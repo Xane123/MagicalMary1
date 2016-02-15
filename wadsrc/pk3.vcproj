@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="pk3"
+	ProjectGUID="{7A78B871-8638-331A-B2AB-918A01DDC4B5}"
+	Keyword="Win32Proj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			IntermediateDirectory="pk3.dir\Debug"
+			ConfigurationType="10"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""
+				AssemblerListingLocation="Debug/"
+				ExceptionHandling="0"
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;Debug\&quot;"
+				ObjectFile="$(IntDir)\"
+/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;Debug\&quot;"/>
+			<Tool
+				Name="VCMIDLTool"
+				AdditionalIncludeDirectories=""
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(InputName).tlb"
+				OutputDirectory="$(IntDir)"
+				HeaderFileName="$(InputName).h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="$(InputName)_i.c"
+				ProxyFileName="$(InputName)_p.c"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			IntermediateDirectory="pk3.dir\Release"
+			ConfigurationType="10"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""
+				AssemblerListingLocation="Release/"
+				ExceptionHandling="0"
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;Release\&quot;"
+				ObjectFile="$(IntDir)\"
+/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;Release\&quot;"/>
+			<Tool
+				Name="VCMIDLTool"
+				AdditionalIncludeDirectories=""
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(InputName).tlb"
+				OutputDirectory="$(IntDir)"
+				HeaderFileName="$(InputName).h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="$(InputName)_i.c"
+				ProxyFileName="$(InputName)_p.c"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+		</Configuration>
+		<Configuration
+			Name="MinSizeRel|Win32"
+			IntermediateDirectory="pk3.dir\MinSizeRel"
+			ConfigurationType="10"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""
+				AssemblerListingLocation="MinSizeRel/"
+				ExceptionHandling="0"
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"
+				ObjectFile="$(IntDir)\"
+/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;MinSizeRel\&quot;"/>
+			<Tool
+				Name="VCMIDLTool"
+				AdditionalIncludeDirectories=""
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(InputName).tlb"
+				OutputDirectory="$(IntDir)"
+				HeaderFileName="$(InputName).h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="$(InputName)_i.c"
+				ProxyFileName="$(InputName)_p.c"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+		</Configuration>
+		<Configuration
+			Name="RelWithDebInfo|Win32"
+			IntermediateDirectory="pk3.dir\RelWithDebInfo"
+			ConfigurationType="10"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""
+				AssemblerListingLocation="RelWithDebInfo/"
+				ExceptionHandling="0"
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"
+				ObjectFile="$(IntDir)\"
+/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="CMAKE_INTDIR=\&quot;RelWithDebInfo\&quot;"/>
+			<Tool
+				Name="VCMIDLTool"
+				AdditionalIncludeDirectories=""
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(InputName).tlb"
+				OutputDirectory="$(IntDir)"
+				HeaderFileName="$(InputName).h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="$(InputName)_i.c"
+				ProxyFileName="$(InputName)_p.c"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+			<File
+				RelativePath="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\pk3">
+			</File>
+			<File
+				RelativePath="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule C:/Users/Myers/Source/zdoom-master/wadsrc/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -HC:/Users/Myers/Source/zdoom-master -BC:/Users/Myers/Source/zdoom-master --check-stamp-file C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule C:/Users/Myers/Source/zdoom-master/wadsrc/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -HC:/Users/Myers/Source/zdoom-master -BC:/Users/Myers/Source/zdoom-master --check-stamp-file C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="MinSizeRel|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule C:/Users/Myers/Source/zdoom-master/wadsrc/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -HC:/Users/Myers/Source/zdoom-master -BC:/Users/Myers/Source/zdoom-master --check-stamp-file C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="RelWithDebInfo|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Building Custom Rule C:/Users/Myers/Source/zdoom-master/wadsrc/CMakeLists.txt"
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -HC:/Users/Myers/Source/zdoom-master -BC:/Users/Myers/Source/zdoom-master --check-stamp-file C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeLists.txt;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\generate.stamp"/>
+				</FileConfiguration>
+			</File>
+		<Filter
+			Name="CMake Rules"
+			Filter="">
+			<File
+				RelativePath="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\pk3.rule">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description=""
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -E touch C:/Users/Myers/Programs/GZDoom/Debug/zipdir.exe&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\zdoom.pk3;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\pk3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description=""
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -E touch C:/Users/Myers/Programs/GZDoom/Release/zipdir.exe&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\zdoom.pk3;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\pk3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="MinSizeRel|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description=""
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -E touch C:/Users/Myers/Programs/GZDoom/MinSizeRel/zipdir.exe&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\zdoom.pk3;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\pk3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="RelWithDebInfo|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description=""
+					CommandLine="&quot;C:\Program Files (x86)\CMake\bin\cmake.exe&quot; -E touch C:/Users/Myers/Programs/GZDoom/RelWithDebInfo/zipdir.exe&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\zdoom.pk3;"
+					Outputs="C:\Users\Myers\Source\zdoom-master\wadsrc\CMakeFiles\pk3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="C:\Users\Myers\Programs\GZDoom\zdoom.pk3.rule">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating C:/Users/Myers/Programs/GZDoom/zdoom.pk3"
+					CommandLine="C:\Users\Myers\Programs\GZDoom\Debug\zipdir.exe -udf C:/Users/Myers/Programs/GZDoom/zdoom.pk3 C:/Users/Myers/Source/zdoom-master/wadsrc/static&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\Debug\zipdir.exe;"
+					Outputs="C:\Users\Myers\Programs\GZDoom\zdoom.pk3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating C:/Users/Myers/Programs/GZDoom/zdoom.pk3"
+					CommandLine="C:\Users\Myers\Programs\GZDoom\Release\zipdir.exe -udf C:/Users/Myers/Programs/GZDoom/zdoom.pk3 C:/Users/Myers/Source/zdoom-master/wadsrc/static&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\Release\zipdir.exe;"
+					Outputs="C:\Users\Myers\Programs\GZDoom\zdoom.pk3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="MinSizeRel|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating C:/Users/Myers/Programs/GZDoom/zdoom.pk3"
+					CommandLine="C:\Users\Myers\Programs\GZDoom\MinSizeRel\zipdir.exe -udf C:/Users/Myers/Programs/GZDoom/zdoom.pk3 C:/Users/Myers/Source/zdoom-master/wadsrc/static&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\MinSizeRel\zipdir.exe;"
+					Outputs="C:\Users\Myers\Programs\GZDoom\zdoom.pk3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="RelWithDebInfo|Win32">
+					<Tool
+					Name="VCCustomBuildTool"
+					Description="Generating C:/Users/Myers/Programs/GZDoom/zdoom.pk3"
+					CommandLine="C:\Users\Myers\Programs\GZDoom\RelWithDebInfo\zipdir.exe -udf C:/Users/Myers/Programs/GZDoom/zdoom.pk3 C:/Users/Myers/Source/zdoom-master/wadsrc/static&#x0D;&#x0A;if errorlevel 1 goto :VCReportError"
+					AdditionalDependencies="C:\Users\Myers\Programs\GZDoom\RelWithDebInfo\zipdir.exe;"
+					Outputs="C:\Users\Myers\Programs\GZDoom\zdoom.pk3"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
