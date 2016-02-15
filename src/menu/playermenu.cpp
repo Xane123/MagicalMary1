@@ -609,7 +609,7 @@ void DPlayerMenu::Init(DMenu *parent, FListMenuDescriptor *desc)
 		{
 			// [XA] Remove the "Random" option if the relevant gameinfo flag is set.
 			if(!gameinfo.norandomplayerclass)
-				li->SetString(0, "Random");
+				li->SetString(0, "EITHER");
 			for(unsigned i=0; i< PlayerClasses.Size(); i++)
 			{
 				const char *cls = GetPrintableDisplayName(PlayerClasses[i].Type);
@@ -758,7 +758,7 @@ void DPlayerMenu::UpdateColorsets()
 	{
 		int sel = 0;
 		P_EnumPlayerColorSets(PlayerClass->Type->TypeName, &PlayerColorSets);
-		li->SetString(0, "Custom");
+		li->SetString(0, "OTHER");
 		for(unsigned i=0;i<PlayerColorSets.Size(); i++)
 		{
 			FPlayerColorSet *colorset = P_GetPlayerColorSet(PlayerClass->Type->TypeName, PlayerColorSets[i]);
@@ -881,7 +881,7 @@ void DPlayerMenu::ColorSetChanged (FListMenuItem *li)
 
 		char command[24];
 		players[consoleplayer].userinfo.ColorSetChanged(mycolorset);
-		mysnprintf(command, countof(command), "colorset %d", mycolorset);
+		mysnprintf(command, countof(command), "COLORSET %d SELECTED.", mycolorset);
 		C_DoCommand(command);
 		UpdateTranslation();
 	}
@@ -1135,12 +1135,12 @@ void DPlayerMenu::Drawer ()
 
 	Super::Drawer();
 
-	const char *str = "PRESS " TEXTCOLOR_WHITE "SPACE";
+	const char *str = "PUSH " TEXTCOLOR_WHITE "SPACEBAR";
 	screen->DrawText (SmallFont, CR_GOLD, 320 - 32 - 32 -
 		SmallFont->StringWidth (str)/2,
 		50 + 48 + 70, str,
 		DTA_Clean, true, TAG_DONE);
-	str = mRotation ? "TO SEE FRONT" : "TO SEE BACK";
+	str = mRotation ? "TO SEE THIS PERSON'S FRONT." : "TO SEE THIS PERSON'S OTHER SIDE.";
 	screen->DrawText (SmallFont, CR_GOLD, 320 - 32 - 32 -
 		SmallFont->StringWidth (str)/2,
 		50 + 48 + 70 + SmallFont->GetHeight (), str,

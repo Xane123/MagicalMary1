@@ -43,7 +43,7 @@ void *safe_malloc(size_t count)
 	void *p;
 	if (count > (1 << 21))
 	{
-		I_Error("Timidity: Tried allocating %zu bytes. This must be a bug.", count);
+		I_Error("TIMIDITY++ ATTEMPTED TO LOAD %zu MORE BYTES THAN IT SHOULD; THIS IS A BUG.", count);
 	}
 	else if ((p = malloc(count)))
 	{
@@ -51,7 +51,7 @@ void *safe_malloc(size_t count)
 	}
 	else
 	{
-		I_Error("Timidity: Couldn't malloc %zu bytes.", count);
+		I_Error("TIMIDITY++ COULDN'T ALLOCATE %zu BYTES OF MEMORY FOR ITSELF.", count);
 	}
 	return 0;	// Unreachable.
 }
