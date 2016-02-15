@@ -440,7 +440,7 @@ static void SetModesMenu (int w, int h, int bits)
 			if (it != NULL) 
 			{
 				char strtemp[64];
-				mysnprintf (strtemp, countof(strtemp), "TESTING %dx%dx%d", w, h, bits);
+				mysnprintf (strtemp, countof(strtemp), "TESTING RESOLUTION: %dx%dx%d", w, h, bits);
 				it->SetValue(0, 1);
 				it->SetString(0, strtemp);
 			}
