@@ -1320,6 +1320,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\gitinfo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\gstrings.h"
 				>
 			</File>
