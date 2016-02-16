@@ -16,7 +16,6 @@
 #include <unistd.h>
 #endif
 
-#include <time.h>
 #include <math.h>
 #include <assert.h>
 #include <sys/stat.h>
