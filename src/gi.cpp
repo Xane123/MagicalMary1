@@ -215,7 +215,7 @@ void FMapInfoParser::ParseGameInfo()
 			sc.MustGetToken(TK_IntConst);
 			if (sc.Number < 0 || sc.Number >= 10)
 			{
-				sc.ScriptError("Weapon slots can only be 0-9.\n");
+				sc.ScriptError("Weapon slot index must be in range [0..9].\n");
 			}
 			int i = sc.Number;
 			gameinfo.DefaultWeaponSlots[i].Clear();
@@ -323,7 +323,7 @@ void FMapInfoParser::ParseGameInfo()
 		GAMEINFOKEY_MUSIC(intermissionMusic, intermissionOrder, "intermissionMusic")
 		GAMEINFOKEY_STRING(CursorPic, "CursorPic")
 		GAMEINFOKEY_BOOL(noloopfinalemusic, "noloopfinalemusic")
-		GAMEINFOKEY_BOOL(completed, "completed")
+		GAMEINFOKEY_BOOL(drawreadthis, "drawreadthis")
 		GAMEINFOKEY_BOOL(swapmenu, "swapmenu")
 		GAMEINFOKEY_BOOL(dontcrunchcorpses, "dontcrunchcorpses")
 		GAMEINFOKEY_BOOL(intermissioncounter, "intermissioncounter")

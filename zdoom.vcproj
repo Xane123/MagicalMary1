@@ -1115,10 +1115,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\xane_test.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\zstrformat.cpp"
 				>
 			</File>
