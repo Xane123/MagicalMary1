@@ -113,6 +113,7 @@ struct gameinfo_t
 	bool intermissioncounter;
 	bool nightmarefast;
 	bool swapmenu;
+	bool completed;
 	bool dontcrunchcorpses;
 	TArray<FName> creditPages;
 	TArray<FName> finalePages;
@@ -176,7 +177,6 @@ struct gameinfo_t
 
 	const char *GetFinalePage(unsigned int num) const;
 };
-
 
 extern gameinfo_t gameinfo;
 

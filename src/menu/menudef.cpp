@@ -107,6 +107,8 @@ static FTextureID GetMenuTexture(const char* const name)
 	return texture;
 }
 
+EXTERN_CVAR(Bool, xane_mode);
+
 //=============================================================================
 //
 //
@@ -152,7 +154,7 @@ static bool CheckSkipGameBlock(FScanner &sc)
 
 //=============================================================================
 //
-//
+//MENUDEF IfOption
 //
 //=============================================================================
 
@@ -163,7 +165,7 @@ static bool CheckSkipOptionBlock(FScanner &sc)
 	do
 	{
 		sc.MustGetString();
-		if (sc.Compare("ReadThis")) filter |= gameinfo.drawreadthis;
+		if (sc.Compare("XaneMode")) filter |= gameinfo.completed;
 		else if (sc.Compare("Swapmenu")) filter |= gameinfo.swapmenu;
 		else if (sc.Compare("Windows"))
 		{

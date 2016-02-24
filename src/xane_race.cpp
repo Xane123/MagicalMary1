@@ -19,6 +19,7 @@
 #include <math.h>
 #include <assert.h>
 #include <sys/stat.h>
+#include "gi.h"
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -27,6 +28,7 @@
 #include "c_console.h"
 
 CVAR(Bool, xane_controller, false, CVAR_ARCHIVE|CVAR_USERINFO)
+CVAR(Bool, xane_mode, false, CVAR_ARCHIVE|CVAR_USERINFO|CVAR_MOD)
 
 CVAR(Int,xane_racecourse1,0,CVAR_ARCHIVE|CVAR_MOD)	//[XANE]Race track #1
 CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD)	//[XANE]Race track #2
@@ -55,3 +57,4 @@ CUSTOM_CVAR(Int, xane_racecup, 0, CVAR_ARCHIVE|CVAR_NOINITCALL) //[XANE]Similar 
 
 	}
 }
+
