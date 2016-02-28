@@ -5,7 +5,7 @@
 SECRETMESSAGE = "A secret is revealed!";
 
 D_DEVSTR = "Useless mode ON.\n";
-D_CDROM = "CD-ROM Version: zdoom.ini from c:\\zdoomdat\n";
+D_CDROM = "CD-ROM Version: WORLD OF KIRBYCRAFT.ini from c:\\WORLD OF KIRBYCRAFTdat\n";
 PRESSKEY = "press a key.";
 PRESSYN = "press y or n.";
 
@@ -13,7 +13,7 @@ QUITMSG = "are you sure you want to\nquit this great game?";
 TXT_YES = "Yes";
 TXT_NO = "No";
 
-// Quit Doom 1 messages
+// Quit WORLD OF KIRBYCRAFT 1 messages
 QUITMSG1 = "please don't leave, there's more\ndemons to toast!";
 QUITMSG2 = "let's beat it -- this is turning\ninto a bloodbath!";
 QUITMSG3 = "i wouldn't leave if i were you.\ndos is much worse.";
@@ -22,7 +22,7 @@ QUITMSG5 = "don't leave yet -- there's a\ndemon around that corner!";
 QUITMSG6 = "ya know, next time you come in here\ni'm gonna toast ya.";
 QUITMSG7 = "go ahead and leave. see if i care.";
 
-// Quit Doom II messages
+// Quit WORLD OF KIRBYCRAFT II messages
 QUITMSG8 = "you want to quit?\nthen, thou hast lost an eighth!";
 QUITMSG9 = "don't go now, there's a \ndimensional shambler waiting\nat the dos prompt!";
 QUITMSG10 = "get outta here and go back\nto your boring programs.";
@@ -58,7 +58,7 @@ QSPROMPT = "quicksave over your game named\n\n'%s'?\n\npress y or n.";
 QLPROMPT = "do you want to quickload the game named\n\n'%s'?\n\npress y or n.";
 NEWGAME = "you can't start a new game\nwhile in a network game.\n\npress a key.";
 NIGHTMARE = "are you sure? this skill level\nisn't even remotely fair.\n\npress y or n.";
-SWSTRING = "this is the shareware version of doom.\n\nyou need to order the entire trilogy.\n\npress a key.";
+SWSTRING = "this is the shareware version of WORLD OF KIRBYCRAFT.\n\nyou need to order the entire trilogy.\n\npress a key.";
 MSGOFF = "Messages OFF";
 MSGON = "Messages ON";
 NETEND = "you can't end a netgame!\n\npress a key.";
@@ -322,7 +322,7 @@ E1TEXT =
 	"you're stuck on The Shores of Hell.\n"
 	"The only way out is through.\n"
 	"\n"
-	"To continue the DOOM experience, play\n"
+	"To continue the WORLD OF KIRBYCRAFT experience, play\n"
 	"The Shores of Hell and its amazing\n"
 	"sequel, Inferno!\n";
 E2TEXT =
@@ -342,7 +342,7 @@ E2TEXT =
 	"Hell.\n"
 	"\n"
 	"Now, it's on to the final chapter of\n"
-	"DOOM! -- Inferno.";
+	"WORLD OF KIRBYCRAFT! -- Inferno.";
 E3TEXT =
 	"The loathsome spiderdemon that\n"
 	"masterminded the invasion of the moon\n"
@@ -827,7 +827,7 @@ OB_FRIENDLY2 = "%k checks %p glasses.";
 OB_FRIENDLY3 = "%k gets a frag for the other team.";
 OB_FRIENDLY4 = "%k loses another friend.";
 
-SAVEGAMENAME = "zdoomsv";
+SAVEGAMENAME = "zWORLD OF KIRBYCRAFTsv";
 STARTUP1 = "";
 STARTUP2 = "";
 STARTUP3 = "";
@@ -848,7 +848,7 @@ SCORE_MISSED = "MISSED";
 SCORE_TOTAL = "TOTAL";
 SCORE_LVLTIME = "LEVEL TIME";
 
-// Item tags: Doom weapons
+// Item tags: WORLD OF KIRBYCRAFT weapons
 TAG_FIST = "Brass Knuckles";
 TAG_CHAINSAW = "Chainsaw";
 TAG_PISTOL = "Pistol";
@@ -1774,7 +1774,7 @@ OB_MPPHASEZORCH = "%o was phase zorched by %k.";
 OB_MPLAZ_BOOM = "%o fell prey to %k's LAZ device.";
 OB_MPLAZ_SPLASH = "%o was lazzed by %k.";
 
-// Music names for Doom. These are needed in the string table only so that they can
+// Music names for WORLD OF KIRBYCRAFT. These are needed in the string table only so that they can
 // be replaced by Dehacked. 
 // Note that these names are not prefixed with 'd_' because that's how Dehacked patches 
 // expect them.
@@ -1815,7 +1815,7 @@ MUSIC_RUNNIN = "runnin";
 MUSIC_STALKS = "stalks";
 MUSIC_COUNTD = "countd";
 MUSIC_BETWEE = "betwee";
-MUSIC_DOOM = "doom";
+MUSIC_WORLD OF KIRBYCRAFT = "WORLD OF KIRBYCRAFT";
 MUSIC_THE_DA = "the_da";
 MUSIC_SHAWN = "shawn";
 MUSIC_DDTBLU = "ddtblu";
@@ -1823,7 +1823,7 @@ MUSIC_IN_CIT = "in_cit";
 MUSIC_DEAD = "dead";
 MUSIC_STLKS2 = "stlks2";
 MUSIC_THEDA2 = "theda2";
-MUSIC_DOOM2 = "doom2";
+MUSIC_WORLD OF KIRBYCRAFT2 = "WORLD OF KIRBYCRAFT2";
 MUSIC_DDTBL2 = "ddtbl2";
 MUSIC_RUNNI2 = "runni2";
 MUSIC_DEAD2 = "dead2";

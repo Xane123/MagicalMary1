@@ -1,11 +1,11 @@
 //=====================================
-//French strings updated by DoomKn1ght.
+//French strings updated by WORLD OF KIRBYCRAFTKn1ght.
 //=====================================
 
 [fr]
 
 D_DEVSTR = "MODE DEVELOPPEMENT ON.\n";
-D_CDROM = "VERSION CD-ROM: DEFAULT.CFG DANS C:\\DOOMDATA\n";
+D_CDROM = "VERSION CD-ROM: DEFAULT.CFG DANS C:\\WORLD OF KIRBYCRAFTDATA\n";
 
 //
 //  M_Menu.C
@@ -16,16 +16,16 @@ QUITMSG = "VOUS VOULEZ VRAIMENT\nQUITTER CE SUPER JEU?";
 TXT_YES = "Oui";
 TXT_NO = "Non";
 
-// QuitDoom1 messages
-QUITMSG1 = "ne partez pas,Il ya encore\ndes démons a griller!";
-QUITMSG2 = "fichons le camp ,ça dégenere\nen bain de sang!";
+// QuitWORLD OF KIRBYCRAFT1 messages
+QUITMSG1 = "ne partez pas,Il ya encore\ndes dÃ©mons a griller!";
+QUITMSG2 = "fichons le camp ,Ã§a dÃ©genere\nen bain de sang!";
 QUITMSG3 = "Je ne quitterai pas si j'etait vous.\nos est bien pire.";
 QUITMSG4 = "Vous essayez de dire que vous aimez dos\nmieux que moi ,pas vrai?";
 QUITMSG5 = "Ne partez pas encore-il y a \nun demon dans le coin!";
 QUITMSG6 = "vous savez ,la prochaine que vous venez ici\nje vous grille.";
 QUITMSG7 = "allez y partez. regardez si j'y fais attention.";
 
-// QuitDOOM II messages
+// QuitWORLD OF KIRBYCRAFT II messages
 QUITMSG8 = "vous voulez vraiment quitter?\nalors,vous avez perdus un huitieme!";
 QUITMSG9 = "ne partez pas maintenent,il y a un \nportail interdimensionnel attendant\na l'ecran os";
 QUITMSG10 = "tirez vous de la et retournez\na vos programmes ennuyeux.";
@@ -60,7 +60,7 @@ NEWGAME = "VOUS NE POUVEZ PAS LANCER\n"
           "UN NOUVEAU JEU SUR RESEAU.\n\nAPPUYEZ SUR UNE TOUCHE.";
 NIGHTMARE = "VOUS CONFIRMEZ? CE NIVEAU EST\n"
             "VRAIMENT IMPITOYABLE!\nAPPUYEZ SUR Y OU N";
-SWSTRING = "CECI EST UNE VERSION SHAREWARE DE DOOM.\n\n"
+SWSTRING = "CECI EST UNE VERSION SHAREWARE DE WORLD OF KIRBYCRAFT.\n\n"
            "VOUS DEVRIEZ COMMANDER LA TRILOGIE COMPLETE.\n\nAPPUYEZ SUR UNE TOUCHE.";
 MSGOFF = "MESSAGES OFF";
 MSGON = "MESSAGES ON";
@@ -269,7 +269,7 @@ THUSTR_20 = "level 20: traitement central";
 THUSTR_21 = "level 21: le centre administratif";
 THUSTR_22 = "level 22: l'habitat";
 THUSTR_23 = "level 23: le projet de mine lunaire";
-THUSTR_24 = "level 24: la carrière";
+THUSTR_24 = "level 24: la carriÃ¨re";
 THUSTR_25 = "level 25: l'antre des barons";
 THUSTR_26 = "level 26: ballistyx";
 THUSTR_27 = "level 27: le mont souffrance";
@@ -335,7 +335,7 @@ E1TEXT =
   "APPAREMMENT BLOQUE AUX PORTES DE L'ENFER.\n"
   "LA SEULE ISSUE EST DE L'AUTRE COTE.\n"
   "\n"
-  "POUR VIVRE LA SUITE DE DOOM, JOUEZ\n"
+  "POUR VIVRE LA SUITE DE WORLD OF KIRBYCRAFT, JOUEZ\n"
   "A 'AUX PORTES DE L'ENFER' ET A\n"
   "L'EPISODE SUIVANT, 'INFERNO'!\n";
         
@@ -356,7 +356,7 @@ E2TEXT =
   "LA SURFACE DE L'ENFER.\n"
   "\n"
   "VOICI MAINTENANT LE CHAPITRE FINAL DE\n"
-  "DOOM! -- L'ENFER.";
+  "WORLD OF KIRBYCRAFT! -- L'ENFER.";
   
 E3TEXT =
   "LE DEMON ARACHNEEN ET REPUGNANT\n"
@@ -672,8 +672,8 @@ TXT_TIMELIMIT = "limite de temps atteinte.";
 
 // Spree messages
 SPREEKILLSELF = "%o etait en folie meurtriere avant que %g ne (le/la) frag!";
-SPREEOVER = "La folie meurtrière %o a ete termine par %k";
-SPREE5 = "%k est dans une folie meurtrière!";
+SPREEOVER = "La folie meurtriÃ¨re %o a ete termine par %k";
+SPREE5 = "%k est dans une folie meurtriÃ¨re!";
 SPREE10 = "%k se dechaine!";
 SPREE15 = "%k domine!";
 SPREE20 = "%k est inarretable!";
@@ -817,7 +817,7 @@ OB_FRIENDLY2 = "%k verifie ses lunetttes.";
 OB_FRIENDLY3 = "%k a obtenu un frag pour l'autre equipe.";
 OB_FRIENDLY4 = "%k a perdu un autre ami.";
 
-SAVEGAMENAME = "zdoomsv";
+SAVEGAMENAME = "WORLD OF KIRBYCRAFTsv";
 STARTUP1 = "";
 STARTUP2 = "";
 STARTUP3 = "";
@@ -991,9 +991,9 @@ HHUSTR_E5M9 = "L ECHEVAUX DE D'SPARIL";
 
 // Keys
 
-TXT_GOTBLUEKEY = "CLÉ BLEUE";
-TXT_GOTYELLOWKEY = "CLÉ JAUNE";
-TXT_GOTGREENKEY = "CLÉ VERTE";
+TXT_GOTBLUEKEY = "CLÃ‰ BLEUE";
+TXT_GOTYELLOWKEY = "CLÃ‰ JAUNE";
+TXT_GOTGREENKEY = "CLÃ‰ VERTE";
 
 // Artifacts
 
@@ -1154,7 +1154,7 @@ TXT_NEED_PASSCARD_DOOR = "Vous avez besoin de la cle carte passe pour ouvrir cet
 TXT_NEED_IDCARD = "Vous avez besoin d'une carte ID.";
 TXT_NEED_PRISONKEY = "Vous n'avez pas la cle de la prison.";
 TXT_NEED_HANDPRINT = "Votre main ne s'imprime pas sur le dossier.";
-TXT_NEED_GOLDKEY = "Vous avez besoin d'une clé d'or.";
+TXT_NEED_GOLDKEY = "Vous avez besoin d'une clÃ© d'or.";
 TXT_NEED_IDBADGE = "Vous avez besoin d'un badge ID.";
 TXT_NEED_IDBADGE_DOOR = "Vous avez besoin d'un badge ID pour ouvrir cette porte.";
 TXT_NEED_SILVERKEY = "Vous avez besoin de la cle d'argent.";
@@ -1435,7 +1435,7 @@ CE1TEXT =
 CE2TEXT = "Vous l'avez fait!";
 CE3TEXT = "Merveilleux travail!";
 CE4TEXT = "Fantastique!";
-//These replaced Doom2 messages
+//These replaced WORLD OF KIRBYCRAFT2 messages
 CE5TEXT = "Trop fort!";
 CE6TEXT = "Dans la bonne voie!";
 CE7TEXT = "merci pour l'aide!";

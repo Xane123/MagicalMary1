@@ -1,0 +1,1 @@
+//World of Kirbycraft is alredycompatible with itself and doesn't eed to be compatible with any other mods.
