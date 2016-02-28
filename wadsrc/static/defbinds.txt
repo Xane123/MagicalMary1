@@ -75,6 +75,8 @@ pad_back pause
 lthumb +speed
 
 
+doublebind w +mc_run
+
 /* Default automap bindings */
 mapbind - +am_zoomout
 mapbind = +am_zoomin
