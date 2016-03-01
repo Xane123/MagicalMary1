@@ -44,6 +44,7 @@ return messagemode
 f12 spynext
 mwheeldown weapnext
 mwheelup weapprev
+\ "pukename turnsuper"
 
 pgup +moveup
 ins +movedown
@@ -53,19 +54,25 @@ del +lookdown
 end centerview
 
 // Generic joystick buttons
-joy1 +attack
-joy2 +strafe
-joy3 +speed
-joy4 +use
+joy1 +use
+joy1 +speed
+joy2 +jump
+joy3 crouch
+joy4 weapnext
 
 // Xbox 360 / PS2 controllers
+lstickup +forward
+lstickdown +back
+lstickleft +moveleft
+lstickright +moveright
 pad_x +use
+pad_x +speed
 pad_b +jump
 pad_a crouch
 pad_y weapnext
 rtrigger +attack
 ltrigger +altattack
-lshoulder pukename turnsuper
+lshoulder "pukename turnsuper"
 dpadleft weapprev
 dpadright weapnext
 dpaddown chase
@@ -73,9 +80,11 @@ dpadup togglemap
 pad_start menu_main
 pad_back pause
 lthumb +speed
+rthumb crouch
 
 
 doublebind w +mc_run
+doublebind lstickup +nc_run
 
 /* Default automap bindings */
 mapbind - +am_zoomout

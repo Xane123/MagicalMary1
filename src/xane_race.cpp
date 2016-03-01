@@ -28,10 +28,10 @@
 
 CVAR(Bool, xane_controller, false, CVAR_ARCHIVE|CVAR_USERINFO)
 
-CVAR(Int,xane_racecourse1,0,CVAR_ARCHIVE|CVAR_MOD)	//[XANE]Race track #1
-CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD)	//[XANE]Race track #2
-CVAR(Int,xane_racecourse3,0,CVAR_ARCHIVE|CVAR_MOD)	//[XANE]Race track #3
-CVAR(Int,xane_racecourse4,0,CVAR_ARCHIVE|CVAR_MOD)	//[XANE]Race track #4
+CVAR(Int,xane_racecourse1,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #1
+CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #2
+CVAR(Int,xane_racecourse3,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #3
+CVAR(Int,xane_racecourse4,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #4
 
 CUSTOM_CVAR(Int, xane_racecup, 0, CVAR_ARCHIVE|CVAR_NOINITCALL) //[XANE]Similar to compatflags; Sets custom variables to preset values.
 {
