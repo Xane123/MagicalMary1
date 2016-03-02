@@ -82,11 +82,11 @@ static bool NoInterpolateView;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
-CVAR (Int, r_clearbuffer, 1, 0)
-CVAR (Bool, r_drawvoxels, true, 0)
+CVAR (Bool, r_deathcamera, true, CVAR_ARCHIVE)	//Switch to third person camera forcibly when the player dies?
+CVAR (Int, r_clearbuffer, 1, 0)	//Color/pattern to render out of bounds areas with.
+CVAR (Bool, r_drawvoxels, true, 0)	//Render 3D voxel models?
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
-CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	//Howmuch earthquakes shake the screen.
 {
 	if (self < 0.f) self = 0.f;
 	else if (self > 1.f) self = 1.f;
