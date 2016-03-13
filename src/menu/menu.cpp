@@ -63,6 +63,7 @@ CVAR (Float, mouse_sensitivity, 1.f, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, show_messages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, show_obituaries, true, CVAR_ARCHIVE)
 
+CVAR(Bool, menu_pausesp, false, CVAR_ARCHIVE)	//Should the menu make the game pause in SP(ZDoom behavior) or continue gameplay regardless (WoK behavior)?
 
 CVAR (Float, snd_menuvolume, 0.6f, CVAR_ARCHIVE)
 CVAR(Int, m_use_mouse, 1, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
@@ -308,7 +309,9 @@ void M_StartControlPanel (bool makeSound)
 	}
 
 	C_HideConsole ();				// [RH] Make sure console goes bye bye.
-	menuactive = MENU_On;
+	if(menu_pausesp==false) { menuactive = MENU_OnNoPause; }
+	else { menuactive = MENU_On; }
+
 	// Pause sound effects before we play the menu switch sound.
 	// That way, it won't be paused.
 	P_CheckTickerPaused ();
@@ -329,7 +332,11 @@ void M_StartControlPanel (bool makeSound)
 
 void M_ActivateMenu(DMenu *menu)
 {
-	if (menuactive == MENU_Off) menuactive = MENU_On;
+	if (menuactive == MENU_Off)
+	{
+		if(menu_pausesp==false) { menuactive = MENU_OnNoPause; }
+		else { menuactive = MENU_On; }
+	}
 	if (DMenu::CurrentMenu != NULL) DMenu::CurrentMenu->ReleaseCapture();
 	DMenu::CurrentMenu = menu;
 	GC::WriteBarrier(DMenu::CurrentMenu);
