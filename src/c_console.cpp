@@ -348,7 +348,7 @@ CCMD (atexit)
 {
 	if (argv.argc() == 1)
 	{
-		Printf ("Registered atexit commands:\n");
+		Printf ("These commands will run when exiting World of Kirbycraft:\n");
 		GameAtExit *record = ExitCmdList;
 		while (record != NULL)
 		{
@@ -635,8 +635,8 @@ void C_AdjustBottom ()
 {
 	if (gamestate == GS_FULLCONSOLE || gamestate == GS_STARTUP)
 		ConBottom = SCREENHEIGHT;
-	else if (ConBottom > SCREENHEIGHT / 2 || ConsoleState == c_down)
-		ConBottom = SCREENHEIGHT / 2;
+	else if (ConBottom > SCREENHEIGHT / 4 || ConsoleState == c_down)
+		ConBottom = SCREENHEIGHT / 4;
 }
 
 void C_NewModeAdjust ()
@@ -1811,7 +1811,7 @@ static bool C_TabCompleteList ()
 	{
 		size_t x = 0;
 		maxwidth += 3;
-		Printf (TEXTCOLOR_BLUE "Completions for %s:\n", CmdLine+2);
+		Printf (TEXTCOLOR_BLUE "CVAR/CCMDs that start with %s:\n", CmdLine+2);
 		for (i = TabPos; nummatches > 0; ++i, --nummatches)
 		{
 			// [Dusk] Print console commands blue, CVars green, aliases red.
