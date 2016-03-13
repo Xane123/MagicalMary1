@@ -927,7 +927,7 @@ public:
 		// [CW] Freeze the game depending on MAPINFO options.
 		if (ConversationPauseTic < gametic && !multiplayer && !(level.flags2 & LEVEL2_CONV_SINGLE_UNFREEZE))
 		{
-			menuactive = MENU_On;
+			menuactive = MENU_OnNoPause;	//Make the menu never pause the game without the "pause" CCMD beforehand.
 		}
 
 		if (CurNode->Backdrop.isValid())
