@@ -26,7 +26,7 @@
 	#include "m_misc.h"
 #include "c_console.h"
 
-CVAR(Bool, xane_controller, false, CVAR_ARCHIVE|CVAR_USERINFO)
+CVAR(Bool, xane_controller, false, CVAR_ARCHIVE|CVAR_NOSET|CVAR_UNSETTABLE|CVAR_DEMOSAVE)	//Set automatically if controllers are being checked for; Don't change manually.
 
 CVAR(Int,xane_racecourse1,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #1
 CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #2
