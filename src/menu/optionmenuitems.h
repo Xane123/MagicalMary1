@@ -34,11 +34,10 @@
 #include "v_text.h"
 #include "gstrings.h"
 
-
 void M_DrawConText (int color, int x, int y, const char *str);
 void M_SetVideoMode();
 
-
+EXTERN_CVAR(Bool, menu_pausesp)
 
 //=============================================================================
 //
@@ -362,7 +361,8 @@ public:
 		if (ev->type == EV_KeyDown)
 		{
 			*pKey = ev->data1;
-			menuactive = MENU_On;
+			if (menu_pausesp == false) { menuactive = MENU_OnNoPause; }
+			else { menuactive = MENU_On; }
 			SetMenuMessage(0);
 			Close();
 			mParentMenu->MenuEvent((ev->data1 == KEY_ESCAPE)? MKEY_Abort : MKEY_Input, 0);

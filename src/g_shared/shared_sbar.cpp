@@ -1500,9 +1500,9 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 {
 	if (demoplayback && demover != DEMOGAMEVERSION)
 	{
-		screen->DrawText (SmallFont, CR_TAN, 0, ST_Y - 40 * CleanYfac,
-			"Demo was recorded with a different version\n"
-			"of " GAMENAME ". Expect it to go out of sync.",
+		screen->DrawText(SmallFont, CR_TAN, 0, ST_Y - 40 * CleanYfac,
+			"THE DEMO YOU'RE WATCHING WAS MADE WITH A DIFFERENT\n"
+			"VERSION OF " GAMESIG "; IF THE PLAYER DOES ILLOGICAL THINGS,\nYOUR " GAMESIG "MAY NEED AN UPDATE.",
 			DTA_CleanNoMove, true, TAG_DONE);
 	}
 
@@ -1590,8 +1590,8 @@ void DBaseStatusBar::DrawConsistancy () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Out of sync with:");
-				buff_p = conbuff + 17;
+				strcpy(conbuff, "YOU ARE OUT OF SYNC WITH PLAYER x;\nIF YOU DON'T SEE OTHER PLAYERS, RESTART WORLD OF KIRBYCRAFT.");
+				buff_p = conbuff + 32;
 			}
 			*buff_p++ = ' ';
 			*buff_p++ = '1' + i;
@@ -1633,8 +1633,8 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Waiting for:");
-				buff_p = conbuff + 12;
+				strcpy(conbuff, "CURRENTLY WAITING FOR PLAYER x;\nTHIS COULD MEAN THEIR COMPUTER DISCONNECTED FROM THE INTERNET OR THEY ARE MOVING WORLD OF KIRBYCRAFT'S WINDOW AROUND.");
+				buff_p = conbuff + 29;
 			}
 			*buff_p++ = ' ';
 			*buff_p++ = '1' + i;
@@ -1836,7 +1836,7 @@ CCMD (showpop)
 {
 	if (argv.argc() != 2)
 	{
-		Printf ("Usage: showpop <popnumber>\n");
+		Printf ("To show a popup defined in SBARINFO, type \"showpop <popnumber>\".\n\nWorld of Kirbycraft doesn't use SBARINFO popups so this only applies to mods.\n");
 	}
 	else if (StatusBar != NULL)
 	{

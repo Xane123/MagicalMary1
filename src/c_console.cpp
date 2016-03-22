@@ -158,8 +158,8 @@ static struct History *HistHead = NULL, *HistTail = NULL, *HistPos = NULL;
 static int HistSize;
 
 CVAR (Float, con_notifytime, 3.f, CVAR_ARCHIVE)
-CVAR (Bool, con_centernotify, false, CVAR_ARCHIVE)
-CUSTOM_CVAR (Int, con_scaletext, 0, CVAR_ARCHIVE)		// Scale notify text at high resolutions?
+CVAR (Bool, con_centernotify, true, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, con_scaletext, 2, CVAR_ARCHIVE)		// Scale notify text at high resolutions?
 {
 	if (self < 0) self = 0;
 	if (self > 2) self = 2;
@@ -348,7 +348,7 @@ CCMD (atexit)
 {
 	if (argv.argc() == 1)
 	{
-		Printf ("Registered atexit commands:\n");
+		Printf ("Commands set to run upon exit:\n");
 		GameAtExit *record = ExitCmdList;
 		while (record != NULL)
 		{
@@ -635,8 +635,8 @@ void C_AdjustBottom ()
 {
 	if (gamestate == GS_FULLCONSOLE || gamestate == GS_STARTUP)
 		ConBottom = SCREENHEIGHT;
-	else if (ConBottom > SCREENHEIGHT / 2 || ConsoleState == c_down)
-		ConBottom = SCREENHEIGHT / 2;
+	else if (ConBottom > SCREENHEIGHT / 4 || ConsoleState == c_down)
+		ConBottom = SCREENHEIGHT / 4;
 }
 
 void C_NewModeAdjust ()
@@ -665,9 +665,9 @@ void C_Ticker ()
 		if (ConsoleState == c_falling)
 		{
 			ConBottom += (consoletic - lasttic) * (SCREENHEIGHT * 2 / 25);
-			if (ConBottom >= SCREENHEIGHT / 2)
+			if (ConBottom >= SCREENHEIGHT / 4)
 			{
-				ConBottom = SCREENHEIGHT / 2;
+				ConBottom = SCREENHEIGHT / 4;
 				ConsoleState = c_down;
 			}
 		}

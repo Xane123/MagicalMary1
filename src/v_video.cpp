@@ -150,8 +150,8 @@ static DWORD Col2RGB8_2[63][256];
 // There's also only one, not four.
 DFrameBuffer *screen;
 
-CVAR (Int, vid_defwidth, 640, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Int, vid_defheight, 480, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defwidth, 1152, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defheight, 648, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Int, vid_defbits, 8, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, vid_fps, false, 0)
 CVAR (Bool, ticker, false, 0)
@@ -184,7 +184,7 @@ CUSTOM_CVAR (Float, dimamount, -1.f, CVAR_ARCHIVE)
 		self = 1.f;
 	}
 }
-CVAR (Color, dimcolor, 0xffd700, CVAR_ARCHIVE)
+CVAR (Color, dimcolor, 0xffc0ff, CVAR_ARCHIVE)
 
 // [RH] Set true when vid_setmode command has been executed
 bool	setmodeneeded = false;

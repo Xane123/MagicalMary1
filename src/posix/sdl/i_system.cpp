@@ -319,7 +319,7 @@ int I_PickIWad_Gtk (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 
 	// Create the dialog window.
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	mysnprintf(caption, countof(caption), GAMESIG " %s: Select an IWAD to use", GetVersionString());
+	mysnprintf(caption, countof(caption), GAMESIG " %s: Choose game data:", GetVersionString());
 	gtk_window_set_title (GTK_WINDOW(window), caption);
 	gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 	gtk_container_set_border_width (GTK_CONTAINER(window), 10);
@@ -331,7 +331,7 @@ int I_PickIWad_Gtk (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 	gtk_container_add (GTK_CONTAINER(window), vbox);
 
 	// Create the top label.
-	widget = gtk_label_new (GAMENAME " found more than one IWAD\nSelect from the list below to determine which one to use:");
+	widget = gtk_label_new(GAMESIG " found multiple games' data; Mods will modify it:");
 	gtk_box_pack_start (GTK_BOX(vbox), widget, false, false, 0);
 	gtk_misc_set_alignment (GTK_MISC(widget), 0, 0);
 
@@ -450,8 +450,8 @@ int I_PickIWad (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 	{
 		FString cmd("kdialog --title \"" GAMESIG " ");
 		cmd << GetVersionString() << ": Select an IWAD to use\""
-		            " --menu \"" GAMENAME " found more than one IWAD\n"
-		            "Select from the list below to determine which one to use:\"";
+			" --menu \"" GAMENAME " found more than one game's\n"
+			"data. Choose one; Mods will modify it:\"";
 
 		for(i = 0; i < numwads; ++i)
 		{

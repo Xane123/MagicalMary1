@@ -127,6 +127,8 @@ static void TerminalResponse (const char *str);
 
 static FStrifeDialogueNode *PrevNode;
 
+EXTERN_CVAR(Bool, menu_pausesp)
+
 #define NUM_RANDOM_LINES 10
 #define NUM_RANDOM_GOODBYES 3
 
@@ -927,7 +929,8 @@ public:
 		// [CW] Freeze the game depending on MAPINFO options.
 		if (ConversationPauseTic < gametic && !multiplayer && !(level.flags2 & LEVEL2_CONV_SINGLE_UNFREEZE))
 		{
-			menuactive = MENU_On;
+			if (menu_pausesp == false) { menuactive = MENU_OnNoPause; }
+			else { menuactive = MENU_On; }
 		}
 
 		if (CurNode->Backdrop.isValid())

@@ -83,12 +83,12 @@ const char *GetVersionString();
 #define SAVESIG "ZDOOMSAVE" SAVEVERSTRINGIFY(SAVEVER)
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "ZDOOM"
-#define BASEWAD "zdoom.pk3"
+#define GAMESIG "World of Kirbycraft"
+#define BASEWAD "data.pk3"
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "ZDoom"
-#define GAMENAMELOWERCASE "zdoom"
+#define GAMENAME "ZDoom, the engine that powers World of Kirbycraft"
+#define GAMENAMELOWERCASE "Settings"
 #define FORUM_URL "http://forum.zdoom.org"
 #define BUGS_FORUM_URL	"http://forum.zdoom.org/index.php?c=3"
 

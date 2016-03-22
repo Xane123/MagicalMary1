@@ -242,7 +242,7 @@ END
 IDD_EAXPROPERTYLIST DIALOGEX 0, 0, 265, 404
 STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_VSCROLL
 EXSTYLE WS_EX_CLIENTEDGE
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     EDITTEXT        IDCE_ENVIRONMENTSIZE,76,7,48,12,ES_AUTOHSCROLL,WS_EX_RIGHT
     EDITTEXT        IDCE_ENVIRONMENTDIFFUSION,76,20,48,12,ES_AUTOHSCROLL,WS_EX_RIGHT
@@ -336,8 +336,8 @@ END
 IDD_EAXEDIT DIALOGEX 0, 0, 280, 326
 STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 EXSTYLE WS_EX_TOOLWINDOW | WS_EX_WINDOWEDGE
-CAPTION "Environment Editor"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+CAPTION "REVERBS Reverb Editor"
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     COMBOBOX        IDC_CURRENTENVIRONMENT,7,19,265,14,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Static",IDC_DUMMY,7,36,265,263,0,WS_EX_CLIENTEDGE
@@ -356,7 +356,7 @@ END
 IDD_NEWEAX DIALOGEX 0, 0, 348, 257
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTERMOUSE | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Create New Environment..."
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     EDITTEXT        IDC_NEWENVNAME,32,216,187,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDITID1,248,216,32,12,ES_AUTOHSCROLL | ES_NUMBER
@@ -375,7 +375,7 @@ END
 IDD_SAVEEAX DIALOGEX 0, 0, 394, 95
 STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
 EXSTYLE WS_EX_TRANSPARENT
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     GROUPBOX        "Include these environments:",IDC_SAVEGROUP,6,0,371,90,0,WS_EX_TRANSPARENT
     CONTROL         "",IDC_ENVLIST,"SysListView32",LVS_LIST | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,12,303,72
@@ -386,8 +386,8 @@ END
 IDD_CRASHDIALOG DIALOGEX 0, 0, 415, 308
 STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_APPWINDOW
-CAPTION "ZDoom Very Fatal Error"
-FONT 8, "MS Shell Dlg", 400, 0, 0x0
+CAPTION "Very Fatal Error"
+FONT 11, "XPinball", 400, 0, 0x0
 BEGIN
     CONTROL         "",IDC_CRASHTAB,"SysTabControl32",WS_TABSTOP,4,4,404,280
     PUSHBUTTON      "&Send Error Report",IDYES,4,289,10,14,WS_DISABLED
@@ -397,7 +397,7 @@ END
 
 IDD_CRASHOVERVIEW DIALOGEX 1, 13, 400, 264
 STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_VISIBLE
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     EDITTEXT        IDC_CRASHINFO,7,126,377,90,ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | WS_VSCROLL
     CONTROL         "",IDC_PLEASETELLUS,"RichEdit20A",ES_MULTILINE | ES_READONLY,7,50,377,54,WS_EX_TRANSPARENT
@@ -411,7 +411,7 @@ END
 
 IDD_CRASHDETAILS DIALOGEX 0, 0, 400, 164
 STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     LTEXT           "The error report contains these files:",IDC_STATIC,7,5,119,8
     LTEXT           "The selected file contains this information:",IDC_STATIC,7,74,136,8
@@ -423,7 +423,7 @@ END
 IDD_BOING DIALOGEX 0, 0, 187, 196
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Upload status"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,130,175,50,14,WS_DISABLED
     ICON            IDI_BOING1,IDC_BOING,7,7,21,20
@@ -436,7 +436,7 @@ END
 IDD_ERRORPANE DIALOGEX 0, 0, 190, 28
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
+FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Quit",IDOK,133,7,50,14
 END
@@ -524,13 +524,13 @@ BEGIN
         BEGIN
             VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
             VALUE "CompanyName", " "
-            VALUE "FileDescription", "ZDoom"
+            VALUE "FileDescription", "World of Kirbycraft"
             VALUE "FileVersion", RC_FILEVERSION2
-            VALUE "InternalName", "ZDoom"
-            VALUE "LegalCopyright", "Copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
-            VALUE "LegalTrademarks", "DoomR is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "zdoom.exe"
-            VALUE "ProductName", "ZDoom"
+            VALUE "InternalName", "World of Kirbycraft"
+            VALUE "LegalCopyright", "World of Kirbycraft is (C)Xane Myers; This is based on the ZDoom source port, copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
+            VALUE "LegalTrademarks", "The engine underlying World of Kirbycraft, ZDoom, has a legal notice: Doom(R) is a Registered Trademark of id Software, Inc."
+            VALUE "OriginalFilename", "wok.exe"
+            VALUE "ProductName", "World of Kirbycraft"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
     END
@@ -538,7 +538,7 @@ BEGIN
     BEGIN
         VALUE "Translation", 0x409, 1200
     END
-EN
+END
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
