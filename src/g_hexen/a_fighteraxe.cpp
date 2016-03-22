@@ -24,8 +24,6 @@ void A_FAxeCheckReadyG (AActor *actor);
 void A_FAxeCheckUpG (AActor *actor);
 void A_FAxeAttack (AActor *actor);
 
-extern void AdjustPlayerAngle (AActor *pmo, AActor *linetarget);
-
 // The Fighter's Axe --------------------------------------------------------
 
 class AFWeapAxe : public AFighterWeapon
@@ -68,11 +66,13 @@ FState *AFWeapAxe::GetAtkState (bool hold)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckReady)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	if (player->ReadyWeapon->Ammo1->Amount)
 	{
@@ -82,6 +82,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckReady)
 	{
 		DoReadyWeapon(self);
 	}
+	return 0;
 }
 
 //============================================================================
@@ -92,11 +93,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckReady)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckReadyG)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	if (player->ReadyWeapon->Ammo1->Amount <= 0)
 	{
@@ -106,6 +109,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckReadyG)
 	{
 		DoReadyWeapon(self);
 	}
+	return 0;
 }
 
 //============================================================================
@@ -116,11 +120,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckReadyG)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckUp)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	if (player->ReadyWeapon->Ammo1->Amount)
 	{
@@ -130,6 +136,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckUp)
 	{
 		CALL_ACTION(A_Raise, self);
 	}
+	return 0;
 }
 
 //============================================================================
@@ -140,11 +147,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckUp)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckUpG)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	if (player->ReadyWeapon->Ammo1->Amount <= 0)
 	{
@@ -154,6 +163,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckUpG)
 	{
 		CALL_ACTION(A_Raise, self);
 	}
+	return 0;
 }
 
 //============================================================================
@@ -164,16 +174,19 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckUpG)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckAtk)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	if (player->ReadyWeapon->Ammo1->Amount)
 	{
 		P_SetPsprite (player, ps_weapon, player->ReadyWeapon->FindState ("FireGlow"));
 	}
+	return 0;
 }
 
 //============================================================================
@@ -184,6 +197,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeCheckAtk)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FAxeAttack)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	angle_t angle;
 	fixed_t power;
 	int damage;
@@ -192,12 +207,12 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeAttack)
 	int useMana;
 	player_t *player;
 	AWeapon *weapon;
-	const PClass *pufftype;
-	AActor *linetarget;
+	PClassActor *pufftype;
+	FTranslatedLineTarget t;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	AActor *pmo=player->mo;
 
@@ -209,46 +224,33 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeAttack)
 	{
 		damage <<= 1;
 		power = 6*FRACUNIT;
-		pufftype = PClass::FindClass ("AxePuffGlow");
+		pufftype = PClass::FindActor ("AxePuffGlow");
 		useMana = 1;
 	}
 	else
 	{
-		pufftype = PClass::FindClass ("AxePuff");
+		pufftype = PClass::FindActor ("AxePuff");
 		useMana = 0;
 	}
 	for (i = 0; i < 16; i++)
 	{
-		angle = pmo->angle+i*(ANG45/16);
-		slope = P_AimLineAttack (pmo, angle, AXERANGE, &linetarget);
-		if (linetarget)
+		for (int j = 1; j >= -1; j -= 2)
 		{
-			P_LineAttack (pmo, angle, AXERANGE, slope, damage, NAME_Melee, pufftype, true, &linetarget);
-			if (linetarget != NULL)
+			angle = pmo->angle + j*i*(ANG45 / 16);
+			slope = P_AimLineAttack(pmo, angle, AXERANGE, &t);
+			if (t.linetarget)
 			{
-				if (linetarget->flags3&MF3_ISMONSTER || linetarget->player)
+				P_LineAttack(pmo, angle, AXERANGE, slope, damage, NAME_Melee, pufftype, true, &t);
+				if (t.linetarget != NULL)
 				{
-					P_ThrustMobj (linetarget, angle, power);
+					if (t.linetarget->flags3&MF3_ISMONSTER || t.linetarget->player)
+					{
+						P_ThrustMobj(t.linetarget, t.angleFromSource, power);
+					}
+					AdjustPlayerAngle(pmo, &t);
+					useMana++;
+					goto axedone;
 				}
-				AdjustPlayerAngle (pmo, linetarget);
-				useMana++; 
-				goto axedone;
-			}
-		}
-		angle = pmo->angle-i*(ANG45/16);
-		slope = P_AimLineAttack (pmo, angle, AXERANGE, &linetarget);
-		if (linetarget)
-		{
-			P_LineAttack (pmo, angle, AXERANGE, slope, damage, NAME_Melee, pufftype, true, &linetarget);
-			if (linetarget != NULL)
-			{
-				if (linetarget->flags3&MF3_ISMONSTER)
-				{
-					P_ThrustMobj (linetarget, angle, power);
-				}
-				AdjustPlayerAngle (pmo, linetarget);
-				useMana++; 
-				goto axedone;
 			}
 		}
 	}
@@ -256,7 +258,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FAxeAttack)
 	pmo->weaponspecial = 0;
 
 	angle = pmo->angle;
-	slope = P_AimLineAttack (pmo, angle, MELEERANGE, &linetarget);
+	slope = P_AimLineAttack (pmo, angle, MELEERANGE);
 	P_LineAttack (pmo, angle, MELEERANGE, slope, damage, NAME_Melee, pufftype, true);
 
 axedone:
@@ -275,6 +277,6 @@ axedone:
 			}
 		}
 	}
-	return;		
+	return 0;		
 }
 

@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 	if (hash == NULL)
 	{
 		fprintf(stderr, "Failed to get commit info: %s\n", strerror(errno));
-		strcpy(vertag, "v0.1b");	//Replaces "unknown version"
+		strcpy(vertag, "<unknown version>");
 		lastlog[0] = '\0';
 		lastlog[1] = '0';
 		lastlog[2] = '\0';

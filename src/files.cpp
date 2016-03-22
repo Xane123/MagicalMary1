@@ -257,12 +257,12 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (err != Z_OK && err != Z_STREAM_END)
 	{
-		I_FatalError ("The PK3 was modified while you were playing;\nXane apologizes for any lost progress, but next time, either save or always remember to close WoK before saving PK3 modifications.");
+		I_Error ("Corrupt zlib stream");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_FatalError ("The stream of data from the PK3 you're using stopped working.\non't ask Xane about this, as he doesn't understand \"ZLIB\".");
+		I_Error ("Ran out of data in zlib stream");
 	}
 
 	return len - Stream.avail_out;
@@ -331,12 +331,12 @@ long FileReaderBZ2::Read (void *buffer, long len)
 
 	if (err != BZ_OK && err != BZ_STREAM_END)
 	{
-		I_FatalError ("Corrupt bzip2 stream");
+		I_Error ("Corrupt bzip2 stream");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_FatalError ("Ran out of data in bzip2 stream");
+		I_Error ("Ran out of data in bzip2 stream");
 	}
 
 	return len - Stream.avail_out;

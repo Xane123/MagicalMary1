@@ -38,7 +38,7 @@
 void M_DrawConText (int color, int x, int y, const char *str);
 void M_SetVideoMode();
 
-EXTERN_CVAR(Bool, menu_pausesp)
+
 
 //=============================================================================
 //
@@ -121,7 +121,8 @@ public:
 
 	bool Activate()
 	{
-		M_StartMessage("Do you really want to do this?", 0);
+		const char *msg = GStrings("SAFEMESSAGE");
+		if (msg) M_StartMessage(msg, 0);
 		return true;
 	}
 };
@@ -228,6 +229,10 @@ public:
 			}
 			SetSelection(Selection);
 			S_Sound (CHAN_VOICE | CHAN_UI, "menu/change", snd_menuvolume, ATTN_NONE);
+		}
+		else
+		{
+			return FOptionMenuItem::MenuEvent(mkey, fromcontroller);
 		}
 		return true;
 	}
@@ -357,8 +362,7 @@ public:
 		if (ev->type == EV_KeyDown)
 		{
 			*pKey = ev->data1;
-			if(menu_pausesp==false) { menuactive = MENU_OnNoPause; }
-			else { menuactive = MENU_On; }
+			menuactive = MENU_On;
 			SetMenuMessage(0);
 			Close();
 			mParentMenu->MenuEvent((ev->data1 == KEY_ESCAPE)? MKEY_Abort : MKEY_Input, 0);
@@ -505,7 +509,7 @@ public:
 
 	int Draw(FOptionMenuDescriptor *desc, int y, int indent, bool selected)
 	{
-		const char *txt = mCurrent? (const char*)mAltText : mLabel;
+		const char *txt = mCurrent? mAltText.GetChars() : mLabel;
 		if (*txt == '$') txt = GStrings(txt + 1);
 		int w = SmallFont->StringWidth(txt) * CleanXfac_1;
 		int x = (screen->GetWidth() - w) / 2;

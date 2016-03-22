@@ -17,8 +17,6 @@ const fixed_t HAMMER_RANGE = MELEERANGE+MELEERANGE/2;
 
 static FRandom pr_hammeratk ("FHammerAtk");
 
-extern void AdjustPlayerAngle (AActor *pmo, AActor *linetarget);
-
 //============================================================================
 //
 // A_FHammerAttack
@@ -27,51 +25,55 @@ extern void AdjustPlayerAngle (AActor *pmo, AActor *linetarget);
 
 DEFINE_ACTION_FUNCTION(AActor, A_FHammerAttack)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	angle_t angle;
 	int damage;
 	fixed_t power;
 	int slope;
 	int i;
 	player_t *player;
-	AActor *linetarget;
+	FTranslatedLineTarget t;
+	PClassActor *hammertime;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	AActor *pmo=player->mo;
 
 	damage = 60+(pr_hammeratk()&63);
 	power = 10*FRACUNIT;
+	hammertime = PClass::FindActor("HammerPuff");
 	for (i = 0; i < 16; i++)
 	{
 		angle = pmo->angle + i*(ANG45/32);
-		slope = P_AimLineAttack (pmo, angle, HAMMER_RANGE, &linetarget, 0, ALF_CHECK3D);
-		if (linetarget)
+		slope = P_AimLineAttack (pmo, angle, HAMMER_RANGE, &t, 0, ALF_CHECK3D);
+		if (t.linetarget != NULL)
 		{
-			P_LineAttack (pmo, angle, HAMMER_RANGE, slope, damage, NAME_Melee, PClass::FindClass ("HammerPuff"), true, &linetarget);
-			if (linetarget != NULL)
+			P_LineAttack(pmo, angle, HAMMER_RANGE, slope, damage, NAME_Melee, hammertime, true, &t);
+			if (t.linetarget != NULL)
 			{
-				AdjustPlayerAngle(pmo, linetarget);
-				if (linetarget->flags3&MF3_ISMONSTER || linetarget->player)
+				AdjustPlayerAngle(pmo, &t);
+				if (t.linetarget->flags3 & MF3_ISMONSTER || t.linetarget->player)
 				{
-					P_ThrustMobj (linetarget, angle, power);
+					P_ThrustMobj(t.linetarget, t.angleFromSource, power);
 				}
 				pmo->weaponspecial = false; // Don't throw a hammer
 				goto hammerdone;
 			}
 		}
 		angle = pmo->angle-i*(ANG45/32);
-		slope = P_AimLineAttack(pmo, angle, HAMMER_RANGE, &linetarget, 0, ALF_CHECK3D);
-		if(linetarget)
+		slope = P_AimLineAttack(pmo, angle, HAMMER_RANGE, &t, 0, ALF_CHECK3D);
+		if (t.linetarget != NULL)
 		{
-			P_LineAttack(pmo, angle, HAMMER_RANGE, slope, damage, NAME_Melee, PClass::FindClass ("HammerPuff"), true, &linetarget);
-			if (linetarget != NULL)
+			P_LineAttack(pmo, angle, HAMMER_RANGE, slope, damage, NAME_Melee, hammertime, true, &t);
+			if (t.linetarget != NULL)
 			{
-				AdjustPlayerAngle(pmo, linetarget);
-				if (linetarget->flags3&MF3_ISMONSTER || linetarget->player)
+				AdjustPlayerAngle(pmo, &t);
+				if (t.linetarget->flags3 & MF3_ISMONSTER || t.linetarget->player)
 				{
-					P_ThrustMobj(linetarget, angle, power);
+					P_ThrustMobj(t.linetarget, t.angleFromSource, power);
 				}
 				pmo->weaponspecial = false; // Don't throw a hammer
 				goto hammerdone;
@@ -80,8 +82,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_FHammerAttack)
 	}
 	// didn't find any targets in meleerange, so set to throw out a hammer
 	angle = pmo->angle;
-	slope = P_AimLineAttack (pmo, angle, HAMMER_RANGE, &linetarget, 0, ALF_CHECK3D);
-	if (P_LineAttack (pmo, angle, HAMMER_RANGE, slope, damage, NAME_Melee, PClass::FindClass ("HammerPuff"), true) != NULL)
+	slope = P_AimLineAttack (pmo, angle, HAMMER_RANGE, NULL, 0, ALF_CHECK3D);
+	if (P_LineAttack (pmo, angle, HAMMER_RANGE, slope, damage, NAME_Melee, hammertime, true) != NULL)
 	{
 		pmo->weaponspecial = false;
 	}
@@ -97,7 +99,7 @@ hammerdone:
 	{ 
 		pmo->weaponspecial = false;
 	}
-	return;		
+	return 0;		
 }
 
 //============================================================================
@@ -108,27 +110,30 @@ hammerdone:
 
 DEFINE_ACTION_FUNCTION(AActor, A_FHammerThrow)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *mo;
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 
 	if (!player->mo->weaponspecial)
 	{
-		return;
+		return 0;
 	}
 	AWeapon *weapon = player->ReadyWeapon;
 	if (weapon != NULL)
 	{
 		if (!weapon->DepleteAmmo (weapon->bAltFire, false))
-			return;
+			return 0;
 	}
-	mo = P_SpawnPlayerMissile (player->mo, PClass::FindClass ("HammerMissile")); 
+	mo = P_SpawnPlayerMissile (player->mo, PClass::FindActor("HammerMissile")); 
 	if (mo)
 	{
 		mo->special1 = 0;
-	}	
+	}
+	return 0;
 }

@@ -20,6 +20,8 @@
 #include "doomstat.h"
 #include "v_palette.h"
 #include "farchive.h"
+#include "r_utility.h"
+
 #include "r_data/colormaps.h"
 
 static FRandom pr_torch ("Torch");
@@ -41,6 +43,18 @@ static FRandom pr_torch ("Torch");
 IMPLEMENT_CLASS (APowerup)
 
 // Powerup-Giver -------------------------------------------------------------
+
+IMPLEMENT_CLASS(PClassPowerupGiver)
+
+void PClassPowerupGiver::ReplaceClassRef(PClass *oldclass, PClass *newclass)
+{
+	Super::ReplaceClassRef(oldclass, newclass);
+	APowerupGiver *def = (APowerupGiver*)Defaults;
+	if (def != NULL)
+	{
+		if (def->PowerupType == oldclass) def->PowerupType = static_cast<PClassWeapon *>(newclass);
+	}
+}
 
 //===========================================================================
 //
@@ -369,9 +383,9 @@ void APowerInvulnerable::InitEffect ()
 	Super::InitEffect();
 	Owner->effects &= ~FX_RESPAWNINVUL;
 	Owner->flags2 |= MF2_INVULNERABLE;
-	if (Mode == NAME_None)
+	if (Mode == NAME_None && Owner->IsKindOf(RUNTIME_CLASS(APlayerPawn)))
 	{
-		Mode = (ENamedName)RUNTIME_TYPE(Owner)->Meta.GetMetaInt(APMETA_InvulMode);
+		Mode = static_cast<PClassPlayerPawn *>(Owner->GetClass())->InvulMode;
 	}
 	if (Mode == NAME_Reflective)
 	{
@@ -967,9 +981,9 @@ void APowerFlight::InitEffect ()
 	Owner->flags |= MF_NOGRAVITY;
 	if (Owner->Z() <= Owner->floorz)
 	{
-		Owner->velz = 4*FRACUNIT;	// thrust the player in the air a bit
+		Owner->vel.z = 4*FRACUNIT;	// thrust the player in the air a bit
 	}
-	if (Owner->velz <= -35*FRACUNIT)
+	if (Owner->vel.z <= -35*FRACUNIT)
 	{ // stop falling scream
 		S_StopSound (Owner, CHAN_VOICE);
 	}
@@ -1247,7 +1261,7 @@ void APowerSpeed::DoEffect ()
 		}
 	}
 
-	if (P_AproxDistance (Owner->velx, Owner->vely) <= 12*FRACUNIT)
+	if (P_AproxDistance (Owner->vel.x, Owner->vel.y) <= 12*FRACUNIT)
 		return;
 
 	AActor *speedMo = Spawn<APlayerSpeedTrail> (Owner->Pos(), NO_REPLACE);
@@ -1619,8 +1633,8 @@ void APowerDamage::ModifyDamage(int damage, FName damageType, int &newdamage, bo
 	static const fixed_t def = 4*FRACUNIT;
 	if (!passive && damage > 0)
 	{
-		const fixed_t * pdf = NULL;
-		DmgFactors * df = GetClass()->ActorInfo->DamageFactors;
+		const fixed_t *pdf = NULL;
+		DmgFactors *df = GetClass()->DamageFactors;
 		if (df != NULL && df->CountUsed() != 0)
 		{
 			pdf = df->CheckFactor(damageType);
@@ -1700,7 +1714,7 @@ void APowerProtection::ModifyDamage(int damage, FName damageType, int &newdamage
 	if (passive && damage > 0)
 	{
 		const fixed_t *pdf = NULL;
-		DmgFactors *df = GetClass()->ActorInfo->DamageFactors;
+		DmgFactors *df = GetClass()->DamageFactors;
 		if (df != NULL && df->CountUsed() != 0)
 		{
 			pdf = df->CheckFactor(damageType);
@@ -1887,9 +1901,9 @@ void APowerMorph::InitEffect( )
 	if (Owner != NULL && Owner->player != NULL && PlayerClass != NAME_None)
 	{
 		player_t *realplayer = Owner->player;	// Remember the identity of the player
-		const PClass *morph_flash = PClass::FindClass (MorphFlash);
-		const PClass *unmorph_flash = PClass::FindClass (UnMorphFlash);
-		const PClass *player_class = PClass::FindClass (PlayerClass);
+		PClassActor *morph_flash = PClass::FindActor(MorphFlash);
+		PClassActor *unmorph_flash = PClass::FindActor(UnMorphFlash);
+		PClassPlayerPawn *player_class = dyn_cast<PClassPlayerPawn>(PClass::FindClass (PlayerClass));
 		if (P_MorphPlayer(realplayer, realplayer, player_class, -1/*INDEFINITELY*/, MorphStyle, morph_flash, unmorph_flash))
 		{
 			Owner = realplayer->mo;				// Replace the new owner in our owner; safe because we are not attached to anything yet

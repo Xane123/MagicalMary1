@@ -57,38 +57,49 @@ static void TeloSpawn (AActor *source, const char *type)
 		fx->special1 = TELEPORT_LIFE;			// Lifetime countdown
 		fx->angle = source->angle;
 		fx->target = source->target;
-		fx->velx = source->velx >> 1;
-		fx->vely = source->vely >> 1;
-		fx->velz = source->velz >> 1;
+		fx->vel.x = source->vel.x >> 1;
+		fx->vel.y = source->vel.y >> 1;
+		fx->vel.z = source->vel.z >> 1;
 	}
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_TeloSpawnA)
 {
+	PARAM_ACTION_PROLOGUE;
 	TeloSpawn (self, "TelOtherFX2");
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_TeloSpawnB)
 {
+	PARAM_ACTION_PROLOGUE;
 	TeloSpawn (self, "TelOtherFX3");
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_TeloSpawnC)
 {
+	PARAM_ACTION_PROLOGUE;
 	TeloSpawn (self, "TelOtherFX4");
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_TeloSpawnD)
 {
+	PARAM_ACTION_PROLOGUE;
 	TeloSpawn (self, "TelOtherFX5");
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_CheckTeleRing)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (self->special1-- <= 0)
 	{
 		self->SetState (self->FindState(NAME_Death));
 	}
+	return 0;
 }
 
 //===========================================================================

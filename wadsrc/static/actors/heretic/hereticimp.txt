@@ -24,6 +24,8 @@ ACTOR HereticImp
 	HitObituary "$OB_HERETICIMPHIT"
 	
 	action native A_ImpMsAttack();
+	action native A_ImpDeath();
+	action native A_ImpXDeath1();
 	action native A_ImpExplode();
 	
 	

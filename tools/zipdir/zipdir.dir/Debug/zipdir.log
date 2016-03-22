@@ -1,0 +1,4 @@
+﻿  Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/CMakeLists.txt
+  CMake does not need to re-run because C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeFiles\generate.stamp is up-to-date.
+  zipdir.c
+  zipdir.vcxproj -> C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Debug\zipdir.exe

@@ -1134,7 +1134,7 @@ void FFlagCVar::DoSet (UCVarValue value, ECVarType type)
 	{
 		if (netgame && !players[consoleplayer].settings_controller)
 		{
-			Printf ("Only the host can change this;\nAsk them to change %s!\n", Name);
+			Printf ("Only setting controllers can change %s\n", Name);
 			return;
 		}
 		D_SendServerFlagChange (&ValueVar, BitNum, newval);
@@ -1236,7 +1236,7 @@ void FMaskCVar::DoSet (UCVarValue value, ECVarType type)
 	{
 		if (netgame && !players[consoleplayer].settings_controller)
 		{
-			Printf ("Only the host can change this;\nAsk them to change %s!\n", Name);
+			Printf ("Only setting controllers can change %s\n", Name);
 			return;
 		}
 		// Ugh...

@@ -22,7 +22,7 @@
 //
 //==========================================================================
 
-void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor * Owner, const PClass * blasteffect, bool dontdamage)
+void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner, PClassActor *blasteffect, bool dontdamage)
 {
 	angle_t angle,ang;
 	AActor *mo;
@@ -35,8 +35,8 @@ void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor * Owner
 
 	angle = Owner->AngleTo(victim);
 	angle >>= ANGLETOFINESHIFT;
-	victim->velx = FixedMul (speed, finecosine[angle]);
-	victim->vely = FixedMul (speed, finesine[angle]);
+	victim->vel.x = FixedMul (speed, finecosine[angle]);
+	victim->vel.y = FixedMul (speed, finesine[angle]);
 
 	// Spawn blast puff
 	ang = victim->AngleTo(Owner);
@@ -48,21 +48,21 @@ void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor * Owner
 	mo = Spawn (blasteffect, pos, ALLOW_REPLACE);
 	if (mo)
 	{
-		mo->velx = victim->velx;
-		mo->vely = victim->vely;
+		mo->vel.x = victim->vel.x;
+		mo->vel.y = victim->vel.y;
 	}
 	if (victim->flags & MF_MISSILE)
 	{
 		// [RH] Floor and ceiling huggers should not be blasted vertically.
 		if (!(victim->flags3 & (MF3_FLOORHUGGER|MF3_CEILINGHUGGER)))
 		{
-			victim->velz = 8*FRACUNIT;
-			mo->velz = victim->velz;
+			victim->vel.z = 8*FRACUNIT;
+			mo->vel.z = victim->vel.z;
 		}
 	}
 	else
 	{
-		victim->velz = (1000 / victim->Mass) << FRACBITS;
+		victim->vel.z = (1000 / victim->Mass) << FRACBITS;
 	}
 	if (victim->player)
 	{
@@ -97,13 +97,13 @@ enum
 
 DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 {
-	ACTION_PARAM_START(6);
-	ACTION_PARAM_INT  (blastflags,	0);
-	ACTION_PARAM_FIXED(strength,	1);
-	ACTION_PARAM_FIXED(radius,		2);
-	ACTION_PARAM_FIXED(speed,		3);
-	ACTION_PARAM_CLASS(blasteffect, 4);
-	ACTION_PARAM_SOUND(blastsound,	5);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_INT_OPT	(blastflags)			{ blastflags = 0; }
+	PARAM_FIXED_OPT	(strength)				{ strength = 255*FRACUNIT; }
+	PARAM_FIXED_OPT	(radius)				{ radius = 255*FRACUNIT; }
+	PARAM_FIXED_OPT	(speed)					{ speed = 20*FRACUNIT; }
+	PARAM_CLASS_OPT	(blasteffect, AActor)	{ blasteffect = PClass::FindActor("BlastEffect"); }
+	PARAM_SOUND_OPT	(blastsound)			{ blastsound = "BlastRadius"; }
 
 	AActor *mo;
 	TThinkerIterator<AActor> iterator;
@@ -111,15 +111,19 @@ DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 
 	if (self->player && (blastflags & BF_USEAMMO) && ACTION_CALL_FROM_WEAPON())
 	{
-		AWeapon * weapon = self->player->ReadyWeapon;
+		AWeapon *weapon = self->player->ReadyWeapon;
 		if (weapon != NULL && !weapon->DepleteAmmo(weapon->bAltFire))
-			return;
+		{
+			return 0;
+		}
 	}
 
 	S_Sound (self, CHAN_AUTO, blastsound, 1, ATTN_NORM);
 
-	if (!(blastflags & BF_DONTWARN)) P_NoiseAlert (self, self);
-
+	if (!(blastflags & BF_DONTWARN))
+	{
+		P_NoiseAlert (self, self);
+	}
 	while ( (mo = iterator.Next ()) )
 	{
 		if ((mo == self) || ((mo->flags2 & MF2_BOSS) && !(blastflags & BF_AFFECTBOSSES))
@@ -147,6 +151,12 @@ DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 		{ // Out of range
 			continue;
 		}
+		if (mo->Sector->PortalGroup != self->Sector->PortalGroup && !P_CheckSight(self, mo))
+		{
+			// in another region and cannot be seen.
+			continue;
+		}
 		BlastActor (mo, strength, speed, self, blasteffect, !!(blastflags & BF_NOIMPACTDAMAGE));
 	}
+	return 0;
 }

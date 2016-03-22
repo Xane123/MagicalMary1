@@ -25,12 +25,12 @@ static FRandom pr_fpatk ("FPunchAttack");
 
 #define MAX_ANGLE_ADJUST (5*ANGLE_1)
 
-void AdjustPlayerAngle (AActor *pmo, AActor *linetarget)
+void AdjustPlayerAngle (AActor *pmo, FTranslatedLineTarget *t)
 {
 	angle_t angle;
 	int difference;
 
-	angle = pmo->AngleTo(linetarget);
+	angle = pmo->AngleTo(t->linetarget);
 	difference = (int)angle - (int)pmo->angle;
 	if (abs(difference) > MAX_ANGLE_ADJUST)
 	{
@@ -59,32 +59,32 @@ void AdjustPlayerAngle (AActor *pmo, AActor *linetarget)
 
 static bool TryPunch(APlayerPawn *pmo, angle_t angle, int damage, fixed_t power)
 {
-	const PClass *pufftype;
-	AActor *linetarget;
+	PClassActor *pufftype;
+	FTranslatedLineTarget t;
 	int slope;
 
-	slope = P_AimLineAttack (pmo, angle, 2*MELEERANGE, &linetarget);
-	if (linetarget != NULL)
+	slope = P_AimLineAttack (pmo, angle, 2*MELEERANGE, &t);
+	if (t.linetarget != NULL)
 	{
 		if (++pmo->weaponspecial >= 3)
 		{
 			damage <<= 1;
 			power *= 3;
-			pufftype = PClass::FindClass ("HammerPuff");
+			pufftype = PClass::FindActor("HammerPuff");
 		}
 		else
 		{
-			pufftype = PClass::FindClass ("PunchPuff");
+			pufftype = PClass::FindActor("PunchPuff");
 		}
-		P_LineAttack (pmo, angle, 2*MELEERANGE, slope, damage, NAME_Melee, pufftype, true, &linetarget);
-		if (linetarget != NULL)
+		P_LineAttack (pmo, angle, 2*MELEERANGE, slope, damage, NAME_Melee, pufftype, true, &t);
+		if (t.linetarget != NULL)
 		{
-			if (linetarget->player != NULL || 
-				(linetarget->Mass != INT_MAX && (linetarget->flags3 & MF3_ISMONSTER)))
+			if (t.linetarget->player != NULL || 
+				(t.linetarget->Mass != INT_MAX && (t.linetarget->flags3 & MF3_ISMONSTER)))
 			{
-				P_ThrustMobj (linetarget, angle, power);
+				P_ThrustMobj (t.linetarget, t.angleFromSource, power);
 			}
-			AdjustPlayerAngle (pmo, linetarget);
+			AdjustPlayerAngle (pmo, &t);
 			return true;
 		}
 	}
@@ -99,6 +99,8 @@ static bool TryPunch(APlayerPawn *pmo, angle_t angle, int damage, fixed_t power)
 
 DEFINE_ACTION_FUNCTION(AActor, A_FPunchAttack)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	int damage;
 	fixed_t power;
 	int i;
@@ -106,7 +108,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FPunchAttack)
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	APlayerPawn *pmo = player->mo;
 
@@ -120,16 +122,16 @@ DEFINE_ACTION_FUNCTION(AActor, A_FPunchAttack)
 			if (pmo->weaponspecial >= 3)
 			{
 				pmo->weaponspecial = 0;
-				P_SetPsprite (player, ps_weapon, player->ReadyWeapon->FindState ("Fire2"));
+				P_SetPsprite (player, ps_weapon, player->ReadyWeapon->FindState("Fire2"));
 				S_Sound (pmo, CHAN_VOICE, "*fistgrunt", 1, ATTN_NORM);
 			}
-			return;
+			return 0;
 		}
 	}
 	// didn't find any creatures, so try to strike any walls
 	pmo->weaponspecial = 0;
 
-	AActor *linetarget;
-	int slope = P_AimLineAttack (pmo, pmo->angle, MELEERANGE, &linetarget);
-	P_LineAttack (pmo, pmo->angle, MELEERANGE, slope, damage, NAME_Melee, PClass::FindClass("PunchPuff"), true);
+	int slope = P_AimLineAttack (pmo, pmo->angle, MELEERANGE);
+	P_LineAttack (pmo, pmo->angle, MELEERANGE, slope, damage, NAME_Melee, PClass::FindActor("PunchPuff"), true);
+	return 0;
 }

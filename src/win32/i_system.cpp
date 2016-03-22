@@ -537,7 +537,7 @@ void I_DetectOS(void)
 		}
 		else
 		{
-			osname = "Millenium Edition";
+			osname = "Me";
 		}
 		break;
 
@@ -548,7 +548,7 @@ void I_DetectOS(void)
 		{
 			if (info.dwMinorVersion == 0)
 			{
-				osname = "2000 Professional";
+				osname = "2000";
 			}
 			if (info.dwMinorVersion == 1)
 			{
@@ -556,33 +556,33 @@ void I_DetectOS(void)
 			}
 			else if (info.dwMinorVersion == 2)
 			{
-				osname = "2003 SERVER (Why?)";
+				osname = "Server 2003";
 			}
 		}
 		else if (info.dwMajorVersion == 6)
 		{
 			if (info.dwMinorVersion == 0)
 			{
-				osname = (info.wProductType == VER_NT_WORKSTATION) ? "Vista" : "Server 2008 (WHY.)";
+				osname = (info.wProductType == VER_NT_WORKSTATION) ? "Vista" : "Server 2008";
 			}
 			else if (info.dwMinorVersion == 1)
 			{
-				osname = (info.wProductType == VER_NT_WORKSTATION) ? "7" : "Server 2008 (WHY.)";
+				osname = (info.wProductType == VER_NT_WORKSTATION) ? "7" : "Server 2008 R2";
 			}
 			else if (info.dwMinorVersion == 2)	
 			{
 				// Starting with Windows 8.1, you need to specify in your manifest
 				// the highest version of Windows you support, which will also be the
 				// highest version of Windows this function returns.
-				osname = (info.wProductType == VER_NT_WORKSTATION) ? "8" : "Server 2012 (WHY.)";
+				osname = (info.wProductType == VER_NT_WORKSTATION) ? "8" : "Server 2012";
 			}
 			else if (info.dwMinorVersion == 3)
 			{
-				osname = (info.wProductType == VER_NT_WORKSTATION) ? "8.1" : "Server 2012 R2 (WHY.)";
+				osname = (info.wProductType == VER_NT_WORKSTATION) ? "8.1" : "Server 2012 R2";
 			}
 			else if (info.dwMinorVersion == 4)
 			{
-				osname = (info.wProductType == VER_NT_WORKSTATION) ? "10" : "10 (Server); WHY.";
+				osname = (info.wProductType == VER_NT_WORKSTATION) ? "10 (or higher)" : "Server 10 (or higher)";
 			}
 		}
 		break;
@@ -595,14 +595,14 @@ void I_DetectOS(void)
 
 	if (OSPlatform == os_Win95)
 	{
-		Printf ("OS: Windows %s %lu.%lu.%lu %s\n",
+		if (!batchrun) Printf ("OS: Windows %s %lu.%lu.%lu %s\n",
 				osname,
 				info.dwMajorVersion, info.dwMinorVersion,
 				info.dwBuildNumber & 0xffff, info.szCSDVersion);
 	}
 	else
 	{
-		Printf ("OS: Windows %s (NT %lu.%lu) Build %lu\n    %s\n",
+		if (!batchrun) Printf ("OS: Windows %s (NT %lu.%lu) Build %lu\n    %s\n",
 				osname,
 				info.dwMajorVersion, info.dwMinorVersion,
 				info.dwBuildNumber, info.szCSDVersion);
@@ -610,7 +610,7 @@ void I_DetectOS(void)
 
 	if (OSPlatform == os_unknown)
 	{
-		Printf ("(Assuming Windows 2000)\n");
+		if (!batchrun) Printf ("(Assuming Windows 2000)\n");
 		OSPlatform = os_Win2k;
 	}
 }
@@ -727,7 +727,7 @@ void CalculateCPUSpeed()
 		PerfToMillisec = PerfToSec * 1000.0;
 	}
 
-	Printf ("CPU Speed: %.0f MHz\n", 0.001 / PerfToMillisec);
+	if (!batchrun) Printf ("CPU Speed: %.0f MHz\n", 0.001 / PerfToMillisec);
 }
 
 //==========================================================================
@@ -802,7 +802,7 @@ void STACK_ARGS I_FatalError(const char *error, ...)
 		// Record error to log (if logging)
 		if (Logfile)
 		{
-			fprintf(Logfile, "\n**** WoK CRASHED DUE TO A FATAL ERROR:\n%s\n", errortext);
+			fprintf(Logfile, "\n**** DIED WITH FATAL ERROR:\n%s\n", errortext);
 			fflush(Logfile);
 		}
 
@@ -1117,9 +1117,9 @@ static void SetQueryIWad(HWND dialog)
 	if (!query && queryiwad)
 	{
 		MessageBox(dialog,
-			"You've selected to run " GAMENAME " by default;"
-			"\n\nIf you want to see the IWAD-choosing dialog again,",
-			"hold SHIFT while lauching World of Kirbycraft.",
+			"You have chosen not to show this dialog box in the future.\n"
+			"If you wish to see it again, hold down SHIFT while starting " GAMENAME ".",
+			"Don't ask me this again",
 			MB_OK | MB_ICONINFORMATION);
 	}
 
@@ -1423,11 +1423,11 @@ static HCURSOR CreateBitmapCursor(int xhot, int yhot, HBITMAP and_mask, HBITMAP 
 {
 	ICONINFO iconinfo =
 	{
-		FALSE,		// fIcon
-		xhot,		// xHotspot
-		yhot,		// yHotspot
-		and_mask,	// hbmMask
-		color_mask	// hbmColor
+		FALSE,			// fIcon
+		(DWORD)xhot,	// xHotspot
+		(DWORD)yhot,	// yHotspot
+		and_mask,		// hbmMask
+		color_mask		// hbmColor
 	};
 	HCURSOR cursor = CreateIconIndirect(&iconinfo);
 
@@ -1476,7 +1476,7 @@ bool I_WriteIniFailed()
 		0,
 		NULL 
 	);
-	errortext.Format ("Your settings could not be saved to \n%s", GameConfig->GetPathName(), lpMsgBuf);
+	errortext.Format ("The config file %s could not be written:\n%s", GameConfig->GetPathName(), lpMsgBuf);
 	LocalFree (lpMsgBuf);
 	return MessageBox(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
 }

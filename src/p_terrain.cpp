@@ -627,13 +627,19 @@ static void ParseFloor (FScanner &sc)
 	FTextureID picnum;
 	int terrain;
 
+	bool opt = sc.CheckString("optional");
 	sc.MustGetString ();
+
 	picnum = TexMan.CheckForTexture (sc.String, FTexture::TEX_Flat,
 		FTextureManager::TEXMAN_Overridable|FTextureManager::TEXMAN_TryAny);
+
 	if (!picnum.Exists())
 	{
-		Printf ("Unknown flat %s\n", sc.String);
-		sc.MustGetString ();
+		if (!opt)
+		{
+			Printf("Unknown flat %s\n", sc.String);
+		}
+		sc.MustGetString();
 		return;
 	}
 	sc.MustGetString ();
@@ -696,6 +702,7 @@ int P_FindTerrain (FName name)
 {
 	unsigned int i;
 
+	if (name == NAME_Null) return -1;
 	for (i = 0; i < Terrains.Size (); i++)
 	{
 		if (Terrains[i].Name == name)

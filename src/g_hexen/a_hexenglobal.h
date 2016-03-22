@@ -3,6 +3,8 @@
 
 #include "d_player.h"
 
+void AdjustPlayerAngle(AActor *pmo, FTranslatedLineTarget *t);
+
 class AHolySpirit : public AActor
 {
 	DECLARE_CLASS (AHolySpirit, AActor)
@@ -27,6 +29,15 @@ class AMageWeapon : public AWeapon
 {
 	DECLARE_CLASS (AMageWeapon, AWeapon);
 public:
+};
+
+class AArtiPoisonBag : public AInventory
+{
+	DECLARE_CLASS (AArtiPoisonBag, AInventory)
+public:
+	bool HandlePickup (AInventory *item);
+	AInventory *CreateCopy (AActor *other);
+	void BeginPlay ();
 };
 
 #endif //__A_HEXENGLOBAL_H__

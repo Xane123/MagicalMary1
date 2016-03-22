@@ -63,8 +63,8 @@ public:
 	DImpactDecal (fixed_t z);
 	DImpactDecal (side_t *wall, const FDecalTemplate *templ);
 
-	static DImpactDecal *StaticCreate (const char *name, fixed_t x, fixed_t y, fixed_t z, side_t *wall, F3DFloor * ffloor, PalEntry color=0);
-	static DImpactDecal *StaticCreate (const FDecalTemplate *tpl, fixed_t x, fixed_t y, fixed_t z, side_t *wall, F3DFloor * ffloor, PalEntry color=0);
+	static DImpactDecal *StaticCreate (const char *name, const fixedvec3 &pos, side_t *wall, F3DFloor * ffloor, PalEntry color=0);
+	static DImpactDecal *StaticCreate (const FDecalTemplate *tpl, const fixedvec3 &pos, side_t *wall, F3DFloor * ffloor, PalEntry color=0);
 
 	void BeginPlay ();
 	void Destroy ();
@@ -106,11 +106,7 @@ class ASkyCamCompat : public ASkyViewpoint
 	DECLARE_CLASS (ASkyCamCompat, ASkyViewpoint)
 
 public:
-	void BeginPlay ()
-	{
-		// Do not call the SkyViewpoint's super method because it would trash our setup
-		AActor::BeginPlay();
-	}
+	void BeginPlay();
 };
 
 
@@ -215,7 +211,7 @@ public:
 
 	TObjPtr<AActor> UnmorphedMe;
 	int UnmorphTime, MorphStyle;
-	const PClass *MorphExitFlash;
+	PClassActor *MorphExitFlash;
 	ActorFlags FlagsSave;
 };
 

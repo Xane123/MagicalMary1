@@ -29,6 +29,7 @@
 #endif
 
 #include "templates.h"
+#include "d_player.h"
 #include "m_argv.h"
 #include "m_swap.h"
 #include "m_bbox.h"
@@ -68,6 +69,12 @@
 #include "po_man.h"
 #include "r_renderer.h"
 #include "r_data/colormaps.h"
+#include "p_blockmap.h"
+#include "r_utility.h"
+#include "p_spec.h"
+#ifndef NO_EDATA
+#include "edata.h"
+#endif
 
 #include "fragglescript/t_fs.h"
 
@@ -1687,21 +1694,18 @@ static void SetMapThingUserData(AActor *actor, unsigned udi)
 	{
 		FName varname = MapThingsUserData[udi].Property;
 		int value = MapThingsUserData[udi].Value;
-		PSymbol *sym = actor->GetClass()->Symbols.FindSymbol(varname, true);
-		PSymbolVariable *var;
+		PField *var = dyn_cast<PField>(actor->GetClass()->Symbols.FindSymbol(varname, true));
 
 		udi++;
 
-		if (sym == NULL || sym->SymbolType != SYM_Variable ||
-			!(var = static_cast<PSymbolVariable *>(sym))->bUserVar ||
-			var->ValueType.Type != VAL_Int)
+		if (var == NULL || (var->Flags & VARF_Native) || !var->Type->IsKindOf(RUNTIME_CLASS(PBasicType)))
 		{
 			DPrintf("%s is not a user variable in class %s\n", varname.GetChars(),
 				actor->GetClass()->TypeName.GetChars());
 		}
 		else
 		{ // Set the value of the specified user variable.
-			*(int *)(reinterpret_cast<BYTE *>(actor) + var->offset) = value;
+			var->Type->SetValue(reinterpret_cast<BYTE *>(actor) + var->Offset, value);
 		}
 	}
 }
@@ -1759,34 +1763,45 @@ void P_LoadThings (MapData * map)
 		mti[i].alpha = -1;
 		mti[i].health = 1;
 		mti[i].FloatbobPhase = -1;
-		flags &= ~MTF_SKILLMASK;
-		mti[i].flags = (short)((flags & 0xf) | 0x7e0);
-		if (gameinfo.gametype == GAME_Strife)
-		{
-			mti[i].flags &= ~MTF_AMBUSH;
-			if (flags & STF_SHADOW)			mti[i].flags |= MTF_SHADOW;
-			if (flags & STF_ALTSHADOW)		mti[i].flags |= MTF_ALTSHADOW;
-			if (flags & STF_STANDSTILL)		mti[i].flags |= MTF_STANDSTILL;
-			if (flags & STF_AMBUSH)			mti[i].flags |= MTF_AMBUSH;
-			if (flags & STF_FRIENDLY)		mti[i].flags |= MTF_FRIENDLY;
-		}
-		else
-		{
-			if (flags & BTF_BADEDITORCHECK)
-			{
-				flags &= 0x1F;
-			}
-			if (flags & BTF_NOTDEATHMATCH)	mti[i].flags &= ~MTF_DEATHMATCH;
-			if (flags & BTF_NOTCOOPERATIVE)	mti[i].flags &= ~MTF_COOPERATIVE;
-			if (flags & BTF_FRIENDLY)		mti[i].flags |= MTF_FRIENDLY;
-		}
-		if (flags & BTF_NOTSINGLE)			mti[i].flags &= ~MTF_SINGLE;
 
 		mti[i].x = LittleShort(mt->x) << FRACBITS;
 		mti[i].y = LittleShort(mt->y) << FRACBITS;
 		mti[i].angle = LittleShort(mt->angle);
 		mti[i].EdNum = LittleShort(mt->type);
 		mti[i].info = DoomEdMap.CheckKey(mti[i].EdNum);
+
+
+#ifndef NO_EDATA
+		if (mti[i].info != NULL && mti[i].info->Special == SMT_EDThing)
+		{
+			ProcessEDMapthing(&mti[i], flags);
+		}
+		else
+#endif
+		{
+			flags &= ~MTF_SKILLMASK;
+			mti[i].flags = (short)((flags & 0xf) | 0x7e0);
+			if (gameinfo.gametype == GAME_Strife)
+			{
+				mti[i].flags &= ~MTF_AMBUSH;
+				if (flags & STF_SHADOW)			mti[i].flags |= MTF_SHADOW;
+				if (flags & STF_ALTSHADOW)		mti[i].flags |= MTF_ALTSHADOW;
+				if (flags & STF_STANDSTILL)		mti[i].flags |= MTF_STANDSTILL;
+				if (flags & STF_AMBUSH)			mti[i].flags |= MTF_AMBUSH;
+				if (flags & STF_FRIENDLY)		mti[i].flags |= MTF_FRIENDLY;
+			}
+			else
+			{
+				if (flags & BTF_BADEDITORCHECK)
+				{
+					flags &= 0x1F;
+				}
+				if (flags & BTF_NOTDEATHMATCH)	mti[i].flags &= ~MTF_DEATHMATCH;
+				if (flags & BTF_NOTCOOPERATIVE)	mti[i].flags &= ~MTF_COOPERATIVE;
+				if (flags & BTF_FRIENDLY)		mti[i].flags |= MTF_FRIENDLY;
+			}
+			if (flags & BTF_NOTSINGLE)			mti[i].flags &= ~MTF_SINGLE;
+		}
 	}
 	delete [] mtp;
 }
@@ -1961,6 +1976,10 @@ void P_SetLineID (int i, line_t *ld)
 			
 		case Static_Init:
 			if (ld->args[1] == Init_SectorLink) setid = ld->args[0];
+			break;
+
+		case Line_SetPortal:
+			setid = ld->args[1]; // 0 = target id, 1 = this id, 2 = plane anchor
 			break;
 		}
 		if (setid != -1)
@@ -2154,10 +2173,23 @@ void P_LoadLineDefs (MapData * map)
 	for (i = 0; i < numlines; i++, mld++, ld++)
 	{
 		ld->Alpha = FRACUNIT;	// [RH] Opaque by default
+		ld->portalindex = UINT_MAX;
 
 		// [RH] Translate old linedef special and flags to be
 		//		compatible with the new format.
-		P_TranslateLineDef (ld, mld, i);
+
+		P_TranslateLineDef (ld, mld, -1);
+		// do not assign the tag for Extradata lines.
+		if (ld->special != Static_Init || (ld->args[1] != Init_EDLine && ld->args[1] != Init_EDSector))
+		{
+			tagManager.AddLineID(i, mld->tag);
+		}
+#ifndef NO_EDATA
+		if (ld->special == Static_Init && ld->args[1] == Init_EDLine)
+		{
+			ProcessEDLinedef(ld, mld->tag);
+		}
+#endif
 
 		ld->v1 = &vertexes[LittleShort(mld->v1)];
 		ld->v2 = &vertexes[LittleShort(mld->v2)];
@@ -2233,6 +2265,8 @@ void P_LoadLineDefs2 (MapData * map)
 	for (i = 0; i < numlines; i++, mld++, ld++)
 	{
 		int j;
+
+		ld->portalindex = UINT_MAX;
 
 		for (j = 0; j < 5; j++)
 			ld->args[j] = mld->args[j];
@@ -3187,9 +3221,9 @@ static void P_GroupLines (bool buildmap)
 			}
 		}
 
-		// set the soundorg to the middle of the bounding box
-		sector->soundorg[0] = bbox.Right()/2 + bbox.Left()/2;
-		sector->soundorg[1] = bbox.Top()/2 + bbox.Bottom()/2;
+		// set the center to the middle of the bounding box
+		sector->centerspot.x = bbox.Right()/2 + bbox.Left()/2;
+		sector->centerspot.y = bbox.Top()/2 + bbox.Bottom()/2;
 
 		// For triangular sectors the above does not calculate good points unless the longest of the triangle's lines is perfectly horizontal and vertical
 		if (sector->linecount == 3)
@@ -3211,8 +3245,8 @@ static void P_GroupLines (bool buildmap)
 					if (DMulScale32 (v->y - Triangle[0]->y, dx,
 									Triangle[0]->x - v->x, dy) != 0)
 					{
-						sector->soundorg[0] = Triangle[0]->x / 3 + Triangle[1]->x / 3 + v->x / 3;
-						sector->soundorg[1] = Triangle[0]->y / 3 + Triangle[1]->y / 3 + v->y / 3;
+						sector->centerspot.x = Triangle[0]->x / 3 + Triangle[1]->x / 3 + v->x / 3;
+						sector->centerspot.y = Triangle[0]->y / 3 + Triangle[1]->y / 3 + v->y / 3;
 						break;
 					}
 				}
@@ -3325,7 +3359,7 @@ void P_LoadBehavior (MapData * map)
 
 void P_GetPolySpots (MapData * map, TArray<FNodeBuilder::FPolyStart> &spots, TArray<FNodeBuilder::FPolyStart> &anchors)
 {
-	if (map->HasBehavior)
+	//if (map->HasBehavior)
 	{
 		for (unsigned int i = 0; i < MapThingsConverted.Size(); ++i)
 		{
@@ -3358,6 +3392,7 @@ void P_FreeLevelData ()
 	FPolyObj::ClearAllSubsectorLinks(); // can't be done as part of the polyobj deletion process.
 	SN_StopAllSequences ();
 	DThinker::DestroyAllThinkers ();
+	P_ClearPortals();
 	tagManager.Clear();
 	level.total_monsters = level.total_items = level.total_secrets =
 		level.killed_monsters = level.found_items = level.found_secrets =
@@ -3676,6 +3711,10 @@ void P_SetupLevel (const char *lumpname, int position)
 		}
 
 		FBehavior::StaticLoadDefaultModules ();
+#ifndef NO_EDATA
+		LoadMapinfoACSLump();
+#endif
+
 
 		P_LoadStrifeConversations (map, lumpname);
 
@@ -4006,7 +4045,8 @@ void P_SetupLevel (const char *lumpname, int position)
 
 	times[16].Clock();
 	if (reloop) P_LoopSidedefs (false);
-	PO_Init ();	// Initialize the polyobjs
+	PO_Init ();				// Initialize the polyobjs
+	P_FinalizePortals();	// finalize line portals after polyobjects have been initialized. This info is needed for properly flagging them.
 	times[16].Unclock();
 
 	assert(sidetemp != NULL);

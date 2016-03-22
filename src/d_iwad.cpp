@@ -381,13 +381,15 @@ int FIWadManager::CheckIWAD (const char *doomwaddir, WadStuff *wads)
 //
 //==========================================================================
 
+static bool havepicked = false;
+
 int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad)
 {
 	TArray<WadStuff> wads;
 	TArray<size_t> foundwads;
 	const char *iwadparm = Args->CheckValue ("-iwad");
-	size_t numwads;
 	int pickwad;
+	size_t numwads;
 	size_t i;
 	bool iwadparmfound = false;
 	FString custwad;
@@ -507,24 +509,21 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 
 	if (numwads == 0)
 	{
-		I_FatalError ("Cannot find " GAMESIG "'s IWAD, Doom II; This will soon be standalone, but\n"
-					  "Until then, get Doom II either through illegal/legal means or use Freedoom as\n"
-					  "the IWAD; By that, this means:\n\n"
+		I_FatalError ("Cannot find a game IWAD (doom.wad, doom2.wad, heretic.wad, etc.).\n"
+					  "Did you install " GAMENAME " properly? You can do either of the following:\n"
+					  "\n"
 #if defined(_WIN32)
-					  "As a Windows user:"
-					  "1. Place either DOOM2.WAD, Freedoom, or WoK itself in the same directory as " GAMESIG ".\n"
-					  "2. Edit your " GAMENAMELOWERCASE "-username.ini and add the directories of your iwads;\n(this file can be found or may be created in the directory wok.exe is placed.\n"
-					  "Place your IWADs in the list beneath [IWADSearch.Directories]");
+					  "1. Place one or more of these wads in the same directory as " GAMENAME ".\n"
+					  "2. Edit your " GAMENAMELOWERCASE "-username.ini and add the directories of your iwads\n"
+					  "to the list beneath [IWADSearch.Directories]");
 #elif defined(__APPLE__)
-					  "As a Mac user:"
 					  "1. Place one or more of these wads in ~/Library/Application Support/" GAMENAMELOWERCASE "/\n"
 					  "2. Edit your ~/Library/Preferences/" GAMENAMELOWERCASE ".ini and add the directories\n"
-					  "of your iwads to the list beneath [IWADSearch.Directories]. If this file doesn't exist, create it.");
+					  "of your iwads to the list beneath [IWADSearch.Directories]");
 #else
-					  "As a Linux user:"
 					  "1. Place one or more of these wads in ~/.config/" GAMENAMELOWERCASE "/.\n"
 					  "2. Edit your ~/.config/" GAMENAMELOWERCASE "/" GAMENAMELOWERCASE ".ini and add the directories of your\n"
-					  "iwads to the list beneath [IWADSearch.Directories].\nIf you're not familiar with Linux, make sure you have hidden folders visible and look in your home folder.");
+					  "iwads to the list beneath [IWADSearch.Directories]");
 #endif
 	}
 
@@ -539,27 +538,30 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 		{
 			for (i = 0; i < numwads; ++i)
 			{
-				FString basename = ExtractFileBase (wads[i].Path);
-				if (stricmp (basename, defaultiwad) == 0)
+				FString basename = ExtractFileBase(wads[i].Path);
+				if (stricmp(basename, defaultiwad) == 0)
 				{
 					defiwad = (int)i;
 					break;
 				}
 			}
 		}
-		pickwad = I_PickIWad (&wads[0], (int)numwads, queryiwad, defiwad);
-		if (pickwad >= 0)
+		if (!havepicked)	// just use the first IWAD if the restart doesn't have a -iwad parameter. We cannot open the picker in fullscreen mode.
 		{
-			// The newly selected IWAD becomes the new default
-			FString basename = ExtractFileBase (wads[pickwad].Path);
-			defaultiwad = basename;
+			pickwad = I_PickIWad(&wads[0], (int)numwads, queryiwad, defiwad);
+			if (pickwad >= 0)
+			{
+				// The newly selected IWAD becomes the new default
+				FString basename = ExtractFileBase(wads[pickwad].Path);
+				defaultiwad = basename;
+			}
+			if (pickwad < 0)
+				exit(0);
+			havepicked = true;
 		}
 	}
 
-	if (pickwad < 0)
-		exit (0);
-
-	// data.pk3 must always be the first file loaded and the IWAD second.
+	// zdoom.pk3 must always be the first file loaded and the IWAD second.
 	wadfiles.Clear();
 	D_AddFile (wadfiles, zdoom_wad);
 

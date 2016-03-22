@@ -858,8 +858,8 @@ void DFrameBuffer::DrawRateStuff ()
 			int rate_x;
 
 			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%2u ms (%3u fps)", howlong, LastCount);
-			rate_x = Width - chars * 8;
-			Clear (rate_x, 0, Width, 8, GPalette.BlackIndex, 0);
+			rate_x = Width - ConFont->StringWidth(&fpsbuff[0]);
+			Clear (rate_x, 0, Width, ConFont->GetHeight(), GPalette.BlackIndex, 0);
 			DrawText (ConFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0], TAG_DONE);
 
 			DWORD thisSec = ms/1000;
@@ -1397,7 +1397,7 @@ void V_CalcCleanFacs (int designwidth, int designheight, int realwidth, int real
 	int cx1, cy1, cx2, cy2;
 
 	ratio = CheckRatio(realwidth, realheight);
-	if (ratio & 4)
+	if (Is54Aspect(ratio))
 	{
 		cwidth = realwidth;
 		cheight = realheight * BaseRatioSizes[ratio][3] / 48;
@@ -1645,12 +1645,14 @@ CUSTOM_CVAR (Int, vid_aspect, 0, CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
 // 2: 16:10
 // 3: 17:10
 // 4: 5:4
+// 5: 17:10 (redundant)
+// 6: 21:9
 int CheckRatio (int width, int height, int *trueratio)
 {
 	int fakeratio = -1;
 	int ratio;
 
-	if ((vid_aspect >= 1) && (vid_aspect <= 5))
+	if ((vid_aspect >= 1) && (vid_aspect <= 6))
 	{
 		// [SP] User wants to force aspect ratio; let them.
 		fakeratio = int(vid_aspect);
@@ -1661,7 +1663,7 @@ int CheckRatio (int width, int height, int *trueratio)
 		else if (fakeratio == 5)
 		{
 			fakeratio = 3;
-		}
+		}        
 	}
 	if (vid_nowidescreen)
 	{
@@ -1702,6 +1704,11 @@ int CheckRatio (int width, int height, int *trueratio)
 	{
 		ratio = 4;
 	}
+    // test for 21:9 (actually 64:27, 21:9 is a semi-accurate ratio used in marketing)
+    else if (abs (height * 64/27 - width) < 30)
+    {
+        ratio = 6;
+    }
 	// Assume anything else is 4:3. (Which is probably wrong these days...)
 	else
 	{
@@ -1724,13 +1731,15 @@ int CheckRatio (int width, int height, int *trueratio)
 //     base_width = 240 * x / y
 //     multiplier = 320 / base_width
 //     base_height = 200 * multiplier
-const int BaseRatioSizes[5][4] =
+const int BaseRatioSizes[7][4] =
 {
 	{  960, 600, 0,                   48 },			//  4:3   320,      200,      multiplied by three
 	{ 1280, 450, 0,                   48*3/4 },		// 16:9   426.6667, 150,      multiplied by three
 	{ 1152, 500, 0,                   48*5/6 },		// 16:10  386,      166.6667, multiplied by three
 	{ 1224, 471, 0,                   48*40/51 },	// 17:10  408,		156.8627, multiplied by three
-	{  960, 640, (int)(6.5*FRACUNIT), 48*15/16 }	//  5:4   320,      213.3333, multiplied by three
+	{  960, 640, (int)(6.5*FRACUNIT), 48*15/16 },   //  5:4   320,      213.3333, multiplied by three
+	{ 1224, 471, 0,                   48*40/51 },	// 17:10  408,		156.8627, multiplied by three (REDUNDANT)
+	{ 1707, 338, 0,                   48*9/16 }     	// 21:9   568.8889, 337.5,    multiplied by three
 };
 
 void IVideo::DumpAdapters ()

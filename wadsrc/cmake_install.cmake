@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Myers/Source/zdoom-master/wadsrc
+# Install script for directory: C:/Users/Myers/git/world-of-kirbycraft/wadsrc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

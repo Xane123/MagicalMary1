@@ -166,9 +166,6 @@ terrain JustASound
 
 // Floor -> terrain mappings -----------------------------------------------
 
-
-floor OD1_WATR Water
-
 ifheretic
 floor FLTWAWA1 Water
 floor FLTFLWW1 Water

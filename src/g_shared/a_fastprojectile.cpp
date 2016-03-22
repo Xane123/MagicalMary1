@@ -4,6 +4,8 @@
 #include "g_level.h"
 #include "r_sky.h"
 #include "p_lnspec.h"
+#include "b_bot.h"
+#include "p_checkposition.h"
 
 
 IMPLEMENT_CLASS(AFastProjectile)
@@ -25,11 +27,8 @@ void AFastProjectile::Tick ()
 	fixed_t zfrac;
 	int changexy;
 
-	PrevX = X();
-	PrevY = Y();
-	PrevZ = Z();
+	ClearInterpolation();
 	fixed_t oldz = Z();
-	PrevAngle = angle;
 
 	if (!(flags5 & MF5_NOTIMEFREEZE))
 	{
@@ -48,7 +47,7 @@ void AFastProjectile::Tick ()
 	int count = 8;
 	if (radius > 0)
 	{
-		while ( ((abs(velx) >> shift) > radius) || ((abs(vely) >> shift) > radius))
+		while ( ((abs(vel.x) >> shift) > radius) || ((abs(vel.y) >> shift) > radius))
 		{
 			// we need to take smaller steps.
 			shift++;
@@ -57,11 +56,11 @@ void AFastProjectile::Tick ()
 	}
 
 	// Handle movement
-	if (velx || vely || (Z() != floorz) || velz)
+	if (vel.x || vel.y || (Z() != floorz) || vel.z)
 	{
-		xfrac = velx >> shift;
-		yfrac = vely >> shift;
-		zfrac = velz >> shift;
+		xfrac = vel.x >> shift;
+		yfrac = vel.y >> shift;
+		zfrac = vel.z >> shift;
 		changexy = xfrac || yfrac;
 		int ripcount = count >> 3;
 		for (i = 0; i < count; i++)
@@ -80,7 +79,7 @@ void AFastProjectile::Tick ()
 						if (tm.ceilingline &&
 							tm.ceilingline->backsector &&
 							tm.ceilingline->backsector->GetTexture(sector_t::ceiling) == skyflatnum &&
-							Z() >= tm.ceilingline->backsector->ceilingplane.ZatPoint (this))
+							Z() >= tm.ceilingline->backsector->ceilingplane.ZatPoint(PosRelative(tm.ceilingline)))
 						{
 							// Hack to prevent missiles exploding against the sky.
 							// Does not handle sky floors.
@@ -138,17 +137,8 @@ void AFastProjectile::Tick ()
 			}
 		}
 	}
-	if ((flags7 & MF7_HANDLENODELAY) && !(flags2 & MF2_DORMANT))
-	{
-		flags7 &= ~MF7_HANDLENODELAY;
-		if (state->GetNoDelay())
-		{
-			// For immediately spawned objects with the NoDelay flag set for their
-			// Spawn state, explicitly call the current state's function.
-			if (state->CallAction(this, this) && (ObjectFlags & OF_EuthanizeMe))
-				return;				// freed itself
-		}
-	}
+	if (!CheckNoDelay())
+		return;		// freed itself
 	// Advance the state
 	if (tics != -1)
 	{
@@ -168,7 +158,7 @@ void AFastProjectile::Effect()
 {
 	//if (pr_smoke() < 128)	// [RH] I think it looks better if it's consistent
 	{
-		FName name = (ENamedName) this->GetClass()->Meta.GetMetaInt (ACMETA_MissileName, NAME_None);
+		FName name = GetClass()->MissileName;
 		if (name != NAME_None)
 		{
 			fixed_t hitz = Z()-8*FRACUNIT;
@@ -178,9 +168,9 @@ void AFastProjectile::Effect()
 				hitz = floorz;
 			}
 			// Do not clip this offset to the floor.
-			hitz += GetClass()->Meta.GetMetaFixed (ACMETA_MissileHeight);
+			hitz += GetClass()->MissileHeight;
 		
-			const PClass *trail = PClass::FindClass(name);
+			PClassActor *trail = PClass::FindActor(name);
 			if (trail != NULL)
 			{
 				AActor *act = Spawn (trail, X(), Y(), hitz, ALLOW_REPLACE);

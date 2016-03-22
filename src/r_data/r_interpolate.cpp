@@ -344,9 +344,10 @@ int DInterpolation::AddRef()
 //
 //==========================================================================
 
-int DInterpolation::DelRef()
+int DInterpolation::DelRef(bool force)
 {
 	if (refcount > 0) --refcount;
+	if (force && refcount == 0) Destroy();
 	return refcount;
 }
 
@@ -468,6 +469,7 @@ void DSectorPlaneInterpolation::Restore()
 		sector->SetPlaneTexZ(sector_t::ceiling, baktexz);
 	}
 	P_RecalculateAttached3DFloors(sector);
+	sector->CheckPortalPlane(ceiling? sector_t::ceiling : sector_t::floor);
 }
 
 //==========================================================================
@@ -504,6 +506,7 @@ void DSectorPlaneInterpolation::Interpolate(fixed_t smoothratio)
 		*pheight = oldheight + FixedMul(bakheight - oldheight, smoothratio);
 		sector->SetPlaneTexZ(pos, oldtexz + FixedMul(baktexz - oldtexz, smoothratio));
 		P_RecalculateAttached3DFloors(sector);
+		sector->CheckPortalPlane(pos);
 	}
 }
 
@@ -935,20 +938,6 @@ DInterpolation *sector_t::SetInterpolation(int position, bool attach)
 	interpolations[position]->AddRef();
 	GC::WriteBarrier(interpolations[position]);
 	return interpolations[position];
-}
-
-//==========================================================================
-//
-//
-//
-//==========================================================================
-
-void sector_t::StopInterpolation(int position)
-{
-	if (interpolations[position] != NULL)
-	{
-		interpolations[position]->DelRef();
-	}
 }
 
 //==========================================================================

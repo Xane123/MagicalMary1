@@ -26,6 +26,7 @@
 
 #include "m_bbox.h"
 #include "p_local.h"
+#include "p_maputl.h"
 
 //==========================================================================
 //
@@ -33,7 +34,7 @@
 //
 //==========================================================================
 
-FBoundingBox::FBoundingBox(fixed_t x, fixed_t y, fixed_t radius)
+void FBoundingBox::setBox(fixed_t x, fixed_t y, fixed_t radius)
 {
 	m_Box[BOXTOP] = (fixed_t)MIN<SQWORD>((SQWORD)y + radius, FIXED_MAX);
 	m_Box[BOXLEFT] = (fixed_t)MAX<SQWORD>((SQWORD)x - radius, FIXED_MIN);

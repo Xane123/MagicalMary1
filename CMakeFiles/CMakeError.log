@@ -1,0 +1,262 @@
+Determining size of off64_t failed with the following output:
+Change Dir: C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_c79c6.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24730.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 3/21/2016 8:48:14 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_c79c6.dir\Debug\".
+  Creating directory "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_c79c6.dir\Debug\cmTC_c79c6.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_c79c6.dir\Debug\cmTC_c79c6.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _LARGEFILE64_SOURCE=1 /D HAVE_SYS_TYPES_H /D HAVE_STDINT_H /D HAVE_STDDEF_H /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c79c6.dir\Debug\\" /Fd"cmTC_c79c6.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _LARGEFILE64_SOURCE=1 /D HAVE_SYS_TYPES_H /D HAVE_STDINT_H /D HAVE_STDDEF_H /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c79c6.dir\Debug\\" /Fd"cmTC_c79c6.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c"
+  
+  OFF64_T.c
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(19): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(20): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(21): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(22): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(23): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+Done Building Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj" (default targets) -- FAILED.
+
+Build FAILED.
+
+"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(19): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(20): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(21): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(22): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CheckTypeSize\OFF64_T.c(23): error C2065: 'off64_t': undeclared identifier [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c79c6.vcxproj]
+
+    0 Warning(s)
+    5 Error(s)
+
+Time Elapsed 00:00:01.09
+
+C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CheckTypeSize/OFF64_T.c:
+#include <sys/types.h>
+#include <stdint.h>
+#include <stddef.h>
+
+
+#undef KEY
+#if defined(__i386)
+# define KEY '_','_','i','3','8','6'
+#elif defined(__x86_64)
+# define KEY '_','_','x','8','6','_','6','4'
+#elif defined(__ppc__)
+# define KEY '_','_','p','p','c','_','_'
+#elif defined(__ppc64__)
+# define KEY '_','_','p','p','c','6','4','_','_'
+#endif
+
+#define SIZE (sizeof(off64_t))
+char info_size[] =  {'I', 'N', 'F', 'O', ':', 's','i','z','e','[',
+  ('0' + ((SIZE / 10000)%10)),
+  ('0' + ((SIZE / 1000)%10)),
+  ('0' + ((SIZE / 100)%10)),
+  ('0' + ((SIZE / 10)%10)),
+  ('0' +  (SIZE    % 10)),
+  ']',
+#ifdef KEY
+  ' ','k','e','y','[', KEY, ']',
+#endif
+  '\0'};
+
+#ifdef __CLASSIC_C__
+int main(argc, argv) int argc; char *argv[];
+#else
+int main(int argc, char *argv[])
+#endif
+{
+  int require = 0;
+  require += info_size[argc];
+  (void)argv;
+  return require;
+}
+
+
+Determining if the function fseeko exists failed with the following output:
+Change Dir: C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_ff572.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24730.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 3/21/2016 8:48:16 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_ff572.dir\Debug\".
+  Creating directory "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_ff572.dir\Debug\cmTC_ff572.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_ff572.dir\Debug\cmTC_ff572.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=fseeko /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_ff572.dir\Debug\\" /Fd"cmTC_ff572.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=fseeko /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_ff572.dir\Debug\\" /Fd"cmTC_ff572.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.c"
+  
+  CheckFunctionExists.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_ff572.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp/Debug/cmTC_ff572.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp/Debug/cmTC_ff572.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_ff572.dir\Debug\CheckFunctionExists.obj
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol _fseeko referenced in function _main [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj]
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_ff572.exe : fatal error LNK1120: 1 unresolved externals [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj]
+Done Building Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj" (default targets) -- FAILED.
+
+Build FAILED.
+
+"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj" (default target) (1) ->
+(Link target) -> 
+  CheckFunctionExists.obj : error LNK2019: unresolved external symbol _fseeko referenced in function _main [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj]
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_ff572.exe : fatal error LNK1120: 1 unresolved externals [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_ff572.vcxproj]
+
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.46
+
+
+Determining if the include file unistd.h exists failed with the following output:
+Change Dir: C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_c80ad.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24730.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 3/21/2016 8:48:18 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c80ad.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_c80ad.dir\Debug\".
+  Creating directory "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_c80ad.dir\Debug\cmTC_c80ad.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_c80ad.dir\Debug\cmTC_c80ad.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c80ad.dir\Debug\\" /Fd"cmTC_c80ad.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c80ad.dir\Debug\\" /Fd"cmTC_c80ad.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
+  
+  CheckIncludeFile.c
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c80ad.vcxproj]
+Done Building Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c80ad.vcxproj" (default targets) -- FAILED.
+
+Build FAILED.
+
+"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c80ad.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\CheckIncludeFile.c(1): fatal error C1083: Cannot open include file: 'unistd.h': No such file or directory [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_c80ad.vcxproj]
+
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.65
+
+
+Determining if the function strndup exists failed with the following output:
+Change Dir: C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_501f7.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24730.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 3/21/2016 8:48:23 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_501f7.dir\Debug\".
+  Creating directory "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_501f7.dir\Debug\cmTC_501f7.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_501f7.dir\Debug\cmTC_501f7.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strndup /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_501f7.dir\Debug\\" /Fd"cmTC_501f7.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strndup /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_501f7.dir\Debug\\" /Fd"cmTC_501f7.dir\Debug\vc140.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.c"
+  
+  CheckFunctionExists.c
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_501f7.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp/Debug/cmTC_501f7.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp/Debug/cmTC_501f7.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_501f7.dir\Debug\CheckFunctionExists.obj
+CheckFunctionExists.obj : error LNK2019: unresolved external symbol _strndup referenced in function _main [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj]
+C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_501f7.exe : fatal error LNK1120: 1 unresolved externals [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj]
+Done Building Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj" (default targets) -- FAILED.
+
+Build FAILED.
+
+"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj" (default target) (1) ->
+(Link target) -> 
+  CheckFunctionExists.obj : error LNK2019: unresolved external symbol _strndup referenced in function _main [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj]
+  C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_501f7.exe : fatal error LNK1120: 1 unresolved externals [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_501f7.vcxproj]
+
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.76
+
+
+Performing C++ SOURCE FILE Test CAN_DO_MFPMATH failed with the following output:
+Change Dir: C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_16a96.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Microsoft (R) Build Engine version 14.0.24730.2
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 3/21/2016 8:48:57 PM.
+The target "BeforeGenerateProjectPriFile" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\Microsoft\NuGet\Microsoft.NuGet.targets (186,61)" does not exist in the project, and will be ignored.
+Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_16a96.dir\Debug\".
+  Creating directory "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_16a96.dir\Debug\cmTC_16a96.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_16a96.dir\Debug\cmTC_16a96.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CAN_DO_MFPMATH /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_16a96.dir\Debug\\" /Fd"cmTC_16a96.dir\Debug\vc140.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue  -msse2 -mfpmath=sse "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\src.cxx"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23506 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CAN_DO_MFPMATH /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_16a96.dir\Debug\\" /Fd"cmTC_16a96.dir\Debug\vc140.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue  -msse2 -mfpmath=sse "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\src.cxx"
+  
+cl : Command line warning D9002: ignoring unknown option '-msse2' [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj]
+  src.cxx
+cl : Command line warning D9002: ignoring unknown option '-mfpmath=sse' [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj]
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_16a96.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp/Debug/cmTC_16a96.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/CMakeTmp/Debug/cmTC_16a96.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_16a96.dir\Debug\src.obj
+  cmTC_16a96.vcxproj -> C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\Debug\cmTC_16a96.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_16a96.dir\Debug\cmTC_16a96.tlog\unsuccessfulbuild".
+  Touching "cmTC_16a96.dir\Debug\cmTC_16a96.tlog\cmTC_16a96.lastbuildstate".
+Done Building Project "C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj" (default targets).
+
+Build succeeded.
+
+"C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  cl : Command line warning D9002: ignoring unknown option '-msse2' [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj]
+  cl : Command line warning D9002: ignoring unknown option '-mfpmath=sse' [C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\CMakeTmp\cmTC_16a96.vcxproj]
+
+    2 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.78
+
+Source file was:
+int main() { return 0; }

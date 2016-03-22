@@ -31,6 +31,7 @@
 #include "farchive.h"
 #include "r_utility.h"
 #include "a_sharedglobal.h"
+#include "p_local.h"
 #include "r_data/colormaps.h"
 
 
@@ -805,7 +806,7 @@ int sector_t::GetCeilingLight () const
 
 ASkyViewpoint *sector_t::GetSkyBox(int which)
 {
-	if (SkyBoxes[which] != NULL) return SkyBoxes[which];
+	if (SkyBoxes[which] != NULL) return barrier_cast<ASkyViewpoint*>(SkyBoxes[which]);
 	if (MoreFlags & (SECF_NOFLOORSKYBOX << which)) return NULL;
 	return level.DefaultSkybox;
 }
@@ -871,6 +872,161 @@ int sector_t::GetTerrain(int pos) const
 	return terrainnum[pos] >= 0 ? terrainnum[pos] : TerrainTypes[GetTexture(pos)];
 }
 
+void sector_t::CheckPortalPlane(int plane)
+{
+	AActor *portal = SkyBoxes[plane];
+	if (!portal || portal->special1 != SKYBOX_LINKEDPORTAL) return;
+
+	fixed_t planeh = planes[plane].TexZ;
+	int obstructed = PLANEF_OBSTRUCTED * (plane == sector_t::floor ?
+		planeh > portal->threshold : planeh < portal->threshold);
+	planes[plane].Flags = (planes[plane].Flags  & ~PLANEF_OBSTRUCTED) | obstructed;
+}
+
+//===========================================================================
+//
+// Finds the highest ceiling at the given position, all portals considered
+//
+//===========================================================================
+
+fixed_t sector_t::HighestCeilingAt(fixed_t x, fixed_t y, sector_t **resultsec)
+{
+	sector_t *check = this;
+	fixed_t planeheight = FIXED_MIN;
+
+	// Continue until we find a blocking portal or a portal below where we actually are.
+	while (!check->PortalBlocksMovement(ceiling) && planeheight < check->SkyBoxes[ceiling]->threshold)
+	{
+		fixedvec2 pos = check->CeilingDisplacement();
+		x += pos.x;
+		y += pos.y;
+		planeheight = check->SkyBoxes[ceiling]->threshold;
+		check = P_PointInSector(x, y);
+	}
+	if (resultsec) *resultsec = check;
+	return check->ceilingplane.ZatPoint(x, y);
+}
+
+//===========================================================================
+//
+// Finds the lowest floor at the given position, all portals considered
+//
+//===========================================================================
+
+fixed_t sector_t::LowestFloorAt(fixed_t x, fixed_t y, sector_t **resultsec)
+{
+	sector_t *check = this;
+	fixed_t planeheight = FIXED_MAX;
+
+	// Continue until we find a blocking portal or a portal above where we actually are.
+	while (!check->PortalBlocksMovement(floor) && planeheight > check->SkyBoxes[floor]->threshold)
+	{
+		fixedvec2 pos = check->FloorDisplacement();
+		x += pos.x;
+		y += pos.y;
+		planeheight = check->SkyBoxes[floor]->threshold;
+		check = P_PointInSector(x, y);
+	}
+	if (resultsec) *resultsec = check;
+	return check->floorplane.ZatPoint(x, y);
+}
+
+
+fixed_t sector_t::NextHighestCeilingAt(fixed_t x, fixed_t y, fixed_t bottomz, fixed_t topz, int flags, sector_t **resultsec, F3DFloor **resultffloor)
+{
+	sector_t *sec = this;
+	fixed_t planeheight = FIXED_MIN;
+
+	while (true)
+	{
+		// Looking through planes from bottom to top
+		fixed_t realceil = sec->ceilingplane.ZatPoint(x, y);
+		for (int i = sec->e->XFloor.ffloors.Size() - 1; i >= 0; --i)
+		{
+			F3DFloor *rover = sec->e->XFloor.ffloors[i];
+			if (!(rover->flags & FF_SOLID) || !(rover->flags & FF_EXISTS)) continue;
+
+			fixed_t ff_bottom = rover->bottom.plane->ZatPoint(x, y);
+			fixed_t ff_top = rover->top.plane->ZatPoint(x, y);
+
+			fixed_t delta1 = bottomz - (ff_bottom + ((ff_top - ff_bottom) / 2));
+			fixed_t delta2 = topz - (ff_bottom + ((ff_top - ff_bottom) / 2));
+
+			if (ff_bottom < realceil && abs(delta1) >= abs(delta2))
+			{ 
+				if (resultsec) *resultsec = sec;
+				if (resultffloor) *resultffloor = rover;
+				return ff_bottom;
+			}
+		}
+		if ((flags & FFCF_NOPORTALS) || sec->PortalBlocksMovement(ceiling) || planeheight >= sec->SkyBoxes[ceiling]->threshold)
+		{ // Use sector's floor
+			if (resultffloor) *resultffloor = NULL;
+			if (resultsec) *resultsec = sec;
+			return realceil;
+		}
+		else
+		{
+			fixedvec2 pos = sec->CeilingDisplacement();
+			x += pos.x;
+			y += pos.y;
+			planeheight = sec->SkyBoxes[ceiling]->threshold;
+			sec = P_PointInSector(x, y);
+		}
+	}
+}
+
+fixed_t sector_t::NextLowestFloorAt(fixed_t x, fixed_t y, fixed_t z, int flags, fixed_t steph, sector_t **resultsec, F3DFloor **resultffloor)
+{
+	sector_t *sec = this;
+	fixed_t planeheight = FIXED_MAX;
+	while (true)
+	{
+		// Looking through planes from top to bottom
+		unsigned numff = sec->e->XFloor.ffloors.Size();
+		fixed_t realfloor = sec->floorplane.ZatPoint(x, y);
+		for (unsigned i = 0; i < numff; ++i)
+		{
+			F3DFloor *ff = sec->e->XFloor.ffloors[i];
+
+
+			// either with feet above the 3D floor or feet with less than 'stepheight' map units inside
+			if ((ff->flags & (FF_EXISTS | FF_SOLID)) == (FF_EXISTS | FF_SOLID))
+			{
+				fixed_t ffz = ff->top.plane->ZatPoint(x, y);
+				fixed_t ffb = ff->bottom.plane->ZatPoint(x, y);
+
+				if (ffz > realfloor && (z >= ffz || (!(flags & FFCF_3DRESTRICT) && (ffb < z && ffz < z + steph))))
+				{ // This floor is beneath our feet.
+					if (resultsec) *resultsec = sec;
+					if (resultffloor) *resultffloor = ff;
+					return ffz;
+				}
+			}
+		}
+		if ((flags & FFCF_NOPORTALS) || sec->PortalBlocksMovement(sector_t::floor) || planeheight <= sec->SkyBoxes[floor]->threshold)
+		{ // Use sector's floor
+			if (resultffloor) *resultffloor = NULL;
+			if (resultsec) *resultsec = sec;
+			return realfloor;
+		}
+		else
+		{
+			fixedvec2 pos = sec->FloorDisplacement();
+			x += pos.x;
+			y += pos.y;
+			planeheight = sec->SkyBoxes[floor]->threshold;
+			sec = P_PointInSector(x, y);
+		}
+	}
+}
+
+//===========================================================================
+//
+// 
+//
+//===========================================================================
+
 FArchive &operator<< (FArchive &arc, secspecial_t &p)
 {
 	if (SaveVersion < 4529)
@@ -895,6 +1051,11 @@ FArchive &operator<< (FArchive &arc, secspecial_t &p)
 }
 
 
+//===========================================================================
+//
+// 
+//
+//===========================================================================
 
 bool secplane_t::CopyPlaneIfValid (secplane_t *dest, const secplane_t *opp) const
 {
@@ -1072,4 +1233,3 @@ int side_t::GetLightLevel (bool foggy, int baselight, bool is3dlight, int *pfake
 	}
 	return baselight;
 }
-

@@ -13,6 +13,7 @@
 #include "teaminfo.h"
 #include "d_net.h"
 #include "farchive.h"
+#include "d_player.h"
 
 IMPLEMENT_POINTY_CLASS(DBot)
  DECLARE_POINTER(dest)
@@ -270,7 +271,7 @@ void InitBotStuff()
 			{
 				w->MoveCombatDist = botinits[i].movecombatdist;
 				w->WeaponFlags |= botinits[i].weaponflags;
-				w->ProjectileType = PClass::FindClass(botinits[i].projectile);
+				w->ProjectileType = PClass::FindActor(botinits[i].projectile);
 			}
 		}
 	}

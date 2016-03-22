@@ -15,6 +15,8 @@
 #include "r_data/r_translate.h"
 #include "doomstat.h"
 #include "farchive.h"
+#include "d_player.h"
+#include "a_morph.h"
 
 // Include all the other Heretic stuff here to reduce compile time
 #include "a_chicken.cpp"
@@ -43,8 +45,8 @@ static FRandom pr_volcimpact ("VolcBallImpact");
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_PodPain)
 {
-	ACTION_PARAM_START(1);
-	ACTION_PARAM_CLASS(gootype, 0);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_CLASS_OPT	(gootype, AActor)	{ gootype = PClass::FindActor("PodGoo"); }
 
 	int count;
 	int chance;
@@ -53,16 +55,17 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_PodPain)
 	chance = pr_podpain ();
 	if (chance < 128)
 	{
-		return;
+		return 0;
 	}
 	for (count = chance > 240 ? 2 : 1; count; count--)
 	{
 		goo = Spawn(gootype, self->PosPlusZ(48*FRACUNIT), ALLOW_REPLACE);
 		goo->target = self;
-		goo->velx = pr_podpain.Random2() << 9;
-		goo->vely = pr_podpain.Random2() << 9;
-		goo->velz = FRACUNIT/2 + (pr_podpain() << 9);
+		goo->vel.x = pr_podpain.Random2() << 9;
+		goo->vel.y = pr_podpain.Random2() << 9;
+		goo->vel.z = FRACUNIT/2 + (pr_podpain() << 9);
 	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -73,15 +76,18 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_PodPain)
 
 DEFINE_ACTION_FUNCTION(AActor, A_RemovePod)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *mo;
 
-	if ( (mo = self->master))
+	if ( (mo = self->master) )
 	{
 		if (mo->special1 > 0)
 		{
 			mo->special1--;
 		}
 	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -94,8 +100,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_RemovePod)
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_MakePod)
 {
-	ACTION_PARAM_START(1);
-	ACTION_PARAM_CLASS(podtype, 0);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_CLASS_OPT(podtype, AActor)	{ podtype = PClass::FindActor("Pod"); }
 
 	AActor *mo;
 	fixed_t x;
@@ -103,7 +109,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_MakePod)
 
 	if (self->special1 == MAX_GEN_PODS)
 	{ // Too many generated pods
-		return;
+		return 0;
 	}
 	x = self->X();
 	y = self->Y();
@@ -111,14 +117,14 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_MakePod)
 	if (!P_CheckPosition (mo, x, y))
 	{ // Didn't fit
 		mo->Destroy ();
-		return;
+		return 0;
 	}
 	mo->SetState (mo->FindState("Grow"));
 	P_ThrustMobj (mo, pr_makepod()<<24, (fixed_t)(4.5*FRACUNIT));
 	S_Sound (mo, CHAN_BODY, self->AttackSound, 1, ATTN_IDLE);
 	self->special1++; // Increment generated pod count
 	mo->master = self; // Link the generator to the pod
-	return;
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -129,10 +135,13 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_MakePod)
 
 DEFINE_ACTION_FUNCTION(AActor, A_AccTeleGlitter)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (++self->health > 35)
 	{
-		self->velz += self->velz/2;
+		self->vel.z += self->vel.z/2;
 	}
+	return 0;
 }
 
 
@@ -144,7 +153,10 @@ DEFINE_ACTION_FUNCTION(AActor, A_AccTeleGlitter)
 
 DEFINE_ACTION_FUNCTION(AActor, A_VolcanoSet)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	self->tics = 105 + (pr_volcano() & 127);
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -155,6 +167,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_VolcanoSet)
 
 DEFINE_ACTION_FUNCTION(AActor, A_VolcanoBlast)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	int i;
 	int count;
 	AActor *blast;
@@ -168,12 +182,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_VolcanoBlast)
 		angle = pr_blast () << 24;
 		blast->angle = angle;
 		angle >>= ANGLETOFINESHIFT;
-		blast->velx = FixedMul (1*FRACUNIT, finecosine[angle]);
-		blast->vely = FixedMul (1*FRACUNIT, finesine[angle]);
-		blast->velz = (FRACUNIT*5/2) + (pr_blast() << 10);
+		blast->vel.x = FixedMul (1*FRACUNIT, finecosine[angle]);
+		blast->vel.y = FixedMul (1*FRACUNIT, finesine[angle]);
+		blast->vel.z = (FRACUNIT*5/2) + (pr_blast() << 10);
 		S_Sound (blast, CHAN_BODY, "world/volcano/shoot", 1, ATTN_NORM);
 		P_CheckMissileSpawn (blast, self->radius);
 	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -184,6 +199,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_VolcanoBlast)
 
 DEFINE_ACTION_FUNCTION(AActor, A_VolcBallImpact)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	unsigned int i;
 	AActor *tiny;
 	angle_t angle;
@@ -193,7 +210,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_VolcBallImpact)
 		self->flags |= MF_NOGRAVITY;
 		self->gravity = FRACUNIT;
 		self->AddZ(28*FRACUNIT);
-		//self->velz = 3*FRACUNIT;
+		//self->vel.z = 3*FRACUNIT;
 	}
 	P_RadiusAttack (self, self->target, 25, 25, NAME_Fire, RADF_HURTSOURCE);
 	for (i = 0; i < 4; i++)
@@ -203,10 +220,11 @@ DEFINE_ACTION_FUNCTION(AActor, A_VolcBallImpact)
 		angle = i*ANG90;
 		tiny->angle = angle;
 		angle >>= ANGLETOFINESHIFT;
-		tiny->velx = FixedMul (FRACUNIT*7/10, finecosine[angle]);
-		tiny->vely = FixedMul (FRACUNIT*7/10, finesine[angle]);
-		tiny->velz = FRACUNIT + (pr_volcimpact() << 9);
+		tiny->vel.x = FixedMul (FRACUNIT*7/10, finecosine[angle]);
+		tiny->vel.y = FixedMul (FRACUNIT*7/10, finesine[angle]);
+		tiny->vel.z = FRACUNIT + (pr_volcimpact() << 9);
 		P_CheckMissileSpawn (tiny, self->radius);
 	}
+	return 0;
 }
 

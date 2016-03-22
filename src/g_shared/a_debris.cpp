@@ -15,7 +15,7 @@ public:
 	{
 		if (!Super::FloorBounceMissile (plane))
 		{
-			if (abs (velz) < (FRACUNIT/2))
+			if (abs (vel.z) < (FRACUNIT/2))
 			{
 				Destroy ();
 			}
@@ -31,7 +31,7 @@ IMPLEMENT_CLASS(AGlassShard)
 
 void P_SpawnDirt (AActor *actor, fixed_t radius)
 {
-	const PClass *dtype = NULL;
+	PClassActor *dtype = NULL;
 	AActor *mo;
 
 	fixed_t zo = (pr_dirt() << 9) + FRACUNIT;
@@ -39,13 +39,13 @@ void P_SpawnDirt (AActor *actor, fixed_t radius)
 
 	char fmt[8];
 	mysnprintf(fmt, countof(fmt), "Dirt%d", 1 + pr_dirt()%6);
-	dtype = PClass::FindClass(fmt);
+	dtype = PClass::FindActor(fmt);
 	if (dtype)
 	{
 		mo = Spawn (dtype, pos, ALLOW_REPLACE);
 		if (mo)
 		{
-			mo->velz = pr_dirt()<<10;
+			mo->vel.z = pr_dirt()<<10;
 		}
 	}
 }

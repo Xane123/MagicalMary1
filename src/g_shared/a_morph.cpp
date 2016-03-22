@@ -13,6 +13,7 @@
 #include "g_level.h"
 #include "farchive.h"
 #include "p_enemy.h"
+#include "d_player.h"
 
 static FRandom pr_morphmonst ("MorphMonster");
 
@@ -30,7 +31,7 @@ void InitAllPowerupEffects(AInventory *item);
 //
 //---------------------------------------------------------------------------
 
-bool P_MorphPlayer (player_t *activator, player_t *p, const PClass *spawntype, int duration, int style, const PClass *enter_flash, const PClass *exit_flash)
+bool P_MorphPlayer (player_t *activator, player_t *p, PClassPlayerPawn *spawntype, int duration, int style, PClassActor *enter_flash, PClassActor *exit_flash)
 {
 	AInventory *item;
 	APlayerPawn *morphed;
@@ -119,7 +120,7 @@ bool P_MorphPlayer (player_t *activator, player_t *p, const PClass *spawntype, i
 	p->MorphExitFlash = (exit_flash) ? exit_flash : RUNTIME_CLASS(ATeleportFog);
 	p->health = morphed->health;
 	p->mo = morphed;
-	p->velx = p->vely = 0;
+	p->vel.x = p->vel.y = 0;
 	morphed->ObtainInventory (actor);
 	// Remove all armor
 	for (item = morphed->Inventory; item != NULL; )
@@ -135,7 +136,7 @@ bool P_MorphPlayer (player_t *activator, player_t *p, const PClass *spawntype, i
 				hxarmor->Slots[1] = 0;
 				hxarmor->Slots[2] = 0;
 				hxarmor->Slots[3] = 0;
-				hxarmor->Slots[4] = spawntype->Meta.GetMetaFixed (APMETA_Hexenarmor0);
+				hxarmor->Slots[4] = spawntype->HexenArmor[0];
 			}
 			else
 			{
@@ -226,11 +227,11 @@ bool P_UndoPlayerMorph (player_t *activator, player_t *player, int unmorphflag, 
 	mo->player = player;
 	mo->reactiontime = 18;
 	mo->flags = ActorFlags::FromInt (pmo->special2) & ~MF_JUSTHIT;
-	mo->velx = 0;
-	mo->vely = 0;
-	player->velx = 0;
-	player->vely = 0;
-	mo->velz = pmo->velz;
+	mo->vel.x = 0;
+	mo->vel.y = 0;
+	player->vel.x = 0;
+	player->vel.y = 0;
+	mo->vel.z = pmo->vel.z;
 	if (!(pmo->special2 & MF_JUSTHIT))
 	{
 		mo->renderflags &= ~RF_INVISIBLE;
@@ -241,7 +242,7 @@ bool P_UndoPlayerMorph (player_t *activator, player_t *player, int unmorphflag, 
 	mo->Score = pmo->Score;
 	InitAllPowerupEffects(mo->Inventory);
 
-	const PClass *exit_flash = player->MorphExitFlash;
+	PClassActor *exit_flash = player->MorphExitFlash;
 	bool correctweapon = !!(player->MorphStyle & MORPH_LOSEACTUALWEAPON);
 	bool undobydeathsaves = !!(player->MorphStyle & MORPH_UNDOBYDEATHSAVES);
 
@@ -278,8 +279,8 @@ bool P_UndoPlayerMorph (player_t *activator, player_t *player, int unmorphflag, 
 	// and for the original DOOM status bar.
 	if (player == &players[consoleplayer])
 	{
-		const char *face = pmo->GetClass()->Meta.GetMetaString (APMETA_Face);
-		if (face != NULL && strcmp(face, "None") != 0)
+		FString face = pmo->GetClass()->Face;
+		if (face.IsNotEmpty() && strcmp(face, "None") != 0)
 		{
 			// Assume root-level base skin to begin with
 			size_t skinindex = 0;
@@ -325,8 +326,8 @@ bool P_UndoPlayerMorph (player_t *activator, player_t *player, int unmorphflag, 
 	}
 	if (correctweapon)
 	{ // Better "lose morphed weapon" semantics
-		const PClass *morphweapon = PClass::FindClass (pmo->MorphWeapon);
-		if (morphweapon != NULL && morphweapon->IsDescendantOf (RUNTIME_CLASS(AWeapon)))
+		PClassActor *morphweapon = PClass::FindActor(pmo->MorphWeapon);
+		if (morphweapon != NULL && morphweapon->IsDescendantOf(RUNTIME_CLASS(AWeapon)))
 		{
 			AWeapon *OriginalMorphWeapon = static_cast<AWeapon *>(mo->FindInventory (morphweapon));
 			if ((OriginalMorphWeapon != NULL) && (OriginalMorphWeapon->GivenAsMorphWeapon))
@@ -356,7 +357,7 @@ bool P_UndoPlayerMorph (player_t *activator, player_t *player, int unmorphflag, 
 	AHexenArmor *hxarmor = mo->FindInventory<AHexenArmor>();
 	if (hxarmor != NULL)
 	{
-		hxarmor->Slots[4] = mo->GetClass()->Meta.GetMetaFixed (APMETA_Hexenarmor0);
+		hxarmor->Slots[4] = mo->GetClass()->HexenArmor[0];
 	}
 	return true;
 }
@@ -369,7 +370,7 @@ bool P_UndoPlayerMorph (player_t *activator, player_t *player, int unmorphflag, 
 //
 //---------------------------------------------------------------------------
 
-bool P_MorphMonster (AActor *actor, const PClass *spawntype, int duration, int style, const PClass *enter_flash, const PClass *exit_flash)
+bool P_MorphMonster (AActor *actor, PClassActor *spawntype, int duration, int style, PClassActor *enter_flash, PClassActor *exit_flash)
 {
 	AMorphedMonster *morphed;
 
@@ -460,9 +461,9 @@ bool P_UndoMonsterMorph (AMorphedMonster *beast, bool force)
 	if (!(beast->FlagsSave & MF_JUSTHIT))
 		actor->renderflags &= ~RF_INVISIBLE;
 	actor->health = actor->SpawnHealth();
-	actor->velx = beast->velx;
-	actor->vely = beast->vely;
-	actor->velz = beast->velz;
+	actor->vel.x = beast->vel.x;
+	actor->vel.y = beast->vel.y;
+	actor->vel.z = beast->vel.z;
 	actor->tid = beast->tid;
 	actor->special = beast->special;
 	actor->Score = beast->Score;
@@ -470,7 +471,7 @@ bool P_UndoMonsterMorph (AMorphedMonster *beast, bool force)
 	actor->AddToHash ();
 	beast->UnmorphedMe = NULL;
 	DObject::StaticPointerSubstitution (beast, actor);
-	const PClass *exit_flash = beast->MorphExitFlash;
+	PClassActor *exit_flash = beast->MorphExitFlash;
 	beast->Destroy ();
 	AActor *eflash = Spawn(exit_flash, beast->PosPlusZ(TELEFOGHEIGHT), ALLOW_REPLACE);
 	if (eflash)
@@ -550,7 +551,7 @@ bool P_MorphedDeath(AActor *actor, AActor **morphed, int *morphedstyle, int *mor
 			if (realme->flags4 & MF4_BOSSDEATH)
 			{
 				realme->health = 0;	// make sure that A_BossDeath considers it dead.
-				CALL_ACTION(A_BossDeath, realme);
+				A_BossDeath(realme);
 			}
 		}
 		fakeme->flags3 |= MF3_STAYMORPHED; // moved here from AMorphedMonster::Die()
@@ -607,16 +608,16 @@ IMPLEMENT_CLASS(AMorphProjectile)
 
 int AMorphProjectile::DoSpecialDamage (AActor *target, int damage, FName damagetype)
 {
-	const PClass *morph_flash = PClass::FindClass (MorphFlash);
-	const PClass *unmorph_flash = PClass::FindClass (UnMorphFlash);
+	PClassActor *morph_flash = PClass::FindActor(MorphFlash);
+	PClassActor *unmorph_flash = PClass::FindActor(UnMorphFlash);
 	if (target->player)
 	{
-		const PClass *player_class = PClass::FindClass (PlayerClass);
+		PClassPlayerPawn *player_class = dyn_cast<PClassPlayerPawn>(PClass::FindClass(PlayerClass));
 		P_MorphPlayer (NULL, target->player, player_class, Duration, MorphStyle, morph_flash, unmorph_flash);
 	}
 	else
 	{
-		const PClass *monster_class = PClass::FindClass (MonsterClass);
+		PClassActor *monster_class = PClass::FindActor(MonsterClass);
 		P_MorphMonster (target, monster_class, Duration, MorphStyle, morph_flash, unmorph_flash);
 	}
 	return -1;

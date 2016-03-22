@@ -331,7 +331,7 @@ bool wipe_initFade (int ticks)
 
 bool wipe_doFade (int ticks)
 {
-	fade += ticks * 8;
+	fade += ticks * 2;
 	if (fade > 64)
 	{
 		screen->DrawBlock (0, 0, SCREENWIDTH, SCREENHEIGHT, (BYTE *)wipe_scr_end);

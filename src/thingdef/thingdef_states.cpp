@@ -58,18 +58,7 @@
 #include "version.h"
 #include "templates.h"
 
-//==========================================================================
-//***
-// PrepareStateParameters
-// creates an empty parameter list for a parameterized function call
-//
-//==========================================================================
-int PrepareStateParameters(FState * state, int numparams, const PClass *cls)
-{
-	int paramindex=StateParams.Reserve(numparams, cls);
-	state->ParameterIndex = paramindex+1;
-	return paramindex;
-}
+TDeletingArray<FStateTempCall *> StateTempCalls;
 
 //==========================================================================
 //***
@@ -77,7 +66,7 @@ int PrepareStateParameters(FState * state, int numparams, const PClass *cls)
 // handles action specials as code pointers
 //
 //==========================================================================
-bool DoActionSpecials(FScanner &sc, FState & state, Baggage &bag)
+FxVMFunctionCall *DoActionSpecials(FScanner &sc, FState & state, Baggage &bag)
 {
 	int i;
 	int min_args, max_args;
@@ -87,23 +76,21 @@ bool DoActionSpecials(FScanner &sc, FState & state, Baggage &bag)
 
 	if (special > 0 && min_args >= 0)
 	{
-
-		int paramindex=PrepareStateParameters(&state, 6, bag.Info->Class);
-
-		StateParams.Set(paramindex, new FxConstant(special, sc));
+		FArgumentList *args = new FArgumentList;
+		args->Push(new FxConstant(special, sc));
+		i = 0;
 
 		// Make this consistent with all other parameter parsing
 		if (sc.CheckToken('('))
 		{
-			for (i = 0; i < 5;)
+			while (i < 5)
 			{
-				StateParams.Set(paramindex+i+1, ParseExpression (sc, bag.Info->Class));
+				args->Push(new FxIntCast(ParseExpression(sc, bag.Info)));
 				i++;
 				if (!sc.CheckToken (',')) break;
 			}
 			sc.MustGetToken (')');
 		}
-		else i=0;
 
 		if (i < min_args)
 		{
@@ -113,11 +100,9 @@ bool DoActionSpecials(FScanner &sc, FState & state, Baggage &bag)
 		{
 			sc.ScriptError ("Too many arguments to %s", specname.GetChars());
 		}
-
-		state.SetAction(FindGlobalActionFunction("A_CallSpecial"), false);
-		return true;
+		return new FxVMFunctionCall(FindGlobalActionFunction("A_CallSpecial"), args, sc);
 	}
-	return false;
+	return NULL;
 }
 
 //==========================================================================
@@ -151,11 +136,13 @@ static FString ParseStateString(FScanner &sc)
 // parses a state block
 //
 //==========================================================================
-void ParseStates(FScanner &sc, FActorInfo * actor, AActor * defaults, Baggage &bag)
+void ParseStates(FScanner &sc, PClassActor * actor, AActor * defaults, Baggage &bag)
 {
 	FString statestring;
 	FState state;
-	char lastsprite[5]="";
+	char lastsprite[5] = "";
+	FStateTempCall *tcall = NULL;
+	FArgumentList *args = NULL;
 
 	sc.MustGetStringName ("{");
 	sc.SetEscape(false);	// disable escape sequences in the state parser
@@ -234,10 +221,13 @@ do_stop:
 
 			state.sprite = GetSpriteIndex(statestring);
 			state.Misc1 = state.Misc2 = 0;
-			state.ParameterIndex = 0;
 			sc.MustGetString();
 			statestring = sc.String;
 
+			if (tcall == NULL)
+			{
+				tcall = new FStateTempCall;
+			}
 			if (sc.CheckString("RANDOM"))
 			{
 				int min, max;
@@ -263,7 +253,7 @@ do_stop:
 				state.TicRange = 0;
 			}
 
-			while (sc.GetString() && !sc.Crossed)
+			while (sc.GetString() && (!sc.Crossed || sc.Compare("{")))
 			{
 				if (sc.Compare("BRIGHT")) 
 				{
@@ -324,133 +314,406 @@ do_stop:
 					continue;
 				}
 
-				// Make the action name lowercase
-				strlwr (sc.String);
-
-				if (DoActionSpecials(sc, state, bag))
+				bool hasfinalret;
+				tcall->Code = ParseActions(sc, state, statestring, bag, tcall->Proto, hasfinalret);
+				if (!hasfinalret)
 				{
-					goto endofstate;
+					AddImplicitReturn(static_cast<FxSequence*>(tcall->Code), tcall->Proto, sc);
 				}
-
-				FName funcname = FName(sc.String, true);
-				PSymbol *sym = bag.Info->Class->Symbols.FindSymbol (funcname, true);
-				if (sym != NULL && sym->SymbolType == SYM_ActionFunction)
-				{
-					PSymbolActionFunction *afd = static_cast<PSymbolActionFunction *>(sym);
-					state.SetAction(afd, false);
-					if (!afd->Arguments.IsEmpty())
-					{
-						const char *params = afd->Arguments.GetChars();
-						int numparams = (int)afd->Arguments.Len();
-				
-						int v;
-
-						if (!islower(*params))
-						{
-							sc.MustGetStringName("(");
-						}
-						else
-						{
-							if (!sc.CheckString("(")) 
-							{
-								state.ParameterIndex = afd->defaultparameterindex+1;
-								goto endofstate;
-							}
-						}
-						
-						int paramindex = PrepareStateParameters(&state, numparams, bag.Info->Class);
-						int paramstart = paramindex;
-						bool varargs = params[numparams - 1] == '+';
-						int varargcount = 0;
-
-						if (varargs)
-						{
-							paramindex++;
-						}
-						else if (afd->defaultparameterindex > -1)
-						{
-							StateParams.Copy(paramindex, afd->defaultparameterindex, int(afd->Arguments.Len()));
-						}
-
-						while (*params)
-						{
-							FxExpression *x;
-							if ((*params == 'l' || *params == 'L') && sc.CheckNumber())
-							{
-								// Special case: State label as an offset
-								if (sc.Number > 0 && statestring.Len() > 1)
-								{
-									sc.ScriptError("You cannot use state jumps commands with a jump offset on multistate definitions\n");
-								}
-
-								v=sc.Number;
-								if (v<0)
-								{
-									sc.ScriptError("Negative jump offsets are not allowed");
-								}
-
-								if (v > 0)
-								{
-									x = new FxStateByIndex(bag.statedef.GetStateCount() + v, sc);
-								}
-								else
-								{
-									x = new FxConstant((FState*)NULL, sc);
-								}
-							}
-							else
-							{
-								// Use the generic parameter parser for everything else
-								x = ParseParameter(sc, bag.Info->Class, *params, false);
-							}
-							StateParams.Set(paramindex++, x);
-							params++;
-							if (varargs)
-							{
-								varargcount++;
-							}
-							if (*params)
-							{
-								if (*params == '+')
-								{
-									if (sc.CheckString(")"))
-									{
-										StateParams.Set(paramstart, new FxConstant(varargcount, sc));
-										goto endofstate;
-									}
-									params--;
-									StateParams.Reserve(1, bag.Info->Class);
-								}
-								else if ((islower(*params) || *params=='!') && sc.CheckString(")"))
-								{
-									goto endofstate;
-								}
-								sc.MustGetStringName (",");
-							}
-						}
-						sc.MustGetStringName(")");
-					}
-					else 
-					{
-						sc.MustGetString();
-						if (sc.Compare("("))
-						{
-							sc.ScriptError("You cannot pass parameters to '%s'\n", funcname.GetChars());
-						}
-						sc.UnGet();
-					}
-					goto endofstate;
-				}
-				sc.ScriptError("Invalid state parameter %s\n", sc.String);
+				goto endofstate;
 			}
 			sc.UnGet();
 endofstate:
-			if (!bag.statedef.AddStates(&state, statestring))
+			int count = bag.statedef.AddStates(&state, statestring);
+			if (count < 0)
 			{
 				sc.ScriptError ("Invalid frame character string '%s'", statestring.GetChars());
+				count = -count;
+			}
+			if (tcall->Code != NULL)
+			{
+				tcall->ActorClass = actor;
+				tcall->FirstState = bag.statedef.GetStateCount() - count;
+				tcall->NumStates = count;
+				StateTempCalls.Push(tcall);
+				tcall = NULL;
 			}
 		}
+	}
+	if (tcall != NULL)
+	{
+		delete tcall;
+	}
+	if (args != NULL)
+	{
+		delete args;
 	}
 	sc.SetEscape(true);	// re-enable escape sequences
 }
 
+//==========================================================================
+//
+// AddImplicitReturn
+//
+// Adds an implied return; statement to the end of a code sequence.
+//
+//==========================================================================
+
+void AddImplicitReturn(FxSequence *code, const PPrototype *proto, FScanner &sc)
+{
+	if (code == NULL)
+	{
+		return;
+	}
+	if (proto == NULL || proto->ReturnTypes.Size() == 0)
+	{ // Returns nothing. Good. We can safely add an implied return.
+		code->Add(new FxReturnStatement(NULL, sc));
+	}
+	else
+	{ // Something was returned earlier in the sequence. Make it an error
+	  // instead of adding an implicit one.
+		sc.ScriptError("Not all paths return a value");
+	}
+}
+
+//==========================================================================
+//
+// ReturnCheck
+//
+// If proto1 is NULL, returns proto2. If proto2 is NULL, returns proto1.
+// If neither is null, checks if both prototypes define the same return
+// types. If not, an error is flagged.
+//
+//==========================================================================
+
+static PPrototype *ReturnCheck(PPrototype *proto1, PPrototype *proto2, FScanner &sc)
+{
+	if (proto1 == NULL)
+	{
+		return proto2;
+	}
+	if (proto2 == NULL)
+	{
+		return proto1;
+	}
+	// A prototype that defines fewer return types can be compatible with
+	// one that defines more if the shorter one matches the initial types
+	// for the longer one.
+	if (proto2->ReturnTypes.Size() < proto1->ReturnTypes.Size())
+	{ // Make proto1 the shorter one to avoid code duplication below.
+		swapvalues(proto1, proto2);
+	}
+	// If one prototype returns nothing, they both must.
+	if (proto1->ReturnTypes.Size() == 0)
+	{
+		if (proto2->ReturnTypes.Size() == 0)
+		{
+			return proto1;
+		}
+		proto1 = NULL;
+	}
+	else
+	{
+		for (unsigned i = 0; i < proto1->ReturnTypes.Size(); ++i)
+		{
+			if (proto1->ReturnTypes[i] != proto2->ReturnTypes[i])
+			{ // Incompatible
+				proto1 = NULL;
+				break;
+			}
+		}
+	}
+	if (proto1 == NULL)
+	{
+		sc.ScriptError("Return types are incompatible");
+	}
+	return proto1;
+}
+
+//==========================================================================
+//
+// ParseActions
+//
+// If this action block contains any return statements, the prototype for
+// one of them will be returned. This is used for deducing the return type
+// of anonymous functions. All called functions passed to return must have
+// matching return types.
+//
+//==========================================================================
+
+static FxExpression *ParseIf(FScanner &sc, FState state, FString statestring, Baggage &bag,
+	PPrototype *&retproto, bool &lastwasret)
+{
+	FxExpression *add, *cond;
+	FxExpression *true_part, *false_part = NULL;
+	PPrototype *true_proto, *false_proto = NULL;
+	bool true_ret, false_ret = false;
+	sc.MustGetStringName("(");
+	cond = ParseExpression(sc, bag.Info);
+	sc.MustGetStringName(")");
+	sc.MustGetStringName("{");	// braces are mandatory
+	true_part = ParseActions(sc, state, statestring, bag, true_proto, true_ret);
+	sc.MustGetString();
+	if (sc.Compare("else"))
+	{
+		if (sc.CheckString("if"))
+		{
+			false_part = ParseIf(sc, state, statestring, bag, false_proto, false_ret);
+		}
+		else
+		{
+			sc.MustGetStringName("{");	// braces are still mandatory
+			false_part = ParseActions(sc, state, statestring, bag, false_proto, false_ret);
+			sc.MustGetString();
+		}
+	}
+	add = new FxIfStatement(cond, true_part, false_part, sc);
+	retproto = ReturnCheck(retproto, true_proto, sc);
+	retproto = ReturnCheck(retproto, false_proto, sc);
+	// If one side does not end with a return, we don't consider the if statement
+	// to end with a return. If the else case is missing, it can never be considered
+	// as ending with a return.
+	if (true_ret && false_ret)
+	{
+		lastwasret = true;
+	}
+	return add;
+}
+
+FxExpression *ParseActions(FScanner &sc, FState state, FString statestring, Baggage &bag,
+						   PPrototype *&retproto, bool &endswithret)
+{
+	// If it's not a '{', then it should be a single action.
+	// Otherwise, it's a sequence of actions.
+	if (!sc.Compare("{"))
+	{
+		FxVMFunctionCall *call = ParseAction(sc, state, statestring, bag);
+		retproto = call->GetVMFunction()->Proto;
+		endswithret = true;
+		return new FxReturnStatement(call, sc);
+	}
+
+	const FScriptPosition pos(sc);
+
+	FxSequence *seq = NULL;
+	PPrototype *proto = NULL;
+	bool lastwasret = false;
+
+	sc.MustGetString();
+	while (!sc.Compare("}"))
+	{
+		FxExpression *add;
+		lastwasret = false;
+		if (sc.Compare("if"))
+		{ // Hangle an if statement
+			add = ParseIf(sc, state, statestring, bag, proto, lastwasret);
+		}
+		else if (sc.Compare("return"))
+		{ // Handle a return statement
+			lastwasret = true;
+			FxVMFunctionCall *retexp = NULL;
+			PPrototype *retproto;
+			sc.MustGetString();
+			if (!sc.Compare(";"))
+			{
+				retexp = ParseAction(sc, state, statestring, bag);
+				sc.MustGetStringName(";");
+				retproto = retexp->GetVMFunction()->Proto;
+			}
+			else
+			{ // Returning nothing; we still need a prototype for that.
+				TArray<PType *> notypes(0);
+				retproto = NewPrototype(notypes, notypes);
+			}
+			proto = ReturnCheck(proto, retproto, sc);
+			sc.MustGetString();
+			add = new FxReturnStatement(retexp, sc);
+		}
+		else
+		{ // Handle a regular action function call
+			add = ParseAction(sc, state, statestring, bag);
+			sc.MustGetStringName(";");
+			sc.MustGetString();
+		}
+		// Only return a sequence if it has actual content.
+		if (add != NULL)
+		{
+			if (seq == NULL)
+			{
+				seq = new FxSequence(pos);
+			}
+			seq->Add(add);
+		}
+	}
+	endswithret = lastwasret;
+	retproto = proto;
+	return seq;
+}
+
+//==========================================================================
+//
+// ParseAction
+//
+//==========================================================================
+
+FxVMFunctionCall *ParseAction(FScanner &sc, FState state, FString statestring, Baggage &bag)
+{
+	FxVMFunctionCall *call;
+
+	// Make the action name lowercase
+	strlwr (sc.String);
+
+	call = DoActionSpecials(sc, state, bag);
+	if (call != NULL)
+	{
+		return call;
+	}
+
+	FName symname = FName(sc.String, true);
+	symname = CheckCastKludges(symname);
+	PFunction *afd = dyn_cast<PFunction>(bag.Info->Symbols.FindSymbol(symname, true));
+	if (afd != NULL)
+	{
+		FArgumentList *args = new FArgumentList;
+		ParseFunctionParameters(sc, bag.Info, *args, afd, statestring, &bag.statedef);
+		call = new FxVMFunctionCall(afd, args->Size() > 0 ? args : NULL, sc);
+		if (args->Size() == 0)
+		{
+			delete args;
+		}
+		return call;
+	}
+	sc.ScriptError("Invalid parameter '%s'\n", sc.String);
+	return NULL;
+}
+
+//==========================================================================
+//
+// ParseFunctionParameters
+//
+// Parses the parameters for a VM function. Called by both ParseStates
+// (which will set statestring and statedef) and by ParseExpression0 (which
+// will not set them). The first token returned by the scanner when entering
+// this function should be '('.
+//
+//==========================================================================
+
+void ParseFunctionParameters(FScanner &sc, PClassActor *cls, TArray<FxExpression *> &out_params,
+	PFunction *afd, FString statestring, FStateDefinitions *statedef)
+{
+	const TArray<PType *> &params = afd->Variants[0].Implementation->Proto->ArgumentTypes;
+	const TArray<DWORD> &paramflags = afd->Variants[0].ArgFlags;
+	int numparams = (int)params.Size();
+	int pnum = 0;
+	bool zeroparm;
+
+	if (afd->Flags & VARF_Method)
+	{
+		numparams--;
+		pnum++;
+	}
+	if (afd->Flags & VARF_Action)
+	{
+		numparams -= 2;
+		pnum += 2;
+	}
+	assert(numparams >= 0);
+	zeroparm = numparams == 0;
+	if (numparams > 0 && !(paramflags[pnum] & VARF_Optional))
+	{
+		sc.MustGetStringName("(");
+	}
+	else
+	{
+		if (!sc.CheckString("(")) 
+		{
+			return;
+		}
+	}
+	while (numparams > 0)
+	{
+		FxExpression *x;
+		if (statedef != NULL && params[pnum] == TypeState && sc.CheckNumber())
+		{
+			// Special case: State label as an offset
+			if (sc.Number > 0 && statestring.Len() > 1)
+			{
+				sc.ScriptError("You cannot use state jumps commands with a jump offset on multistate definitions\n");
+			}
+
+			int v = sc.Number;
+			if (v < 0)
+			{
+				sc.ScriptError("Negative jump offsets are not allowed");
+			}
+
+			if (v > 0)
+			{
+				x = new FxStateByIndex(statedef->GetStateCount() + v, sc);
+			}
+			else
+			{
+				x = new FxConstant((FState*)NULL, sc);
+			}
+		}
+		else
+		{
+			// Use the generic parameter parser for everything else
+			x = ParseParameter(sc, cls, params[pnum], false);
+		}
+		out_params.Push(x);
+		pnum++;
+		numparams--;
+		if (numparams > 0)
+		{
+			if (params[pnum] == NULL)
+			{ // varargs function
+				if (sc.CheckString(")"))
+				{
+					return;
+				}
+				pnum--;
+				numparams++;
+			}
+			else if ((paramflags[pnum] & VARF_Optional) && sc.CheckString(")"))
+			{
+				return;
+			}
+			sc.MustGetStringName (",");
+		}
+	}
+	if (zeroparm)
+	{
+		if (!sc.CheckString(")"))
+		{
+			sc.ScriptError("You cannot pass parameters to '%s'\n", afd->SymbolName.GetChars());
+		}
+	}
+	else
+	{
+		sc.MustGetStringName(")");
+	}
+}
+
+//==========================================================================
+//
+// CheckCastKludges
+//
+//==========================================================================
+
+FName CheckCastKludges(FName in)
+{
+	switch (in)
+	{
+	case NAME_Int:
+		return NAME___decorate_internal_int__;
+	case NAME_Bool:
+		return NAME___decorate_internal_bool__;
+	case NAME_State:
+		return NAME___decorate_internal_state__;
+	case NAME_Float:
+		return NAME___decorate_internal_float__;
+	default:
+		return in;
+	}
+}

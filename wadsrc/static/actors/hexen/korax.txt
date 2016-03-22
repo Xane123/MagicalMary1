@@ -23,6 +23,7 @@ ACTOR Korax
 
 	action native A_KoraxChase();
 	action native A_KoraxDecide();
+	action native A_KoraxBonePop();
 	action native A_KoraxMissile();
 	action native A_KoraxCommand();
 

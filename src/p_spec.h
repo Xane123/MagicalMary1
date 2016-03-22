@@ -165,13 +165,13 @@ void	P_SpawnSpecials (void);
 void	P_UpdateSpecials (void);
 
 // when needed
-bool	P_ActivateLine (line_t *ld, AActor *mo, int side, int activationType);
-bool	P_TestActivateLine (line_t *ld, AActor *mo, int side, int activationType);
+bool	P_ActivateLine (line_t *ld, AActor *mo, int side, int activationType, fixedvec3 *optpos = NULL);
+bool	P_TestActivateLine (line_t *ld, AActor *mo, int side, int activationType, fixedvec3 *optpos = NULL);
 bool	P_PredictLine (line_t *ld, AActor *mo, int side, int activationType);
 
 void 	P_PlayerInSpecialSector (player_t *player, sector_t * sector=NULL);
 void	P_PlayerOnSpecialFlat (player_t *player, int floorType);
-void	P_SectorDamage(int tag, int amount, FName type, const PClass *protectClass, int flags);
+void	P_SectorDamage(int tag, int amount, FName type, PClassActor *protectClass, int flags);
 void	P_SetSectorFriction (int tag, int amount, bool alterFlag);
 
 inline fixed_t FrictionToMoveFactor(fixed_t friction)
@@ -404,7 +404,7 @@ void	EV_StartLightFading (int tag, int value, int tics);
 #define BUTTONTIME TICRATE		// 1 second, in ticks. 
 
 bool	P_ChangeSwitchTexture (side_t *side, int useAgain, BYTE special, bool *quest=NULL);
-bool	P_CheckSwitchRange(AActor *user, line_t *line, int sideno);
+bool	P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpos = NULL);
 
 //
 // P_PLATS
@@ -529,12 +529,13 @@ public:
 		doorClose,
 		doorOpen,
 		doorRaise,
-		doorRaiseIn5Mins,
+		doorWaitRaise,
 		doorCloseWaitOpen,
+		doorWaitClose,
 	};
 
 	DDoor (sector_t *sector);
-	DDoor (sector_t *sec, EVlDoor type, fixed_t speed, int delay, int lightTag);
+	DDoor (sector_t *sec, EVlDoor type, fixed_t speed, int delay, int topcountdown, int lightTag);
 
 	void Serialize (FArchive &arc);
 	void Tick ();
@@ -560,9 +561,7 @@ protected:
 
 	friend bool	EV_DoDoor (DDoor::EVlDoor type, line_t *line, AActor *thing,
 						   int tag, int speed, int delay, int lock,
-						   int lightTag, bool boomgen);
-	friend void P_SpawnDoorCloseIn30 (sector_t *sec);
-	friend void P_SpawnDoorRaiseIn5Mins (sector_t *sec);
+						   int lightTag, bool boomgen, int topcountdown);
 private:
 	DDoor ();
 
@@ -570,9 +569,7 @@ private:
 
 bool EV_DoDoor (DDoor::EVlDoor type, line_t *line, AActor *thing,
 				int tag, int speed, int delay, int lock,
-				int lightTag, bool boomgen = false);
-void P_SpawnDoorCloseIn30 (sector_t *sec);
-void P_SpawnDoorRaiseIn5Mins (sector_t *sec);
+				int lightTag, bool boomgen = false, int topcountdown = 0);
 
 class DAnimatedDoor : public DMovingCeiling
 {
@@ -629,7 +626,7 @@ public:
 		ceilRaiseInstant,
 		ceilCrushAndRaise,
 		ceilLowerAndCrush,
-		ceilLowerAndCrushDist,
+		ceil_placeholder,
 		ceilCrushRaiseAndStay,
 		ceilRaiseToNearest,
 		ceilLowerToLowest,
@@ -731,7 +728,7 @@ public:
 		floorLowerToLowestCeiling,
 		floorLowerByTexture,
 		floorLowerToCeiling,
-		 
+
 		donutRaise,
 
 		buildStair,
@@ -749,6 +746,12 @@ public:
 	{
 		buildUp,
 		buildDown
+	};
+
+	enum EStairType
+	{
+		stairUseSpecials = 1,
+		stairSync = 2
 	};
 
 	DFloor (sector_t *sec);

@@ -75,7 +75,7 @@ int CleanXfac_1, CleanYfac_1, CleanWidth_1, CleanHeight_1;
 // FillSimplePoly uses this
 extern "C" short spanend[MAXHEIGHT];
 
-CVAR (Bool, hud_scale, true, CVAR_ARCHIVE);
+CVAR (Bool, hud_scale, false, CVAR_ARCHIVE);
 
 // For routines that take RGB colors, cache the previous lookup in case there
 // are several repetitions with the same color.
@@ -744,6 +744,13 @@ void DCanvas::VirtualToRealCoords(double &x, double &y, double &w, double &h,
 	double vwidth, double vheight, bool vbottom, bool handleaspect) const
 {
 	int myratio = handleaspect ? CheckRatio (Width, Height) : 0;
+
+    // if 21:9 AR, map to 16:9 for all callers.
+    // this allows for black bars and stops the stretching of fullscreen images
+    if (myratio == 6) {
+        myratio = 2;
+    }
+
 	double right = x + w;
 	double bottom = y + h;
 
@@ -781,10 +788,10 @@ void DCanvas::VirtualToRealCoordsFixed(fixed_t &x, fixed_t &y, fixed_t &w, fixed
 {
 	double dx, dy, dw, dh;
 
-	dx = FIXED2FLOAT(x);
-	dy = FIXED2FLOAT(y);
-	dw = FIXED2FLOAT(w);
-	dh = FIXED2FLOAT(h);
+	dx = FIXED2DBL(x);
+	dy = FIXED2DBL(y);
+	dw = FIXED2DBL(w);
+	dh = FIXED2DBL(h);
 	VirtualToRealCoords(dx, dy, dw, dh, vwidth, vheight, vbottom, handleaspect);
 	x = FLOAT2FIXED(dx);
 	y = FLOAT2FIXED(dy);
@@ -811,12 +818,19 @@ void DCanvas::VirtualToRealCoordsInt(int &x, int &y, int &w, int &h,
 void DCanvas::FillBorder (FTexture *img)
 {
 	int myratio = CheckRatio (Width, Height);
+
+    // if 21:9 AR, fill borders akin to 16:9, since all fullscreen
+    // images are being drawn to that scale.
+    if (myratio == 6) {
+        myratio = 2;
+    }
+
 	if (myratio == 0)
 	{ // This is a 4:3 display, so no border to show
 		return;
 	}
 	int bordtop, bordbottom, bordleft, bordright, bord;
-	if (myratio & 4)
+	if (Is54Aspect(myratio))
 	{ // Screen is taller than it is wide
 		bordleft = bordright = 0;
 		bord = Height - Height * BaseRatioSizes[myratio][3] / 48;
@@ -1184,8 +1198,8 @@ void DCanvas::FillSimplePoly(FTexture *tex, FVector2 *points, int npoints,
 		return;
 	}
 
-	scalex /= FIXED2FLOAT(tex->xScale);
-	scaley /= FIXED2FLOAT(tex->yScale);
+	scalex /= FIXED2DBL(tex->xScale);
+	scaley /= FIXED2DBL(tex->yScale);
 
 	cosrot = cos(rot);
 	sinrot = sin(rot);
@@ -1265,7 +1279,7 @@ void DCanvas::FillSimplePoly(FTexture *tex, FVector2 *points, int npoints,
 					ds_x1 = x1;
 					ds_x2 = x2 - 1;
 
-					TVector2<double> tex(x1 - originx, y - originy);
+					DVector2 tex(x1 - originx, y - originy);
 					if (dorotate)
 					{
 						double t = tex.X;

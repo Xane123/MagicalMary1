@@ -14,32 +14,35 @@
 static FRandom pr_bang4cloud ("Bang4Cloud");
 static FRandom pr_lightout ("LightOut");
 
-extern const PClass *QuestItemClasses[31];
-
 DEFINE_ACTION_FUNCTION(AActor, A_Bang4Cloud)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	fixed_t xo = (pr_bang4cloud.Random2() & 3) * 10240;
 	fixed_t yo = (pr_bang4cloud.Random2() & 3) * 10240;
-
 	Spawn("Bang4Cloud", self->Vec3Offset(xo, yo, 0), ALLOW_REPLACE);
+	return 0;
 }
 
 // -------------------------------------------------------------------
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_GiveQuestItem)
 {
-	ACTION_PARAM_START(1);
-	ACTION_PARAM_INT(questitem, 0);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_INT(questitem);
 
 	// Give one of these quest items to every player in the game
-	for (int i = 0; i < MAXPLAYERS; ++i)
+	if (questitem >= 0 && questitem < (int)countof(QuestItemClasses))
 	{
-		if (playeringame[i])
+		for (int i = 0; i < MAXPLAYERS; ++i)
 		{
-			AInventory *item = static_cast<AInventory *>(Spawn (QuestItemClasses[questitem-1], 0,0,0, NO_REPLACE));
-			if (!item->CallTryPickup (players[i].mo))
+			if (playeringame[i])
 			{
-				item->Destroy ();
+				AInventory *item = static_cast<AInventory *>(Spawn (QuestItemClasses[questitem - 1], 0,0,0, NO_REPLACE));
+				if (!item->CallTryPickup (players[i].mo))
+				{
+					item->Destroy ();
+				}
 			}
 		}
 	}
@@ -53,20 +56,26 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_GiveQuestItem)
 	{
 		C_MidPrint (SmallFont, name);
 	}
+	return 0;
 }
 
 // PowerCrystal -------------------------------------------------------------------
 
 DEFINE_ACTION_FUNCTION(AActor, A_ExtraLightOff)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (self->target != NULL && self->target->player != NULL)
 	{
 		self->target->player->extralight = 0;
 	}
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_Explode512)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	P_RadiusAttack (self, self->target, 512, 512, NAME_None, RADF_HURTSOURCE);
 	if (self->target != NULL && self->target->player != NULL)
 	{
@@ -76,10 +85,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_Explode512)
 
 	// Strife didn't do this next part, but it looks good
 	self->RenderStyle = STYLE_Add;
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_LightGoesOut)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *foo;
 	sector_t *sec = self->Sector;
 	vertex_t *spot;
@@ -92,6 +104,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_LightGoesOut)
 	sec->floorplane.d = sec->floorplane.PointToDist (spot, newheight);
 	fixed_t newtheight = sec->floorplane.Zat0();
 	sec->ChangePlaneTexZ(sector_t::floor, newtheight - oldtheight);
+	sec->CheckPortalPlane(sector_t::floor);
 
 	for (int i = 0; i < 8; ++i)
 	{
@@ -99,9 +112,10 @@ DEFINE_ACTION_FUNCTION(AActor, A_LightGoesOut)
 		if (foo != NULL)
 		{
 			int t = pr_lightout() & 15;
-			foo->velx = (t - (pr_lightout() & 7)) << FRACBITS;
-			foo->vely = (pr_lightout.Random2() & 7) << FRACBITS;
-			foo->velz = (7 + (pr_lightout() & 3)) << FRACBITS;
+			foo->vel.x = (t - (pr_lightout() & 7)) << FRACBITS;
+			foo->vel.y = (pr_lightout.Random2() & 7) << FRACBITS;
+			foo->vel.z = (7 + (pr_lightout() & 3)) << FRACBITS;
 		}
 	}
+	return 0;
 }

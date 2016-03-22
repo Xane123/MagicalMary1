@@ -105,12 +105,12 @@ CUSTOM_CVAR (Bool, st_scale, true, CVAR_ARCHIVE)
 	}
 }
 
-CVAR (Int, crosshair, 2, CVAR_ARCHIVE)
+CVAR (Int, crosshair, 0, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
-CVAR (Color, crosshaircolor, 0xd8d8b8, CVAR_ARCHIVE);
+CVAR (Color, crosshaircolor, 0xff0000, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
 CVAR (Bool, crosshairscale, false, CVAR_ARCHIVE);
-CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);
+CVAR (Bool, crosshairgrow, false, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
@@ -253,7 +253,7 @@ DBaseStatusBar::DBaseStatusBar (int reltop, int hres, int vres)
 
 void DBaseStatusBar::Destroy ()
 {
-	for (unsigned int i = 0; i < countof(Messages); ++i)
+	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessage *msg = Messages[i];
 		while (msg)
@@ -355,7 +355,7 @@ void DBaseStatusBar::MultiplayerChanged ()
 
 void DBaseStatusBar::Tick ()
 {
-	for (unsigned int i = 0; i < countof(Messages); ++i)
+	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessage *msg = Messages[i];
 		DHUDMessage **prev = &Messages[i];
@@ -437,7 +437,7 @@ void DBaseStatusBar::AttachMessage (DHUDMessage *msg, DWORD id, int layer)
 
 DHUDMessage *DBaseStatusBar::DetachMessage (DHUDMessage *msg)
 {
-	for (unsigned int i = 0; i < countof(Messages); ++i)
+	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessage *probe = Messages[i];
 		DHUDMessage **prev = &Messages[i];
@@ -464,7 +464,7 @@ DHUDMessage *DBaseStatusBar::DetachMessage (DHUDMessage *msg)
 
 DHUDMessage *DBaseStatusBar::DetachMessage (DWORD id)
 {
-	for (unsigned int i = 0; i < countof(Messages); ++i)
+	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessage *probe = Messages[i];
 		DHUDMessage **prev = &Messages[i];
@@ -497,7 +497,7 @@ DHUDMessage *DBaseStatusBar::DetachMessage (DWORD id)
 
 void DBaseStatusBar::DetachAllMessages ()
 {
-	for (unsigned int i = 0; i < countof(Messages); ++i)
+	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessage *probe = Messages[i];
 
@@ -1058,7 +1058,7 @@ void DBaseStatusBar::RefreshBackground () const
 	int x, x2, y, ratio;
 
 	ratio = CheckRatio (SCREENWIDTH, SCREENHEIGHT);
-	x = (!(ratio & 3) || !Scaled) ? ST_X : SCREENWIDTH*(48-BaseRatioSizes[ratio][3])/(48*2);
+	x = (!IsRatioWidescreen(ratio) || !Scaled) ? ST_X : SCREENWIDTH*(48-BaseRatioSizes[ratio][3])/(48*2);
 	y = x == ST_X && x > 0 ? ST_Y : ::ST_Y;
 
 	if(!CompleteBorder)
@@ -1078,7 +1078,7 @@ void DBaseStatusBar::RefreshBackground () const
 	{
 		if(!CompleteBorder)
 		{
-			x2 = !(ratio & 3) || !Scaled ? ST_X+HorizontalResolution :
+			x2 = !IsRatioWidescreen(ratio) || !Scaled ? ST_X+HorizontalResolution :
 				SCREENWIDTH - (SCREENWIDTH*(48-BaseRatioSizes[ratio][3])+48*2-1)/(48*2);
 		}
 		else
@@ -1411,7 +1411,7 @@ void DBaseStatusBar::DrawLog ()
 {
 	int hudwidth, hudheight;
 
-	if (CPlayer->LogText && *CPlayer->LogText)
+	if (CPlayer->LogText.IsNotEmpty())
 	{
 		// This uses the same scaling as regular HUD messages
 		switch (con_scaletext)
@@ -1501,8 +1501,8 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 	if (demoplayback && demover != DEMOGAMEVERSION)
 	{
 		screen->DrawText (SmallFont, CR_TAN, 0, ST_Y - 40 * CleanYfac,
-			"This demo was made with an older version of WoK; If it goes\n"
-			"out of sync or does strange things, ask Xane to record a new replacement.",
+			"Demo was recorded with a different version\n"
+			"of " GAMENAME ". Expect it to go out of sync.",
 			DTA_CleanNoMove, true, TAG_DONE);
 	}
 
@@ -1533,9 +1533,12 @@ void DBaseStatusBar::DrawPowerups ()
 	// Each icon gets a 32x32 block to draw itself in.
 	int x, y;
 	AInventory *item;
+	const int yshift = SmallFont->GetHeight();
 
 	x = -20;
-	y = 17;
+	y = 17 
+		+ (ST_IsTimeVisible()    ? yshift : 0)
+		+ (ST_IsLatencyVisible() ? yshift : 0);
 	for (item = CPlayer->mo->Inventory; item != NULL; item = item->Inventory)
 	{
 		if (item->DrawPowerup (x, y))
@@ -1587,7 +1590,7 @@ void DBaseStatusBar::DrawConsistancy () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "WARNING: You are out of sync with player ");
+				strcpy (conbuff, "Out of sync with:");
 				buff_p = conbuff + 17;
 			}
 			*buff_p++ = ' ';
@@ -1678,7 +1681,7 @@ void DBaseStatusBar::Serialize (FArchive &arc)
 	}
 	else
 	{
-		for (unsigned int i = 0; i < countof(Messages); ++i)
+		for (size_t i = 0; i < countof(Messages); ++i)
 		{
 			arc << Messages[i];
 		}
@@ -1690,7 +1693,7 @@ void DBaseStatusBar::ScreenSizeChanged ()
 	st_scale.Callback ();
 	ST_SetNeedRefresh();
 
-	for (unsigned int i = 0; i < countof(Messages); ++i)
+	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessage *message = Messages[i];
 		while (message != NULL)
@@ -1833,7 +1836,7 @@ CCMD (showpop)
 {
 	if (argv.argc() != 2)
 	{
-		Printf ("To request a SBARINFO popup,type showpop <popnumber>.\n");
+		Printf ("Usage: showpop <popnumber>\n");
 	}
 	else if (StatusBar != NULL)
 	{

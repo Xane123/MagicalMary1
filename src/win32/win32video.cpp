@@ -295,13 +295,15 @@ void Win32Video::InitDDraw ()
 	{
 		DDraw->Release ();
 		DDraw = NULL;
-		I_FatalError ("Could not determine display modes: %08lx", dderr);
+		I_FatalError ("Could not enumerate display modes: %08lx", dderr);
 	}
 	if (m_Modes == NULL)
 	{
 		DDraw->Release ();
 		DDraw = NULL;
-		I_FatalError ("DirectDraw returned no valid display modes.");
+		I_FatalError ("DirectDraw returned no display modes.\n\n"
+					"If you started " GAMENAME " from a fullscreen DOS box, run it from "
+					"a DOS window instead. If that does not work, you may need to reboot.");
 	}
 	if (Args->CheckParm ("-2"))
 	{ // Force all modes to be pixel-doubled.

@@ -58,11 +58,26 @@ inline int R_PointOnSide (fixed_t x, fixed_t y, const node_t *node)
 
 angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2);
 inline angle_t R_PointToAngle (fixed_t x, fixed_t y) { return R_PointToAngle2 (viewx, viewy, x, y); }
+inline angle_t R_PointToAnglePrecise (fixed_t viewx, fixed_t viewy, fixed_t x, fixed_t y)
+{
+	return xs_RoundToUInt(atan2(double(y-viewy), double(x-viewx)) * (ANGLE_180/M_PI));
+}
+
+// Used for interpolation waypoints.
+struct fixedvec3a
+{
+	fixed_t x, y, z;
+	angle_t angle;
+};
+
+
 subsector_t *R_PointInSubsector (fixed_t x, fixed_t y);
 fixed_t R_PointToDist2 (fixed_t dx, fixed_t dy);
 void R_ResetViewInterpolation ();
 void R_RebuildViewInterpolation(player_t *player);
 bool R_GetViewInterpolationStatus();
+void R_ClearInterpolationPath();
+void R_AddInterpolationPoint(const fixedvec3a &vec);
 void R_SetViewSize (int blocks);
 void R_SetFOV (float fov);
 float R_GetFOV ();

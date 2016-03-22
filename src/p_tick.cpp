@@ -31,7 +31,10 @@
 #include "sbar.h"
 #include "r_data/r_interpolate.h"
 #include "i_sound.h"
+#include "d_player.h"
 #include "g_level.h"
+#include "r_utility.h"
+#include "p_spec.h"
 
 extern gamestate_t wipegamestate;
 
@@ -109,6 +112,7 @@ void P_Ticker (void)
 		S_ResumeSound (false);
 
 	P_ResetSightCounters (false);
+	R_ClearInterpolationPath();
 
 	// Since things will be moving, it's okay to interpolate them in the renderer.
 	r_NoInterpolate = false;

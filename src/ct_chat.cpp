@@ -31,7 +31,6 @@
 #include "templates.h"
 #include "d_net.h"
 #include "d_event.h"
-#include "gstrings.h"	//Testing
 
 #define QUEUESIZE		128
 #define MESSAGESIZE		128
@@ -66,16 +65,16 @@ static bool DoSubstitution (FString &out, const char *in);
 static int len;
 static BYTE ChatQueue[QUEUESIZE];
 
-CVAR (String, chatmacro1, "LET'S GO BEAT SOME ENEMIES!", CVAR_ARCHIVE)
-CVAR (String, chatmacro2, "I'M OKAY.", CVAR_ARCHIVE)
-CVAR (String, chatmacro3, "I'M IN A BAD SITUATION NOW!", CVAR_ARCHIVE)
-CVAR (String, chatmacro4, "HELP ME!", CVAR_ARCHIVE)
-CVAR (String, chatmacro5, "YOU COULDN'T DEFEAT ME!", CVAR_ARCHIVE)
-CVAR (String, chatmacro6, "GOOD LUCK NEXT TIME, JUNIOR!", CVAR_ARCHIVE)
-CVAR (String, chatmacro7, "GET OVER HERE!", CVAR_ARCHIVE)
-CVAR (String, chatmacro8, "I'LL TAKE CARE OF THEM!", CVAR_ARCHIVE)
-CVAR (String, chatmacro9, "YEAH!", CVAR_ARCHIVE)
-CVAR (String, chatmacro0, "NO.", CVAR_ARCHIVE)
+CVAR (String, chatmacro1, "I'm ready to kick butt!", CVAR_ARCHIVE)
+CVAR (String, chatmacro2, "I'm OK.", CVAR_ARCHIVE)
+CVAR (String, chatmacro3, "I'm not looking too good!", CVAR_ARCHIVE)
+CVAR (String, chatmacro4, "Help!", CVAR_ARCHIVE)
+CVAR (String, chatmacro5, "You suck!", CVAR_ARCHIVE)
+CVAR (String, chatmacro6, "Next time, scumbag...", CVAR_ARCHIVE)
+CVAR (String, chatmacro7, "Come here!", CVAR_ARCHIVE)
+CVAR (String, chatmacro8, "I'll take care of it.", CVAR_ARCHIVE)
+CVAR (String, chatmacro9, "Yes", CVAR_ARCHIVE)
+CVAR (String, chatmacro0, "No", CVAR_ARCHIVE)
 
 FStringCVar *chat_macros[10] =
 {
@@ -221,10 +220,10 @@ void CT_Drawer (void)
 {
 	if (chatmodeon)
 	{
-		static const char *prompt = GStrings("CHAT_START");
+		static const char *prompt = "Say: ";
 		int i, x, scalex, y, promptwidth;
 
-		y = (viewactive || gamestate != GS_LEVEL) ? -10 : -20;
+		y = (viewactive || gamestate != GS_LEVEL) ? -10 : -30;
 		if (con_scaletext == 1)
 		{
 			scalex = CleanXfac;
@@ -265,14 +264,14 @@ void CT_Drawer (void)
 		ChatQueue[len+1] = '\0';
 		if (con_scaletext < 2)
 		{
-			screen->DrawText (SmallFont, CR_GOLD, 0, y-25, prompt, DTA_CleanNoMove, *con_scaletext, TAG_DONE);
-			screen->DrawText (SmallFont, CR_GREY, promptwidth, y-25, (char *)(ChatQueue + i), DTA_CleanNoMove, *con_scaletext, TAG_DONE);
+			screen->DrawText (SmallFont, CR_GREEN, 0, y, prompt, DTA_CleanNoMove, *con_scaletext, TAG_DONE);
+			screen->DrawText (SmallFont, CR_GREY, promptwidth, y, (char *)(ChatQueue + i), DTA_CleanNoMove, *con_scaletext, TAG_DONE);
 		}
 		else
 		{
-			screen->DrawText (SmallFont, CR_GOLD, 0, y-15, prompt, 
+			screen->DrawText (SmallFont, CR_GREEN, 0, y, prompt, 
 				DTA_VirtualWidth, screen_width, DTA_VirtualHeight, screen_height, DTA_KeepRatio, true, TAG_DONE);
-			screen->DrawText (SmallFont, CR_GREY, promptwidth, y-10, (char *)(ChatQueue + i), 
+			screen->DrawText (SmallFont, CR_GREY, promptwidth, y, (char *)(ChatQueue + i), 
 				DTA_VirtualWidth, screen_width, DTA_VirtualHeight, screen_height, DTA_KeepRatio, true, TAG_DONE);
 		}
 		ChatQueue[len] = '\0';
@@ -344,6 +343,9 @@ static void CT_ClearChatMessage ()
 
 static void ShoveChatStr (const char *str, BYTE who)
 {
+	// Don't send empty messages
+	if (str == NULL || str[0] == '\0')
+		return;
 
 	FString substBuff;
 
@@ -354,23 +356,6 @@ static void ShoveChatStr (const char *str, BYTE who)
 		str += 3;
 		who |= 2;
 	}
-
-	if (str[0] == '/' &&
-		(str[1] == 'h' || str[1] == 'H') &&
-		(str[2] == 'e' || str[2] == 'E') &&
-		(str[3] == 'l' || str[3] == 'L') &&
-		(str[4] == 'p' || str[4] == 'P'))
-	{
-		Printf("WRITE A MESSAGE THEN PUSH ENTER TO SEND IT.\nTYPE /ME (SENTENCE) TO SAY YOU ARE DOING SOMETHING.");
-		str += 5;
-		who |= 0;
-		str = NULL;
-		return;
-	}
-
-	// Don't send empty messages
-	if (str == NULL || str[0] == '\0')
-		return;
 
 	Net_WriteByte (DEM_SAY);
 	Net_WriteByte (who);

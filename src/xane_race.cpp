@@ -42,9 +42,9 @@ CUSTOM_CVAR(Int, xane_racecup, 0, CVAR_ARCHIVE|CVAR_NOINITCALL) //[XANE]Similar 
 		break;
 	case 1: //Test Cup #1
 		xane_racecourse1 = 94;
-		xane_racecourse2 = 2;
-		xane_racecourse3 = 3;
-		xane_racecourse4 = 4;
+		xane_racecourse2 = 101;
+		xane_racecourse3 = 94;
+		xane_racecourse4 = 102;
 		break;
 	case 2:	//Test Cup #2
 		xane_racecourse1 = 2;

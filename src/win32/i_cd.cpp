@@ -176,7 +176,7 @@ bool FCDThread::Init ()
 	CD_WindowClass.style = CS_NOCLOSE;
 	CD_WindowClass.lpfnWndProc = CD_WndProc;
 	CD_WindowClass.hInstance = g_hInst;
-	CD_WindowClass.lpszClassName = GAMESIG " CD Player";
+	CD_WindowClass.lpszClassName = GAMENAME " CD Player";
 	CD_WindowAtom = RegisterClass (&CD_WindowClass);
 
 	if (CD_WindowAtom == 0)
@@ -310,7 +310,7 @@ DWORD FCDThread::Dispatch (DWORD method, DWORD parm1, DWORD parm2, DWORD parm3)
 	case CDM_Play:
 		if (!IsTrackAudio (parm1))
 		{
-			Printf ("Track % is not a song; If this is an old CD-based console game,\nthis may be the \"data track\".\n", parm1);
+			//Printf ("Track %d is not audio\n", track);
 			return FALSE;
 		}
 

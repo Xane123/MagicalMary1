@@ -11,19 +11,28 @@
 8 "slot 8"
 9 "slot 9"
 0 "slot 0"
-[ sizedown
-] sizeup
-q +attack
+[ invprev
+] invnext
+mwheelleft invprev
+mwheelright invnext
+enter invuse
+- sizedown
+= sizeup
+ctrl +attack
+alt +strafe
 shift +speed
-space +jump
-w +forward
-s +back
-a +moveleft
-d +moveright
+space +use
+rightarrow +right
+leftarrow +left
+uparrow +forward
+downarrow +back
+, +moveleft
+. +moveright
 mouse1 +attack
-mouse2 +jump
+mouse2 +strafe
 mouse3 +forward
 mouse4 +speed
+capslock "toggle cl_run"
 f1 menu_help
 f2 menu_save
 f3 menu_load
@@ -38,14 +47,14 @@ f10 menu_quit
 tab togglemap
 pause pause
 sysrq screenshot
-enter messagemode
-return messagemode
-/ +showscores
+t messagemode
+\ +showscores
 f12 spynext
 mwheeldown weapnext
 mwheelup weapprev
-\ "pukename turnsuper"
 
+// Originally just for Heretic, Hexen, and Strife.
+// I can't see why they shouldn't be for Doom or Chex either.
 pgup +moveup
 ins +movedown
 home land
@@ -54,39 +63,38 @@ del +lookdown
 end centerview
 
 // Generic joystick buttons
-joy1 +use
-joy1 +speed
-joy2 +jump
-joy3 crouch
-joy4 weapnext
+joy1 +attack
+joy2 +strafe
+joy3 +speed
+joy4 +use
 
 // Xbox 360 / PS2 controllers
-lstickup +forward
-lstickdown +back
-lstickleft +moveleft
-lstickright +moveright
-pad_x +use
-pad_x +speed
-pad_b +jump
-pad_a crouch
-pad_y weapnext
+pad_a +use
+pad_y +jump
 rtrigger +attack
 ltrigger +altattack
-lshoulder "pukename turnsuper"
-dpadleft weapprev
-dpadright weapnext
-dpaddown chase
+lshoulder weapprev
+rshoulder weapnext
+dpadleft invprev
+dpadright invnext
+dpaddown invuse
 dpadup togglemap
-pad_start menu_main
-pad_back pause
-lthumb +speed
-rthumb crouch
+pad_start pause
+pad_back menu_main
+lthumb crouch
 
-
-doublebind w +mc_run
-doublebind lstickup +nc_run
 
 /* Default automap bindings */
+mapbind f am_togglefollow
+mapbind g am_togglegrid
+mapbind p am_toggletexture
+mapbind m am_setmark
+mapbind c am_clearmarks
+mapbind 0 am_gobig
+mapbind rightarrow +am_panright
+mapbind leftarrow +am_panleft
+mapbind uparrow +am_panup
+mapbind downarrow +am_pandown
 mapbind - +am_zoomout
 mapbind = +am_zoomin
 mapbind kp- +am_zoomout

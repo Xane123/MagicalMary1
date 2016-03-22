@@ -361,7 +361,7 @@ void InitPalette ()
 
 	if (!usingBuild)
 	{
-		FWadLump palump = Wads.OpenLumpName ("WGAMEPAL");
+		FWadLump palump = Wads.OpenLumpName ("PLAYPAL");
 		palump.Read (pal, 768);
 	}
 

@@ -45,9 +45,7 @@ struct cluster_info_t;
 class FScanner;
 
 #if defined(_MSC_VER)
-#pragma data_seg(".yreg$u")
-#pragma data_seg()
-
+#pragma section(".yreg$u",read)
 #define MSVC_YSEG __declspec(allocate(".yreg$u"))
 #define GCC_YSEG
 #else
@@ -127,7 +125,7 @@ struct FMapOptInfo
 	bool old;
 };
 
-enum ELevelFlags
+enum ELevelFlags : unsigned int
 {
 	LEVEL_NOINTERMISSION		= 0x00000001,
 	LEVEL_NOINVENTORYBAR		= 0x00000002,	// This effects Doom only, since it's the only one without a standard inventory bar.

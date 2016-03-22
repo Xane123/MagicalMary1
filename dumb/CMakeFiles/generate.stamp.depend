@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Users/Myers/git/world-of-kirbycraft/dumb/CMakeLists.txt
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckFunctionExists.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckCXXCompilerFlag.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckCXXSourceCompiles.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake

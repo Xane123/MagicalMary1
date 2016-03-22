@@ -31,6 +31,8 @@
 #include "i_system.h"
 #include "doomdef.h"
 #include "p_local.h"
+#include "p_maputl.h"
+#include "d_player.h"
 #include "m_bbox.h"
 #include "p_lnspec.h"
 #include "s_sound.h"
@@ -44,8 +46,12 @@
 #include "thingdef/thingdef.h"
 #include "d_dehacked.h"
 #include "g_level.h"
+#include "r_utility.h"
+#include "p_blockmap.h"
 #include "r_data/r_translate.h"
 #include "teaminfo.h"
+#include "p_spec.h"
+#include "p_checkposition.h"
 
 #include "gi.h"
 
@@ -144,9 +150,40 @@ void P_RecursiveSound (sector_t *sec, AActor *soundtarget, bool splash, int soun
 		}
 	}
 
+	bool checkabove = !sec->PortalBlocksSound(sector_t::ceiling);
+	bool checkbelow = !sec->PortalBlocksSound(sector_t::floor);
+
 	for (i = 0; i < sec->linecount; i++)
 	{
 		check = sec->lines[i];
+
+		// I wish there was a better method to do this than randomly looking through the portal at a few places...
+		if (checkabove)
+		{
+			sector_t *upper =
+				P_PointInSector(check->v1->x + check->dx / 2 + sec->SkyBoxes[sector_t::ceiling]->scaleX,
+					check->v1->y + check->dy / 2 + sec->SkyBoxes[sector_t::ceiling]->scaleY);
+
+			P_RecursiveSound(upper, soundtarget, splash, soundblocks, emitter, maxdist);
+		}
+		if (checkbelow)
+		{
+			sector_t *lower =
+				P_PointInSector(check->v1->x + check->dx / 2 + sec->SkyBoxes[sector_t::floor]->scaleX,
+					check->v1->y + check->dy / 2 + sec->SkyBoxes[sector_t::floor]->scaleY);
+
+			P_RecursiveSound(lower, soundtarget, splash, soundblocks, emitter, maxdist);
+		}
+		FLinePortal *port = check->getPortal();
+		if (port && (port->mFlags & PORTF_SOUNDTRAVERSE))
+		{
+			if (port->mDestination)
+			{
+				P_RecursiveSound(port->mDestination->frontsector, soundtarget, splash, soundblocks, emitter, maxdist);
+			}
+		}
+
+
 		if (check->sidedef[1] == NULL ||
 			!(check->flags & ML_TWOSIDED))
 		{
@@ -388,16 +425,16 @@ bool AActor::SuggestMissileAttack (fixed_t dist)
 
 bool P_HitFriend(AActor * self)
 {
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	if (self->flags&MF_FRIENDLY && self->target != NULL)
 	{
 		angle_t angle = self->AngleTo(self->target);
 		fixed_t dist = self->AproxDistance (self->target);
-		P_AimLineAttack (self, angle, dist, &linetarget, 0, true);
-		if (linetarget != NULL && linetarget != self->target)
+		P_AimLineAttack (self, angle, dist, &t, 0, true);
+		if (t.linetarget != NULL && t.linetarget != self->target)
 		{
-			return self->IsFriend (linetarget);
+			return self->IsFriend (t.linetarget);
 		}
 	}
 	return false;
@@ -519,17 +556,15 @@ bool P_Move (AActor *actor)
 	// so make it switchable
 	if (nomonsterinterpolation)
 	{
-		actor->PrevX = actor->X();
-		actor->PrevY = actor->Y();
-		actor->PrevZ = actor->Z();
+		actor->ClearInterpolation();
 	}
 
 	if (try_ok && friction > ORIG_FRICTION)
 	{
 		actor->SetOrigin(origx, origy, actor->Z(), false);
 		movefactor *= FRACUNIT / ORIG_FRICTION_FACTOR / 4;
-		actor->velx += FixedMul (deltax, movefactor);
-		actor->vely += FixedMul (deltay, movefactor);
+		actor->vel.x += FixedMul (deltax, movefactor);
+		actor->vel.y += FixedMul (deltay, movefactor);
 	}
 
 	// [RH] If a walking monster is no longer on the floor, move it down
@@ -552,7 +587,7 @@ bool P_Move (AActor *actor)
 			else
 			{ // The monster just hit the floor, so trigger any actions.
 				if (actor->floorsector->SecActTarget != NULL &&
-					actor->floorz == actor->floorsector->floorplane.ZatPoint(actor))
+					actor->floorz == actor->floorsector->floorplane.ZatPoint(actor->PosRelative(actor->floorsector)))
 				{
 					actor->floorsector->SecActTarget->TriggerAction(actor, SECSPAC_HitFloor);
 				}
@@ -606,18 +641,18 @@ bool P_Move (AActor *actor)
 		// Do NOT simply return false 1/4th of the time (causes monsters to
 		// back out when they shouldn't, and creates secondary stickiness).
 
-		line_t *ld;
+		spechit_t spec;
 		int good = 0;
 		
 		if (!(actor->flags6 & MF6_NOTRIGGER))
 		{
-			while (spechit.Pop (ld))
+			while (spechit.Pop (spec))
 			{
 				// [RH] let monsters push lines, as well as use them
-				if (((actor->flags4 & MF4_CANUSEWALLS) && P_ActivateLine (ld, actor, 0, SPAC_Use)) ||
-					((actor->flags2 & MF2_PUSHWALL) && P_ActivateLine (ld, actor, 0, SPAC_Push)))
+				if (((actor->flags4 & MF4_CANUSEWALLS) && P_ActivateLine (spec.line, actor, 0, SPAC_Use)) ||
+					((actor->flags2 & MF2_PUSHWALL) && P_ActivateLine (spec.line, actor, 0, SPAC_Push)))
 				{
-					good |= ld == actor->BlockingLine ? 1 : 2;
+					good |= spec.line == actor->BlockingLine ? 1 : 2;
 				}
 			}
 		}
@@ -862,8 +897,8 @@ void P_NewChaseDir(AActor * actor)
 				box.Bottom() < line->bbox[BOXTOP]    &&
 				box.BoxOnLineSide(line) == -1)
 		    {
-				fixed_t front = line->frontsector->floorplane.ZatPoint(actor);
-				fixed_t back  = line->backsector->floorplane.ZatPoint(actor);
+				fixed_t front = line->frontsector->floorplane.ZatPoint(actor->PosRelative(line));
+				fixed_t back  = line->backsector->floorplane.ZatPoint(actor->PosRelative(line));
 				angle_t angle;
 		
 				// The monster must contact one of the two floors,
@@ -1697,7 +1732,7 @@ bool P_LookForPlayers (AActor *actor, INTBOOL allaround, FLookExParams *params)
 				player->mo->flags3 & MF3_GHOST)
 			{
 				if ((player->mo->AproxDistance (actor) > 2*MELEERANGE)
-					&& P_AproxDistance (player->mo->velx, player->mo->vely)	< 5*FRACUNIT)
+					&& P_AproxDistance (player->mo->vel.x, player->mo->vel.y)	< 5*FRACUNIT)
 				{ // Player is sneaking - can't detect
 					continue;
 				}
@@ -1729,10 +1764,12 @@ bool P_LookForPlayers (AActor *actor, INTBOOL allaround, FLookExParams *params)
 //
 DEFINE_ACTION_FUNCTION(AActor, A_Look)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *targ;
 
 	if (self->flags5 & MF5_INCONVERSATION)
-		return;
+		return 0;
 
 	// [RH] Set goal now if appropriate
 	if (self->special == Thing_SetGoal && self->args[0] == 0) 
@@ -1764,7 +1801,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 
 		if (targ && targ->player && (targ->player->cheats & CF_NOTARGET))
 		{
-			return;
+			return 0;
 		}
 	}
 
@@ -1790,7 +1827,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 			}
 			else
 			{
-				CALL_ACTION(A_Wander, self);
+				A_Wander(self);
 			}
 		}
 		else
@@ -1808,7 +1845,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 	}
 	
 	if (!P_LookForPlayers (self, self->flags4 & MF4_LOOKALLAROUND, NULL))
-		return;
+		return 0;
 				
 	// go into chase state
   seeyou:
@@ -1834,6 +1871,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 	{
 		self->SetState (self->SeeState);
 	}
+	return 0;
 }
 
 
@@ -1846,31 +1884,33 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
 {
-	ACTION_PARAM_START(6);
-	ACTION_PARAM_INT(flags, 0);
-	ACTION_PARAM_FIXED(minseedist, 1);
-	ACTION_PARAM_FIXED(maxseedist, 2);
-	ACTION_PARAM_FIXED(maxheardist, 3);
-	ACTION_PARAM_DOUBLE(fov_f, 4);
-	ACTION_PARAM_STATE(seestate, 5);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_INT_OPT	(flags)			{ flags = 0; }
+	PARAM_FIXED_OPT	(minseedist)	{ minseedist = 0; }
+	PARAM_FIXED_OPT	(maxseedist)	{ maxseedist = 0; }
+	PARAM_FIXED_OPT (maxheardist)	{ maxheardist = 0; }
+	PARAM_FLOAT_OPT (fov_f)			{ fov_f = 0; }
+	PARAM_STATE_OPT	(seestate)		{ seestate = NULL; }
 
 	AActor *targ = NULL; // Shuts up gcc
 	fixed_t dist;
-	angle_t fov = (fov_f == 0) ? ANGLE_180 : angle_t(fov_f * ANGLE_90 / 90);
+	angle_t fov = (fov_f == 0) ? ANGLE_180 : FLOAT2ANGLE(fov_f);
 	FLookExParams params = { fov, minseedist, maxseedist, maxheardist, flags, seestate };
 
 	if (self->flags5 & MF5_INCONVERSATION)
-		return;
+		return 0;
 
 	// [RH] Set goal now if appropriate
 	if (self->special == Thing_SetGoal && self->args[0] == 0) 
 	{
-		NActorIterator iterator (NAME_PatrolPoint, self->args[1]);
+		NActorIterator iterator(NAME_PatrolPoint, self->args[1]);
 		self->special = 0;
 		self->goal = iterator.Next ();
 		self->reactiontime = self->args[2] * TICRATE + level.maptime;
-		if (self->args[3] == 0) self->flags5 &=~ MF5_CHASEGOAL;
-		else self->flags5 |= MF5_CHASEGOAL;
+		if (self->args[3] == 0)
+			self->flags5 &= ~MF5_CHASEGOAL;
+		else
+			self->flags5 |= MF5_CHASEGOAL;
 	}
 
 	self->threshold = 0;		// any shot will wake up
@@ -1908,7 +1948,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
         
         if (targ && targ->player && (targ->player->cheats & CF_NOTARGET))
         {
-            return;
+            return 0;
         }
 	}
 
@@ -1947,7 +1987,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
                         }
                         else
                         {
-                            CALL_ACTION(A_Wander, self);
+                            A_Wander(self);
                         }
                     }
                 }
@@ -1982,11 +2022,11 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
 	if (!(flags & LOF_NOSIGHTCHECK))
 	{
 		if (!P_LookForPlayers(self, true, &params))
-			return;
+			return 0;
 	}
 	else
 	{
-		return;
+		return 0;
 	}
 				
 	// go into chase state
@@ -2023,6 +2063,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
             }
         }
 	}
+	return 0;
 }
 
 // [KS] *** End additions by me ***
@@ -2033,9 +2074,11 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_LookEx)
 //
 //==========================================================================
 
-DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ClearLastHeard)
+DEFINE_ACTION_FUNCTION(AActor, A_ClearLastHeard)
 {
+	PARAM_ACTION_PROLOGUE;
 	self->LastHeard = NULL;
+	return 0;
 }
 
 //==========================================================================
@@ -2043,7 +2086,34 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ClearLastHeard)
 // A_Wander
 //
 //==========================================================================
-DEFINE_ACTION_FUNCTION(AActor, A_Wander)
+enum ChaseFlags
+{
+	CHF_FASTCHASE = 1,
+	CHF_NOPLAYACTIVE = 2,
+	CHF_NIGHTMAREFAST = 4,
+	CHF_RESURRECT = 8,
+	CHF_DONTMOVE = 16,
+	CHF_NORANDOMTURN = 32,
+	CHF_NODIRECTIONTURN = 64,
+	CHF_NOPOSTATTACKTURN = 128,
+	CHF_STOPIFBLOCKED = 256,
+};
+
+DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Wander)
+{
+	PARAM_ACTION_PROLOGUE;
+	PARAM_INT_OPT(flags) { flags = 0; }	
+	A_Wander(self, flags);
+	return 0;
+}
+
+// [MC] I had to move this out from within A_Wander in order to allow flags to 
+// pass into it. That meant replacing the CALL_ACTION(A_Wander) functions with
+// just straight up defining A_Wander in order to compile. Looking around though,
+// actors from the games themselves just do a straight A_Chase call itself so
+// I saw no harm in it.
+
+void A_Wander(AActor *self, int flags)
 {
 	// [RH] Strife probably clears this flag somewhere, but I couldn't find where.
 	// This seems as good a place as any.
@@ -2062,27 +2132,27 @@ DEFINE_ACTION_FUNCTION(AActor, A_Wander)
 	}
 
 	// turn towards movement direction if not there yet
-	if (self->movedir < DI_NODIR)
+	if (!(flags & CHF_NODIRECTIONTURN) && (self->movedir < DI_NODIR))
 	{
-		self->angle &= (angle_t)(7<<29);
+		self->angle &= (angle_t)(7 << 29);
 		int delta = self->angle - (self->movedir << 29);
 		if (delta > 0)
 		{
-			self->angle -= ANG90/2;
+			self->angle -= ANG90 / 2;
 		}
 		else if (delta < 0)
 		{
-			self->angle += ANG90/2;
+			self->angle += ANG90 / 2;
 		}
 	}
 
-	if (--self->movecount < 0 || !P_Move (self))
+	if ((--self->movecount < 0 && !(flags & CHF_NORANDOMTURN)) || (!P_Move(self) && !(flags & CHF_STOPIFBLOCKED)))
 	{
-		P_RandomChaseDir (self);
+		P_RandomChaseDir(self);
 		self->movecount += 5;
 	}
+	return;
 }
-
 
 //==========================================================================
 //
@@ -2091,10 +2161,12 @@ DEFINE_ACTION_FUNCTION(AActor, A_Wander)
 //==========================================================================
 DEFINE_ACTION_FUNCTION(AActor, A_Look2)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *targ;
 
 	if (self->flags5 & MF5_INCONVERSATION)
-		return;
+		return 0;
 
 	self->threshold = 0;
 	targ = self->LastHeard;
@@ -2117,7 +2189,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look2)
 			self->target = targ;
 			self->threshold = 10;
 			self->SetState (self->SeeState);
-			return;
+			return 0;
 		}
 		else
 		{
@@ -2125,7 +2197,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look2)
 				goto nosee;
 			self->SetState (self->SeeState);
 			self->flags4 |= MF4_INCOMBAT;
-			return;
+			return 0;
 		}
 	}
 nosee:
@@ -2137,6 +2209,7 @@ nosee:
 	{
 		self->SetState (self->SpawnState + 3);
 	}
+	return 0;
 }
 
 //=============================================================================
@@ -2152,7 +2225,7 @@ nosee:
 //=============================================================================
 #define CLASS_BOSS_STRAFE_RANGE	64*10*FRACUNIT
 
-void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missilestate, bool playactive, bool nightmarefast, bool dontmove)
+void A_DoChase (VMFrameStack *stack, AActor *actor, bool fastchase, FState *meleestate, FState *missilestate, bool playactive, bool nightmarefast, bool dontmove, int flags)
 {
 	int delta;
 
@@ -2214,7 +2287,7 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 	{
 		A_FaceTarget(actor);
 	}
-	else if (actor->movedir < 8)
+	else if (!(flags & CHF_NODIRECTIONTURN) && actor->movedir < 8)
 	{
 		actor->angle &= (angle_t)(7<<29);
 		delta = actor->angle - (actor->movedir << 29);
@@ -2286,7 +2359,7 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 				//CALL_ACTION(A_Look, actor);
 				if (actor->target == NULL)
 				{
-					if (!dontmove) CALL_ACTION(A_Wander, actor);
+					if (!dontmove) A_Wander(actor);
 					actor->flags &= ~MF_INCHASE;
 					return;
 				}
@@ -2304,10 +2377,15 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 	if (actor->flags & MF_JUSTATTACKED)
 	{
 		actor->flags &= ~MF_JUSTATTACKED;
-		if (!actor->isFast() && !dontmove)
+		if (!actor->isFast() && !dontmove && !(flags & CHF_NOPOSTATTACKTURN) && !(flags & CHF_STOPIFBLOCKED))
 		{
 			P_NewChaseDir (actor);
 		}
+		//Because P_TryWalk would never be reached if the actor is stopped by a blocking object,
+		//need to make sure the movecount is reset, otherwise they will just keep attacking
+		//over and over again.
+		if (flags & CHF_STOPIFBLOCKED)
+			actor->movecount = pr_trywalk() & 15;
 		actor->flags &= ~MF_INCHASE;
 		return;
 	}
@@ -2377,8 +2455,8 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 		else
 		{
 			actor->FastChaseStrafeCount = 0;
-			actor->velx = 0;
-			actor->vely = 0;
+			actor->vel.x = 0;
+			actor->vel.y = 0;
 			fixed_t dist = actor->AproxDistance (actor->target);
 			if (dist < CLASS_BOSS_STRAFE_RANGE)
 			{
@@ -2387,8 +2465,8 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 					angle_t ang = actor->AngleTo(actor->target);
 					if (pr_chase() < 128) ang += ANGLE_90;
 					else ang -= ANGLE_90;
-					actor->velx = 13 * finecosine[ang>>ANGLETOFINESHIFT];
-					actor->vely = 13 * finesine[ang>>ANGLETOFINESHIFT];
+					actor->vel.x = 13 * finecosine[ang>>ANGLETOFINESHIFT];
+					actor->vel.y = 13 * finesine[ang>>ANGLETOFINESHIFT];
 					actor->FastChaseStrafeCount = 3;		// strafe time
 				}
 			}
@@ -2464,34 +2542,36 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 
 	if (actor->strafecount)
 		actor->strafecount--;
-
+	
 	// class bosses don't do this when strafing
 	if ((!fastchase || !actor->FastChaseStrafeCount) && !dontmove)
 	{
 		// CANTLEAVEFLOORPIC handling was completely missing in the non-serpent functions.
 		fixed_t oldX = actor->X();
 		fixed_t oldY = actor->Y();
+		int oldgroup = actor->PrevPortalGroup;
 		FTextureID oldFloor = actor->floorpic;
 
 		// chase towards player
-		if (--actor->movecount < 0 || !P_Move (actor))
+		if ((--actor->movecount < 0 && !(flags & CHF_NORANDOMTURN)) || (!P_Move(actor) && !(flags & CHF_STOPIFBLOCKED)))
 		{
-			P_NewChaseDir (actor);
+			P_NewChaseDir(actor);
 		}
-		
 		// if the move was illegal, reset it 
 		// (copied from A_SerpentChase - it applies to everything with CANTLEAVEFLOORPIC!)
 		if (actor->flags2&MF2_CANTLEAVEFLOORPIC && actor->floorpic != oldFloor )
 		{
-			if (P_TryMove (actor, oldX, oldY, false))
+			if (P_TryMove(actor, oldX, oldY, false))
 			{
 				if (nomonsterinterpolation)
 				{
 					actor->PrevX = oldX;
 					actor->PrevY = oldY;
+					actor->PrevPortalGroup = oldgroup;
 				}
 			}
-			P_NewChaseDir (actor);
+			if (!(flags & CHF_STOPIFBLOCKED))
+				P_NewChaseDir(actor);
 		}
 	}
 	else if (dontmove && actor->movecount > 0) actor->movecount--;
@@ -2524,39 +2604,52 @@ static bool P_CheckForResurrection(AActor *self, bool usevilestates)
 		fixedvec2 viletry = self->Vec2Offset(
 			FixedMul (absSpeed, xspeed[self->movedir]),
 			FixedMul (absSpeed, yspeed[self->movedir]), true);
-		AActor *corpsehit;
 
-		FBlockThingsIterator it(FBoundingBox(viletry.x, viletry.y, 32*FRACUNIT));
-		while ((corpsehit = it.Next()))
+		FPortalGroupArray check(FPortalGroupArray::PGA_Full3d);
+
+		FMultiBlockThingsIterator it(check, viletry.x, viletry.y, self->Z() - 64* FRACUNIT, self->Top() + 64 * FRACUNIT, 32 * FRACUNIT, false, NULL);
+		FMultiBlockThingsIterator::CheckResult cres;
+		while (it.Next(&cres))
 		{
+			AActor *corpsehit = cres.thing;
 			FState *raisestate = corpsehit->GetRaiseState();
 			if (raisestate != NULL)
 			{
 				// use the current actor's radius instead of the Arch Vile's default.
 				fixed_t maxdist = corpsehit->GetDefault()->radius + self->radius;
 
-				if (abs(corpsehit->X() - viletry.x) > maxdist ||
-					abs(corpsehit->Y() - viletry.y) > maxdist)
+				if (abs(corpsehit->Pos().x - cres.position.x) > maxdist ||
+					abs(corpsehit->Pos().y - cres.position.y) > maxdist)
 					continue;			// not actually touching
 				// Let's check if there are floors in between the archvile and its target
-				sector_t *vilesec = self->Sector;
-				sector_t *corpsec = corpsehit->Sector;
-				// We only need to test if at least one of the sectors has a 3D floor.
-				sector_t *testsec = vilesec->e->XFloor.ffloors.Size() ? vilesec :
-					(vilesec != corpsec && corpsec->e->XFloor.ffloors.Size()) ? corpsec : NULL;
-				if (testsec)
+
+				if (corpsehit->Sector->PortalGroup != self->Sector->PortalGroup)
 				{
-					fixed_t zdist1, zdist2;
-					if (P_Find3DFloor(testsec, corpsehit->Pos(), false, true, zdist1)
-						!= P_Find3DFloor(testsec, self->Pos(), false, true, zdist2))
+					// if in a different section of the map, only consider possible if a line of sight exists.
+					if (!P_CheckSight(self, corpsehit))
+						continue;
+				}
+				else
+				{
+					sector_t *vilesec = self->Sector;
+					sector_t *corpsec = corpsehit->Sector;
+					// We only need to test if at least one of the sectors has a 3D floor.
+					sector_t *testsec = vilesec->e->XFloor.ffloors.Size() ? vilesec :
+						(vilesec != corpsec && corpsec->e->XFloor.ffloors.Size()) ? corpsec : NULL;
+					if (testsec)
 					{
-						// Not on same floor
-						if (vilesec == corpsec || abs(zdist1 - self->Z()) > self->height)
-							continue;
+						fixed_t zdist1, zdist2;
+						if (P_Find3DFloor(testsec, corpsehit->Pos(), false, true, zdist1)
+							!= P_Find3DFloor(testsec, self->Pos(), false, true, zdist2))
+						{
+							// Not on same floor
+							if (vilesec == corpsec || abs(zdist1 - self->Z()) > self->height)
+								continue;
+						}
 					}
 				}
 
-				corpsehit->velx = corpsehit->vely = 0;
+				corpsehit->vel.x = corpsehit->vel.y = 0;
 				// [RH] Check against real height and radius
 
 				fixed_t oldheight = corpsehit->height;
@@ -2595,10 +2688,10 @@ static bool P_CheckForResurrection(AActor *self, bool usevilestates)
 				{
 					// For Dehacked compatibility this has to use the Arch Vile's
 					// heal state as a default if the actor doesn't define one itself.
-					const PClass *archvile = PClass::FindClass("Archvile");
+					PClassActor *archvile = PClass::FindActor("Archvile");
 					if (archvile != NULL)
 					{
-						self->SetState(archvile->ActorInfo->FindState(NAME_Heal));
+						self->SetState(archvile->FindState(NAME_Heal));
 					}
 				}
 				S_Sound(corpsehit, CHAN_BODY, "vile/raise", 1, ATTN_IDLE);
@@ -2652,64 +2745,64 @@ static bool P_CheckForResurrection(AActor *self, bool usevilestates)
 //
 //==========================================================================
 
-enum ChaseFlags
-{
-	CHF_FASTCHASE = 1,
-	CHF_NOPLAYACTIVE = 2,
-	CHF_NIGHTMAREFAST = 4,
-	CHF_RESURRECT = 8,
-	CHF_DONTMOVE = 16,
-};
-
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Chase)
 {
-	ACTION_PARAM_START(3);
-	ACTION_PARAM_STATE(melee, 0);
-	ACTION_PARAM_STATE(missile, 1);
-	ACTION_PARAM_INT(flags, 2);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_STATE_OPT	(melee)		{ melee = NULL; }
+	PARAM_STATE_OPT	(missile)	{ missile = NULL; }
+	PARAM_INT_OPT	(flags)		{ flags = 0; }
 
-	if (melee != (FState*)-1)
+	if (numparam >= NAP + 1)
 	{
-		if (flags & CHF_RESURRECT && P_CheckForResurrection(self, false)) return;
+		if ((flags & CHF_RESURRECT) && P_CheckForResurrection(self, false))
+			return 0;
 		
-		A_DoChase(self, !!(flags&CHF_FASTCHASE), melee, missile, !(flags&CHF_NOPLAYACTIVE), 
-					!!(flags&CHF_NIGHTMAREFAST), !!(flags&CHF_DONTMOVE));
+		A_DoChase(stack, self, !!(flags&CHF_FASTCHASE), melee, missile, !(flags&CHF_NOPLAYACTIVE), 
+					!!(flags&CHF_NIGHTMAREFAST), !!(flags&CHF_DONTMOVE), flags);
 	}
 	else // this is the old default A_Chase
 	{
-		A_DoChase (self, false, self->MeleeState, self->MissileState, true, gameinfo.nightmarefast, false);
+		A_DoChase(stack, self, false, self->MeleeState, self->MissileState, true, gameinfo.nightmarefast, false, flags);
 	}
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_FastChase)
 {
-	A_DoChase (self, true, self->MeleeState, self->MissileState, true, true, false);
+	PARAM_ACTION_PROLOGUE;
+	A_DoChase(stack, self, true, self->MeleeState, self->MissileState, true, true, false, 0);
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_VileChase)
 {
+	PARAM_ACTION_PROLOGUE;
 	if (!P_CheckForResurrection(self, true))
-		A_DoChase (self, false, self->MeleeState, self->MissileState, true, gameinfo.nightmarefast, false);
+	{
+		A_DoChase(stack, self, false, self->MeleeState, self->MissileState, true, gameinfo.nightmarefast, false, 0);
+	}
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ExtChase)
 {
-	ACTION_PARAM_START(4);
-	ACTION_PARAM_BOOL(domelee, 0);
-	ACTION_PARAM_BOOL(domissile, 1);
-	ACTION_PARAM_BOOL(playactive, 2);
-	ACTION_PARAM_BOOL(nightmarefast, 3);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_BOOL		(domelee);
+	PARAM_BOOL		(domissile);
+	PARAM_BOOL_OPT	(playactive)	{ playactive = true; }
+	PARAM_BOOL_OPT	(nightmarefast)	{ nightmarefast = false; }
 
 	// Now that A_Chase can handle state label parameters, this function has become rather useless...
-	A_DoChase(self, false,
-		domelee ? self->MeleeState:NULL, domissile ? self->MissileState:NULL,
-		playactive, nightmarefast, false);
+	A_DoChase(stack, self, false,
+		domelee ? self->MeleeState : NULL, domissile ? self->MissileState : NULL,
+		playactive, nightmarefast, false, 0);
+	return 0;
 }
 
 // for internal use
-void A_Chase(AActor *self)
+void A_Chase(VMFrameStack *stack, AActor *self)
 {
-	A_DoChase (self, false, self->MeleeState, self->MissileState, true, gameinfo.nightmarefast, false);
+	A_DoChase(stack, self, false, self->MeleeState, self->MissileState, true, gameinfo.nightmarefast, false, 0);
 }
 
 //=============================================================================
@@ -2778,7 +2871,7 @@ void A_Face (AActor *self, AActor *other, angle_t max_turn, angle_t max_pitch, a
 	if (max_pitch <= ANGLE_180)
 	{
 		fixedvec2 pos = self->Vec2To(other);
-		TVector2<double> dist(pos.x, pos.y);
+		DVector2 dist(pos.x, pos.y);
 		
 		// Positioning ala missile spawning, 32 units above foot level
 		fixed_t source_z = self->Z() + 32*FRACUNIT + self->GetBobOffset();
@@ -2804,7 +2897,7 @@ void A_Face (AActor *self, AActor *other, angle_t max_turn, angle_t max_pitch, a
 
 		double dist_z = target_z - source_z;
 		double ddist = sqrt(dist.X*dist.X + dist.Y*dist.Y + dist_z*dist_z);
-		int other_pitch = (int)rad2bam(asin(dist_z / ddist));
+		int other_pitch = (int)RAD2ANGLE(asin(dist_z / ddist));
 		
 		if (max_pitch != 0)
 		{
@@ -2823,8 +2916,7 @@ void A_Face (AActor *self, AActor *other, angle_t max_turn, angle_t max_pitch, a
 		{
 			self->pitch = other_pitch;
 		}
-		if (flags & FAF_NODISTFACTOR)
-			self->pitch += pitch_offset;
+		self->pitch += pitch_offset;
 	}
 	
 
@@ -2843,41 +2935,44 @@ void A_FaceTarget(AActor *self)
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FaceTarget)
 {
-	ACTION_PARAM_START(6);
-	ACTION_PARAM_ANGLE(max_turn, 0);
-	ACTION_PARAM_ANGLE(max_pitch, 1);
-	ACTION_PARAM_ANGLE(ang_offset, 2);
-	ACTION_PARAM_ANGLE(pitch_offset, 3);
-	ACTION_PARAM_INT(flags, 4);
-	ACTION_PARAM_FIXED(z_add, 5);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_ANGLE_OPT(max_turn)		{ max_turn = 0; }
+	PARAM_ANGLE_OPT(max_pitch)		{ max_pitch = 270; }
+	PARAM_ANGLE_OPT(ang_offset)		{ ang_offset = 0; }
+	PARAM_ANGLE_OPT(pitch_offset)	{ pitch_offset = 0; }
+	PARAM_INT_OPT(flags)			{ flags = 0; }
+	PARAM_FIXED_OPT(z_add)			{ z_add = 0; }
 
 	A_Face(self, self->target, max_turn, max_pitch, ang_offset, pitch_offset, flags, z_add);
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FaceMaster)
 {
-	ACTION_PARAM_START(6);
-	ACTION_PARAM_ANGLE(max_turn, 0);
-	ACTION_PARAM_ANGLE(max_pitch, 1);
-	ACTION_PARAM_ANGLE(ang_offset, 2);
-	ACTION_PARAM_ANGLE(pitch_offset, 3);
-	ACTION_PARAM_INT(flags, 4);
-	ACTION_PARAM_FIXED(z_add, 5);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_ANGLE_OPT(max_turn)		{ max_turn = 0; }
+	PARAM_ANGLE_OPT(max_pitch)		{ max_pitch = 270; }
+	PARAM_ANGLE_OPT(ang_offset)		{ ang_offset = 0; }
+	PARAM_ANGLE_OPT(pitch_offset)	{ pitch_offset = 0; }
+	PARAM_INT_OPT(flags)			{ flags = 0; }
+	PARAM_FIXED_OPT(z_add)			{ z_add = 0; }
 
 	A_Face(self, self->master, max_turn, max_pitch, ang_offset, pitch_offset, flags, z_add);
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FaceTracer)
 {
-	ACTION_PARAM_START(6);
-	ACTION_PARAM_ANGLE(max_turn, 0);
-	ACTION_PARAM_ANGLE(max_pitch, 1);
-	ACTION_PARAM_ANGLE(ang_offset, 2);
-	ACTION_PARAM_ANGLE(pitch_offset, 3);
-	ACTION_PARAM_INT(flags, 4);
-	ACTION_PARAM_FIXED(z_add, 5);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_ANGLE_OPT(max_turn)		{ max_turn = 0; }
+	PARAM_ANGLE_OPT(max_pitch)		{ max_pitch = 270; }
+	PARAM_ANGLE_OPT(ang_offset)		{ ang_offset = 0; }
+	PARAM_ANGLE_OPT(pitch_offset)	{ pitch_offset = 0; }
+	PARAM_INT_OPT(flags)			{ flags = 0; }
+	PARAM_FIXED_OPT(z_add)			{ z_add = 0; }
 
 	A_Face(self, self->tracer, max_turn, max_pitch, ang_offset, pitch_offset, flags, z_add);
+	return 0;
 }
 
 //===========================================================================
@@ -2889,11 +2984,13 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FaceTracer)
 //===========================================================================
 DEFINE_ACTION_FUNCTION(AActor, A_MonsterRail)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (!self->target)
-		return;
+		return 0;
 
 	fixed_t saved_pitch = self->pitch;
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	// [RH] Andy Baker's stealth monsters
 	if (self->flags & MF_STEALTH)
@@ -2905,18 +3002,18 @@ DEFINE_ACTION_FUNCTION(AActor, A_MonsterRail)
 		
 	self->angle = self->AngleTo(self->target);
 
-	self->pitch = P_AimLineAttack (self, self->angle, MISSILERANGE, &linetarget, ANGLE_1*60, 0, self->target);
-	if (linetarget == NULL)
+	self->pitch = P_AimLineAttack (self, self->angle, MISSILERANGE, &t, ANGLE_1*60, 0, self->target);
+	if (t.linetarget == NULL)
 	{
 		// We probably won't hit the target, but aim at it anyway so we don't look stupid.
 		fixedvec2 pos = self->Vec2To(self->target);
-		TVector2<double> xydiff(pos.x, pos.y);
+		DVector2 xydiff(pos.x, pos.y);
 		double zdiff = (self->target->Z() + (self->target->height>>1)) - (self->Z() + (self->height>>1) - self->floorclip);
 		self->pitch = int(atan2(zdiff, xydiff.Length()) * ANGLE_180 / -M_PI);
 	}
 
 	// Let the aim trail behind the player
-	self->angle = self->AngleTo(self->target, -self->target->velx * 3, -self->target->vely * 3);
+	self->angle = self->AngleTo(self->target, -self->target->vel.x * 3, -self->target->vel.y * 3);
 
 	if (self->target->flags & MF_SHADOW && !(self->flags6 & MF6_SEEINVISIBLE))
 	{
@@ -2925,10 +3022,12 @@ DEFINE_ACTION_FUNCTION(AActor, A_MonsterRail)
 
 	P_RailAttack (self, self->GetMissileDamage (0, 1), 0);
 	self->pitch = saved_pitch;
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_Scream)
 {
+	PARAM_ACTION_PROLOGUE;
 	if (self->DeathSound)
 	{
 		// Check for bosses.
@@ -2942,14 +3041,17 @@ DEFINE_ACTION_FUNCTION(AActor, A_Scream)
 			S_Sound (self, CHAN_VOICE, self->DeathSound, 1, ATTN_NORM);
 		}
 	}
+	return 0;
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_XScream)
 {
+	PARAM_ACTION_PROLOGUE;
 	if (self->player)
 		S_Sound (self, CHAN_VOICE, "*gibbed", 1, ATTN_NORM);
 	else
 		S_Sound (self, CHAN_VOICE, "misc/gibbed", 1, ATTN_NORM);
+	return 0;
 }
 
 //===========================================================================
@@ -2960,8 +3062,10 @@ DEFINE_ACTION_FUNCTION(AActor, A_XScream)
 
 DEFINE_ACTION_FUNCTION(AActor, A_ScreamAndUnblock)
 {
+	PARAM_ACTION_PROLOGUE;
 	CALL_ACTION(A_Scream, self);
 	A_Unblock(self, true);
+	return 0;
 }
 
 //===========================================================================
@@ -2972,10 +3076,12 @@ DEFINE_ACTION_FUNCTION(AActor, A_ScreamAndUnblock)
 
 DEFINE_ACTION_FUNCTION(AActor, A_ActiveSound)
 {
+	PARAM_ACTION_PROLOGUE;
 	if (self->ActiveSound)
 	{
 		S_Sound (self, CHAN_VOICE, self->ActiveSound, 1, ATTN_NORM);
 	}
+	return 0;
 }
 
 //===========================================================================
@@ -2986,8 +3092,10 @@ DEFINE_ACTION_FUNCTION(AActor, A_ActiveSound)
 
 DEFINE_ACTION_FUNCTION(AActor, A_ActiveAndUnblock)
 {
+	PARAM_ACTION_PROLOGUE;
 	CALL_ACTION(A_ActiveSound, self);
 	A_Unblock(self, true);
+	return 0;
 }
 
 //---------------------------------------------------------------------------
@@ -3022,7 +3130,12 @@ void ModifyDropAmount(AInventory *inv, int dropamount)
 	else if (inv->IsKindOf (RUNTIME_CLASS(AAmmo)))
 	{
 		// Half ammo when dropped by bad guys.
-		inv->Amount = inv->GetClass()->Meta.GetMetaInt (AIMETA_DropAmount, MAX(1, FixedMul(inv->Amount, dropammofactor)));
+		int amount = static_cast<PClassAmmo *>(inv->GetClass())->DropAmount;
+		if (amount <= 0)
+		{
+			amount = MAX(1, FixedMul(inv->Amount, dropammofactor));
+		}
+		inv->Amount = amount;
 		inv->ItemFlags |= flagmask;
 	}
 	else if (inv->IsKindOf (RUNTIME_CLASS(AWeaponGiver)))
@@ -3052,7 +3165,7 @@ void ModifyDropAmount(AInventory *inv, int dropamount)
 
 CVAR(Int, sv_dropstyle, 0, CVAR_SERVERINFO | CVAR_ARCHIVE);
 
-AInventory *P_DropItem (AActor *source, const PClass *type, int dropamount, int chance)
+AInventory *P_DropItem (AActor *source, PClassActor *type, int dropamount, int chance)
 {
 	if (type != NULL && pr_dropitem() <= chance)
 	{
@@ -3063,9 +3176,11 @@ AInventory *P_DropItem (AActor *source, const PClass *type, int dropamount, int 
 		if (!(i_compatflags & COMPATF_NOTOSSDROPS))
 		{
 			int style = sv_dropstyle;
-			if (style==0) style= (gameinfo.gametype == GAME_Strife)? 2:1;
-			
-			if (style==2)
+			if (style == 0)
+			{
+				style = (gameinfo.gametype == GAME_Strife) ? 2 : 1;
+			}
+			if (style == 2)
 			{
 				spawnz += 24*FRACUNIT;
 			}
@@ -3074,7 +3189,7 @@ AInventory *P_DropItem (AActor *source, const PClass *type, int dropamount, int 
 				spawnz += source->height / 2;
 			}
 		}
-		mo = Spawn (type, source->X(), source->Y(), spawnz, ALLOW_REPLACE);
+		mo = Spawn(type, source->X(), source->Y(), spawnz, ALLOW_REPLACE);
 		if (mo != NULL)
 		{
 			mo->flags |= MF_DROPPED;
@@ -3085,7 +3200,7 @@ AInventory *P_DropItem (AActor *source, const PClass *type, int dropamount, int 
 			}
 			if (mo->IsKindOf (RUNTIME_CLASS(AInventory)))
 			{
-				AInventory * inv = static_cast<AInventory *>(mo);
+				AInventory *inv = static_cast<AInventory *>(mo);
 				ModifyDropAmount(inv, dropamount);
 				inv->ItemFlags |= IF_TOSSED;
 				if (inv->SpecialDropAction (source))
@@ -3115,19 +3230,21 @@ void P_TossItem (AActor *item)
 	
 	if (style==2)
 	{
-		item->velx += pr_dropitem.Random2(7) << FRACBITS;
-		item->vely += pr_dropitem.Random2(7) << FRACBITS;
+		item->vel.x += pr_dropitem.Random2(7) << FRACBITS;
+		item->vel.y += pr_dropitem.Random2(7) << FRACBITS;
 	}
 	else
 	{
-		item->velx = pr_dropitem.Random2() << 8;
-		item->vely = pr_dropitem.Random2() << 8;
-		item->velz = FRACUNIT*5 + (pr_dropitem() << 10);
+		item->vel.x = pr_dropitem.Random2() << 8;
+		item->vel.y = pr_dropitem.Random2() << 8;
+		item->vel.z = FRACUNIT*5 + (pr_dropitem() << 10);
 	}
 }
 
 DEFINE_ACTION_FUNCTION(AActor, A_Pain)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	// [RH] Vary player pain sounds depending on health (ala Quake2)
 	if (self->player && self->player->morphTics == 0)
 	{
@@ -3169,15 +3286,17 @@ DEFINE_ACTION_FUNCTION(AActor, A_Pain)
 	{
 		S_Sound (self, CHAN_VOICE, self->PainSound, 1, ATTN_NORM);
 	}
+	return 0;
 }
 
 // killough 11/98: kill an object
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Die)
 {
-	ACTION_PARAM_START(1);
-	ACTION_PARAM_NAME(damagetype, 0);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_NAME_OPT	(damagetype)	{ damagetype = NAME_None; }
 
-	P_DamageMobj (self, NULL, NULL, self->health, damagetype, DMG_FORCED);
+		P_DamageMobj(self, NULL, NULL, self->health, damagetype, DMG_FORCED);
+	return 0;
 }
 
 //
@@ -3187,9 +3306,11 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Die)
 
 DEFINE_ACTION_FUNCTION(AActor, A_Detonate)
 {
-	int damage = self->GetMissileDamage (0, 1);
+	PARAM_ACTION_PROLOGUE;
+	int damage = self->GetMissileDamage(0, 1);
 	P_RadiusAttack (self, self->target, damage, damage, self->DamageType, RADF_HURTSOURCE);
 	P_CheckSplash(self, damage<<FRACBITS);
+	return 0;
 }
 
 bool CheckBossDeath (AActor *actor)
@@ -3226,16 +3347,16 @@ bool CheckBossDeath (AActor *actor)
 // A_BossDeath
 // Possibly trigger special effects if on a boss level
 //
-DEFINE_ACTION_FUNCTION(AActor, A_BossDeath)
+void A_BossDeath(AActor *self)
 {
 	FName mytype = self->GetClass()->TypeName;
 
 	// Ugh...
-	FName type = self->GetClass()->ActorInfo->GetReplacee()->Class->TypeName;
+	FName type = self->GetClass()->GetReplacee()->TypeName;
 	
 	// Do generic special death actions first
 	bool checked = false;
-	for(unsigned i=0; i<level.info->specialactions.Size(); i++)
+	for (unsigned i = 0; i < level.info->specialactions.Size(); i++)
 	{
 		FSpecialAction *sa = &level.info->specialactions[i];
 
@@ -3326,6 +3447,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_BossDeath)
 	G_ExitLevel (0, false);
 }
 
+DEFINE_ACTION_FUNCTION(AActor, A_BossDeath)
+{
+	PARAM_ACTION_PROLOGUE;
+	A_BossDeath(self);
+	return 0;
+}
+
 //----------------------------------------------------------------------------
 //
 // PROC P_Massacre
@@ -3399,6 +3527,7 @@ bool A_RaiseMobj (AActor *actor, fixed_t speed)
 
 DEFINE_ACTION_FUNCTION(AActor, A_ClassBossHealth)
 {
+	PARAM_ACTION_PROLOGUE;
 	if (multiplayer && !deathmatch)		// co-op only
 	{
 		if (!self->special1)
@@ -3407,4 +3536,5 @@ DEFINE_ACTION_FUNCTION(AActor, A_ClassBossHealth)
 			self->special1 = true;   // has been initialized
 		}
 	}
+	return 0;
 }

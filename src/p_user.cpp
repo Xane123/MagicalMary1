@@ -54,6 +54,11 @@
 #include "gstrings.h"
 #include "farchive.h"
 #include "r_renderer.h"
+#include "d_player.h"
+#include "r_utility.h"
+#include "p_blockmap.h"
+#include "a_morph.h"
+#include "p_spec.h"
 
 static FRandom pr_skullpop ("SkullPop");
 
@@ -129,26 +134,26 @@ bool FPlayerClass::CheckSkin (int skin)
 //
 //===========================================================================
 
-const char *GetPrintableDisplayName(const PClass *cls)
+FString GetPrintableDisplayName(PClassPlayerPawn *cls)
 { 
 	// Fixme; This needs a decent way to access the string table without creating a mess.
-	const char *name = cls->Meta.GetMetaString(APMETA_DisplayName);
-	return name;
+	// [RH] ????
+	return cls->DisplayName;
 }
 
-bool ValidatePlayerClass(const PClass *ti, const char *name)
+bool ValidatePlayerClass(PClassActor *ti, const char *name)
 {
-	if (!ti)
+	if (ti == NULL)
 	{
-		Printf ("Unknown player class '%s'\n", name);
+		Printf("Unknown player class '%s'\n", name);
 		return false;
 	}
-	else if (!ti->IsDescendantOf (RUNTIME_CLASS (APlayerPawn)))
+	else if (!ti->IsDescendantOf(RUNTIME_CLASS(APlayerPawn)))
 	{
-		Printf ("Invalid player class '%s'\n", name);
+		Printf("Invalid player class '%s'\n", name);
 		return false;
 	}
-	else if (ti->Meta.GetMetaString (APMETA_DisplayName) == NULL)
+	else if (static_cast<PClassPlayerPawn *>(ti)->DisplayName.IsEmpty())
 	{
 		Printf ("Missing displayname for player class '%s'\n", name);
 		return false;
@@ -161,18 +166,18 @@ void SetupPlayerClasses ()
 	FPlayerClass newclass;
 
 	PlayerClasses.Clear();
-	for (unsigned i=0; i<gameinfo.PlayerClasses.Size(); i++)
+	for (unsigned i = 0; i < gameinfo.PlayerClasses.Size(); i++)
 	{
-		newclass.Flags = 0;
-		newclass.Type = PClass::FindClass(gameinfo.PlayerClasses[i]);
-
-		if (ValidatePlayerClass(newclass.Type, gameinfo.PlayerClasses[i]))
+		PClassActor *cls = PClass::FindActor(gameinfo.PlayerClasses[i]);
+		if (ValidatePlayerClass(cls, gameinfo.PlayerClasses[i]))
 		{
-			if ((GetDefaultByType(newclass.Type)->flags6 & MF6_NOMENU))
+			newclass.Flags = 0;
+			newclass.Type = static_cast<PClassPlayerPawn *>(cls);
+			if ((GetDefaultByType(cls)->flags6 & MF6_NOMENU))
 			{
 				newclass.Flags |= PCF_NOMENU;
 			}
-			PlayerClasses.Push (newclass);
+			PlayerClasses.Push(newclass);
 		}
 	}
 }
@@ -189,17 +194,17 @@ CCMD (addplayerclass)
 {
 	if (ParsingKeyConf && argv.argc () > 1)
 	{
-		const PClass *ti = PClass::FindClass (argv[1]);
+		PClassActor *ti = PClass::FindActor(argv[1]);
 
 		if (ValidatePlayerClass(ti, argv[1]))
 		{
 			FPlayerClass newclass;
 
-			newclass.Type = ti;
+			newclass.Type = static_cast<PClassPlayerPawn *>(ti);
 			newclass.Flags = 0;
 
 			int arg = 2;
-			while (arg < argv.argc ())
+			while (arg < argv.argc())
 			{
 				if (!stricmp (argv[arg], "nomenu"))
 				{
@@ -212,7 +217,6 @@ CCMD (addplayerclass)
 
 				arg++;
 			}
-
 			PlayerClasses.Push (newclass);
 		}
 	}
@@ -224,7 +228,7 @@ CCMD (playerclasses)
 	{
 		Printf ("%3d: Class = %s, Name = %s\n", i,
 			PlayerClasses[i].Type->TypeName.GetChars(),
-			PlayerClasses[i].Type->Meta.GetMetaString (APMETA_DisplayName));
+			PlayerClasses[i].Type->DisplayName.GetChars());
 	}
 }
 
@@ -253,8 +257,7 @@ player_t::player_t()
   viewheight(0),
   deltaviewheight(0),
   bob(0),
-  velx(0),
-  vely(0),
+  vel({ 0,0 }),
   centering(0),
   turnticks(0),
   attackdown(0),
@@ -333,8 +336,8 @@ player_t &player_t::operator=(const player_t &p)
 	viewheight = p.viewheight;
 	deltaviewheight = p.deltaviewheight;
 	bob = p.bob;
-	velx = p.velx;
-	vely = p.vely;
+	vel.x = p.vel.x;
+	vel.y = p.vel.y;
 	centering = p.centering;
 	turnticks = p.turnticks;
 	attackdown = p.attackdown;
@@ -496,6 +499,100 @@ int player_t::GetSpawnClass()
 {
 	const PClass * type = PlayerClasses[CurrentPlayerClass].Type;
 	return static_cast<APlayerPawn*>(GetDefaultByType(type))->SpawnMask;
+}
+
+//===========================================================================
+//
+// PClassPlayerPawn
+//
+//===========================================================================
+
+IMPLEMENT_CLASS(PClassPlayerPawn)
+
+PClassPlayerPawn::PClassPlayerPawn()
+{
+	for (size_t i = 0; i < countof(HexenArmor); ++i)
+	{
+		HexenArmor[i] = 0;
+	}
+	ColorRangeStart = 0;
+	ColorRangeEnd = 0;
+}
+
+void PClassPlayerPawn::DeriveData(PClass *newclass)
+{
+	assert(newclass->IsKindOf(RUNTIME_CLASS(PClassPlayerPawn)));
+	Super::DeriveData(newclass);
+	PClassPlayerPawn *newp = static_cast<PClassPlayerPawn *>(newclass);
+	size_t i;
+
+	newp->DisplayName = DisplayName;
+	newp->SoundClass = SoundClass;
+	newp->Face = Face;
+	newp->InvulMode = InvulMode;
+	newp->HealingRadiusType = HealingRadiusType;
+	newp->ColorRangeStart = ColorRangeStart;
+	newp->ColorRangeEnd = ColorRangeEnd;
+	newp->ColorSets = ColorSets;
+	for (i = 0; i < countof(HexenArmor); ++i)
+	{
+		newp->HexenArmor[i] = HexenArmor[i];
+	}
+	for (i = 0; i < countof(Slot); ++i)
+	{
+		newp->Slot[i] = Slot[i];
+	}
+}
+
+static int STACK_ARGS intcmp(const void *a, const void *b)
+{
+	return *(const int *)a - *(const int *)b;
+}
+
+void PClassPlayerPawn::EnumColorSets(TArray<int> *out)
+{
+	out->Clear();
+	FPlayerColorSetMap::Iterator it(ColorSets);
+	FPlayerColorSetMap::Pair *pair;
+
+	while (it.NextPair(pair))
+	{
+		out->Push(pair->Key);
+	}
+	qsort(&(*out)[0], out->Size(), sizeof(int), intcmp);
+}
+
+//==========================================================================
+//
+//
+//==========================================================================
+
+bool PClassPlayerPawn::GetPainFlash(FName type, PalEntry *color) const
+{
+	const PClassPlayerPawn *info = this;
+
+	while (info != NULL)
+	{
+		const PalEntry *flash = info->PainFlashes.CheckKey(type);
+		if (flash != NULL)
+		{
+			*color = *flash;
+			return true;
+		}
+		// Try parent class
+		info = dyn_cast<PClassPlayerPawn>(info->ParentClass);
+	}
+	return false;
+}
+
+void PClassPlayerPawn::ReplaceClassRef(PClass *oldclass, PClass *newclass)
+{
+	Super::ReplaceClassRef(oldclass, newclass);
+	APlayerPawn *def = (APlayerPawn*)Defaults;
+	if (def != NULL)
+	{
+		if (def->FlechetteType == oldclass) def->FlechetteType = static_cast<PClassInventory *>(newclass);
+	}
 }
 
 //===========================================================================
@@ -671,10 +768,9 @@ void APlayerPawn::PostBeginPlay()
 	// Voodoo dolls: restore original floorz/ceilingz logic
 	if (player == NULL || player->mo != this)
 	{
-		dropoffz = floorz = Sector->floorplane.ZatPoint(this);
-		ceilingz = Sector->ceilingplane.ZatPoint(this);
-		P_FindFloorCeiling(this, FFCF_ONLYSPAWNPOS);
+		P_FindFloorCeiling(this, FFCF_ONLYSPAWNPOS|FFCF_NOPORTALS);
 		SetZ(floorz);
+		P_FindFloorCeiling(this, FFCF_ONLYSPAWNPOS);
 	}
 	else
 	{
@@ -834,7 +930,7 @@ bool APlayerPawn::UseInventory (AInventory *item)
 //
 //===========================================================================
 
-AWeapon *APlayerPawn::BestWeapon (const PClass *ammotype)
+AWeapon *APlayerPawn::BestWeapon(PClassAmmo *ammotype)
 {
 	AWeapon *bestMatch = NULL;
 	int bestOrder = INT_MAX;
@@ -896,7 +992,7 @@ AWeapon *APlayerPawn::BestWeapon (const PClass *ammotype)
 //
 //===========================================================================
 
-AWeapon *APlayerPawn::PickNewWeapon (const PClass *ammotype)
+AWeapon *APlayerPawn::PickNewWeapon(PClassAmmo *ammotype)
 {
 	AWeapon *best = BestWeapon (ammotype);
 
@@ -924,7 +1020,7 @@ AWeapon *APlayerPawn::PickNewWeapon (const PClass *ammotype)
 //
 //===========================================================================
 
-void APlayerPawn::CheckWeaponSwitch(const PClass *ammotype)
+void APlayerPawn::CheckWeaponSwitch(PClassAmmo *ammotype)
 {
 	if (!player->userinfo.GetNeverSwitch() &&
 		player->PendingWeapon == WP_NOCHANGE && 
@@ -951,14 +1047,14 @@ void APlayerPawn::CheckWeaponSwitch(const PClass *ammotype)
 
 void APlayerPawn::GiveDeathmatchInventory()
 {
-	for (unsigned int i = 0; i < PClass::m_Types.Size(); ++i)
+	for (unsigned int i = 0; i < PClassActor::AllActorClasses.Size(); ++i)
 	{
-		if (PClass::m_Types[i]->IsDescendantOf (RUNTIME_CLASS(AKey)))
+		if (PClassActor::AllActorClasses[i]->IsDescendantOf (RUNTIME_CLASS(AKey)))
 		{
-			AKey *key = (AKey *)GetDefaultByType (PClass::m_Types[i]);
+			AKey *key = (AKey *)GetDefaultByType (PClassActor::AllActorClasses[i]);
 			if (key->KeyNumber != 0)
 			{
-				key = static_cast<AKey *>(Spawn (PClass::m_Types[i], 0,0,0, NO_REPLACE));
+				key = static_cast<AKey *>(Spawn(static_cast<PClassActor *>(PClassActor::AllActorClasses[i]), 0,0,0, NO_REPLACE));
 				if (!key->CallTryPickup (this))
 				{
 					key->Destroy ();
@@ -1105,8 +1201,8 @@ const char *APlayerPawn::GetSoundClass() const
 	}
 
 	// [GRB]
-	const char *sclass = GetClass ()->Meta.GetMetaString (APMETA_SoundClass);
-	return sclass != NULL ? sclass : "player";
+	PClassPlayerPawn *pclass = GetClass();
+	return pclass->SoundClass.IsNotEmpty() ? pclass->SoundClass.GetChars() : "player";
 }
 
 //===========================================================================
@@ -1220,18 +1316,14 @@ void APlayerPawn::GiveDefaultInventory ()
 	// HexenArmor must always be the first item in the inventory because
 	// it provides player class based protection that should not affect
 	// any other protection item.
-	fixed_t hx[5];
-	for(int i=0;i<5;i++)
-	{
-		hx[i] = GetClass()->Meta.GetMetaFixed(APMETA_Hexenarmor0+i);
-	}
-	GiveInventoryType (RUNTIME_CLASS(AHexenArmor));
+	PClassPlayerPawn *myclass = GetClass();
+	GiveInventoryType(RUNTIME_CLASS(AHexenArmor));
 	AHexenArmor *harmor = FindInventory<AHexenArmor>();
-	harmor->Slots[4] = hx[0];
-	harmor->SlotsIncrement[0] = hx[1];
-	harmor->SlotsIncrement[1] = hx[2];
-	harmor->SlotsIncrement[2] = hx[3];
-	harmor->SlotsIncrement[3] = hx[4];
+	harmor->Slots[4] = myclass->HexenArmor[0];
+	for (int i = 0; i < 4; ++i)
+	{
+		harmor->SlotsIncrement[i] = myclass->HexenArmor[i + 1];
+	}
 
 	// BasicArmor must come right after that. It should not affect any
 	// other protection item as well but needs to process the damage
@@ -1243,25 +1335,25 @@ void APlayerPawn::GiveDefaultInventory ()
 	AddInventory (barmor);
 
 	// Now add the items from the DECORATE definition
-	FDropItem *di = GetDropItems();
+	DDropItem *di = GetDropItems();
 
 	while (di)
 	{
-		const PClass *ti = PClass::FindClass (di->Name);
+		PClassActor *ti = PClass::FindActor (di->Name);
 		if (ti)
 		{
 			AInventory *item = FindInventory (ti);
 			if (item != NULL)
 			{
 				item->Amount = clamp<int>(
-					item->Amount + (di->amount ? di->amount : ((AInventory *)item->GetDefault ())->Amount),
+					item->Amount + (di->Amount ? di->Amount : ((AInventory *)item->GetDefault ())->Amount),
 					0, item->MaxAmount);
 			}
 			else
 			{
 				item = static_cast<AInventory *>(Spawn (ti, 0,0,0, NO_REPLACE));
-				item->ItemFlags|=IF_IGNORESKILL;	// no skill multiplicators here
-				item->Amount = di->amount;
+				item->ItemFlags |= IF_IGNORESKILL;	// no skill multiplicators here
+				item->Amount = di->Amount;
 				if (item->IsKindOf (RUNTIME_CLASS (AWeapon)))
 				{
 					// To allow better control any weapon is emptied of
@@ -1298,7 +1390,7 @@ void APlayerPawn::MorphPlayerThink ()
 
 void APlayerPawn::ActivateMorphWeapon ()
 {
-	const PClass *morphweapon = PClass::FindClass (MorphWeapon);
+	PClassActor *morphweapon = PClass::FindActor (MorphWeapon);
 	player->PendingWeapon = WP_NOCHANGE;
 	player->psprites[ps_weapon].sy = WEAPONTOP;
 
@@ -1358,7 +1450,7 @@ void APlayerPawn::Die (AActor *source, AActor *inflictor, int dmgflags)
 				AInventory *item;
 
 				// kgDROP - start - modified copy from a_action.cpp
-				FDropItem *di = weap->GetDropItems();
+				DDropItem *di = weap->GetDropItems();
 
 				if (di != NULL)
 				{
@@ -1366,8 +1458,8 @@ void APlayerPawn::Die (AActor *source, AActor *inflictor, int dmgflags)
 					{
 						if (di->Name != NAME_None)
 						{
-							const PClass *ti = PClass::FindClass(di->Name);
-							if (ti) P_DropItem (player->mo, ti, di->amount, di->probability);
+							PClassActor *ti = PClass::FindActor(di->Name);
+							if (ti) P_DropItem (player->mo, ti, di->Amount, di->Probability);
 						}
 						di = di->Next;
 					}
@@ -1466,6 +1558,8 @@ void APlayerPawn::TweakSpeeds (int &forward, int &side)
 
 DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	int sound = 0;
 	int chan = CHAN_VOICE;
 
@@ -1479,13 +1573,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 		{
 			S_Sound (self, CHAN_VOICE, "*death", 1, ATTN_NORM);
 		}
-		return;
+		return 0;
 	}
 
 	// Handle the different player death screams
 	if ((((level.flags >> 15) | (dmflags)) &
 		(DF_FORCE_FALLINGZD | DF_FORCE_FALLINGHX)) &&
-		self->velz <= -39*FRACUNIT)
+		self->vel.z <= -39*FRACUNIT)
 	{
 		sound = S_FindSkinnedSound (self, "*splat");
 		chan = CHAN_BODY;
@@ -1528,6 +1622,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 		}
 	}
 	S_Sound (self, chan, sound, 1, ATTN_NORM);
+	return 0;
 }
 
 
@@ -1539,25 +1634,26 @@ DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SkullPop)
 {
-	ACTION_PARAM_START(1);
-	ACTION_PARAM_CLASS(spawntype, 0);
+	PARAM_ACTION_PROLOGUE;
+	PARAM_CLASS_OPT(spawntype, APlayerChunk)	{ spawntype = NULL; }
 
 	APlayerPawn *mo;
 	player_t *player;
 
 	// [GRB] Parameterized version
-	if (!spawntype || !spawntype->IsDescendantOf (RUNTIME_CLASS (APlayerChunk)))
+	if (spawntype == NULL || !spawntype->IsDescendantOf(RUNTIME_CLASS(APlayerChunk)))
 	{
-		spawntype = PClass::FindClass("BloodySkull");
-		if (spawntype == NULL) return;
+		spawntype = dyn_cast<PClassPlayerPawn>(PClass::FindClass("BloodySkull"));
+		if (spawntype == NULL)
+			return 0;
 	}
 
 	self->flags &= ~MF_SOLID;
 	mo = (APlayerPawn *)Spawn (spawntype, self->PosPlusZ(48*FRACUNIT), NO_REPLACE);
 	//mo->target = self;
-	mo->velx = pr_skullpop.Random2() << 9;
-	mo->vely = pr_skullpop.Random2() << 9;
-	mo->velz = 2*FRACUNIT + (pr_skullpop() << 6);
+	mo->vel.x = pr_skullpop.Random2() << 9;
+	mo->vel.y = pr_skullpop.Random2() << 9;
+	mo->vel.z = 2*FRACUNIT + (pr_skullpop() << 6);
 	// Attach player mobj to bloody skull
 	player = self->player;
 	self->player = NULL;
@@ -1577,6 +1673,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SkullPop)
 			players[i].camera = mo;
 		}
 	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -1587,10 +1684,13 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SkullPop)
 
 DEFINE_ACTION_FUNCTION(AActor, A_CheckPlayerDone)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (self->player == NULL)
 	{
-		self->Destroy ();
+		self->Destroy();
 	}
+	return 0;
 }
 
 //===========================================================================
@@ -1659,8 +1759,8 @@ void P_SideThrust (player_t *player, angle_t angle, fixed_t move)
 {
 	angle = (angle - ANGLE_90) >> ANGLETOFINESHIFT;
 
-	player->mo->velx += FixedMul (move, finecosine[angle]);
-	player->mo->vely += FixedMul (move, finesine[angle]);
+	player->mo->vel.x += FixedMul (move, finecosine[angle]);
+	player->mo->vel.y += FixedMul (move, finesine[angle]);
 }
 
 void P_ForwardThrust (player_t *player, angle_t angle, fixed_t move)
@@ -1674,11 +1774,11 @@ void P_ForwardThrust (player_t *player, angle_t angle, fixed_t move)
 		fixed_t zpush = FixedMul (move, finesine[pitch]);
 		if (player->mo->waterlevel && player->mo->waterlevel < 2 && zpush < 0)
 			zpush = 0;
-		player->mo->velz -= zpush;
+		player->mo->vel.z -= zpush;
 		move = FixedMul (move, finecosine[pitch]);
 	}
-	player->mo->velx += FixedMul (move, finecosine[angle]);
-	player->mo->vely += FixedMul (move, finesine[angle]);
+	player->mo->vel.x += FixedMul (move, finecosine[angle]);
+	player->mo->vel.y += FixedMul (move, finesine[angle]);
 }
 
 //
@@ -1704,8 +1804,8 @@ void P_Bob (player_t *player, angle_t angle, fixed_t move, bool forward)
 
 	angle >>= ANGLETOFINESHIFT;
 
-	player->velx += FixedMul(move, finecosine[angle]);
-	player->vely += FixedMul(move, finesine[angle]);
+	player->vel.x += FixedMul(move, finecosine[angle]);
+	player->vel.y += FixedMul(move, finesine[angle]);
 }
 
 /*
@@ -1744,7 +1844,7 @@ void P_CalcHeight (player_t *player)
 	}
 	else
 	{
-		player->bob = DMulScale16 (player->velx, player->velx, player->vely, player->vely);
+		player->bob = DMulScale16 (player->vel.x, player->vel.x, player->vel.y, player->vel.y);
 		if (player->bob == 0)
 		{
 			still = true;
@@ -1964,7 +2064,7 @@ void P_FallingDamage (AActor *actor)
 	if (actor->floorsector->Flags & SECF_NOFALLINGDAMAGE)
 		return;
 
-	vel = abs(actor->velz);
+	vel = abs(actor->vel.z);
 
 	// Since Hexen falling damage is stronger than ZDoom's, it takes
 	// precedence. ZDoom falling damage may not be as strong, but it
@@ -1985,7 +2085,7 @@ void P_FallingDamage (AActor *actor)
 		{
 			vel = FixedMul (vel, 16*FRACUNIT/23);
 			damage = ((FixedMul (vel, vel) / 10) >> FRACBITS) - 24;
-			if (actor->velz > -39*FRACUNIT && damage > actor->health
+			if (actor->vel.z > -39*FRACUNIT && damage > actor->health
 				&& actor->health != 1)
 			{ // No-death threshold
 				damage = actor->health-1;
@@ -2202,8 +2302,8 @@ void P_PlayerThink (player_t *player)
 
 	if (debugfile && !(player->cheats & CF_PREDICTING))
 	{
-		fprintf (debugfile, "tic %d for pl %td: (%d, %d, %d, %u) b:%02x p:%d y:%d f:%d s:%d u:%d\n",
-			gametic, player-players, player->mo->X(), player->mo->Y(), player->mo->Z(),
+		fprintf (debugfile, "tic %d for pl %d: (%d, %d, %d, %u) b:%02x p:%d y:%d f:%d s:%d u:%d\n",
+			gametic, (int)(player-players), player->mo->X(), player->mo->Y(), player->mo->Z(),
 			player->mo->angle>>ANGLETOFINESHIFT, player->cmd.ucmd.buttons,
 			player->cmd.ucmd.pitch, player->cmd.ucmd.yaw, player->cmd.ucmd.forwardmove,
 			player->cmd.ucmd.sidemove, player->cmd.ucmd.upmove);
@@ -2218,7 +2318,7 @@ void P_PlayerThink (player_t *player)
 	{
 		// A negative scale is used to prevent G_AddViewAngle/G_AddViewPitch
 		// from scaling with the FOV scale.
-		desired *= fabs(player->ReadyWeapon->FOVScale);
+		desired *= fabsf(player->ReadyWeapon->FOVScale);
 	}
 	if (player->FOV != desired)
 	{
@@ -2474,11 +2574,11 @@ void P_PlayerThink (player_t *player)
 			}
 			else if (player->mo->waterlevel >= 2)
 			{
-				player->mo->velz = FixedMul(4*FRACUNIT, player->mo->Speed);
+				player->mo->vel.z = FixedMul(4*FRACUNIT, player->mo->Speed);
 			}
 			else if (player->mo->flags & MF_NOGRAVITY)
 			{
-				player->mo->velz = 3*FRACUNIT;
+				player->mo->vel.z = 3*FRACUNIT;
 			}
 			else if (level.IsJumpingAllowed() && player->onground && player->jumpTics == 0)
 			{
@@ -2487,7 +2587,7 @@ void P_PlayerThink (player_t *player)
 				// [BC] If the player has the high jump power, double his jump velocity.
 				if ( player->cheats & CF_HIGHJUMP )	jumpvelz *= 2;
 
-				player->mo->velz += jumpvelz;
+				player->mo->vel.z += jumpvelz;
 				player->mo->flags2 &= ~MF2_ONMOBJ;
 				player->jumpTics = -1;
 				if (!(player->cheats & CF_PREDICTING))
@@ -2513,12 +2613,12 @@ void P_PlayerThink (player_t *player)
 			}
 			if (player->mo->waterlevel >= 2 || (player->mo->flags2 & MF2_FLY) || (player->cheats & CF_NOCLIP2))
 			{
-				player->mo->velz = FixedMul(player->mo->Speed, cmd->ucmd.upmove << 9);
+				player->mo->vel.z = FixedMul(player->mo->Speed, cmd->ucmd.upmove << 9);
 				if (player->mo->waterlevel < 2 && !(player->mo->flags & MF_NOGRAVITY))
 				{
 					player->mo->flags2 |= MF2_FLY;
 					player->mo->flags |= MF_NOGRAVITY;
-					if ((player->mo->velz <= -39 * FRACUNIT) && !(player->cheats & CF_PREDICTING))
+					if ((player->mo->vel.z <= -39 * FRACUNIT) && !(player->cheats & CF_PREDICTING))
 					{ // Stop falling scream
 						S_StopSound (player->mo, CHAN_VOICE);
 					}
@@ -2548,8 +2648,8 @@ void P_PlayerThink (player_t *player)
 			// Player must be touching the floor
 			P_PlayerOnSpecialFlat(player, P_GetThingFloorType(player->mo));
 		}
-		if (player->mo->velz <= -player->mo->FallingScreamMinSpeed &&
-			player->mo->velz >= -player->mo->FallingScreamMaxSpeed && !player->morphTics &&
+		if (player->mo->vel.z <= -player->mo->FallingScreamMinSpeed &&
+			player->mo->vel.z >= -player->mo->FallingScreamMaxSpeed && !player->morphTics &&
 			player->mo->waterlevel == 0)
 		{
 			int id = S_FindSkinnedSound (player->mo, "*falling");
@@ -2652,13 +2752,13 @@ void P_PredictionLerpReset()
 
 bool P_LerpCalculate(PredictPos from, PredictPos to, PredictPos &result, float scale)
 {
-	FVector3 vecFrom(FIXED2DBL(from.x), FIXED2DBL(from.y), FIXED2DBL(from.z));
-	FVector3 vecTo(FIXED2DBL(to.x), FIXED2DBL(to.y), FIXED2DBL(to.z));
-	FVector3 vecResult;
+	DVector3 vecFrom(FIXED2DBL(from.x), FIXED2DBL(from.y), FIXED2DBL(from.z));
+	DVector3 vecTo(FIXED2DBL(to.x), FIXED2DBL(to.y), FIXED2DBL(to.z));
+	DVector3 vecResult;
 	vecResult = vecTo - vecFrom;
 	vecResult *= scale;
 	vecResult = vecResult + vecFrom;
-	FVector3 delta = vecResult - vecTo;
+	DVector3 delta = vecResult - vecTo;
 
 	result.x = FLOAT2FIXED(vecResult.X);
 	result.y = FLOAT2FIXED(vecResult.Y);
@@ -2971,8 +3071,8 @@ void player_t::Serialize (FArchive &arc)
 		<< viewheight
 		<< deltaviewheight
 		<< bob
-		<< velx
-		<< vely
+		<< vel.x
+		<< vel.y
 		<< centering
 		<< health
 		<< inventorytics;
@@ -3159,55 +3259,6 @@ void player_t::Serialize (FArchive &arc)
 	if (SaveVersion >= 4522)
 	{
 		arc << MUSINFOactor << MUSINFOtics;
-	}
-}
-
-
-static FPlayerColorSetMap *GetPlayerColors(FName classname)
-{
-	const PClass *cls = PClass::FindClass(classname);
-
-	if (cls != NULL)
-	{
-		FActorInfo *inf = cls->ActorInfo;
-
-		if (inf != NULL)
-		{
-			return inf->ColorSets;
-		}
-	}
-	return NULL;
-}
-
-FPlayerColorSet *P_GetPlayerColorSet(FName classname, int setnum)
-{
-	FPlayerColorSetMap *map = GetPlayerColors(classname);
-	if (map == NULL)
-	{
-		return NULL;
-	}
-	return map->CheckKey(setnum);
-}
-
-static int STACK_ARGS intcmp(const void *a, const void *b)
-{
-	return *(const int *)a - *(const int *)b;
-}
-
-void P_EnumPlayerColorSets(FName classname, TArray<int> *out)
-{
-	out->Clear();
-	FPlayerColorSetMap *map = GetPlayerColors(classname);
-	if (map != NULL)
-	{
-		FPlayerColorSetMap::Iterator it(*map);
-		FPlayerColorSetMap::Pair *pair;
-
-		while (it.NextPair(pair))
-		{
-			out->Push(pair->Key);
-		}
-		qsort(&(*out)[0], out->Size(), sizeof(int), intcmp);
 	}
 }
 

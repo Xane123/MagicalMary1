@@ -55,11 +55,11 @@ bool UseKnownFolders()
 	if (file != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(file);
-		Printf("Using program directory for storage\n");
+		if (!batchrun) Printf("Using program directory for storage\n");
 		iswritable = true;
 		return false;
 	}
-	Printf("Using known folders for storage\n");
+	if (!batchrun) Printf("Using known folders for storage\n");
 	iswritable = false;
 	return true;
 }
@@ -295,10 +295,7 @@ FString M_GetSavegamesPath()
 
 	if (!UseKnownFolders())
 	{
-		path = progdir;
-		path << "/saves";
-		CreatePath(path);
-
+		return progdir;
 	}
 	// Try standard Saved Games folder
 	else if (GetKnownFolder(-1, FOLDERID_SavedGames, true, path))
@@ -316,8 +313,6 @@ FString M_GetSavegamesPath()
 	else
 	{
 		path = progdir;
-		path << "/saves";
-		CreatePath(path);
 	}
 	return path;
 }

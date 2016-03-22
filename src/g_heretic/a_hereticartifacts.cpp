@@ -47,12 +47,15 @@ bool AArtiTomeOfPower::Use (bool pickup)
 
 DEFINE_ACTION_FUNCTION(AActor, A_TimeBomb)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	self->AddZ(32*FRACUNIT, false);
 	self->PrevZ = self->Z();	// no interpolation!
 	self->RenderStyle = STYLE_Add;
 	self->alpha = FRACUNIT;
 	P_RadiusAttack (self, self->target, 128, 128, self->DamageType, RADF_HURTSOURCE);
 	P_CheckSplash(self, 128<<FRACBITS);
+	return 0;
 }
 
 class AArtiTimeBomb : public AInventory
@@ -69,7 +72,7 @@ bool AArtiTimeBomb::Use (bool pickup)
 {
 	angle_t angle = Owner->angle >> ANGLETOFINESHIFT;
 	AActor *mo = Spawn("ActivatedTimeBomb",
-		Vec3Angle(24*FRACUNIT, Owner->angle, - Owner->floorclip), ALLOW_REPLACE);
+		Owner->Vec3Angle(24*FRACUNIT, Owner->angle, - Owner->floorclip), ALLOW_REPLACE);
 	mo->target = Owner;
 	return true;
 }

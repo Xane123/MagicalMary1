@@ -88,13 +88,13 @@ void P_BringUpWeapon (player_t *player);
 void P_FireWeapon (player_t *player);
 void P_DropWeapon (player_t *player);
 void P_BobWeapon (player_t *player, pspdef_t *psp, fixed_t *x, fixed_t *y);
-angle_t P_BulletSlope (AActor *mo, AActor **pLineTarget = NULL);
-void P_GunShot (AActor *mo, bool accurate, const PClass *pufftype, angle_t pitch);
+angle_t P_BulletSlope (AActor *mo, FTranslatedLineTarget *pLineTarget = NULL, int aimflags = 0);
+void P_GunShot (AActor *mo, bool accurate, PClassActor *pufftype, angle_t pitch);
 
-void DoReadyWeapon(AActor * self);
-void DoReadyWeaponToBob(AActor * self);
-void DoReadyWeaponToFire(AActor * self, bool primary = true, bool secondary = true);
-void DoReadyWeaponToSwitch(AActor * self, bool switchable = true);
+void DoReadyWeapon(AActor *self);
+void DoReadyWeaponToBob(AActor *self);
+void DoReadyWeaponToFire(AActor *self, bool primary = true, bool secondary = true);
+void DoReadyWeaponToSwitch(AActor *self, bool switchable = true);
 
 DECLARE_ACTION(A_Raise)
 void A_ReFire(AActor *self, FState *state = NULL);

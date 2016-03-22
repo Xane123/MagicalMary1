@@ -1,0 +1,4 @@
+﻿  Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/tools/updaterevision/CMakeLists.txt
+  CMake does not need to re-run because C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeFiles\generate.stamp is up-to-date.
+  updaterevision.c
+  updaterevision.vcxproj -> C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\Release\updaterevision.exe

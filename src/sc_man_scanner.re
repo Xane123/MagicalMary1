@@ -36,7 +36,7 @@ std2:
 	L	= [a-zA-Z_];
 	H	= [a-fA-F0-9];
 	E	= [Ee] [+-]? D+;
-	FS	= [fFlL];
+	FS	= [fF];
 	IS	= [uUlL];
 	ESC	= [\\] ([abcfnrtv?'"\\] | "x" H+ | O+);
 
@@ -49,12 +49,41 @@ std2:
 	TOK2 = (NWS\STOP1);
 	TOKC2 = (NWS\STOPC);
 */
-	if (tokens)	// A well-defined scanner, based on the c.re example.
+#define RET(x)	TokenType = (x); goto normal_token;
+	if (tokens && StateMode != 0)
 	{
-#define RET(x)	TokenType = x; goto normal_token;
 	/*!re2c
 		"/*"						{ goto comment; }	/* C comment */
 		"//" (any\"\n")* "\n"		{ goto newline; }	/* C++ comment */
+		("#region"|"#endregion") (any\"\n")* "\n"
+									{ goto newline; }	/* Region blocks [mxd] */
+
+		(["](([\\]["])|[^"])*["])	{ RET(TK_StringConst); }
+		'stop'						{ RET(TK_Stop); }
+		'wait'						{ RET(TK_Wait); }
+		'fail'						{ RET(TK_Fail); }
+		'loop'						{ RET(TK_Loop); }
+		'goto'						{ StateMode = 0; StateOptions = false; RET(TK_Goto); }
+		":"							{ RET(':'); }
+		";"							{ RET(';'); }
+		"}"							{ StateMode = 0; StateOptions = false; RET('}'); }
+		
+		WSP+						{ goto std1; }
+		"\n"						{ goto newline; }
+		
+		TOKS = (NWS\[/":;}]);
+		TOKS* ([/] (TOKS\[*]) TOKS*)*
+									{ RET(TK_NonWhitespace); }
+		
+	*/
+	}
+	else if (tokens)	// A well-defined scanner, based on the c.re example.
+	{
+	/*!re2c
+		"/*"						{ goto comment; }	/* C comment */
+		"//" (any\"\n")* "\n"		{ goto newline; }	/* C++ comment */
+		("#region"|"#endregion") (any\"\n")* "\n"
+									{ goto newline; }	/* Region blocks [mxd] */
 
 		/* C Keywords */
 		'break'						{ RET(TK_Break); }
@@ -146,24 +175,29 @@ std2:
 
 		'is'						{ RET(TK_Is); }
 		'replaces'					{ RET(TK_Replaces); }
-
-		/* Needed for decorate action functions */
+		'states'					{ RET(TK_States); }
+		'meta'						{ RET(TK_Meta); }
+		'deprecated'				{ RET(TK_Deprecated); }
 		'action'					{ RET(TK_Action); }
+		'readonly'					{ RET(TK_ReadOnly); }
 
+		/* Actor state options */
+		'bright'					{ RET(StateOptions ? TK_Bright : TK_Identifier); }
+		'fast'						{ RET(StateOptions ? TK_Fast : TK_Identifier); }
+		'slow'						{ RET(StateOptions ? TK_Slow : TK_Identifier); }
+		'nodelay'					{ RET(StateOptions ? TK_NoDelay : TK_Identifier); }
+		'canraise'					{ RET(StateOptions ? TK_CanRaise : TK_Identifier); }
+		'offset'					{ RET(StateOptions ? TK_Offset : TK_Identifier); }
+		'light'						{ RET(StateOptions ? TK_Light : TK_Identifier); }
+		
 		/* other DECORATE top level keywords */
 		'#include'					{ RET(TK_Include); }
 		'fixed_t'					{ RET(TK_Fixed_t); }
 		'angle_t'					{ RET(TK_Angle_t); }
-		'abs'						{ RET(TK_Abs); }
-		'random'					{ RET(TK_Random); }
-		'random2'					{ RET(TK_Random2); }
-		'frandom'					{ RET(TK_FRandom); }
-		'randompick'				{ RET(TK_RandomPick); }
-		'frandompick'				{ RET(TK_FRandomPick); }
 
 		L (L|D)*					{ RET(TK_Identifier); }
 
-		("0" [xX] H+ IS?) | ("0" D+ IS?) | (D+ IS?)
+		("0" [xX] H+ IS?IS?) | ("0" D+ IS?IS?) | (D+ IS?IS?)
 									{ RET(TK_IntConst); }
 
 		(D+ E FS?) | (D* "." D+ E? FS?) | (D+ "." D* E? FS?)
@@ -202,8 +236,9 @@ std2:
 		"~=="						{ RET(TK_ApproxEq); }
 		"<>="						{ RET(TK_LtGtEq); }
 		"**"						{ RET(TK_MulMul); }
-		";"							{ RET(';'); }
-		"{"							{ RET('{'); }
+		"::"						{ RET(TK_ColonColon); }
+		";"							{ StateOptions = false; RET(';'); }
+		"{"							{ StateOptions = false; RET('{'); }
 		"}"							{ RET('}'); }
 		","							{ RET(','); }
 		":"							{ RET(':'); }
@@ -241,6 +276,8 @@ std2:
 	/*!re2c
 		"/*"						{ goto comment; }	/* C comment */
 		("//"|";") (any\"\n")* "\n"	{ goto newline; }	/* C++/Hexen comment */
+		("#region"|"#endregion") (any\"\n")* "\n"
+									{ goto newline; }	/* Region blocks [mxd] */
 
 		WSP+						{ goto std1; }		/* whitespace */
 		"\n"						{ goto newline; }
@@ -259,6 +296,8 @@ std2:
 	/*!re2c
 		"/*"					{ goto comment; }	/* C comment */
 		"//" (any\"\n")* "\n"	{ goto newline; }	/* C++ comment */
+		("#region"|"#endregion") (any\"\n")* "\n"
+									{ goto newline; }	/* Region blocks [mxd] */
 
 		WSP+					{ goto std1; }		/* whitespace */
 		"\n"					{ goto newline; }
@@ -354,6 +393,10 @@ normal_token:
 		{
 			memcpy (StringBuffer, tok+1, StringLen);
 		}
+		if (StateMode && TokenType == TK_StringConst)
+		{
+			TokenType = TK_NonWhitespace;
+		}
 	}
 	else
 	{
@@ -364,6 +407,17 @@ normal_token:
 		else
 		{
 			memcpy (StringBuffer, tok, StringLen);
+		}
+	}
+	if (tokens && StateMode)
+	{ // State mode is exited after two consecutive TK_NonWhitespace tokens
+		if (TokenType == TK_NonWhitespace)
+		{
+			StateMode--;
+		}
+		else
+		{
+			StateMode = 2;
 		}
 	}
 	if (StringLen < MAX_STRING_SIZE)

@@ -66,6 +66,8 @@
 //EXTERN_CVAR (Int, tx)
 //EXTERN_CVAR (Int, ty)
 
+extern subsector_t *InSubsector;
+
 static void R_DrawSkyStriped (visplane_t *pl);
 
 planefunction_t 		floorfunc;
@@ -686,9 +688,12 @@ visplane_t *R_FindPlane (const secplane_t &height, FTextureID picnum, int lightl
 			yscale == check->yscale &&
 			angle == check->angle && 
 			sky == check->sky &&
-			CurrentMirror == check->CurrentMirror &&
+			CurrentPortalUniq == check->CurrentPortalUniq &&
 			MirrorFlags == check->MirrorFlags &&
-			CurrentSkybox == check->CurrentSkybox
+			CurrentSkybox == check->CurrentSkybox &&
+			viewx == check->viewx &&
+			viewy == check->viewy &&
+			viewz == check->viewz
 			)
 		{
 		  return check;
@@ -718,7 +723,7 @@ visplane_t *R_FindPlane (const secplane_t &height, FTextureID picnum, int lightl
 	check->viewangle = stacked_angle;
 	check->Alpha = alpha;
 	check->Additive = additive;
-	check->CurrentMirror = CurrentMirror;
+	check->CurrentPortalUniq = CurrentPortalUniq;
 	check->MirrorFlags = MirrorFlags;
 	check->CurrentSkybox = CurrentSkybox;
 
@@ -807,7 +812,7 @@ visplane_t *R_CheckPlane (visplane_t *pl, int start, int stop)
 		new_pl->sky = pl->sky;
 		new_pl->Alpha = pl->Alpha;
 		new_pl->Additive = pl->Additive;
-		new_pl->CurrentMirror = pl->CurrentMirror;
+		new_pl->CurrentPortalUniq = pl->CurrentPortalUniq;
 		new_pl->MirrorFlags = pl->MirrorFlags;
 		new_pl->CurrentSkybox = pl->CurrentSkybox;
 		pl = new_pl;
@@ -1043,7 +1048,7 @@ int R_DrawPlanes ()
 		for (pl = visplanes[i]; pl; pl = pl->next)
 		{
 			// kg3D - draw only correct planes
-			if(pl->CurrentMirror != CurrentMirror || pl->CurrentSkybox != CurrentSkybox)
+			if(pl->CurrentPortalUniq != CurrentPortalUniq || pl->CurrentSkybox != CurrentSkybox)
 				continue;
 			// kg3D - draw only real planes now
 			if(pl->sky >= 0) {
@@ -1063,22 +1068,31 @@ void R_DrawHeightPlanes(fixed_t height)
 
 	ds_color = 3;
 
+	fixed_t oViewX = viewx, oViewY = viewy, oViewZ = viewz;
+	angle_t oViewAngle = viewangle;
+
 	for (i = 0; i < MAXVISPLANES; i++)
 	{
 		for (pl = visplanes[i]; pl; pl = pl->next)
 		{
 			// kg3D - draw only correct planes
-			if(pl->CurrentSkybox != CurrentSkybox)
+			if(pl->CurrentSkybox != CurrentSkybox || pl->CurrentPortalUniq != CurrentPortalUniq)
 				continue;
 			if(pl->sky < 0 && pl->height.Zat0() == height) {
 				viewx = pl->viewx;
 				viewy = pl->viewy;
+				viewz = pl->viewz;
 				viewangle = pl->viewangle;
 				MirrorFlags = pl->MirrorFlags;
 				R_DrawSinglePlane (pl, pl->sky & 0x7FFFFFFF, pl->Additive, true);
 			}
 		}
 	}
+
+	viewx = oViewX;
+	viewy = oViewY;
+	viewz = oViewZ;
+	viewangle = oViewAngle;
 }
 
 
@@ -1180,6 +1194,7 @@ void R_DrawSkyBoxes ()
 		return;
 
 	R_3D_EnterSkybox();
+	CurrentPortalInSkybox = true;
 
 	int savedextralight = extralight;
 	fixed_t savedx = viewx;
@@ -1270,6 +1285,7 @@ void R_DrawSkyBoxes ()
 
 		// Create a drawseg to clip sprites to the sky plane
 		R_CheckDrawSegs ();
+		ds_p->CurrentPortalUniq = CurrentPortalUniq;
 		ds_p->siz1 = INT_MAX;
 		ds_p->siz2 = INT_MAX;
 		ds_p->sz1 = 0;
@@ -1281,6 +1297,7 @@ void R_DrawSkyBoxes ()
 		ds_p->sprtopclip = R_NewOpening (pl->right - pl->left);
 		ds_p->maskedtexturecol = ds_p->swall = -1;
 		ds_p->bFogBoundary = false;
+		ds_p->curline = NULL;
 		ds_p->fake = 0;
 		memcpy (openings + ds_p->sprbottomclip, floorclip + pl->left, (pl->right - pl->left)*sizeof(short));
 		memcpy (openings + ds_p->sprtopclip, ceilingclip + pl->left, (pl->right - pl->left)*sizeof(short));
@@ -1299,6 +1316,7 @@ void R_DrawSkyBoxes ()
 		viewzStack.Push (viewz);
 		visplaneStack.Push (pl);
 
+		InSubsector = NULL;
 		R_RenderBSPNode (nodes + numnodes - 1);
 		R_3D_ResetClip(); // reset clips (floor/ceiling)
 		R_DrawPlanes ();
@@ -1354,6 +1372,7 @@ void R_DrawSkyBoxes ()
 	viewangle = savedangle;
 	R_SetViewAngle ();
 
+	CurrentPortalInSkybox = false;
 	R_3D_LeaveSkybox();
 
 	if(fakeActive) return;
@@ -1514,7 +1533,7 @@ void R_DrawNormalPlane (visplane_t *pl, fixed_t alpha, bool additive, bool maske
 	yscale = pl->yscale << (16 - ds_ybits);
 	if (planeang != 0)
 	{
-		double rad = bam2rad(planeang);
+		double rad = ANGLE2RAD(planeang);
 		double cosine = cos(rad), sine = sin(rad);
 
 		pviewx = xs_RoundToInt(pl->xoffs + viewx * cosine - viewy * sine);
@@ -1635,12 +1654,12 @@ void R_DrawTiltedPlane (visplane_t *pl, fixed_t alpha, bool additive, bool maske
 		return;
 	}
 
-	double vx = FIXED2FLOAT(viewx);
-	double vy = FIXED2FLOAT(viewy);
-	double vz = FIXED2FLOAT(viewz);
+	double vx = FIXED2DBL(viewx);
+	double vy = FIXED2DBL(viewy);
+	double vz = FIXED2DBL(viewz);
 
-	lxscale = FIXED2FLOAT(pl->xscale) * ifloatpow2[ds_xbits];
-	lyscale = FIXED2FLOAT(pl->yscale) * ifloatpow2[ds_ybits];
+	lxscale = FIXED2DBL(pl->xscale) * ifloatpow2[ds_xbits];
+	lyscale = FIXED2DBL(pl->yscale) * ifloatpow2[ds_ybits];
 	xscale = 64.f / lxscale;
 	yscale = 64.f / lyscale;
 	zeroheight = pl->height.ZatPoint(vx, vy);
@@ -1651,13 +1670,13 @@ void R_DrawTiltedPlane (visplane_t *pl, fixed_t alpha, bool additive, bool maske
 	// p is the texture origin in view space
 	// Don't add in the offsets at this stage, because doing so can result in
 	// errors if the flat is rotated.
-	ang = bam2rad(ANG270 - viewangle);
+	ang = ANGLE2RAD(ANG270 - viewangle);
 	p[0] = vx * cos(ang) - vy * sin(ang);
 	p[2] = vx * sin(ang) + vy * cos(ang);
 	p[1] = pl->height.ZatPoint(0.0, 0.0) - vz;
 
 	// m is the v direction vector in view space
-	ang = bam2rad(ANG180 - viewangle - pl->angle);
+	ang = ANGLE2RAD(ANG180 - viewangle - pl->angle);
 	m[0] = yscale * cos(ang);
 	m[2] = yscale * sin(ang);
 //	m[1] = FIXED2FLOAT(pl->height.ZatPoint (0, iyscale) - pl->height.ZatPoint (0,0));
@@ -1673,7 +1692,7 @@ void R_DrawTiltedPlane (visplane_t *pl, fixed_t alpha, bool additive, bool maske
 	// This code keeps the texture coordinates constant across the x,y plane no matter
 	// how much you slope the surface. Use the commented-out code above instead to keep
 	// the textures a constant size across the surface's plane instead.
-	ang = bam2rad(pl->angle);
+	ang = ANGLE2RAD(pl->angle);
 	m[1] = pl->height.ZatPoint(vx + yscale * sin(ang), vy + yscale * cos(ang)) - zeroheight;
 	ang += PI/2;
 	n[1] = pl->height.ZatPoint(vx + xscale * sin(ang), vy + xscale * cos(ang)) - zeroheight;

@@ -371,12 +371,12 @@ level_info_t *level_info_t::CheckLevelRedirect ()
 {
 	if (RedirectType != NAME_None)
 	{
-		const PClass *type = PClass::FindClass(RedirectType);
+		PClassActor *type = PClass::FindActor(RedirectType);
 		if (type != NULL)
 		{
 			for (int i = 0; i < MAXPLAYERS; ++i)
 			{
-				if (playeringame[i] && players[i].mo->FindInventory (type))
+				if (playeringame[i] && players[i].mo->FindInventory(type))
 				{
 					// check for actual presence of the map.
 					if (P_CheckMapData(RedirectMapName))
@@ -1328,6 +1328,7 @@ MapFlagHandlers[] =
 	{ "compat_floormove",				MITYPE_COMPATFLAG, 0, COMPATF2_FLOORMOVE },
 	{ "compat_soundcutoff",				MITYPE_COMPATFLAG, 0, COMPATF2_SOUNDCUTOFF },
 	{ "compat_pointonline",				MITYPE_COMPATFLAG, 0, COMPATF2_POINTONLINE },
+	{ "compat_multiexit",				MITYPE_COMPATFLAG, 0, COMPATF2_MULTIEXIT },
 	{ "cd_start_track",					MITYPE_EATNEXT,	0, 0 },
 	{ "cd_end1_track",					MITYPE_EATNEXT,	0, 0 },
 	{ "cd_end2_track",					MITYPE_EATNEXT,	0, 0 },

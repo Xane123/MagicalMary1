@@ -30,8 +30,6 @@
 ** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **---------------------------------------------------------------------------
 **
-** It might be a good idea to move these into files that they are more
-** closely related to, but right now, I am too lazy to do that.
 */
 
 #include <math.h>
@@ -71,6 +69,8 @@
 #include "v_text.h"
 #include "p_lnspec.h"
 #include "v_video.h"
+#include "r_utility.h"
+#include "r_data/r_interpolate.h"
 
 extern FILE *Logfile;
 extern bool insave;
@@ -458,9 +458,9 @@ CCMD (exec)
 	}
 }
 
-void execLogfile(const char *fn)
+void execLogfile(const char *fn, bool append)
 {
-	if ((Logfile = fopen(fn, "w")))
+	if ((Logfile = fopen(fn, append? "a" : "w")))
 	{
 		const char *timestr = myasctime();
 		Printf("Log started: %s\n", timestr);
@@ -484,7 +484,7 @@ CCMD (logfile)
 
 	if (argv.argc() >= 2)
 	{
-		execLogfile(argv[1]);
+		execLogfile(argv[1], argv.argc() >=3? !!argv[2]:false);
 	}
 }
 
@@ -605,7 +605,7 @@ CCMD (special)
 			}
 		}
 		Net_WriteByte(DEM_RUNSPECIAL);
-		Net_WriteByte(specnum);
+		Net_WriteWord(specnum);
 		Net_WriteByte(argc - 2);
 		for (int i = 2; i < argc; ++i)
 		{
@@ -777,15 +777,16 @@ CCMD (warp)
 		Printf ("You can only warp inside a level.\n");
 		return;
 	}
-	if (argv.argc() != 3)
+	if (argv.argc() < 3 || argv.argc() > 4)
 	{
-		Printf ("Usage: warp <x> <y>\n");
+		Printf ("Usage: warp <x> <y> [z]\n");
 	}
 	else
 	{
 		Net_WriteByte (DEM_WARPCHEAT);
 		Net_WriteWord (atoi (argv[1]));
 		Net_WriteWord (atoi (argv[2]));
+		Net_WriteWord (argv.argc() == 3 ? ONFLOORZ/65536 : atoi (argv[3]));
 	}
 }
 
@@ -871,16 +872,16 @@ CCMD (wdir)
 //-----------------------------------------------------------------------------
 CCMD(linetarget)
 {
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	if (CheckCheatmode () || players[consoleplayer].mo == NULL) return;
-	P_AimLineAttack(players[consoleplayer].mo,players[consoleplayer].mo->angle,MISSILERANGE, &linetarget, 0);
-	if (linetarget)
+	P_AimLineAttack(players[consoleplayer].mo,players[consoleplayer].mo->angle,MISSILERANGE, &t, 0);
+	if (t.linetarget)
 	{
 		Printf("Target=%s, Health=%d, Spawnhealth=%d\n",
-			linetarget->GetClass()->TypeName.GetChars(),
-			linetarget->health,
-			linetarget->SpawnHealth());
+			t.linetarget->GetClass()->TypeName.GetChars(),
+			t.linetarget->health,
+			t.linetarget->SpawnHealth());
 	}
 	else Printf("No target found\n");
 }
@@ -888,18 +889,18 @@ CCMD(linetarget)
 // As linetarget, but also give info about non-shootable actors
 CCMD(info)
 {
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	if (CheckCheatmode () || players[consoleplayer].mo == NULL) return;
 	P_AimLineAttack(players[consoleplayer].mo,players[consoleplayer].mo->angle,MISSILERANGE, 
-		&linetarget, 0,	ALF_CHECKNONSHOOTABLE|ALF_FORCENOSMART);
-	if (linetarget)
+		&t, 0,	ALF_CHECKNONSHOOTABLE|ALF_FORCENOSMART);
+	if (t.linetarget)
 	{
 		Printf("Target=%s, Health=%d, Spawnhealth=%d\n",
-			linetarget->GetClass()->TypeName.GetChars(),
-			linetarget->health,
-			linetarget->SpawnHealth());
-		PrintMiscActorInfo(linetarget);
+			t.linetarget->GetClass()->TypeName.GetChars(),
+			t.linetarget->health,
+			t.linetarget->SpawnHealth());
+		PrintMiscActorInfo(t.linetarget);
 	}
 	else Printf("No target found. Info cannot find actors that have "
 				"the NOBLOCKMAP flag or have height/radius of 0.\n");
@@ -929,8 +930,8 @@ static void PrintFilteredActorList(const ActorTypeChecker IsActorType, const cha
 
 	if (FilterName != NULL)
 	{
-		FilterClass = PClass::FindClass(FilterName);
-		if (FilterClass == NULL || FilterClass->ActorInfo == NULL)
+		FilterClass = PClass::FindActor(FilterName);
+		if (FilterClass == NULL)
 		{
 			Printf("%s is not an actor class.\n", FilterName);
 			return;
@@ -1086,12 +1087,40 @@ CCMD(currentpos)
 	if(mo)
 	{
 		Printf("Current player position: (%1.3f,%1.3f,%1.3f), angle: %1.3f, floorheight: %1.3f, sector:%d, lightlevel: %d\n",
-			FIXED2FLOAT(mo->X()), FIXED2FLOAT(mo->Y()), FIXED2FLOAT(mo->Z()), mo->angle/float(ANGLE_1), FIXED2FLOAT(mo->floorz), mo->Sector->sectornum, mo->Sector->lightlevel);
+			FIXED2DBL(mo->X()), FIXED2DBL(mo->Y()), FIXED2DBL(mo->Z()), ANGLE2DBL(mo->angle), FIXED2DBL(mo->floorz), mo->Sector->sectornum, mo->Sector->lightlevel);
 	}
 	else
 	{
 		Printf("You are not in game!");
 	}
+}
+
+//-----------------------------------------------------------------------------
+//
+//
+//
+//-----------------------------------------------------------------------------
+CCMD(vmengine)
+{
+	if (argv.argc() == 2)
+	{
+		if (stricmp(argv[1], "default") == 0)
+		{
+			VMSelectEngine(VMEngine_Default);
+			return;
+		}
+		else if (stricmp(argv[1], "checked") == 0)
+		{
+			VMSelectEngine(VMEngine_Checked);
+			return;
+		}
+		else if (stricmp(argv[1], "unchecked") == 0)
+		{
+			VMSelectEngine(VMEngine_Unchecked);
+			return;
+		}
+	}
+	Printf("Usage: vmengine <default|checked|unchecked>\n");
 }
 
 //-----------------------------------------------------------------------------
@@ -1208,5 +1237,18 @@ CCMD(secret)
 			}
 			else inlevel = false;
 		}
+	}
+}
+
+CCMD(angleconvtest)
+{
+	Printf("Testing degrees to angle conversion:\n");
+	for (double ang = -5 * 180.; ang < 5 * 180.; ang += 45.)
+	{
+		angle_t ang1 = FLOAT2ANGLE(ang);
+		angle_t ang2 = (angle_t)(ang * (ANGLE_90 / 90.));
+		angle_t ang3 = (angle_t)(int)(ang * (ANGLE_90 / 90.));
+		Printf("Angle = %.5f: xs_RoundToInt = %08x, unsigned cast = %08x, signed cast = %08x\n",
+			ang, ang1, ang2, ang3);
 	}
 }

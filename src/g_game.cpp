@@ -80,6 +80,9 @@
 #include "m_joy.h"
 #include "farchive.h"
 #include "r_renderer.h"
+#include "r_utility.h"
+#include "a_morph.h"
+#include "p_spec.h"
 #include "r_data/colormaps.h"
 
 #include <zlib.h>
@@ -439,13 +442,16 @@ CCMD (use)
 {
 	if (argv.argc() > 1 && who != NULL)
 	{
-		SendItemUse = who->FindInventory (PClass::FindClass (argv[1]));
+		SendItemUse = who->FindInventory(PClass::FindActor(argv[1]));
 	}
 }
 
 CCMD (invdrop)
 {
-	if (players[consoleplayer].mo) SendItemDrop = players[consoleplayer].mo->InvSel;
+	if (players[consoleplayer].mo)
+	{
+		SendItemDrop = players[consoleplayer].mo->InvSel;
+	}
 }
 
 CCMD (weapdrop)
@@ -457,11 +463,11 @@ CCMD (drop)
 {
 	if (argv.argc() > 1 && who != NULL)
 	{
-		SendItemDrop = who->FindInventory (PClass::FindClass (argv[1]));
+		SendItemDrop = who->FindInventory(PClass::FindActor(argv[1]));
 	}
 }
 
-const PClass *GetFlechetteType(AActor *other);
+PClassActor *GetFlechetteType(AActor *other);
 
 CCMD (useflechette)
 { // Select from one of arti_poisonbag1-3, whichever the player has
@@ -475,7 +481,7 @@ CCMD (useflechette)
 	if (who == NULL)
 		return;
 
-	const PClass *type = GetFlechetteType(who);
+	PClassActor *type = GetFlechetteType(who);
 	if (type != NULL)
 	{
 		AInventory *item;
@@ -502,7 +508,7 @@ CCMD (select)
 {
 	if (argv.argc() > 1)
 	{
-		AInventory *item = who->FindInventory (PClass::FindClass (argv[1]));
+		AInventory *item = who->FindInventory(PClass::FindActor(argv[1]));
 		if (item != NULL)
 		{
 			who->InvSel = item;
@@ -1350,7 +1356,7 @@ void G_PlayerReborn (int player)
 	BYTE		currclass;
 	userinfo_t  userinfo;	// [RH] Save userinfo
 	APlayerPawn *actor;
-	const PClass *cls;
+	PClassPlayerPawn *cls;
 	FString		log;
 	DBot		*Bot;		//Added by MC:
 
@@ -1537,8 +1543,7 @@ void G_DeathMatchSpawnPlayer (int playernum)
 	selections = deathmatchstarts.Size ();
 	// [RH] We can get by with just 1 deathmatch start
 	if (selections < 1)
-		I_Error ("There are no deathmatch starts placed in this map; Add at least one to test, though more (at least 8) are recommended to avoid telefragging.");
-	if(selections<8) printf("WARNING: ONLY %d DEATHMATCH START(S) FOUND!\nTELEFRAGGING IS POSSIBLE UNLESS AT LEAST 8 ARE PLACED IN THIS MAP.\n",selections);
+		I_Error ("No deathmatch starts");
 
 	// At level start, none of the players have mobjs attached to them,
 	// so we always use the random deathmatch spawn. During the game,
@@ -1567,7 +1572,6 @@ void G_DeathMatchSpawnPlayer (int playernum)
 			}
 		}
 	}
-	if(selections<8) printf("WARNING: ONLY %d DEATHMATCH START(S) FOUND!\nTELEFRAGGING IS POSSIBLE UNLESS AT LEAST 8 ARE PLACED IN THIS MAP.\n",selections);
 	AActor *mo = P_SpawnPlayer(spot, playernum);
 	if (mo != NULL) P_PlayerStartStomp(mo);
 }
@@ -1711,13 +1715,13 @@ void G_DoPlayerPop(int playernum)
 
 	if (deathmatch)
 	{
-		Printf("%s LEFT, EARNING A TOTAL OF %d POINTS;\nGOOD LUCK TO EVERYONE HERE!\n",
+		Printf("%s left the game with %d frags\n",
 			players[playernum].userinfo.GetName(),
 			players[playernum].fragcount);
 	}
 	else
 	{
-		Printf("%s LEFT THE GAME.\nGOOD LUCK TO ALL OTHER PLAYERS!\n", players[playernum].userinfo.GetName());
+		Printf("%s left the game\n", players[playernum].userinfo.GetName());
 	}
 
 	// [RH] Revert each player to their own view if spying through the player who left
@@ -1785,11 +1789,11 @@ static bool CheckSingleWad (char *name, bool &printRequires, bool printwarn)
 		{
 			if (!printRequires)
 			{
-				Printf ("THIS SAVE FILE ANOTHER FILE: \"%s\"\n", name);
+				Printf ("This savegame needs these wads:\n%s", name);
 			}
 			else
 			{
-				Printf ("MAKE SURE ALL FILES ARE LOADED AND THIS ISN'T FROM A PREVIOUS GZDOOM BUILDER TEST!\n\nTHESE FILE(S) ARE REQUIRED:\n%s", name);
+				Printf (", %s", name);
 			}
 		}
 		printRequires = true;
@@ -1865,11 +1869,11 @@ void G_DoLoadGame ()
 		// have this information.
 		if (engine == NULL)
 		{
-			Printf ("THIS SAVE FILE IS INCOMPATIBLE WITH " GAMESIG "!\n");
+			Printf ("Savegame is from an incompatible version\n");
 		}
 		else
 		{
-			Printf ("THIS SAVE FILE IS FROM %s, ANOTHER ZDOOM-BASED ENGINE.\n", engine);
+			Printf ("Savegame is from another ZDoom-based engine: %s\n", engine);
 			delete[] engine;
 		}
 		delete png;
@@ -1888,10 +1892,10 @@ void G_DoLoadGame ()
 	{
 		delete png;
 		fclose (stdfile);
-		Printf ("THIS SAVE FILE WAS SAVED WITH AN OLDER VERSION OF WOK; USE THAT VERSION TO KEEP PLAYING THIS SAVE.\n");
+		Printf ("Savegame is from an incompatible version");
 		if (SaveVersion != 0)
 		{
-			Printf("THIS SAVE'S VERSION IS %d; %d IS THE OLDEST WOK VERSION SUPPORTED.", SaveVersion, MINSAVEVER);
+			Printf(": %d (%d is the oldest supported)", SaveVersion, MINSAVEVER);
 		}
 		Printf("\n");
 		return;
@@ -1906,7 +1910,7 @@ void G_DoLoadGame ()
 	map = M_GetPNGText (png, "Current Map");
 	if (map == NULL)
 	{
-		Printf ("THE MAP THIS GAME WAS SAVED IN WAS REMOVED IN\nTHE LATEST VERSION.	\n");
+		Printf ("Savegame is missing the current map\n");
 		fclose (stdfile);
 		return;
 	}
@@ -2002,20 +2006,20 @@ void G_SaveGame (const char *filename, const char *description)
 {
 	if (sendsave || gameaction == ga_savegame)
 	{
-		Printf ("YOUR PREVIOUS GAME IS STILL BEING SAVED.\n");
+		Printf ("A game save is still pending.\n");
 		return;
 	}
     else if (!usergame)
 	{
-        Printf ("YOU'RE NOT IN A SAVABLE GAME.\n");
+        Printf ("not in a saveable game\n");
     }
     else if (gamestate != GS_LEVEL)
 	{
-        Printf ("YOU'RE NOT PLAYING A LEVEL!\n");
+        Printf ("not in a level\n");
     }
     else if (players[consoleplayer].health <= 0 && !multiplayer)
     {
-        Printf ("THE PLAYER IS DEAD; YOU'RE IN SINGLEPLAYER SO THIS GAME CAN'T BE SAVED.\n");
+        Printf ("player is dead in a single-player game\n");
     }
 	else
 	{
@@ -2060,6 +2064,7 @@ FString G_BuildSaveName (const char *prefix, int slot)
 CVAR (Int, autosavenum, 0, CVAR_NOSET|CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 static int nextautosave = -1;
 CVAR (Int, disableautosave, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Bool, saveloadconfirmation, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG) // [mxd]
 CUSTOM_CVAR (Int, autosavecount, 4, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 {
 	if (self < 0)
@@ -2195,7 +2200,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (stdfile == NULL)
 	{
-		Printf ("ERROR: SAVE FILE COULDN'T BE LOADED FROM '%s'\n", filename.GetChars());
+		Printf ("Could not create savegame '%s'\n", filename.GetChars());
 		insave = false;
 		I_FreezeTime(false);
 		return;
@@ -2257,13 +2262,12 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		}
 		fclose(stdfile);
 	}
-/*	if (success) 
+	if (success) 
 	{
 		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
 		else Printf ("%s\n", GStrings("GGSAVED"));
-	}*/
-
-	if(success==false) Printf(PRINT_HIGH, "Attempt to save WoK failed!\nPlease check folder permissions.\n");
+	}
+	else Printf(PRINT_HIGH, "Save failed\n");
 
 	BackupSaveName = filename;
 
@@ -2394,7 +2398,7 @@ void G_RecordDemo (const char* name)
 	usergame = false;
 	demoname = name;
 	FixPathSeperator (demoname);
-	DefaultExtension (demoname, ".demo");
+	DefaultExtension (demoname, ".lmp");
 	maxdemosize = 0x20000;
 	demobuffer = (BYTE *)M_Malloc (maxdemosize);
 	demorecording = true; 
@@ -2490,12 +2494,12 @@ CCMD (playdemo)
 {
 	if (netgame)
 	{
-		Printf("EXIT YOUR CURRENT MULTPLAYER GAME BEFORE PLAYING A DEMO!");
+		Printf("End your current netgame first!");
 		return;
 	}
 	if (demorecording)
 	{
-		Printf("STOP RECORDING YOUR CURRENT DEMO FIRST!!");
+		Printf("End your current demo first!");
 		return;
 	}
 	if (argv.argc() > 1)
@@ -2539,7 +2543,7 @@ bool G_ProcessIFFDemo (FString &mapname)
 	id = ReadLong (&demo_p);
 	if (id != ZDEM_ID)
 	{
-		Printf ("This demo isn't a demo made with " GAMESIG "!\n");
+		Printf ("Not a " GAMENAME " demo file!\n");
 		return true;
 	}
 
@@ -2552,7 +2556,7 @@ bool G_ProcessIFFDemo (FString &mapname)
 		nextchunk = demo_p + len + (len & 1);
 		if (nextchunk > zdemformend)
 		{
-			Printf ("This demo has been altered!\n");
+			Printf ("Demo is mangled!\n");
 			return true;
 		}
 
@@ -2561,15 +2565,15 @@ bool G_ProcessIFFDemo (FString &mapname)
 		case ZDHD_ID:
 			headerHit = true;
 
-			demover = ReadWord (&demo_p);	// WoK version demo was created with
+			demover = ReadWord (&demo_p);	// ZDoom version demo was created with
 			if (demover < MINDEMOVERSION)
 			{
-				Printf ("This demo was recorded with an old version of " GAMESIG ";\nDownload that version to see it!\n");
+				Printf ("Demo requires an older version of " GAMENAME "!\n");
 				//return true;
 			}
-			if (ReadWord (&demo_p) > DEMOGAMEVERSION)	// Minimum WoK version
+			if (ReadWord (&demo_p) > DEMOGAMEVERSION)	// Minimum ZDoom version
 			{
-				Printf ("This demo requires a newer version of " GAMESIG ";\nDownload the newest version to see it!\n");
+				Printf ("Demo requires a newer version of " GAMENAME "!\n");
 				return true;
 			}
 			if (demover >= 0x21a)
@@ -2629,20 +2633,20 @@ bool G_ProcessIFFDemo (FString &mapname)
 
 	if (!headerHit)
 	{
-		Printf ("This demo has no file header!\n");
+		Printf ("Demo has no header!\n");
 		return true;
 	}
 
 	if (!numPlayers)
 	{
-		Printf ("Somehow, this demo was recorded with no players!\n");
+		Printf ("Demo has no players!\n");
 		return true;
 	}
 
 	if (!bodyHit)
 	{
 		zdembodyend = NULL;
-		Printf ("This demo file doesn't have a required file section!\n");
+		Printf ("Demo has no BODY chunk!\n");
 		return true;
 	}
 
@@ -2655,7 +2659,7 @@ bool G_ProcessIFFDemo (FString &mapname)
 		int r = uncompress (uncompressed, &uncompSize, demo_p, uLong(zdembodyend - demo_p));
 		if (r != Z_OK)
 		{
-			Printf ("Your compressed demo, %s, couldn't be decompressed!\n", M_ZLibError(r).GetChars());
+			Printf ("Could not decompress demo! %s\n", M_ZLibError(r).GetChars());
 			M_Free(uncompressed);
 			return true;
 		}
@@ -2685,7 +2689,7 @@ void G_DoPlayDemo (void)
 	else
 	{
 		FixPathSeperator (defdemoname);
-		DefaultExtension (defdemoname, ".demo");
+		DefaultExtension (defdemoname, ".lmp");
 		M_ReadFileMalloc (defdemoname, &demobuffer);
 	}
 	demo_p = demobuffer;
@@ -2696,7 +2700,7 @@ void G_DoPlayDemo (void)
 
 	if (ReadLong (&demo_p) != FORM_ID)
 	{
-		const char *eek = "This demo was not recorded in " GAMESIG " so it cannot be played.\n";
+		const char *eek = "Cannot play non-" GAMENAME " demos.\n";
 
 		C_ForgetCVars();
 		M_Free(demobuffer);
@@ -2728,7 +2732,7 @@ void G_DoPlayDemo (void)
 		}
 		else if (numsectors == 0)
 		{
-			I_Error("This demo relied on a save which is not in your /saves folder.\n");
+			I_Error("Cannot play demo without its savegame\n");
 		}
 		C_HideConsole ();
 		demonew = false;
@@ -2858,11 +2862,11 @@ bool G_CheckDemoStatus (void)
 		stoprecording = false;
 		if (saved)
 		{
-			Printf ("Your demo named %s was saved successfully!\n", demoname.GetChars()); 
+			Printf ("Demo %s recorded\n", demoname.GetChars()); 
 		}
 		else
 		{
-			Printf ("Sorry that your effort was wasted, PALYERNAME, but %s couldn't be saved...\n",  demoname.GetChars());
+			Printf ("Demo %s could not be saved\n", demoname.GetChars());
 		}
 	}
 

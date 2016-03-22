@@ -119,6 +119,8 @@ FScanner &FScanner::operator=(const FScanner &other)
 	LastGotLine = other.LastGotLine;
 	CMode = other.CMode;
 	Escape = other.Escape;
+	StateMode = other.StateMode;
+	StateOptions = other.StateOptions;
 
 	// Copy public members
 	if (other.String == other.StringBuffer)
@@ -275,6 +277,8 @@ void FScanner::PrepareScript ()
 	LastGotLine = 1;
 	CMode = false;
 	Escape = true;
+	StateMode = 0;
+	StateOptions = false;
 	StringBuffer[0] = '\0';
 	BigStringBuffer = "";
 }
@@ -388,6 +392,38 @@ void FScanner::SetCMode (bool cmode)
 void FScanner::SetEscape (bool esc)
 {
 	Escape = esc;
+}
+
+//==========================================================================
+//
+// FScanner :: SetStateMode
+//
+// Enters state mode. This mode is very permissive for identifiers, which
+// it returns as TOK_NonWhitespace. The only character sequences that are
+// not returned as such are these:
+//
+//   * stop
+//   * wait
+//   * fail
+//   * loop
+//   * goto - Automatically exits state mode after it's seen.
+//   * :
+//   * ;
+//   * } - Automatically exits state mode after it's seen.
+//
+// Quoted strings are returned as TOK_NonWhitespace, minus the quotes. Once
+// two consecutive sequences of TOK_NonWhitespace have been encountered
+// (which would be the state's sprite and frame specifiers), nearly normal
+// processing resumes, with the exception that various identifiers
+// used for state options will be returned as tokens and not identifiers.
+// This ends once a ';' or '{' character is encountered.
+//
+//==========================================================================
+
+void FScanner::SetStateMode(bool stately)
+{
+	StateMode = stately ? 2 : 0;
+	StateOptions = stately;
 }
 
 //==========================================================================
@@ -513,8 +549,19 @@ bool FScanner::GetToken ()
 		else if (TokenType == TK_IntConst)
 		{
 			char *stopper;
-			Number = strtol(String, &stopper, 0);
-			Float = Number;
+			// Check for unsigned
+			if (String[StringLen - 1] == 'u' || String[StringLen - 1] == 'U' ||
+				String[StringLen - 2] == 'u' || String[StringLen - 2] == 'U')
+			{
+				TokenType = TK_UIntConst;
+				Number = strtoul(String, &stopper, 0);
+				Float = (unsigned)Number;
+			}
+			else
+			{
+				Number = strtol(String, &stopper, 0);
+				Float = Number;
+			}
 		}
 		else if (TokenType == TK_FloatConst)
 		{
@@ -815,7 +862,7 @@ int FScanner::MustMatchString (const char * const *strings, size_t stride)
 	i = MatchString (strings, stride);
 	if (i == -1)
 	{
-		ScriptError (NULL);
+		ScriptError ("Unknown keyword '%s'", String);
 	}
 	return i;
 }
@@ -878,7 +925,7 @@ FString FScanner::TokenName (int token, const char *string)
 
 //==========================================================================
 //
-// FScanner::ScriptError
+// FScanner::GetMessageLine
 //
 //==========================================================================
 

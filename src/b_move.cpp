@@ -18,6 +18,9 @@
 #include "a_keys.h"
 #include "d_event.h"
 #include "p_enemy.h"
+#include "d_player.h"
+#include "p_spec.h"
+#include "p_checkposition.h"
 
 static FRandom pr_botopendoor ("BotOpenDoor");
 static FRandom pr_bottrywalk ("BotTryWalk");
@@ -80,10 +83,12 @@ bool DBot::Move (ticcmd_t *cmd)
 		player->mo->movedir = DI_NODIR;
 
 		good = 0;
+		spechit_t spechit1;
 		line_t *ld;
 
-		while (spechit.Pop (ld))
+		while (spechit.Pop (spechit1))
 		{
+			ld = spechit1.line;
 			bool tryit = true;
 
 			if (ld->special == Door_LockedRaise && !P_CheckKeys (player->mo, ld->args[3], false))

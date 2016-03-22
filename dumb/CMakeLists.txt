@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 2.4 )
+cmake_minimum_required( VERSION 2.8.7 )
 
 make_release_only()
 
@@ -9,15 +9,18 @@ set( CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -DDEBUGMODE=1" )
 
 if( ZD_CMAKE_COMPILER_IS_GNUC_COMPATIBLE )
 	set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-pointer-sign -Wno-uninitialized" )
-	if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.5")
+	if( CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER "4.5" )
 		set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-but-set-variable" )
-	endif(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.5")
-endif( ZD_CMAKE_COMPILER_IS_GNUC_COMPATIBLE )
+	endif()
+endif()
+
+# Enable fast flag for dumb
+set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ZD_FASTMATH_FLAG}" )
 
 CHECK_FUNCTION_EXISTS( itoa ITOA_EXISTS )
 if( NOT ITOA_EXISTS )
 	add_definitions( -DNEED_ITOA=1 )
-endif( NOT ITOA_EXISTS )
+endif()
 
 include_directories( include )
 
@@ -114,5 +117,5 @@ if( ZD_CMAKE_COMPILER_IS_GNUCXX_COMPATIBLE )
 
 	if( DUMB_CAN_USE_SSE )
 		set_source_files_properties( src/helpers/resampler.c PROPERTIES COMPILE_FLAGS -msse )
-	endif( DUMB_CAN_USE_SSE )
-endif( ZD_CMAKE_COMPILER_IS_GNUCXX_COMPATIBLE )
+	endif()
+endif()

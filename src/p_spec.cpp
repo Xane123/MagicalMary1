@@ -46,6 +46,8 @@
 #include "w_wad.h"
 
 #include "p_local.h"
+#include "p_spec.h"
+#include "p_blockmap.h"
 #include "p_lnspec.h"
 #include "p_terrain.h"
 #include "p_acs.h"
@@ -64,6 +66,12 @@
 #include "a_keys.h"
 #include "c_dispatch.h"
 #include "r_sky.h"
+#include "d_player.h"
+#include "p_maputl.h"
+#include "p_blockmap.h"
+#ifndef NO_EDATA
+#include "edata.h"
+#endif
 
 // State.
 #include "r_state.h"
@@ -193,14 +201,14 @@ bool CheckIfExitIsGood (AActor *self, level_info_t *info)
 //
 //============================================================================
 
-bool P_ActivateLine (line_t *line, AActor *mo, int side, int activationType)
+bool P_ActivateLine (line_t *line, AActor *mo, int side, int activationType, fixedvec3 *optpos)
 {
 	int lineActivation;
 	INTBOOL repeat;
 	INTBOOL buttonSuccess;
 	BYTE special;
 
-	if (!P_TestActivateLine (line, mo, side, activationType))
+	if (!P_TestActivateLine (line, mo, side, activationType, optpos))
 	{
 		return false;
 	}
@@ -254,7 +262,7 @@ bool P_ActivateLine (line_t *line, AActor *mo, int side, int activationType)
 //
 //============================================================================
 
-bool P_TestActivateLine (line_t *line, AActor *mo, int side, int activationType)
+bool P_TestActivateLine (line_t *line, AActor *mo, int side, int activationType, fixedvec3 *optpos)
 {
  	int lineActivation = line->activation;
 
@@ -283,7 +291,7 @@ bool P_TestActivateLine (line_t *line, AActor *mo, int side, int activationType)
 	}
 	if (activationType == SPAC_Use || activationType == SPAC_UseBack)
 	{
-		if (!P_CheckSwitchRange(mo, line, side))
+		if (!P_CheckSwitchRange(mo, line, side, optpos))
 		{
 			return false;
 		}
@@ -431,7 +439,7 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 	{
 		// Falling, not all the way down yet?
 		sector = player->mo->Sector;
-		if (player->mo->Z() != sector->floorplane.ZatPoint(player->mo)
+		if (player->mo->Z() != sector->LowestFloorAt(player->mo)
 			&& !player->mo->waterlevel)
 		{
 			return;
@@ -471,7 +479,7 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 				}
 				if (sector->Flags & SECF_DMGTERRAINFX)
 				{
-					P_HitWater(player->mo, sector, INT_MIN, INT_MIN, INT_MIN, false, true, true);
+					P_HitWater(player->mo, player->mo->Sector, INT_MIN, INT_MIN, INT_MIN, false, true, true);
 				}
 			}
 		}
@@ -497,7 +505,7 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 //
 //============================================================================
 
-static void DoSectorDamage(AActor *actor, sector_t *sec, int amount, FName type, const PClass *protectClass, int flags)
+static void DoSectorDamage(AActor *actor, sector_t *sec, int amount, FName type, PClassActor *protectClass, int flags)
 {
 	if (!(actor->flags & MF_SHOOTABLE))
 		return;
@@ -520,7 +528,7 @@ static void DoSectorDamage(AActor *actor, sector_t *sec, int amount, FName type,
 	P_DamageMobj (actor, NULL, NULL, amount, type);
 }
 
-void P_SectorDamage(int tag, int amount, FName type, const PClass *protectClass, int flags)
+void P_SectorDamage(int tag, int amount, FName type, PClassActor *protectClass, int flags)
 {
 	FSectorTagIterator itr(tag);
 	int secnum;
@@ -910,10 +918,11 @@ static void SetupFloorPortal (AStackPoint *point)
 {
 	NActorIterator it (NAME_LowerStackLookOnly, point->tid);
 	sector_t *Sector = point->Sector;
-	Sector->SkyBoxes[sector_t::floor] = static_cast<ASkyViewpoint*>(it.Next());
-	if (Sector->SkyBoxes[sector_t::floor] != NULL && Sector->SkyBoxes[sector_t::floor]->bAlways)
+	ASkyViewpoint *skyv = static_cast<ASkyViewpoint*>(it.Next());
+	Sector->SkyBoxes[sector_t::floor] = skyv;
+	if (skyv != NULL && skyv->bAlways)
 	{
-		Sector->SkyBoxes[sector_t::floor]->Mate = point;
+		skyv->Mate = point;
 		if (Sector->GetAlpha(sector_t::floor) == OPAQUE)
 			Sector->SetAlpha(sector_t::floor, Scale (point->args[0], OPAQUE, 255));
 	}
@@ -923,12 +932,13 @@ static void SetupCeilingPortal (AStackPoint *point)
 {
 	NActorIterator it (NAME_UpperStackLookOnly, point->tid);
 	sector_t *Sector = point->Sector;
-	Sector->SkyBoxes[sector_t::ceiling] = static_cast<ASkyViewpoint*>(it.Next());
-	if (Sector->SkyBoxes[sector_t::ceiling] != NULL && Sector->SkyBoxes[sector_t::ceiling]->bAlways)
+	ASkyViewpoint *skyv = static_cast<ASkyViewpoint*>(it.Next());
+	Sector->SkyBoxes[sector_t::ceiling] = skyv;
+	if (skyv != NULL && skyv->bAlways)
 	{
-		Sector->SkyBoxes[sector_t::ceiling]->Mate = point;
+		skyv->Mate = point;
 		if (Sector->GetAlpha(sector_t::ceiling) == OPAQUE)
-			Sector->SetAlpha(sector_t::ceiling, Scale (point->args[0], OPAQUE, 255));
+			Sector->SetAlpha(sector_t::ceiling, Scale(point->args[0], OPAQUE, 255));
 	}
 }
 
@@ -959,7 +969,7 @@ static void SetPortal(sector_t *sector, int plane, ASkyViewpoint *portal, fixed_
 	// plane: 0=floor, 1=ceiling, 2=both
 	if (plane > 0)
 	{
-		if (sector->SkyBoxes[sector_t::ceiling] == NULL || !sector->SkyBoxes[sector_t::ceiling]->bAlways) 
+		if (sector->SkyBoxes[sector_t::ceiling] == NULL || !barrier_cast<ASkyViewpoint*>(sector->SkyBoxes[sector_t::ceiling])->bAlways)
 		{
 			sector->SkyBoxes[sector_t::ceiling] = portal;
 			if (sector->GetAlpha(sector_t::ceiling) == OPAQUE)
@@ -970,7 +980,7 @@ static void SetPortal(sector_t *sector, int plane, ASkyViewpoint *portal, fixed_
 	}
 	if (plane == 2 || plane == 0)
 	{
-		if (sector->SkyBoxes[sector_t::floor] == NULL || !sector->SkyBoxes[sector_t::floor]->bAlways) 
+		if (sector->SkyBoxes[sector_t::floor] == NULL || !barrier_cast<ASkyViewpoint*>(sector->SkyBoxes[sector_t::floor])->bAlways)
 		{
 			sector->SkyBoxes[sector_t::floor] = portal;
 		}
@@ -1015,15 +1025,16 @@ static void CopyPortal(int sectortag, int plane, ASkyViewpoint *origin, fixed_t 
 	}
 }
 
-void P_SpawnPortal(line_t *line, int sectortag, int plane, int alpha)
+void P_SpawnPortal(line_t *line, int sectortag, int plane, int alpha, int linked)
 {
+	if (plane < 0 || plane > 2 || (linked && plane == 2)) return;
 	for (int i=0;i<numlines;i++)
 	{
 		// We must look for the reference line with a linear search unless we want to waste the line ID for it
 		// which is not a good idea.
 		if (lines[i].special == Sector_SetPortal &&
 			lines[i].args[0] == sectortag &&
-			lines[i].args[1] == 0 &&
+			lines[i].args[1] == linked &&
 			lines[i].args[2] == plane &&
 			lines[i].args[3] == 1)
 		{
@@ -1032,10 +1043,18 @@ void P_SpawnPortal(line_t *line, int sectortag, int plane, int alpha)
 			fixed_t y1 = fixed_t((SQWORD(line->v1->y) + SQWORD(line->v2->y)) >> 1);
 			fixed_t x2 = fixed_t((SQWORD(lines[i].v1->x) + SQWORD(lines[i].v2->x)) >> 1);
 			fixed_t y2 = fixed_t((SQWORD(lines[i].v1->y) + SQWORD(lines[i].v2->y)) >> 1);
+			fixed_t z = linked ? line->frontsector->planes[plane].TexZ : 0;	// the map's sector height defines the portal plane for linked portals
+
 			fixed_t alpha = Scale (lines[i].args[4], OPAQUE, 255);
 
 			AStackPoint *anchor = Spawn<AStackPoint>(x1, y1, 0, NO_REPLACE);
 			AStackPoint *reference = Spawn<AStackPoint>(x2, y2, 0, NO_REPLACE);
+			reference->special1 = linked ? SKYBOX_LINKEDPORTAL : SKYBOX_PORTAL;
+			anchor->special1 = SKYBOX_ANCHOR;
+			// store the portal displacement in the unused scaleX/Y members of the portal reference actor.
+			anchor->scaleX = -(reference->scaleX = x2 - x1);
+			anchor->scaleY = -(reference->scaleY = y2 - y1);
+			anchor->threshold = reference->threshold = z;
 
 			reference->Mate = anchor;
 			anchor->Mate = reference;
@@ -1178,7 +1197,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		break;
 			
 	case dSector_DoorCloseIn30:
-		P_SpawnDoorCloseIn30 (sector);
+		new DDoor(sector, DDoor::doorWaitClose, FRACUNIT * 2, 0, 0, 30 * TICRATE);
 		break;
 			
 	case dDamage_End:
@@ -1194,7 +1213,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		break;
 
 	case dSector_DoorRaiseIn5Mins:
-		P_SpawnDoorRaiseIn5Mins (sector);
+		new DDoor (sector, DDoor::doorWaitRaise, 2*FRACUNIT, TICRATE*30/7, 5*60*TICRATE, 0);
 		break;
 
 	case dFriction_Low:
@@ -1323,6 +1342,11 @@ void P_SpawnSpecials (void)
 
 		P_InitSectorSpecial(sector, sector->special, false);
 	}
+
+#ifndef NO_EDATA
+	ProcessEDSectors();
+#endif
+
 	
 	// Init other misc stuff
 
@@ -1418,14 +1442,22 @@ void P_SpawnSpecials (void)
 			//	- 0: normal (handled here)
 			//	- 1: copy (handled by the portal they copy)
 			//	- 2: EE-style skybox (handled by the camera object)
+			//  - 3: EE-style flat portal (GZDoom HW renderer only for now)
+			//  - 4: EE-style horizon portal (GZDoom HW renderer only for now)
+			//  - 5: copy portal to line (GZDoom HW renderer only for now)
+			//  - 6: linked portal
 			//	other values reserved for later use
 			// arg 2 = 0:floor, 1:ceiling, 2:both
 			// arg 3 = 0: anchor, 1: reference line
 			// arg 4 = for the anchor only: alpha
-			if (lines[i].args[1] == 0 && lines[i].args[3] == 0)
+			if ((lines[i].args[1] == 0 || lines[i].args[1] == 6) && lines[i].args[3] == 0)
 			{
-				P_SpawnPortal(&lines[i], lines[i].args[0], lines[i].args[2], lines[i].args[4]);
+				P_SpawnPortal(&lines[i], lines[i].args[0], lines[i].args[2], lines[i].args[4], lines[i].args[1]);
 			}
+			break;
+
+		case Line_SetPortal:
+			P_SpawnLinePortal(&lines[i]);
 			break;
 
 		// [RH] ZDoom Static_Init settings
@@ -1770,15 +1802,16 @@ static void P_SpawnScrollers(void)
 
 		// Check for undefined parameters that are non-zero and output messages for them.
 		// We don't report for specials we don't understand.
-		if (special != 0)
+		FLineSpecial *spec = P_GetLineSpecialInfo(special);
+		if (spec != NULL)
 		{
-			int max = LineSpecialsInfo[special] != NULL ? LineSpecialsInfo[special]->map_args : countof(l->args);
+			int max = spec->map_args;
 			for (unsigned arg = max; arg < countof(l->args); ++arg)
 			{
 				if (l->args[arg] != 0)
 				{
 					Printf("Line %d (type %d:%s), arg %u is %d (should be 0)\n",
-						i, special, LineSpecialsInfo[special]->name, arg+1, l->args[arg]);
+						i, special, spec->name, arg+1, l->args[arg]);
 				}
 			}
 		}
@@ -1826,7 +1859,7 @@ static void P_SpawnScrollers(void)
 
 		switch (special)
 		{
-			register int s;
+			int s;
 
 		case Scroll_Ceiling:
 		{
@@ -2216,11 +2249,14 @@ void DPusher::Tick ()
 		// Seek out all pushable things within the force radius of this
 		// point pusher. Crosses sectors, so use blockmap.
 
-		FBlockThingsIterator it(FBoundingBox(m_X, m_Y, m_Radius));
-		AActor *thing;
+		FPortalGroupArray check(FPortalGroupArray::PGA_NoSectorPortals);	// no sector portals because this thing is utterly z-unaware.
+		FMultiBlockThingsIterator it(check, m_X, m_Y, 0, 0, m_Radius, false, m_Source->Sector);
+		FMultiBlockThingsIterator::CheckResult cres;
 
-		while ((thing = it.Next()))
+
+		while (it.Next(&cres))
 		{
+			AActor *thing = cres.thing;
 			// Normal ZDoom is based only on the WINDTHRUST flag, with the noclip cheat as an exemption.
 			bool pusharound = ((thing->flags2 & MF2_WINDTHRUST) && !(thing->flags & MF_NOCLIP));
 					
@@ -2247,8 +2283,8 @@ void DPusher::Tick ()
 					if (m_Source->GetClass()->TypeName == NAME_PointPusher)
 						pushangle += ANG180;    // away
 					pushangle >>= ANGLETOFINESHIFT;
-					thing->velx += FixedMul (speed, finecosine[pushangle]);
-					thing->vely += FixedMul (speed, finesine[pushangle]);
+					thing->vel.x += FixedMul (speed, finecosine[pushangle]);
+					thing->vel.y += FixedMul (speed, finesine[pushangle]);
 				}
 			}
 		}
@@ -2265,6 +2301,7 @@ void DPusher::Tick ()
 			continue;
 
 		sector_t *hsec = sec->GetHeightSec();
+		fixedvec3 pos = thing->PosRelative(sec);
 		if (m_Type == p_wind)
 		{
 			if (hsec == NULL)
@@ -2282,7 +2319,7 @@ void DPusher::Tick ()
 			}
 			else // special water sector
 			{
-				ht = hsec->floorplane.ZatPoint(thing);
+				ht = hsec->floorplane.ZatPoint(pos);
 				if (thing->Z() > ht) // above ground
 				{
 					xspeed = m_Xmag; // full force
@@ -2311,7 +2348,7 @@ void DPusher::Tick ()
 			{ // special water sector
 				floor = &hsec->floorplane;
 			}
-			if (thing->Z() > floor->ZatPoint(thing))
+			if (thing->Z() > floor->ZatPoint(pos))
 			{ // above ground
 				xspeed = yspeed = 0; // no force
 			}
@@ -2321,8 +2358,8 @@ void DPusher::Tick ()
 				yspeed = m_Ymag;
 			}
 		}
-		thing->velx += xspeed<<(FRACBITS-PUSH_FACTOR);
-		thing->vely += yspeed<<(FRACBITS-PUSH_FACTOR);
+		thing->vel.x += xspeed<<(FRACBITS-PUSH_FACTOR);
+		thing->vel.y += yspeed<<(FRACBITS-PUSH_FACTOR);
 	}
 }
 
@@ -2357,7 +2394,7 @@ static void P_SpawnPushers ()
 {
 	int i;
 	line_t *l = lines;
-	register int s;
+	int s;
 
 	for (i = 0; i < numlines; i++, l++)
 	{

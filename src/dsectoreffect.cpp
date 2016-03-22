@@ -29,6 +29,7 @@
 #include "r_data/r_interpolate.h"
 #include "statnums.h"
 #include "farchive.h"
+#include "doomstat.h"
 
 IMPLEMENT_CLASS (DSectorEffect)
 
@@ -95,11 +96,11 @@ void DMover::Serialize (FArchive &arc)
 	arc << interpolation;
 }
 
-void DMover::StopInterpolation()
+void DMover::StopInterpolation(bool force)
 {
 	if (interpolation != NULL)
 	{
-		interpolation->DelRef();
+		interpolation->DelRef(force);
 		interpolation = NULL;
 	}
 }

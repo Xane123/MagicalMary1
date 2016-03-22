@@ -47,7 +47,7 @@ gameinfo_t gameinfo;
 
 const char *GameNames[17] =
 {
-	NULL, "WOK", "HereWOK", NULL, "HexOK", NULL, NULL, NULL, "StrOK", NULL, NULL, NULL, NULL, NULL, NULL, NULL, "ChOx"
+	NULL, "Doom", "Heretic", NULL, "Hexen", NULL, NULL, NULL, "Strife", NULL, NULL, NULL, NULL, NULL, NULL, NULL, "Chex"
 };
 
 

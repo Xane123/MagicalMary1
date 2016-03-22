@@ -51,6 +51,8 @@ int AFrostMissile::DoSpecialDamage (AActor *victim, int damage, FName damagetype
 
 DEFINE_ACTION_FUNCTION(AActor, A_FireConePL1)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	angle_t angle;
 	int damage;
 	int slope;
@@ -58,18 +60,18 @@ DEFINE_ACTION_FUNCTION(AActor, A_FireConePL1)
 	AActor *mo;
 	bool conedone=false;
 	player_t *player;
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 
 	AWeapon *weapon = self->player->ReadyWeapon;
 	if (weapon != NULL)
 	{
 		if (!weapon->DepleteAmmo (weapon->bAltFire))
-			return;
+			return 0;
 	}
 	S_Sound (self, CHAN_WEAPON, "MageShardsFire", 1, ATTN_NORM);
 
@@ -77,10 +79,10 @@ DEFINE_ACTION_FUNCTION(AActor, A_FireConePL1)
 	for (i = 0; i < 16; i++)
 	{
 		angle = self->angle+i*(ANG45/16);
-		slope = P_AimLineAttack (self, angle, MELEERANGE, &linetarget, 0, ALF_CHECK3D);
-		if (linetarget)
+		slope = P_AimLineAttack (self, angle, MELEERANGE, &t, 0, ALF_CHECK3D);
+		if (t.linetarget)
 		{
-			P_DamageMobj (linetarget, self, self, damage, NAME_Ice);
+			P_DamageMobj (t.linetarget, self, self, damage, NAME_Ice, DMG_USEANGLE, t.angleFromSource);
 			conedone = true;
 			break;
 		}
@@ -99,6 +101,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_FireConePL1)
 			mo->args[0] = 3;		// Mark Initial shard as super damage
 		}
 	}
+	return 0;
 }
 
 //============================================================================
@@ -109,11 +112,16 @@ DEFINE_ACTION_FUNCTION(AActor, A_FireConePL1)
 
 DEFINE_ACTION_FUNCTION(AActor, A_ShedShard)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *mo;
 	int spawndir = self->special1;
 	int spermcount = self->special2;
 
-	if (spermcount <= 0) return;				// No sperm left
+	if (spermcount <= 0)
+	{
+		return 0;				// No sperm left
+	}
 	self->special2 = 0;
 	spermcount--;
 
@@ -126,7 +134,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_ShedShard)
 		{
 			mo->special1 = SHARDSPAWN_LEFT;
 			mo->special2 = spermcount;
-			mo->velz = self->velz;
+			mo->vel.z = self->vel.z;
 			mo->args[0] = (spermcount==3)?2:0;
 		}
 	}
@@ -138,7 +146,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_ShedShard)
 		{
 			mo->special1 = SHARDSPAWN_RIGHT;
 			mo->special2 = spermcount;
-			mo->velz = self->velz;
+			mo->vel.z = self->vel.z;
 			mo->args[0] = (spermcount==3)?2:0;
 		}
 	}
@@ -148,7 +156,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_ShedShard)
 											 0, (15+2*spermcount)<<FRACBITS, self->target);
 		if (mo)
 		{
-			mo->velz = self->velz;
+			mo->vel.z = self->vel.z;
 			if (spermcount & 1)			// Every other reproduction
 				mo->special1 = SHARDSPAWN_UP | SHARDSPAWN_LEFT | SHARDSPAWN_RIGHT;
 			else
@@ -163,7 +171,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_ShedShard)
 											 0, (15+2*spermcount)<<FRACBITS, self->target);
 		if (mo)
 		{
-			mo->velz = self->velz;
+			mo->vel.z = self->vel.z;
 			if (spermcount & 1)			// Every other reproduction
 				mo->special1 = SHARDSPAWN_DOWN | SHARDSPAWN_LEFT | SHARDSPAWN_RIGHT;
 			else
@@ -173,4 +181,5 @@ DEFINE_ACTION_FUNCTION(AActor, A_ShedShard)
 			mo->args[0] = (spermcount==3)?2:0;
 		}
 	}
+	return 0;
 }

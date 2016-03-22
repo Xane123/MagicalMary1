@@ -324,7 +324,12 @@ void FValueTextItem::Drawer(bool selected)
 	screen->DrawText(mFont, selected? OptionSettings.mFontColorSelection : mFontColor, mXpos, mYpos, text, DTA_Clean, true, TAG_DONE);
 
 	int x = mXpos + mFont->StringWidth(text) + 8;
-	if (mSelections.Size() > 0) screen->DrawText(mFont, mFontColor2, x, mYpos, mSelections[mSelection], DTA_Clean, true, TAG_DONE);
+	if (mSelections.Size() > 0)
+	{
+		const char *mOptValue = mSelections[mSelection];
+		if (*mOptValue == '$') mOptValue = GStrings(mOptValue + 1);
+		screen->DrawText(mFont, mFontColor2, x, mYpos, mOptValue, DTA_Clean, true, TAG_DONE);
+	}
 }
 
 //=============================================================================
@@ -479,7 +484,7 @@ void FSliderItem::Drawer(bool selected)
 	screen->DrawText(mFont, selected? OptionSettings.mFontColorSelection : mFontColor, mXpos, mYpos, text, DTA_Clean, true, TAG_DONE);
 
 	int x = SmallFont->StringWidth ("Green") + 8 + mXpos;
-	int x2 = SmallFont->StringWidth (mText) + 8 + mXpos;
+	int x2 = SmallFont->StringWidth (text) + 8 + mXpos;
 	DrawSlider (MAX(x2, x), mYpos);
 }
 
@@ -609,7 +614,7 @@ void DPlayerMenu::Init(DMenu *parent, FListMenuDescriptor *desc)
 		{
 			// [XA] Remove the "Random" option if the relevant gameinfo flag is set.
 			if(!gameinfo.norandomplayerclass)
-				li->SetString(0, "EITHER");
+				li->SetString(0, "Random");
 			for(unsigned i=0; i< PlayerClasses.Size(); i++)
 			{
 				const char *cls = GetPrintableDisplayName(PlayerClasses[i].Type);
@@ -687,8 +692,7 @@ void DPlayerMenu::UpdateTranslation()
 	if (PlayerClass != NULL)
 	{
 		PlayerSkin = R_FindSkin (skins[PlayerSkin].name, int(PlayerClass - &PlayerClasses[0]));
-		R_GetPlayerTranslation(PlayerColor,
-			P_GetPlayerColorSet(PlayerClass->Type->TypeName, PlayerColorset),
+		R_GetPlayerTranslation(PlayerColor, PlayerClass->Type->GetColorSet(PlayerColorset),
 			&skins[PlayerSkin], translationtables[TRANSLATION_Players][MAXPLAYERS]);
 	}
 }
@@ -757,11 +761,11 @@ void DPlayerMenu::UpdateColorsets()
 	if (li != NULL)
 	{
 		int sel = 0;
-		P_EnumPlayerColorSets(PlayerClass->Type->TypeName, &PlayerColorSets);
-		li->SetString(0, "OTHER");
+		PlayerClass->Type->EnumColorSets(&PlayerColorSets);
+		li->SetString(0, "Custom");
 		for(unsigned i=0;i<PlayerColorSets.Size(); i++)
 		{
-			FPlayerColorSet *colorset = P_GetPlayerColorSet(PlayerClass->Type->TypeName, PlayerColorSets[i]);
+			FPlayerColorSet *colorset = PlayerClass->Type->GetColorSet(PlayerColorSets[i]);
 			li->SetString(i+1, colorset->Name);
 		}
 		int mycolorset = players[consoleplayer].userinfo.GetColorSet();
@@ -881,7 +885,7 @@ void DPlayerMenu::ColorSetChanged (FListMenuItem *li)
 
 		char command[24];
 		players[consoleplayer].userinfo.ColorSetChanged(mycolorset);
-		mysnprintf(command, countof(command), "COLORSET %d SELECTED.", mycolorset);
+		mysnprintf(command, countof(command), "colorset %d", mycolorset);
 		C_DoCommand(command);
 		UpdateTranslation();
 	}
@@ -907,7 +911,7 @@ void DPlayerMenu::ClassChanged (FListMenuItem *li)
 		players[consoleplayer].userinfo.PlayerClassNumChanged(gameinfo.norandomplayerclass ? sel : sel-1);
 		PickPlayerClass();
 
-		cvar_set ("playerclass", sel == 0 && !gameinfo.norandomplayerclass ? "Random" : PlayerClass->Type->Meta.GetMetaString (APMETA_DisplayName));
+		cvar_set ("playerclass", sel == 0 && !gameinfo.norandomplayerclass ? "Random" : PlayerClass->Type->DisplayName.GetChars());
 
 		UpdateSkins();
 		UpdateColorsets();
@@ -1135,12 +1139,12 @@ void DPlayerMenu::Drawer ()
 
 	Super::Drawer();
 
-	const char *str = "PUSH " TEXTCOLOR_WHITE "SPACEBAR";
+	const char *str = "PRESS " TEXTCOLOR_WHITE "SPACE";
 	screen->DrawText (SmallFont, CR_GOLD, 320 - 32 - 32 -
 		SmallFont->StringWidth (str)/2,
 		50 + 48 + 70, str,
 		DTA_Clean, true, TAG_DONE);
-	str = mRotation ? "TO SEE THIS PERSON'S FRONT." : "TO SEE THIS PERSON'S OTHER SIDE.";
+	str = mRotation ? "TO SEE FRONT" : "TO SEE BACK";
 	screen->DrawText (SmallFont, CR_GOLD, 320 - 32 - 32 -
 		SmallFont->StringWidth (str)/2,
 		50 + 48 + 70 + SmallFont->GetHeight (), str,

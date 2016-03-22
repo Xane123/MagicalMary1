@@ -627,18 +627,18 @@ static bool FindFreeName (FString &fullname, const char *extension)
 
 		if (tm == NULL)
 		{
-			lbmname.Format ("SShot_WOK_%04d.%s", i, extension);
+			lbmname.Format ("%sScreenshot_%s_%04d.%s", fullname.GetChars(), gamename, i, extension);
 		}
 		else if (i == 0)
 		{
-			lbmname.Format ("SShot_WOK_%04d%02d%02d_%02d%02d%02d.%s",
+			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				extension);
 		}
 		else
 		{
-			lbmname.Format ("SShot_WOK_%04d%02d%02d_%02d%02d%02d_%02d.%s",
+			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				i, extension);
@@ -685,7 +685,7 @@ void M_ScreenShot (const char *filename)
 		CreatePath(autoname);
 		if (!FindFreeName (autoname, writepcx ? "pcx" : "png"))
 		{
-			Printf ("YOU HAVE TAKEN TOO MANY SCREENSHOTS;\nDELETE SOME THEN TRY TAKING ANOTHER SCREENSHOT.\nIF YOU PUSHED PRINTSCREEN TO DO THIS, THE PICTURE MAY BE IN YOUR CLIPBOARD!\n");
+			Printf ("M_ScreenShot: Delete some screenshots\n");
 			return;
 		}
 	}
@@ -740,7 +740,7 @@ void M_ScreenShot (const char *filename)
 	{
 		if (!screenshot_quiet)
 		{
-			Printf ("THE SCREENSHOT COULDN'T BE SAVED; IT'S MOST LIKELY\nIN YOUR CLIPBOARD IF YOU PUSHED PRINTSCREEN, THOUGH!\n");
+			Printf ("Could not create screenshot.\n");
 		}
 	}
 }

@@ -34,8 +34,10 @@
 
 #include "i_system.h"
 #include "p_local.h"
+#include "p_spec.h"
 
 // State.
+#include "d_player.h"
 #include "dobject.h"
 #include "doomstat.h"
 #include "r_state.h"
@@ -474,6 +476,12 @@ void P_SerializeWorld (FArchive &arc)
 		}
 		arc << li->args[1] << li->args[2] << li->args[3] << li->args[4];
 
+		if (SaveVersion >= 4532)
+		{
+			arc << li->portalindex;
+		}
+		else li->portalindex = UINT_MAX;
+
 		for (j = 0; j < 2; j++)
 		{
 			if (li->sidedef[j] == NULL)
@@ -508,6 +516,16 @@ void P_SerializeWorld (FArchive &arc)
 	{
 		arc << zn->Environment;
 	}
+
+	if (SaveVersion >= 4532)
+	{
+		arc << linePortals;
+	}
+	else
+	{
+		linePortals.Clear();
+	}
+	P_CollectLinkedPortals();
 }
 
 void extsector_t::Serialize(FArchive &arc)

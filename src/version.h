@@ -41,17 +41,17 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "0.1b"
+#define VERSIONSTR "2.9pre"
 
 // The version as seen in the Windows resource
-#define RC_FILEVERSION 1,0,0001,0
-#define RC_PRODUCTVERSION 1,0,0001,0
-#define RC_PRODUCTVERSION2 "0.1b"
+#define RC_FILEVERSION 2,8,9999,0
+#define RC_PRODUCTVERSION 2,8,9999,0
+#define RC_PRODUCTVERSION2 "2.9pre"
 
 // Version identifier for network games.
 // Bump it every time you do a release unless you're certain you
 // didn't change anything that will affect sync.
-#define NETGAMEVERSION 231
+#define NETGAMEVERSION 232
 
 // Version stored in the ini's [LastRun] section.
 // Bump it if you made some configuration change that you want to
@@ -61,11 +61,11 @@ const char *GetVersionString();
 // Protocol version used in demos.
 // Bump it if you change existing DEM_ commands or add new ones.
 // Otherwise, it should be safe to leave it alone.
-#define DEMOGAMEVERSION 0x21D
+#define DEMOGAMEVERSION 0x21E
 
 // Minimum demo version we can play.
 // Bump it whenever you change or remove existing DEM_ commands.
-#define MINDEMOVERSION 0x21C
+#define MINDEMOVERSION 0x21E
 
 // SAVEVER is the version of the information stored in level snapshots.
 // Note that SAVEVER is not directly comparable to VERSION.
@@ -76,26 +76,26 @@ const char *GetVersionString();
 
 // Use 4500 as the base git save version, since it's higher than the
 // SVN revision ever got.
-#define SAVEVER 4531
+#define SAVEVER 4533
 
 #define SAVEVERSTRINGIFY2(x) #x
 #define SAVEVERSTRINGIFY(x) SAVEVERSTRINGIFY2(x)
 #define SAVESIG "ZDOOMSAVE" SAVEVERSTRINGIFY(SAVEVER)
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "World of Kirbycraft"
-#define BASEWAD "data.pk3"
+#define GAMESIG "ZDOOM"
+#define BASEWAD "zdoom.pk3"
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "the engine powering World of Kirbycraft, ZDoom, "
-#define GAMENAMELOWERCASE "Settings"
-#define FORUM_URL "xanem1@gmail.com"
-#define BUGS_FORUM_URL	"...just explain what happened and send the crash report to Xane."
+#define GAMENAME "ZDoom"
+#define GAMENAMELOWERCASE "zdoom"
+#define FORUM_URL "http://forum.zdoom.org"
+#define BUGS_FORUM_URL	"http://forum.zdoom.org/index.php?c=3"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME
 #else
-#define GAME_DIR ".config/" wok
+#define GAME_DIR ".config/" GAMENAMELOWERCASE
 #endif
 
 

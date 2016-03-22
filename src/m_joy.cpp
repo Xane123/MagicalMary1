@@ -22,8 +22,6 @@ EXTERN_CVAR(Bool, joy_xinput)
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-EXTERN_CVAR(Bool, xane_controller)
-
 CUSTOM_CVAR(Bool, use_joystick, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
 {
 #ifdef _WIN32
@@ -31,8 +29,6 @@ CUSTOM_CVAR(Bool, use_joystick, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINI
 	joy_dinput.Callback();
 	joy_xinput.Callback();
 #endif
-
-xane_controller = use_joystick;
 }
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------

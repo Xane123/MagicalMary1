@@ -5,7 +5,7 @@
 [ita]
 
 D_DEVSTR = "Modalita' sviluppo ATTIVA.\n";
-D_CDROM = "Versione del CD-ROM: WORLD OF KIRBYCRAFT.cfg da c:\\WORLD OF KIRBYCRAFTdat\n";
+D_CDROM = "Versione del CD-ROM: zdoom.cfg da c:\\zdoomdat\n";
 PRESSKEY = "premi un tasto.";
 PRESSYN = "premi y oppure n.";
 
@@ -13,7 +13,7 @@ QUITMSG = "Sei sicuro di volere uscire\nda questo grandioso gioco?";
 TXT_YES = "Si";
 TXT_NO = "No";
 
-// QuitWORLD OF KIRBYCRAFT1 messages
+// QuitDoom1 messages
 QUITMSG1 = "per favore non uscire, ci sono altri\ndemoni da ammazzare!";
 QUITMSG2 = "ammettiamolo - tutto cio' si sta\ntrasformando in un bagno di sangue!";
 QUITMSG3 = "non uscirei se fossi in te.\nil dos e' molto peggio.";
@@ -22,7 +22,7 @@ QUITMSG5 = "non abbandonare ora - c'e' un\ndemone dietro l'angolo!";
 QUITMSG6 = "sai, la prossima volta che verrai qui\nti faro' a pezzi.";
 QUITMSG7 = "continua ed esci. sai che mi frega.";
 
-// QuitWORLD OF KIRBYCRAFT II messages
+// QuitDOOM II messages
 QUITMSG8 = "vuoi uscire?\nallora hai perso il senno!";
 QUITMSG9 = "non andartene adesso, c'e' un\nportale dimensionale che ti aspetta\nal prompt del dos!";
 QUITMSG10 = "vai fuori di qui e torna\nai tuoi noiosi programmi.";
@@ -58,7 +58,7 @@ QSPROMPT = "sovrascrivere il salvataggio\n\n'%s'?\n\npremi y oppure n.";
 QLPROMPT = "vuoi fare un quickload della partita\n\n'%s'?\n\npremi y oppure n.";
 NEWGAME = "non puoi iniziare una nuova partita\ndurante una partita in rete.\n\npremi un tasto.";
 NIGHTMARE = "sei sicuro? questo livello di difficolta'\ne' dannatamente difficile.\n\npremi y oppure n.";
-SWSTRING = "questa e' la versione shareware di WORLD OF KIRBYCRAFT.\n\ndevi ordinare la trilogia completa.\n\npremi un tasto.";
+SWSTRING = "questa e' la versione shareware di doom.\n\ndevi ordinare la trilogia completa.\n\npremi un tasto.";
 MSGOFF = "messaggi disattivati";
 MSGON = "messaggi attivati";
 NETEND = "non puoi terminare un netgame!\n\npremi un tasto";
@@ -291,7 +291,7 @@ E1TEXT =
         "sulle Coste dell'Inferno.\n"
 	"L'unica uscita ci passa in mezzo.\n"
 	"\n"
-        "Per continuare l'esperienza di WORLD OF KIRBYCRAFT\n"
+        "Per continuare l'esperienza di DOOM\n"
         "gioca 'The Shores of Hell' e il suo\n"
         "incredibile seguito, 'Inferno'!\n";
 E2TEXT =
@@ -312,7 +312,7 @@ E2TEXT =
 	"dell'Inferno.\n"
 	"\n"
 	"E' ora del capitolo finale di\n"
-	"WORLD OF KIRBYCRAFT! - 'Inferno'.";
+	"DOOM! - 'Inferno'.";
 E3TEXT =
 	"Il terribile demone-ragno che aveva\n"
 	"progettato l'invasione delle basi\n"
@@ -479,7 +479,7 @@ P6TEXT =
 T1TEXT =
 	"Ti sei aperto la via fuori dai laboratori\n"
 	"sperimentali infestati. Sembra che la UAC\n"
-	"abbia fatto il passo piÃ¹ lungo della gamba\n"
+	"abbia fatto il passo più lungo della gamba\n"
 	"di nuovo. Con questi continui turnover,\n"
         "deve essere dura per la UAC comprare delle\n"
         "polizze di assicurazione sulla vita degli\n"
@@ -701,7 +701,7 @@ OB_FRIENDLY2 = "%k si controlla gli occhiali.";
 OB_FRIENDLY3 = "%k regala un frag all'altro team.";
 OB_FRIENDLY4 = "%k perde un altro amico.";
 
-SAVEGAMENAME = "WORLD OF KIRBYCRAFTsv";
+SAVEGAMENAME = "zdoomsv";
 STARTUP1 = "";
 STARTUP2 = "";
 STARTUP3 = "";

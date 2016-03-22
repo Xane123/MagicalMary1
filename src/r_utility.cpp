@@ -34,7 +34,6 @@
 #include "doomstat.h"
 #include "m_random.h"
 #include "m_bbox.h"
-#include "p_local.h"
 #include "r_sky.h"
 #include "st_stuff.h"
 #include "c_cvars.h"
@@ -55,6 +54,9 @@
 #include "r_renderer.h"
 #include "r_data/colormaps.h"
 #include "farchive.h"
+#include "r_utility.h"
+#include "d_player.h"
+#include "p_local.h"
 
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
@@ -79,14 +81,15 @@ static TArray<InterpolationViewer> PastViewers;
 static FRandom pr_torchflicker ("TorchFlicker");
 static FRandom pr_hom;
 static bool NoInterpolateView;
+static TArray<fixedvec3a> InterpolationPath;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-CVAR (Bool, r_deathcamera, true, CVAR_ARCHIVE)	//Switch to third person camera forcibly when the player dies?
-CVAR (Int, r_clearbuffer, 1, 0)	//Color/pattern to render out of bounds areas with.
-CVAR (Bool, r_drawvoxels, true, 0)	//Render 3D voxel models?
+CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
+CVAR (Int, r_clearbuffer, 0, 0)
+CVAR (Bool, r_drawvoxels, true, 0)
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
-CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	//Howmuch earthquakes shake the screen.
+CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (self < 0.f) self = 0.f;
 	else if (self > 1.f) self = 1.f;
@@ -431,7 +434,7 @@ void R_SetWindow (int windowSize, int fullWidth, int fullHeight, int stHeight)
 
 	centery = viewheight/2;
 	centerx = viewwidth/2;
-	if (WidescreenRatio & 4)
+	if (Is54Aspect(WidescreenRatio))
 	{
 		centerxwide = centerx;
 	}
@@ -484,7 +487,7 @@ void R_ExecuteSetViewSize ()
 //
 //==========================================================================
 
-CUSTOM_CVAR (Int, screenblocks, 11, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 {
 	if (self > 12)
 		self = 12;
@@ -572,6 +575,7 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 //	frac = tf;
 	if (NoInterpolateView)
 	{
+		InterpolationPath.Clear();
 		NoInterpolateView = false;
 		iview->oviewx = iview->nviewx;
 		iview->oviewy = iview->nviewy;
@@ -579,9 +583,78 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 		iview->oviewpitch = iview->nviewpitch;
 		iview->oviewangle = iview->nviewangle;
 	}
-	viewx = iview->oviewx + FixedMul (frac, iview->nviewx - iview->oviewx);
-	viewy = iview->oviewy + FixedMul (frac, iview->nviewy - iview->oviewy);
-	viewz = iview->oviewz + FixedMul (frac, iview->nviewz - iview->oviewz);
+	int oldgroup = R_PointInSubsector(iview->oviewx, iview->oviewy)->sector->PortalGroup;
+	int newgroup = R_PointInSubsector(iview->nviewx, iview->nviewy)->sector->PortalGroup;
+
+	fixed_t oviewangle = iview->oviewangle;
+	fixed_t nviewangle = iview->nviewangle;
+	if ((iview->oviewx != iview->nviewx || iview->oviewy != iview->nviewy) && InterpolationPath.Size() > 0)
+	{
+		viewx = iview->nviewx;
+		viewy = iview->nviewy;
+		viewz = iview->nviewz;
+
+		// Interpolating through line portals is a messy affair.
+		// What needs be done is to store the portal transitions of the camera actor as waypoints
+		// and then find out on which part of the path the current view lies.
+		// Needless to say, this doesn't work for chasecam mode.
+		if (!r_showviewer)
+		{
+			fixed_t pathlen = 0;
+			fixed_t zdiff = 0;
+			fixed_t totalzdiff = 0;
+			angle_t adiff = 0;
+			angle_t totaladiff = 0;
+			fixed_t oviewz = iview->oviewz;
+			fixed_t nviewz = iview->nviewz;
+			fixedvec3a oldpos = { iview->oviewx, iview->oviewy, 0, 0 };
+			fixedvec3a newpos = { iview->nviewx, iview->nviewy, 0, 0 };
+			InterpolationPath.Push(newpos);	// add this to  the array to simplify the loops below
+
+			for (unsigned i = 0; i < InterpolationPath.Size(); i += 2)
+			{
+				fixedvec3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
+				fixedvec3a &end = InterpolationPath[i];
+				pathlen += xs_CRoundToInt(DVector2(end.x - start.x, end.y - start.y).Length());
+				totalzdiff += start.z;
+				totaladiff += start.angle;
+			}
+			fixed_t interpolatedlen = FixedMul(frac, pathlen);
+
+			for (unsigned i = 0; i < InterpolationPath.Size(); i += 2)
+			{
+				fixedvec3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
+				fixedvec3a &end = InterpolationPath[i];
+				fixed_t fraglen = xs_CRoundToInt(DVector2(end.x - start.x, end.y - start.y).Length());
+				zdiff += start.z;
+				adiff += start.angle;
+				if (fraglen <= interpolatedlen)
+				{
+					interpolatedlen -= fraglen;
+				}
+				else
+				{
+					fixed_t fragfrac = FixedDiv(interpolatedlen, fraglen);
+					oviewz += zdiff;
+					nviewz -= totalzdiff - zdiff;
+					oviewangle += adiff;
+					nviewangle -= totaladiff - adiff;
+					viewx = start.x + FixedMul(fragfrac, end.x - start.x);
+					viewy = start.y + FixedMul(fragfrac, end.y - start.y);
+					viewz = oviewz + FixedMul(frac, nviewz - oviewz);
+					break;
+				}
+			}
+			InterpolationPath.Pop();
+		}
+	}
+	else
+	{
+		fixedvec2 disp = Displacements.getOffset(oldgroup, newgroup);
+		viewx = iview->oviewx + FixedMul(frac, iview->nviewx - iview->oviewx - disp.x);
+		viewy = iview->oviewy + FixedMul(frac, iview->nviewy - iview->oviewy - disp.y);
+		viewz = iview->oviewz + FixedMul(frac, iview->nviewz - iview->oviewz);
+	}
 	if (player != NULL &&
 		!(player->cheats & CF_INTERPVIEW) &&
 		player - players == consoleplayer &&
@@ -597,7 +670,7 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 		(!netgame || !cl_noprediction) &&
 		!LocalKeyboardTurner)
 	{
-		viewangle = iview->nviewangle + (LocalViewAngle & 0xFFFF0000);
+		viewangle = nviewangle + (LocalViewAngle & 0xFFFF0000);
 
 		fixed_t delta = player->centering ? 0 : -(signed)(LocalViewPitch & 0xFFFF0000);
 
@@ -630,11 +703,39 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 	else
 	{
 		viewpitch = iview->oviewpitch + FixedMul (frac, iview->nviewpitch - iview->oviewpitch);
-		viewangle = iview->oviewangle + FixedMul (frac, iview->nviewangle - iview->oviewangle);
+		viewangle = oviewangle + FixedMul (frac, nviewangle - oviewangle);
 	}
 	
 	// Due to interpolation this is not necessarily the same as the sector the camera is in.
 	viewsector = R_PointInSubsector(viewx, viewy)->sector;
+	bool moved = false;
+	while (!viewsector->PortalBlocksMovement(sector_t::ceiling))
+	{
+		AActor *point = viewsector->SkyBoxes[sector_t::ceiling];
+		if (viewz > point->threshold)
+		{
+			viewx += point->scaleX;
+			viewy += point->scaleY;
+			viewsector = R_PointInSubsector(viewx, viewy)->sector;
+			moved = true;
+		}
+		else break;
+	}
+	if (!moved)
+	{
+		while (!viewsector->PortalBlocksMovement(sector_t::floor))
+		{
+			AActor *point = viewsector->SkyBoxes[sector_t::floor];
+			if (viewz < point->threshold)
+			{
+				viewx += point->scaleX;
+				viewy += point->scaleY;
+				viewsector = R_PointInSubsector(viewx, viewy)->sector;
+				moved = true;
+			}
+			else break;
+		}
+	}
 }
 
 //==========================================================================
@@ -645,6 +746,7 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 
 void R_ResetViewInterpolation ()
 {
+	InterpolationPath.Clear();
 	NoInterpolateView = true;
 }
 
@@ -685,6 +787,7 @@ static InterpolationViewer *FindPastViewer (AActor *actor)
 	InterpolationViewer iview = { NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	iview.ViewActor = actor;
 	iview.otic = -1;
+	InterpolationPath.Clear();
 	return &PastViewers[PastViewers.Push (iview)];
 }
 
@@ -696,6 +799,7 @@ static InterpolationViewer *FindPastViewer (AActor *actor)
 
 void R_FreePastViewers ()
 {
+	InterpolationPath.Clear();
 	PastViewers.Clear ();
 }
 
@@ -709,6 +813,7 @@ void R_FreePastViewers ()
 
 void R_ClearPastViewer (AActor *actor)
 {
+	InterpolationPath.Clear();
 	for (unsigned int i = 0; i < PastViewers.Size(); ++i)
 	{
 		if (PastViewers[i].ViewActor == actor)
@@ -748,6 +853,7 @@ void R_RebuildViewInterpolation(player_t *player)
 	iview->oviewz = iview->nviewz;
 	iview->oviewpitch = iview->nviewpitch;
 	iview->oviewangle = iview->nviewangle;
+	InterpolationPath.Clear();
 }
 
 //==========================================================================
@@ -759,6 +865,29 @@ void R_RebuildViewInterpolation(player_t *player)
 bool R_GetViewInterpolationStatus()
 {
 	return NoInterpolateView;
+}
+
+
+//==========================================================================
+//
+// R_ClearInterpolationPath
+//
+//==========================================================================
+
+void R_ClearInterpolationPath()
+{
+	InterpolationPath.Clear();
+}
+
+//==========================================================================
+//
+// R_AddInterpolationPoint
+//
+//==========================================================================
+
+void R_AddInterpolationPoint(const fixedvec3a &vec)
+{
+	InterpolationPath.Push(vec);
 }
 
 //==========================================================================
@@ -788,9 +917,6 @@ static fixed_t QuakePower(fixed_t factor, fixed_t intensity, fixed_t offset)
 //
 //==========================================================================
 
-	int xframe;
-	int xcolors[59] = { 234, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 253, 188, 187, 186, 185, 184, 183, 182, 181, 180, 179, 178, 177, 176, 234, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 253, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112 };
-
 void R_SetupFrame (AActor *actor)
 {
 	if (actor == NULL)
@@ -801,6 +927,7 @@ void R_SetupFrame (AActor *actor)
 	player_t *player = actor->player;
 	unsigned int newblend;
 	InterpolationViewer *iview;
+	bool unlinked = false;
 
 	if (player != NULL && player->mo == actor)
 	{	// [RH] Use camera instead of viewplayer
@@ -836,15 +963,28 @@ void R_SetupFrame (AActor *actor)
 	if (player != NULL && gamestate != GS_TITLELEVEL &&
 		((player->cheats & CF_CHASECAM) || (r_deathcamera && camera->health <= 0)))
 	{
+		sector_t *oldsector = R_PointInSubsector(iview->oviewx, iview->oviewy)->sector;
 		// [RH] Use chasecam view
-		P_AimCamera (camera, iview->nviewx, iview->nviewy, iview->nviewz, viewsector);
+		P_AimCamera (camera, iview->nviewx, iview->nviewy, iview->nviewz, viewsector, unlinked);
 		r_showviewer = true;
+		// Interpolating this is a very complicated thing because nothing keeps track of the aim camera's movement, so whenever we detect a portal transition
+		// it's probably best to just reset the interpolation for this move.
+		// Note that this can still cause problems with unusually linked portals
+		if (viewsector->PortalGroup != oldsector->PortalGroup || (unlinked && P_AproxDistance(iview->oviewx - iview->nviewx, iview->oviewy - iview->nviewy) > 256 * FRACUNIT))
+		{
+			iview->otic = nowtic;
+			iview->oviewx = iview->nviewx;
+			iview->oviewy = iview->nviewy;
+			iview->oviewz = iview->nviewz;
+			iview->oviewpitch = iview->nviewpitch;
+			iview->oviewangle = iview->nviewangle;
+		}
 	}
 	else
 	{
 		iview->nviewx = camera->X();
 		iview->nviewy = camera->Y();
-		iview->nviewz = camera->player ? camera->player->viewz : camera->Z() + camera->GetClass()->Meta.GetMetaFixed(AMETA_CameraHeight);
+		iview->nviewz = camera->player ? camera->player->viewz : camera->Z() + camera->GetCameraHeight();
 		viewsector = camera->Sector;
 		r_showviewer = false;
 	}
@@ -881,16 +1021,22 @@ void R_SetupFrame (AActor *actor)
 	interpolator.DoInterpolations (r_TicFrac);
 
 	// Keep the view within the sector's floor and ceiling
-	fixed_t theZ = viewsector->ceilingplane.ZatPoint (viewx, viewy) - 4*FRACUNIT;
-	if (viewz > theZ)
+	if (viewsector->PortalBlocksMovement(sector_t::ceiling))
 	{
-		viewz = theZ;
+		fixed_t theZ = viewsector->ceilingplane.ZatPoint(viewx, viewy) - 4 * FRACUNIT;
+		if (viewz > theZ)
+		{
+			viewz = theZ;
+		}
 	}
 
-	theZ = viewsector->floorplane.ZatPoint (viewx, viewy) + 4*FRACUNIT;
-	if (viewz < theZ)
+	if (viewsector->PortalBlocksMovement(sector_t::floor))
 	{
-		viewz = theZ;
+		fixed_t theZ = viewsector->floorplane.ZatPoint(viewx, viewy) + 4 * FRACUNIT;
+		if (viewz < theZ)
+		{
+			viewz = theZ;
+		}
 	}
 
 	if (!paused)
@@ -1014,8 +1160,6 @@ void R_SetupFrame (AActor *actor)
 		int color;
 		int hom = r_clearbuffer;
 
-		if(r_clearbuffer>6) r_clearbuffer = 6;
-
 		if (hom == 3)
 		{
 			hom = ((I_FPSTime() / 128) & 1) + 1;
@@ -1032,19 +1176,11 @@ void R_SetupFrame (AActor *actor)
 		{
 			color = (I_FPSTime() / 32) & 255;
 		}
-		else if (hom == 6)	//CUSTOM: Blue/orange fade
-		{
-			color =	xcolors[xframe/4] & 255;
-		}
 		else
 		{
 			color = pr_hom();
 		}
 		Renderer->ClearBuffer(color);
-
-		xframe++;
-
-		if(xframe>=59*4) xframe = 0;
 	}
 }
 

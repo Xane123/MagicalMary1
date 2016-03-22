@@ -50,7 +50,32 @@
 
 class FArchive;
 
+
+template<typename T> class TIterator
+{
+public:
+	TIterator(T* ptr = nullptr) { m_ptr = ptr; }
+	bool operator==(const TIterator<T>& other) const { return (m_ptr == other.m_ptr); }
+	bool operator!=(const TIterator<T>& other) const { return (m_ptr != other.m_ptr); }
+	TIterator<T> &operator++() { ++m_ptr; return (*this); }
+	T &operator*() { return *m_ptr; }
+	const T &operator*() const { return *m_ptr; }
+	T* operator->() { return m_ptr; }
+
+protected:
+	T* m_ptr;
+};
+
+
 // TArray -------------------------------------------------------------------
+
+// Must match TArray's layout.
+struct FArray
+{
+	void *Array;
+	unsigned int Most;
+	unsigned int Count;
+};
 
 // T is the type stored in the array.
 // TT is the type returned by operator().
@@ -60,6 +85,32 @@ class TArray
 	template<class U, class UU> friend FArchive &operator<< (FArchive &arc, TArray<U,UU> &self);
 
 public:
+
+    typedef TIterator<T>                       iterator;
+    typedef TIterator<const T>                 const_iterator;
+
+    iterator begin()
+	{
+		return &Array[0];
+	}
+
+	iterator end()
+	{
+		return &Array[Count];
+	}
+	
+	const_iterator cbegin() const
+	{
+		return &Array[0];
+	}
+	
+	const_iterator cend() const
+	{
+		return &Array[Count];
+	}
+	
+	
+
 	////////
 	// This is a dummy constructor that does nothing. The purpose of this
 	// is so you can create a global TArray in the data segment that gets
@@ -119,6 +170,22 @@ public:
 			Count = 0;
 			Most = 0;
 		}
+	}
+	// Check equality of two arrays
+	bool operator==(const TArray<T> &other) const
+	{
+		if (Count != other.Count)
+		{
+			return false;
+		}
+		for (unsigned int i = 0; i < Count; ++i)
+		{
+			if (Array[i] != other.Array[i])
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	// Return a reference to an element
 	T &operator[] (size_t index) const
@@ -358,6 +425,15 @@ public:
 				delete (*this)[i];
 		}
 	}
+	void DeleteAndClear()
+	{
+		for (unsigned int i = 0; i < TArray<T,TT>::Size(); ++i)
+		{
+			if ((*this)[i] != NULL) 
+				delete (*this)[i];
+		}
+		this->Clear();
+	}
 };
 
 // TAutoGrowArray -----------------------------------------------------------
@@ -428,9 +504,39 @@ template<class KT> struct THashTraits
 {
 	// Returns the hash value for a key.
 	hash_t Hash(const KT key) { return (hash_t)(intptr_t)key; }
+	hash_t Hash(double key)
+	{
+		hash_t keyhash[2];
+		memcpy(&keyhash, &key, sizeof(keyhash));
+		return keyhash[0] ^ keyhash[1];
+	}
 
 	// Compares two keys, returning zero if they are the same.
 	int Compare(const KT left, const KT right) { return left != right; }
+};
+
+template<> struct THashTraits<float>
+{
+	// Use all bits when hashing singles instead of converting them to ints.
+	hash_t Hash(float key)
+	{
+		hash_t keyhash;
+		memcpy(&keyhash, &key, sizeof(keyhash));
+		return keyhash;
+	}
+	int Compare(float left, float right) { return left != right; }
+};
+
+template<> struct THashTraits<double>
+{
+	// Use all bits when hashing doubles instead of converting them to ints.
+	hash_t Hash(double key)
+	{
+		hash_t keyhash[2];
+		memcpy(&keyhash, &key, sizeof(keyhash));
+		return keyhash[0] ^ keyhash[1];
+	}
+	int Compare(double left, double right) { return left != right; }
 };
 
 template<class VT> struct TValueTraits
@@ -441,6 +547,15 @@ template<class VT> struct TValueTraits
 	{
 		::new(&value) VT;
 	}
+};
+
+// Must match layout of TMap
+struct FMap
+{
+	void *Nodes;
+	void *LastFree;
+	hash_t Size;
+	hash_t NumUsed;
 };
 
 template<class KT, class VT, class MapType> class TMapIterator;

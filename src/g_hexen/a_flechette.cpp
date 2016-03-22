@@ -24,15 +24,6 @@ DECLARE_ACTION(A_CheckThrowBomb)
 
 // Poison Bag Artifact (Flechette) ------------------------------------------
 
-class AArtiPoisonBag : public AInventory
-{
-	DECLARE_CLASS (AArtiPoisonBag, AInventory)
-public:
-	bool HandlePickup (AInventory *item);
-	AInventory *CreateCopy (AActor *other);
-	void BeginPlay ();
-};
-
 IMPLEMENT_CLASS (AArtiPoisonBag)
 
 // Poison Bag 1 (The Cleric's) ----------------------------------------------
@@ -129,9 +120,9 @@ bool AArtiPoisonBag3::Use (bool pickup)
 		fixed_t speed = fixed_t(sqrt((double)mo->Speed*mo->Speed + (4.0*65536*4*65536)));
 		fixed_t xyscale = FixedMul(speed, finecosine[modpitch]);
 
-		mo->velz = FixedMul(speed, finesine[modpitch]);
-		mo->velx = FixedMul(xyscale, finecosine[angle]) + (Owner->velx >> 1);
-		mo->vely = FixedMul(xyscale, finesine[angle]) + (Owner->vely >> 1);
+		mo->vel.z = FixedMul(speed, finesine[modpitch]);
+		mo->vel.x = FixedMul(xyscale, finecosine[angle]) + (Owner->vel.x >> 1);
+		mo->vel.y = FixedMul(xyscale, finesine[angle]) + (Owner->vel.y >> 1);
 		mo->AddZ(FixedMul(mo->Speed, finesine[orgpitch]));
 
 		mo->target = Owner;
@@ -155,10 +146,10 @@ IMPLEMENT_CLASS (AArtiPoisonBagGiver)
 
 bool AArtiPoisonBagGiver::Use (bool pickup)
 {
-	const PClass *MissileType = PClass::FindClass((ENamedName) this->GetClass()->Meta.GetMetaInt (ACMETA_MissileName, NAME_None));
-	if (MissileType != NULL)
+	PClassActor *missiletype = PClass::FindActor(this->GetClass()->MissileName);
+	if (missiletype != NULL)
 	{
-		AActor *mo = Spawn (MissileType, Owner->Pos(), ALLOW_REPLACE);
+		AActor *mo = Spawn (missiletype, Owner->Pos(), ALLOW_REPLACE);
 		if (mo != NULL)
 		{
 			if (mo->IsKindOf(RUNTIME_CLASS(AInventory)))
@@ -186,10 +177,10 @@ IMPLEMENT_CLASS (AArtiPoisonBagShooter)
 
 bool AArtiPoisonBagShooter::Use (bool pickup)
 {
-	const PClass *MissileType = PClass::FindClass((ENamedName) this->GetClass()->Meta.GetMetaInt (ACMETA_MissileName, NAME_None));
-	if (MissileType != NULL)
+	PClassActor *missiletype = PClass::FindActor(this->GetClass()->MissileName);
+	if (missiletype != NULL)
 	{
-		AActor *mo = P_SpawnPlayerMissile(Owner, MissileType);
+		AActor *mo = P_SpawnPlayerMissile(Owner, missiletype);
 		if (mo != NULL)
 		{
 			// automatic handling of seeker missiles
@@ -209,9 +200,9 @@ bool AArtiPoisonBagShooter::Use (bool pickup)
 //
 //============================================================================
 
-const PClass *GetFlechetteType(AActor *other)
+PClassActor *GetFlechetteType(AActor *other)
 {
-	const PClass *spawntype = NULL;
+	PClassActor *spawntype = NULL;
 	if (other->IsKindOf(RUNTIME_CLASS(APlayerPawn)))
 	{
 		spawntype = static_cast<APlayerPawn*>(other)->FlechetteType;
@@ -273,8 +264,7 @@ AInventory *AArtiPoisonBag::CreateCopy (AActor *other)
 	}
 
 	AInventory *copy;
-
-	const PClass *spawntype = GetFlechetteType(other);
+	PClassActor *spawntype = GetFlechetteType(other);
 	copy = static_cast<AInventory *>(Spawn (spawntype, 0, 0, 0, NO_REPLACE));
 	copy->Amount = Amount;
 	copy->MaxAmount = MaxAmount;
@@ -316,7 +306,7 @@ IMPLEMENT_CLASS (APoisonCloud)
 
 void APoisonCloud::BeginPlay ()
 {
-	velx = 1; // missile objects must move to impact other objects
+	vel.x = 1; // missile objects must move to impact other objects
 	special1 = 24+(pr_poisoncloud()&7);
 	special2 = 0;
 }
@@ -342,7 +332,7 @@ int APoisonCloud::DoSpecialDamage (AActor *victim, int damage, FName damagetype)
 			int damage = 15 + (pr_poisoncloudd()&15);
 			if (mate)
 			{
-				damage = (int)((float)damage * level.teamdamage);
+				damage = (int)((double)damage * level.teamdamage);
 			}
 			// Handle passive damage modifiers (e.g. PowerProtection)
 			if (victim->Inventory != NULL)
@@ -353,7 +343,7 @@ int APoisonCloud::DoSpecialDamage (AActor *victim, int damage, FName damagetype)
 			damage = FixedMul(damage, victim->DamageFactor);
 			if (damage > 0)
 			{
-				damage = DamageTypeDefinition::ApplyMobjDamageFactor(damage, damagetype, victim->GetClass()->ActorInfo->DamageFactors);
+				damage = DamageTypeDefinition::ApplyMobjDamageFactor(damage, damagetype, victim->GetClass()->DamageFactors);
 			}
 			if (damage > 0)
 			{
@@ -382,6 +372,8 @@ int APoisonCloud::DoSpecialDamage (AActor *victim, int damage, FName damagetype)
 
 DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagInit)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	AActor *mo;
 	
 	mo = Spawn<APoisonCloud> (self->PosPlusZ(28*FRACUNIT), ALLOW_REPLACE);
@@ -389,6 +381,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagInit)
 	{
 		mo->target = self->target;
 	}
+	return 0;
 }
 
 //===========================================================================
@@ -399,14 +392,17 @@ DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagInit)
 
 DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagCheck)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (--self->special1 <= 0)
 	{
 		self->SetState (self->FindState ("Death"));
 	}
 	else
 	{
-		return;
+		return 0;
 	}
+	return 0;
 }
 
 //===========================================================================
@@ -417,12 +413,15 @@ DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagCheck)
 
 DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagDamage)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	int bobIndex;
 	
 	P_RadiusAttack (self, self->target, 4, 40, self->DamageType, RADF_HURTSOURCE);
 	bobIndex = self->special2;
 	self->AddZ(finesine[bobIndex << BOBTOFINESHIFT] >> 1);
 	self->special2 = (bobIndex + 1) & 63;
+	return 0;
 }
 
 //===========================================================================
@@ -433,10 +432,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_PoisonBagDamage)
 
 DEFINE_ACTION_FUNCTION(AActor, A_CheckThrowBomb)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (--self->health <= 0)
 	{
 		self->SetState (self->FindState(NAME_Death));
 	}
+	return 0;
 }
 
 //===========================================================================
@@ -447,18 +449,21 @@ DEFINE_ACTION_FUNCTION(AActor, A_CheckThrowBomb)
 
 DEFINE_ACTION_FUNCTION(AActor, A_CheckThrowBomb2)
 {
-	// [RH] Check using actual velocity, although the velz < 2 check still stands
-	//if (abs(self->velx) < FRACUNIT*3/2 && abs(self->vely) < FRACUNIT*3/2
-	//	&& self->velz < 2*FRACUNIT)
-	if (self->velz < 2*FRACUNIT &&
-		TMulScale32 (self->velx, self->velx, self->vely, self->vely, self->velz, self->velz)
+	PARAM_ACTION_PROLOGUE;
+
+	// [RH] Check using actual velocity, although the vel.z < 2 check still stands
+	//if (abs(self->vel.x) < FRACUNIT*3/2 && abs(self->vel.y) < FRACUNIT*3/2
+	//	&& self->vel.z < 2*FRACUNIT)
+	if (self->vel.z < 2*FRACUNIT &&
+		TMulScale32 (self->vel.x, self->vel.x, self->vel.y, self->vel.y, self->vel.z, self->vel.z)
 		< (3*3)/(2*2))
 	{
 		self->SetState (self->SpawnState + 6);
 		self->SetZ(self->floorz);
-		self->velz = 0;
+		self->vel.z = 0;
 		self->BounceFlags = BOUNCE_None;
 		self->flags &= ~MF_MISSILE;
 	}
 	CALL_ACTION(A_CheckThrowBomb, self);
+	return 0;
 }

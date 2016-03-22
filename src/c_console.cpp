@@ -77,7 +77,7 @@
 CUSTOM_CVAR(Int, con_buffersize, -1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	// ensure a minimum size
-	if (self >= 0 && self < 128) self = 128; 
+	if (self >= 0 && self < 128) self = 128;
 }
 
 FConsoleBuffer *conbuffer;
@@ -158,8 +158,8 @@ static struct History *HistHead = NULL, *HistTail = NULL, *HistPos = NULL;
 static int HistSize;
 
 CVAR (Float, con_notifytime, 3.f, CVAR_ARCHIVE)
-CVAR (Bool, con_centernotify, true, CVAR_ARCHIVE)
-CUSTOM_CVAR (Int, con_scaletext, 2, CVAR_ARCHIVE)		// Scale notify text at high resolutions?
+CVAR (Bool, con_centernotify, false, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, con_scaletext, 0, CVAR_ARCHIVE)		// Scale notify text at high resolutions?
 {
 	if (self < 0) self = 0;
 	if (self > 2) self = 2;
@@ -348,7 +348,7 @@ CCMD (atexit)
 {
 	if (argv.argc() == 1)
 	{
-		Printf ("These commands will run when exiting World of Kirbycraft:\n");
+		Printf ("Registered atexit commands:\n");
 		GameAtExit *record = ExitCmdList;
 		while (record != NULL)
 		{
@@ -635,8 +635,8 @@ void C_AdjustBottom ()
 {
 	if (gamestate == GS_FULLCONSOLE || gamestate == GS_STARTUP)
 		ConBottom = SCREENHEIGHT;
-	else if (ConBottom > SCREENHEIGHT / 4 || ConsoleState == c_down)
-		ConBottom = SCREENHEIGHT / 4;
+	else if (ConBottom > SCREENHEIGHT / 2 || ConsoleState == c_down)
+		ConBottom = SCREENHEIGHT / 2;
 }
 
 void C_NewModeAdjust ()
@@ -1811,7 +1811,7 @@ static bool C_TabCompleteList ()
 	{
 		size_t x = 0;
 		maxwidth += 3;
-		Printf (TEXTCOLOR_BLUE "CVAR/CCMDs that start with %s:\n", CmdLine+2);
+		Printf (TEXTCOLOR_BLUE "Completions for %s:\n", CmdLine+2);
 		for (i = TabPos; nummatches > 0; ++i, --nummatches)
 		{
 			// [Dusk] Print console commands blue, CVars green, aliases red.

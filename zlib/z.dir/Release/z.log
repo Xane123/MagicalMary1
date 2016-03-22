@@ -1,0 +1,15 @@
+﻿  Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/zlib/CMakeLists.txt
+  CMake does not need to re-run because C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeFiles\generate.stamp is up-to-date.
+  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  inflate.c
+  infback.c
+  inftrees.c
+  inffast.c
+  trees.c
+  uncompr.c
+  zutil.c
+  Generating Code...
+  z.vcxproj -> C:\Users\Myers\git\world-of-kirbycraft\zlib\Release\z.lib

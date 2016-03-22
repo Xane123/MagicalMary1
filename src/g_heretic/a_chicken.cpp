@@ -41,13 +41,13 @@ void AChickenPlayer::MorphPlayerThink ()
 	{
 		return;
 	}
-	if (!(velx | vely) && pr_chickenplayerthink () < 160)
+	if (!(vel.x | vel.y) && pr_chickenplayerthink () < 160)
 	{ // Twitch view angle
 		angle += pr_chickenplayerthink.Random2 () << 19;
 	}
 	if ((Z() <= floorz) && (pr_chickenplayerthink() < 32))
 	{ // Jump and noise
-		velz += JumpZ;
+		vel.z += JumpZ;
 
 		FState * painstate = FindState(NAME_Pain);
 		if (painstate != NULL) SetState (painstate);
@@ -66,9 +66,11 @@ void AChickenPlayer::MorphPlayerThink ()
 
 DEFINE_ACTION_FUNCTION(AActor, A_ChicAttack)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	if (!self->target)
 	{
-		return;
+		return 0;
 	}
 	if (self->CheckMeleeRange())
 	{
@@ -76,6 +78,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_ChicAttack)
 		int newdam = P_DamageMobj (self->target, self, self, damage, NAME_Melee);
 		P_TraceBleed (newdam > 0 ? newdam : damage, self->target, self);
 	}
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -86,6 +89,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_ChicAttack)
 
 DEFINE_ACTION_FUNCTION(AActor, A_Feathers)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	int i;
 	int count;
 	AActor *mo;
@@ -102,11 +107,12 @@ DEFINE_ACTION_FUNCTION(AActor, A_Feathers)
 	{
 		mo = Spawn("Feather", self->PosPlusZ(20*FRACUNIT), NO_REPLACE);
 		mo->target = self;
-		mo->velx = pr_feathers.Random2() << 8;
-		mo->vely = pr_feathers.Random2() << 8;
-		mo->velz = FRACUNIT + (pr_feathers() << 9);
+		mo->vel.x = pr_feathers.Random2() << 8;
+		mo->vel.y = pr_feathers.Random2() << 8;
+		mo->vel.z = FRACUNIT + (pr_feathers() << 9);
 		mo->SetState (mo->SpawnState + (pr_feathers()&7));
 	}
+	return 0;
 }
 
 //---------------------------------------------------------------------------
@@ -132,14 +138,17 @@ void P_UpdateBeak (AActor *self)
 
 DEFINE_ACTION_FUNCTION(AActor, A_BeakRaise)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	player_t *player;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 	player->psprites[ps_weapon].sy = WEAPONTOP;
 	P_SetPsprite (player, ps_weapon, player->ReadyWeapon->GetReadyState());
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -161,28 +170,31 @@ void P_PlayPeck (AActor *chicken)
 
 DEFINE_ACTION_FUNCTION(AActor, A_BeakAttackPL1)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	angle_t angle;
 	int damage;
 	int slope;
 	player_t *player;
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 
 	damage = 1 + (pr_beakatkpl1()&3);
 	angle = player->mo->angle;
-	slope = P_AimLineAttack (player->mo, angle, MELEERANGE, &linetarget);
-	P_LineAttack (player->mo, angle, MELEERANGE, slope, damage, NAME_Melee, "BeakPuff", true, &linetarget);
-	if (linetarget)
+	slope = P_AimLineAttack (player->mo, angle, MELEERANGE);
+	P_LineAttack (player->mo, angle, MELEERANGE, slope, damage, NAME_Melee, "BeakPuff", true, &t);
+	if (t.linetarget)
 	{
-		player->mo->angle = player->mo->AngleTo(linetarget);
+		player->mo->angle = t.angleFromSource;
 	}
 	P_PlayPeck (player->mo);
 	player->chickenPeck = 12;
 	player->psprites[ps_weapon].tics -= pr_beakatkpl1() & 7;
+	return 0;
 }
 
 //----------------------------------------------------------------------------
@@ -193,26 +205,29 @@ DEFINE_ACTION_FUNCTION(AActor, A_BeakAttackPL1)
 
 DEFINE_ACTION_FUNCTION(AActor, A_BeakAttackPL2)
 {
+	PARAM_ACTION_PROLOGUE;
+
 	angle_t angle;
 	int damage;
 	int slope;
 	player_t *player;
-	AActor *linetarget;
+	FTranslatedLineTarget t;
 
 	if (NULL == (player = self->player))
 	{
-		return;
+		return 0;
 	}
 
 	damage = pr_beakatkpl2.HitDice (4);
 	angle = player->mo->angle;
-	slope = P_AimLineAttack (player->mo, angle, MELEERANGE, &linetarget);
-	P_LineAttack (player->mo, angle, MELEERANGE, slope, damage, NAME_Melee, "BeakPuff", true, &linetarget);
-	if (linetarget)
+	slope = P_AimLineAttack (player->mo, angle, MELEERANGE);
+	P_LineAttack (player->mo, angle, MELEERANGE, slope, damage, NAME_Melee, "BeakPuff", true, &t);
+	if (t.linetarget)
 	{
-		player->mo->angle = player->mo->AngleTo(linetarget);
+		player->mo->angle = t.angleFromSource;
 	}
 	P_PlayPeck (player->mo);
 	player->chickenPeck = 12;
 	player->psprites[ps_weapon].tics -= pr_beakatkpl2()&3;
+	return 0;
 }

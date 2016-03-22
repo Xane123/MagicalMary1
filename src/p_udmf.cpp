@@ -103,18 +103,18 @@ static char HexenSectorSpecialOk[256]={
 static inline bool P_IsThingSpecial(int specnum)
 {
 	return (specnum >= Thing_Projectile && specnum <= Thing_SpawnNoFog) ||
-			specnum == Thing_SpawnFacing || Thing_ProjectileIntercept || Thing_ProjectileAimed;
+			specnum == Thing_SpawnFacing || specnum == Thing_ProjectileIntercept || specnum == Thing_ProjectileAimed;
 }
 
 enum
 {
-	Dm=1,	//Doom
-	Ht=2,	//Heretic
-	Hx=4,	//Hexen
-	St=8,	//Strife
-	Zd=16,	//ZDoom
-	Zdt=32,	//ZDoom(t?)
-	Va=64,	//Vanilla/Vavoom?
+	Dm=1,
+	Ht=2,
+	Hx=4,
+	St=8,
+	Zd=16,
+	Zdt=32,
+	Va=64,
 
 	// will be extended later. Unknown namespaces will always be treated like the base
 	// namespace for each game
@@ -259,7 +259,7 @@ fixed_t UDMFParserBase::CheckFixed(const char *key)
 
 angle_t UDMFParserBase::CheckAngle(const char *key)
 {
-	return angle_t(CheckFloat(key) * ANGLE_90 / 90.);
+	return FLOAT2ANGLE(CheckFloat(key));
 }
 
 bool UDMFParserBase::CheckBool(const char *key)
@@ -791,6 +791,7 @@ public:
 
 		memset(ld, 0, sizeof(*ld));
 		ld->Alpha = FRACUNIT;
+		ld->portalindex = UINT_MAX;
 		ld->sidedef[0] = ld->sidedef[1] = NULL;
 		if (level.flags2 & LEVEL2_CLIPMIDTEX) ld->flags |= ML_CLIP_MIDTEX;
 		if (level.flags2 & LEVEL2_WRAPMIDTEX) ld->flags |= ML_WRAP_MIDTEX;
@@ -1606,7 +1607,7 @@ public:
 		}
 		else
 		{
-			double ulen = TVector3<double>(fp[0], fp[1], fp[2]).Length();
+			double ulen = DVector3(fp[0], fp[1], fp[2]).Length();
 
 			// normalize the vector, it must have a length of 1
 			sec->floorplane.a = FLOAT2FIXED(fp[0] / ulen);
@@ -1624,7 +1625,7 @@ public:
 		}
 		else
 		{
-			double ulen = TVector3<double>(cp[0], cp[1], cp[2]).Length();
+			double ulen = DVector3(cp[0], cp[1], cp[2]).Length();
 
 			// normalize the vector, it must have a length of 1
 			sec->ceilingplane.a = FLOAT2FIXED(cp[0] / ulen);

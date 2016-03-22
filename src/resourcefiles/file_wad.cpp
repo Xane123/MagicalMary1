@@ -39,6 +39,7 @@
 #include "v_text.h"
 #include "w_wad.h"
 #include "gi.h"
+#include "i_system.h"
 
 // Console Doom LZSS wrapper.
 class FileReaderLZSS : public FileReaderBase
@@ -343,6 +344,12 @@ bool FWadFile::Open(bool quiet)
 		NumLumps = BigLong(header.NumLumps);
 		InfoTableOfs = BigLong(header.InfoTableOfs);
 		isBigEndian = true;
+
+		// Check again to detect broken wads
+		if (InfoTableOfs + NumLumps*sizeof(wadlump_t) > (unsigned)wadSize)
+		{
+			I_Error("Cannot load broken WAD file %s\n", Filename);
+		}
 	}
 
 	wadlump_t *fileinfo = new wadlump_t[NumLumps];
@@ -370,7 +377,7 @@ bool FWadFile::Open(bool quiet)
 
 	if (!quiet)
 	{
-		Printf(", %d lumps\n", NumLumps);
+		if (!batchrun) Printf(", %d lumps\n", NumLumps);
 
 		// don't bother with namespaces here. We won't need them.
 		SetNamespace("S_START", "S_END", ns_sprites);

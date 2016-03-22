@@ -26,8 +26,8 @@
 #define BOT_RELEASE_COMPILE //Define this when compiling a version that should be released.
 
 #define NOCOLOR     11
-#define MAXTHINGNODES 75 //Path stuff (paths created between items).
-#define SPAWN_DELAY 70  //Used to determine how many tics there are between each bot spawn when bot's are being spawned in a row (like when entering a new map).
+#define MAXTHINGNODES 100 //Path stuff (paths created between items).
+#define SPAWN_DELAY 80  //Used to determine how many tics there are between each bot spawn when bot's are being spawned in a row (like when entering a new map).
 
 #define BOTFILENAME "bots.cfg"
 
