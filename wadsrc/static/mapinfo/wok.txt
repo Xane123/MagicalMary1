@@ -25,8 +25,8 @@ gameinfo
 	statusbar = "sbarinfo/doom.txt"
 	intermissionmusic = ""
 	intermissioncounter = true
-	dimcolor = "6f 00 6b"
-	dimamount = 0.8
+	dimcolor = "ff 80 ff"
+	dimamount = 0.7
 	definventorymaxamount = 25
 	defaultrespawntime = 12
 	defaultdropstyle = 1

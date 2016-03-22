@@ -133,16 +133,16 @@ CCMD(god2)
 	Net_WriteByte(CHT_GOD2);
 }
 
-CCMD (iddqd)
+CCMD (arthasmode)
 {
 	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_IDDQD);
+	Net_WriteByte (CHT_ARTHASMODE);
 }
 
-CCMD (buddha)
+CCMD (marymode)
 {
 	if (CheckCheatmode())
 		return;
@@ -151,7 +151,7 @@ CCMD (buddha)
 	Net_WriteByte(CHT_BUDDHA);
 }
 
-CCMD(buddha2)
+CCMD(uthermode)
 {
 	if (CheckCheatmode())
 		return;

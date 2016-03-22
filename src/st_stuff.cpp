@@ -89,7 +89,7 @@ static cheatseq_t Cheats[] =
 	{ CheatPowerup[6],		0, 1, 0,{ 0,0 },				Cht_BeholdMenu },
 	{ CheatMypos,			0, 1, 0,{ 0,0 },				Cht_MyPos },
 	{ CheatAmap,			0, 0, 0,{ 0,0 },				Cht_AutoMap },
-	{ CheatGod,				0, 0, 0,{ CHT_IDDQD,0 },		Cht_Generic },
+	{ CheatGod,				0, 0, 0,{ CHT_ARTHASMODE,0 },		Cht_Generic },
 	{ CheatAmmo,			0, 0, 0,{ CHT_IDKFA,0 },		Cht_Generic },
 	{ CheatAmmoNoKey,		0, 0, 0,{ CHT_IDFA,0 },		Cht_Generic },
 	{ CheatNoclip,			0, 0, 0,{ CHT_NOCLIP2,0 },	Cht_Generic },
@@ -208,12 +208,21 @@ static bool Cht_Generic (cheatseq_t *cheat)
 	return true;
 }
 
-static bool Cht_Music (cheatseq_t *cheat)
+static bool Cht_Music(cheatseq_t *cheat)
 {
-	char buf[9] = "idmus xx";
+	char buf[12] = "puke 254 xx";
 
-	buf[6] = cheat->Args[0];
-	buf[7] = cheat->Args[1];
+	if (cheat->Args[0] == 0)
+	{
+		buf[9] = cheat->Args[1];
+		buf[10] = '\0';
+	}
+	else
+	{
+		buf[9] = cheat->Args[0];
+		buf[10] = cheat->Args[1];
+	}
+
 	C_DoCommand (buf);
 	return true;
 }

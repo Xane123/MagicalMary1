@@ -189,7 +189,7 @@ enum ECheatCommand
 	CHT_PUMPUPH,
 	CHT_PUMPUPP,
 	CHT_PUMPUPS,
-	CHT_IDDQD,			// Same as CHT_GOD, but sets health
+	CHT_ARTHASMODE,			// Same as CHT_GOD, but sets health
 	CHT_MASSACRE,
 	CHT_CHASECAM,
 	CHT_FLY,

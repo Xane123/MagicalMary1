@@ -100,12 +100,13 @@ typedef enum {
 	dLight_StrobeFastSync = 77,
 	dSector_DoorRaiseIn5Mins = 78,
 	dFriction_Low = 79,
-	dDamage_SuperHellslime = 80,
+	dFriction_None = 80,
 	dLight_FireFlicker = 81,
 	dDamage_LavaWimpy = 82,
 	dDamage_LavaHefty = 83,
 	dScroll_EastLavaDamage = 84,
 	hDamage_Sludge = 85,
+
 	Sector_Outside = 87,
 
 	// And here are some for Strife

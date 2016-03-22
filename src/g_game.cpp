@@ -107,7 +107,7 @@ void	G_DoPlayDemo (void);
 void	G_DoCompleted (void);
 void	G_DoVictory (void);
 void	G_DoWorldDone (void);
-void	G_DoSaveGame (bool okForQuicksave, FString filename, const char *description);
+void	G_DoSaveGame (bool okForQuicksave, FString filename, const char *description, bool showmsg);
 void	G_DoAutoSave ();
 
 void STAT_Write(FILE *file);
@@ -1072,7 +1072,7 @@ void G_Ticker ()
 			G_DoLoadGame ();
 			break;
 		case ga_savegame:
-			G_DoSaveGame (true, savegamefile, savedescription);
+			G_DoSaveGame (true, savegamefile, savedescription, true);
 			gameaction = ga_nothing;
 			savegamefile = "";
 			savedescription[0] = '\0';
@@ -1715,13 +1715,13 @@ void G_DoPlayerPop(int playernum)
 
 	if (deathmatch)
 	{
-		Printf("%s left the game with %d frags\n",
+		Printf("%s LEFT AFTER EARNING %d POINTS.\n",
 			players[playernum].userinfo.GetName(),
 			players[playernum].fragcount);
 	}
 	else
 	{
-		Printf("%s left the game\n", players[playernum].userinfo.GetName());
+		Printf("%s LEFT;\nGOOD LUCK TO ALL REMAINING PLAYERS!\n", players[playernum].userinfo.GetName());
 	}
 
 	// [RH] Revert each player to their own view if spying through the player who left
@@ -1789,7 +1789,7 @@ static bool CheckSingleWad (char *name, bool &printRequires, bool printwarn)
 		{
 			if (!printRequires)
 			{
-				Printf ("This savegame needs these wads:\n%s", name);
+				Printf ("THIS SAVE REQUIRES AN ADDITIONAL PK3/WAD, %s.\nMAKE SURE THAT FILE IS LOADED WITH -FILE WHEN STARTING WORLD OF KIRBYCRAFT!\n", name);
 			}
 			else
 			{
@@ -1853,7 +1853,7 @@ void G_DoLoadGame ()
 	if (png == NULL)
 	{
 		fclose (stdfile);
-		Printf ("'%s' is not a valid (PNG) savegame\n", savename.GetChars());
+		Printf ("'%s' IS A NORMAL PNG IMAGE AND IS NOT A VALID\nWORLD OF KIRBYCRAFT SAVE.\n", savename.GetChars());
 		return;
 	}
 
@@ -1869,11 +1869,11 @@ void G_DoLoadGame ()
 		// have this information.
 		if (engine == NULL)
 		{
-			Printf ("Savegame is from an incompatible version\n");
+			Printf ("THIS SAVE COMES FROM AN UNKNOWN ENGINE AND THEREFORE IS INCOMPATIBLE.\n");
 		}
 		else
 		{
-			Printf ("Savegame is from another ZDoom-based engine: %s\n", engine);
+			Printf ("THIS SAVE COMES FROM %s, ANOTHER ENGINE BASED ON ZDOOM.\n", engine);
 			delete[] engine;
 		}
 		delete png;
@@ -1892,7 +1892,7 @@ void G_DoLoadGame ()
 	{
 		delete png;
 		fclose (stdfile);
-		Printf ("Savegame is from an incompatible version");
+		Printf("THIS SAVE IS TOO OLD TO BE USED WITH THIS VERSION OF %s;\nPLEASE DOWNLOAD THE OLDER VERSION REQUIRED!\n", GAMESIG);
 		if (SaveVersion != 0)
 		{
 			Printf(": %d (%d is the oldest supported)", SaveVersion, MINSAVEVER);
@@ -1910,7 +1910,7 @@ void G_DoLoadGame ()
 	map = M_GetPNGText (png, "Current Map");
 	if (map == NULL)
 	{
-		Printf ("Savegame is missing the current map\n");
+		Printf ("THE LEVEL THIS SAVE WAS SAVED IN NO LONGER EXISTS IN THE CURRENT VERSION OF WORLD OF KIRBYCRAFT.\n");
 		fclose (stdfile);
 		return;
 	}
@@ -2006,7 +2006,7 @@ void G_SaveGame (const char *filename, const char *description)
 {
 	if (sendsave || gameaction == ga_savegame)
 	{
-		Printf ("A game save is still pending.\n");
+		Printf ("WORLD OF KIRBYCRAFT IS STILL WAITING ON A PREVIOUS SAVE.\n");
 		return;
 	}
     else if (!usergame)
@@ -2109,7 +2109,7 @@ void G_DoAutoSave ()
 	strncpy (description+9, readableTime+4, 12);
 	description[9+12] = 0;
 
-	G_DoSaveGame (false, file, description);
+	G_DoSaveGame (false, file, description, false);
 }
 
 
@@ -2174,7 +2174,7 @@ static void PutSavePic (FILE *file, int width, int height)
 	}
 }
 
-void G_DoSaveGame (bool okForQuicksave, FString filename, const char *description)
+void G_DoSaveGame (bool okForQuicksave, FString filename, const char *description, bool showmsg)
 {
 	char buf[100];
 
@@ -2264,10 +2264,9 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	}
 	if (success) 
 	{
-		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
-		else Printf ("%s\n", GStrings("GGSAVED"));
+		if(showmsg == true) Printf ("%s TO %s\n", GStrings("GGSAVED"), filename.GetChars());
 	}
-	else Printf(PRINT_HIGH, "Save failed\n");
+	else Printf(PRINT_HIGH, "%s WAS UNABLE TO SAVE.\n", GAMESIG);
 
 	BackupSaveName = filename;
 

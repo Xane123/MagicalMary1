@@ -1201,7 +1201,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		break;
 			
 	case dDamage_End:
-		P_SetupSectorDamage(sector, 20, 32, 256, NAME_None, SECF_ENDGODMODE|SECF_ENDLEVEL);
+		P_SetupSectorDamage(sector, 0, 170, 256, NAME_None, SECF_ENDGODMODE|SECF_ENDLEVEL);
 		break;
 
 	case dLight_StrobeSlowSync:
@@ -1222,8 +1222,10 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		sector->Flags |= SECF_FRICTION;
 		break;
 
-	case dDamage_SuperHellslime:
-		P_SetupSectorDamage(sector, 20, 32, 5, NAME_Slime, 0);
+	case dFriction_None:
+		sector->friction = FRICTION_NONE;
+		sector->movefactor = 0x000;
+		sector->Flags |= SECF_FRICTION;
 		break;
 
 	case dLight_FireFlicker:

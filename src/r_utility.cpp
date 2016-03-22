@@ -85,14 +85,22 @@ static TArray<fixedvec3a> InterpolationPath;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
-CVAR (Int, r_clearbuffer, 0, 0)
-CVAR (Bool, r_drawvoxels, true, 0)
+CVAR (Bool, r_deathcamera, true, CVAR_ARCHIVE)	//Forcibly switch to third-person camera when the player dies?
+CVAR (Int, r_clearbuffer, 1, 0)	//What color to make out of bounds areas.
+CVAR (Bool, r_drawvoxels, true, 0)	//Draw "3D" voxel models?
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
-CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	//Amount earthquakes shake the screen.
 {
-	if (self < 0.f) self = 0.f;
-	else if (self > 1.f) self = 1.f;
+	if (self < 0.25f)
+	{
+		self = 0.25f;
+		Printf("ERROR: QUAKE EFFECTS MUST BE ON.");
+	}
+	else if (self > 1.5f)
+	{
+		self = 1.5f;
+		Printf("ERROR: QUAKE EFFECTS SHOULDN'T BE TOO INTENSE.");
+	}
 }
 
 DCanvas			*RenderTarget;		// [RH] canvas to render to

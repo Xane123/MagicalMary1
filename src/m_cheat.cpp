@@ -75,7 +75,7 @@ void cht_DoCheat (player_t *player, int cheat)
 
 	switch (cheat)
 	{
-	case CHT_IDDQD:
+	case CHT_ARTHASMODE:
 		if (!(player->cheats & CF_GODMODE) && player->playerstate == PST_LIVE)
 		{
 			if (player->mo)

@@ -275,7 +275,8 @@ FString M_GetScreenshotsPath()
 	}
 	else
 	{
-		return progdir;
+		path = progdir;
+		path << "/screenshots";
 	}
 	CreatePath(path);
 	return path;
@@ -300,19 +301,21 @@ FString M_GetSavegamesPath()
 	// Try standard Saved Games folder
 	else if (GetKnownFolder(-1, FOLDERID_SavedGames, true, path))
 	{
-		path << "/" GAMENAME;
+		path << "/" GAMESIG;
 	}
 	// Try defacto My Documents/My Games folder
 	else if (GetKnownFolder(CSIDL_PERSONAL, FOLDERID_Documents, true, path))
 	{
 		// I assume since this isn't a standard folder, it doesn't have
 		// a localized name either.
-		path << "/My Games/" GAMENAME;
+		path << "/My Games/" GAMESIG;
 		CreatePath(path);
 	}
 	else
 	{
 		path = progdir;
+		path << "/saves";
+		CreatePath(path);
 	}
 	return path;
 }

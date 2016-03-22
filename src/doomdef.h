@@ -369,6 +369,7 @@ enum
 #define ORIG_FRICTION			0xE800	// original value
 #define ORIG_FRICTION_FACTOR	2048	// original value
 #define FRICTION_LOW			0xf900
+#define FRICTION_NONE			0xff00	//[XANE]This probably isn't no friction but...it's a larger number!
 #define FRICTION_FLY			0xeb00
 
 

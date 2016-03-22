@@ -1,93 +1,4 @@
-// Must be sorted in identification order (easiest to recognize first!)
-
-IWad
-{
-	Name = "Testing (Freedoom Phase 2)"
-	Autoname = "doom.freedoom.phase2"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "MAP01", "FREEDOOM"
-	BannerColors = "32 54 43", "c6 dc d1"
-}
-
-IWad
-{
-	Name = "Testing (Freedoom Phase 1)"
-	Autoname = "doom.freedoom.phase1"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/doom1.txt"
-	MustContain = "E1M1", "E2M1", "E3M1", "FREEDOOM"
-	BannerColors = "32 54 43", "c6 dc d1"
-}
-		
-IWad
-{
-	Name = "DOOM: BFG Edition"
-	Autoname = "doom.doom1.bfg"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/ultdoom.txt"
-	Compatibility = "Shorttex"
-	MustContain = "E1M1","E2M1","E2M2","E2M3","E2M4","E2M5","E2M6","E2M7","E2M8","E2M9",
-		          "E3M1","E3M2","E3M3","E3M4","E3M5","E3M6","E3M7","E3M8","E3M9",
-		          "DPHOOF","BFGGA0","HEADA1","CYBRA1","SPIDA1D1", "E4M2",
-		          "DMENUPIC", "M_ACPT", "M_CAN", "M_EXITO", "M_CHG"
-	BannerColors = "54 54 54", "a8 a8 a8"
-}
-
-IWad
-{
-	Name = "Testing (Ultimate DOOM)"
-	Autoname = "doom.doom1.ultimate"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/ultdoom.txt"
-	Compatibility = "Shorttex"
-	MustContain = "E1M1","E2M1","E2M2","E2M3","E2M4","E2M5","E2M6","E2M7","E2M8","E2M9",
-		          "E3M1","E3M2","E3M3","E3M4","E3M5","E3M6","E3M7","E3M8","E3M9",
-		          "DPHOOF","BFGGA0","HEADA1","CYBRA1","SPIDA1D1", "E4M2"
-	BannerColors = "54 54 54", "a8 a8 a8"
-}
-
-IWad
-{
-	Name = "Testing (Registered DOOM)"
-	Autoname = "doom.doom1.registered"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/doom1.txt"
-	Compatibility = "Shorttex"
-	MustContain = "E1M1","E2M1","E2M2","E2M3","E2M4","E2M5","E2M6","E2M7","E2M8","E2M9",
-		          "E3M1","E3M2","E3M3","E3M4","E3M5","E3M6","E3M7","E3M8","E3M9",
-		          "DPHOOF","BFGGA0","HEADA1","CYBRA1","SPIDA1D1"
-	BannerColors = "54 54 54", "a8 a8 a8"
-}
-
-IWad
-{
-	Name = "Testing (TNT)"
-	Autoname = "doom.doom2.tnt"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/tnt.txt"
-	Compatibility = "Shorttex", "Stairs"
-	MustContain = "MAP01", "REDTNT2"
-	BannerColors = "a8 00 00", "a8 a8 a8"
-}
-
-IWad
-{
-	Name = "Testing (Plutonia)"
-	Autoname = "doom.doom2.plutonia"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/plutonia.txt"
-	Compatibility = "Shorttex"
-	MustContain = "MAP01", "CAMO1"
-	BannerColors = "a8 00 00", "a8 a8 a8"
-}
+// World of Kirbycraft only has one IWAD, its own.
 
 IWad
 {
@@ -95,55 +6,10 @@ IWad
 	Autoname = "wok.base"
 	Game = "Doom"
 	Config = "Doom"
-	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "WOK_IWAD", "WGAMEPAL", "SMALLFNT", "MESG_FNT", "RACETIME"
+	Mapinfo = "mapinfo/wok.txt"
+	MustContain = "WGAMEPAL", "SMALLFNT", "MESG_FNT", "RACETIME"
 	BannerColors = "60 30 05", "60 90 B0"
 	Load = "wok_x.pk3", "wok_extra_lag.pk3", "MAPS.wad"
 }
 
-IWad
-{
-	Name = "DOOM 2: BFG Edition"
-	Autoname = "doom.doom2.bfg"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/doom2bfg.txt"
-	Compatibility = "Shorttex"
-	MustContain = "MAP01", "DMENUPIC", "M_ACPT", "M_CAN", "M_EXITO", "M_CHG"
-	BannerColors = "a8 00 00", "a8 a8 a8"
-	Load = "nerve.wad"
-}
-
-// Doom 2 must be last to be checked becaude MAP01 is its only requirement
-IWad
-{
-	Name = "Testing (Doom 2)"
-	Autoname = "doom.doom2.commercial"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/doom2.txt"
-	Compatibility = "Shorttex"
-	MustContain = "MAP01"
-	BannerColors = "a8 00 00", "a8 a8 a8"
-}
-	
-
-
-Names
-{	
-	"bfgdoom2.wad"
-	"doom2bfg.wad"
-	"doom2f.wad"
-	"doom2.wad"
-	"plutonia.wad"
-	"tnt.wad"
-	"bfgdoom.wad"
-	"doombfg.wad"
-	"doomu.wad"
-	"doom.wad"
-	"freedoom1.wad"
-	"freedoom2.wad"
-	"freedoomu.wad"
-	"freedoom.wad"
-	"wok.wad"
-}
+Names { "wok.wad" }
