@@ -282,8 +282,10 @@ FOptionMenuDescriptor *UpdateJoystickConfigMenu(IJoystickConfig *joy)
 		}
 		if (joy == NULL)
 		{
-			opt->mTitle = "Configure Controller";
-			it = new FOptionMenuItemStaticText("Invalid controller specified for menu", false);
+			opt->mTitle = GStrings("MENU_CONTROLLER_TITLE");
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText(GStrings("MENU_CONTROLLER_ERROR"), false);
 			opt->mItems.Push(it);
 		}
 		else
@@ -292,34 +294,52 @@ FOptionMenuDescriptor *UpdateJoystickConfigMenu(IJoystickConfig *joy)
 
 			SELECTED_JOYSTICK = joy;
 
-			it = new FOptionMenuSliderJoySensitivity("Overall sensitivity", 0, 2, 0.1, 3);
+			it = new FOptionMenuSliderJoySensitivity(GStrings("MENU_CONTROLLER_SENSITIVITY1"), 0, 2, 0.1, 3);
 			opt->mItems.Push(it);
 			it = new FOptionMenuItemStaticText(" ", false);
 			opt->mItems.Push(it);
 
 			if (joy->GetNumAxes() > 0)
 			{
-				it = new FOptionMenuItemStaticText("Axis Configuration", true);
+				it = new FOptionMenuItemStaticText(GStrings("MENU_CONTROLLER_AXIS"), true);
+				opt->mItems.Push(it);
+				it = new FOptionMenuItemStaticText("", false);
+				opt->mItems.Push(it);
+				it = new FOptionMenuItemStaticText("", false);
 				opt->mItems.Push(it);
 
 				for (int i = 0; i < joy->GetNumAxes(); ++i)
 				{
+					it = new FOptionMenuItemStaticText("", false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemJoyMap(joy->GetAxisName(i), i, "JoyAxisMapNames", false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemStaticText("", false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemStaticText("", false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuSliderJoyScale(GStrings("MENU_CONTROLLER_SENSITIVITY1"), i, 0, 4, 0.1, 3);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemStaticText(" ", false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemInverter(GStrings("MENU_CONTROLLER_INVERT"), i, false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemStaticText(" ", false);
+					opt->mItems.Push(it);
+					it = new FOptionMenuSliderJoyDeadZone(GStrings("MENU_CONTROLLER_DEADZONE"), i, 0, 0.9, 0.05, 3);
+					opt->mItems.Push(it);
+					it = new FOptionMenuItemStaticText(" ", false);
+					opt->mItems.Push(it);
 					it = new FOptionMenuItemStaticText(" ", false);
 					opt->mItems.Push(it);
 
-					it = new FOptionMenuItemJoyMap(joy->GetAxisName(i), i, "JoyAxisMapNames", false);
-					opt->mItems.Push(it);
-					it = new FOptionMenuSliderJoyScale("Overall sensitivity", i, 0, 4, 0.1, 3);
-					opt->mItems.Push(it);
-					it = new FOptionMenuItemInverter("Invert", i, false);
-					opt->mItems.Push(it);
-					it = new FOptionMenuSliderJoyDeadZone("Dead Zone", i, 0, 0.9, 0.05, 3);
-					opt->mItems.Push(it);
 				}
 			}
 			else
 			{
-				it = new FOptionMenuItemStaticText("No configurable axes", false);
+				it = new FOptionMenuItemStaticText(GStrings("MENU_CONTROLLER_AXISERROR"), false);
+				opt->mItems.Push(it);
+				it = new FOptionMenuItemStaticText(" ", false);
 				opt->mItems.Push(it);
 			}
 		}
@@ -369,39 +389,73 @@ void UpdateJoystickMenu(IJoystickConfig *selected)
 		}
 
 		// Todo: Block joystick for changing this one.
-		it = new FOptionMenuItemOption("Enable controller support", "use_joystick", "YesNo", NULL, false);
+		it = new FOptionMenuItemOption(GStrings("MENU_ECONTROLLERS"), "use_j2oystick", "YesNo", NULL, false);
 		opt->mItems.Push(it);
 		#ifdef _WIN32
-			it = new FOptionMenuItemOption("Enable DirectInput controllers", "joy_dinput", "YesNo", NULL, false);
+			it = new FOptionMenuItemStaticText("", false);
 			opt->mItems.Push(it);
-			it = new FOptionMenuItemOption("Enable XInput controllers", "joy_xinput", "YesNo", NULL, false);
+			it = new FOptionMenuItemStaticText("", false);
 			opt->mItems.Push(it);
-			it = new FOptionMenuItemOption("Enable raw PlayStation 2 adapters", "joy_ps2raw", "YesNo", NULL, false);
+			it = new FOptionMenuItemOption(GStrings("MENU_DIRECTINPUT"), "joy_dinput", "YesNo", NULL, false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemOption(GStrings("MENU_XINPUT"), "joy_xinput", "YesNo", NULL, false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemOption(GStrings("MENU_PLAYSTATION2"), "joy_ps2raw", "YesNo", NULL, false);
 			opt->mItems.Push(it);
 		#endif
 
-		it = new FOptionMenuItemStaticText(" ", false);
+		it = new FOptionMenuItemStaticText("", false);
+		opt->mItems.Push(it);
+		it = new FOptionMenuItemStaticText("", false);
 		opt->mItems.Push(it);
 
 		if (Joysticks.Size() == 0)
 		{
-			it = new FOptionMenuItemStaticText("No controllers detected", false);
+			it = new FOptionMenuItemStaticText(GStrings("MENU_NOCONTROLLERS_HEADER"), false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText(GStrings("MENU_NOCONTROLLERS_INFO1"), false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText(GStrings("MENU_NOCONTROLLERS_INFO2"), false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText(GStrings("MENU_NOCONTROLLERS_INFO3"), false);
 			opt->mItems.Push(it);
 			if (!use_joystick)
 			{
-				it = new FOptionMenuItemStaticText("Controller support must be", false);
+				it = new FOptionMenuItemStaticText("", false);
 				opt->mItems.Push(it);
-				it = new FOptionMenuItemStaticText("enabled to detect any", false);
+				it = new FOptionMenuItemStaticText("", false);
+				opt->mItems.Push(it);
+				it = new FOptionMenuItemStaticText(GStrings("MENU_CONTROLLER_OFF1"), false);
+				opt->mItems.Push(it);
+				it = new FOptionMenuItemStaticText("", false);
+				opt->mItems.Push(it);
+				it = new FOptionMenuItemStaticText(GStrings("MENU_CONTROLLER_OFF2"), false);
 				opt->mItems.Push(it);
 			}
 		}
 		else
 		{
-			it = new FOptionMenuItemStaticText("Configure controllers:", false);
+			it = new FOptionMenuItemStaticText("", false);
+			opt->mItems.Push(it);
+			it = new FOptionMenuItemStaticText(GStrings("MENU_CONTROLLER_ON"), false);
 			opt->mItems.Push(it);
 
 			for (int i = 0; i < (int)Joysticks.Size(); ++i)
 			{
+				it = new FOptionMenuItemStaticText("", false);
+				opt->mItems.Push(it);
 				it = new FOptionMenuItemJoyConfigMenu(Joysticks[i]->GetName(), Joysticks[i]);
 				opt->mItems.Push(it);
 				if (i == itemnum) opt->mSelectedItem = opt->mItems.Size();

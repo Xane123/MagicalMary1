@@ -100,7 +100,7 @@ typedef enum {
 	dLight_StrobeFastSync = 77,
 	dSector_DoorRaiseIn5Mins = 78,
 	dFriction_Low = 79,
-	dFriction_None = 80,
+	dFriction_None = 80,	//[XANE]Used for automated sections involving boost panels.
 	dLight_FireFlicker = 81,
 	dDamage_LavaWimpy = 82,
 	dDamage_LavaHefty = 83,
