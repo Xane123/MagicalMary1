@@ -48,4 +48,6 @@
 /build
 
 *.obj
-src/zdoom.dir/Release/p_switch.obj
+src/zdoom.dir/Release
+src/zdoom.dir
+*.log
