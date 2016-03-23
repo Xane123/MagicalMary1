@@ -1,7 +1,0 @@
-﻿  Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/gdtoa/CMakeLists.txt
-  CMake does not need to re-run because C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeFiles\generate.stamp is up-to-date.
-  dmisc.c
-  dtoa.c
-  misc.c
-  Generating Code...
-  gdtoa.vcxproj -> C:\Users\Myers\git\world-of-kirbycraft\gdtoa\Debug\gdtoa.lib
