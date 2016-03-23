@@ -1456,7 +1456,7 @@ void ST_Util_BitmapColorsFromPlaypal (BITMAPINFO *bitmap_info)
 	int i;
 
 	{
-		FWadLump lumpr = Wads.OpenLumpName ("PLAYPAL");
+		FWadLump lumpr = Wads.OpenLumpName ("WGAMEPAL");
 		lumpr.Read (playpal, 768);
 	}
 	for (i = 0; i < 256; ++i)
