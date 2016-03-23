@@ -51,3 +51,4 @@
 src/zdoom.dir/Release
 src/zdoom.dir
 *.log
+*.sdf
