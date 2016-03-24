@@ -342,7 +342,7 @@ CCMD (hxvisit)
 				return;
 			}
 		}
-		Printf ("No such map found\n");
+		Printf ("This map, although it has a definition in MAPINFO, doesn't exist.\n");
 	}
 }
 
@@ -356,7 +356,7 @@ CCMD (changemap)
 
 	if (!players[who->player - players].settings_controller && netgame)
 	{
-		Printf ("Only setting controllers can change the map.\n");
+		Printf ("Only the host can perfom map changes.\n");
 		return;
 	}
 
@@ -366,7 +366,7 @@ CCMD (changemap)
 		{
 			if (!P_CheckMapData(argv[1]))
 			{
-				Printf ("No map %s\n", argv[1]);
+				Printf ("The map %s doesn't exist.\n", argv[1]);
 			}
 			else
 			{

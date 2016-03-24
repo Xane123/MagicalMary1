@@ -262,36 +262,6 @@ CUSTOM_CVAR (Float, turbo, 100.f, 0)
 	}
 }
 
-CCMD (turnspeeds)
-{
-	if (argv.argc() == 1)
-	{
-		Printf ("Current turn speeds: %d %d %d %d\n", angleturn[0],
-			angleturn[1], angleturn[2], angleturn[3]);
-	}
-	else
-	{
-		int i;
-
-		for (i = 1; i <= 4 && i < argv.argc(); ++i)
-		{
-			angleturn[i-1] = atoi (argv[i]);
-		}
-		if (i <= 2)
-		{
-			angleturn[1] = angleturn[0] * 2;
-		}
-		if (i <= 3)
-		{
-			angleturn[2] = angleturn[0] / 2;
-		}
-		if (i <= 4)
-		{
-			angleturn[3] = angleturn[2];
-		}
-	}
-}
-
 CCMD (slot)
 {
 	if (argv.argc() > 1)
@@ -468,41 +438,6 @@ CCMD (drop)
 }
 
 PClassActor *GetFlechetteType(AActor *other);
-
-CCMD (useflechette)
-{ // Select from one of arti_poisonbag1-3, whichever the player has
-	static const ENamedName bagnames[3] =
-	{
-		NAME_ArtiPoisonBag1,
-		NAME_ArtiPoisonBag2,
-		NAME_ArtiPoisonBag3
-	};
-
-	if (who == NULL)
-		return;
-
-	PClassActor *type = GetFlechetteType(who);
-	if (type != NULL)
-	{
-		AInventory *item;
-		if ( (item = who->FindInventory (type) ))
-		{
-			SendItemUse = item;
-			return;
-		}
-	}
-
-	// The default flechette could not be found. Try all 3 types then.
-	for (int j = 0; j < 3; ++j)
-	{
-		AInventory *item;
-		if ( (item = who->FindInventory (bagnames[j])) )
-		{
-			SendItemUse = item;
-			break;
-		}
-	}
-}
 
 CCMD (select)
 {
