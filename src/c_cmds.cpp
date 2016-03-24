@@ -350,7 +350,7 @@ CCMD (changemap)
 {
 	if (who == NULL || !usergame)
 	{
-		Printf ("Use the map command when not in a game.\n");
+		Printf("Try \"map\" instead; You aren't in a game now so changemap doesn't work.\n");
 		return;
 	}
 

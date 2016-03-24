@@ -389,7 +389,7 @@ void UpdateJoystickMenu(IJoystickConfig *selected)
 		}
 
 		// Todo: Block joystick for changing this one.
-		it = new FOptionMenuItemOption(GStrings("MENU_ECONTROLLERS"), "use_j2oystick", "YesNo", NULL, false);
+		it = new FOptionMenuItemOption(GStrings("MENU_ECONTROLLERS"), "use_joystick", "YesNo", NULL, false);
 		opt->mItems.Push(it);
 		#ifdef _WIN32
 			it = new FOptionMenuItemStaticText("", false);

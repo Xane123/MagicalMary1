@@ -19,6 +19,9 @@
 EXTERN_CVAR(Bool, joy_ps2raw)
 EXTERN_CVAR(Bool, joy_dinput)
 EXTERN_CVAR(Bool, joy_xinput)
+EXTERN_CVAR(Bool, cl_run)
+CVAR(Bool, xane_controller, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR(Bool, joy_autorun, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -29,6 +32,9 @@ CUSTOM_CVAR(Bool, use_joystick, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINI
 	joy_dinput.Callback();
 	joy_xinput.Callback();
 #endif
+
+	xane_controller = use_joystick;
+	if (joy_autorun == true) cl_run = use_joystick;
 }
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
