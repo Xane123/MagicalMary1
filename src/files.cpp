@@ -257,7 +257,7 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (err != Z_OK && err != Z_STREAM_END)
 	{
-		I_Error ("Corrupt zlib stream");
+		I_FatalError ("Corrupt zlib stream");
 	}
 
 	if (Stream.avail_out != 0)

@@ -3,7 +3,7 @@
 gameinfo
 {
 	titlepage = "TITLEPIC"
-	titletime = 999
+	titletime = 10
 	infopage = "-NOFLAT-"
 	titlemusic = ""
 	advisorytime = 0
@@ -30,9 +30,9 @@ gameinfo
 	definventorymaxamount = 25
 	defaultrespawntime = 12
 	defaultdropstyle = 1
-	endoom = "ENDOOM"
+	endoom = "MOD_INFO"
 	pickupcolor = "c0 c0 c0"
-	quitmessages = "Do you want to quit?"
+	quitmessages = "TESTING?"
 
 	menufontcolor_title = "purple"
 	menufontcolor_label = "default"
@@ -42,10 +42,10 @@ gameinfo
 	menufontcolor_highlight = "lightblue"
 	menufontcolor_selection = "purple"
 	menubackbutton = "M_BACK_D"
-	playerclasses = "DoomPlayer"
-	pausesign = "-NOFLAT-"
-	gibfactor = 1
-	cursorpic = "doomcurs"
+	playerclasses = "ArthasPlayer", "LGirlPlayer"
+	pausesign = "M_PAUSED"
+	gibfactor = 0.25
+	cursorpic = "cursor"
 	textscreenx = 10
 	textscreeny = 10
 	defaultendsequence = "Inter_Cast"

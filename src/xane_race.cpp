@@ -26,12 +26,10 @@
 	#include "m_misc.h"
 #include "c_console.h"
 
-CVAR(Bool, xane_controller, false, CVAR_ARCHIVE|CVAR_NOSET|CVAR_UNSETTABLE|CVAR_DEMOSAVE)	//Set automatically if controllers are being checked for; Don't change manually.
-
-CVAR(Int,xane_racecourse1,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #1
-CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #2
-CVAR(Int,xane_racecourse3,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #3
-CVAR(Int,xane_racecourse4,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG|CVAR_SERVERINFO)	//[XANE]Race track #4
+CVAR(Int,xane_racecourse1,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Race track #1
+CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Race track #2
+CVAR(Int,xane_racecourse3,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Race track #3
+CVAR(Int,xane_racecourse4,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Race track #4
 
 CUSTOM_CVAR(Int, xane_racecup, 0, CVAR_ARCHIVE|CVAR_NOINITCALL) //[XANE]Similar to compatflags; Sets custom variables to preset values.
 {
@@ -44,7 +42,7 @@ CUSTOM_CVAR(Int, xane_racecup, 0, CVAR_ARCHIVE|CVAR_NOINITCALL) //[XANE]Similar 
 		xane_racecourse1 = 94;
 		xane_racecourse2 = 101;
 		xane_racecourse3 = 94;
-		xane_racecourse4 = 102;
+		xane_racecourse4 = 101;
 		break;
 	case 2:	//Test Cup #2
 		xane_racecourse1 = 2;

@@ -928,6 +928,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="xane_race.cpp" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\afxres.h" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\critsec.h" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\hardware.h" />
