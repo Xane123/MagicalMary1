@@ -2,7 +2,7 @@
 
 gameinfo
 {
-	titlepage = "-NOFLAT-"
+	titlepage = "TITLEPIC"
 	titletime = 999
 	infopage = "-NOFLAT-"
 	titlemusic = ""

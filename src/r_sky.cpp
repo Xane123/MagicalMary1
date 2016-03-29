@@ -49,7 +49,7 @@ fixed_t		sky1cyl,		sky2cyl;
 double		sky1pos,		sky2pos;
 
 // [RH] Stretch sky texture if not taller than 128 pixels?
-CUSTOM_CVAR (Bool, r_stretchsky, true, CVAR_ARCHIVE)
+CUSTOM_CVAR (Bool, g_old1, false, 0)	//"Sky stetching"; This is unnecessay in World of Kirbycraft.
 {
 	R_InitSkyMap ();
 }
@@ -99,7 +99,7 @@ void R_InitSkyMap ()
 	skytexturemid = 0;
 	if (skyheight >= 128 && skyheight < 200)
 	{
-		skystretch = (r_stretchsky
+		skystretch = (g_old1
 					  && skyheight >= 128
 					  && level.IsFreelookAllowed()
 					  && !(level.flags & LEVEL_FORCENOSKYSTRETCH)) ? 1 : 0;
