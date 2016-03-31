@@ -68,7 +68,7 @@ FileReader::FileReader (const char *filename)
 {
 	if (!Open(filename))
 	{
-		I_Error ("Could not open %s", filename);
+		I_Error ("%s couldn't be opened.", filename);
 	}
 }
 
@@ -257,12 +257,12 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (err != Z_OK && err != Z_STREAM_END)
 	{
-		I_FatalError ("Corrupt zlib stream");
+		I_FatalError("One of the PK3's that were loaded was modified while World of Kirbycraft was running.");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_Error ("Ran out of data in zlib stream");
+		I_Error ("The PK3 stream ended unexpectedly.");
 	}
 
 	return len - Stream.avail_out;

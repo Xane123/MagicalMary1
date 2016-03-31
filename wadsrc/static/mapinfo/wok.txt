@@ -6,11 +6,6 @@ gameinfo
 	titletime = 10
 	infopage = "-NOFLAT-"
 	titlemusic = ""
-	advisorytime = 0
-	chatsound = ""
-	finalemusic = ""
-	finaleflat = "-NOFLAT-"
-	finalepage = "-NOFLAT-"
 	quitsound = ""
 	borderflat = "-NOFLAT-"
 	border = DoomBorder
@@ -34,25 +29,12 @@ gameinfo
 	pickupcolor = "c0 c0 c0"
 	quitmessages = "TESTING?"
 
-	menufontcolor_title = "purple"
-	menufontcolor_label = "default"
-	menufontcolor_value = "gray"
-	menufontcolor_action = "gray"
-	menufontcolor_header = "blue"
-	menufontcolor_highlight = "lightblue"
-	menufontcolor_selection = "purple"
 	menubackbutton = "M_BACK_D"
 	playerclasses = "ArthasPlayer", "LGirlPlayer"
-	pausesign = "M_PAUSED"
+	pausesign = "M_PAUSE"
 	gibfactor = 0.25
 	cursorpic = "cursor"
-	textscreenx = 10
-	textscreeny = 10
-	defaultendsequence = "Inter_Cast"
 	maparrow = "maparrows/arrow.txt", "maparrows/ddtarrow.txt"
-	statscreen_mapnamefont = "BigFont"
-	statscreen_finishedpatch = "WIF"
-	statscreen_enteringpatch = "WIENTER"
 }
 
 DoomEdNums
