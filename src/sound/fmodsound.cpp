@@ -96,7 +96,7 @@ CVAR (String, snd_midipatchset, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, snd_profile, false, 0)
 
 // Underwater low-pass filter cutoff frequency. Set to 0 to disable the filter.
-CUSTOM_CVAR (Float, snd_waterlp, 250, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CUSTOM_CVAR (Float, snd_waterlp, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 {
 	// Clamp to the DSP unit's limits.
 	if (*self < 10 && *self != 0)
