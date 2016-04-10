@@ -2408,9 +2408,9 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 	{
 		fixed_t startvelz = mo->vel.z;
 
-		if (mo->waterlevel == 0 || (mo->player &&
+		/*if (mo->waterlevel == 0 || (mo->player &&
 			!(mo->player->cmd.ucmd.forwardmove | mo->player->cmd.ucmd.sidemove)))
-		{
+		{*/
 			// [RH] Double gravity only if running off a ledge. Coming down from
 			// an upward thrust (e.g. a jump) should not double it.
 			if (mo->vel.z == 0 && oldfloorz > mo->floorz && mo->Z() == oldfloorz)
@@ -2421,7 +2421,7 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 			{
 				mo->vel.z -= grav;
 			}
-		}
+		//}
 		if (mo->player == NULL)
 		{
 			if (mo->waterlevel >= 1)
@@ -2461,23 +2461,6 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 				}
 			}
 		}
-		else
-		{
-			if (mo->waterlevel > 1)
-			{
-				fixed_t sinkspeed = -WATER_SINK_SPEED;
-
-				if (mo->vel.z < sinkspeed)
-				{
-					mo->vel.z = (startvelz < sinkspeed) ? startvelz : sinkspeed;
-				}
-				else
-				{
-					mo->vel.z = startvelz + ((mo->vel.z - startvelz) >>
-						(mo->waterlevel == 1 ? WATER_SINK_SMALL_FACTOR : WATER_SINK_FACTOR));
-				}
-			}
-		}
 	}
 
 	// Hexen compatibility handling for floatbobbing. Ugh...
@@ -2513,10 +2496,7 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 		}
 		mo->vel.z = FixedMul (mo->vel.z, FRICTION_FLY);
 	}
-	if (mo->waterlevel && !(mo->flags & MF_NOGRAVITY))
-	{
-		mo->vel.z = FixedMul (mo->vel.z, mo->Sector->friction);
-	}
+
 
 //
 // clip movement

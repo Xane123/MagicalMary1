@@ -1767,7 +1767,7 @@ void P_ForwardThrust (player_t *player, angle_t angle, fixed_t move)
 {
 	angle >>= ANGLETOFINESHIFT;
 
-	if ((player->mo->waterlevel || (player->mo->flags & MF_NOGRAVITY))
+	if ((/*player->mo->waterlevel ||*/ (player->mo->flags & MF_NOGRAVITY))
 		&& player->mo->pitch != 0)
 	{
 		angle_t pitch = (angle_t)player->mo->pitch >> ANGLETOFINESHIFT;
@@ -2135,7 +2135,7 @@ void P_FallingDamage (AActor *actor)
 			damage = 999;
 		}
 	}
-	P_DamageMobj (actor, NULL, NULL, damage, NAME_Falling);
+	if (actor->player && actor->waterlevel < 2) P_DamageMobj(actor, NULL, NULL, damage, NAME_Falling);
 }
 
 //==========================================================================
@@ -2572,10 +2572,10 @@ void P_PlayerThink (player_t *player)
 				// Jumping while crouching will force an un-crouch but not jump
 				player->crouching = 1;
 			}
-			else if (player->mo->waterlevel >= 2)
+			/*else if (player->mo->waterlevel >= 2)
 			{
 				player->mo->vel.z = FixedMul(4*FRACUNIT, player->mo->Speed);
-			}
+			}*/
 			else if (player->mo->flags & MF_NOGRAVITY)
 			{
 				player->mo->vel.z = 3*FRACUNIT;

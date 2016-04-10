@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -57,33 +57,33 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\Debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zdoom.dir\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wok</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zdoom.dir\Release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wok</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\MinSizeRel\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">zdoom.dir\MinSizeRel\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">wok</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\RelWithDebInfo\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">zdoom.dir\RelWithDebInfo\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">wok</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</GenerateManifest>
-  </PropertyGroup>
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\Debug\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zdoom.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wok</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\Release\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zdoom.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wok</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\MinSizeRel\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">zdoom.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">wok</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\RelWithDebInfo\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">zdoom.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">wok</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</GenerateManifest>
+    </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Programmers API Win32\api\inc;C:\Users\Myers\git\world-of-kirbycraft\zlib;C:\Users\Myers\git\world-of-kirbycraft\bzip2;C:\Users\Myers\git\world-of-kirbycraft\lzma\C;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu;C:\Users\Myers\git\world-of-kirbycraft\src;C:\Users\Myers\git\world-of-kirbycraft\src\.;C:\Users\Myers\git\world-of-kirbycraft\src\g_doom;C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic;C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen;C:\Users\Myers\git\world-of-kirbycraft\src\g_raven;C:\Users\Myers\git\world-of-kirbycraft\src\g_strife;C:\Users\Myers\git\world-of-kirbycraft\src\g_shared;C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth;C:\Users\Myers\git\world-of-kirbycraft\src\sound;C:\Users\Myers\git\world-of-kirbycraft\src\textures;C:\Users\Myers\git\world-of-kirbycraft\src\thingdef;C:\Users\Myers\git\world-of-kirbycraft\src\timidity;C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi;C:\Users\Myers\git\world-of-kirbycraft\src\xlat;C:\Users\Myers\git\world-of-kirbycraft\src\zscript;C:\Users\Myers\git\world-of-kirbycraft\src\..\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\..\dumb\include;C:\Users\Myers\git\world-of-kirbycraft\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -139,8 +139,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ImportLibrary>C:/Users/Myers/git/world-of-kirbycraft/src/Debug/wok.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Myers/git/world-of-kirbycraft/Debug/wok.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -166,8 +165,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_OPENAL=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_OPENAL=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -205,8 +203,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProgramDataBaseFile>C:/Users/Myers/git/world-of-kirbycraft/Release/wok.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -232,8 +229,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_OPENAL=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_OPENAL=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -271,8 +267,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProgramDataBaseFile>C:/Users/Myers/git/world-of-kirbycraft/MinSizeRel/wok.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -336,8 +331,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProgramDataBaseFile>C:/Users/Myers/git/world-of-kirbycraft/RelWithDebInfo/wok.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -928,7 +922,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xane_race.cpp" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\afxres.h" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\critsec.h" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\hardware.h" />
@@ -1291,778 +1284,778 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_ia32\tmap3.asm" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_x86_64\tmap3.asm" />
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_x86_64\tmap3.s" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\__autostart.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\eaxedit.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_d3d9.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\__autostart.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\eaxedit.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_d3d9.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_d3d9_wipe.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_d3d9_wipe.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_ddraw.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\hardware.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\helperthread.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_cd.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_crash.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_input.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_keyboard.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_mouse.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_dijoy.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_rawps2.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_xinput.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_main.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_movie.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_system.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\st_start.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\win32video.cpp" />
-    <ResourceCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\zdoom.rc" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_classify_sse2.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_ddraw.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\hardware.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\helperthread.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_cd.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_crash.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_input.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_keyboard.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_mouse.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_dijoy.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_rawps2.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_xinput.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_main.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_movie.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_system.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\st_start.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\win32video.cpp"  />
+    <ResourceCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\zdoom.rc"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_classify_sse2.cpp" >
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_swrenderer.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_swrenderer.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_3dfloors.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_3dfloors.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_bsp.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_bsp.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_draw.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_draw.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_drawt.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_drawt.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_main.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_main.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_plane.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_plane.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_segs.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_segs.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_sky.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_sky.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_things.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_things.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_advsound.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_advsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_environment.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_environment.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_playlist.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_playlist.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sndseq.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sndseq.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sound.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\GuillotineBinPack.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\GuillotineBinPack.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\SkylineBinPack.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\SkylineBinPack.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission_parse.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission_parse.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\colorpickermenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\colorpickermenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\joystickmenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\joystickmenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\listmenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\listmenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\loadsavemenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\loadsavemenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menudef.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menudef.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menuinput.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menuinput.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\messagebox.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\messagebox.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\optionmenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\optionmenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\playerdisplay.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\playerdisplay.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\playermenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\playermenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\readthis.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\readthis.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\videomenu.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\videomenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\fmopl.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\fmopl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\mlopl.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\mlopl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\mlopl_io.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\mlopl_io.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\music_opldumper_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\music_opldumper_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\music_opl_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\music_opl_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\opl_mus_player.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\opl_mus_player.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\dosbox\opl.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\dosbox\opl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\OPL3.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\OPL3.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\nukedopl3.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\nukedopl3.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\fmodsound.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\fmodsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_music.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_music.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_sound.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_sound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\mpg123_decoder.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\mpg123_decoder.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_cd.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_cd.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_dumb.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_dumb.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_gme.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_gme.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_mus_midiout.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_mus_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_smf_midiout.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_smf_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_hmi_midiout.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_hmi_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_xmi_midiout.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_xmi_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midistream.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midistream.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midi_base.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midi_base.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midi_timidity.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midi_timidity.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_mus_opl.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_mus_opl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_stream.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_stream.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_fluidsynth_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_fluidsynth_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_softsynth_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_softsynth_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_timidity_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_timidity_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_wildmidi_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_wildmidi_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_win_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_win_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\oalsound.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\oalsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\sndfile_decoder.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\sndfile_decoder.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_pseudo_mididevice.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_pseudo_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\common.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\common.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_dls.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_dls.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_font.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_font.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_sf2.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_sf2.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\mix.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\mix.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\playmidi.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\playmidi.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\resample.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\resample.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\timidity.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\timidity.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\file_io.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\file_io.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\gus_pat.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\gus_pat.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\reverb.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\reverb.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\wildmidi_lib.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\wildmidi_lib.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\wm_error.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\wm_error.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\colormaps.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\colormaps.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_translate.cpp">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_translate.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\x86.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\actorptrselect.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\am_map.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_bot.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_func.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_game.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_move.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_think.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\bbannouncer.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_bind.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cmds.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_console.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_consolebuffer.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cvars.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_dispatch.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_expr.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\cmdlib.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\colormatcher.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\compatibility.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\configfile.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\ct_chat.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_dehacked.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_iwad.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_main.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_net.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_netinfo.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_protocol.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\decallib.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobject.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjgc.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjtype.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomdef.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomstat.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dsectoreffect.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dthinker.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\edata.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\f_wipe.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\farchive.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\files.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doomedmap.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_game.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hub.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_level.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_mapinfo.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_skill.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gameconfigfile.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gi.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gitinfo.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\hu_scores.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_net.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\info.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\keysections.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\lumpconfigfile.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_alloc.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_argv.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_bbox.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_cheat.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_joy.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_misc.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_png.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_random.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_specialpaths.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\memarena.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\md5.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\name.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_classify_nosse2.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_events.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_extract.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_gl.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_utility.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\pathexpander.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dfloors.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dmidtex.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_acs.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_buildmap.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_ceiling.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_conversation.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_doors.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_effect.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_enemy.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_floor.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_glnodes.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_interaction.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lights.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_linkedsectors.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lnspec.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_map.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_maputl.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_mobj.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pillar.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_plats.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pspr.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_saveg.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_sectors.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_setup.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_sight.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_slopes.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_spec.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_states.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_switch.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tags.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_teleport.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_terrain.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_things.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tick.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_trace.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_udmf.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_usdf.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_user.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_writemap.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_xlat.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\parsecontext.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\po_man.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\portal.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_utility.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\st_stuff.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\statistics.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\stats.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\stringtable.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\strnatcmp.c">
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\x86.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\actorptrselect.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\am_map.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_bot.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_func.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_game.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_move.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_think.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\bbannouncer.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_bind.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cmds.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_console.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_consolebuffer.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cvars.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_dispatch.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_expr.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\cmdlib.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\colormatcher.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\compatibility.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\configfile.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\ct_chat.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_dehacked.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_iwad.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_main.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_net.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_netinfo.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_protocol.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\decallib.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobject.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjgc.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjtype.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomdef.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomstat.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dsectoreffect.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dthinker.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\edata.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\f_wipe.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\farchive.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\files.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doomedmap.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_game.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hub.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_level.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_mapinfo.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_skill.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gameconfigfile.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gi.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gitinfo.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\hu_scores.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_net.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\info.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\keysections.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\lumpconfigfile.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_alloc.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_argv.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_bbox.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_cheat.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_joy.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_misc.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_png.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_random.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_specialpaths.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\memarena.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\md5.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\name.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_classify_nosse2.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_events.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_extract.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_gl.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_utility.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\pathexpander.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dfloors.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dmidtex.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_acs.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_buildmap.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_ceiling.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_conversation.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_doors.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_effect.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_enemy.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_floor.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_glnodes.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_interaction.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lights.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_linkedsectors.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lnspec.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_map.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_maputl.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_mobj.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pillar.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_plats.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pspr.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_saveg.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_sectors.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_setup.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_sight.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_slopes.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_spec.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_states.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_switch.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tags.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_teleport.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_terrain.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_things.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tick.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_trace.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_udmf.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_usdf.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_user.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_writemap.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_xlat.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\parsecontext.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\po_man.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\portal.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_utility.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\st_stuff.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\statistics.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\stats.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\stringtable.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\strnatcmp.c" >
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\tables.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\teaminfo.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\tempfiles.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_blend.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_collection.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_draw.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_font.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_palette.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_pfx.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_text.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_video.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\w_wad.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wi_stuff.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstrformat.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstring.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_doommisc.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_hereticmisc.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_hexenmisc.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\a_artitele.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\a_minotaur.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_strifestuff.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\strife_sbar.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_action.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_armor.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_artifacts.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_bridge.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_camera.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_debris.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_decals.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_fastprojectile.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_flashfader.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_fountain.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_hatetarget.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_keys.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_lightning.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_mapmarker.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_morph.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_movingcamera.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_pickups.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_puzzleitems.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_quake.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_randomspawner.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_secrettrigger.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_sectoraction.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_setcolor.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_skies.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_soundenvironment.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_soundsequence.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_spark.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_specialspot.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_waterzone.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weaponpiece.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weapons.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\hudmessages.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbarinfo.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbar_mugshot.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\shared_hud.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\shared_sbar.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\ancientzip.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_7z.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_grp.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_lump.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_rff.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_wad.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_zip.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_pak.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_directory.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\resourcefile.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\animations.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\anim_switches.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\automaptexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\bitmap.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\buildtexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\canvastexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\ddstexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\flattexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\imgztexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\jpegtexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\multipatchtexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\patchtexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\pcxtexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\pngtexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\rawpagetexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\emptytexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\texture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\texturemanager.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\tgatexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\warptexture.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\olddecorations.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_codeptr.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_data.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_exp.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_expression.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_parse.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_properties.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_states.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat\parse_xlat.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_fspic.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_func.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_load.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_oper.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_parse.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_prepro.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_script.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_spec.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_variable.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_cmd.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\sprites.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\voxels.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\renderstyle.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_interpolate.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\ast.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmbuilder.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmdisasm.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmexec.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmframe.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_compile.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_expr.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_parser.cpp" />
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zzautozend.cpp" />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\tables.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\teaminfo.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\tempfiles.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_blend.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_collection.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_draw.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_font.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_palette.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_pfx.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_text.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_video.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\w_wad.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wi_stuff.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstrformat.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstring.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_doommisc.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_hereticmisc.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_hexenmisc.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\a_artitele.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\a_minotaur.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_strifestuff.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\strife_sbar.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_action.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_armor.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_artifacts.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_bridge.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_camera.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_debris.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_decals.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_fastprojectile.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_flashfader.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_fountain.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_hatetarget.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_keys.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_lightning.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_mapmarker.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_morph.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_movingcamera.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_pickups.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_puzzleitems.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_quake.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_randomspawner.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_secrettrigger.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_sectoraction.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_setcolor.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_skies.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_soundenvironment.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_soundsequence.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_spark.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_specialspot.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_waterzone.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weaponpiece.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weapons.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\hudmessages.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbarinfo.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbar_mugshot.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\shared_hud.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\shared_sbar.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\ancientzip.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_7z.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_grp.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_lump.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_rff.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_wad.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_zip.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_pak.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_directory.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\resourcefile.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\animations.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\anim_switches.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\automaptexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\bitmap.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\buildtexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\canvastexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\ddstexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\flattexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\imgztexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\jpegtexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\multipatchtexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\patchtexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\pcxtexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\pngtexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\rawpagetexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\emptytexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\texture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\texturemanager.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\tgatexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\warptexture.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\olddecorations.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_codeptr.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_data.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_exp.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_expression.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_parse.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_properties.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_states.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat\parse_xlat.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_fspic.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_func.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_load.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_oper.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_parse.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_prepro.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_script.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_spec.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_variable.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_cmd.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\sprites.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\voxels.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\renderstyle.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_interpolate.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\ast.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmbuilder.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmdisasm.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmexec.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmframe.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_compile.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_expr.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_parser.cpp"  />
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zzautozend.cpp"  />
     <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj" />
     <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj" />
     <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj" />
