@@ -60,6 +60,6 @@ const char *GetVersionString()
 	}
 	else
 	{
-		return "v1.2-alpha";	//[XANE]Since gitinfo.h updates way slower than GitHub itself, this is updated by hand.
+		return "v1.3-dev";	//[XANE]Since gitinfo.h updates way slower than GitHub itself, this is updated by hand.
 	}
 }
