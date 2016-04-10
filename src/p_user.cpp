@@ -1981,11 +1981,20 @@ void P_MovePlayer (player_t *player)
 
 		movefactor = P_GetMoveFactor (mo, &friction);
 		bobfactor = friction < ORIG_FRICTION ? movefactor : ORIG_FRICTION_FACTOR;
-		if (!player->onground && !(player->mo->flags & MF_NOGRAVITY) && !player->mo->waterlevel)
+		if (!player->onground && !(player->mo->flags & MF_NOGRAVITY))
 		{
-			// [RH] allow very limited movement if not on ground.
-			movefactor = FixedMul (movefactor, level.aircontrol);
-			bobfactor = FixedMul (bobfactor, level.aircontrol);
+			if (player->mo->waterlevel < 2)
+			{
+				// [RH] allow very limited movement if not on ground.
+				movefactor = FixedMul(movefactor, level.aircontrol);
+				bobfactor = FixedMul(bobfactor, level.aircontrol);
+			}
+			else
+			{
+				movefactor = FixedMul(movefactor, 2.5);
+				bobfactor = FixedMul(bobfactor, 2.5);
+			}
+			
 		}
 
 		fm = cmd->ucmd.forwardmove;
