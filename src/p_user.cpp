@@ -1989,10 +1989,10 @@ void P_MovePlayer (player_t *player)
 				movefactor = FixedMul(movefactor, level.aircontrol);
 				bobfactor = FixedMul(bobfactor, level.aircontrol);
 			}
-			else
+			else //If the player's in the water...
 			{
-				movefactor = FixedMul(movefactor, 2.5);
-				bobfactor = FixedMul(bobfactor, 2.5);
+				movefactor = 1024;
+				bobfactor = 1024;
 			}
 			
 		}
