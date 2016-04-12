@@ -1232,15 +1232,15 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 	bool retval = Super::UpdateWaterLevel (oldz, splash);
 	if (player != NULL)
 	{
-		if (oldlevel < 3 && waterlevel == 3)
+		if (oldlevel == 2 && waterlevel == 3)
 		{ // Our head just went under.
-			S_Sound (this, CHAN_VOICE, "*dive", 1, ATTN_NORM);
+			S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
 		}
-		else if (oldlevel == 3 && waterlevel < 3)
+		else if (oldlevel == 3 && waterlevel == 2)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)
 			{ // We hadn't run out of air yet.
-				S_Sound (this, CHAN_VOICE, "*surface", 1, ATTN_NORM);
+				S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
 			}
 			// If we were running out of air, then ResetAirSupply() will play *gasp.
 		}
@@ -1368,7 +1368,7 @@ void APlayerPawn::GiveDefaultInventory ()
 					{
 						// Player was morphed. This is illegal at game start.
 						// This problem is only detectable when it's too late to do something about it...
-						I_Error("Cannot give morph items when starting a game");
+						I_Error("YOU CAN'T TRANSFORM; YOU'RE STARTING WORLD OF KIRBYCRAFT!");
 					}
 					item->Destroy ();
 					item = NULL;
@@ -1772,7 +1772,7 @@ void P_ForwardThrust (player_t *player, angle_t angle, fixed_t move)
 	{
 		angle_t pitch = (angle_t)player->mo->pitch >> ANGLETOFINESHIFT;
 		fixed_t zpush = FixedMul (move, finesine[pitch]);
-		if (player->mo->waterlevel && player->mo->waterlevel < 2 && zpush < 0)
+		if (/*player->mo->waterlevel && player->mo->waterlevel < 2 &&*/ zpush < 0)
 			zpush = 0;
 		player->mo->vel.z -= zpush;
 		move = FixedMul (move, finecosine[pitch]);
@@ -1991,8 +1991,8 @@ void P_MovePlayer (player_t *player)
 			}
 			else //If the player's in the water...
 			{
-				movefactor = 1024;
-				bobfactor = 1024;
+				movefactor = 860;
+				bobfactor = 860;
 			}
 			
 		}
