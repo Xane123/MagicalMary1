@@ -77,7 +77,7 @@ static BYTE CheatChoppers[] = { 'i','d','c','h','o','p','p','e','r','s',255 };
 static BYTE CheatGod[] = { 'h','o','n','o','r',255 };
 static BYTE CheatAmmo[] = { 'i','d','k','f','a',255 };
 static BYTE CheatAmmoNoKey[] = { 'i','d','f','a',255 };
-static BYTE CheatClev[] = { 'w','o','k','l','v','l',0,0,255 };
+static BYTE CheatClev[] = { 'x','m','c','l','e','v',0,0,255 };
 static BYTE CheatMypos[] = { 'w','o','k','p','o','s',255 };	//WOKPOS
 static BYTE CheatAmap[] = { 'x','a','n','e',255 };
 static BYTE CheatKillX[] = { 'x','k','i','l','l',255 };	//XKill kills whoever you're pointing at.
@@ -243,22 +243,62 @@ static bool Cht_AutoMap (cheatseq_t *cheat)
 {
 	if (automapactive)
 	{
-		am_cheat = (am_cheat + 1) % 3;
+		am_cheat = (am_cheat + 1) % 4;
+		switch (am_cheat)
+		{
+		case 0:
+			Printf(GStrings("TXT_CHEATMAP0"));
+			break;
+		case 1:
+			Printf(GStrings("TXT_CHEATMAP1"));
+			break;
+		case 2:
+			Printf(GStrings("TXT_CHEATMAP2"));
+			break;
+		case 3:
+			Printf(GStrings("TXT_CHEATMAP3"));
+			break;
+		}
 		return true;
 	}
 	else
 	{
+		Printf(GStrings("TXT_MAPNON"));
 		return false;
 	}
 }
 
-static bool Cht_ChangeLevel (cheatseq_t *cheat)
+static bool Cht_ChangeLevel (cheatseq_t *cheat)	//[XANE]The change level cheat now can go to special stages andd can go to levels lower than 10!
 {
-	char cmd[10] = "idclev xx";
 
-	cmd[7] = cheat->Args[0];
-	cmd[8] = cheat->Args[1];
-	C_DoCommand (cmd);
+	if (cheat->Args[0] == '9')
+	{
+		char cmd[19] = "changemap SPECSTGx";
+		cmd[17] = cheat->Args[1];
+		cmd[18] = '\0';
+
+		C_DoCommand(cmd);
+	}
+	else if (cheat->Args[0] == '0')
+	{
+		char cmd[16] = "changemap MAPxx";
+
+		cmd[13] = cheat->Args[0];
+		cmd[14] = cheat->Args[1];
+
+		cmd[13] = cmd[14];
+		cmd[14] = '\0';
+
+		C_DoCommand(cmd);
+	}
+	else
+	{
+		char cmd[16] = "changemap MAPxx";
+		cmd[13] = cheat->Args[0];
+		cmd[14] = cheat->Args[1];
+
+		C_DoCommand(cmd);
+	}
 	return true;
 }
 
@@ -267,15 +307,6 @@ static bool Cht_ChangeStartSpot (cheatseq_t *cheat)
 	char cmd[64];
 
 	mysnprintf (cmd, countof(cmd), "changemap %s %c", level.MapName.GetChars(), cheat->Args[0]);
-	C_DoCommand (cmd);
-	return true;
-}
-
-static bool Cht_WarpTransLevel (cheatseq_t *cheat)
-{
-	char cmd[11] = "hxvisit xx";
-	cmd[8] = cheat->Args[0];
-	cmd[9] = cheat->Args[1];
 	C_DoCommand (cmd);
 	return true;
 }
