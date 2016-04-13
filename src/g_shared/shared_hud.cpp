@@ -60,7 +60,7 @@
 
 EXTERN_CVAR(Bool,am_follow)
 EXTERN_CVAR (Int, con_scaletext)
-EXTERN_CVAR (Bool, idmypos)
+EXTERN_CVAR (Bool, wokpos)
 EXTERN_CVAR (Int, screenblocks)
 
 EXTERN_CVAR (Bool, am_showtime)
@@ -1065,7 +1065,7 @@ void DrawHUD()
 		{
 			StatusBar->DrawCrosshair();
 		}
-		if (idmypos) DrawCoordinates(CPlayer);
+		if (wokpos) DrawCoordinates(CPlayer);
 
 		DrawTime();
 		DrawLatency();

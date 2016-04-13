@@ -282,7 +282,7 @@ static bool Cht_WarpTransLevel (cheatseq_t *cheat)
 
 static bool Cht_MyPos (cheatseq_t *cheat)
 {
-	C_DoCommand ("toggle idmypos");
+	C_DoCommand ("toggle wokpos");
 	return true;
 }
 
