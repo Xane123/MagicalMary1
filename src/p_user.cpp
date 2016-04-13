@@ -1233,16 +1233,16 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 	if (player != NULL)
 	{
 
-		if (oldlevel == 2 && waterlevel == 3 && player->mo->vel.z > 42000)
+		if (oldlevel == 2 && waterlevel == 3) //&& player->mo->vel.z > 42000)
 		{ // Our head just went under.
-			Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
+//			Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
 			S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
 		}
-		else if (oldlevel == 3 && waterlevel == 2 && player->mo->vel.z < -24000)
+		else if (oldlevel == 3 && waterlevel == 2) //&& player->mo->vel.z < -24000)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)
 			{ // We hadn't run out of air yet.
-				Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
+//				Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
 				S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
 			}
 			// If we were running out of air, then ResetAirSupply() will play *gasp.

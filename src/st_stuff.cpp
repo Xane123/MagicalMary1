@@ -70,15 +70,14 @@ BYTE CheatPowerup[7][10] =
 	{ 'i','d','b','e','h','o','l','d', 255 },
 };
 
-// Smashing Pumpkins Into Small Piles Of Putrid Debris. 
-static BYTE CheatNoclip[] = { 'i','d','s','p','i','s','p','o','p','d',255 };
+//CHEATS
 static BYTE CheatNoclip2[] = { 'i','d','c','l','i','p',255 };
 static BYTE CheatMus[] = { 'p','l','a','y',0,0,255 };
 static BYTE CheatChoppers[] = { 'i','d','c','h','o','p','p','e','r','s',255 };
 static BYTE CheatGod[] = { 'h','o','n','o','r',255 };
 static BYTE CheatAmmo[] = { 'i','d','k','f','a',255 };
 static BYTE CheatAmmoNoKey[] = { 'i','d','f','a',255 };
-static BYTE CheatClev[] = { 'i','d','c','l','e','v',0,0,255 };
+static BYTE CheatClev[] = { 'w','o','k','l','v','l',0,0,255 };
 static BYTE CheatMypos[] = { 'w','o','k','p','o','s',255 };	//WOKPOS
 static BYTE CheatAmap[] = { 'x','a','n','e',255 };
 static BYTE CheatKillX[] = { 'x','k','i','l','l',255 };	//XKill kills whoever you're pointing at.
@@ -92,7 +91,6 @@ static cheatseq_t Cheats[] =
 	{ CheatGod,				0, 0, 0,{ CHT_ARTHASMODE,0 },		Cht_Generic },
 	{ CheatAmmo,			0, 0, 0,{ CHT_IDKFA,0 },		Cht_Generic },
 	{ CheatAmmoNoKey,		0, 0, 0,{ CHT_IDFA,0 },		Cht_Generic },
-	{ CheatNoclip,			0, 0, 0,{ CHT_NOCLIP2,0 },	Cht_Generic },
 	{ CheatNoclip2,			0, 0, 0,{ CHT_NOCLIP2,0 },	Cht_Generic },
 	{ CheatKillX,			0, 0, 0,{ CHT_MDK,0 },	Cht_Generic },
 	{ CheatPowerup[0],		0, 0, 0,{ CHT_BEHOLDV,0 },	Cht_Generic },
