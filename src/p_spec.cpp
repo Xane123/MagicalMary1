@@ -1222,7 +1222,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		sector->Flags |= SECF_FRICTION;
 		break;
 
-	case dFriction_None:
+	case dFriction_None:	//80:No Friction (automated section)
 		sector->friction = FRICTION_NONE;
 		sector->movefactor = 0x000;
 		sector->Flags |= SECF_FRICTION;

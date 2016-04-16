@@ -115,12 +115,13 @@ void STAT_Read(PNGHandle *png);
 
 FIntCVar gameskill ("skill", 2, CVAR_SERVERINFO|CVAR_LATCH);
 CVAR (Int, deathmatch, 0, CVAR_SERVERINFO|CVAR_LATCH);
-CVAR (Bool, chasedemo, false, 0);
+CVAR (Bool, chasedemo, true, 0);
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, longsavemessages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (String, save_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR (Bool, cl_waitforsave, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 EXTERN_CVAR (Float, con_midtime);
+EXTERN_CVAR (Bool, msg_showminor)
 
 //==========================================================================
 //
@@ -1105,7 +1106,7 @@ void G_Ticker ()
 			if (cmd->ucmd.forwardmove > TURBOTHRESHOLD &&
 				!(gametic&31) && ((gametic>>5)&(MAXPLAYERS-1)) == i )
 			{
-				Printf ("%s is turbo!\n", players[i].userinfo.GetName());
+				if(msg_showminor) Printf ("%s IS USING TURBO!\n", players[i].userinfo.GetName());
 			}
 
 			if (netgame && players[i].Bot == NULL && !demoplayback && (gametic%ticdup) == 0)

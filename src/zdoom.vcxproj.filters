@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\__autostart.cpp">
@@ -1037,6 +1037,9 @@
       <Filter>ZScript</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zzautozend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xane_race.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

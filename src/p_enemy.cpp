@@ -477,7 +477,7 @@ bool P_Move (AActor *actor)
 	}
 
 	if ((unsigned)actor->movedir >= 8)
-		I_Error ("Weird actor->movedir!");
+		I_Error ("AN OBJECT TRIED TO MOVE IN A STRANGE DIRECTION.");
 
 	// killough 10/98: allow dogs to drop off of taller ledges sometimes.
 	// dropoff==1 means always allow it, dropoff==2 means only up to 128 high,
@@ -3241,6 +3241,8 @@ void P_TossItem (AActor *item)
 	}
 }
 
+CVAR(Bool, snd_style, false, CVAR_AUTO|CVAR_ARCHIVE|CVAR_DEMOSAVE)
+
 DEFINE_ACTION_FUNCTION(AActor, A_Pain)
 {
 	PARAM_ACTION_PROLOGUE;
@@ -3280,7 +3282,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_Pain)
 			sfx_id = pain_amount;
 		}
 
-		S_Sound (self, CHAN_VOICE, sfx_id, 1, ATTN_NORM);
+		if(snd_style == false) S_Sound(self, CHAN_VOICE, sfx_id, 1, ATTN_NORM);
+		else S_Sound(self, CHAN_VOICE, "misc/pain", 1, ATTN_NORM);
 	}
 	else if (self->PainSound)
 	{

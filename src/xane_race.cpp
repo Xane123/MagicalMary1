@@ -31,6 +31,15 @@ CVAR(Int,xane_racecourse2,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Rac
 CVAR(Int,xane_racecourse3,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Race track #3
 CVAR(Int,xane_racecourse4,0,CVAR_ARCHIVE|CVAR_MOD|CVAR_GLOBALCONFIG)	//[XANE]Race track #4
 
+EXTERN_CVAR(Bool, wokpos)
+EXTERN_CVAR(Bool, noisedebug)
+
+CUSTOM_CVAR(Bool, xane_debug, false, CVAR_ARCHIVE | CVAR_DEMOSAVE)
+{
+	wokpos = xane_debug;
+	noisedebug = xane_debug;
+}
+
 CUSTOM_CVAR(Int, xane_racecup, 0, CVAR_ARCHIVE|CVAR_NOINITCALL) //[XANE]Similar to compatflags; Sets custom variables to preset values.
 {
 

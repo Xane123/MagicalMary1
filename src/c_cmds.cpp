@@ -87,7 +87,7 @@ bool CheckCheatmode (bool printmsg)
 {
 	if ((G_SkillProperty(SKILLP_DisableCheats) || netgame || deathmatch) && (!sv_cheats))
 	{
-		if (printmsg) Printf ("sv_cheats must be true to enable this command.\n");
+		if (printmsg) Printf("CHEATS ARE CURRENTLY DISABLED; CHANGE SV_CHEATS TO TRUE TO ENABLE THEM.\n");
 		return true;
 	}
 	else
@@ -106,6 +106,26 @@ CCMD (exit)
 	if (!insave) exit (0);
 }
 
+/*player_t *player = NULL;
+
+CCMD(teleport)
+{
+	if (CheckCheatmode())
+		return;
+
+	if (argv.argc() == 3)
+	{
+		player->mo->__pos.x = argv[0][1];
+		player->mo->__pos.y = argv[0][2];
+		player->mo->__pos.z = argv[0][3];
+
+	}
+	else
+	{
+		Printf("YOU ONLY TYPED %d OF THE 3 ARGUMENTS THAT ARE REQUIRED TO TELEPORT; THESE ARE THE X, Y, AND Z COORDIATES TO TELEPORT TO.", argv.argc());
+	}
+}*/
+
 /*
 ==================
 Cmd_God
@@ -115,7 +135,8 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-CCMD (god)
+
+/*CCMD (GOD)
 {
 	if (CheckCheatmode ())
 		return;
@@ -131,9 +152,9 @@ CCMD(god2)
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_GOD2);
-}
+}*/
 
-CCMD (arthasmode)
+CCMD (arthas)
 {
 	if (CheckCheatmode ())
 		return;
@@ -142,6 +163,7 @@ CCMD (arthasmode)
 	Net_WriteByte (CHT_ARTHASMODE);
 }
 
+/*
 CCMD (marymode)
 {
 	if (CheckCheatmode())
@@ -158,7 +180,7 @@ CCMD(uthermode)
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_BUDDHA2);
-}
+}*/
 
 CCMD (notarget)
 {
@@ -171,11 +193,14 @@ CCMD (notarget)
 
 CCMD (fly)
 {
-	if (CheckCheatmode ())
+
+	Printf("THIS IS A USELESS COMMAND COMPARED TO NOCLIP2 OR ARTHAS' FLIGHT; USE NOCLIP2 INSTEAD.\n");
+
+/*	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_FLY);
+	Net_WriteByte (CHT_FLY);*/
 }
 
 /*
@@ -390,7 +415,7 @@ CCMD (changemap)
 	}
 	else
 	{
-		Printf ("Usage: changemap <map name> [position]\n");
+		Printf ("Usage: changemap <map name>\n");
 	}
 }
 

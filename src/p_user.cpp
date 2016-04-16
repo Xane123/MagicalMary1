@@ -80,6 +80,8 @@ CUSTOM_CVAR(Float, cl_predict_lerpthreshold, 2.00f, CVAR_ARCHIVE | CVAR_GLOBALCO
 	P_PredictionLerpReset();
 }
 
+EXTERN_CVAR(Bool, snd_style)
+
 struct PredictPos
 {
 	int gametic;
@@ -1233,17 +1235,19 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 	if (player != NULL)
 	{
 
-		if (oldlevel == 2 && waterlevel == 3) //&& player->mo->vel.z > 42000)
+		if (oldlevel == 2 && waterlevel == 3 && player->mo->vel.z < -16*FRACUNIT)
 		{ // Our head just went under.
 //			Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
-			S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+			if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+			else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
 		}
-		else if (oldlevel == 3 && waterlevel == 2) //&& player->mo->vel.z < -24000)
+		else if (oldlevel == 3 && waterlevel == 2 && player->mo->vel.z > 12*FRACUNIT)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)
 			{ // We hadn't run out of air yet.
 //				Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
-				S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+				if(snd_style==false) S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+				else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
 			}
 			// If we were running out of air, then ResetAirSupply() will play *gasp.
 		}
@@ -1986,7 +1990,7 @@ void P_MovePlayer (player_t *player)
 		bobfactor = friction < ORIG_FRICTION ? movefactor : ORIG_FRICTION_FACTOR;
 		if (!player->onground && !(player->mo->flags & MF_NOGRAVITY))
 		{
-			if (player->mo->waterlevel < 2)
+			if (player->mo->waterlevel < 2)	//[XANE]Added separate water checks since swimming is removed.
 			{
 				// [RH] allow very limited movement if not on ground.
 				movefactor = FixedMul(movefactor, level.aircontrol);
@@ -2028,7 +2032,7 @@ void P_MovePlayer (player_t *player)
 			P_SideThrust (player, mo->angle, sidemove);
 		}
 
-		if (debugfile)
+		/*if (debugfile)
 		{
 			fprintf (debugfile, "move player for pl %d%c: (%d,%d,%d) (%d,%d) %d %d w%d [", int(player-players),
 				player->cheats&CF_PREDICTING?'p':' ',
@@ -2040,7 +2044,7 @@ void P_MovePlayer (player_t *player)
 				n = n->m_tnext;
 			}
 			fprintf (debugfile, "]\n");
-		}
+		}*/
 
 		if (!(player->cheats & CF_PREDICTING) && (forwardmove|sidemove))
 		{
@@ -2603,7 +2607,8 @@ void P_PlayerThink (player_t *player)
 				player->mo->flags2 &= ~MF2_ONMOBJ;
 				player->jumpTics = -1;
 				if (!(player->cheats & CF_PREDICTING))
-					S_Sound(player->mo, CHAN_BODY, "*jump", 1, ATTN_NORM);
+					if(snd_style == false) S_Sound(player->mo, CHAN_BODY, "*jump", 1, ATTN_NORM);
+					else S_Sound(player->mo, CHAN_BODY, "misc/jump", 0.5, ATTN_NORM);
 			}
 		}
 

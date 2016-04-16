@@ -94,6 +94,7 @@ CVAR (Flag, pf_hexenweaps,	paletteflash, PF_HEXENWEAPONS)
 CVAR (Flag, pf_poison,		paletteflash, PF_POISON)
 CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
+CVAR (Bool, msg_showminor, false, CVAR_ARCHIVE)
 
 // Stretch status bar to full screen width?
 CUSTOM_CVAR (Bool, st_scale, true, CVAR_ARCHIVE)
@@ -1588,7 +1589,7 @@ void DBaseStatusBar::DrawConsistancy () const
 	{
 		if (playeringame[i] && players[i].inconsistant)
 		{
-			if (buff_p == NULL)
+			if (buff_p == NULL && msg_showminor)
 			{
 				strcpy(conbuff, "YOU ARE OUT OF SYNC WITH PLAYER x;\nIF YOU DON'T SEE OTHER PLAYERS, RESTART WORLD OF KIRBYCRAFT.");
 				buff_p = conbuff + 32;

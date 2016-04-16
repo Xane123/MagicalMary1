@@ -1171,11 +1171,11 @@ static void GiveInventory (AActor *activator, const char *type, int amount)
 	info = PClass::FindActor(type);
 	if (info == NULL)
 	{
-		Printf ("ACS: I don't know what %s is.\n", type);
+		Printf ("ACS: %s HASN'T BEEN CREATED IN DECORATE YET.\n", type);
 	}
 	else if (!info->IsDescendantOf (RUNTIME_CLASS(AInventory)))
 	{
-		Printf ("ACS: %s is not an inventory item.\n", type);
+		Printf("ACS: %s IS NOT AN INVENTORY ITEM; INHERIT FROM INVENTORY OR CUSTOMINVENTORY.\n", type);
 	}
 	else if (activator == NULL)
 	{
@@ -1465,7 +1465,7 @@ void FBehavior::StaticLoadDefaultModules ()
 			}
 			else
 			{
-				Printf (TEXTCOLOR_RED "Could not find autoloaded ACS library %s\n", sc.String);
+				Printf (TEXTCOLOR_RED "AN ACS SCRIPT FILE YOU REQUESTED TO BE LOADED, %s, COULDN'T BE FOUND.\n", sc.String);
 			}
 		}
 	}
@@ -1613,7 +1613,7 @@ void FBehavior::StaticSerializeModuleStates (FArchive &arc)
 
 	if (modnum != StaticModules.Size())
 	{
-		I_Error("Level was saved with a different number of ACS modules. (Have %d, save has %d)", StaticModules.Size(), modnum);
+		I_Error("THIS SAVE WAS SAVED WITH A DIFFERENT NUMBER OF ACS SCRIPTS;\n\nREDOWNLOAD THE SAME VERSION YOU SAVED THIS IN OR USE LEVEL SELECT TO GET BACK TO WHERE YOU SAVED THIS FILE.\n\nIF YOU'RE CURIOUS, THIS SAVE HAD %d PARTS WHILE THE CURRENT VERSION HAS %d PARTS INSTEAD.", modnum, StaticModules.Size());
 	}
 
 	for (modnum = 0; modnum < StaticModules.Size(); ++modnum)
@@ -1634,12 +1634,12 @@ void FBehavior::StaticSerializeModuleStates (FArchive &arc)
 			if (stricmp (modname, module->ModuleName) != 0)
 			{
 				delete[] modname;
-				I_Error("Level was saved with a different set or order of ACS modules. (Have %s, save has %s)", module->ModuleName, modname);
+				I_Error("THIS SAVE WAS SAVED WITH A DIFFERENT SET OF ACS SCRIPT FILES;\n\nREDOWNLOAD THE SAME VERSION YOU SAVED THIS IN OR USE LEVEL SELECT TO GET BACK TO WHERE YOU SAVED THIS FILE.\n\nIF YOU'RE CURIOUS, THIS SAVE HAS %s FIRST, WHILE THE CURRENT VERSION HAS %s FIRST INSTEAD.", modname, module->ModuleName);
 			}
 			else if (ModSize != module->GetDataSize())
 			{
 				delete[] modname;
-				I_Error("ACS module %s has changed from what was saved. (Have %d bytes, save has %d bytes)", module->ModuleName, module->GetDataSize(), ModSize);
+				I_Error("AN ACS SCRIPT FILE HAS CHANGED IN SIZE SINCE THIS SAVE WAS MADE.\n\nREDOWNLOAD THE SAME VERSION YOU SAVED THIS SAVE IN OR USE LEVEL SELECT TO RETURN TO WHERE YOU SAVED THIS FILE.\n\nIF YOU'RE CURIOUS, THE ACS SCRIPT IN THIS SAVE, %s, WAS %d BYTES BIG.", module->ModuleName, module->GetDataSize(), ModSize);
 			}
 			delete[] modname;
 		}
