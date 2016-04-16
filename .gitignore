@@ -54,3 +54,5 @@ src/zdoom.dir
 *.sdf
 *.pk3
 *.tlog
+*.cache
+src/gitinfo.h
