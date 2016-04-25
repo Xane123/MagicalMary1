@@ -1,8 +1,8 @@
-// 45f69406486ec5d531f3f74d67c50781d24ec49c
+// 4d495d5a447050dd4cc6ffb7b509d1a92fb0d0f5
 //
-// GIT_DESCRIPTION is located in a different file!
-// Do not updte this by hand, though.
+// GIT_DESCRIPTION is located in gitinfo.cpp!
+// Do not update this by hand, though.
 
-#define GIT_DESCRIPTION "v1.1.1-alpha-17-g45f6940"
-#define GIT_HASH "45f69406486ec5d531f3f74d67c50781d24ec49c"
-#define GIT_TIME "2016-04-24 23:54:12 -0400"
+#define GIT_DESCRIPTION "v1.3-alpha"
+#define GIT_HASH "4d495d5a447050dd4cc6ffb7b509d1a92fb0d0f5"
+#define GIT_TIME "2016-04-25 00:06:42 -0400"
