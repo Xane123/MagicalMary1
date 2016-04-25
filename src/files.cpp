@@ -262,7 +262,7 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (Stream.avail_out != 0)
 	{
-		I_Error ("The PK3 stream ended unexpectedly.");
+		I_FatalError ("The PK3 stream ended unexpectedly.");
 	}
 
 	return len - Stream.avail_out;
@@ -331,12 +331,12 @@ long FileReaderBZ2::Read (void *buffer, long len)
 
 	if (err != BZ_OK && err != BZ_STREAM_END)
 	{
-		I_Error ("Corrupt bzip2 stream");
+		I_FatalError("One of the files that were loaded was modified while World of Kirbycraft was running.");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_Error ("Ran out of data in bzip2 stream");
+		I_FatalError("The file stream ended unexpectedly.");
 	}
 
 	return len - Stream.avail_out;

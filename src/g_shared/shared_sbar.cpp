@@ -1252,11 +1252,12 @@ void DBaseStatusBar::Draw (EHudState state)
 		RefreshBackground ();
 	}
 
-	if (wokpos)
+	if (wokpos)	//WOKPOS: Draw coordinates; Other similar code is for old automap coordinate code.
 	{ // Draw current coordinates
 		int height = SmallFont->GetHeight();
-		char labels[3] = { 'X', 'Y', 'Z' };
+		char labels[4] = { 'X', 'Y', 'F', 'C' };
 		fixed_t *value;
+
 		int i;
 
 		int vwidth;
@@ -1288,13 +1289,34 @@ void DBaseStatusBar::Draw (EHudState state)
 		}
 
 		fixedvec3 pos = CPlayer->mo->Pos();
-		for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
+		for (i = 3, value = &pos.z; i >= 0; y -= height, --value, --i)
 		{
-			mysnprintf (line, countof(line), "%c: %d", labels[i], *value >> FRACBITS);
-			screen->DrawText (SmallFont, CR_GREEN, xpos, y, line, 
-				DTA_KeepRatio, true,
-				DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, 				
-				TAG_DONE);
+			if (i < 2)
+			{
+				mysnprintf(line, countof(line), "%c: %d", labels[i], *value >> FRACBITS);
+				screen->DrawText(SmallFont, CR_CYAN, xpos, y-16, line,
+					DTA_KeepRatio, true,
+					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+					TAG_DONE);
+			}
+			else if(i == 2)
+			{
+				mysnprintf(line, countof(line), "%c: %d", labels[i], (*value >> FRACBITS) - (CPlayer->mo->floorz >> FRACBITS));
+				screen->DrawText(SmallFont, CR_CYAN, xpos, y-16, line,
+					DTA_KeepRatio, true,
+					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+					TAG_DONE);
+			}
+			else
+			{
+				i--;
+				mysnprintf(line, countof(line), "%c: %d", labels[i], (CPlayer->mo->ceilingz >> FRACBITS) - (*value >> FRACBITS));
+				screen->DrawText(SmallFont, CR_CYAN, xpos, y - 16, line,
+					DTA_KeepRatio, true,
+					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+					TAG_DONE);
+				i = 3;
+			}
 			V_SetBorderNeedRefresh();
 		}
 	}

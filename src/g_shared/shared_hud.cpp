@@ -843,6 +843,8 @@ static void DrawCoordinates(player_t * CPlayer)
 	int xpos = vwidth - SmallFont->StringWidth("X: -00000")-6;
 	int ypos = -10;
 
+	Printf("ARGH");
+
 	mysnprintf(coordstr, countof(coordstr), "X: %d", x>>FRACBITS);
 	screen->DrawText(SmallFont, hudcolor_xyco, xpos, ypos, coordstr,
 		DTA_KeepRatio, true,
