@@ -1831,7 +1831,7 @@ fixed_t P_XYMovement (AActor *mo, fixed_t scrollx, fixed_t scrolly)
 	fixed_t oldfloorz = mo->floorz;
 	fixed_t oldz = mo->Z();
 
-	fixed_t maxmove = MAXMOVE;
+	fixed_t maxmove = MAXMOVE;	//Suspected cause of water "speed limit".
 
 	if((mo->flags & MF_MISSILE) || (mo->player && mo->player->crouchoffset<-10 * FRACUNIT)) maxmove = MAXMOVE / 4;
 
