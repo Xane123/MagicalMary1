@@ -1289,7 +1289,7 @@ void DBaseStatusBar::Draw (EHudState state)
 		}
 
 		fixedvec3 pos = CPlayer->mo->Pos();
-		for (i = 3, value = &pos.z; i >= 0; y -= height, --value, --i)
+		for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
 		{
 			if (i < 2)
 			{
@@ -1299,23 +1299,21 @@ void DBaseStatusBar::Draw (EHudState state)
 					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
 					TAG_DONE);
 			}
-			else if(i == 2)
+			else
 			{
 				mysnprintf(line, countof(line), "%c: %d", labels[i], (*value >> FRACBITS) - (CPlayer->mo->floorz >> FRACBITS));
 				screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
 					DTA_KeepRatio, true,
 					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
 					TAG_DONE);
-			}
-			else
-			{
-				i--;
+
+				y -= height;
+
 				mysnprintf(line, countof(line), "%c: %d", 'C', (CPlayer->mo->ceilingz >> FRACBITS) - (*value >> FRACBITS));
 				screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
 					DTA_KeepRatio, true,
 					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
 					TAG_DONE);
-				i = 3;
 			}
 			V_SetBorderNeedRefresh();
 		}
