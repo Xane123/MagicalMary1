@@ -82,9 +82,7 @@ inline int GetSafeBlockY(long long blocky)
 // MAXRADIUS is for precalculated sector block boxes
 // the spider demon is larger,
 // but we do not have any moving sectors nearby
-#define MAXRADIUS		0/*32*FRACUNIT*/
-
-//#define GRAVITY 		FRACUNIT
+#define MAXRADIUS		0s
 #define MAXMOVE 		(30*FRACUNIT)
 
 #define TALKRANGE		(128*FRACUNIT)
@@ -92,11 +90,6 @@ inline int GetSafeBlockY(long long blocky)
 #define MELEERANGE		(64*FRACUNIT)
 #define MISSILERANGE	(32*64*FRACUNIT)
 #define PLAYERMISSILERANGE	(8192*FRACUNIT)	// [RH] New MISSILERANGE for players
-
-// follow a player exlusively for 3 seconds
-// No longer used.
-// #define BASETHRESHOLD	100
-
 
 //
 // P_PSPR

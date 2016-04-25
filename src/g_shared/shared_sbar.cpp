@@ -74,6 +74,7 @@ EXTERN_CVAR (Bool, am_showtime)
 EXTERN_CVAR (Bool, am_showtotaltime)
 EXTERN_CVAR (Bool, noisedebug)
 EXTERN_CVAR (Int, con_scaletext)
+EXTERN_CVAR (Bool, xane_debug)
 
 DBaseStatusBar *StatusBar;
 
@@ -81,6 +82,7 @@ extern int setblocks;
 
 int ST_X, ST_Y;
 int SB_state = 3;
+int xane_timer = 0;
 
 FTexture *CrosshairImage;
 static int CrosshairNum;
@@ -94,7 +96,8 @@ CVAR (Flag, pf_hexenweaps,	paletteflash, PF_HEXENWEAPONS)
 CVAR (Flag, pf_poison,		paletteflash, PF_POISON)
 CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
-CVAR (Bool, msg_showminor, false, CVAR_ARCHIVE)
+CVAR (Bool, msg_showminor, false, CVAR_ARCHIVE)	//[XANE]Write very minor/useless messages like "out of sync" to the HUD?
+CVAR (Bool, hud_debugstyle, true, CVAR_ARCHIVE)	//[XANE]Make WOKPOS text "transparent" or solid?
 
 // Stretch status bar to full screen width?
 CUSTOM_CVAR (Bool, st_scale, true, CVAR_ARCHIVE)
@@ -1315,6 +1318,24 @@ void DBaseStatusBar::Draw (EHudState state)
 					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
 					TAG_DONE);
 			}
+			if (i <= 0 && xane_debug)
+			{
+				y -= height;
+				xane_timer++;
+				if (xane_timer >= 34 % TICRATE) xane_timer = 0;
+				
+				if (xane_timer <= 15 % TICRATE)
+				{
+					mysnprintf(line, countof(line), "-DEBUG-");
+					screen->DrawText(SmallFont, CR_YELLOW, xpos, y - 64, line,
+						DTA_KeepRatio, true,
+						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+						TAG_DONE);
+				}
+
+			}
+
+
 			V_SetBorderNeedRefresh();
 		}
 	}

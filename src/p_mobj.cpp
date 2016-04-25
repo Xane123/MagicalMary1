@@ -1835,8 +1835,6 @@ fixed_t P_XYMovement (AActor *mo, fixed_t scrollx, fixed_t scrolly)
 
 	if((mo->flags & MF_MISSILE) || (mo->player && mo->player->crouchoffset<-10 * FRACUNIT)) maxmove = MAXMOVE / 4;
 
-	if (mo->waterlevel >= 2) maxmove = MAXMOVE * 2;
-
 	if (mo->flags2 & MF2_WINDTHRUST && mo->waterlevel < 2 && !(mo->flags & MF_NOCLIP))
 	{
 		int special = mo->Sector->special;

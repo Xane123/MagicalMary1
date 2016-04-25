@@ -77,8 +77,8 @@ int main(int argc, char **argv)
 	}
 	if (hash == NULL)
 	{
-		fprintf(stderr, "Failed to get commit info: %s\n", strerror(errno));
-		strcpy(vertag, "NO GIT");
+		fprintf(stderr, "Make sure this is a valid, cloned git folder! %s\n", strerror(errno));
+		strcpy(vertag, "Update version number through gitinfo.cpp!");
 		lastlog[0] = '\0';
 		lastlog[1] = '0';
 		lastlog[2] = '\0';
@@ -117,19 +117,19 @@ int main(int argc, char **argv)
 		fprintf(stream,
 "// %s\n"
 "//\n"
-"// GIT_DESCRIPTION is located in a different file!\n"
-"// Do not updte this by hand, though.\n"
+"// GIT_DESCRIPTION is located in gitinfo.cpp!\n"
+"// Do not update this by hand, though.\n"
 "\n"
 "#define GIT_DESCRIPTION \"%s\"\n"
 "#define GIT_HASH \"%s\"\n"
 "#define GIT_TIME \"%s\"\n",
 			hash, vertag, hash, lastlog);
 		fclose(stream);
-		fprintf(stderr, "%s updated to commit %s.\n", argv[1], vertag);
+		fprintf(stderr, "%s was updated to the version %s.\n", argv[1], vertag);
 	}
 	else
 	{
-		fprintf (stderr, "%s is up to date at commit %s.\n", argv[1], vertag);
+		fprintf (stderr, "%s is up to date at the version %s.\n", argv[1], vertag);
 	}
 
 	return 0;
