@@ -1859,7 +1859,7 @@ fixed_t P_XYMovement (AActor *mo, fixed_t scrollx, fixed_t scrolly)
 	// that large thrusts can't propel an actor through a wall, because wall
 	// running depends on the player's original movement continuing even after
 	// it gets blocked.
-	if ((mo->player != NULL && (i_compatflags & COMPATF_WALLRUN)) || (mo->waterlevel >= 1) ||
+	if ((mo->player != NULL && (i_compatflags & COMPATF_WALLRUN)) || /*(mo->waterlevel >= 1) ||*/
 		(mo->player != NULL && mo->player->crouchfactor < FRACUNIT*3/4))
 	{
 		// preserve the direction instead of clamping x and y independently.
@@ -5660,7 +5660,7 @@ foundone:
 	splash = &Splashes[splashnum];
 
 	// Small splash for small masses
-	if (thing->Mass < 10)
+	if (thing->Mass < 50)	//Change this to determine what
 		smallsplash = true;
 
 	if (smallsplash && splash->SmallSplash)

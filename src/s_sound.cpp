@@ -133,6 +133,7 @@ int S_SoundCurveSize;
 FBoolCVar noisedebug ("noise", false, 0);	// [RH] Print sound debugging info?
 CVAR (Int, snd_channels, 32, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)	// number of channels available
 CVAR (Bool, snd_flipstereo, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+EXTERN_CVAR (Bool, hud_debugstyle)
 
 // CODE --------------------------------------------------------------------
 
@@ -150,122 +151,127 @@ void S_NoiseDebug (void)
 	FVector3 origin;
 	int y, color;
 
-	y = 28 * CleanYfac;
-	screen->DrawText (SmallFont, CR_BLUE, 0, y, GStrings("TXT_NOISEHEADER"), TAG_DONE);
-	y += 24;
-
-	screen->DrawText (SmallFont, CR_CYAN, 0, y, "NAME", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 82, y, "X", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 132, y, "Y", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 192, y, "Z", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 242, y, "VOL", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 282, y, "DIST", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 322, y, "CHAN", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 362, y, "PRI", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 402, y, "FLAGS", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 482, y, "AUD", TAG_DONE);
-	screen->DrawText (SmallFont, CR_CYAN, 542, y, "POS", TAG_DONE);
-	y += 16;
-
-	if (Channels == NULL)
+	if ((hud_debugstyle == false) || (hud_debugstyle && (level.time % TICRATE) == 0 || (level.time % TICRATE) == 2 || (level.time % TICRATE) == 4 || (level.time % TICRATE) == 6 || (level.time % TICRATE) == 8 || (level.time % TICRATE) == 10 || (level.time % TICRATE) == 12 || (level.time % TICRATE) == 14 || (level.time % TICRATE) == 16 || (level.time % TICRATE) == 18 || (level.time % TICRATE) == 20 || (level.time % TICRATE) == 22 || (level.time % TICRATE) == 24 || (level.time % TICRATE) == 26 || (level.time % TICRATE) == 28 || (level.time % TICRATE) == 30 || (level.time % TICRATE) == 32 || (level.time % TICRATE) == 34))
 	{
-		return;
-	}
+		y = 28 * CleanYfac;
+		screen->DrawText(SmallFont, CR_BLUE, 0, y, GStrings("TXT_NOISEHEADER"), TAG_DONE);
+		y += 24;
 
+		screen->DrawText(SmallFont, CR_CYAN, 0, y, "NAME", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 82, y, "X", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 132, y, "Y", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 192, y, "Z", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 242, y, "VOL", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 282, y, "DIST", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 322, y, "CHAN", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 362, y, "PRI", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 402, y, "FLAGS", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 482, y, "AUD", TAG_DONE);
+		screen->DrawText(SmallFont, CR_CYAN, 542, y, "POS", TAG_DONE);
+		y += 16;
 
-	listener.X = FIXED2FLOAT(players[consoleplayer].camera->SoundX());
-	listener.Y = FIXED2FLOAT(players[consoleplayer].camera->SoundZ());
-	listener.Z = FIXED2FLOAT(players[consoleplayer].camera->SoundY());
-
-	// Display the oldest channel first.
-	for (chan = Channels; chan->NextChan != NULL; chan = chan->NextChan)
-	{ }
-	while (y < SCREENHEIGHT - 16)
-	{
-		char temp[32];
-
-		CalcPosVel(chan, &origin, NULL);
-		color = (chan->ChanFlags & CHAN_LOOP) ? CR_YELLOW : CR_LIGHTBLUE;
-
-		// Name
-		Wads.GetLumpName (temp, S_sfx[chan->SoundID].lumpnum);
-		temp[8] = 0;
-		screen->DrawText (SmallFont, color, 0, y, temp, TAG_DONE);
-
-		if (!(chan->ChanFlags & CHAN_IS3D))
+		if (Channels == NULL)
 		{
-			screen->DrawText(SmallFont, color, 92, y, "---", TAG_DONE);		// X
-			screen->DrawText(SmallFont, color, 142, y, "---", TAG_DONE);	// Y
-			screen->DrawText(SmallFont, color, 192, y, "---", TAG_DONE);	// Z
-			screen->DrawText(SmallFont, color, 282, y, "---", TAG_DONE);	// Distance
+			return;
 		}
-		else
+
+
+		listener.X = FIXED2FLOAT(players[consoleplayer].camera->SoundX());
+		listener.Y = FIXED2FLOAT(players[consoleplayer].camera->SoundZ());
+		listener.Z = FIXED2FLOAT(players[consoleplayer].camera->SoundY());
+
+		// Display the oldest channel first.
+		for (chan = Channels; chan->NextChan != NULL; chan = chan->NextChan)
 		{
-			// X coordinate
-			mysnprintf(temp, countof(temp), "%.0f", origin.X);
-			screen->DrawText(SmallFont, color, 92, y, temp, TAG_DONE);
+		}
+		while (y < SCREENHEIGHT - 16)
+		{
+			char temp[32];
 
-			// Y coordinate
-			mysnprintf(temp, countof(temp), "%.0f", origin.Z);
-			screen->DrawText(SmallFont, color, 142, y, temp, TAG_DONE);
+			CalcPosVel(chan, &origin, NULL);
+			color = (chan->ChanFlags & CHAN_LOOP) ? CR_YELLOW : CR_LIGHTBLUE;
 
-			// Z coordinate
-			mysnprintf(temp, countof(temp), "%.0f", origin.Y);
-			screen->DrawText(SmallFont, color, 192, y, temp, TAG_DONE);
+			// Name
+			Wads.GetLumpName(temp, S_sfx[chan->SoundID].lumpnum);
+			temp[8] = 0;
+			screen->DrawText(SmallFont, color, 0, y, temp, TAG_DONE);
 
-			// Distance
-			if (chan->DistanceScale > 0)
+			if (!(chan->ChanFlags & CHAN_IS3D))
 			{
-				mysnprintf(temp, countof(temp), "%.0f", (origin - listener).Length());
-				screen->DrawText(SmallFont, color, 282, y, temp, TAG_DONE);
+				screen->DrawText(SmallFont, color, 92, y, "---", TAG_DONE);		// X
+				screen->DrawText(SmallFont, color, 142, y, "---", TAG_DONE);	// Y
+				screen->DrawText(SmallFont, color, 192, y, "---", TAG_DONE);	// Z
+				screen->DrawText(SmallFont, color, 282, y, "---", TAG_DONE);	// Distance
 			}
 			else
 			{
-				screen->DrawText(SmallFont, color, 282, y, "---", TAG_DONE);
+				// X coordinate
+				mysnprintf(temp, countof(temp), "%.0f", origin.X);
+				screen->DrawText(SmallFont, color, 92, y, temp, TAG_DONE);
+
+				// Y coordinate
+				mysnprintf(temp, countof(temp), "%.0f", origin.Z);
+				screen->DrawText(SmallFont, color, 142, y, temp, TAG_DONE);
+
+				// Z coordinate
+				mysnprintf(temp, countof(temp), "%.0f", origin.Y);
+				screen->DrawText(SmallFont, color, 192, y, temp, TAG_DONE);
+
+				// Distance
+				if (chan->DistanceScale > 0)
+				{
+					mysnprintf(temp, countof(temp), "%.0f", (origin - listener).Length());
+					screen->DrawText(SmallFont, color, 282, y, temp, TAG_DONE);
+				}
+				else
+				{
+					screen->DrawText(SmallFont, color, 282, y, "---", TAG_DONE);
+				}
 			}
+
+			// Volume
+			mysnprintf(temp, countof(temp), "%.2g", chan->Volume);
+			screen->DrawText(SmallFont, color, 242, y, temp, TAG_DONE);
+
+			// Channel
+			mysnprintf(temp, countof(temp), "%d", chan->EntChannel);
+			screen->DrawText(SmallFont, color, 322, y, temp, TAG_DONE);
+
+			// Priority
+			mysnprintf(temp, countof(temp), "%d", chan->Priority);
+			screen->DrawText(SmallFont, color, 362, y, temp, TAG_DONE);
+
+			// Flags
+			mysnprintf(temp, countof(temp), "%s3%sZ%sU%sM%sN%sA%sL%sE%sV",
+				(chan->ChanFlags & CHAN_IS3D) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_LISTENERZ) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_UI) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_MAYBE_LOCAL) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_NOPAUSE) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_AREA) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_LOOP) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_EVICTED) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
+				(chan->ChanFlags & CHAN_VIRTUAL) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE);
+			screen->DrawText(SmallFont, color, 402, y, temp, TAG_DONE);
+
+			// Audibility
+			mysnprintf(temp, countof(temp), "%.4f", GSnd->GetAudibility(chan));
+			screen->DrawText(SmallFont, color, 482, y, temp, TAG_DONE);
+
+			// Position
+			mysnprintf(temp, countof(temp), "%u", GSnd->GetPosition(chan));
+			screen->DrawText(SmallFont, color, 542, y, temp, TAG_DONE);
+
+
+			y += 16;
+			if (chan->PrevChan == &Channels)
+			{
+				break;
+			}
+			chan = (FSoundChan *)((size_t)chan->PrevChan - myoffsetof(FSoundChan, NextChan));
 		}
-
-		// Volume
-		mysnprintf(temp, countof(temp), "%.2g", chan->Volume);
-		screen->DrawText(SmallFont, color, 242, y, temp, TAG_DONE);
-
-		// Channel
-		mysnprintf(temp, countof(temp), "%d", chan->EntChannel);
-		screen->DrawText(SmallFont, color, 322, y, temp, TAG_DONE);
-
-		// Priority
-		mysnprintf(temp, countof(temp), "%d", chan->Priority);
-		screen->DrawText(SmallFont, color, 362, y, temp, TAG_DONE);
-
-		// Flags
-		mysnprintf(temp, countof(temp), "%s3%sZ%sU%sM%sN%sA%sL%sE%sV",
-			(chan->ChanFlags & CHAN_IS3D)			? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_LISTENERZ)		? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_UI)				? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_MAYBE_LOCAL)	? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_NOPAUSE)		? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_AREA)			? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_LOOP)			? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_EVICTED)		? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-			(chan->ChanFlags & CHAN_VIRTUAL)		? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE);
-		screen->DrawText(SmallFont, color, 402, y, temp, TAG_DONE);
-
-		// Audibility
-		mysnprintf(temp, countof(temp), "%.4f", GSnd->GetAudibility(chan));
-		screen->DrawText(SmallFont, color, 482, y, temp, TAG_DONE);
-
-		// Position
-		mysnprintf(temp, countof(temp), "%u", GSnd->GetPosition(chan));
-		screen->DrawText(SmallFont, color, 542, y, temp, TAG_DONE);
-
-
-		y += 16;
-		if (chan->PrevChan == &Channels)
-		{
-			break;
-		}
-		chan = (FSoundChan *)((size_t)chan->PrevChan - myoffsetof(FSoundChan, NextChan));
 	}
+
 	V_SetBorderNeedRefresh();
 }
 

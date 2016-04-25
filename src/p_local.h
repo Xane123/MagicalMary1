@@ -82,8 +82,8 @@ inline int GetSafeBlockY(long long blocky)
 // MAXRADIUS is for precalculated sector block boxes
 // the spider demon is larger,
 // but we do not have any moving sectors nearby
-#define MAXRADIUS		0s
-#define MAXMOVE 		(30*FRACUNIT)
+#define MAXRADIUS		0
+#define MAXMOVE 		(30*FRACUNIT)	//Speed limit; Changing this makes springs break. Underwater speed limit is unaffected.
 
 #define TALKRANGE		(128*FRACUNIT)
 #define USERANGE		(64*FRACUNIT)

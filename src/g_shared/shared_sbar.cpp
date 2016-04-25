@@ -82,7 +82,6 @@ extern int setblocks;
 
 int ST_X, ST_Y;
 int SB_state = 3;
-int xane_timer = 0;
 
 FTexture *CrosshairImage;
 static int CrosshairNum;
@@ -1292,49 +1291,46 @@ void DBaseStatusBar::Draw (EHudState state)
 		}
 
 		fixedvec3 pos = CPlayer->mo->Pos();
-		for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
+		if((hud_debugstyle == false) || (hud_debugstyle && (level.time % TICRATE) == 0 || (level.time % TICRATE) == 2 || (level.time % TICRATE) == 4 || (level.time % TICRATE) == 6 || (level.time % TICRATE) == 8 || (level.time % TICRATE) == 10 || (level.time % TICRATE) == 12 || (level.time % TICRATE) == 14 || (level.time % TICRATE) == 16 || (level.time % TICRATE) == 18 || (level.time % TICRATE) == 20|| (level.time % TICRATE) == 22 || (level.time % TICRATE) == 24 || (level.time % TICRATE) == 26 || (level.time % TICRATE) == 28 || (level.time % TICRATE) == 30 || (level.time % TICRATE) == 32 || (level.time % TICRATE) == 34))
 		{
-			if (i < 2)
+			for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
 			{
-				mysnprintf(line, countof(line), "%c: %d", labels[i], *value >> FRACBITS);
-				screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
-					DTA_KeepRatio, true,
-					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-					TAG_DONE);
-			}
-			else
-			{
-				mysnprintf(line, countof(line), "%c: %d", labels[i], (*value >> FRACBITS) - (CPlayer->mo->floorz >> FRACBITS));
-				screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
-					DTA_KeepRatio, true,
-					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-					TAG_DONE);
-
-				y -= height;
-
-				mysnprintf(line, countof(line), "%c: %d", 'C', (CPlayer->mo->ceilingz >> FRACBITS) - (*value >> FRACBITS));
-				screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
-					DTA_KeepRatio, true,
-					DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-					TAG_DONE);
-			}
-			if (i <= 0 && xane_debug)
-			{
-				y -= height;
-				xane_timer++;
-				if (xane_timer >= 34 % TICRATE) xane_timer = 0;
-				
-				if (xane_timer <= 15 % TICRATE)
+				if (i < 2)
 				{
-					mysnprintf(line, countof(line), "-DEBUG-");
-					screen->DrawText(SmallFont, CR_YELLOW, xpos, y - 64, line,
+					mysnprintf(line, countof(line), "%c: %d", labels[i], *value >> FRACBITS);
+					screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
+						DTA_KeepRatio, true,
+						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+						TAG_DONE);
+				}
+				else
+				{
+					mysnprintf(line, countof(line), "%c: %d", labels[i], (*value >> FRACBITS) - (CPlayer->mo->floorz >> FRACBITS));
+					screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
+						DTA_KeepRatio, true,
+						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+						TAG_DONE);
+
+					y -= height;
+
+					mysnprintf(line, countof(line), "%c: %d", 'C', (CPlayer->mo->ceilingz >> FRACBITS) - (*value >> FRACBITS));
+					screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
 						DTA_KeepRatio, true,
 						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
 						TAG_DONE);
 				}
 
+				if (xane_debug && i <= 0)
+				{
+					y -= height;
+					mysnprintf(line, countof(line), GStrings("TXT_WOKPOS_DBGHEAD"));
+					screen->DrawText(SmallFont, CR_YELLOW, xpos, y - 64, line,
+						DTA_KeepRatio, true,
+						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
+						TAG_DONE);
+				}
+			
 			}
-
 
 			V_SetBorderNeedRefresh();
 		}
@@ -1447,7 +1443,6 @@ void DBaseStatusBar::Draw (EHudState state)
 		}
 	}
 }
-
 
 void DBaseStatusBar::DrawLog ()
 {

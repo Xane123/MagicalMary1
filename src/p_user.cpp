@@ -1235,13 +1235,13 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 	if (player != NULL)
 	{
 
-		if (oldlevel == 2 && waterlevel == 3 && player->mo->vel.z < -16*FRACUNIT)
+		if (oldlevel < 3 && waterlevel == 3 && player->mo->vel.z < -16*FRACUNIT)
 		{ // Our head just went under.
 //			Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
 			if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
 			else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
 		}
-		else if (oldlevel == 3 && waterlevel == 2 && player->mo->vel.z > 12*FRACUNIT)
+		else if (oldlevel == 3 && waterlevel < 3 && player->mo->vel.z > 12*FRACUNIT)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)
 			{ // We hadn't run out of air yet.
@@ -2032,20 +2032,6 @@ void P_MovePlayer (player_t *player)
 			P_SideThrust (player, mo->angle, sidemove);
 		}
 
-		/*if (debugfile)
-		{
-			fprintf (debugfile, "move player for pl %d%c: (%d,%d,%d) (%d,%d) %d %d w%d [", int(player-players),
-				player->cheats&CF_PREDICTING?'p':' ',
-				player->mo->X(), player->mo->Y(), player->mo->Z(),forwardmove, sidemove, movefactor, friction, player->mo->waterlevel);
-			msecnode_t *n = player->mo->touching_sectorlist;
-			while (n != NULL)
-			{
-				fprintf (debugfile, "%td ", n->m_sector-sectors);
-				n = n->m_tnext;
-			}
-			fprintf (debugfile, "]\n");
-		}*/
-
 		if (!(player->cheats & CF_PREDICTING) && (forwardmove|sidemove))
 		{
 			player->mo->PlayRunning ();
@@ -2628,7 +2614,7 @@ void P_PlayerThink (player_t *player)
 			{
 				cmd->ucmd.upmove = ksgn (cmd->ucmd.upmove) * 0x300;
 			}
-			if (player->mo->waterlevel >= 2 || (player->mo->flags2 & MF2_FLY) || (player->cheats & CF_NOCLIP2))
+			if ((player->mo->flags2 & MF2_FLY) || (player->cheats & CF_NOCLIP2))
 			{
 				player->mo->vel.z = FixedMul(player->mo->Speed, cmd->ucmd.upmove << 9);
 				if (player->mo->waterlevel < 2 && !(player->mo->flags & MF_NOGRAVITY))

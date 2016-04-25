@@ -1186,7 +1186,7 @@ void R_SetupFrame (AActor *actor)
 		}
 		else
 		{
-			color = pr_hom();
+			color = pr_hom();	//"Seizure Mode"
 		}
 		Renderer->ClearBuffer(color);
 	}
