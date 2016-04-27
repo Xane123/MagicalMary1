@@ -2311,4 +2311,16 @@
       <UniqueIdentifier>{2FC23326-32BB-3D29-9691-84B13290889A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="win32\icon1.ico" />
+    <Image Include="win32\boing1.ico" />
+    <Image Include="win32\boing2.ico" />
+    <Image Include="win32\boing3.ico" />
+    <Image Include="win32\boing4.ico" />
+    <Image Include="win32\boing5.ico" />
+    <Image Include="win32\boing6.ico" />
+    <Image Include="win32\boing7.ico" />
+    <Image Include="win32\boing8.ico" />
+    <Image Include="win32\deadguy.bmp" />
+  </ItemGroup>
 </Project>

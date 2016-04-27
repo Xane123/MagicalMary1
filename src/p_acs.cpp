@@ -6185,7 +6185,7 @@ int DLevelScript::RunScript ()
 	{
 		if (++runaway > 2000000)
 		{
-			Printf ("Runaway %s terminated\n", ScriptPresentation(script).GetChars());
+			Printf ("%s IS MISSING A DELAY AND HAS RAN TOO MANY COO\n", ScriptPresentation(script).GetChars());
 			state = SCRIPT_PleaseRemove;
 			break;
 		}
@@ -8683,7 +8683,7 @@ scriptwait:
 		case PCD_GETACTORCEILINGZ:
 			{
 				AActor *actor = SingleActorFromTID(STACK(1), activator);
-				STACK(1) = actor == NULL ? 0 : actor->ceilingz;
+				STACK(1) = actor == NULL ? 0 : actor->ceilingz; 
 			}
 			break;
 
@@ -8696,8 +8696,12 @@ scriptwait:
 
 		case PCD_GETACTORPITCH:
 			{
+				/*AActor *actor = SingleActorFromTID(STACK(1), activator);
+				STACK(1) = actor == NULL ? 0 : actor->pitch >> 16;*/
+
 				AActor *actor = SingleActorFromTID(STACK(1), activator);
-				STACK(1) = actor == NULL ? 0 : actor->pitch >> 16;
+				if (actor->player && (actor->player->cmd.ucmd.forwardmove | actor->player->cmd.ucmd.sidemove) && actor != NULL && actor->BlockingLine->sidedef[1] != NULL) STACK(1) = true;
+				else STACK(1) = false;
 			}
 			break;
 
@@ -9523,7 +9527,7 @@ scriptwait:
 			break;
 
 		case PCD_CONSOLECOMMAND:
-			Printf (TEXTCOLOR_RED GAMENAME " doesn't support execution of console commands from scripts\n");
+			Printf (TEXTCOLOR_RED GAMESIG " doesn't support execution of console commands from scripts\n");
 			sp -= 3;
 			break;
  		}
@@ -9536,12 +9540,12 @@ scriptwait:
 
 	if (state == SCRIPT_DivideBy0)
 	{
-		Printf ("Divide by zero in %s\n", ScriptPresentation(script).GetChars());
+		Printf ("THIS SCRIPT DIVIDED BY ZERO. %s\n", ScriptPresentation(script).GetChars());
 		state = SCRIPT_PleaseRemove;
 	}
 	else if (state == SCRIPT_ModulusBy0)
 	{
-		Printf ("Modulus by zero in %s\n", ScriptPresentation(script).GetChars());
+		Printf ("THIS SCRIPT ATTEMPTED TO MODULO BY ZERO. %s\n", ScriptPresentation(script).GetChars());
 		state = SCRIPT_PleaseRemove;
 	}
 	if (state == SCRIPT_PleaseRemove)

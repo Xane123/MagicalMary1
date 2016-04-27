@@ -154,7 +154,7 @@ void S_NoiseDebug (void)
 	if ((hud_debugstyle == false) || (hud_debugstyle && (level.time % TICRATE) == 0 || (level.time % TICRATE) == 2 || (level.time % TICRATE) == 4 || (level.time % TICRATE) == 6 || (level.time % TICRATE) == 8 || (level.time % TICRATE) == 10 || (level.time % TICRATE) == 12 || (level.time % TICRATE) == 14 || (level.time % TICRATE) == 16 || (level.time % TICRATE) == 18 || (level.time % TICRATE) == 20 || (level.time % TICRATE) == 22 || (level.time % TICRATE) == 24 || (level.time % TICRATE) == 26 || (level.time % TICRATE) == 28 || (level.time % TICRATE) == 30 || (level.time % TICRATE) == 32 || (level.time % TICRATE) == 34))
 	{
 		y = 28 * CleanYfac;
-		screen->DrawText(SmallFont, CR_BLUE, 0, y, GStrings("TXT_NOISEHEADER"), TAG_DONE);
+		screen->DrawText(SmallFont, CR_YELLOW, 0, y, GStrings("TXT_NOISEHEADER"), TAG_DONE);
 		y += 24;
 
 		screen->DrawText(SmallFont, CR_CYAN, 0, y, "NAME", TAG_DONE);

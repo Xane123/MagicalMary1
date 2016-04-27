@@ -2107,6 +2107,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>57BB9742-72A7-30ED-BB26-80920476A3DB</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="win32\boing1.ico" />
+    <Image Include="win32\boing2.ico" />
+    <Image Include="win32\boing3.ico" />
+    <Image Include="win32\boing4.ico" />
+    <Image Include="win32\boing5.ico" />
+    <Image Include="win32\boing6.ico" />
+    <Image Include="win32\boing7.ico" />
+    <Image Include="win32\boing8.ico" />
+    <Image Include="win32\deadguy.bmp" />
+    <Image Include="win32\icon1.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

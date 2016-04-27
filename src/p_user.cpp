@@ -2586,15 +2586,12 @@ void P_PlayerThink (player_t *player)
 			{
 				fixed_t jumpvelz = player->mo->JumpZ * 35 / TICRATE;
 
-				// [BC] If the player has the high jump power, double his jump velocity.
-				if ( player->cheats & CF_HIGHJUMP )	jumpvelz *= 2;
-
 				player->mo->vel.z += jumpvelz;
-				player->mo->flags2 &= ~MF2_ONMOBJ;
+				player->mo->flags2 &= ~MF2_ONMOBJ;	
 				player->jumpTics = -1;
 				if (!(player->cheats & CF_PREDICTING))
-					if(snd_style == false) S_Sound(player->mo, CHAN_BODY, "*jump", 1, ATTN_NORM);
-					else S_Sound(player->mo, CHAN_BODY, "misc/jump", 0.5, ATTN_NORM);
+					if(snd_style == false) S_Sound(player->mo, CHAN_VOICE, "*jump", 1, ATTN_NORM);
+					else S_Sound(player->mo, CHAN_VOICE, "misc/jump", 0.5, ATTN_NORM);
 			}
 		}
 

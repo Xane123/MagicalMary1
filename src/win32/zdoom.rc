@@ -8,8 +8,10 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
-#include "../version.h"
-#include "../gitinfo.h"
+#include "../version.h"
+
+#include "../gitinfo.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -69,13 +71,13 @@ BEGIN
     "        BEGIN\r\n"
     "            VALUE ""Comments"", ""Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg.""\r\n"
     "            VALUE ""CompanyName"", "" ""\r\n"
-    "            VALUE ""FileDescription"", ""ZDoom""\r\n"
+    "            VALUE ""FileDescription"", ""World of Kirbycraft""\r\n"
     "            VALUE ""FileVersion"", RC_FILEVERSION2\r\n"
-    "            VALUE ""InternalName"", ""ZDoom""\r\n"
+    "            VALUE ""InternalName"", ""World of Kirbycraft""\r\n"
     "            VALUE ""LegalCopyright"", ""Copyright \\u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
     "            VALUE ""LegalTrademarks"", ""DoomR is a Registered Trademark of id Software, Inc.""\r\n"
-    "            VALUE ""OriginalFilename"", ""zdoom.exe""\r\n"
-    "            VALUE ""ProductName"", ""ZDoom""\r\n"
+    "            VALUE ""OriginalFilename"", ""wok.exe""\r\n"
+    "            VALUE ""ProductName"", ""World of Kirbycraft""\r\n"
     "            VALUE ""ProductVersion"", RC_PRODUCTVERSION2\r\n"
     "        END\r\n"
     "    END\r\n"
@@ -125,6 +127,7 @@ GUIDELINES DESIGNINFO
 BEGIN
     IDD_IWADDIALOG, DIALOG
     BEGIN
+        MOCKUP, 0, 50, 0, 0, ".\deadguy.bmp"
         LEFTMARGIN, 5
         RIGHTMARGIN, 205
         TOPMARGIN, 7
@@ -421,12 +424,12 @@ BEGIN
 END
 
 IDD_BOING DIALOGEX 0, 0, 187, 196
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Upload status"
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Amiga/DX-Ball 2"
 FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,130,175,50,14,WS_DISABLED
-    ICON            IDI_BOING1,IDC_BOING,7,7,21,20
+    ICON            IDI_BOING1,IDC_BOING,7,7,20,20
     LTEXT           "Static",IDC_BOINGSTATUS,33,12,147,8
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,166,189,1
     CONTROL         "",IDC_BOINGEDIT,"RichEdit20A",ES_MULTILINE | ES_READONLY | WS_BORDER | WS_VSCROLL | WS_TABSTOP,7,34,173,124
@@ -448,7 +451,7 @@ BEGIN
     PUSHBUTTON      "&Cancel multiplayer game",IDCANCEL,45,34,89,14
     CONTROL         "",IDC_NETSTARTMESSAGE,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,7,7,116,8
     CONTROL         "",IDC_NETSTARTCOUNT,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,153,7,29,8,WS_EX_RIGHT
-    CONTROL         "",IDC_NETSTARTPROGRESS,"msctls_progress32",PBS_SMOOTH | PBS_SMOOTHREVERSE | WS_BORDER,7,18,175,10,WS_EX_STATICEDGE
+    CONTROL         "",IDC_NETSTARTPROGRESS,"msctls_progress32",PBS_SMOOTH | PBS_SMOOTHREVERSE | WS_BORDER,7,18,175,10,WS_EX_TRANSPARENT | WS_EX_STATICEDGE
 END
 
 
@@ -481,6 +484,11 @@ BEGIN
 END
 
 IDD_NETSTARTPANE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_BOING AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
@@ -527,8 +535,8 @@ BEGIN
             VALUE "FileDescription", "World of Kirbycraft"
             VALUE "FileVersion", RC_FILEVERSION2
             VALUE "InternalName", "World of Kirbycraft"
-            VALUE "LegalCopyright", "World of Kirbycraft is (C)Xane Myers; This is based on the ZDoom source port, copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
-            VALUE "LegalTrademarks", "The engine underlying World of Kirbycraft, ZDoom, has a legal notice: Doom(R) is a Registered Trademark of id Software, Inc."
+            VALUE "LegalCopyright", "Copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
+            VALUE "LegalTrademarks", "DoomR is a Registered Trademark of id Software, Inc."
             VALUE "OriginalFilename", "wok.exe"
             VALUE "ProductName", "World of Kirbycraft"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
