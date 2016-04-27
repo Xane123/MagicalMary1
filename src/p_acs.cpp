@@ -149,6 +149,31 @@ enum
 	PICKAF_RETURNTID = 2,
 };
 
+// ACS specific conversion functions to and from fixed point.
+// These should be used to convert from and to sctipt variables
+// so that there is a clear distinction between leftover fixed point code
+// and genuinely needed conversions.
+
+inline double ACSToDouble(int acsval)
+{
+	return acsval / 65536.;
+}
+
+inline float ACSToFloat(int acsval)
+{
+	return acsval / 65536.f;
+}
+
+inline int DoubleToACS(double val)
+{
+	return xs_Fix<16>::ToFix(val);
+}
+
+inline DAngle ACSToAngle(int acsval)
+{
+	return acsval * (360. / 65536.);
+}
+
 struct CallReturn
 {
 	CallReturn(int pc, ScriptFunction *func, FBehavior *module, SDWORD *locals, ACSLocalArrays *arrays, bool discard, unsigned int runaway)

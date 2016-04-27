@@ -1478,7 +1478,7 @@ bool I_WriteIniFailed()
 	);
 	errortext.Format ("The config file %s could not be written:\n%s", GameConfig->GetPathName(), lpMsgBuf);
 	LocalFree (lpMsgBuf);
-	return MessageBox(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
+	return MessageBox(Window, errortext.GetChars(), GAMESIG "'s configuration was not saved!", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
 }
 
 //==========================================================================
