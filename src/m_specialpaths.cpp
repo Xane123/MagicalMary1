@@ -11,6 +11,7 @@
 
 #include "cmdlib.h"
 #include "m_misc.h"
+#include "gstrings.h"
 
 #if !defined(__APPLE__) && !defined(_WIN32)
 #include <sys/stat.h>
@@ -145,7 +146,7 @@ FString M_GetCachePath(bool create)
 	}
 	// Don't use GAME_DIR and such so that ZDoom and its child ports can
 	// share the node cache.
-	path += "/zdoom/cache";
+	path += "/temp/cache";
 	path.Substitute("//", "/");	// needed because progdir ends with a slash.
 	return path;
 }
@@ -227,7 +228,7 @@ FString M_GetConfigPath(bool for_reading)
 		}
 		else
 		{ // Couldn't get user name, so just use zdoom.ini
-			path += GAMENAMELOWERCASE ".ini";
+			path += GAMENAMELOWERCASE "-wok.ini";
 		}
 	}
 
@@ -261,23 +262,10 @@ FString M_GetScreenshotsPath()
 {
 	FString path;
 
-	if (!UseKnownFolders())
-	{
-		return progdir;
-	}
-	else if (GetKnownFolder(-1, MyFOLDERID_Screenshots, true, path))
-	{
-		path << "/" GAMENAME;
-	}
-	else if (GetKnownFolder(CSIDL_MYPICTURES, FOLDERID_Pictures, true, path))
-	{
-		path << "/Screenshots/" GAMENAME;
-	}
-	else
-	{
-		path = progdir;
-		path << "/screenshots";
-	}
+	path = progdir;
+	path << "/";
+	path << GStrings("FOLDER_SHOTS");
+
 	CreatePath(path);
 	return path;
 }
@@ -294,29 +282,11 @@ FString M_GetSavegamesPath()
 {
 	FString path;
 
-	if (!UseKnownFolders())
-	{
-		return progdir;
-	}
-	// Try standard Saved Games folder
-	else if (GetKnownFolder(-1, FOLDERID_SavedGames, true, path))
-	{
-		path << "/" GAMESIG;
-	}
-	// Try defacto My Documents/My Games folder
-	else if (GetKnownFolder(CSIDL_PERSONAL, FOLDERID_Documents, true, path))
-	{
-		// I assume since this isn't a standard folder, it doesn't have
-		// a localized name either.
-		path << "/My Games/" GAMESIG;
-		CreatePath(path);
-	}
-	else
-	{
-		path = progdir;
-		path << "/saves";
-		CreatePath(path);
-	}
+	path = progdir;
+	path << "/";
+	path << GStrings("FOLDER_SAVES");
+	CreatePath(path);
+
 	return path;
 }
 

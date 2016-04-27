@@ -54,12 +54,5 @@ const char *GetGitTime()
 
 const char *GetVersionString()
 {
-	if (GetGitDescription()[0] == '\0')
-	{
-		return VERSIONSTR;
-	}
-	else
-	{
-		return "v1.3-alpha";	//[XANE]Since gitinfo.h updates way slower than GitHub itself, this is updated by hand.
-	}
+	return VERSIONSTR;	//Go to version.h to change the version number.
 }

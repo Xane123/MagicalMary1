@@ -41,12 +41,12 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "2.9pre"
+#define VERSIONSTR "v1.4-dev"
 
 // The version as seen in the Windows resource
-#define RC_FILEVERSION 2,8,9999,0
-#define RC_PRODUCTVERSION 2,8,9999,0
-#define RC_PRODUCTVERSION2 "2.9pre"
+#define RC_FILEVERSION 1,4,9999,0
+#define RC_PRODUCTVERSION 1,4,9999,0
+#define RC_PRODUCTVERSION2 VERSIONSTR
 
 // Version identifier for network games.
 // Bump it every time you do a release unless you're certain you
@@ -80,22 +80,22 @@ const char *GetVersionString();
 
 #define SAVEVERSTRINGIFY2(x) #x
 #define SAVEVERSTRINGIFY(x) SAVEVERSTRINGIFY2(x)
-#define SAVESIG "ZDOOMSAVE" SAVEVERSTRINGIFY(SAVEVER)
+#define SAVESIG "WOK_SAVE" SAVEVERSTRINGIFY(SAVEVER)
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "World of Kirbycraft"
 #define BASEWAD "data.pk3"
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "ZDoom, the engine that powers World of Kirbycraft"
+#define GAMENAME "The engine that powers World of Kirbycraft, ZDoom,"
 #define GAMENAMELOWERCASE "Settings"
 #define FORUM_URL "http://forum.zdoom.org"
 #define BUGS_FORUM_URL	"http://forum.zdoom.org/index.php?c=3"
 
 #if defined(__APPLE__) || defined(_WIN32)
-#define GAME_DIR GAMENAME
+#define GAME_DIR GAMESIG
 #else
-#define GAME_DIR ".config/" GAMENAMELOWERCASE
+#define GAME_DIR ".config/" GAMESIG
 #endif
 
 
