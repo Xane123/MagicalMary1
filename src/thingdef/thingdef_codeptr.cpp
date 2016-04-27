@@ -682,21 +682,38 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_BasicAttack)
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_PlaySound)
 {
 	PARAM_ACTION_PROLOGUE;
-	PARAM_SOUND_OPT	(soundid)		{ soundid = "weapons/pistol"; }
+	PARAM_SOUND_OPT	(soundid)		{ soundid = "misc/splash"; }
 	PARAM_INT_OPT	(channel)		{ channel = CHAN_BODY; }
 	PARAM_FLOAT_OPT	(volume)		{ volume = 1; }
 	PARAM_BOOL_OPT	(looping)		{ looping = false; }
 	PARAM_FLOAT_OPT	(attenuation)	{ attenuation = ATTN_NORM; }
+	PARAM_BOOL_OPT(local) { local = false; }
 
 	if (!looping)
 	{
-		S_Sound (self, channel, soundid, (float)volume, (float)attenuation);
+		if (!local)
+			{
+			S_Sound(self, channel, soundid, (float)volume, (float)attenuation);
+			}
+		else
+			{
+			if (self->CheckLocalView(consoleplayer))
+			 S_Sound(channel, soundid, (float)volume, ATTN_NONE);
+			}
 	}
 	else
 	{
 		if (!S_IsActorPlayingSomething (self, channel&7, soundid))
 		{
-			S_Sound (self, channel | CHAN_LOOP, soundid, (float)volume, (float)attenuation);
+			if (!local)
+				{
+				S_Sound(self, channel | CHAN_LOOP, soundid, (float)volume, (float)attenuation);
+				}
+			else
+				{
+				if (self->CheckLocalView(consoleplayer))
+					S_Sound(self, channel | CHAN_LOOP, soundid, (float)volume, ATTN_NONE);
+				}
 		}
 	}
 	return 0;

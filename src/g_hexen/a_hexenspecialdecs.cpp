@@ -117,10 +117,14 @@ DEFINE_ACTION_FUNCTION(AActor, A_PotteryCheck)
 		if (playeringame[i])
 		{
 			AActor *pmo = players[i].mo;
-			if (P_CheckSight (self, pmo) && (absangle(pmo->AngleTo(self) - pmo->angle) <= ANGLE_45))
+			if (P_CheckSight (self, pmo) && (absangle(pmo->AngleTo(self) - pmo->angle) <= ANGLE_60))
 			{ // Previous state (pottery bit waiting state)
 				self->SetState (self->state - 1);
 				return 0;
+			}
+			else
+			{
+				self->SetState(self->SeeState);
 			}
 		}
 	}
