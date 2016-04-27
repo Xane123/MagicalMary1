@@ -133,7 +133,6 @@ ACTOR PotteryBit
 	+NOICEDEATH
 
 	action native A_PotteryChooseBit();
-	action native A_PotteryCheck();
 
 	States
 	{

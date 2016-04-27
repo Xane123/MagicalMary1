@@ -41,8 +41,8 @@ ACTOR Actor native //: Thinker
 	native bool CheckClass(class<Actor> checkclass, int ptr_select = AAPTR_DEFAULT, bool match_superclass = false);
 	native bool IsPointerEqual(int ptr_select1, int ptr_select2);
 	native int	CountInv(class<Inventory> itemtype, int ptr_select = AAPTR_DEFAULT);
-	native float GetDistance(bool checkz, int ptr = AAPTR_DEFAULT);
-	native int GetSpawnHealth();
+	native float GetDistance(bool checkz, int ptr = AAPTR_TARGET);
+ 	native float GetAngle(bool relative, int ptr = AAPTR_TARGET);	native int GetSpawnHealth();
 	native int GetGibHealth();
 
 	// Action functions
@@ -175,8 +175,7 @@ ACTOR Actor native //: Thinker
 	action native A_ComboAttack();
 	action native A_BulletAttack();
 	action native A_WolfAttack(int flags = 0, sound whattoplay = "weapons/pistol", float snipe = 1.0, int maxdamage = 64, int blocksize = 128, int pointblank = 2, int longrange = 4, float runspeed = 160.0, class<Actor> pufftype = "BulletPuff");
-	action native A_PlaySound(sound whattoplay = "weapons/pistol", int slot = CHAN_BODY, float volume = 1.0, bool looping = false, float attenuation = ATTN_NORM);
-	action native A_PlayWeaponSound(sound whattoplay);
+	action native A_PlaySound(sound whattoplay = "misc/splash", int slot = CHAN_BODY, float volume = 1.0, bool looping = false, float attenuation = ATTN_NORM, bool local = false);action native A_PlayWeaponSound(sound whattoplay);
 	action native A_FLoopActiveSound();
 	action native A_LoopActiveSound();
 	action native A_StopSound(int slot = CHAN_VOICE);	// Bad default but that's what is originally was...
@@ -333,6 +332,8 @@ ACTOR Actor native //: Thinker
 	action native int ACS_NamedLockedExecuteDoor(name script, int mapnum=0, int arg1=0, int arg2=0, int lock=0);
 	action native int ACS_NamedExecuteWithResult(name script, int arg1=0, int arg2=0, int arg3=0, int arg4=0);
 	action native ACS_NamedExecuteAlways(name script, int mapnum=0, int arg1=0, int arg2=0, int arg3=0);
+	
+	action native A_PotteryCheck();
 	
 	States
 	{
