@@ -1828,10 +1828,10 @@ void G_DoLoadGame ()
 	{
 		delete png;
 		fclose (stdfile);
-		Printf("THIS SAVE IS TOO OLD TO BE USED WITH THIS VERSION OF %s;\nPLEASE DOWNLOAD THE OLDER VERSION REQUIRED!\n", GAMESIG);
+		Printf("THIS SAVE IS TOO OLD TO BE USED WITH THIS VERSION OF %s;\nPLEASE DOWNLOAD THE OLDER VERSION REQUIRED,\n", GAMESIG);
 		if (SaveVersion != 0)
 		{
-			Printf(": %d (%d is the oldest supported)", SaveVersion, MINSAVEVER);
+			Printf("%d; %d IS THE OLDEST VERSION SUPPORTED.", SaveVersion, MINSAVEVER);
 		}
 		Printf("\n");
 		return;
@@ -1947,11 +1947,11 @@ void G_SaveGame (const char *filename, const char *description)
 	}
     else if (!usergame)
 	{
-        Printf ("not in a saveable game\n");
+        Printf ("YOU'RE NOT CURRENTLY IN A GAME.\n");
     }
     else if (gamestate != GS_LEVEL)
 	{
-        Printf ("not in a level\n");
+        Printf ("YOU'RE NOT IN A LEVEL!\n");
     }
     else if (players[consoleplayer].health <= 0 && !multiplayer)
     {
@@ -1992,7 +1992,7 @@ FString G_BuildSaveName (const char *prefix, int slot)
 	name << prefix;
 	if (slot >= 0)
 	{
-		name.AppendFormat("%d.zds", slot);
+		name.AppendFormat("%d.png", slot);
 	}
 	return name;
 }
@@ -2028,7 +2028,7 @@ void G_DoAutoSave ()
 	num.Int = nextautosave;
 	autosavenum.ForceSet (num, CVAR_Int);
 
-	file = G_BuildSaveName ("auto", nextautosave);
+	file = G_BuildSaveName ("check", nextautosave);
 
 	if (!(level.flags2 & LEVEL2_NOAUTOSAVEHINT))
 	{
@@ -2041,7 +2041,7 @@ void G_DoAutoSave ()
 	}
 
 	readableTime = myasctime ();
-	strcpy (description, "Autosave ");
+	strcpy (description, "Chkpoint ");
 	strncpy (description+9, readableTime+4, 12);
 	description[9+12] = 0;
 
@@ -2123,7 +2123,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (demoplayback)
 	{
-		filename = G_BuildSaveName ("demosave.zds", -1);
+		filename = G_BuildSaveName ("demo.zds", -1);
 	}
 
 	if (cl_waitforsave)
@@ -2136,7 +2136,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (stdfile == NULL)
 	{
-		Printf ("Could not create savegame '%s'\n", filename.GetChars());
+		Printf ("COULDN'T SAVE TO '%s'!\n", filename.GetChars());
 		insave = false;
 		I_FreezeTime(false);
 		return;
@@ -2145,8 +2145,8 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	SaveVersion = SAVEVER;
 	PutSavePic (stdfile, SAVEPICWIDTH, SAVEPICHEIGHT);
 	mysnprintf(buf, countof(buf), GAMENAME " %s", GetVersionString());
-	M_AppendPNGText (stdfile, "Software", buf);
-	M_AppendPNGText (stdfile, "Engine", GAMESIG);
+	M_AppendPNGText (stdfile, "Software", GAMESIG /*buf*/);
+	M_AppendPNGText (stdfile, "Engine", GAMENAME);
 	M_AppendPNGText (stdfile, "ZDoom Save Version", SAVESIG);
 	M_AppendPNGText (stdfile, "Title", description);
 	M_AppendPNGText (stdfile, "Current Map", level.MapName);

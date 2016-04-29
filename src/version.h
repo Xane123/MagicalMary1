@@ -72,15 +72,15 @@ const char *GetVersionString();
 // SAVESIG should match SAVEVER.
 
 // MINSAVEVER is the minimum level snapshot version that can be loaded.
-#define MINSAVEVER	3100
+#define MINSAVEVER	533//3100
 
 // Use 4500 as the base git save version, since it's higher than the
 // SVN revision ever got.
-#define SAVEVER 4533
+#define SAVEVER 4533	//The game considers this "533" at the momet.
 
 #define SAVEVERSTRINGIFY2(x) #x
 #define SAVEVERSTRINGIFY(x) SAVEVERSTRINGIFY2(x)
-#define SAVESIG "WOK_SAVE" SAVEVERSTRINGIFY(SAVEVER)
+#define SAVESIG "ZDOOMSAVE" SAVEVERSTRINGIFY(SAVEVER)
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "World of Kirbycraft"
@@ -89,8 +89,8 @@ const char *GetVersionString();
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "The engine that powers World of Kirbycraft, ZDoom,"
 #define GAMENAMELOWERCASE "Settings"
-#define FORUM_URL "http://forum.zdoom.org"
-#define BUGS_FORUM_URL	"http://forum.zdoom.org/index.php?c=3"
+#define FORUM_URL "xanem1@gmail.com"
+#define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations!)"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMESIG
