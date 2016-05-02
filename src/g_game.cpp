@@ -1851,6 +1851,15 @@ void G_DoLoadGame ()
 		return;
 	}
 
+	char *wokversion = M_GetPNGText(png, "WoK Version");	//[XANE]An experiment.
+	if (strcmp(wokversion, VERSIONNUM))
+	{
+		Printf("THIS SAVE CAME FROM A DIFFERENT VERSION BUT CAN STILL BE LOADED!\n(COMPARED %s AND %s)\n", wokversion, VERSIONNUM);
+		return;
+	}
+
+	delete[] wokversion;
+
 	// Now that it looks like we can load this save, hide the fullscreen console if it was up
 	// when the game was selected from the menu.
 	if (hidecon && gamestate == GS_FULLCONSOLE)
@@ -2150,6 +2159,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	M_AppendPNGText (stdfile, "ZDoom Save Version", SAVESIG);
 	M_AppendPNGText (stdfile, "Title", description);
 	M_AppendPNGText (stdfile, "Current Map", level.MapName);
+	M_AppendPNGText(stdfile, "WoK Version", VERSIONNUM);
 	PutSaveWads (stdfile);
 	PutSaveComment (stdfile);
 

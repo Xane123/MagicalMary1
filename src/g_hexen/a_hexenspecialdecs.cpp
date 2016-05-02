@@ -31,6 +31,8 @@ static FRandom pr_soaexplode ("SoAExplode");
 void A_PotteryExplode (AActor *);
 void A_PotteryChooseBit (AActor *);
 void A_PotteryCheck (AActor *);
+void A_RenderNormal(AActor *);
+void A_RenderAdd(AActor *);
 
 class APottery1 : public AActor
 {
@@ -128,6 +130,21 @@ DEFINE_ACTION_FUNCTION(AActor, A_PotteryCheck)
 			}
 		}
 	}
+	return 0;
+}
+DEFINE_ACTION_FUNCTION(AActor, A_RenderNormal)
+{
+	PARAM_ACTION_PROLOGUE;
+
+	self->RenderStyle = STYLE_Normal;
+	return 0;
+}
+
+DEFINE_ACTION_FUNCTION(AActor, A_RenderAdd)
+{
+	PARAM_ACTION_PROLOGUE;
+
+	self->RenderStyle = STYLE_Normal;
 	return 0;
 }
 

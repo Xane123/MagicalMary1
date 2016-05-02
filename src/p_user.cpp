@@ -1235,6 +1235,16 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 	if (player != NULL)
 	{
 
+		if (oldlevel == 0 && waterlevel == 1 && (abs(player->mo->vel.x) > 10 * FRACUNIT || abs(player->mo->vel.y) > 10 * FRACUNIT))
+		{
+			player->mo->vel.z = 1 * FRACUNIT;
+			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.075 * FRACUNIT));
+			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.075 * FRACUNIT));
+			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);
+			waterlevel = 0;
+
+		}
+
 		if (oldlevel < 3 && waterlevel == 3 && player->mo->vel.z < -16*FRACUNIT)
 		{ // Our head just went under.
 //			Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
