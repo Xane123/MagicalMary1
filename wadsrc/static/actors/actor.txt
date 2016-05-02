@@ -333,6 +333,9 @@ ACTOR Actor native //: Thinker
 	action native int ACS_NamedExecuteWithResult(name script, int arg1=0, int arg2=0, int arg3=0, int arg4=0);
 	action native ACS_NamedExecuteAlways(name script, int mapnum=0, int arg1=0, int arg2=0, int arg3=0);
 	
+	action native A_RenderNormal();
+	action native A_RenderAdd();
+	
 	action native A_PotteryCheck();
 	
 	States

@@ -2491,9 +2491,11 @@ void P_PlayerThink (player_t *player)
 		P_DeathThink (player);
 		return;
 	}
+
+	if (player->onground) hydroplane = false;
+
 	if (player->jumpTics != 0)
 	{
-		if (player->jumpTics > 3 && hydroplane) player->jumpTics = 3;
 		player->jumpTics--;
 		if ((player->onground || hydroplane) && player->jumpTics < -18)
 		{
@@ -2596,9 +2598,16 @@ void P_PlayerThink (player_t *player)
 			{
 				player->mo->vel.z = 3*FRACUNIT;
 			}
-			else if ((level.IsJumpingAllowed() && player->onground) || (hydroplane && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT)) && player->jumpTics == 0)
+
+			else if (((level.IsJumpingAllowed() && player->onground) || (hydroplane && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))) && player->jumpTics == 0 && player->mo->vel.z <= 0 * FRACUNIT)
 			{
 				fixed_t jumpvelz = player->mo->JumpZ * 35 / TICRATE;
+
+				if (hydroplane)
+				{
+					player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.2 * FRACUNIT));
+					player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.2 * FRACUNIT));
+				}
 
 				player->mo->vel.z += jumpvelz;
 				player->mo->flags2 &= ~MF2_ONMOBJ;	
@@ -2881,7 +2890,7 @@ void P_PredictPlayer (player_t *player)
 			// Aditional Debug information
 			if (developer && DoLerp)
 			{
-				DPrintf("Lerp! Ltic (%d) && Ptic (%d) | Lx (%d) && Px (%d) | Ly (%d) && Py (%d)\n",
+				DPrintf("LERP! Ltic (%d) && Ptic (%d) | Lx (%d) && Px (%d) | Ly (%d) && Py (%d)\n",
 					PredictionLast.gametic, i,
 					(PredictionLast.x >> 16), (player->mo->X() >> 16),
 					(PredictionLast.y >> 16), (player->mo->Y() >> 16));
