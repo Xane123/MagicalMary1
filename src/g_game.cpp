@@ -1799,7 +1799,7 @@ void G_DoLoadGame ()
 	// Since there are ZDoom derivates using the exact same savegame format but
 	// with mutual incompatibilities this check simplifies things significantly.
 	char *engine = M_GetPNGText (png, "Engine");
-	if (engine == NULL || 0 != strcmp (engine, GAMESIG))
+	if (engine == NULL || 0 != strcmp (engine, GAMENAME))
 	{
 		// Make a special case for the message printed for old savegames that don't
 		// have this information.
@@ -1809,7 +1809,7 @@ void G_DoLoadGame ()
 		}
 		else
 		{
-			Printf ("THIS SAVE COMES FROM %s, ANOTHER ENGINE BASED ON ZDOOM.\n", engine);
+			Printf ("THIS SAVE COMES FROM %s ANOTHER ENGINE BASED ON ZDOOM.\n", engine);
 			delete[] engine;
 		}
 		delete png;
@@ -2123,7 +2123,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (demoplayback)
 	{
-		filename = G_BuildSaveName ("demo.zds", -1);
+		filename = G_BuildSaveName ("demo.png", -1);
 	}
 
 	if (cl_waitforsave)
@@ -2144,8 +2144,8 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	SaveVersion = SAVEVER;
 	PutSavePic (stdfile, SAVEPICWIDTH, SAVEPICHEIGHT);
-	mysnprintf(buf, countof(buf), GAMENAME " %s", GetVersionString());
-	M_AppendPNGText (stdfile, "Software", GAMESIG /*buf*/);
+	mysnprintf(buf, countof(buf), GAMESIG " %s", GetVersionString());
+	M_AppendPNGText (stdfile, "Software", buf);
 	M_AppendPNGText (stdfile, "Engine", GAMENAME);
 	M_AppendPNGText (stdfile, "ZDoom Save Version", SAVESIG);
 	M_AppendPNGText (stdfile, "Title", description);
