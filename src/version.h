@@ -41,12 +41,12 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.4-dev"
-#define VERSIONNUM "14"	//Prefix with "1" for final versions!
+#define VERSIONSTR "v1.3-alpha"
+#define VERSIONNUM "13"	//Prefix with "1" for final versions!
 
 // The version as seen in the Windows resource
-#define RC_FILEVERSION 1,4,9999,0
-#define RC_PRODUCTVERSION 1,4,9999,0
+#define RC_FILEVERSION 1,3,9999,0
+#define RC_PRODUCTVERSION 1,3,9999,0
 #define RC_PRODUCTVERSION2 VERSIONSTR
 
 // Version identifier for network games.
@@ -85,11 +85,11 @@ const char *GetVersionString();
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "World of Kirbycraft"
-#define BASEWAD "data.pk3"
+#define BASEWAD "data.pk3"	//Name of PK3 file that the EXE uses.
 
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "The engine that powers World of Kirbycraft, ZDoom,"
-#define GAMENAMELOWERCASE "Settings"
+#define GAMENAMELOWERCASE "Settings"	//Settings INI file's name.
 #define FORUM_URL "xanem1@gmail.com"
 #define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations!)"
 
