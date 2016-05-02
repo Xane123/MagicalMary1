@@ -62,6 +62,8 @@
 
 static FRandom pr_skullpop ("SkullPop");
 
+bool hydroplane = false;
+
 // [RH] # of ticks to complete a turn180
 #define TURN180_TICKS	((TICRATE / 4) + 1)
 
@@ -1235,14 +1237,14 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 	if (player != NULL)
 	{
 
-		if (oldlevel == 0 && waterlevel == 1 && (abs(player->mo->vel.x) > 10 * FRACUNIT || abs(player->mo->vel.y) > 10 * FRACUNIT))
+		if (oldlevel == 0 && waterlevel == 1 && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))
 		{
 			player->mo->vel.z = 1 * FRACUNIT;
-			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.075 * FRACUNIT));
-			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.075 * FRACUNIT));
-			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);
+			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.0175 * FRACUNIT));
+			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.0175 * FRACUNIT));
+			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);	//This crashes muttiplayer.
+			hydroplane = true;	//Allow the player to jump on water for a short time.
 			waterlevel = 0;
-
 		}
 
 		if (oldlevel < 3 && waterlevel == 3 && player->mo->vel.z < -16*FRACUNIT)
@@ -2491,10 +2493,12 @@ void P_PlayerThink (player_t *player)
 	}
 	if (player->jumpTics != 0)
 	{
+		if (player->jumpTics > 3 && hydroplane) player->jumpTics = 3;
 		player->jumpTics--;
-		if (player->onground && player->jumpTics < -18)
+		if ((player->onground || hydroplane) && player->jumpTics < -18)
 		{
 			player->jumpTics = 0;
+			hydroplane = false;
 		}
 	}
 	if (player->morphTics && !(player->cheats & CF_PREDICTING))
@@ -2592,7 +2596,7 @@ void P_PlayerThink (player_t *player)
 			{
 				player->mo->vel.z = 3*FRACUNIT;
 			}
-			else if (level.IsJumpingAllowed() && player->onground && player->jumpTics == 0)
+			else if ((level.IsJumpingAllowed() && player->onground) || (hydroplane && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT)) && player->jumpTics == 0)
 			{
 				fixed_t jumpvelz = player->mo->JumpZ * 35 / TICRATE;
 
@@ -2723,18 +2727,11 @@ void P_PlayerThink (player_t *player)
 			P_PoisonDamage (player, player->poisoner, 1, true);
 		}
 
-		// Apply degeneration.
-		if (dmflags2 & DF2_YES_DEGENERATION)
-		{
-			if ((level.time % TICRATE) == 0 && player->health > deh.MaxHealth)
-			{
-				if (player->health - 5 < deh.MaxHealth)
-					player->health = deh.MaxHealth;
-				else
-					player->health--;
+		// Apply timer.
 
-				player->mo->health = player->health;
-			}
+		if ((level.time % TICRATE / 2) == 0 && hydroplane)
+		{
+			hydroplane = false;
 		}
 
 		// Handle air supply
