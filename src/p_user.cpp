@@ -1243,7 +1243,7 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.0175 * FRACUNIT));
 			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.0175 * FRACUNIT));
 			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);	//This crashes muttiplayer.
-			S_Sound(this, CHAN_BODY, "misc/watersurface",0.7,ATTN_NORM)
+			S_Sound(this, CHAN_BODY, "misc/watersurface", 0.7, ATTN_NORM);
 			hydroplane = true;	//Allow the player to jump on water for a short time.
 			waterlevel = 0;
 		}
