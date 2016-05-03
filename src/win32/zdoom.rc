@@ -127,7 +127,6 @@ GUIDELINES DESIGNINFO
 BEGIN
     IDD_IWADDIALOG, DIALOG
     BEGIN
-        MOCKUP, 0, 50, 0, 0, ".\deadguy.bmp"
         LEFTMARGIN, 5
         RIGHTMARGIN, 205
         TOPMARGIN, 7
@@ -347,7 +346,7 @@ BEGIN
     PUSHBUTTON      "&New...",IDC_NEW,8,305,45,14
     PUSHBUTTON      "&Save...",IDC_SAVE,60,305,45,14
     PUSHBUTTON      "&Revert",IDC_REVERT,112,305,45,14
-    CONTROL         "&Test in level",IDC_TESTEAX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,165,307,54,10
+    CONTROL         "&Test",IDC_TESTEAX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,165,307,54,10
     PUSHBUTTON      "&Done",IDOK,228,305,45,14
     CONTROL         "Show &IDs in List",IDC_SHOWIDS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,7,66,10
     LTEXT           "ID 2:",IDC_STATIC,239,7,19,8
@@ -389,7 +388,7 @@ END
 IDD_CRASHDIALOG DIALOGEX 0, 0, 415, 308
 STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_APPWINDOW
-CAPTION "Very Fatal Error"
+CAPTION "World of Kirbycraft"
 FONT 11, "XPinball", 400, 0, 0x0
 BEGIN
     CONTROL         "",IDC_CRASHTAB,"SysTabControl32",WS_TABSTOP,4,4,404,280
@@ -536,7 +535,7 @@ BEGIN
             VALUE "FileVersion", RC_FILEVERSION2
             VALUE "InternalName", "World of Kirbycraft"
             VALUE "LegalCopyright", "Copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
-            VALUE "LegalTrademarks", "DoomR is a Registered Trademark of id Software, Inc."
+            VALUE "LegalTrademarks", "Doom(R) is a Registered Trademark of id Software, Inc."
             VALUE "OriginalFilename", "wok.exe"
             VALUE "ProductName", "World of Kirbycraft"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
