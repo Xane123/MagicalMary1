@@ -76,7 +76,7 @@
 #define WATER_SINK_FACTOR		3
 #define WATER_SINK_SMALL_FACTOR	4
 #define WATER_SINK_SPEED		(FRACUNIT/2)
-#define WATER_JUMP_SPEED		(FRACUNIT*7/2)
+#define WATER_JUMP_SPEED		(FRACUNIT*21/2)
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
