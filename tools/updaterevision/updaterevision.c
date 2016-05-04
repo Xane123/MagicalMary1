@@ -117,8 +117,8 @@ int main(int argc, char **argv)
 		fprintf(stream,
 "// %s\n"
 "//\n"
-"// GIT_DESCRIPTION is located in gitinfo.cpp!\n"
-"// Do not update this by hand, though.\n"
+"// GIT_DESCRIPTION (the version number) is located in version.h!\n"
+"// Don't edit this by hand as it updates with each compile!\n"
 "\n"
 "#define GIT_DESCRIPTION \"%s\"\n"
 "#define GIT_HASH \"%s\"\n"

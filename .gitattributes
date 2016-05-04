@@ -2,6 +2,7 @@
 
 *.h		text
 *.c		text
+*.rc		text
 *.cc		text
 *.cpp		text
 *.mm		text
