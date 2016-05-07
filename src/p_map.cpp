@@ -4176,6 +4176,7 @@ AActor *P_LineAttack(AActor *t1, angle_t angle, fixed_t distance,
 	AActor *puff = NULL;
 	int pflag = 0;
 	int puffFlags = (flags & LAF_ISMELEEATTACK) ? PF_MELEERANGE : 0;
+	bool spawnSky = false;
 	if (flags & LAF_NORANDOMPUFFZ)
 		puffFlags |= PF_NORANDOMZ;
 
@@ -4219,6 +4220,7 @@ AActor *P_LineAttack(AActor *t1, angle_t angle, fixed_t distance,
 		(t1->player->ReadyWeapon->flags2 & MF2_THRUGHOST)) ||
 		(puffDefaults && (puffDefaults->flags2 & MF2_THRUGHOST));
 
+	spawnSky = (puffDefaults && (puffDefaults->flags3 & MF3_SKYEXPLODE));
 	TData.hitSameSpecies = (puffDefaults && (puffDefaults->flags6 & MF6_MTHRUSPECIES));
 
 	// if the puff uses a non-standard damage type, this will override default, hitscan and melee damage type.
@@ -4258,7 +4260,7 @@ AActor *P_LineAttack(AActor *t1, angle_t angle, fixed_t distance,
 		if (trace.HitType != TRACE_HitActor)
 		{
 			// position a bit closer for puffs
-			if (trace.HitType != TRACE_HitWall || trace.Line->special != Line_Horizon)
+			if (trace.HitType != TRACE_HitWall || ((trace.Line->special != Line_Horizon) || spawnSky))
 			{
 				fixedvec2 pos = P_GetOffsetPosition(trace.HitPos.x, trace.HitPos.y, -trace.HitVector.x * 4, -trace.HitVector.y * 4);
 				puff = P_SpawnPuff(t1, pufftype, pos.x, pos.y, trace.HitPos.z - trace.HitVector.z * 4, trace.SrcAngleToTarget,

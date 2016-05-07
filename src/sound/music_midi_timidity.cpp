@@ -212,7 +212,7 @@ int TimidityPPMIDIDevice::Open(void (*callback)(unsigned int, void *, DWORD, DWO
 		if (pipe (WavePipe) == -1)
 #endif
 		{
-			Printf(PRINT_BOLD, "Could not create a data pipe for TiMidity++.\n");
+			Printf(PRINT_BOLD, "COULDN'T PIPE MUSIC TO TIMIDITY++.\n");
 			pipeSize = 0;
 		}
 		else
@@ -223,7 +223,7 @@ int TimidityPPMIDIDevice::Open(void (*callback)(unsigned int, void *, DWORD, DWO
 				timidity_frequency, this);
 			if (Stream == NULL)
 			{
-				Printf(PRINT_BOLD, "Could not create music stream.\n");
+				Printf(PRINT_BOLD, "THE SONG COULDN'T START.\n");
 				pipeSize = 0;
 #ifdef _WIN32
 				CloseHandle(WriteWavePipe);
@@ -239,8 +239,8 @@ int TimidityPPMIDIDevice::Open(void (*callback)(unsigned int, void *, DWORD, DWO
 		
 		if (pipeSize == 0)
 		{
-			Printf(PRINT_BOLD, "If your soundcard cannot play more than one\n"
-								"wave at a time, you will hear no music.\n");
+			Printf(PRINT_BOLD, "IF YOUR SOUND CARD CAN'T PLAY MORE THAN ONE\n"
+								"SOUND AT A TIME, YOU WON'T HEAR MUSIC.\n");
 		}
 		else
 		{
