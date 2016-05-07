@@ -1044,7 +1044,7 @@ bool DPlayerMenu::MenuEvent (int mkey, bool fromcontroller)
 			case NAME_Gender:
 				if (li->GetValue(0, &v))
 				{
-					cvar_set ("gender", v==0? "male" : v==1? "female" : "other");
+					cvar_set ("gender", v==0? "MALE" : v==1? "FEMALE" : "NONE");
 				}
 				break;
 
@@ -1139,13 +1139,13 @@ void DPlayerMenu::Drawer ()
 
 	Super::Drawer();
 
-	const char *str = "PRESS " TEXTCOLOR_WHITE "SPACE";
-	screen->DrawText (SmallFont, CR_GOLD, 320 - 32 - 32 -
+	const char *str = "PRESS " TEXTCOLOR_YELLOW "SPACE";
+	screen->DrawText (SmallFont, CR_LIGHTBLUE, 320 - 32 - 32 -
 		SmallFont->StringWidth (str)/2,
 		50 + 48 + 70, str,
 		DTA_Clean, true, TAG_DONE);
 	str = mRotation ? "TO SEE FRONT" : "TO SEE BACK";
-	screen->DrawText (SmallFont, CR_GOLD, 320 - 32 - 32 -
+	screen->DrawText (SmallFont, CR_WHITE, 320 - 32 - 32 -
 		SmallFont->StringWidth (str)/2,
 		50 + 48 + 70 + SmallFont->GetHeight (), str,
 		DTA_Clean, true, TAG_DONE);

@@ -208,7 +208,7 @@ DehInfo deh =
 	200,	// .MaxSoulsphere
 	100,	// .SoulsphereHealth
 	200,	// .MegasphereHealth
-	100,	// .GodHealth
+	200,	// .GodHealth
 	200,	// .FAArmor
 	  2,	// .FAAC
 	200,	// .KFAArmor
