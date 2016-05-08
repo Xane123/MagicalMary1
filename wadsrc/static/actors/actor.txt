@@ -336,6 +336,8 @@ ACTOR Actor native //: Thinker
 	action native A_RenderNormal();
 	action native A_RenderAdd();
 	
+	action native A_CoinSound();
+	
 	action native A_PotteryCheck();
 	
 	States

@@ -1243,17 +1243,26 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.0175 * FRACUNIT));
 			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.0175 * FRACUNIT));
 			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);	//This crashes muttiplayer.
-			S_Sound(this, CHAN_BODY, "misc/watersurface", ((MAX(abs(player->mo->vel.x), abs(player->mo->vel.y)) * 0.0001)/160), ATTN_NORM);
+			S_Sound(this, CHAN_BODY, "misc/watersurface", ((MAX(abs(player->mo->vel.x), abs(player->mo->vel.y)) * 0.0001) / 160), ATTN_NORM);
 			hydroplane = true;	//Allow the player to jump on water for a short time.
 			waterlevel = 0;
 		}
 
-		if (oldlevel < 3 && waterlevel == 3 && player->mo->vel.z < -16*FRACUNIT)
-		{ // Our head just went under.
-//			Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
-			if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
-			else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
+		if (oldlevel < 3 && waterlevel == 3)
+		{
+			if(player->mo->vel.z < -16 * FRACUNIT)	//If going fast enough, play the splashing sound.
+			{ // Our head just went under.
+				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+				else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
+			}
+			else
+			{ // Our head just went under.
+				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+				else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+			}
+
 		}
+		
 		else if (oldlevel == 3 && waterlevel < 3 && player->mo->vel.z > 12*FRACUNIT)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)

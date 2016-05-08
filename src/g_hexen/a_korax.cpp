@@ -29,6 +29,8 @@
 #include "g_level.h"
 */
 
+EXTERN_CVAR(Bool, snd_style)
+
 const int KORAX_SPIRIT_LIFETIME = 5*TICRATE/5;	// 5 seconds
 const int KORAX_COMMAND_HEIGHT	= 120;
 const int KORAX_COMMAND_OFFSET	= 27;
@@ -172,6 +174,20 @@ DEFINE_ACTION_FUNCTION(AActor, A_KoraxBonePop)
 	}
 
 	P_StartScript (self, NULL, 255, NULL, NULL, 0, 0);		// Death script
+	return 0;
+}
+
+DEFINE_ACTION_FUNCTION(AActor, A_CoinSound)	//[XANE]
+{
+	PARAM_ACTION_PROLOGUE;
+
+	if (snd_style == false)
+	{
+		if (self->waterlevel <= 1) S_Sound(self, CHAN_ITEM, "misc/coin_normal", 1, ATTN_NONE);
+		if (self->waterlevel > 1) S_Sound(self, CHAN_ITEM, "misc/coin_water", 1, ATTN_NONE);
+	}
+	else S_Sound(self, CHAN_ITEM, "misc/coin_8bit", 1, ATTN_NONE);
+
 	return 0;
 }
 
