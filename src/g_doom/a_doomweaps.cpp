@@ -121,6 +121,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw)
 	PARAM_SOUND_OPT	(fullsound)			{ fullsound = "weapons/sawfull"; }
 	PARAM_SOUND_OPT	(hitsound)			{ hitsound = "weapons/sawhit"; }
 	PARAM_INT_OPT	(damage)			{ damage = 2; }
+	PARAM_INT_OPT(channel) { channel = CHAN_BODY; }
 	PARAM_CLASS_OPT	(pufftype, AActor)	{ pufftype = NULL; }
 	PARAM_INT_OPT	(flags)				{ flags = 0; }
 	PARAM_FIXED_OPT	(range)				{ range = 0; }
@@ -176,7 +177,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw)
 		{
 			player->extralight = !player->extralight;
 		}
-		S_Sound (self, CHAN_WEAPON, fullsound, 1, ATTN_NORM);
+		S_Sound (self, channel, fullsound, 1, ATTN_NORM);
 		return 0;
 	}
 
@@ -227,146 +228,8 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw)
 		}
 	}
 
-	S_Sound (self, CHAN_WEAPON, hitsound, 1, ATTN_NORM);
+	S_Sound (self, channel, hitsound, 1, ATTN_NORM);
 		
-	// turn to face target
-	if (!(flags & SF_NOTURN))
-	{
-		angle = t.angleFromSource;
-		if (angle - self->angle > ANG180)
-		{
-			if (angle - self->angle < (angle_t)(-ANG90 / 20))
-				self->angle = angle + ANG90 / 21;
-			else
-				self->angle -= ANG90 / 20;
-		}
-		else
-		{
-			if (angle - self->angle > ANG90 / 20)
-				self->angle = angle - ANG90 / 21;
-			else
-				self->angle += ANG90 / 20;
-		}
-	}
-	if (!(flags & SF_NOPULLIN))
-		self->flags |= MF_JUSTATTACKED;
-	return 0;
-}
-
-DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw2)
-{
-	PARAM_ACTION_PROLOGUE;
-	PARAM_SOUND_OPT(fullsound) { fullsound = "weapons/sawfull"; }
-	PARAM_SOUND_OPT(hitsound) { hitsound = "weapons/sawhit"; }
-	PARAM_INT_OPT(damage) { damage = 2; }
-	PARAM_CLASS_OPT(pufftype, AActor) { pufftype = NULL; }
-	PARAM_INT_OPT(flags) { flags = 0; }
-	PARAM_FIXED_OPT(range) { range = 0; }
-	PARAM_ANGLE_OPT(spread_xy) { spread_xy = 33554432; /*angle_t(2.8125 * (ANGLE_90 / 90.0));*/ } // The floating point expression does not get optimized away.
-	PARAM_ANGLE_OPT(spread_z) { spread_z = 0; }
-	PARAM_FIXED_OPT(lifesteal) { lifesteal = 0; }
-	PARAM_INT_OPT(lifestealmax) { lifestealmax = 0; }
-	PARAM_CLASS_OPT(armorbonustype, ABasicArmorBonus) { armorbonustype = NULL; }
-
-	angle_t angle;
-	angle_t slope;
-	player_t *player;
-	FTranslatedLineTarget t;
-	int actualdamage;
-
-	if (NULL == (player = self->player))
-	{
-		return 0;
-	}
-
-	if (pufftype == NULL)
-	{
-		pufftype = PClass::FindActor(NAME_BulletPuff);
-	}
-	if (damage == 0)
-	{
-		damage = 2;
-	}
-	if (!(flags & SF_NORANDOM))
-	{
-		damage *= (pr_saw() % 10 + 1);
-	}
-	if (range == 0)
-	{ // use meleerange + 1 so the puff doesn't skip the flash (i.e. plays all states)
-		range = MELEERANGE + 1;
-	}
-
-	angle = self->angle + (pr_saw.Random2() * (spread_xy / 255));
-	slope = P_AimLineAttack(self, angle, range, &t) + (pr_saw.Random2() * (spread_z / 255));
-
-	AWeapon *weapon = self->player->ReadyWeapon;
-	if ((weapon != NULL) && !(flags & SF_NOUSEAMMO) && !(!t.linetarget && (flags & SF_NOUSEAMMOMISS)) && !(weapon->WeaponFlags & WIF_DEHAMMO) && ACTION_CALL_FROM_WEAPON())
-	{
-		if (!weapon->DepleteAmmo(weapon->bAltFire))
-			return 0;
-	}
-
-	P_LineAttack(self, angle, range, slope, damage, NAME_Melee, pufftype, false, &t, &actualdamage);
-
-	if (!t.linetarget)
-	{
-		if ((flags & SF_RANDOMLIGHTMISS) && (pr_saw() > 64))
-		{
-			player->extralight = !player->extralight;
-		}
-		S_Sound(self, CHAN_VOICE, fullsound, 1, ATTN_NORM);
-		return 0;
-	}
-
-	if (flags & SF_RANDOMLIGHTHIT)
-	{
-		int randVal = pr_saw();
-		if (randVal < 64)
-		{
-			player->extralight = 0;
-		}
-		else if (randVal < 160)
-		{
-			player->extralight = 1;
-		}
-		else
-		{
-			player->extralight = 2;
-		}
-	}
-
-	if (lifesteal && !(t.linetarget->flags5 & MF5_DONTDRAIN))
-	{
-		if (flags & SF_STEALARMOR)
-		{
-			if (armorbonustype == NULL)
-			{
-				armorbonustype = dyn_cast<ABasicArmorBonus::MetaClass>(PClass::FindClass("ArmorBonus"));
-			}
-			if (armorbonustype != NULL)
-			{
-				assert(armorbonustype->IsDescendantOf(RUNTIME_CLASS(ABasicArmorBonus)));
-				ABasicArmorBonus *armorbonus = static_cast<ABasicArmorBonus *>(Spawn(armorbonustype, 0, 0, 0, NO_REPLACE));
-				armorbonus->SaveAmount *= (actualdamage * lifesteal) >> FRACBITS;
-				armorbonus->MaxSaveAmount = lifestealmax <= 0 ? armorbonus->MaxSaveAmount : lifestealmax;
-				armorbonus->flags |= MF_DROPPED;
-				armorbonus->ClearCounters();
-
-				if (!armorbonus->CallTryPickup(self))
-				{
-					armorbonus->Destroy();
-				}
-			}
-		}
-
-		else
-		{
-			P_GiveBody(self, (actualdamage * lifesteal) >> FRACBITS, lifestealmax);
-		}
-	}
-
-	S_Sound(self, CHAN_VOICE, hitsound, 1, ATTN_NORM);
-
 	// turn to face target
 	if (!(flags & SF_NOTURN))
 	{
