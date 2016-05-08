@@ -113,7 +113,7 @@ CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
 CVAR (Color, crosshaircolor, 0x707090, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
 CVAR (Bool, crosshairscale, false, CVAR_ARCHIVE);
-CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);
+CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);		//Grow crosshair briely when picking up items (coins)?
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
