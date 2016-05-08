@@ -177,16 +177,16 @@ DEFINE_ACTION_FUNCTION(AActor, A_KoraxBonePop)
 	return 0;
 }
 
-DEFINE_ACTION_FUNCTION(AActor, A_CoinSound)	//[XANE]
+DEFINE_ACTION_FUNCTION(AActor, A_CoinSound)	//[XANE]Play different sounds depending on the user's settings/water (SM64 reference)
 {
 	PARAM_ACTION_PROLOGUE;
 
 	if (snd_style == false)
 	{
 		if (self->waterlevel <= 1) S_Sound(self, CHAN_ITEM, "misc/coin_normal", 1, ATTN_NONE);
-		if (self->waterlevel > 1) S_Sound(self, CHAN_ITEM, "misc/coin_water", 1, ATTN_NONE);
+		if (self->waterlevel > 1) S_Sound(self, CHAN_ITEM, "misc/coin_water", 0.65, ATTN_NONE);
 	}
-	else S_Sound(self, CHAN_ITEM, "misc/coin_8bit", 1, ATTN_NONE);
+	else S_Sound(self, CHAN_ITEM, "misc/coin_8bit", 0.35, ATTN_NONE);
 
 	return 0;
 }
