@@ -41,7 +41,7 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.3-alpha"
+#define VERSIONSTR "v1.4-dev"
 #define VERSIONNUM "13"	//Prefix with "1" for final versions!
 
 // The version as seen in the Windows resource
@@ -91,7 +91,7 @@ const char *GetVersionString();
 #define GAMENAME "The engine that powers World of Kirbycraft, ZDoom,"
 #define GAMENAMELOWERCASE "Settings"	//Settings INI file's name.
 #define FORUM_URL "xanem1@gmail.com"
-#define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations!)"
+#define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations or multiplayer crashing when running on water!)"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMESIG

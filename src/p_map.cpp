@@ -4260,7 +4260,7 @@ AActor *P_LineAttack(AActor *t1, angle_t angle, fixed_t distance,
 		if (trace.HitType != TRACE_HitActor)
 		{
 			// position a bit closer for puffs
-			if (trace.HitType != TRACE_HitWall || ((trace.Line->special != Line_Horizon) || spawnSky))
+			if (trace.HitType != TRACE_HitWall || ((trace.Line->special != Line_Horizon) || spawnSky))	//From https://github.com/rheit/zdoom/pull/649.
 			{
 				fixedvec2 pos = P_GetOffsetPosition(trace.HitPos.x, trace.HitPos.y, -trace.HitVector.x * 4, -trace.HitVector.y * 4);
 				puff = P_SpawnPuff(t1, pufftype, pos.x, pos.y, trace.HitPos.z - trace.HitVector.z * 4, trace.SrcAngleToTarget,
