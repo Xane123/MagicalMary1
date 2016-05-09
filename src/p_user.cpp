@@ -1230,10 +1230,10 @@ int APlayerPawn::GetMaxHealth() const
 //
 //===========================================================================
 
-bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
+bool APlayerPawn::UpdateWaterLevel(fixed_t oldz, bool splash)
 {
 	int oldlevel = waterlevel;
-	bool retval = Super::UpdateWaterLevel (oldz, splash);
+	bool retval = Super::UpdateWaterLevel(oldz, splash);
 	if (player != NULL)
 	{
 
@@ -1250,28 +1250,35 @@ bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 
 		if (oldlevel < 3 && waterlevel == 3)
 		{
-			if(player->mo->vel.z < -16 * FRACUNIT)	//If going fast enough, play the splashing sound.
+			if (player->mo->vel.z < -16 * FRACUNIT)	//If going fast enough, play the splashing sound.
 			{ // Our head just went under.
 				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
 				else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
 			}
 			else
-			{ // Our head just went under.
+			{
 				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
 				else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
 			}
 
 		}
-		
-		else if (oldlevel == 3 && waterlevel < 3 && player->mo->vel.z > 12*FRACUNIT)
+
+		else if (oldlevel == 3 && waterlevel < 3)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)
 			{ // We hadn't run out of air yet.
-//				Printf("SPEED IS %d; EXPECTED SPEEDS ARE U 4.5 AND D -1.0.\n", player->mo->vel.z);
-				if(snd_style==false) S_Sound (this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
-				else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
+				if (player->mo->vel.z > 16 * FRACUNIT)	//If going fast enough, play the splashing sound.
+				{ // Our head just went under.
+					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+					else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
+				}
+				else
+				{
+					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+					else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+				}				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+				// If we were running out of air, then ResetAirSupply() will play *gasp.
 			}
-			// If we were running out of air, then ResetAirSupply() will play *gasp.
 		}
 	}
 	return retval;
