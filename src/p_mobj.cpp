@@ -2414,9 +2414,10 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 		{*/
 			// [RH] Double gravity only if running off a ledge. Coming down from
 			// an upward thrust (e.g. a jump) should not double it.
-			if (mo->vel.z == 0 && oldfloorz > mo->floorz && mo->Z() == oldfloorz)
+			if (oldfloorz > mo->floorz && mo->Z() == oldfloorz)
 			{
-				mo->vel.z -= grav + grav;
+				if (oldfloorz-mo->floorz == 63 * FRACUNIT) mo->vel.z = MAX(abs(mo->vel.x), abs(mo->vel.y));	//[XANE]63 units? This must be a ramp!
+				else mo->vel.z -= grav + grav;
 			}
 			else
 			{
