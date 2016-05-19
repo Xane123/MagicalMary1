@@ -56,3 +56,4 @@ src/zdoom.dir
 *.tlog
 *.cache
 /src/gitinfo.h
+*.lastbuildstate
