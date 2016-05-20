@@ -129,7 +129,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_NOCLIP2:
-		/*if (xane_debug == true)
+		if (xane_debug == true)
 		{
 			player->cheats ^= CF_NOCLIP2;
 			if (player->cheats & CF_NOCLIP2)
@@ -144,7 +144,7 @@ void cht_DoCheat (player_t *player, int cheat)
 			}
 		}
 		else msg = GStrings("STSTR_DBOFF");	//If debug mode is off, don't allow noclip mode to be turned on...or off.
-		if (player->mo->vel.x == 0) player->mo->vel.x = 1;	// force some lateral movement so that internal variables are up to date*/
+		if (player->mo->vel.x == 0) player->mo->vel.x = 1;	// force some lateral movement so that internal variables are up to date
 		break;
 
 	case CHT_NOVELOCITY:

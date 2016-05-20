@@ -71,8 +71,6 @@ bool hydroplane = false;
 CVAR (Bool, cl_noprediction, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR(Bool, cl_predict_specials, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
-EXTERN_CVAR(Bool, xane_debug)
-
 CUSTOM_CVAR(Float, cl_predict_lerpscale, 0.05f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	P_PredictionLerpReset();
@@ -1252,15 +1250,18 @@ bool APlayerPawn::UpdateWaterLevel(fixed_t oldz, bool splash)
 
 		if (oldlevel < 3 && waterlevel == 3)
 		{
-			if (player->mo->vel.z < -16 * FRACUNIT)	//If going fast enough, play the splashing sound.
-			{ // Our head just went under.
-				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
-				else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
-			}
-			else
+			if (!player->mo->IsNoClip2())
 			{
-				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-				else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+				if (player->mo->vel.z < -16 * FRACUNIT)	//If going fast enough, play the splashing sound.
+				{ // Our head just went under.
+					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+					else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
+				}
+				else
+				{
+					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+					else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+				}
 			}
 
 		}
@@ -1276,9 +1277,14 @@ bool APlayerPawn::UpdateWaterLevel(fixed_t oldz, bool splash)
 				}
 				else
 				{
-					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-					else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-				}				if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+					if (!player->mo->IsNoClip2())
+					{
+						if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+						else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
+						if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
+					}
+					
+				}
 				// If we were running out of air, then ResetAirSupply() will play *gasp.
 			}
 		}
@@ -2382,8 +2388,7 @@ void P_PlayerThink (player_t *player)
 	// No-clip cheat
 	if ((player->cheats & (CF_NOCLIP | CF_NOCLIP2)) == CF_NOCLIP2)
 	{ // No noclip2 without noclip
-		if(xane_debug == true) player->cheats &= ~CF_NOCLIP2;
-		else Printf("DEBUG MODE IS NOT ENABLED; NOCLIP CAN'T BE USED NOW.");
+		player->cheats &= ~CF_NOCLIP2;
 	}
 	if (player->cheats & (CF_NOCLIP | CF_NOCLIP2) || (player->mo->GetDefault()->flags & MF_NOCLIP))
 	{

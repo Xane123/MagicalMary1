@@ -741,7 +741,7 @@ public:
 	// Do I hate the other actor?
 	bool IsHostile (AActor *other);
 
-	inline bool IsNoClip2() const;
+	inline bool IsNoClip2() const;	//If NOCLIP2 is enabled...
 	void CheckPortalTransition(bool islinked);
 	fixedvec3 GetPortalTransition(fixed_t byoffset, sector_t **pSec = NULL);
 
