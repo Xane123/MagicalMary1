@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3332aee013da637b798973701951f936\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{1A3E81C8-F664-369F-BCF2-B120979CBC21}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

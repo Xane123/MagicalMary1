@@ -1,0 +1,3 @@
+// Doom menu cursor
+switch doom SW1OFF on pic SW1ON tics 0
+switch doom SW2OFF on pic SW2ON tics 0

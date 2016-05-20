@@ -1,0 +1,25 @@
+ClearTeams
+
+Team "Human"
+{
+	PlayerColor "40 8F FF"
+	TextColor "Cyan"
+}
+
+Team "Undead"
+{
+	PlayerColor "DF 10 40"
+	TextColor "Dark Red"
+}
+
+Team "Orc"
+{
+	PlayerColor "80 DF 10"
+	TextColor "Olive"
+}
+
+Team "Night Elf"
+{
+	PlayerColor "FF DF 50"
+	TextColor "Light Blue"
+}

@@ -1,0 +1,2311 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\__autostart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\eaxedit.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_d3d9.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_d3d9_wipe.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\fb_ddraw.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\hardware.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\helperthread.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_cd.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_crash.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_input.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_keyboard.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_mouse.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_dijoy.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_rawps2.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_xinput.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_main.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_movie.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_system.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\st_start.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\win32video.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_classify_sse2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_swrenderer.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_3dfloors.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_bsp.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_draw.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_drawt.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_main.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_plane.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_segs.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_sky.cpp">
+      <Filter>Render Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_things.cpp">
+      <Filter>Render Core\Render Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_advsound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_playlist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sndseq.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\GuillotineBinPack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\SkylineBinPack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission.cpp">
+      <Filter>Intermission</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission_parse.cpp">
+      <Filter>Intermission</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\colorpickermenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\joystickmenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\listmenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\loadsavemenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menudef.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menuinput.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\messagebox.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\optionmenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\playerdisplay.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\playermenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\readthis.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\videomenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\fmopl.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\mlopl.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\mlopl_io.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\music_opldumper_mididevice.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\music_opl_mididevice.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\opl_mus_player.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\dosbox\opl.cpp">
+      <Filter>Audio Files\OPL Synth\DOSBox</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\OPL3.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\nukedopl3.cpp">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\fmodsound.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_music.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_sound.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\mpg123_decoder.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_cd.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_dumb.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_gme.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_mus_midiout.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_smf_midiout.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_hmi_midiout.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_xmi_midiout.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midistream.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midi_base.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_midi_timidity.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_mus_opl.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_stream.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_fluidsynth_mididevice.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_softsynth_mididevice.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_timidity_mididevice.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_wildmidi_mididevice.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_win_mididevice.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\oalsound.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\sndfile_decoder.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\music_pseudo_mididevice.cpp">
+      <Filter>Audio Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\common.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_dls.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_font.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\instrum_sf2.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\mix.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\playmidi.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\resample.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\timidity\timidity.cpp">
+      <Filter>Audio Files\Timidity\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\file_io.cpp">
+      <Filter>Audio Files\WildMidi\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\gus_pat.cpp">
+      <Filter>Audio Files\WildMidi\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\reverb.cpp">
+      <Filter>Audio Files\WildMidi\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\wildmidi_lib.cpp">
+      <Filter>Audio Files\WildMidi\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi\wm_error.cpp">
+      <Filter>Audio Files\WildMidi\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\colormaps.cpp">
+      <Filter>Render Data\Resource Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_translate.cpp">
+      <Filter>Render Data\Resource Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\x86.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\actorptrselect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\am_map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_bot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_func.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_move.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_think.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\bbannouncer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_bind.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cmds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_consolebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cvars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_dispatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_expr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\cmdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\colormatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\compatibility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\configfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\ct_chat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_dehacked.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_iwad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_net.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_netinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_protocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\decallib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjgc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjtype.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomdef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dsectoreffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\dthinker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\edata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\f_wipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\farchive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\files.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doomedmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_level.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_mapinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_skill.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gameconfigfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\gitinfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\hu_scores.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_net.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\info.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\keysections.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\lumpconfigfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_alloc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_argv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_bbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_cheat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_joy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_misc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_png.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_specialpaths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\memarena.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\md5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\name.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_classify_nosse2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_extract.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_gl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild_utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\pathexpander.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dfloors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dmidtex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_acs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_buildmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_ceiling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_conversation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_doors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_effect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_floor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_glnodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_interaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lights.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_linkedsectors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lnspec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_maputl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_mobj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pillar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_plats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pspr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_saveg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_sectors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_setup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_sight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_slopes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_spec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_states.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_switch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tags.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_teleport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_things.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_trace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_udmf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_usdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_user.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_writemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_xlat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\parsecontext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\po_man.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\portal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_utility.cpp">
+      <Filter>Render Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\st_stuff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\statistics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\stats.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\stringtable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\strnatcmp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\teaminfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\tempfiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_blend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_collection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_palette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_pfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_video.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\w_wad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\wi_stuff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstrformat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_doommisc.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_hereticmisc.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_hexenmisc.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\a_artitele.cpp">
+      <Filter>Games\Raven Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\a_minotaur.cpp">
+      <Filter>Games\Raven Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_strifestuff.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\strife_sbar.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_action.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_armor.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_artifacts.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_bridge.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_camera.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_debris.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_decals.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_fastprojectile.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_flashfader.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_fountain.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_hatetarget.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_keys.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_lightning.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_mapmarker.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_morph.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_movingcamera.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_pickups.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_puzzleitems.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_quake.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_randomspawner.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_secrettrigger.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_sectoraction.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_setcolor.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_skies.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_soundenvironment.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_soundsequence.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_spark.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_specialspot.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_waterzone.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weaponpiece.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weapons.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\hudmessages.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbarinfo.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbar_mugshot.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\shared_hud.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\shared_sbar.cpp">
+      <Filter>Shared Game</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\ancientzip.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_7z.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_grp.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_lump.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_rff.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_wad.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_zip.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_pak.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\file_directory.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\resourcefile.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT.cpp">
+      <Filter>SFMT</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\animations.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\anim_switches.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\automaptexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\bitmap.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\buildtexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\canvastexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\ddstexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\flattexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\imgztexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\jpegtexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\multipatchtexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\patchtexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\pcxtexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\pngtexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\rawpagetexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\emptytexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\texture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\texturemanager.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\tgatexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\warptexture.cpp">
+      <Filter>Render Data\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\olddecorations.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_codeptr.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_data.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_exp.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_expression.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_parse.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_properties.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_states.cpp">
+      <Filter>Decorate++</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat\parse_xlat.cpp">
+      <Filter>Xlat</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_fspic.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_func.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_load.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_oper.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_parse.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_prepro.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_script.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_spec.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_variable.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_cmd.cpp">
+      <Filter>FraggleScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\sprites.cpp">
+      <Filter>Render Data\Resource Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\voxels.cpp">
+      <Filter>Render Data\Resource Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\renderstyle.cpp">
+      <Filter>Render Data\Resource Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_interpolate.cpp">
+      <Filter>Render Data\Resource Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\ast.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmbuilder.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmdisasm.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmexec.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmframe.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_compile.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_expr.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_parser.cpp">
+      <Filter>ZScript</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zzautozend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\afxres.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\critsec.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\hardware.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\helperthread.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_input.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\i_system.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\rawinput.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\resource.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\win32iface.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\winres.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_fs.h">
+      <Filter>FraggleScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\fragglescript\t_script.h">
+      <Filter>FraggleScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_doomglobal.h">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_hexenglobal.h">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_raven\ravenshared.h">
+      <Filter>Games\Raven Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_action.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_artifacts.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_keys.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_lightning.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_morph.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_pickups.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_sharedglobal.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_specialspot.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\a_weaponpiece.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbar.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbarinfo.h">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_strifeglobal.h">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\intermission\intermission.h">
+      <Filter>Intermission</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\menu.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\menu\optionmenuitems.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\deftypes.h">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\muslib.h">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\nukedopl3.h">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\opl.h">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\opl_mus_player.h">
+      <Filter>Audio Files\OPL Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth\dosbox\opl.h">
+      <Filter>Audio Files\OPL Synth\DOSBox</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\dikeys.h">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\hardware.h">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\i_input.h">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\i_system.h">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\critsec.h">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_common.h">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\st_console.h">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\critsec.h">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\sdlvideo.h">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\colormaps.h">
+      <Filter>Render Data\Resource Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\renderstyle.h">
+      <Filter>Render Data\Resource Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_interpolate.h">
+      <Filter>Render Data\Resource Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\r_translate.h">
+      <Filter>Render Data\Resource Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\sprites.h">
+      <Filter>Render Data\Resource Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_data\voxels.h">
+      <Filter>Render Data\Resource Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\ancientzip.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\resourcefiles\resourcefile.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-alti.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params11213.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params1279.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params132049.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params19937.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params216091.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params2281.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params4253.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params44497.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params607.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-params86243.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT-sse2.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sfmt\SFMT.h">
+      <Filter>SFMT</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\efx.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\except.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\fmodsound.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\fmod_wrap.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_music.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_musicinterns.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_sound.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\i_soundinternal.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\mpg123_decoder.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\oaldef.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\oalload.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\oalsound.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sound\sndfile_decoder.h">
+      <Filter>Audio Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\bitmap.h">
+      <Filter>Render Data\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\textures\textures.h">
+      <Filter>Render Data\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef.h">
+      <Filter>Decorate++</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_exp.h">
+      <Filter>Decorate++</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\thingdef\thingdef_type.h">
+      <Filter>Decorate++</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat\xlat.h">
+      <Filter>Xlat</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vm.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmbuilder.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmexec.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\vmops.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_compile.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_exprlist.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc_parser.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\actionspecials.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\actorptrselect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\am_map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\announcer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\autosegs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\basicinlines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\basictypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\b_bot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\cmdlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\colormatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\compatibility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\configfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_bind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_consolebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_cvars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\c_dispatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\decallib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\dobjtype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomdata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomdef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomerrors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomstat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\doomtype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\dscript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\dsectoreffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\dthinker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_dehacked.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_net.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_netinf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_protocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\d_ticcmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\edata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\errors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\farchive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\files.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\f_wipe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gameconfigfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gametype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gccinlines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gitinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gstrings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\GuillotineBinPack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_level.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\hu_stuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_cd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_movie.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_net.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\i_video.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\lists.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\lumpconfigfile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\md5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\memarena.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\mscinlines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\mus2midi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_alloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_argv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_bbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_cheat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_crc32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_fixed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_joy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_misc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_png.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\m_swap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\name.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\namedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\nodebuild.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\parsecontext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\pathexpander.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\portal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\po_man.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dfloors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_3dmidtex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_acs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_blockmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_checkposition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_conversation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_effect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_lnspec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_local.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_maputl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_pspr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_saveg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_setup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_spec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_tick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_trace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\p_udmf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\Rect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_3dfloors.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_bsp.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_defs.h">
+      <Filter>Render Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_draw.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_local.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_main.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_plane.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_renderer.h">
+      <Filter>Render Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_segs.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_sky.h">
+      <Filter>Render Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_state.h">
+      <Filter>Render Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_swrenderer.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_things.h">
+      <Filter>Render Core\Render Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\r_utility.h">
+      <Filter>Render Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_tokens.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\skins.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\SkylineBinPack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\statnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\stats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\stringtable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\strnatcmp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\st_start.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\st_stuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_playlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sndseq.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\s_sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\tables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\tagitem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\tarray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\teaminfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\tempfiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\templates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\tflags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\vectors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\version.h">
+      <Filter>Versioning</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_collection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_palette.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_pfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\v_video.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\weightedlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\wi_stuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\w_wad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\w_zip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\x86.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat_parser.h">
+      <Filter>Xlat</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\xs_Float.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zcc-parse.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zstring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\i_cd.cpp">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\i_movie.cpp">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\i_steam.cpp">
+      <Filter>POSIX Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\crashcatcher.c">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\hardware.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\i_gui.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\i_input.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\i_joystick.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\i_main.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\i_system.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\i_timer.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\sdlvideo.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\sdl\st_start.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\osx\iwadpicker_cocoa.mm">
+      <Filter>OS X Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\osx\zdoom.icns">
+      <Filter>OS X Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\critsec.cpp">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_input.mm">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_joystick.cpp">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_main.mm">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_main_except.cpp">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_system.mm">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_timer.cpp">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\i_video.mm">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\st_console.mm">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\st_start.mm">
+      <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.re">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_arachnotron.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_archvile.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_bossbrain.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_bruiser.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_cacodemon.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_cyberdemon.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_demon.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_doomimp.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_doomweaps.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_fatso.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_keen.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_lostsoul.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_painelemental.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_possessed.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_revenant.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_scriptedmarine.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_doom\a_spidermaster.cpp">
+      <Filter>Games\Doom Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_chicken.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_dsparil.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_hereticartifacts.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_hereticimp.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_hereticweaps.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_ironlich.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_knight.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic\a_wizard.cpp">
+      <Filter>Games\Heretic Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_bats.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_bishop.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_blastradius.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_boostarmor.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_centaur.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_clericflame.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_clericholy.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_clericmace.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_clericstaff.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_dragon.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_fighteraxe.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_fighterhammer.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_fighterplayer.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_fighterquietus.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_firedemon.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_flechette.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_flies.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_fog.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_healingradius.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_heresiarch.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_hexenspecialdecs.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_iceguy.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_korax.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_magecone.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_magelightning.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_magestaff.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_pig.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_serpent.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_spike.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_summon.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_teleportother.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen\a_wraith.cpp">
+      <Filter>Games\Hexen Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_acolyte.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_alienspectres.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_coin.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_crusader.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_entityboss.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_inquisitor.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_loremaster.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_oracle.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_programmer.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_reaver.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_rebels.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_sentinel.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_spectral.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_stalker.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_strifeitems.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_strifeweapons.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_templar.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_strife\a_thingstoblowup.cpp">
+      <Filter>Games\Strife Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\g_shared\sbarinfo_commands.cpp">
+      <Filter>Shared Game</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat\xlat_parser.y">
+      <Filter>Xlat</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\xlat_parser.c">
+      <Filter>Xlat</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zscript\zcc-parse.lemon">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\zcc-parse.c">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_ia32\a.asm">
+      <Filter>Assembly Files\ia32</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_ia32\misc.asm">
+      <Filter>Assembly Files\ia32</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_ia32\tmap.asm">
+      <Filter>Assembly Files\ia32</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_ia32\tmap2.asm">
+      <Filter>Assembly Files\ia32</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_ia32\tmap3.asm">
+      <Filter>Assembly Files\ia32</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_x86_64\tmap3.asm">
+      <Filter>Assembly Files\x86_64</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\asm_x86_64\tmap3.s">
+      <Filter>Assembly Files\x86_64</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\xlat_parser.c.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\zcc-parse.c.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\sc_man_scanner.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\a.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\misc.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\tmap.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\tmap2.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\tmap3.obj.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj">
+      <Filter>Object Files</Filter>
+    </Object>
+    <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj">
+      <Filter>Object Files</Filter>
+    </Object>
+    <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj">
+      <Filter>Object Files</Filter>
+    </Object>
+    <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj">
+      <Filter>Object Files</Filter>
+    </Object>
+    <Object Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj">
+      <Filter>Object Files</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\zdoom.rc">
+      <Filter>Versioning</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Audio Files\OPL Synth">
+      <UniqueIdentifier>{3C342F7B-ABC6-3F6C-B83D-A87377321BE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity">
+      <UniqueIdentifier>{DD413FD7-3C27-353D-A0BA-A94DA55375FE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi">
+      <UniqueIdentifier>{8F305CDD-25AF-34CC-98EA-C162C739C0B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Resource Headers">
+      <UniqueIdentifier>{39EBCB4D-914B-3707-BADC-2A8DF4DADB73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Resource Sources">
+      <UniqueIdentifier>{25693973-A1B4-30FF-91DA-589D7C20D336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Textures">
+      <UniqueIdentifier>{42120805-B6BF-351F-988D-EEC9933B534D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Doom Game">
+      <UniqueIdentifier>{ACFEE9C4-3731-3CBE-9667-63A8CBE16659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Heretic Game">
+      <UniqueIdentifier>{3F7D85C0-5A4A-3E32-B468-40A4946E79B2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Hexen Game">
+      <UniqueIdentifier>{FC60B022-9EF3-3F3F-8D8B-7DF0E3CE2B8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Raven Shared">
+      <UniqueIdentifier>{A95A03D4-C826-3BB5-84DD-94D39393E65C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Strife Game">
+      <UniqueIdentifier>{7F820D8D-482F-3B23-8BBD-B258F8A4E313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity\Source">
+      <UniqueIdentifier>{E09F1CA0-D7F6-3BD3-899E-A6023E9DDAA2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assembly Files\ia32">
+      <UniqueIdentifier>{D3AB408F-7338-3769-8761-1BC946994773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assembly Files\x86_64">
+      <UniqueIdentifier>{819B48A8-C59C-30DD-A207-D89E81566A6F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi\Source">
+      <UniqueIdentifier>{81530CC5-B2EA-3F55-940D-4344DCCE496A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Core\Render Headers">
+      <UniqueIdentifier>{E9D8497F-C8D0-375D-A22C-CD60D9392DB2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Core\Render Sources">
+      <UniqueIdentifier>{EA4F8791-D24D-358B-B4F7-360CC30804B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{281D1C2B-8FBD-3BE9-8CED-FA77CDABB679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A2A613C5-88F1-353F-AB31-B7DDC887ABDB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{1A3E81C8-F664-369F-BCF2-B120979CBC21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Files">
+      <UniqueIdentifier>{58232ECD-B168-3554-AF1C-8B1B4760B394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assembly Files">
+      <UniqueIdentifier>{EA4C87AA-7BF8-3EB2-95E2-FB9EBD9E92A2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files">
+      <UniqueIdentifier>{D390220A-63DE-3206-AF7A-1475D2D3D194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Decorate++">
+      <UniqueIdentifier>{6F5D00FD-C0DA-3107-97CB-0E755CFB61EA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FraggleScript">
+      <UniqueIdentifier>{5328714E-2026-37A4-BAEF-E77E1008F139}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games">
+      <UniqueIdentifier>{31D734C1-BFE9-35D9-90E9-06A7340289CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Intermission">
+      <UniqueIdentifier>{BEF95329-8D62-3860-BFB2-84701B96446B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{293DD77B-66CC-39B6-878D-FA2121A0A383}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Core">
+      <UniqueIdentifier>{FF6257E6-32E4-34FF-821B-2A249643A920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data">
+      <UniqueIdentifier>{028A7BEE-9F25-3576-8565-10BE8C1F5675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Interface">
+      <UniqueIdentifier>{72E8E81E-80B8-353A-81F6-527C956F94DC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{CFEA9F00-AE6F-3E8E-A044-4F4D8FB5F280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="POSIX Files">
+      <UniqueIdentifier>{82BEE486-014C-31CF-9A40-137E6B3BC9F1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cocoa Files">
+      <UniqueIdentifier>{FD0828D7-1CAA-3F58-B033-E7D3C60AC843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OS X Files">
+      <UniqueIdentifier>{88892639-B882-334D-BF91-7FFC3DD9FE99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDL Files">
+      <UniqueIdentifier>{49AEA3D1-E71B-3244-905A-B35259B562FB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SFMT">
+      <UniqueIdentifier>{5F7DCBDB-2F87-30A8-91D3-7198ECA44869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared Game">
+      <UniqueIdentifier>{7327C4E2-8A3E-3750-A4A4-2F06105FFEFA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Versioning">
+      <UniqueIdentifier>{F773B3A4-6A78-325D-B42B-3A41B0E11133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win32 Files">
+      <UniqueIdentifier>{241C1A2E-900A-3A1F-B11E-F5F10001DB88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xlat">
+      <UniqueIdentifier>{8B73789D-4DE5-32E1-926E-A745AF4FD778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZScript">
+      <UniqueIdentifier>{2FC23326-32BB-3D29-9691-84B13290889A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\OPL Synth\DOSBox">
+      <UniqueIdentifier>{78809B19-5FD9-3F8C-9192-4772CB7F20DB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

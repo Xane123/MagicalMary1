@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{C8A49BD1-0AB0-39DC-9063-51DFEA245659}</ProjectGUID>
+    <WindowsTargetPlatformVersion>10.0.10240.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ZERO_CHECK</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3332aee013da637b798973701951f936\generate.stamp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "$(SolutionPath)"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3332aee013da637b798973701951f936/generate.stamp.rule;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckTypeSize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindBZip2.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindJPEG.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindZLIB.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCXXCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeRCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeSystem.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\CleanDirectoryList.cmake;C:\Users\Myers\git\world-of-kirbycraft\CreateLaunchers.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\gme_types.h.in;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\config.h.in;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "$(SolutionPath)"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3332aee013da637b798973701951f936/generate.stamp.rule;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckTypeSize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindBZip2.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindJPEG.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindZLIB.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCXXCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeRCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeSystem.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\CleanDirectoryList.cmake;C:\Users\Myers\git\world-of-kirbycraft\CreateLaunchers.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\gme_types.h.in;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\config.h.in;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "$(SolutionPath)"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3332aee013da637b798973701951f936/generate.stamp.rule;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckTypeSize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindBZip2.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindJPEG.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindZLIB.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCXXCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeRCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeSystem.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\CleanDirectoryList.cmake;C:\Users\Myers\git\world-of-kirbycraft\CreateLaunchers.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\gme_types.h.in;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\config.h.in;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "$(SolutionPath)"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3332aee013da637b798973701951f936/generate.stamp.rule;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckTypeSize.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindBZip2.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindJPEG.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindZLIB.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\Windows.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeCXXCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeRCCompiler.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3.4.1\CMakeSystem.cmake;C:\Users\Myers\git\world-of-kirbycraft\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\CleanDirectoryList.cmake;C:\Users\Myers\git\world-of-kirbycraft\CreateLaunchers.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\gme_types.h.in;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\config.h.in;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\zlib\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\bzip2\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu\gme\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\lzma\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\lemon\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\re2c\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\fixrtext\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\dumb\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
