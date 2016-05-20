@@ -74,7 +74,15 @@ EXTERN_CVAR (Bool, am_showtime)
 EXTERN_CVAR (Bool, am_showtotaltime)
 EXTERN_CVAR (Bool, noisedebug)
 EXTERN_CVAR (Int, con_scaletext)
-CVAR (Bool, xane_debug, false, CVAR_ARCHIVE|CVAR_DEMOSAVE)
+
+CVAR(Bool, wokpos, false, 0);
+EXTERN_CVAR(Bool, noisedebug)
+
+CUSTOM_CVAR(Bool, xane_debug, false, CVAR_ARCHIVE | CVAR_DEMOSAVE)
+{
+	wokpos = xane_debug;
+	noisedebug = xane_debug;
+}
 
 DBaseStatusBar *StatusBar;
 
@@ -118,8 +126,6 @@ CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
 }
-
-CVAR (Bool, wokpos, false, 0);
 
 //---------------------------------------------------------------------------
 //

@@ -268,7 +268,7 @@ static bool Cht_AutoMap (cheatseq_t *cheat)
 	}
 }
 
-static bool Cht_ChangeLevel (cheatseq_t *cheat)	//[XANE]The change level cheat now can go to special stages andd can go to levels lower than 10!
+static bool Cht_ChangeLevel (cheatseq_t *cheat)	//[XANE]The change level cheat now can go to special stages and can go to levels lower than 10!
 {
 
 	if (cheat->Args[0] == '9')
