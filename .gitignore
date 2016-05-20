@@ -57,3 +57,4 @@ src/zdoom.dir
 *.cache
 /src/gitinfo.h
 *.lastbuildstate
+*.opendb
