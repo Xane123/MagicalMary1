@@ -71,6 +71,8 @@ bool hydroplane = false;
 CVAR (Bool, cl_noprediction, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR(Bool, cl_predict_specials, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
+EXTERN_CVAR(Bool, xane_debug)
+
 CUSTOM_CVAR(Float, cl_predict_lerpscale, 0.05f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	P_PredictionLerpReset();
@@ -2380,7 +2382,8 @@ void P_PlayerThink (player_t *player)
 	// No-clip cheat
 	if ((player->cheats & (CF_NOCLIP | CF_NOCLIP2)) == CF_NOCLIP2)
 	{ // No noclip2 without noclip
-		player->cheats &= ~CF_NOCLIP2;
+		if(xane_debug == true) player->cheats &= ~CF_NOCLIP2;
+		else Printf("DEBUG MODE IS NOT ENABLED; NOCLIP CAN'T BE USED NOW.");
 	}
 	if (player->cheats & (CF_NOCLIP | CF_NOCLIP2) || (player->mo->GetDefault()->flags & MF_NOCLIP))
 	{

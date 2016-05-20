@@ -49,6 +49,8 @@
 #include "r_utility.h"
 #include "a_morph.h"
 
+EXTERN_CVAR(Bool, xane_debug)
+
 // [RH] Actually handle the cheat. The cheat code in st_stuff.c now just
 // writes some bytes to the network data stream, and the network code
 // later calls us.
@@ -127,18 +129,22 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_NOCLIP2:
-		player->cheats ^= CF_NOCLIP2;
-		if (player->cheats & CF_NOCLIP2)
+		/*if (xane_debug == true)
 		{
-			player->cheats |= CF_NOCLIP;
-			msg = GStrings("STSTR_NC2ON");
+			player->cheats ^= CF_NOCLIP2;
+			if (player->cheats & CF_NOCLIP2)
+			{
+				player->cheats |= CF_NOCLIP;
+				msg = GStrings("STSTR_NC2ON");
+			}
+			else
+			{
+				player->cheats &= ~CF_NOCLIP;
+				msg = GStrings("STSTR_NCOFF");
+			}
 		}
-		else
-		{
-			player->cheats &= ~CF_NOCLIP;
-			msg = GStrings("STSTR_NCOFF");
-		}
-		if (player->mo->vel.x == 0) player->mo->vel.x = 1;	// force some lateral movement so that internal variables are up to date
+		else msg = GStrings("STSTR_DBOFF");	//If debug mode is off, don't allow noclip mode to be turned on...or off.
+		if (player->mo->vel.x == 0) player->mo->vel.x = 1;	// force some lateral movement so that internal variables are up to date*/
 		break;
 
 	case CHT_NOVELOCITY:
