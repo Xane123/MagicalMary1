@@ -200,7 +200,7 @@ bool P_CheckForGLNodes()
 	int missing = CheckForMissingSegs();
 	if (missing > 0)
 	{
-		Printf("%d missing segs counted\nThe BSP needs to be rebuilt.\n", missing);
+		Printf("ERROR: %d segments were expected but not found.\nThis level's nodes need to be rebuilt.\n\nIf this is an official level, report this to github.com/Xane123/world-of-kirbycraft as a \"glitch\".\n", missing);
 	}
 	return missing == 0;
 }

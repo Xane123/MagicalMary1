@@ -122,11 +122,11 @@ void P_TouchSpecialThing (AActor *special, AActor *toucher)
 //
 void SexMessage (const char *from, char *to, int gender, const char *victim, const char *killer)
 {
-	static const char *genderstuff[3][3] =
+	static const char *genderstuff[3][3] =	//Made text all-caps for World o Kirbycraft's font.
 	{
-		{ "he",  "him", "his" },
-		{ "she", "her", "her" },
-		{ "it",  "it",  "its" }
+		{ "HE",  "HIM", "HIS" },
+		{ "SHE", "HER", "HER" },
+		{ "IT",  "IT",  "ITS" }
 	};
 	static const int gendershift[3][3] =
 	{

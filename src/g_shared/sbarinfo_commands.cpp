@@ -1238,7 +1238,7 @@ class CommandDrawNumber : public CommandDrawString
 					sc.MustGetToken(')');
 				}
 				else
-					sc.ScriptError("Unknown flag '%s'.", sc.String);
+					sc.ScriptError("An unkown SBARINFO flag, '%s', was found in your custom status bar.", sc.String);
 				if(!sc.CheckToken('|'))
 					sc.MustGetToken(',');
 			}
@@ -2094,7 +2094,7 @@ class CommandDrawInventoryBar : public SBarInfoCommand
 			style(STYLE_Doom), size(7), alwaysShow(false), noArtibox(false),
 			noArrows(false), alwaysShowCounter(false), translucent(false),
 			vertical(false), shadow(false), shadowX(2), shadowY(2),
-			counters(NULL), font(NULL), translation(CR_GOLD),
+			counters(NULL), font(NULL), translation(CR_YELLOW),
 			fontSpacing(0)
 		{
 		}

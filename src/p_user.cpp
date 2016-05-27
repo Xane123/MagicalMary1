@@ -62,7 +62,7 @@
 
 static FRandom pr_skullpop ("SkullPop");
 
-bool hydroplane = false;
+//CVAR(Bool, internal_onwater, 0, CVAR_DEMOSAVE)
 
 // [RH] # of ticks to complete a turn180
 #define TURN180_TICKS	((TICRATE / 4) + 1)
@@ -1236,17 +1236,17 @@ bool APlayerPawn::UpdateWaterLevel(fixed_t oldz, bool splash)
 	bool retval = Super::UpdateWaterLevel(oldz, splash);
 	if (player != NULL)
 	{
-
-		if (oldlevel == 0 && waterlevel == 1 && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))
+			//TODO: Try to convert this to ACS in hopes of fixing multiplayer crashes. 
+/*		if (oldlevel == 0 && (waterlevel == 1 || waterlevel == 4) && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))
 		{
 			player->mo->vel.z = 1 * FRACUNIT;
 			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.0175 * FRACUNIT));
 			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.0175 * FRACUNIT));
 			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);	//This crashes muttiplayer.
 			S_Sound(this, CHAN_BODY, "misc/watersurface", ((MAX(abs(player->mo->vel.x), abs(player->mo->vel.y)) * 0.0001) / 160), ATTN_NORM);
-			hydroplane = true;	//Allow the player to jump on water for a short time.
+			internal_onwater = true;	//Allow the player to jump on water for a short time.
 			waterlevel = 0;
-		}
+		}*/
 
 		if (oldlevel < 3 && waterlevel == 3)
 		{
@@ -2517,15 +2517,15 @@ void P_PlayerThink (player_t *player)
 		return;
 	}
 
-	if (player->onground) hydroplane = false;
+//	if (player->onground) internal_onwater = false;
 
 	if (player->jumpTics != 0)
 	{
 		player->jumpTics--;
-		if ((player->onground || hydroplane) && player->jumpTics < -18)
+		if (player->onground && player->jumpTics < -18)
 		{
 			player->jumpTics = 0;
-			hydroplane = false;
+			//internal_onwater = false;
 		}
 	}
 	if (player->morphTics && !(player->cheats & CF_PREDICTING))
@@ -2624,15 +2624,15 @@ void P_PlayerThink (player_t *player)
 				player->mo->vel.z = 3*FRACUNIT;
 			}
 
-			else if (((level.IsJumpingAllowed() && player->onground) || (hydroplane && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))) && player->jumpTics == 0 && player->mo->vel.z <= 0 * FRACUNIT)
+			else if ((level.IsJumpingAllowed() && player->onground) && /*|| (internal_onwater && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))))*/ player->jumpTics == 0 && player->mo->vel.z <= 0 * FRACUNIT)
 			{
 				fixed_t jumpvelz = player->mo->JumpZ * 35 / TICRATE;
 
-				if (hydroplane)
+				/*if (internal_onwater)	//[XANE]OLD CODE for jumping on water!
 				{
 					player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.2 * FRACUNIT));
 					player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.2 * FRACUNIT));
-				}
+				}*/
 
 				player->mo->vel.z += jumpvelz;
 				player->mo->flags2 &= ~MF2_ONMOBJ;	
@@ -2763,10 +2763,10 @@ void P_PlayerThink (player_t *player)
 
 		// Apply timer.
 
-		if ((level.time % TICRATE / 2) == 0 && hydroplane)
+		/*if ((level.time % TICRATE / 2) == 0 && internal_onwater)
 		{
-			hydroplane = false;
-		}
+			internal_onwater = false;
+		}*/
 
 		// Handle air supply
 		//if (level.airsupply > 0)

@@ -1,5 +1,4 @@
 // Emacs style mode select	 -*- C++ -*- 
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -77,6 +76,8 @@
 #define WATER_SINK_SMALL_FACTOR	4
 #define WATER_SINK_SPEED		(FRACUNIT/2)
 #define WATER_JUMP_SPEED		(FRACUNIT*21/2)
+
+//EXTERN_CVAR(Bool, internal_onwater)
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
@@ -4145,6 +4146,9 @@ bool AActor::UpdateWaterLevel (fixed_t oldz, bool dosplash)
 	{
 		waterlevel = lastwaterlevel;
 	}
+
+	//if (internal_onwater > 0) waterlevel = 4;
+
 	return false;	// we did the splash ourselves
 }
 

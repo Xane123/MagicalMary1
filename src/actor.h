@@ -1054,7 +1054,7 @@ public:
 
 	AActor			*inext, **iprev;// Links to other mobjs in same bucket
 	TObjPtr<AActor> goal;			// Monster's goal if not chasing anything
-	int				waterlevel;		// 0=none, 1=feet, 2=waist, 3=eyes
+	int				waterlevel;		// 0=none, 1=feet, 2=waist, 3=eyes, 4=running on water.
 	BYTE			boomwaterlevel;	// splash information for non-swimmable water sectors
 	BYTE			MinMissileChance;// [RH] If a random # is > than this, then missile attack.
 	SBYTE			LastLookPlayerNumber;// Player number last looked for (if TIDtoHate == 0)

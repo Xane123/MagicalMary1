@@ -2301,7 +2301,7 @@ void V_InitFontColors ()
 			{
 				if (names[0] == NAME_Untranslated)
 				{
-					sc.ScriptError ("The \"untranslated\" color may not have any other names");
+					sc.ScriptError("UNTRANSLATED can only be named that; It can't be named anything else.");
 				}
 				names.Push (sc.String);
 			}

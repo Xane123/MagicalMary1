@@ -78,8 +78,8 @@
 //
 //=============================================================================
 
-CVAR (Int,   am_rotate,				0,			CVAR_ARCHIVE);
-CVAR (Int,   am_overlay,			0,			CVAR_ARCHIVE);
+CVAR (Bool,   am_rotate,				1,			CVAR_ARCHIVE);
+CVAR (Int,   am_overlay,			2,			CVAR_ARCHIVE);
 CVAR (Bool,  am_showsecrets,		true,		CVAR_ARCHIVE);
 CVAR (Bool,  am_showmonsters,		true,		CVAR_ARCHIVE);
 CVAR (Bool,  am_showitems,			false,		CVAR_ARCHIVE);
@@ -122,26 +122,26 @@ CVAR (Color, am_thingcolor_ncmonster,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_thingcolor_item,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_thingcolor_citem,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_portalcolor,		0x404040,	CVAR_ARCHIVE);
-
-CVAR (Color, am_ovyourcolor,		0xfce8d8,	CVAR_ARCHIVE);
-CVAR (Color, am_ovwallcolor,		0x00ff00,	CVAR_ARCHIVE);
-CVAR (Color, am_ovsecretwallcolor,	0x008844,	CVAR_ARCHIVE);
-CVAR (Color, am_ovspecialwallcolor,	0xffffff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovotherwallscolor,	0x008844,	CVAR_ARCHIVE);
-CVAR (Color, am_ovlockedcolor,		0x008844,	CVAR_ARCHIVE);
-CVAR (Color, am_ovefwallcolor,		0x008844,	CVAR_ARCHIVE);
-CVAR (Color, am_ovfdwallcolor,		0x008844,	CVAR_ARCHIVE);
-CVAR (Color, am_ovcdwallcolor,		0x008844,	CVAR_ARCHIVE);
-CVAR (Color, am_ovunseencolor,		0x00226e,	CVAR_ARCHIVE);
-CVAR (Color, am_ovtelecolor,		0xffff00,	CVAR_ARCHIVE);
-CVAR (Color, am_ovinterlevelcolor,	0xffff00,	CVAR_ARCHIVE);
-CVAR (Color, am_ovsecretsectorcolor,0x00ffff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor,		0xe88800,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_friend,	0xe88800,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_monster,	0xe88800,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_ncmonster,	0xe88800,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_item,		0xe88800,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_citem,		0xe88800,	CVAR_ARCHIVE);
+																//[XANE]Modified automap overlay colors.
+CVAR (Color, am_ovyourcolor,		0x8080cd,	CVAR_ARCHIVE);
+CVAR (Color, am_ovwallcolor,		0xffffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovsecretwallcolor,	0xcae690,	CVAR_ARCHIVE);
+CVAR (Color, am_ovspecialwallcolor,	0xbbffbb,	CVAR_ARCHIVE);
+CVAR (Color, am_ovotherwallscolor,	0xffa0a0,	CVAR_ARCHIVE);
+CVAR (Color, am_ovlockedcolor,		0xffa0a0,	CVAR_ARCHIVE);
+CVAR (Color, am_ovefwallcolor,		0xe4e4e4,	CVAR_ARCHIVE);
+CVAR (Color, am_ovfdwallcolor,		0xc9c9c9,	CVAR_ARCHIVE);
+CVAR (Color, am_ovcdwallcolor,		0xf2f2f2,	CVAR_ARCHIVE);
+CVAR (Color, am_ovunseencolor,		0xff2020,	CVAR_ARCHIVE);
+CVAR (Color, am_ovtelecolor,		0xffa0ff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovinterlevelcolor,	0xc0ffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovsecretsectorcolor,0xe6e690,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor,		0xc0ffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_friend,	0xbbffbb,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_monster,	0xffc0c0,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_ncmonster,	0xffb995,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_item,		0xbbbbff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_citem,		0xffffa0,	CVAR_ARCHIVE);
 CVAR (Color, am_ovportalcolor,			0x004022,	CVAR_ARCHIVE);
 
 //=============================================================================
@@ -498,7 +498,7 @@ void FMapInfoParser::ParseAMColors(bool overlay)
 
 		if (nextKey.CompareNoCase("base") == 0)
 		{
-			if (colorset) sc.ScriptError("'base' must be specified before the first color");
+			if (colorset) sc.ScriptError("'BASE' MUST BE SPECIIED BEFORE THE FIRST COLOR.");
 			sc.MustGetToken(TK_StringConst);
 			if (sc.Compare("doom"))
 			{
@@ -1098,7 +1098,7 @@ static void AM_calcMinMaxMtoF()
 
 static void AM_ClipRotatedExtents (fixed_t pivotx, fixed_t pivoty)
 {
-	if (am_rotate == 0 || (am_rotate == 2 && !viewactive))
+	if (am_rotate)
 	{
 		if (m_x + m_w/2 > max_x)
 			m_x = max_x - m_w/2;
@@ -1214,7 +1214,7 @@ void AM_changeWindowLoc ()
 
 	oincx = incx = Scale(m_paninc.x, SCREENWIDTH, 320);
 	oincy = incy = Scale(m_paninc.y, SCREENHEIGHT, 200);
-	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+	if (am_rotate)
 	{
 		AM_rotate(&incx, &incy, players[consoleplayer].camera->angle - ANG90);
 	}
@@ -1596,7 +1596,7 @@ void AM_doFollowPlayer ()
   		// do the parallax parchment scrolling.
 		sx = (players[consoleplayer].camera->X() - f_oldloc.x) >> FRACTOMAPBITS;
 		sy = (f_oldloc.y - players[consoleplayer].camera->Y()) >> FRACTOMAPBITS;
-		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+		if (am_rotate)
 		{
 			AM_rotate (&sx, &sy, players[consoleplayer].camera->angle - ANG90);
 		}
@@ -1876,7 +1876,7 @@ void AM_drawGrid (int color)
 		ml.b.x = x;
 		ml.a.y = miny - exty;
 		ml.b.y = ml.a.y + minlen;
-		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+		if (am_rotate)
 		{
 			AM_rotatePoint (&ml.a.x, &ml.a.y);
 			AM_rotatePoint (&ml.b.x, &ml.b.y);
@@ -1898,7 +1898,7 @@ void AM_drawGrid (int color)
 		ml.b.x = ml.a.x + minlen;
 		ml.a.y = y;
 		ml.b.y = y;
-		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+		if (am_rotate)
 		{
 			AM_rotatePoint (&ml.a.x, &ml.a.y);
 			AM_rotatePoint (&ml.b.x, &ml.b.y);
@@ -1948,7 +1948,7 @@ void AM_drawSubsectors()
 		{
 			mpoint_t pt = { subsectors[i].firstline[j].v1->x >> FRACTOMAPBITS,
 							subsectors[i].firstline[j].v1->y >> FRACTOMAPBITS };
-			if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+			if (am_rotate)
 			{
 				AM_rotatePoint(&pt.x, &pt.y);
 			}
@@ -2040,7 +2040,7 @@ void AM_drawSubsectors()
 			AM_rotate(&originpt.x, &originpt.y, rotation);
 		}
 		// Apply the automap's rotation to the texture origin.
-		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+		if (am_rotate)
 		{
 			rotation += ANG90 - players[consoleplayer].camera->angle;
 			AM_rotatePoint(&originpt.x, &originpt.y);
@@ -2124,7 +2124,7 @@ void AM_drawSeg(seg_t *seg, const AMColor &color)
 	l.b.x = seg->v2->x >> FRACTOMAPBITS;
 	l.b.y = seg->v2->y >> FRACTOMAPBITS;
 
-	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+	if (am_rotate)
 	{
 		AM_rotatePoint (&l.a.x, &l.a.y);
 		AM_rotatePoint (&l.b.x, &l.b.y);
@@ -2140,7 +2140,7 @@ void AM_drawPolySeg(FPolySeg *seg, const AMColor &color)
 	l.b.x = seg->v2.x >> FRACTOMAPBITS;
 	l.b.y = seg->v2.y >> FRACTOMAPBITS;
 
-	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+	if (am_rotate)
 	{
 		AM_rotatePoint (&l.a.x, &l.a.y);
 		AM_rotatePoint (&l.b.x, &l.b.y);
@@ -2443,7 +2443,7 @@ void AM_drawWalls (bool allmap)
 			l.b.x = (lines[i].v2->x + offset.x) >> FRACTOMAPBITS;
 			l.b.y = (lines[i].v2->y + offset.y) >> FRACTOMAPBITS;
 
-			if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+			if (am_rotate)
 			{
 				AM_rotatePoint(&l.a.x, &l.a.y);
 				AM_rotatePoint(&l.b.x, &l.b.y);
@@ -2671,7 +2671,7 @@ void AM_drawPlayers ()
 		fixedvec2 pos = am_portaloverlay? players[consoleplayer].camera->GetPortalTransition(players[consoleplayer].viewheight) : (fixedvec2)players[consoleplayer].camera->Pos();
 		pt.x = pos.x >> FRACTOMAPBITS;
 		pt.y = pos.y >> FRACTOMAPBITS;
-		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+		if (am_rotate)
 		{
 			angle = ANG90;
 			AM_rotatePoint (&pt.x, &pt.y);
@@ -2738,7 +2738,7 @@ void AM_drawPlayers ()
 
 			angle = p->mo->angle;
 
-			if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+			if (am_rotate)
 			{
 				AM_rotatePoint (&pt.x, &pt.y);
 				angle -= players[consoleplayer].camera->angle - ANG90;
@@ -2772,7 +2772,7 @@ void AM_drawKeys ()
 
 		angle = key->angle;
 
-		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+		if (am_rotate)
 		{
 			AM_rotatePoint (&p.x, &p.y);
 			angle += ANG90 - players[consoleplayer].camera->angle;
@@ -2832,7 +2832,7 @@ void AM_drawThings ()
 						frame = &SpriteFrames[spriteIndex];
 						angle_t angle = ANGLE_270 - t->angle;
 						if (frame->Texture[0] != frame->Texture[1]) angle += (ANGLE_180 / 16);
-						if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+						if (am_rotate)
 						{
 							angle += players[consoleplayer].camera->angle - ANGLE_90;
 						}
@@ -2855,7 +2855,7 @@ void AM_drawThings ()
 			drawTriangle:
 					angle = t->angle;
 
-					if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+					if (am_rotate)
 					{
 						AM_rotatePoint (&p.x, &p.y);
 						angle += ANG90 - players[consoleplayer].camera->angle;
@@ -2942,7 +2942,7 @@ static void DrawMarker (FTexture *tex, fixed_t x, fixed_t y, int yadjust,
 	{
 		return;
 	}
-	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
+	if (am_rotate)
 	{
 		AM_rotatePoint (&x, &y);
 	}
