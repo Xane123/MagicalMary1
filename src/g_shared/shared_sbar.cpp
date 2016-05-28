@@ -1297,7 +1297,7 @@ void DBaseStatusBar::Draw (EHudState state)
 		}
 
 		fixedvec3 pos = CPlayer->mo->Pos();
-		if((hud_debugstyle == false) || (hud_debugstyle && (level.time % TICRATE) == 0 || (level.time % TICRATE) == 2 || (level.time % TICRATE) == 4 || (level.time % TICRATE) == 6 || (level.time % TICRATE) == 8 || (level.time % TICRATE) == 10 || (level.time % TICRATE) == 12 || (level.time % TICRATE) == 14 || (level.time % TICRATE) == 16 || (level.time % TICRATE) == 18 || (level.time % TICRATE) == 20|| (level.time % TICRATE) == 22 || (level.time % TICRATE) == 24 || (level.time % TICRATE) == 26 || (level.time % TICRATE) == 28 || (level.time % TICRATE) == 30 || (level.time % TICRATE) == 32 || (level.time % TICRATE) == 34))
+		if((hud_debugstyle == false) || (hud_debugstyle && ((level.time % TICRATE) % 2 == 0)))
 		{
 			for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
 			{
@@ -1329,7 +1329,7 @@ void DBaseStatusBar::Draw (EHudState state)
 				if (xane_debug && i <= 0)
 				{
 					y -= height;
-					mysnprintf(line, countof(line), GStrings("TXT_WOKPOS_DBGHEAD"));
+					mysnprintf(line, countof(line), GStrings("TXT_WOKPOS_DBGHEAD"));	//If Debug Mode is enabled, draw the "debug" header.
 					screen->DrawText(SmallFont, CR_YELLOW, xpos, y - 64, line,
 						DTA_KeepRatio, true,
 						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
