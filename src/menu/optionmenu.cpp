@@ -412,7 +412,7 @@ void DOptionMenu::Drawer ()
 		}
 	}
 	mDesc->mDrawTop = y;
-	int fontheight = OptionSettings.mLinespacing * CleanYfac_1;
+	int fontheight = (SmallFont->GetHeight() * CleanYfac_1);	//[XANE]Fixed menu spacing.
 	y *= CleanYfac_1;
 
 	int indent = mDesc->mIndent;
@@ -450,7 +450,7 @@ void DOptionMenu::Drawer ()
 		{
 			if (((DMenu::MenuTime%8) < 6) || DMenu::CurrentMenu != this)
 			{
-				M_DrawConText(OptionSettings.mFontColorSelection, cur_indent + 3 * CleanXfac_1, y+fontheight-9*CleanYfac_1, "\xd");
+				M_DrawConText(OptionSettings.mFontColorSelection, cur_indent + 3 * CleanXfac_1, y+fontheight-17*CleanYfac_1, "\xd");
 			}
 		}
 	}
