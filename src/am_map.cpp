@@ -3105,7 +3105,7 @@ void AM_Drawer ()
 	}
 	AM_activateNewScale();
 
-	if (am_textured && hasglnodes && textured && !viewactive)
+	if ((am_textured && hasglnodes && textured) && (!viewactive || (viewactive && (level.time % TICRATE) % 2 == 0)))
 		AM_drawSubsectors();
 
 	if (grid)	
@@ -3115,7 +3115,7 @@ void AM_Drawer ()
 	AM_drawPlayers();
 	if (G_SkillProperty(SKILLP_EasyKey))
 		AM_drawKeys();
-	if ((am_cheat >= 2 && am_cheat != 4) || allthings)
+	if ((am_cheat >= 2 && am_cheat != 4) || allthings) 
 		AM_drawThings();
 
 	AM_drawAuthorMarkers();
