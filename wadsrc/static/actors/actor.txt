@@ -356,6 +356,7 @@ ACTOR Actor native //: Thinker
 		Wait
 	GenericCrush:
 		TNT1 A 0
+		TNT1 A 0 A_ChangeFlag("COUNTITEM",FALSE)
 		TNT1 A 1 A_GiveInventory("CoinSP",1,AAPTR_PLAYER1)
 		Goto FadeLoopZ
 	FadeLoopZ:
