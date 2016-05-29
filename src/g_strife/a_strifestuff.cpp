@@ -678,6 +678,23 @@ DEFINE_ACTION_FUNCTION(AActor, A_CheckTerrain)
 	return 0;
 }
 
+DEFINE_ACTION_FUNCTION(AActor, A_CheckPit)
+{
+	PARAM_ACTION_PROLOGUE;
+
+	sector_t *sec = self->Sector;
+
+	if (self->Z() == sec->floorplane.ZatPoint(self) && sec->PortalBlocksMovement(sector_t::floor))
+	{
+		if (sec->special == Damage_InstantDeath)
+		{
+			P_DamageMobj(self, NULL, NULL, 999, NAME_InstantDeath);
+			self->SetState(self->FindState("Score"));
+		}
+	}
+	return 0;
+}
+
 //============================================================================
 //
 // A_ClearSoundTarget

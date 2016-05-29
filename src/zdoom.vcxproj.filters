@@ -1039,6 +1039,9 @@
     <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zzautozend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xane_race.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\afxres.h">

@@ -337,6 +337,7 @@ ACTOR Actor native //: Thinker
 	action native A_RenderAdd();
 	
 	action native A_CoinSound();
+	action native A_CheckPit();
 	
 	action native A_PotteryCheck();
 	
@@ -354,8 +355,12 @@ ACTOR Actor native //: Thinker
 		"----" A 1 A_FreezeDeathChunks
 		Wait
 	GenericCrush:
-		POL5 A -1
-		Stop
+		TNT1 A 0
+		TNT1 A 1 A_GiveInventory("CoinSP",1,AAPTR_PLAYER1)
+		Goto FadeLoopZ
+	FadeLoopZ:
+		TNT1 A 1 A_FadeOut(0.5,1)
+		Loop
 	}
 
 	// Internal functions

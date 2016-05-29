@@ -16,6 +16,7 @@ doublebind w +mc_run
 [ sizedown
 ] sizeup
 q +attack
+e +altattack
 shift +speed
 space +jump
 w +forward

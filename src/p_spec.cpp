@@ -1266,7 +1266,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 
 	case Damage_InstantDeath:
 		// Strife's instant death sector
-		P_SetupSectorDamage(sector, TELEFRAG_DAMAGE, 1, 256, NAME_InstantDeath, 0);
+		P_SetupSectorDamage(sector, PIT_DAMAGE, 1, 256, NAME_InstantDeath, 0);
 		break;
 
 	case sDamage_SuperHellslime:

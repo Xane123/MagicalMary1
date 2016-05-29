@@ -450,7 +450,7 @@ void DOptionMenu::Drawer ()
 		{
 			if (((DMenu::MenuTime%8) < 6) || DMenu::CurrentMenu != this)
 			{
-				M_DrawConText(OptionSettings.mFontColorSelection, cur_indent + 3 * CleanXfac_1, y+fontheight-17*CleanYfac_1, "\xd");
+				M_DrawConText(CR_YELLOW/*OptionSettings.mFontColorSelection*/, cur_indent + 3 * CleanXfac_1, y+fontheight-17*CleanYfac_1, "\xd");
 			}
 		}
 	}

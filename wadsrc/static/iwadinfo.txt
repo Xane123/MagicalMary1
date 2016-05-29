@@ -2,7 +2,7 @@
 
 IWad
 {
-	Name = "World of Kirbycraft"
+	Name = "World of Kirbycraft (Alpha)"
 	Autoname = "wok.base"
 	Game = "Doom"
 	Config = "Doom"
