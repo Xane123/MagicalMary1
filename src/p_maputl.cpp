@@ -302,6 +302,7 @@ void AActor::UnlinkFromWorld ()
 				next->sprev = prev;
 			snext = NULL;
 			sprev = (AActor **)(size_t)0xBeefCafe;	// Woo! Bug-catching value!
+			//Printf("AN INVALID OBJECT WAS UNLINKED FROM THE WORLD!\n");
 
 			// phares 3/14/98
 			//

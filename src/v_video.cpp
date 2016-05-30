@@ -548,10 +548,10 @@ FString V_GetColorStringByName (const char *name)
 
 	if (Wads.GetNumLumps()==0) return FString();
 
-	rgblump = Wads.CheckNumForName ("X11R6RGB");
+	rgblump = Wads.CheckNumForName ("RGBCOLOR");
 	if (rgblump == -1)
 	{
-		Printf ("X11R6RGB lump not found\n");
+		Printf("THE RGBCOLOR LUMP CAN'T BE FOUND; REPORT THIS TO XANE!\n");
 		return FString();
 	}
 
@@ -613,7 +613,7 @@ FString V_GetColorStringByName (const char *name)
 	}
 	if (rgb < rgbEnd)
 	{
-		Printf ("X11R6RGB lump is corrupt\n");
+		Printf ("Colors lump is corrupt\n");
 	}
 	return FString();
 }
