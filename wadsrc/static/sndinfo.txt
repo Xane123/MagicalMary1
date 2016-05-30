@@ -49,10 +49,3 @@ misc/icebreak			icebrk1a
 // The released source code used a min distance of 160. Why?
 // Retail Doom and Strife use 200.
 $rolloff * 200 1200
-
-// Marine's Best Friend -- not just for marines anymore!
-dog/active			dsdgact
-dog/attack			dsdgatk
-dog/death			dsdgdth
-dog/pain			dsdgpain
-dog/sight			dsdgsit

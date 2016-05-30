@@ -1,0 +1,20 @@
+! $XaneConsortium: rgb.txt,v 10.41 94/02/20 18:39:36 rws Exp $
+
+0 0 0 Black
+64 64 64 DarkGrey
+128 128 128 Grey
+224 224 224 LightGrey
+255 0 0 PureRed
+0 255 0 PureGreen
+0 0 255 PureBlue
+255 255 0 PureYellow
+0 255 255 PureCyan
+255 0 255 PurePurple
+255 128 64 Light Orange
+255 128 0 Orange
+255 64 64 Red
+244 244 72 Yellow
+72 255 72 Green
+32 96 255 Blue
+255 128 255 Pink
+128 64 128 Purple
