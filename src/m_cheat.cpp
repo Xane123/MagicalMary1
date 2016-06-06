@@ -129,7 +129,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_NOCLIP2:
-		if ((multiplayer == true) || (multiplayer == false && xane_debug == true))	//[XANE]Possible multiplayer crash fix(?)
+		if ((multiplayer == true) || (multiplayer == false && xane_debug == true))	//[XANE]NOCLIP2 multiplayer crash fix
 		{
 			player->cheats ^= CF_NOCLIP2;
 			if (player->cheats & CF_NOCLIP2)

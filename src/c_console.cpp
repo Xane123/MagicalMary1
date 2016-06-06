@@ -1535,11 +1535,11 @@ CCMD (echo)
 
 CVAR (Float, con_midtime, 3.f, CVAR_ARCHIVE)
 
-static const char bar1[] = TEXTCOLOR_RED "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
+static const char bar1[] = TEXTCOLOR_BLUE "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
 						  "\36\36\36\36\36\36\36\36\36\36\36\36\37" TEXTCOLOR_TAN "\n";
-static const char bar2[] = TEXTCOLOR_RED "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
+static const char bar2[] = TEXTCOLOR_BLUE "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
 						  "\36\36\36\36\36\36\36\36\36\36\36\36\37" TEXTCOLOR_GREEN "\n";
-static const char bar3[] = TEXTCOLOR_RED "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
+static const char bar3[] = TEXTCOLOR_BLUE "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
 						  "\36\36\36\36\36\36\36\36\36\36\36\36\37" TEXTCOLOR_NORMAL "\n";
 static const char logbar[] = "\n<------------------------------->\n";
 
@@ -1811,7 +1811,7 @@ static bool C_TabCompleteList ()
 	{
 		size_t x = 0;
 		maxwidth += 3;
-		Printf (TEXTCOLOR_BLUE "Completions for %s:\n", CmdLine+2);
+		Printf (TEXTCOLOR_YELLOW "CVARs/CCMDs that start with '%s':\n", CmdLine+2);
 		for (i = TabPos; nummatches > 0; ++i, --nummatches)
 		{
 			// [Dusk] Print console commands blue, CVars green, aliases red.
