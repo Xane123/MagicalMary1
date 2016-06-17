@@ -560,7 +560,7 @@ bool DAnimatedDoor::StartClosing ()
 	}
 
 	fixed_t topdist = m_Sector->ceilingplane.d;
-	if (MoveCeiling (2048*FRACUNIT, m_BotDist, 0, -1, false) == crushed)
+	if (MoveCeiling (2048*FRACUNIT, m_BotDist, 0, -1, false) ==		crushed)
 	{
 		return false;
 	}

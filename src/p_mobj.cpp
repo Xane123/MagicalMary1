@@ -3003,12 +3003,12 @@ int P_FindUniqueTID(int start_tid, int limit)
 	return 0;
 }
 
-CCMD(utid)
+/*CCMD(utid)
 {
 	Printf("%d\n",
 		P_FindUniqueTID(argv.argc() > 1 ? atoi(argv[1]) : 0,
 		(argv.argc() > 2 && atoi(argv[2]) >= 0) ? atoi(argv[2]) : 0));
-}
+}*/
 
 //==========================================================================
 //

@@ -212,6 +212,9 @@ argv(0) noclip
 */
 CCMD (noclip)
 {
+
+	Printf("USE NOCLIP2 INSTEAD.");
+
 	if (CheckCheatmode ())
 		return;
 
