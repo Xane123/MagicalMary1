@@ -83,8 +83,8 @@ static BYTE CheatClev[] = { 'x','m','c','l','e','v',0,0,255 };
 static BYTE CheatMypos[] = { 'w','o','k','p','o','s',255 };	//WOKPOS
 static BYTE CheatAmap[] = { 'x','a','n','e',255 };
 static BYTE CheatKillX[] = { 'x','k','i','l','l',255 };	//XKill kills whoever you're pointing at.
-static BYTE CheatWLup[] = { 'y', 'o', 'u', 'w', 'o', 'n', 't', 't', 'a', 'k', 'e', 'm', 'e', 'a', 'l', 'i', 'v', 'e' };	//YOUWONTTAKEMEALIVE; Increase Wanted Level
-static BYTE CheatWLDown[] = { 'l', 'e', 'a', 'v', 'e', 'm', 'e', 'a', 'l', 'o', 'n', 'e' };	//LEAVEMEALONE; Decrease Wanted Level
+static BYTE CheatWLup[] = { 'y', 'o', 'u', 'w', 'o', 'n', 't', 't', 'a', 'k', 'e', 'm', 'e', 'a', 'l', 'i', 'v', 'e', 255 };	//YOUWONTTAKEMEALIVE; Increase Wanted Level
+static BYTE CheatWLDown[] = { 'l', 'e', 'a', 'v', 'e', 'm', 'e', 'a', 'l', 'o', 'n', 'e', 255 };	//LEAVEMEALONE; Decrease Wanted Level
 
 static cheatseq_t Cheats[] =
 {
@@ -278,13 +278,14 @@ static bool Cht_WantedLevelUp(cheatseq_t *cheat)
 {
 	char cmd[30] = "pukename forcewantedlevel 2 1";
 	C_DoCommand(cmd);
+	return true;
 }
 
 static bool Cht_WantedLevelDown(cheatseq_t *cheat)
 {
-	char cmd[30] = "pukename forcewantedlevel x 0";
-	cmd[28] = cheat->Args[1];
+	char cmd[30] = "pukename forcewantedlevel 0 0";
 	C_DoCommand(cmd);
+	return true;
 }
 
 static bool Cht_ChangeLevel (cheatseq_t *cheat)	//[XANE]The change level cheat now can go to special stages and can go to levels lower than 10!
