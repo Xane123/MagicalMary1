@@ -82,9 +82,9 @@ static BYTE CheatAmmoNoKey[] = { 'i','d','f','a',255 };
 static BYTE CheatClev[] = { 'x','m','c','l','e','v',0,0,255 };
 static BYTE CheatMypos[] = { 'w','o','k','p','o','s',255 };	//WOKPOS
 static BYTE CheatAmap[] = { 'x','a','n','e',255 };
+static BYTE CheatWLUp[] = { 'y', 'o', 'u', 'w', 'o', 'n', 't', 't', 'a', 'k', 'e', 'm', 'e', 'a', 'l', 'i', 'v', 'e', 255 };	//YOUWONTTAKEMEALIVE; Increases Wanted Level
+static BYTE CheatWLDown[] = { 'l', 'e', 'a', 'v', 'e', 'm', 'e', 'a', 'l', 'o', 'n', 'e', 255 };	//LEAVEMEALONE; Decreases Wanted Level
 static BYTE CheatKillX[] = { 'x','k','i','l','l',255 };	//XKill kills whoever you're pointing at.
-static BYTE CheatWLup[] = { 'y', 'o', 'u', 'w', 'o', 'n', 't', 't', 'a', 'k', 'e', 'm', 'e', 'a', 'l', 'i', 'v', 'e', 255 };	//YOUWONTTAKEMEALIVE; Increase Wanted Level
-static BYTE CheatWLDown[] = { 'l', 'e', 'a', 'v', 'e', 'm', 'e', 'a', 'l', 'o', 'n', 'e', 255 };	//LEAVEMEALONE; Decrease Wanted Level
 
 static cheatseq_t Cheats[] =
 {
@@ -97,7 +97,7 @@ static cheatseq_t Cheats[] =
 	{ CheatAmmoNoKey,		0, 0, 0,{ CHT_IDFA,0 },		Cht_Generic },
 	{ CheatNoclip2,			0, 0, 0,{ CHT_NOCLIP2,0 },	Cht_Generic },
 	{ CheatKillX,			0, 0, 0,{ CHT_MDK,0 },	Cht_Generic },
-	{ CheatWLup,			0, 0, 0,{ 0,0 },	Cht_WantedLevelUp },
+	{ CheatWLUp,			0, 0, 0,{ 0,0 },	Cht_WantedLevelUp },
 	{ CheatWLDown,			0, 0, 0,{ 0,0 },	Cht_WantedLevelDown },
 	{ CheatPowerup[0],		0, 0, 0,{ CHT_BEHOLDV,0 },	Cht_Generic },
 	{ CheatPowerup[1],		0, 0, 0,{ CHT_BEHOLDS,0 },	Cht_Generic },
@@ -149,7 +149,7 @@ static bool CheatCheckList (event_t *ev, cheatseq_t *cheats, int numcheats)
 					eat |= cheats->Handler (cheats);
 				}
 			}
-			else if (cheats->Pos - cheats->Sequence > 2)
+			else if (cheats->Pos - cheats->Sequence > 1)
 			{ // If more than two characters into the sequence,
 			  // eat the keypress, just so that the Hexen cheats
 			  // with T in them will work without unbinding T.
