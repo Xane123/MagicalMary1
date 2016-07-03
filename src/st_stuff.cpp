@@ -84,6 +84,7 @@ static BYTE CheatMypos[] = { 'w','o','k','p','o','s',255 };	//WOKPOS
 static BYTE CheatAmap[] = { 'x','a','n','e',255 };
 static BYTE CheatWLUp[] = { 'y', 'o', 'u', 'w', 'o', 'n', 't', 't', 'a', 'k', 'e', 'm', 'e', 'a', 'l', 'i', 'v', 'e', 255 };	//YOUWONTTAKEMEALIVE; Increases Wanted Level
 static BYTE CheatWLDown[] = { 'l', 'e', 'a', 'v', 'e', 'm', 'e', 'a', 'l', 'o', 'n', 'e', 255 };	//LEAVEMEALONE; Decreases Wanted Level
+static BYTE CheatCryOn[] = { 'c', 'r', 'y', 'm', 'e', 'a', 'r', 'i', 'v', 'e', 'r', 255 };
 static BYTE CheatKillX[] = { 'x','k','i','l','l',255 };	//XKill kills whoever you're pointing at.
 
 static cheatseq_t Cheats[] =
