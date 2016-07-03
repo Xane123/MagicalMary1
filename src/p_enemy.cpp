@@ -485,11 +485,11 @@ bool P_Move (AActor *actor)
 	AActor *target = actor->target;
 
 	if ((actor->flags6 & MF6_JUMPDOWN) && target &&
-			!(target->IsFriend(actor)) &&
-			actor->AproxDistance(target) < FRACUNIT*144 &&
-			pr_dropoff() < 235)
+			!(target->IsFriend(actor)) /*&&
+			actor->AproxDistance(target) < FRACUNIT*192 &&
+			pr_dropoff() < 235*/)
 	{
-		dropoff = 2;
+		dropoff = 1;
 	}
 
 	// [RH] I'm not so sure this is such a good idea
