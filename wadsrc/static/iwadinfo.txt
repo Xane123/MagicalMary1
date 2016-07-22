@@ -7,7 +7,7 @@ IWad
 	Game = "Doom"
 	Config = "Doom"
 	Mapinfo = "mapinfo/wok.txt"
-	MustContain = "WGAMEPAL", "SMALLFNT", "MESG_FNT", "RACETIME"
+	MustContain = "WORLD_OF", "KIRBCRAF", "XANE_WOK"
 	BannerColors = "60 30 05", "60 90 B0"
 	Load = "wok_x.pk3", "wok_extra_lag.pk3", "MAPS.wad"
 }

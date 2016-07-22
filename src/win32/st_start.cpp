@@ -70,12 +70,12 @@
 #define ST_MAX_NETNOTCHES		8
 
 // Heretic startup screen
-#define HERETIC_MINOR_VERSION	'0'			// Since Heretic shouldn't be supported...
+#define HERETIC_MINOR_VERSION	'3'			// Since Heretic shouldn't be supported...
 
 #define THERM_X					14
 #define THERM_Y					14
 #define THERM_LEN				51
-#define THERM_COLOR				0xAA		// light green
+#define THERM_COLOR				0xBB		// light blue
 
 // Strife startup screen
 #define PEASANT_INDEX			0

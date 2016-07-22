@@ -599,14 +599,14 @@ public:
 
 		if (!mSliderShort)
 		{
-			M_DrawConText(CR_WHITE, x, cy, "\x10\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x12");
-			M_DrawConText(CR_ORANGE, x + int((5 + ((ccur * 78) / range)) * CleanXfac_1), cy, "\x13");
+			M_DrawConText(CR_CYAN, x, cy + (4 * CleanYfac_1), "\x10\x11\x11\x11\x11\x11\x11\x11\x11\x11\x11\x12");
+			M_DrawConText(CR_CREAM, x + int((5 + ((ccur * 78) / range)) * CleanXfac_1), cy + (6 * CleanYfac_1), "\x13");	//Offset the arrow downward a couple pixels from the slider.
 		}
 		else
 		{
 			// On 320x200 we need a shorter slider
-			M_DrawConText(CR_WHITE, x, cy, "\x10\x11\x11\x11\x11\x11\x12");
-			M_DrawConText(CR_ORANGE, x + int((5 + ((ccur * 38) / range)) * CleanXfac_1), cy, "\x13");
+			M_DrawConText(CR_CYAN, x, cy + (4 * CleanYfac_1), "\x10\x11\x11\x11\x11\x11\x12");
+			M_DrawConText(CR_CREAM, x + int((5 + ((ccur * 38) / range)) * CleanXfac_1), cy + (6 * CleanYfac_1), "\x13");
 			right -= 5*8*CleanXfac_1;
 		}
 
