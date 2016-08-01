@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\__autostart.cpp">
@@ -1039,9 +1039,6 @@
     <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\zzautozend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xane_race.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\win32\afxres.h">
@@ -1680,6 +1677,9 @@
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_tokens.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1862,9 +1862,6 @@
     </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\st_start.mm">
       <Filter>Cocoa Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.re">
       <Filter>Source Files</Filter>
@@ -2133,13 +2130,13 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\sc_man_scanner.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\xlat_parser.c.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\zcc-parse.c.rule">
-      <Filter>CMake Rules</Filter>
-    </CustomBuild>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\sc_man_scanner.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\a.obj.rule">
@@ -2181,15 +2178,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Audio Files\OPL Synth">
-      <UniqueIdentifier>{3C342F7B-ABC6-3F6C-B83D-A87377321BE6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\Timidity">
-      <UniqueIdentifier>{DD413FD7-3C27-353D-A0BA-A94DA55375FE}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\WildMidi">
-      <UniqueIdentifier>{8F305CDD-25AF-34CC-98EA-C162C739C0B3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Render Data\Resource Headers">
       <UniqueIdentifier>{39EBCB4D-914B-3707-BADC-2A8DF4DADB73}</UniqueIdentifier>
     </Filter>
@@ -2214,23 +2202,26 @@
     <Filter Include="Games\Strife Game">
       <UniqueIdentifier>{7F820D8D-482F-3B23-8BBD-B258F8A4E313}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\Timidity\Source">
-      <UniqueIdentifier>{E09F1CA0-D7F6-3BD3-899E-A6023E9DDAA2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assembly Files\ia32">
       <UniqueIdentifier>{D3AB408F-7338-3769-8761-1BC946994773}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assembly Files\x86_64">
       <UniqueIdentifier>{819B48A8-C59C-30DD-A207-D89E81566A6F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\WildMidi\Source">
-      <UniqueIdentifier>{81530CC5-B2EA-3F55-940D-4344DCCE496A}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Render Core\Render Headers">
       <UniqueIdentifier>{E9D8497F-C8D0-375D-A22C-CD60D9392DB2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Render Core\Render Sources">
       <UniqueIdentifier>{EA4F8791-D24D-358B-B4F7-360CC30804B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi\Source">
+      <UniqueIdentifier>{81530CC5-B2EA-3F55-940D-4344DCCE496A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity\Source">
+      <UniqueIdentifier>{E09F1CA0-D7F6-3BD3-899E-A6023E9DDAA2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\OPL Synth\DOSBox">
+      <UniqueIdentifier>{78809B19-5FD9-3F8C-9192-4772CB7F20DB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{281D1C2B-8FBD-3BE9-8CED-FA77CDABB679}</UniqueIdentifier>
@@ -2307,8 +2298,14 @@
     <Filter Include="ZScript">
       <UniqueIdentifier>{2FC23326-32BB-3D29-9691-84B13290889A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\OPL Synth\DOSBox">
-      <UniqueIdentifier>{78809B19-5FD9-3F8C-9192-4772CB7F20DB}</UniqueIdentifier>
+    <Filter Include="Audio Files\OPL Synth">
+      <UniqueIdentifier>{3C342F7B-ABC6-3F6C-B83D-A87377321BE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity">
+      <UniqueIdentifier>{DD413FD7-3C27-353D-A0BA-A94DA55375FE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi">
+      <UniqueIdentifier>{8F305CDD-25AF-34CC-98EA-C162C739C0B3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

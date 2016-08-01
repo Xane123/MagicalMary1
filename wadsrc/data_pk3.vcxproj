@@ -161,12 +161,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3a9aaacbda7a51759cc552b3129ba36a\data.pk3.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating ../data.pk3</Message>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\5cfb60045a6f6e47b5759c0bc1b3920e\data.pk3.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating C:/truecolorsw/data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-..\tools\zipdir\Debug\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\Debug\zipdir.exe -udf C:/truecolorsw/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/Debug/data.pk3
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/truecolorsw/data.pk3 C:/truecolorsw/Debug/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -174,14 +174,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Debug\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/5cfb60045a6f6e47b5759c0bc1b3920e/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Debug\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\truecolorsw\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating ../data.pk3</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating C:/truecolorsw/data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-..\tools\zipdir\Release\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\Release\zipdir.exe -udf C:/truecolorsw/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/Release/data.pk3
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/truecolorsw/data.pk3 C:/truecolorsw/Release/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -189,14 +189,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Release\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/5cfb60045a6f6e47b5759c0bc1b3920e/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Release\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\truecolorsw\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating ../data.pk3</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating C:/truecolorsw/data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-..\tools\zipdir\MinSizeRel\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\MinSizeRel\zipdir.exe -udf C:/truecolorsw/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/MinSizeRel/data.pk3
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/truecolorsw/data.pk3 C:/truecolorsw/MinSizeRel/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -204,14 +204,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\MinSizeRel\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/5cfb60045a6f6e47b5759c0bc1b3920e/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\MinSizeRel\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\truecolorsw\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating ../data.pk3</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating C:/truecolorsw/data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-..\tools\zipdir\RelWithDebInfo\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\RelWithDebInfo\zipdir.exe -udf C:/truecolorsw/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/RelWithDebInfo/data.pk3
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/truecolorsw/data.pk3 C:/truecolorsw/RelWithDebInfo/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -219,8 +219,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\RelWithDebInfo\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/5cfb60045a6f6e47b5759c0bc1b3920e/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\RelWithDebInfo\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\truecolorsw\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
@@ -236,7 +236,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\truecolorsw\data.pk3;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"></Message>
@@ -249,7 +249,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\truecolorsw\data.pk3;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"></Message>
@@ -262,7 +262,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\truecolorsw\data.pk3;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"></Message>
@@ -275,7 +275,7 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\truecolorsw\data.pk3;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>

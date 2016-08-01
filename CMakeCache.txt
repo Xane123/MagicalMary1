@@ -269,7 +269,7 @@ ZDOOM_GENERATE_ASM:BOOL=OFF
 ZDOOM_GENERATE_MAPFILE:BOOL=OFF
 
 //Directory where zdoom.pk3 and the executable will be created.
-ZDOOM_OUTPUT_DIR:PATH=C:/Users/Myers/git/world-of-kirbycraft
+ZDOOM_OUTPUT_DIR:PATH=C:/truecolorsw
 
 //Don't use Release/Debug directories.
 ZDOOM_OUTPUT_OLDSTYLE:BOOL=OFF
