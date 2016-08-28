@@ -88,10 +88,18 @@ const char *GetVersionString();
 #define BASEWAD "data.pk3"	//Name of PK3 file that the EXE uses.
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "The engine that powers World of Kirbycraft, ZDoom,"
+#if defined(_WIN32)
+#define GAMENAME “ZDoom, the engine that powers this game“
 #define GAMENAMELOWERCASE "Settings"	//Settings INI file's name.
+#endif
+
+#if defined(__APPLE__)
+#define GAMENAME “World of Kirbycraft“
+#define GAMENAMELOWERCASE “worldofkirbycraft-settings”	//Settings INI
+#endif
+
 #define FORUM_URL "xanem1@gmail.com"
-#define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations or multiplayer crashing when running on water!)"
+#define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations or multiplayer crashing!)"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMESIG
