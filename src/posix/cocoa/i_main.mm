@@ -375,7 +375,7 @@ NSMenuItem* CreateApplicationMenu()
 {
 	NSMenu* menu = [NSMenu new];
 
-	[menu addItemWithTitle:[@"About " stringByAppendingString:@GAMENAME]
+	[menu addItemWithTitle:[@"About " stringByAppendingString:@GAMENAME " (How do I edit the about dialog?)"]
 					   action:@selector(orderFrontStandardAboutPanel:)
 				keyEquivalent:@""];
 	[menu addItem:[NSMenuItem separatorItem]];
