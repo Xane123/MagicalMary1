@@ -59,7 +59,7 @@ typedef enum
 #define TICRATE 		35
 
 // Amount of damage done by a telefrag.
-#define TELEFRAG_DAMAGE	1000000
+#define TELEFRAG_DAMAGE	1//000000
 #define PIT_DAMAGE 100
 
 // The current state of the game: whether we are

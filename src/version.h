@@ -41,12 +41,12 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.3.8-dev"
-#define VERSIONNUM "13"	//Prefix with "1" for final versions!
+#define VERSIONSTR "v1.5-dev"
+#define VERSIONNUM "15"	//Prefix with "1" for final versions!
 
 // The version as seen in the Windows resource
-#define RC_FILEVERSION 1,3,9999,0
-#define RC_PRODUCTVERSION 1,3,9999,0
+#define RC_FILEVERSION 1,5,9999,0
+#define RC_PRODUCTVERSION 1,5,9999,0
 #define RC_PRODUCTVERSION2 VERSIONSTR
 
 // Version identifier for network games.
