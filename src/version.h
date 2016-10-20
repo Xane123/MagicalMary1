@@ -41,7 +41,7 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.5-dev"
+#define VERSIONSTR "v1.5-alpha"
 #define VERSIONNUM "15"	//Prefix with "1" for final versions!
 
 // The version as seen in the Windows resource
