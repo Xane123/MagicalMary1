@@ -22,7 +22,7 @@
 //
 //==========================================================================
 
-void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner, PClassActor *blasteffect, bool dontdamage)
+void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner, PClassActor *blasteffect, bool dontdamage, bool no_vertical)
 {
 	angle_t angle,ang;
 	AActor *mo;
@@ -62,7 +62,8 @@ void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner,
 	}
 	else
 	{
-		victim->vel.z = (1000 / victim->Mass) << FRACBITS;
+		if(no_vertical)mo->vel.z = victim->vel.z;	//[XANE]Added an option to disable vertical thrusting.
+		else victim->vel.z = (1000 / victim->Mass) << FRACBITS;
 	}
 	if (victim->player)
 	{
@@ -102,6 +103,7 @@ DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 	PARAM_FIXED_OPT	(strength)				{ strength = 255*FRACUNIT; }
 	PARAM_FIXED_OPT	(radius)				{ radius = 255*FRACUNIT; }
 	PARAM_FIXED_OPT	(speed)					{ speed = 20*FRACUNIT; }
+	PARAM_BOOL_OPT (no_thrust_vertical)		{ no_thrust_vertical = true; }
 	PARAM_CLASS_OPT	(blasteffect, AActor)	{ blasteffect = PClass::FindActor("BlastEffect"); }
 	PARAM_SOUND_OPT	(blastsound)			{ blastsound = "BlastRadius"; }
 
@@ -156,7 +158,7 @@ DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 			// in another region and cannot be seen.
 			continue;
 		}
-		BlastActor (mo, strength, speed, self, blasteffect, !!(blastflags & BF_NOIMPACTDAMAGE));
+		BlastActor (mo, strength, speed, self, blasteffect, !!(blastflags & BF_NOIMPACTDAMAGE), no_thrust_vertical);
 	}
 	return 0;
 }
