@@ -230,9 +230,8 @@ ACTOR PowerWeaponLevel2 : Powerup native
 
 ACTOR PowerSpeed : Powerup native
 {
-	Powerup.Duration -45
-	Speed 1.5
-	Inventory.Icon "SPBOOT0"
+	Powerup.Duration -60
+	Speed 1
 	+INVENTORY.NOTELEPORTFREEZE
 }
 
