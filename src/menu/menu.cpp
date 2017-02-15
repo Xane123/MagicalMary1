@@ -460,7 +460,7 @@ void M_SetMenu(FName menu, int param)
 			}
 		}
 	}
-	Printf("A MENU ATTEMPTED TO OPEN WITH AN UNKNOWN TYPE, '%s';\nIF YOU'RE PLAYING THE BASE, UNMODDED WORLD OF KIRBYCRAFT, REPORT THIS TO XANE!\n", menu.GetChars());
+	Printf("A MENU ATTEMPTED TO OPEN WITH AN UNKNOWN TYPE, '%s';\nIF YOU'RE PLAYING THE BASE, UNMODDED" GAMENAME ", REPORT THIS TO XANE!\n", menu.GetChars());
 }
 
 //=============================================================================

@@ -71,13 +71,13 @@ BEGIN
     "        BEGIN\r\n"
     "            VALUE ""Comments"", ""Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg.""\r\n"
     "            VALUE ""CompanyName"", "" ""\r\n"
-    "            VALUE ""FileDescription"", ""World of Kirbycraft""\r\n"
+    "            VALUE ""FileDescription"", ""GAMENAME""\r\n"
     "            VALUE ""FileVersion"", RC_FILEVERSION2\r\n"
-    "            VALUE ""InternalName"", ""World of Kirbycraft""\r\n"
-    "            VALUE ""LegalCopyright"", ""Copyright \\u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
-    "            VALUE ""LegalTrademarks"", ""DoomR is a Registered Trademark of id Software, Inc.""\r\n"
-    "            VALUE ""OriginalFilename"", ""wok.exe""\r\n"
-    "            VALUE ""ProductName"", ""World of Kirbycraft""\r\n"
+    "            VALUE ""InternalName"", ""GAMENAME""\r\n"
+    "            VALUE ""LegalCopyright"", ""(C) 2017 Xane Myers, 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
+    "            VALUE ""LegalTrademarks"", ""Doom(R) is a Registered Trademark of id Software, Inc.""\r\n"
+    "            VALUE ""OriginalFilename"", ""play.exe""\r\n"
+    "            VALUE ""ProductName"", ""GAMENAME""\r\n"
     "            VALUE ""ProductVersion"", RC_PRODUCTVERSION2\r\n"
     "        END\r\n"
     "    END\r\n"
@@ -99,22 +99,6 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "icon1.ico"
-
-IDI_BOING1              ICON                    "boing1.ico"
-
-IDI_BOING2              ICON                    "boing2.ico"
-
-IDI_BOING3              ICON                    "boing3.ico"
-
-IDI_BOING4              ICON                    "boing4.ico"
-
-IDI_BOING5              ICON                    "boing5.ico"
-
-IDI_BOING6              ICON                    "boing6.ico"
-
-IDI_BOING7              ICON                    "boing7.ico"
-
-IDI_BOING8              ICON                    "boing8.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -388,7 +372,7 @@ END
 IDD_CRASHDIALOG DIALOGEX 0, 0, 415, 308
 STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_APPWINDOW
-CAPTION "World of Kirbycraft"
+CAPTION "Mary's Magical Adventure"
 FONT 11, "XPinball", 400, 0, 0x0
 BEGIN
     CONTROL         "",IDC_CRASHTAB,"SysTabControl32",WS_TABSTOP,4,4,404,280
@@ -428,7 +412,6 @@ CAPTION "Amiga/DX-Ball 2"
 FONT 11, "XPinball", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "Close",IDOK,130,175,50,14,WS_DISABLED
-    ICON            IDI_BOING1,IDC_BOING,7,7,20,20
     LTEXT           "Static",IDC_BOINGSTATUS,33,12,147,8
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,166,189,1
     CONTROL         "",IDC_BOINGEDIT,"RichEdit20A",ES_MULTILINE | ES_READONLY | WS_BORDER | WS_VSCROLL | WS_TABSTOP,7,34,173,124
@@ -531,13 +514,13 @@ BEGIN
         BEGIN
             VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
             VALUE "CompanyName", " "
-            VALUE "FileDescription", "World of Kirbycraft"
+            VALUE "FileDescription", GAMENAME
             VALUE "FileVersion", RC_FILEVERSION2
-            VALUE "InternalName", "World of Kirbycraft"
-            VALUE "LegalCopyright", "Copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
+            VALUE "InternalName", GAMENAME
+            VALUE "LegalCopyright", "(C) 2017 Xane Myers, 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
             VALUE "LegalTrademarks", "Doom(R) is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "wok.exe"
-            VALUE "ProductName", "World of Kirbycraft"
+            VALUE "OriginalFilename", "play.exe"
+            VALUE "ProductName", GAMENAME
             VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
     END

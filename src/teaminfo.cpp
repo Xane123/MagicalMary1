@@ -326,10 +326,10 @@ bool FTeam::GetAllowCustomPlayerColor () const
 
 CCMD (teamlist)
 {
-	Printf ("The teams in World of Kirbycraft are currently:\n");
+	Printf ("The teams in Mary's Magical Adventure are currently:\n");
 
 	for (unsigned int uiTeam = 0; uiTeam < Teams.Size (); uiTeam++)
 		Printf ("%d : %s\n", uiTeam, Teams[uiTeam].GetName ());
 
-	Printf ("To add more, create a TEAMINFO file with new entries in the same format as World of Kirbycraft's built-in teams.\n");
+	Printf ("To add more, create a TEAMINFO file with new entries in the same format as Mary's Magical Adventure's built-in teams.\n");
 }

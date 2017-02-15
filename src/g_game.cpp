@@ -1725,7 +1725,7 @@ static bool CheckSingleWad (char *name, bool &printRequires, bool printwarn)
 		{
 			if (!printRequires)
 			{
-				Printf ("THIS SAVE REQUIRES AN ADDITIONAL PK3/WAD, %s.\nMAKE SURE THAT FILE IS LOADED WITH -FILE WHEN STARTING WORLD OF KIRBYCRAFT!\n", name);
+				Printf ("THIS SAVE REQUIRES AN ADDITIONAL PK3/WAD, %s.\nMAKE SURE THAT FILE IS LOADED WITH -FILE WHEN STARTING Mary's Magical Adventure!\n", name);
 			}
 			else
 			{
@@ -1789,7 +1789,7 @@ void G_DoLoadGame ()
 	if (png == NULL)
 	{
 		fclose (stdfile);
-		Printf ("'%s' IS A NORMAL PNG IMAGE AND IS NOT A VALID\nWORLD OF KIRBYCRAFT SAVE.\n", savename.GetChars());
+		Printf ("'%s' IS A NORMAL PNG IMAGE AND IS NOT A VALID\nMary's Magical Adventure SAVE.\n", savename.GetChars());
 		return;
 	}
 
@@ -1846,7 +1846,7 @@ void G_DoLoadGame ()
 	map = M_GetPNGText (png, "Current Map");
 	if (map == NULL)
 	{
-		Printf ("THE LEVEL THIS SAVE WAS SAVED IN NO LONGER EXISTS IN THE CURRENT VERSION OF WORLD OF KIRBYCRAFT.\n");
+		Printf ("THE LEVEL THIS SAVE WAS SAVED IN NO LONGER EXISTS IN THE CURRENT VERSION OF Mary's Magical Adventure.\n");
 		fclose (stdfile);
 		return;
 	}
@@ -1951,7 +1951,7 @@ void G_SaveGame (const char *filename, const char *description)
 {
 	if (sendsave || gameaction == ga_savegame)
 	{
-		Printf ("WORLD OF KIRBYCRAFT IS STILL WAITING ON A PREVIOUS SAVE.\n");
+		Printf ("Mary's Magical Adventure IS STILL WAITING ON A PREVIOUS SAVE.\n");
 		return;
 	}
     else if (!usergame)

@@ -495,7 +495,7 @@ void R_ExecuteSetViewSize ()
 //
 //==========================================================================
 
-CUSTOM_CVAR (Int, screenblocks, 11, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)	//10 is the standard HUD, 11 is fullscreen, and 12 is no HUD, respectively.
 {
 	if (self > 12)
 		self = 12;

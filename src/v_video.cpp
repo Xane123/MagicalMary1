@@ -153,7 +153,7 @@ DFrameBuffer *screen;
 CVAR (Int, vid_defwidth, 1152, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Int, vid_defheight, 648, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Int, vid_defbits, 8, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Bool, vid_fps, false, 0)
+CVAR (Int, vid_fps, 0, CVAR_ARCHIVE)
 CVAR (Bool, ticker, false, 0)
 CVAR (Int, vid_showpalette, 0, 0)
 
@@ -857,10 +857,22 @@ void DFrameBuffer::DrawRateStuff ()
 			int chars;
 			int rate_x;
 
-			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%2u ms (%3u fps)", howlong, LastCount);
-			rate_x = Width - ConFont->StringWidth(&fpsbuff[0]);
-			Clear (rate_x, 0, Width, ConFont->GetHeight(), GPalette.BlackIndex, 0);
-			DrawText (ConFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0], TAG_DONE);
+			if(vid_fps==2) chars = mysnprintf (fpsbuff, countof(fpsbuff), "%3uFPS (%2ums)", LastCount, howlong);
+			else chars = mysnprintf(fpsbuff, countof(fpsbuff), "%3uFPS", LastCount);
+			rate_x = Width - SmallFont->StringWidth(&fpsbuff[0]);
+
+			Clear(vid_fps==2 ? 994 : 1069, 0, Width, 23, 70, 0);
+			Clear(vid_fps == 2 ? 995 : 1070, 0, Width, 24, 70, 0);
+			Clear(vid_fps == 2 ? 996 : 1071, 0, Width, 22, 69, 0);
+			Clear(vid_fps == 2 ? 998 : 1073, 0, Width, 20, 68, 0);
+			Clear(vid_fps == 2 ? 1000 : 1075, 0, Width, 18, 67, 0);
+			Clear(vid_fps == 2 ? 1001 : 1076, 0, Width, 1, 68, 0);	//Line
+			Clear(vid_fps == 2 ? 1001 : 1076, 4, Width, 5, 68, 0);	//Line
+			Clear(vid_fps == 2 ? 1001 : 1076, 8, Width, 9, 68, 0);	//Line
+			Clear(vid_fps == 2 ? 1001 : 1076, 12, Width, 13, 68, 0);	//Line
+			Clear(vid_fps == 2 ? 1001 : 1076, 16, Width, 17, 68, 0);	//Line
+			
+			DrawText (SmallFont, LastCount>30 ? CR_UNTRANSLATED : CR_YELLOW, rate_x-1, 2, (char *)&fpsbuff[0], TAG_DONE);
 
 			DWORD thisSec = ms/1000;
 			if (LastSec < thisSec)
@@ -909,9 +921,9 @@ void DFrameBuffer::DrawRateStuff ()
 		static FPaletteTester palette;
 
 		palette.SetTranslation(vid_showpalette);
-		DrawTexture(&palette, 0, 0,
-			DTA_DestWidth, 16*7,
-			DTA_DestHeight, 16*7,
+		DrawTexture(&palette, 8, 480,
+			DTA_DestWidth, 24*7,
+			DTA_DestHeight, 24*7,
 			DTA_Masked, false,
 			TAG_DONE);
 	}

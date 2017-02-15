@@ -1633,7 +1633,7 @@ void DBaseStatusBar::DrawConsistancy () const
 		{
 			if (buff_p == NULL && msg_showminor)
 			{
-				strcpy(conbuff, "YOU ARE OUT OF SYNC WITH PLAYER x;\nIF YOU DON'T SEE OTHER PLAYERS, RESTART WORLD OF KIRBYCRAFT.");
+				strcpy(conbuff, "YOU ARE OUT OF SYNC WITH PLAYER x;\nIF YOU DON'T SEE OTHER PLAYERS, RESTART " GAMENAME ".");
 				buff_p = conbuff + 32;
 			}
 			*buff_p++ = ' ';
@@ -1676,7 +1676,7 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy(conbuff, "CURRENTLY WAITING FOR PLAYER x;\nTHIS COULD MEAN THEIR COMPUTER DISCONNECTED FROM THE INTERNET OR THEY ARE MOVING WORLD OF KIRBYCRAFT'S WINDOW AROUND.");
+				strcpy(conbuff, "CURRENTLY WAITING FOR PLAYER x;\nTHIS COULD MEAN THEIR COMPUTER DISCONNECTED FROM THE INTERNET OR THEY ARE MOVING THE GAME WINDOW AROUND.");
 				buff_p = conbuff + 29;
 			}
 			*buff_p++ = ' ';
@@ -1879,7 +1879,7 @@ CCMD (showpop)
 {
 	if (argv.argc() != 2)
 	{
-		Printf ("To show a popup defined in SBARINFO, type \"showpop <popnumber>\".\n\nWorld of Kirbycraft doesn't use SBARINFO popups so this only applies to mods.\n");
+		Printf ("To show a popup defined in SBARINFO, type \"showpop <popnumber>\".\n\nMary's Magical Adventure doesn't use SBARINFO popups so this only applies to mods.\n");
 	}
 	else if (StatusBar != NULL)
 	{

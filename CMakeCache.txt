@@ -31,7 +31,7 @@ BZIP2_LIBRARY_RELEASE:FILEPATH=BZIP2_LIBRARY_RELEASE-NOTFOUND
 
 //Choose the type of build, options are: Debug Release RelWithDebInfo
 // MinSizeRel.
-CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_BUILD_TYPE:STRING=MinSizeRel
 
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
@@ -92,10 +92,7 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=/INCREMENTAL:NO
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/WoK
-
-//Path to a program.
-CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/link.exe
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Mary's Magical Adventure
 
 //Flags used by the linker during the creation of modules.
 CMAKE_MODULE_LINKER_FLAGS:STRING= /machine:X86
@@ -114,9 +111,6 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=ZDoom
-
-//RC compiler
-CMAKE_RC_COMPILER:FILEPATH=rc
 
 //Flags for Windows Resource Compiler.
 CMAKE_RC_FLAGS:STRING=' /DWIN32 '
@@ -218,9 +212,11 @@ JPEG_LIBRARY:FILEPATH=JPEG_LIBRARY-NOTFOUND
 //GCC support for hidden visibility
 LIBGME_HAVE_GCC_VISIBILITY:BOOL=OFF
 
-MPG123_INCLUDE_DIR:PATH=C:/Program Files (x86)/mpg123
+//Path to a file.
+MPG123_INCLUDE_DIR:PATH=C:/Users/Myers/git/mpg123-1.20.1-x86
 
-MPG123_LIBRARIES:FILEPATH=C:/Program Files (x86)/mpg123/libmpg123-0.lib
+//Path to a library.
+MPG123_LIBRARIES:FILEPATH=C:/Users/Myers/git/mpg123-1.20.1-x86/libmpg123-0.lib
 
 //Path to a program.
 NASM_PATH:FILEPATH=C:/Users/Myers/AppData/Local/nasm/nasm.exe
@@ -232,20 +228,22 @@ NO_ASM:BOOL=OFF
 NO_FMOD:BOOL=OFF
 
 //Disable OpenAL sound support
-NO_OPENAL:BOOL=ON
+NO_OPENAL:BOOL=OFF
 
 //Path to a file.
-OPENAL_INCLUDE_DIR:PATH=C:/Program Files (x86)/OpenAL 1.1 SDK/include
+OPENAL_INCLUDE_DIR:PATH=C:/Users/Myers/git/openal/include/AL
 
 //Path to a library.
-OPENAL_LIBRARY:FILEPATH=C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib
+OPENAL_LIBRARY:FILEPATH=C:/Users/Myers/git/openal/libs/Win32/OpenAL32.lib
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
 
-SNDFILE_INCLUDE_DIR:PATH=C:/Program Files/Mega-Nerd/libsndfile/include
+//Path to a file.
+SNDFILE_INCLUDE_DIR:PATH=C:/Program Files (x86)/Mega-Nerd/libsndfile/include/
 
-SNDFILE_LIBRARY:FILEPATH=C:/Program Files/Mega-Nerd/libsndfile/lib/libsndfile-1.lib
+//Path to a library.
+SNDFILE_LIBRARY:FILEPATH=C:/Program Files (x86)/Mega-Nerd/libsndfile/lib/libsndfile-1.lib
 
 //Build SSE and SSE2 versions of key code.
 SSE:BOOL=ON
@@ -260,7 +258,7 @@ XINPUT_INCLUDE_DIR:PATH=C:/Program Files (x86)/Microsoft DirectX SDK (February 2
 YASM_PATH:FILEPATH=YASM_PATH-NOTFOUND
 
 //Name of the executable to create.
-ZDOOM_EXE_NAME:FILEPATH=wok
+ZDOOM_EXE_NAME:FILEPATH=play
 
 //Generate assembly output.
 ZDOOM_GENERATE_ASM:BOOL=OFF
@@ -269,7 +267,7 @@ ZDOOM_GENERATE_ASM:BOOL=OFF
 ZDOOM_GENERATE_MAPFILE:BOOL=OFF
 
 //Directory where zdoom.pk3 and the executable will be created.
-ZDOOM_OUTPUT_DIR:PATH=C:/truecolorsw
+ZDOOM_OUTPUT_DIR:PATH=C:/Users/Myers/git/world-of-kirbycraft
 
 //Don't use Release/Debug directories.
 ZDOOM_OUTPUT_OLDSTYLE:BOOL=OFF
@@ -378,8 +376,6 @@ CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_C_STANDARD_LIBRARIES
 CMAKE_C_STANDARD_LIBRARIES-ADVANCED:INTERNAL=1
-//Executable file format
-CMAKE_EXECUTABLE_FORMAT:INTERNAL=Unknown
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS
 CMAKE_EXE_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_DEBUG
@@ -401,8 +397,6 @@ CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/Myers/git/world-of-kirbycraft
-//ADVANCED property for variable: CMAKE_LINKER
-CMAKE_LINKER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS
 CMAKE_MODULE_LINKER_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS_DEBUG
@@ -415,9 +409,6 @@ CMAKE_MODULE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //number of local generators
 CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=17
-//ADVANCED property for variable: CMAKE_RC_COMPILER
-CMAKE_RC_COMPILER-ADVANCED:INTERNAL=1
-CMAKE_RC_COMPILER_WORKS:INTERNAL=1
 //ADVANCED property for variable: CMAKE_RC_FLAGS
 CMAKE_RC_FLAGS-ADVANCED:INTERNAL=1
 //Path to CMake installation.
@@ -454,9 +445,9 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Have function filelength
 FILELENGTH_EXISTS:INTERNAL=1
 //Details about finding OpenAL
-FIND_PACKAGE_MESSAGE_DETAILS_OpenAL:INTERNAL=[C:/Program Files (x86)/OpenAL 1.1 SDK/libs/Win64/OpenAL32.lib][C:/Program Files (x86)/OpenAL 1.1 SDK/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenAL:INTERNAL=[C:/Users/Myers/git/openal/libs/Win32/OpenAL32.lib][C:/Users/Myers/git/openal/include/AL][v()]
 //Details about finding SndFile
-FIND_PACKAGE_MESSAGE_DETAILS_SndFile:INTERNAL=[C:/Program Files/Mega-Nerd/libsndfile/lib/libsndfile-1.lib][C:/Program Files/Mega-Nerd/libsndfile/include][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_SndFile:INTERNAL=[C:/Program Files (x86)/Mega-Nerd/libsndfile/lib/libsndfile-1.lib][C:/Program Files (x86)/Mega-Nerd/libsndfile/include/][v()]
 //ADVANCED property for variable: FLUIDSYNTH_INCLUDE_DIR
 FLUIDSYNTH_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: FLUIDSYNTH_LIBRARIES

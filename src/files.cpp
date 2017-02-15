@@ -257,7 +257,7 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (err != Z_OK && err != Z_STREAM_END)
 	{
-		I_FatalError("One of the PK3's that were loaded was modified while World of Kirbycraft was running.");
+		I_FatalError("One of the PK3's that were loaded was modified while Mary's Magical Adventure was running.");
 	}
 
 	if (Stream.avail_out != 0)
@@ -331,7 +331,7 @@ long FileReaderBZ2::Read (void *buffer, long len)
 
 	if (err != BZ_OK && err != BZ_STREAM_END)
 	{
-		I_FatalError("One of the files that were loaded was modified while World of Kirbycraft was running.");
+		I_FatalError("One of the files that were loaded was modified while Mary's Magical Adventure was running.");
 	}
 
 	if (Stream.avail_out != 0)

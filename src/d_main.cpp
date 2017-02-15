@@ -1048,7 +1048,7 @@ void D_PageTicker (void)
 //
 //==========================================================================
 
-void D_PageDrawer (void)
+void D_PageDrawer (void)	//[XANE]This is what draws the title screen (TITLEPIC)!
 {
 	if (Page != NULL)
 	{
@@ -1057,14 +1057,14 @@ void D_PageDrawer (void)
 			DTA_Masked, false,
 			DTA_BilinearFilter, true,
 			TAG_DONE);
-		screen->FillBorder (NULL);
+		screen->FillBorder (Page/*NULL*/);
 	}
 	else
 	{
-		screen->Clear (0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
+		screen->Clear (0, 0, SCREENWIDTH, SCREENHEIGHT, BASECOLOR, 0);
 		if (!PageBlank)
 		{
-			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Page graphic goes here", TAG_DONE);
+			screen->DrawText (SmallFont, CR_RED, 0, 0, "Xane, are you looking for that stupid pillarboxing code?", TAG_DONE);
 		}
 	}
 	if (Advisory != NULL)

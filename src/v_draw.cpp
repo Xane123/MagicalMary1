@@ -61,6 +61,7 @@
 #include "d_net.h"
 #include "colormatcher.h"
 #include "r_data/colormaps.h"
+#include "version.h"
 
 // [RH] Stretch values to make a 320x200 image best fit the screen
 // without using fractional steppings
@@ -520,13 +521,16 @@ bool DCanvas::ParseDrawTextureTags (FTexture *img, double x, double y, DWORD tag
 			parms->virtHeight = va_arg(tags, double);
 			break;
 
-		case DTA_Fullscreen:
+		case DTA_Fullscreen: //[XANE]The title screen has its size altered with this. Unknown about positioning.
 			boolval = va_arg(tags, INTBOOL);
 			if (boolval)
 			{
-				parms->x = parms->y = 0;
-				parms->virtWidth = img->GetScaledWidthDouble();
-				parms->virtHeight = img->GetScaledHeightDouble();
+				//parms->x = parms->y = 0;
+				parms->x = -45;
+				parms->y = 0;
+				
+				parms->virtWidth = SCREENWIDTH/4.5;//img->GetScaledWidthDouble();
+				parms->virtHeight = SCREENHEIGHT/3.5;//img->GetScaledHeightDouble();
 			}
 			break;
 
@@ -817,7 +821,7 @@ void DCanvas::VirtualToRealCoordsInt(int &x, int &y, int &w, int &h,
 
 void DCanvas::FillBorder (FTexture *img)
 {
-	int myratio = CheckRatio (Width, Height);
+	int myratio = 0;//CheckRatio (Width, Height); [XANE TEST]
 
     // if 21:9 AR, fill borders akin to 16:9, since all fullscreen
     // images are being drawn to that scale.
@@ -1475,7 +1479,7 @@ void V_DrawBorder (int x1, int y1, int x2, int y2)
 	}
 	else
 	{
-		screen->Clear (x1, y1, x2, y2, 0, 0);
+		screen->Clear (x1, y1, x2, y2, BASECOLOR, 0);
 	}
 }
 

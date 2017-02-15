@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt" />
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\5cfb60045a6f6e47b5759c0bc1b3920e\data.pk3.rule">
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3a9aaacbda7a51759cc552b3129ba36a\data.pk3.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\78ac00bdc5b9f3f46d8be8977bdc2572\data_pk3.rule">

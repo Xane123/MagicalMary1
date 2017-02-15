@@ -98,7 +98,7 @@ CCMD (bumpgamma)
 		newgamma = 1.0;
 
 	Gamma = newgamma;
-	Printf ("Gamma correction level %g\n", *Gamma);
+	Printf ("Changed gamma level to %g.\n", *Gamma);
 }
 
 

@@ -304,7 +304,7 @@ void S_Init ()
 	curvelump = Wads.CheckNumForName ("SNDCURVE");
 	if (curvelump >= 0)
 	{
-		Printf("YOUR PK3 CONTAINS A SNDCURVE FILE.\nWORLD OF KIRBYCRAFT IS DOOM-BASED AND DOESN'T USE RAVEN'S SNDCURVE FILE.");
+		Printf("YOUR PK3 CONTAINS A SNDCURVE FILE.\nMary's Magical Adventure IS DOOM-BASED AND DOESN'T USE RAVEN'S SNDCURVE FILE.");
 		S_SoundCurveSize = Wads.LumpLength (curvelump);
 		S_SoundCurve = new BYTE[S_SoundCurveSize];
 		Wads.ReadLump(curvelump, S_SoundCurve);

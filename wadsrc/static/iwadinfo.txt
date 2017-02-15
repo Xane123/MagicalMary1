@@ -2,14 +2,14 @@
 
 IWad
 {
-	Name = "World of Kirbycraft (Alpha)"
-	Autoname = "wok.base"
+	Name = "Mary's Magical Adventure (Alpha)"
+	Autoname = "mma.base"
 	Game = "Doom"
 	Config = "Doom"
-	Mapinfo = "mapinfo/wok.txt"
-	MustContain = "WORLD_OF", "KIRBCRAF", "XANE_WOK"
-	BannerColors = "60 30 05", "60 90 B0"
-	Load = "wok_x.pk3", "wok_extra_lag.pk3", "MAPS.wad", "fmv.pk3", "fmv_3d.pk3", "fmv_hires.pk3"
+	Mapinfo = "mapinfo/mma.txt"
+	MustContain = "WGAMEPAL", "XANE_MMA"
+	BannerColors = "c0 40 c0", "40 20 40"
+	Load = "mma_extra.pk3", "mma_maps.wad", "fmv.pk3", "fmv_3d.pk3", "fmv_hires.pk3"
 }
 
-Names { "wok.wad" }
+Names { "mma_data.pk3" }

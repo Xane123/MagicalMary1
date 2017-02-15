@@ -20,14 +20,6 @@
 #define IDB_BITMAP1                     131
 #define IDB_DEADGUY                     131
 #define IDD_CRASHDETAILS                133
-#define IDI_BOING1                      137
-#define IDI_BOING2                      138
-#define IDI_BOING3                      139
-#define IDI_BOING4                      140
-#define IDI_BOING5                      141
-#define IDI_BOING6                      142
-#define IDI_BOING7                      143
-#define IDI_BOING8                      144
 #define IDD_BOING                       145
 #define IDD_CRASHOVERVIEW               147
 #define IDD_ERRORPANE                   148
@@ -99,8 +91,8 @@
 #define IDC_NETSTARTPROGRESS            1079
 #define IDC_NETSTARTMESSAGE             1080
 #define IDC_NETSTARTCOUNT               1081
-#define IDC_STATIC_TITLE				1082
-#define IDC_STATIC_STARTUP				1083
+#define IDC_STATIC_TITLE                1082
+#define IDC_STATIC_STARTUP              1083
 #define IDCE_ENVIRONMENTDIFFUSION       1085
 #define IDCS_ENVIRONMENTDIFFUSION       1086
 #define IDCE_ROOM                       1087

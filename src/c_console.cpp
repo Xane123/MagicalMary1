@@ -870,7 +870,7 @@ void C_DrawConsole (bool hw2d)
 			TAG_DONE);
 		if (conline && visheight < screen->GetHeight())
 		{
-			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 0, 0);
+			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 70, 0);	//Fixed pink console line.
 		}
 
 		if (ConBottom >= 12)

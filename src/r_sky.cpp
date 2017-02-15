@@ -49,7 +49,7 @@ fixed_t		sky1cyl,		sky2cyl;
 double		sky1pos,		sky2pos;
 
 // [RH] Stretch sky texture if not taller than 128 pixels?
-CUSTOM_CVAR (Bool, g_old1, false, 0)	//"Sky stetching"; This is unnecessay in World of Kirbycraft.
+CUSTOM_CVAR (Bool, g_old1, false, 0)	//"Sky stetching"; This is unnecessay in Mary's Magical Adventure.
 {
 	R_InitSkyMap ();
 }

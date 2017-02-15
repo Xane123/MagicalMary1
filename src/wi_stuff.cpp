@@ -51,6 +51,7 @@
 #include "r_data/r_translate.h"
 #include "templates.h"
 #include "gstrings.h"
+#include "version.h"
 
 // States for the intermission
 typedef enum
@@ -659,7 +660,7 @@ void WI_drawBackground()
 	}
 	else 
 	{
-		screen->Clear(0,0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
+		screen->Clear(0,0, SCREENWIDTH, SCREENHEIGHT, BASECOLOR, 0);
 	}
 
 	for(i=0;i<anims.Size();i++)

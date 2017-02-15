@@ -1412,7 +1412,7 @@ void APlayerPawn::GiveDefaultInventory ()
 					{
 						// Player was morphed. This is illegal at game start.
 						// This problem is only detectable when it's too late to do something about it...
-						I_Error("YOU CAN'T TRANSFORM; YOU'RE STARTING WORLD OF KIRBYCRAFT!");
+						I_Error("YOU CAN'T TRANSFORM; YOU'RE STARTING Mary's Magical Adventure!");
 					}
 					item->Destroy ();
 					item = NULL;

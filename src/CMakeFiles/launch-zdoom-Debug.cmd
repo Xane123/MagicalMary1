@@ -1,9 +1,9 @@
-cd C:/truecolorsw
+cd C:/Users/Myers/git/world-of-kirbycraft
 set PATH=;%PATH%
 
 if [%1]==[--debugger] (
 	SHIFT
 )
 
-"C:\truecolorsw\Debug\wok.exe"  
+"C:\Users\Myers\git\world-of-kirbycraft\Debug\play.exe"  
 pause

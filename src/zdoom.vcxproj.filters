@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\src\__autostart.cpp">
@@ -1461,9 +1461,6 @@
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gitinfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\gstrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1677,9 +1674,6 @@
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_tokens.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1862,6 +1856,9 @@
     </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\posix\cocoa\st_start.mm">
       <Filter>Cocoa Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Myers\git\world-of-kirbycraft\src\sc_man_scanner.re">
       <Filter>Source Files</Filter>
@@ -2130,13 +2127,13 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt" />
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\sc_man_scanner.h.rule">
-      <Filter>CMake Rules</Filter>
-    </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\xlat_parser.c.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\zcc-parse.c.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\7761af3cb78a30892a6bccf3d51c4d30\sc_man_scanner.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\0d04f66ff6b2c35bc12fbf1f4f27cc6e\a.obj.rule">
@@ -2178,30 +2175,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Render Data\Resource Headers">
-      <UniqueIdentifier>{39EBCB4D-914B-3707-BADC-2A8DF4DADB73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Data\Resource Sources">
-      <UniqueIdentifier>{25693973-A1B4-30FF-91DA-589D7C20D336}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Data\Textures">
-      <UniqueIdentifier>{42120805-B6BF-351F-988D-EEC9933B534D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Doom Game">
-      <UniqueIdentifier>{ACFEE9C4-3731-3CBE-9667-63A8CBE16659}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Heretic Game">
-      <UniqueIdentifier>{3F7D85C0-5A4A-3E32-B468-40A4946E79B2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Hexen Game">
-      <UniqueIdentifier>{FC60B022-9EF3-3F3F-8D8B-7DF0E3CE2B8C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Raven Shared">
-      <UniqueIdentifier>{A95A03D4-C826-3BB5-84DD-94D39393E65C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Strife Game">
-      <UniqueIdentifier>{7F820D8D-482F-3B23-8BBD-B258F8A4E313}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assembly Files\ia32">
       <UniqueIdentifier>{D3AB408F-7338-3769-8761-1BC946994773}</UniqueIdentifier>
     </Filter>
@@ -2214,11 +2187,11 @@
     <Filter Include="Render Core\Render Sources">
       <UniqueIdentifier>{EA4F8791-D24D-358B-B4F7-360CC30804B3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\WildMidi\Source">
-      <UniqueIdentifier>{81530CC5-B2EA-3F55-940D-4344DCCE496A}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Audio Files\Timidity\Source">
       <UniqueIdentifier>{E09F1CA0-D7F6-3BD3-899E-A6023E9DDAA2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi\Source">
+      <UniqueIdentifier>{81530CC5-B2EA-3F55-940D-4344DCCE496A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Audio Files\OPL Synth\DOSBox">
       <UniqueIdentifier>{78809B19-5FD9-3F8C-9192-4772CB7F20DB}</UniqueIdentifier>
@@ -2298,6 +2271,15 @@
     <Filter Include="ZScript">
       <UniqueIdentifier>{2FC23326-32BB-3D29-9691-84B13290889A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render Data\Resource Headers">
+      <UniqueIdentifier>{39EBCB4D-914B-3707-BADC-2A8DF4DADB73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Resource Sources">
+      <UniqueIdentifier>{25693973-A1B4-30FF-91DA-589D7C20D336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Textures">
+      <UniqueIdentifier>{42120805-B6BF-351F-988D-EEC9933B534D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Audio Files\OPL Synth">
       <UniqueIdentifier>{3C342F7B-ABC6-3F6C-B83D-A87377321BE6}</UniqueIdentifier>
     </Filter>
@@ -2307,5 +2289,24 @@
     <Filter Include="Audio Files\WildMidi">
       <UniqueIdentifier>{8F305CDD-25AF-34CC-98EA-C162C739C0B3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Games\Doom Game">
+      <UniqueIdentifier>{ACFEE9C4-3731-3CBE-9667-63A8CBE16659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Heretic Game">
+      <UniqueIdentifier>{3F7D85C0-5A4A-3E32-B468-40A4946E79B2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Hexen Game">
+      <UniqueIdentifier>{FC60B022-9EF3-3F3F-8D8B-7DF0E3CE2B8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Raven Shared">
+      <UniqueIdentifier>{A95A03D4-C826-3BB5-84DD-94D39393E65C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Strife Game">
+      <UniqueIdentifier>{7F820D8D-482F-3B23-8BBD-B258F8A4E313}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="win32\icon1.ico" />
+    <Image Include="win32\deadguy.bmp" />
   </ItemGroup>
 </Project>

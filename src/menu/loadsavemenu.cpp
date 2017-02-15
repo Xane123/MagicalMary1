@@ -571,7 +571,7 @@ void DLoadSaveMenu::Drawer ()
 	else
 	{
 		screen->Clear (savepicLeft, savepicTop,
-			savepicLeft+savepicWidth, savepicTop+savepicHeight, 0, 0);
+			savepicLeft+savepicWidth, savepicTop+savepicHeight, BASECOLOR-1, 0);
 
 		if (SaveGames.Size() > 0)
 		{
@@ -588,7 +588,7 @@ void DLoadSaveMenu::Drawer ()
 
 	// Draw comment area
 	V_DrawFrame (commentLeft, commentTop, commentWidth, commentHeight);
-	screen->Clear (commentLeft, commentTop, commentRight, commentBottom, 0, 0);
+	screen->Clear (commentLeft, commentTop, commentRight, commentBottom, BASECOLOR, 0);
 	if (SaveComment != NULL)
 	{
 		// I'm not sure why SaveComment would go NULL in this loop, but I got
@@ -596,22 +596,22 @@ void DLoadSaveMenu::Drawer ()
 		// for that.
 		for (i = 0; SaveComment != NULL && SaveComment[i].Width >= 0 && i < 6; ++i)
 		{
-			screen->DrawText (SmallFont, CR_GOLD, commentLeft, commentTop
-				+ SmallFont->GetHeight()*i*CleanYfac, SaveComment[i].Text,
+			screen->DrawText (ConFont, CR_GOLD, commentLeft, commentTop
+				+ ConFont->GetHeight()*i*CleanYfac, SaveComment[i].Text,
 				DTA_CleanNoMove, true, TAG_DONE);
 		}
 	}
 
 	// Draw file area
 	V_DrawFrame (listboxLeft, listboxTop, listboxWidth, listboxHeight);
-	screen->Clear (listboxLeft, listboxTop, listboxRight, listboxBottom, 0, 0);
+	screen->Clear (listboxLeft, listboxTop, listboxRight, listboxBottom, BASECOLOR+1, 0);
 
 	if (SaveGames.Size() == 0)
 	{
 		const char * text = GStrings("MNU_NOFILES");
-		const int textlen = SmallFont->StringWidth (text)*CleanXfac;
+		const int textlen = ConFont->StringWidth (text)*CleanXfac;
 
-		screen->DrawText (SmallFont, CR_GOLD, listboxLeft+(listboxWidth-textlen)/2,
+		screen->DrawText (ConFont, CR_GOLD, listboxLeft+(listboxWidth-textlen)/2,
 			listboxTop+(listboxHeight-rowHeight)/2, text,
 			DTA_CleanNoMove, true, TAG_DONE);
 		return;
@@ -640,9 +640,9 @@ void DLoadSaveMenu::Drawer ()
 
 		if ((int)j == Selected)
 		{
-			screen->Clear (listboxLeft, listboxTop+rowHeight*i,
-				listboxRight, listboxTop+rowHeight*(i+1), -1,
-				mEntering ? MAKEARGB(255,255,0,0) : MAKEARGB(255,0,0,255));
+			screen->Clear(listboxLeft, listboxTop + rowHeight*i,
+				listboxRight, listboxTop + rowHeight*(i + 1), 183+i, 0);/*-1,
+				mEntering ? MAKEARGB(255,255,0,0) : MAKEARGB(255,0,0,255));*/
 			didSeeSelected = true;
 			if (!mEntering)
 			{
