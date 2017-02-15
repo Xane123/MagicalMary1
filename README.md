@@ -8,6 +8,8 @@ ZDoom no longer supports compiling with Visual C++ 2005, so compiling for older 
 
 World of Kirbycraft's source code, due to it being based on ZDoom, is under the same [licenses](http://zdoom.org/wiki/License) as it.
 
+Go [here](https://sites.google.com/view/xanem1/games/marys-magical-adventure) to visit Mary's Magical Adventure's official website. Its wiki can be found [here](https://worldofkirbycraft.miraheze.org/wiki/Main_Page).
+
 ## Request
 If anyone visiting this repository knows how to do this, please make the modifications and send a pull request that does the following:
 * Makes MAPINFO's "music" property be an integer.
