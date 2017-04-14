@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\523614ed5ce48a98a241a83a30f29bc4\INSTALL_force.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\99455265503761edb0e3c0a6e7d8cc31\INSTALL_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{1A3E81C8-F664-369F-BCF2-B120979CBC21}</UniqueIdentifier>
+      <UniqueIdentifier>{39915B61-5B97-32B8-891A-7F6CFC741C08}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

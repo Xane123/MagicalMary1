@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\gdtoa\dmisc.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\gdtoa\dmisc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\gdtoa\dtoa.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\gdtoa\dtoa.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\gdtoa\misc.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\gdtoa\misc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\gdtoa\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\gdtoa\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{281D1C2B-8FBD-3BE9-8CED-FA77CDABB679}</UniqueIdentifier>
+      <UniqueIdentifier>{D4487385-BD72-39A8-996C-F48DF028A1AA}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

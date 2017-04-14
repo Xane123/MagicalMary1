@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/Myers/git/world-of-kirbycraft/src
+# Install script for directory: D:/Git/MaryMagicalAdventure/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Mary's Magical Adventure")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

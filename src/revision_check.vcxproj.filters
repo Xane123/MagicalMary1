@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt" />
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\e864f5f6ebec8d3f00a7793b7ba95348\revision_check.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\src\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\9df01fca94b42de4f7604479dd6e4c43\revision_check.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\revision_check" />
+    <None Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{1A3E81C8-F664-369F-BCF2-B120979CBC21}</UniqueIdentifier>
+      <UniqueIdentifier>{39915B61-5B97-32B8-891A-7F6CFC741C08}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

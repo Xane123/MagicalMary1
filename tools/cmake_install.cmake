@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/Myers/git/world-of-kirbycraft/tools
+# Install script for directory: D:/Git/MaryMagicalAdventure/tools
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Mary's Magical Adventure")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -29,11 +29,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/Myers/git/world-of-kirbycraft/tools/lemon/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/tools/re2c/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/tools/fixrtext/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/tools/updaterevision/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/tools/lemon/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/tools/re2c/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/tools/fixrtext/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/tools/updaterevision/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/tools/zipdir/cmake_install.cmake")
 
 endif()
 

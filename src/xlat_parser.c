@@ -643,9 +643,9 @@ static void yy_destructor(
     case 38: /* RSHASSIGN */
     case 39: /* LINEFLAG */
 {
-#line 4 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 4 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 
-#line 649 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 649 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
       break;
 /********* End destructor definitions *****************************************/
@@ -1027,219 +1027,219 @@ static void yy_reduce(
 /********** Begin reduce actions **********************************************/
         YYMINORTYPE yylhsminor;
       case 0: /* exp ::= NUM */
-#line 34 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 34 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[0].minor.yy0.val; }
-#line 1033 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1033 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy32 = yylhsminor.yy32;
         break;
       case 1: /* exp ::= exp PLUS exp */
-#line 35 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 35 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[-2].minor.yy32 + yymsp[0].minor.yy32; }
-#line 1039 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1039 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,6,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 2: /* exp ::= exp MINUS exp */
-#line 36 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 36 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[-2].minor.yy32 - yymsp[0].minor.yy32; }
-#line 1046 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1046 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,5,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 3: /* exp ::= exp MULTIPLY exp */
-#line 37 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 37 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[-2].minor.yy32 * yymsp[0].minor.yy32; }
-#line 1053 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1053 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,7,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 4: /* exp ::= exp DIVIDE exp */
-#line 38 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 38 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { if (yymsp[0].minor.yy32 != 0) yylhsminor.yy32 = yymsp[-2].minor.yy32 / yymsp[0].minor.yy32; else context->PrintError("Division by zero"); }
-#line 1060 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1060 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,8,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 5: /* exp ::= exp MODULUS exp */
-#line 39 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 39 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { if (yymsp[0].minor.yy32 != 0) yylhsminor.yy32 = yymsp[-2].minor.yy32 % yymsp[0].minor.yy32; else context->PrintError("Division by zero"); }
-#line 1067 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1067 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,9,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 6: /* exp ::= exp OR exp */
-#line 40 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 40 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[-2].minor.yy32 | yymsp[0].minor.yy32; }
-#line 1074 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1074 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,2,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 7: /* exp ::= exp AND exp */
-#line 41 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 41 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[-2].minor.yy32 & yymsp[0].minor.yy32; }
-#line 1081 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1081 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,4,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 8: /* exp ::= exp XOR exp */
-#line 42 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 42 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yylhsminor.yy32 = yymsp[-2].minor.yy32 ^ yymsp[0].minor.yy32; }
-#line 1088 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1088 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,3,&yymsp[-1].minor);
   yymsp[-2].minor.yy32 = yylhsminor.yy32;
         break;
       case 9: /* exp ::= MINUS exp */
 {  yy_destructor(yypParser,5,&yymsp[-1].minor);
-#line 43 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 43 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-1].minor.yy32 = -yymsp[0].minor.yy32; }
-#line 1096 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1096 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 10: /* exp ::= LPAREN exp RPAREN */
       case 29: /*exp_with_tag ::= LPAREN exp_with_tag RPAREN */ yytestcase(yyruleno==29);
 {  yy_destructor(yypParser,12,&yymsp[-2].minor);
-#line 44 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 44 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = yymsp[-1].minor.yy32; }
-#line 1104 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1104 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,13,&yymsp[0].minor);
 }
         break;
       case 11: /* define_statement ::= DEFINE SYM LPAREN exp RPAREN */
-#line 54 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 54 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	context->AddSym (yymsp[-3].minor.yy0.sym, yymsp[-1].minor.yy32);
 }
-#line 1113 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1113 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
         break;
       case 12: /* enum_open ::= ENUM LBRACE */
-#line 67 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 67 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	context->EnumVal = 0;
 }
-#line 1122 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1122 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,18,&yymsp[0].minor);
         break;
       case 13: /* single_enum ::= SYM */
-#line 76 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 76 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	context->AddSym (yymsp[0].minor.yy0.sym, context->EnumVal++);
 }
-#line 1130 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1130 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
         break;
       case 14: /* single_enum ::= SYM EQUALS exp */
-#line 81 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 81 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	context->AddSym (yymsp[-2].minor.yy0.sym, yymsp[0].minor.yy32);
 	context->EnumVal = yymsp[0].minor.yy32+1;
 }
-#line 1138 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1138 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-1].minor);
         break;
       case 15: /* linetype_exp ::= exp */
-#line 94 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 94 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy32 = static_cast<XlatParseContext *>(context)->DefiningLineType = yymsp[0].minor.yy32;
 }
-#line 1146 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1146 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy32 = yylhsminor.yy32;
         break;
       case 16: /* linetype_declaration ::= linetype_exp EQUALS exp COMMA exp LPAREN special_args RPAREN */
-#line 99 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 99 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	SimpleLineTranslations.SetVal(yymsp[-7].minor.yy32, 
 		FLineTrans(yymsp[-3].minor.yy32&0xffff, yymsp[-5].minor.yy32+yymsp[-1].minor.yy7.addflags, yymsp[-1].minor.yy7.args[0], yymsp[-1].minor.yy7.args[1], yymsp[-1].minor.yy7.args[2], yymsp[-1].minor.yy7.args[3], yymsp[-1].minor.yy7.args[4]));
 	static_cast<XlatParseContext *>(context)->DefiningLineType = -1;
 }
-#line 1156 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1156 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-6].minor);
   yy_destructor(yypParser,19,&yymsp[-4].minor);
   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
         break;
       case 17: /* linetype_declaration ::= linetype_exp EQUALS exp COMMA SYM LPAREN special_args RPAREN */
-#line 106 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 106 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	Printf ("%s, line %d: %s is undefined\n", context->SourceFile, context->SourceLine, yymsp[-3].minor.yy0.sym);
 	static_cast<XlatParseContext *>(context)->DefiningLineType = -1;
 }
-#line 1168 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1168 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-6].minor);
   yy_destructor(yypParser,19,&yymsp[-4].minor);
   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
         break;
       case 18: /* exp_with_tag ::= NUM */
-#line 112 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 112 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { XlatExpressions.Push(yymsp[0].minor.yy0.val); yylhsminor.yy32 = XlatExpressions.Push(XEXP_Const); }
-#line 1177 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1177 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy32 = yylhsminor.yy32;
         break;
       case 19: /* exp_with_tag ::= TAG */
 {  yy_destructor(yypParser,21,&yymsp[0].minor);
-#line 113 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 113 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = XlatExpressions.Push(XEXP_Tag); }
-#line 1184 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1184 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 20: /* exp_with_tag ::= exp_with_tag PLUS exp_with_tag */
-#line 114 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 114 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Add); }
-#line 1190 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1190 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,6,&yymsp[-1].minor);
         break;
       case 21: /* exp_with_tag ::= exp_with_tag MINUS exp_with_tag */
-#line 115 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 115 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Sub); }
-#line 1196 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1196 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,5,&yymsp[-1].minor);
         break;
       case 22: /* exp_with_tag ::= exp_with_tag MULTIPLY exp_with_tag */
-#line 116 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 116 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Mul); }
-#line 1202 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1202 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,7,&yymsp[-1].minor);
         break;
       case 23: /* exp_with_tag ::= exp_with_tag DIVIDE exp_with_tag */
-#line 117 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 117 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Div); }
-#line 1208 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1208 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,8,&yymsp[-1].minor);
         break;
       case 24: /* exp_with_tag ::= exp_with_tag MODULUS exp_with_tag */
-#line 118 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 118 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Mod); }
-#line 1214 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1214 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,9,&yymsp[-1].minor);
         break;
       case 25: /* exp_with_tag ::= exp_with_tag OR exp_with_tag */
-#line 119 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 119 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Or);  }
-#line 1220 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1220 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,2,&yymsp[-1].minor);
         break;
       case 26: /* exp_with_tag ::= exp_with_tag AND exp_with_tag */
-#line 120 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 120 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_And); }
-#line 1226 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1226 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,4,&yymsp[-1].minor);
         break;
       case 27: /* exp_with_tag ::= exp_with_tag XOR exp_with_tag */
-#line 121 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 121 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Xor); }
-#line 1232 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1232 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,3,&yymsp[-1].minor);
         break;
       case 28: /* exp_with_tag ::= MINUS exp_with_tag */
 {  yy_destructor(yypParser,5,&yymsp[-1].minor);
-#line 122 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 122 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[-1].minor.yy32 = XlatExpressions.Push(XEXP_Neg); }
-#line 1239 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1239 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 30: /* special_arg ::= exp_with_tag */
-#line 129 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 129 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	if (XlatExpressions[yymsp[0].minor.yy32] == XEXP_Tag)
 	{ // Store tags directly
@@ -1276,11 +1276,11 @@ static void yy_reduce(
 		}
 	}
 }
-#line 1280 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1280 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy120 = yylhsminor.yy120;
         break;
       case 31: /* multi_special_arg ::= special_arg */
-#line 169 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 169 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy7.addflags = yymsp[0].minor.yy120.argop << LINETRANS_TAGSHIFT;
 	yylhsminor.yy7.argcount = 1;
@@ -1290,11 +1290,11 @@ static void yy_reduce(
 	yylhsminor.yy7.args[3] = 0;
 	yylhsminor.yy7.args[4] = 0;
 }
-#line 1294 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1294 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy7 = yylhsminor.yy7;
         break;
       case 32: /* multi_special_arg ::= multi_special_arg COMMA special_arg */
-#line 179 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 179 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy7 = yymsp[-2].minor.yy7;
 	if (yylhsminor.yy7.argcount < LINETRANS_MAXARGS)
@@ -1308,12 +1308,12 @@ static void yy_reduce(
 		context->PrintError("Line special has too many arguments\n");
 	}
 }
-#line 1312 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1312 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,19,&yymsp[-1].minor);
   yymsp[-2].minor.yy7 = yylhsminor.yy7;
         break;
       case 33: /* special_args ::= */
-#line 196 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 196 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yymsp[1].minor.yy7.addflags = 0;
 	yymsp[1].minor.yy7.argcount = 0;
@@ -1323,10 +1323,10 @@ static void yy_reduce(
 	yymsp[1].minor.yy7.args[3] = 0;
 	yymsp[1].minor.yy7.args[4] = 0;
 }
-#line 1327 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1327 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
         break;
       case 34: /* boom_declaration ::= LBRACKET exp RBRACKET LPAREN exp COMMA exp RPAREN LBRACE boom_body RBRACE */
-#line 223 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 223 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	int i;
 	MoreLines *probe;
@@ -1359,7 +1359,7 @@ static void yy_reduce(
 		NumBoomish++;
 	}
 }
-#line 1363 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1363 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,23,&yymsp[-8].minor);
   yy_destructor(yypParser,12,&yymsp[-7].minor);
   yy_destructor(yypParser,19,&yymsp[-5].minor);
@@ -1368,24 +1368,24 @@ static void yy_reduce(
   yy_destructor(yypParser,16,&yymsp[0].minor);
         break;
       case 35: /* boom_body ::= */
-#line 257 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 257 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yymsp[1].minor.yy129 = NULL;
 }
-#line 1376 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1376 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
         break;
       case 36: /* boom_body ::= boom_line boom_body */
-#line 261 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 261 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy129 = new MoreLines;
 	yylhsminor.yy129->next = yymsp[0].minor.yy129;
 	yylhsminor.yy129->arg = yymsp[-1].minor.yy130;
 }
-#line 1385 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1385 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[-1].minor.yy129 = yylhsminor.yy129;
         break;
       case 37: /* boom_line ::= boom_selector boom_op boom_args */
-#line 268 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 268 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy130.bOrExisting = (yymsp[-1].minor.yy32 == OR_EQUAL);
 	yylhsminor.yy130.bUseConstant = (yymsp[0].minor.yy63.filters == NULL);
@@ -1416,191 +1416,191 @@ static void yy_reduce(
 		yylhsminor.yy130.ListSize = i > 15 ? 15 : i;
 	}
 }
-#line 1420 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1420 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[-2].minor.yy130 = yylhsminor.yy130;
         break;
       case 38: /* boom_selector ::= FLAGS */
 {  yy_destructor(yypParser,24,&yymsp[0].minor);
-#line 299 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 299 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = 4; }
-#line 1427 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1427 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 39: /* boom_selector ::= ARG2 */
 {  yy_destructor(yypParser,25,&yymsp[0].minor);
-#line 300 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 300 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = 0; }
-#line 1434 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1434 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 40: /* boom_selector ::= ARG3 */
       case 57: /*sector_op ::= LSHASSIGN */ yytestcase(yyruleno==57);
 {  yy_destructor(yypParser,26,&yymsp[0].minor);
-#line 301 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 301 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = 1; }
-#line 1442 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1442 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 41: /* boom_selector ::= ARG4 */
 {  yy_destructor(yypParser,27,&yymsp[0].minor);
-#line 302 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 302 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = 2; }
-#line 1449 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1449 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 42: /* boom_selector ::= ARG5 */
 {  yy_destructor(yypParser,28,&yymsp[0].minor);
-#line 303 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 303 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = 3; }
-#line 1456 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1456 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 43: /* boom_op ::= EQUALS */
 {  yy_destructor(yypParser,20,&yymsp[0].minor);
-#line 305 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 305 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = '='; }
-#line 1463 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1463 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 44: /* boom_op ::= OR_EQUAL */
 {  yy_destructor(yypParser,29,&yymsp[0].minor);
-#line 306 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 306 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = OR_EQUAL; }
-#line 1470 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1470 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 45: /* boom_args ::= exp */
-#line 309 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 309 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy63.constant = yymsp[0].minor.yy32;
 	yylhsminor.yy63.filters = NULL;
 }
-#line 1479 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1479 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy63 = yylhsminor.yy63;
         break;
       case 46: /* boom_args ::= exp LBRACKET arg_list RBRACKET */
-#line 314 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 314 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy63.mask = yymsp[-3].minor.yy32;
 	yylhsminor.yy63.filters = yymsp[-1].minor.yy8;
 }
-#line 1488 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1488 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,22,&yymsp[-2].minor);
   yy_destructor(yypParser,23,&yymsp[0].minor);
   yymsp[-3].minor.yy63 = yylhsminor.yy63;
         break;
       case 47: /* arg_list ::= list_val */
-#line 320 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 320 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy8 = new MoreFilters;
 	yylhsminor.yy8->next = NULL;
 	yylhsminor.yy8->filter = yymsp[0].minor.yy83;
 }
-#line 1500 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1500 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yymsp[0].minor.yy8 = yylhsminor.yy8;
         break;
       case 48: /* arg_list ::= list_val COMMA arg_list */
-#line 326 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 326 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy8 = new MoreFilters;
 	yylhsminor.yy8->next = yymsp[0].minor.yy8;
 	yylhsminor.yy8->filter = yymsp[-2].minor.yy83;
 }
-#line 1510 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1510 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,19,&yymsp[-1].minor);
   yymsp[-2].minor.yy8 = yylhsminor.yy8;
         break;
       case 49: /* list_val ::= exp COLON exp */
-#line 333 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 333 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	yylhsminor.yy83.filter = yymsp[-2].minor.yy32;
 	yylhsminor.yy83.value = yymsp[0].minor.yy32;
 }
-#line 1520 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1520 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,30,&yymsp[-1].minor);
   yymsp[-2].minor.yy83 = yylhsminor.yy83;
         break;
       case 50: /* maxlinespecial_def ::= MAXLINESPECIAL EQUALS exp SEMICOLON */
-#line 345 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 345 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	// Just kill all specials higher than the max.
 	// If the translator wants to redefine some later, just let it.
 	SimpleLineTranslations.Resize(yymsp[-1].minor.yy32+1);
 }
-#line 1531 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1531 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 51: /* sector_declaration ::= SECTOR exp EQUALS exp SEMICOLON */
-#line 360 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 360 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	FSectorTrans tr(yymsp[-1].minor.yy32, true);
 	SectorTranslations.SetVal(yymsp[-3].minor.yy32, tr);
 }
-#line 1541 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1541 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 52: /* sector_declaration ::= SECTOR exp EQUALS SYM SEMICOLON */
-#line 366 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 366 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	Printf("Unknown constant '%s'\n", yymsp[-1].minor.yy0.sym);
 }
-#line 1550 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1550 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 53: /* sector_declaration ::= SECTOR exp EQUALS exp NOBITMASK SEMICOLON */
-#line 371 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 371 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	FSectorTrans tr(yymsp[-2].minor.yy32, false);
 	SectorTranslations.SetVal(yymsp[-4].minor.yy32, tr);
 }
-#line 1560 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1560 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-3].minor);
   yy_destructor(yypParser,34,&yymsp[-1].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 54: /* sector_bitmask ::= SECTOR BITMASK exp sector_op exp SEMICOLON */
-#line 377 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 377 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	FSectorMask sm = { yymsp[-3].minor.yy32, yymsp[-2].minor.yy32, yymsp[-1].minor.yy32};
 	SectorMasks.Push(sm);
 }
-#line 1571 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1571 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,35,&yymsp[-4].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 55: /* sector_bitmask ::= SECTOR BITMASK exp SEMICOLON */
-#line 383 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 383 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	FSectorMask sm = { yymsp[-1].minor.yy32, 0, 0};
 	SectorMasks.Push(sm);
 }
-#line 1581 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1581 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,35,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 56: /* sector_bitmask ::= SECTOR BITMASK exp CLEAR SEMICOLON */
-#line 389 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 389 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	FSectorMask sm = { yymsp[-2].minor.yy32, 0, 1};
 	SectorMasks.Push(sm);
 }
-#line 1591 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1591 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,35,&yymsp[-3].minor);
   yy_destructor(yypParser,36,&yymsp[-1].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 58: /* sector_op ::= RSHASSIGN */
 {  yy_destructor(yypParser,38,&yymsp[0].minor);
-#line 395 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 395 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 { yymsp[0].minor.yy32 = -1; }
-#line 1600 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1600 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
         break;
       case 59: /* lineflag_declaration ::= LINEFLAG exp EQUALS exp SEMICOLON */
-#line 400 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 400 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	if (yymsp[-3].minor.yy32 >= 0 && yymsp[-3].minor.yy32 < 16)
 	{
@@ -1608,12 +1608,12 @@ static void yy_reduce(
 		LineFlagTranslations[yymsp[-3].minor.yy32].ismask = false;
 	}
 }
-#line 1612 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1612 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
       case 60: /* lineflag_declaration ::= LINEFLAG exp AND exp SEMICOLON */
-#line 409 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 409 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
 {
 	if (yymsp[-3].minor.yy32 >= 0 && yymsp[-3].minor.yy32 < 16)
 	{
@@ -1621,7 +1621,7 @@ static void yy_reduce(
 		LineFlagTranslations[yymsp[-3].minor.yy32].ismask = true;
 	}
 }
-#line 1625 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1625 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,4,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
         break;
@@ -1697,9 +1697,9 @@ static void yy_syntax_error(
   XlatParseARG_FETCH;
 #define TOKEN yyminor
 /************ Begin %syntax_error code ****************************************/
-#line 7 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat/xlat_parser.y"
+#line 7 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
  context->PrintError("syntax error");
-#line 1703 "C:/Users/Myers/git/world-of-kirbycraft/src/xlat_parser.c"
+#line 1703 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 /************ End %syntax_error code ******************************************/
   XlatParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }

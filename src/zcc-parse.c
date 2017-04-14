@@ -33,7 +33,7 @@
 #endif
 
 /************ Begin %include sections from the grammar ************************/
-#line 2 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 2 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 
 // Allocates a new AST node off the parse state's arena.
 #define NEW_AST_NODE(type,name,tok) \
@@ -100,7 +100,7 @@ static void SetNodeLine(ZCC_TreeNode *name, int line)
 		int FuncFlags;
 		int SourceLoc;
 	};
-#line 104 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 104 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 /**************** End of %include directives **********************************/
 /* These constants specify the various numeric values for terminal symbols
 ** in a format understandable to "makeheaders".  This section is blank unless
@@ -1553,9 +1553,9 @@ static void yy_destructor(
     case 126: /* SWITCH */
     case 127: /* CASE */
 {
-#line 72 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 72 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 
-#line 1559 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 1559 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
       break;
 /********* End destructor definitions *****************************************/
@@ -2134,71 +2134,71 @@ static void yy_reduce(
 /********** Begin reduce actions **********************************************/
         YYMINORTYPE yylhsminor;
       case 0: /* main ::= translation_unit */
-#line 127 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 127 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { stat->TopNode = yymsp[0].minor.yy256; stat->sc.ScriptMessage("Parse complete\n"); }
-#line 2140 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2140 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 1: /* translation_unit ::= */
       case 21: /*class_innards ::= */ yytestcase(yyruleno==21);
       case 30: /*opt_struct_body ::= */ yytestcase(yyruleno==30);
-#line 130 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 130 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy256 = NULL; }
-#line 2147 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2147 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 2: /* translation_unit ::= translation_unit external_declaration */
       case 22: /*class_innards ::= class_innards class_member */ yytestcase(yyruleno==22);
-#line 131 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 131 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { SAFE_APPEND(yymsp[-1].minor.yy256,yymsp[0].minor.yy256); }
-#line 2153 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2153 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 3: /* translation_unit ::= error */
       case 31: /*struct_body ::= error */ yytestcase(yyruleno==31);
-#line 133 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 133 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = NULL; }
-#line 2159 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2159 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 4: /* external_declaration ::= class_definition */
-#line 136 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 136 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy214; /*X-overwrites-A*/ }
-#line 2164 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2164 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 5: /* external_declaration ::= struct_def */
       case 25: /*class_member ::= struct_def */ yytestcase(yyruleno==25);
-#line 137 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 137 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy59; /*X-overwrites-A*/ }
-#line 2170 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2170 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 6: /* external_declaration ::= enum_def */
       case 24: /*class_member ::= enum_def */ yytestcase(yyruleno==24);
       case 34: /*struct_member ::= enum_def */ yytestcase(yyruleno==34);
-#line 138 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 138 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy345; /*X-overwrites-A*/ }
-#line 2177 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2177 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 7: /* external_declaration ::= const_def */
       case 28: /*class_member ::= const_def */ yytestcase(yyruleno==28);
       case 35: /*struct_member ::= const_def */ yytestcase(yyruleno==35);
-#line 139 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 139 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy99; /*X-overwrites-A*/ }
-#line 2184 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2184 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 8: /* opt_expr ::= */
-#line 150 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 150 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[1].minor.yy66 = NULL;
 }
-#line 2191 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2191 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 9: /* class_definition ::= class_head class_body */
-#line 166 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 166 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[-1].minor.yy214->Body = yymsp[0].minor.yy256;
 	yymsp[-1].minor.yy214 = yymsp[-1].minor.yy214; /*X-overwrites-A*/
 }
-#line 2199 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2199 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 10: /* class_head ::= CLASS IDENTIFIER class_ancestry class_flags */
-#line 172 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 172 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Class,head,yymsp[-3].minor.yy0);
 	head->NodeName = yymsp[-2].minor.yy0.Name();
@@ -2207,108 +2207,108 @@ static void yy_reduce(
 	head->Replaces = yymsp[0].minor.yy41.Replaces;
 	yylhsminor.yy214 = head;
 }
-#line 2211 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2211 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-3].minor.yy214 = yylhsminor.yy214;
         break;
       case 11: /* class_ancestry ::= */
       case 97: /*class_restrictor ::= */ yytestcase(yyruleno==97);
-#line 182 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 182 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy113 = NULL; }
-#line 2218 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2218 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 12: /* class_ancestry ::= COLON dottable_id */
 {  yy_destructor(yypParser,13,&yymsp[-1].minor);
-#line 183 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 183 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy113 = yymsp[0].minor.yy113; /*yymsp[-1].minor.yy113-overwrites-yymsp[0].minor.yy113*/ }
-#line 2224 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2224 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 13: /* class_flags ::= */
-#line 186 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 186 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy41.Flags = 0; yymsp[1].minor.yy41.Replaces = NULL; }
-#line 2230 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2230 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 14: /* class_flags ::= class_flags ABSTRACT */
       case 15: /*class_flags ::= class_flags NATIVE */ yytestcase(yyruleno==15);
-#line 187 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 187 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy41.Flags = yymsp[-1].minor.yy41.Flags | 0/*FIXME*/; yylhsminor.yy41.Replaces = yymsp[-1].minor.yy41.Replaces; }
-#line 2236 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2236 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,51,&yymsp[0].minor);
   yymsp[-1].minor.yy41 = yylhsminor.yy41;
         break;
       case 16: /* class_flags ::= class_flags REPLACES dottable_id */
-#line 189 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 189 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy41.Flags = yymsp[-2].minor.yy41.Flags; yylhsminor.yy41.Replaces = yymsp[0].minor.yy113; }
-#line 2243 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2243 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,53,&yymsp[-1].minor);
   yymsp[-2].minor.yy41 = yylhsminor.yy41;
         break;
       case 17: /* dottable_id ::= IDENTIFIER */
-#line 197 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 197 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Identifier,id,yymsp[0].minor.yy0);
 	id->Id = yymsp[0].minor.yy0.Name();
 	yylhsminor.yy113 = id;
 }
-#line 2254 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2254 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy113 = yylhsminor.yy113;
         break;
       case 18: /* dottable_id ::= dottable_id DOT IDENTIFIER */
-#line 203 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 203 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Identifier,id2,yymsp[-2].minor.yy113);
 	id2->Id = yymsp[0].minor.yy0.Name();
 	yymsp[-2].minor.yy113->AppendSibling(id2);
 	yymsp[-2].minor.yy113 = yymsp[-2].minor.yy113; /*X-overwrites-A*/
 }
-#line 2265 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2265 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,42,&yymsp[-1].minor);
         break;
       case 19: /* class_body ::= SEMICOLON class_innards EOF */
       case 20: /*class_body ::= LBRACE class_innards RBRACE */ yytestcase(yyruleno==20);
 {  yy_destructor(yypParser,47,&yymsp[-2].minor);
-#line 220 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 220 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy256 = yymsp[-1].minor.yy256; /*yymsp[-2].minor.yy256-overwrites-yymsp[-1].minor.yy256*/ }
-#line 2273 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2273 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,46,&yymsp[0].minor);
 }
         break;
       case 23: /* class_member ::= declarator */
       case 33: /*struct_member ::= declarator_no_fun */ yytestcase(yyruleno==33);
-#line 231 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 231 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy323; /*X-overwrites-A*/ }
-#line 2281 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2281 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 26: /* class_member ::= states_def */
-#line 234 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 234 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy204; /*X-overwrites-A*/ }
-#line 2286 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2286 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 27: /* class_member ::= default_def */
-#line 235 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 235 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy256 = yymsp[0].minor.yy271; /*X-overwrites-A*/ }
-#line 2291 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2291 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 29: /* struct_def ::= STRUCT IDENTIFIER LBRACE opt_struct_body RBRACE opt_semicolon */
-#line 246 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 246 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Struct,def,yymsp[-5].minor.yy0);
 	def->NodeName = yymsp[-4].minor.yy0.Name();
 	def->Body = yymsp[-2].minor.yy256;
 	yylhsminor.yy59 = def;
 }
-#line 2301 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2301 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,54,&yymsp[-3].minor);
   yy_destructor(yypParser,55,&yymsp[-1].minor);
   yymsp[-5].minor.yy59 = yylhsminor.yy59;
         break;
       case 32: /* struct_body ::= struct_member struct_body */
-#line 258 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 258 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy256 = yymsp[-1].minor.yy256; /*X-overwrites-A*/ yymsp[-1].minor.yy256->AppendSibling(yymsp[0].minor.yy256); }
-#line 2309 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2309 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 36: /* const_def ::= CONST IDENTIFIER EQ expr SEMICOLON */
-#line 267 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 267 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ConstantDef,def,yymsp[-4].minor.yy0);
 	def->NodeName = yymsp[-3].minor.yy0.Name();
@@ -2316,13 +2316,13 @@ static void yy_reduce(
 	def->Symbol = NULL;
 	yylhsminor.yy99 = def;
 }
-#line 2320 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2320 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,1,&yymsp[-2].minor);
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-4].minor.yy99 = yylhsminor.yy99;
         break;
       case 37: /* enum_def ::= ENUM IDENTIFIER enum_type LBRACE opt_enum_list RBRACE opt_semicolon */
-#line 284 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 284 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Enum,def,yymsp[-6].minor.yy0);
 	def->NodeName = yymsp[-5].minor.yy0.Name();
@@ -2380,40 +2380,40 @@ static void yy_reduce(
 	}
 	yylhsminor.yy345 = def;
 }
-#line 2384 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2384 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,54,&yymsp[-3].minor);
   yymsp[-6].minor.yy345 = yylhsminor.yy345;
         break;
       case 38: /* enum_type ::= */
-#line 342 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 342 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy0.Int = ZCC_IntAuto; yymsp[1].minor.yy0.SourceLoc = stat->sc.GetMessageLine(); }
-#line 2391 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2391 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 39: /* enum_type ::= COLON int_type */
 {  yy_destructor(yypParser,13,&yymsp[-1].minor);
-#line 343 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 343 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy0 = yymsp[0].minor.yy0; /*yymsp[-1].minor.yy0-overwrites-yymsp[0].minor.yy0*/ }
-#line 2397 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2397 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 40: /* enum_list ::= error */
-#line 345 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 345 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy99 = NULL; }
-#line 2403 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2403 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 41: /* enum_list ::= enum_list COMMA enumerator */
-#line 347 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 347 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy99 = yymsp[-2].minor.yy99; /*X-overwrites-A*/ yymsp[-2].minor.yy99->AppendSibling(yymsp[0].minor.yy99); }
-#line 2408 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2408 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,48,&yymsp[-1].minor);
         break;
       case 42: /* opt_enum_list ::= */
-#line 349 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 349 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy99 = NULL; }
-#line 2414 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2414 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 43: /* enumerator ::= IDENTIFIER */
-#line 353 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 353 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ConstantDef,node,yymsp[0].minor.yy0);
 	node->NodeName = yymsp[0].minor.yy0.Name();
@@ -2421,11 +2421,11 @@ static void yy_reduce(
 	node->Symbol = NULL;
 	yylhsminor.yy99 = node;
 }
-#line 2425 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2425 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy99 = yylhsminor.yy99;
         break;
       case 44: /* enumerator ::= IDENTIFIER EQ expr */
-#line 361 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 361 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ConstantDef,node,yymsp[-2].minor.yy0);
 	node->NodeName = yymsp[-2].minor.yy0.Name();
@@ -2433,106 +2433,106 @@ static void yy_reduce(
 	node->Symbol = NULL;
 	yylhsminor.yy99 = node;
 }
-#line 2437 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2437 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,1,&yymsp[-1].minor);
   yymsp[-2].minor.yy99 = yylhsminor.yy99;
         break;
       case 45: /* states_def ::= STATES scanner_mode LBRACE states_body RBRACE */
-#line 384 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 384 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(States,def,yymsp[-4].minor.yy0);
 	def->Body = yymsp[-1].minor.yy276;
 	yylhsminor.yy204 = def;
 }
-#line 2448 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2448 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,54,&yymsp[-2].minor);
   yy_destructor(yypParser,55,&yymsp[0].minor);
   yymsp[-4].minor.yy204 = yylhsminor.yy204;
         break;
       case 46: /* scanner_mode ::= */
-#line 401 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 401 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { stat->sc.SetStateMode(true); }
-#line 2456 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2456 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 47: /* states_body ::= */
-#line 403 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 403 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy276 = NULL; }
-#line 2461 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2461 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 48: /* states_body ::= error */
-#line 404 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 404 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy276 = NULL; }
-#line 2466 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2466 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 49: /* states_body ::= states_body state_line */
       case 50: /*states_body ::= states_body state_label */ yytestcase(yyruleno==50);
       case 51: /*states_body ::= states_body state_flow */ yytestcase(yyruleno==51);
-#line 405 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 405 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { SAFE_APPEND(yymsp[-1].minor.yy276,yymsp[0].minor.yy276); }
-#line 2473 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2473 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 52: /* state_label ::= NWS COLON */
-#line 410 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 410 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(StateLabel, label, yymsp[-1].minor.yy0);
 	label->Label = yymsp[-1].minor.yy0.Name();
 	yylhsminor.yy276 = label;
 }
-#line 2482 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2482 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,13,&yymsp[0].minor);
   yymsp[-1].minor.yy276 = yylhsminor.yy276;
         break;
       case 53: /* state_flow_type ::= STOP */
-#line 418 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 418 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { NEW_AST_NODE(StateStop, flow, yymsp[0].minor.yy0); yylhsminor.yy276 = flow; }
-#line 2489 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2489 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy276 = yylhsminor.yy276;
         break;
       case 54: /* state_flow_type ::= WAIT */
-#line 419 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 419 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { NEW_AST_NODE(StateWait, flow, yymsp[0].minor.yy0); yylhsminor.yy276 = flow; }
-#line 2495 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2495 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy276 = yylhsminor.yy276;
         break;
       case 55: /* state_flow_type ::= FAIL */
-#line 420 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 420 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { NEW_AST_NODE(StateFail, flow, yymsp[0].minor.yy0); yylhsminor.yy276 = flow; }
-#line 2501 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2501 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy276 = yylhsminor.yy276;
         break;
       case 56: /* state_flow_type ::= LOOP */
-#line 421 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 421 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { NEW_AST_NODE(StateLoop, flow, yymsp[0].minor.yy0); yylhsminor.yy276 = flow; }
-#line 2507 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2507 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy276 = yylhsminor.yy276;
         break;
       case 57: /* state_flow_type ::= GOTO dottable_id state_goto_offset */
-#line 423 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 423 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(StateGoto, flow, yymsp[-2].minor.yy0);
 	flow->Label = yymsp[-1].minor.yy113;
 	flow->Offset = yymsp[0].minor.yy66;
 	yylhsminor.yy276 = flow;
 }
-#line 2518 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2518 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-2].minor.yy276 = yylhsminor.yy276;
         break;
       case 58: /* state_goto_offset ::= */
       case 240: /*var_init ::= */ yytestcase(yyruleno==240);
-#line 430 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 430 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy66 = NULL; }
-#line 2525 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2525 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 59: /* state_goto_offset ::= PLUS expr */
       case 241: /*var_init ::= EQ expr_list */ yytestcase(yyruleno==241);
 {  yy_destructor(yypParser,66,&yymsp[-1].minor);
-#line 431 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 431 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy66 = yymsp[0].minor.yy66; /*yymsp[-1].minor.yy66-overwrites-yymsp[0].minor.yy66*/ }
-#line 2532 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2532 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 60: /* state_line ::= NWS NWS expr state_opts state_action */
-#line 434 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 434 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(StateLine, line, yymsp[-4].minor.yy0);
 	const char *sprite = FName(yymsp[-4].minor.yy0.Name()).GetChars();
@@ -2554,90 +2554,90 @@ static void yy_reduce(
 	line->Action = yymsp[0].minor.yy256;
 	yylhsminor.yy276 = line;
 }
-#line 2558 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2558 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-4].minor.yy276 = yylhsminor.yy276;
         break;
       case 61: /* state_opts ::= */
-#line 456 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 456 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { StateOpts opts; opts.Zero(); yymsp[1].minor.yy222 = opts; }
-#line 2564 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2564 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 62: /* state_opts ::= state_opts BRIGHT */
-#line 457 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 457 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy222.Bright = true; yymsp[-1].minor.yy222 = yymsp[-1].minor.yy222; /*X-overwrites-A*/ }
-#line 2569 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2569 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,67,&yymsp[0].minor);
         break;
       case 63: /* state_opts ::= state_opts FAST */
-#line 458 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 458 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy222.Fast = true; yymsp[-1].minor.yy222 = yymsp[-1].minor.yy222; /*X-overwrites-A*/ }
-#line 2575 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2575 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,68,&yymsp[0].minor);
         break;
       case 64: /* state_opts ::= state_opts SLOW */
-#line 459 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 459 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy222.Slow = true; yymsp[-1].minor.yy222 = yymsp[-1].minor.yy222; /*X-overwrites-A*/ }
-#line 2581 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2581 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,69,&yymsp[0].minor);
         break;
       case 65: /* state_opts ::= state_opts NODELAY */
-#line 460 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 460 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy222.NoDelay = true; yymsp[-1].minor.yy222 = yymsp[-1].minor.yy222; /*X-overwrites-A*/ }
-#line 2587 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2587 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,70,&yymsp[0].minor);
         break;
       case 66: /* state_opts ::= state_opts CANRAISE */
-#line 461 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 461 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy222.CanRaise = true; yymsp[-1].minor.yy222 = yymsp[-1].minor.yy222; /*X-overwrites-A*/ }
-#line 2593 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2593 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,71,&yymsp[0].minor);
         break;
       case 67: /* state_opts ::= state_opts OFFSET LPAREN expr COMMA expr RPAREN */
-#line 462 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 462 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-6].minor.yy222.Offset = yymsp[-3].minor.yy66; yymsp[-3].minor.yy66->AppendSibling(yymsp[-1].minor.yy66); yymsp[-6].minor.yy222 = yymsp[-6].minor.yy222; /*X-overwrites-A*/ }
-#line 2599 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2599 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,72,&yymsp[-5].minor);
   yy_destructor(yypParser,43,&yymsp[-4].minor);
   yy_destructor(yypParser,48,&yymsp[-2].minor);
   yy_destructor(yypParser,73,&yymsp[0].minor);
         break;
       case 68: /* state_opts ::= state_opts LIGHT LPAREN light_list RPAREN */
-#line 463 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 463 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-4].minor.yy222 = yymsp[-4].minor.yy222; /*X-overwrites-A*/ }
-#line 2608 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2608 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,74,&yymsp[-3].minor);
   yy_destructor(yypParser,43,&yymsp[-2].minor);
   yy_destructor(yypParser,73,&yymsp[0].minor);
         break;
       case 69: /* state_action ::= LBRACE statement_list scanner_mode RBRACE */
 {  yy_destructor(yypParser,54,&yymsp[-3].minor);
-#line 469 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 469 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-3].minor.yy256 = yymsp[-2].minor.yy117; /*yymsp[-3].minor.yy256-overwrites-yymsp[-2].minor.yy117*/ }
-#line 2617 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2617 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,55,&yymsp[0].minor);
 }
         break;
       case 70: /* state_action ::= LBRACE error scanner_mode RBRACE */
 {  yy_destructor(yypParser,54,&yymsp[-3].minor);
-#line 470 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 470 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-3].minor.yy256 = NULL; }
-#line 2625 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2625 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,55,&yymsp[0].minor);
 }
         break;
       case 71: /* state_action ::= state_call scanner_mode SEMICOLON */
-#line 471 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 471 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy256 = yymsp[-2].minor.yy285; /*X-overwrites-A*/ }
-#line 2632 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2632 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
         break;
       case 72: /* state_call ::= */
-#line 473 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 473 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy285 = NULL; }
-#line 2638 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2638 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 73: /* state_call ::= IDENTIFIER state_call_params */
-#line 475 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 475 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprFuncCall, expr, yymsp[-1].minor.yy0);
 	NEW_AST_NODE(ExprID, func, yymsp[-1].minor.yy0);
@@ -2649,114 +2649,114 @@ static void yy_reduce(
 	expr->Parameters = yymsp[0].minor.yy384;
 	yylhsminor.yy285 = expr;
 }
-#line 2653 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2653 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy285 = yylhsminor.yy285;
         break;
       case 74: /* state_call_params ::= */
-#line 487 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 487 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy384 = NULL; }
-#line 2659 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2659 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 75: /* state_call_params ::= LPAREN func_expr_list RPAREN */
 {  yy_destructor(yypParser,43,&yymsp[-2].minor);
-#line 488 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 488 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy384 = yymsp[-1].minor.yy384; /*yymsp[-2].minor.yy384-overwrites-yymsp[-1].minor.yy384*/ }
-#line 2665 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2665 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,73,&yymsp[0].minor);
 }
         break;
       case 76: /* default_def ::= DEFAULT compound_statement */
 {  yy_destructor(yypParser,76,&yymsp[-1].minor);
-#line 492 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 492 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy271 = yymsp[0].minor.yy271; /*yymsp[-1].minor.yy271-overwrites-yymsp[0].minor.yy271*/ }
-#line 2673 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2673 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 77: /* int_type ::= SBYTE */
-#line 497 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 497 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_SInt8; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2679 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2679 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 78: /* int_type ::= BYTE */
-#line 498 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 498 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_UInt8; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2685 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2685 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 79: /* int_type ::= SHORT */
-#line 499 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 499 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_SInt16; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2691 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2691 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 80: /* int_type ::= USHORT */
-#line 500 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 500 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_UInt16; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2697 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2697 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 81: /* int_type ::= INT */
-#line 501 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 501 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_SInt32; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2703 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2703 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 82: /* int_type ::= UINT */
-#line 502 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 502 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_UInt32; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2709 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2709 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 83: /* type_name1 ::= BOOL */
-#line 504 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 504 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_Bool; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2715 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2715 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 84: /* type_name1 ::= FLOAT */
-#line 506 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 506 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_FloatAuto; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2721 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2721 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 85: /* type_name1 ::= DOUBLE */
-#line 507 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 507 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_Float64; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2727 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2727 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 86: /* type_name1 ::= STRING */
-#line 508 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 508 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_String; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2733 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2733 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 87: /* type_name1 ::= VECTOR vector_size */
-#line 509 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 509 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[0].minor.yy0.Int; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc; }
-#line 2739 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2739 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 88: /* type_name1 ::= NAME */
-#line 510 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 510 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_Name; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 2745 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2745 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 89: /* type_name ::= type_name1 */
-#line 513 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 513 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(BasicType, type, yymsp[0].minor.yy0);
 	type->Type = (EZCCBuiltinType)yymsp[0].minor.yy0.Int;
 	type->UserType = NULL;
 	yylhsminor.yy257 = type;
 }
-#line 2756 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2756 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy257 = yylhsminor.yy257;
         break;
       case 90: /* type_name ::= IDENTIFIER */
-#line 520 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 520 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(BasicType, type, yymsp[0].minor.yy0);
 	NEW_AST_NODE(Identifier, id, yymsp[0].minor.yy0);
@@ -2765,29 +2765,29 @@ static void yy_reduce(
 	id->Id = yymsp[0].minor.yy0.Name();
 	yylhsminor.yy257 = type;
 }
-#line 2769 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2769 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy257 = yylhsminor.yy257;
         break;
       case 91: /* type_name ::= DOT dottable_id */
 {  yy_destructor(yypParser,42,&yymsp[-1].minor);
-#line 529 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 529 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(BasicType, type, yymsp[0].minor.yy113);
 	type->Type = ZCC_UserType;
 	type->UserType = yymsp[0].minor.yy113;
 	yymsp[-1].minor.yy257 = type;
 }
-#line 2781 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2781 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 92: /* vector_size ::= */
-#line 541 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 541 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy0.Int = ZCC_Vector3; yymsp[1].minor.yy0.SourceLoc = stat->sc.GetMessageLine(); }
-#line 2787 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2787 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 93: /* vector_size ::= LT INTCONST|UINTCONST GT */
 {  yy_destructor(yypParser,19,&yymsp[-2].minor);
-#line 543 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 543 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	if (yymsp[-1].minor.yy0.Int >= 2 && yymsp[-1].minor.yy0.Int <= 4)
 	{
@@ -2800,85 +2800,85 @@ static void yy_reduce(
 	}
 	yymsp[-2].minor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc;
 }
-#line 2804 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2804 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,20,&yymsp[0].minor);
 }
         break;
       case 94: /* aggregate_type ::= MAP LT type_or_array COMMA type_or_array GT */
-#line 572 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 572 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(MapType,map,yymsp[-5].minor.yy0);
 	map->KeyType = yymsp[-3].minor.yy112;
 	map->ValueType = yymsp[-1].minor.yy112;
 	yylhsminor.yy112 = map;
 }
-#line 2816 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2816 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,19,&yymsp[-4].minor);
   yy_destructor(yypParser,48,&yymsp[-2].minor);
   yy_destructor(yypParser,20,&yymsp[0].minor);
   yymsp[-5].minor.yy112 = yylhsminor.yy112;
         break;
       case 95: /* aggregate_type ::= ARRAY LT type_or_array GT */
-#line 580 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 580 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(DynArrayType,arr,yymsp[-3].minor.yy0);
 	arr->ElementType = yymsp[-1].minor.yy112;
 	yylhsminor.yy112 = arr;
 }
-#line 2829 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2829 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,19,&yymsp[-2].minor);
   yy_destructor(yypParser,20,&yymsp[0].minor);
   yymsp[-3].minor.yy112 = yylhsminor.yy112;
         break;
       case 96: /* aggregate_type ::= CLASS class_restrictor */
-#line 587 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 587 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ClassType,cls,yymsp[-1].minor.yy0);
 	cls->Restriction = yymsp[0].minor.yy113;
 	yylhsminor.yy112 = cls;
 }
-#line 2841 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2841 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy112 = yylhsminor.yy112;
         break;
       case 98: /* class_restrictor ::= LT dottable_id GT */
 {  yy_destructor(yypParser,19,&yymsp[-2].minor);
-#line 593 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 593 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy113 = yymsp[-1].minor.yy113; /*yymsp[-2].minor.yy113-overwrites-yymsp[-1].minor.yy113*/ }
-#line 2848 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2848 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,20,&yymsp[0].minor);
 }
         break;
       case 99: /* type ::= type_name */
-#line 595 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 595 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy112 = yymsp[0].minor.yy257; /*X-overwrites-A*/ yymsp[0].minor.yy112->ArraySize = NULL; }
-#line 2855 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2855 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 100: /* type ::= aggregate_type */
-#line 596 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 596 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy112 = yymsp[0].minor.yy112; /*X-overwrites-A*/ yymsp[0].minor.yy112->ArraySize = NULL; }
-#line 2860 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2860 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 101: /* type_or_array ::= type array_size */
-#line 599 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 599 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy112 = yymsp[-1].minor.yy112; /*X-overwrites-A*/ yymsp[-1].minor.yy112->ArraySize = yymsp[0].minor.yy66; }
-#line 2865 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2865 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 102: /* type_list ::= type_list COMMA type_or_array */
-#line 602 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 602 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy112 = yymsp[-2].minor.yy112; /*X-overwrites-A*/ yymsp[-2].minor.yy112->AppendSibling(yymsp[0].minor.yy112); }
-#line 2870 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2870 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,48,&yymsp[-1].minor);
         break;
       case 103: /* type_list_or_void ::= VOID */
 {  yy_destructor(yypParser,93,&yymsp[0].minor);
-#line 604 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 604 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy112 = NULL; }
-#line 2877 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2877 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 104: /* array_size_expr ::= LBRACKET opt_expr RBRACKET */
 {  yy_destructor(yypParser,44,&yymsp[-2].minor);
-#line 608 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 608 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	if (yymsp[-1].minor.yy66 == NULL)
 	{
@@ -2892,20 +2892,20 @@ static void yy_reduce(
 		yymsp[-2].minor.yy66 = yymsp[-1].minor.yy66;
 	}
 }
-#line 2896 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2896 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,94,&yymsp[0].minor);
 }
         break;
       case 105: /* array_size ::= array_size array_size_expr */
-#line 623 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 623 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[-1].minor.yy66->AppendSibling(yymsp[0].minor.yy66);
 	yymsp[-1].minor.yy66 = yymsp[-1].minor.yy66; /*X-overwrites-A*/
 }
-#line 2906 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2906 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 106: /* declarator ::= decl_flags type_list_or_void variables_or_function */
-#line 632 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 632 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	if (yymsp[0].minor.yy338.FuncName == NAME_None && yymsp[0].minor.yy338.VarNames == NULL)
 	{ // An error. yymsp[-2].minor.yy0 message was already printed.
@@ -2942,11 +2942,11 @@ static void yy_reduce(
 		yylhsminor.yy323 = NULL;
 	}
 }
-#line 2946 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2946 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-2].minor.yy323 = yylhsminor.yy323;
         break;
       case 107: /* declarator_no_fun ::= decl_flags type variable_list SEMICOLON */
-#line 669 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 669 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(VarDeclarator, decl, yymsp[-3].minor.yy0.SourceLoc ? yymsp[-3].minor.yy0.SourceLoc : yymsp[-2].minor.yy112->SourceLoc);
 	decl->Type = yymsp[-2].minor.yy112;
@@ -2954,12 +2954,12 @@ static void yy_reduce(
 	decl->Flags = yymsp[-3].minor.yy0.Int;
 	yylhsminor.yy323 = decl;
 }
-#line 2958 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2958 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-3].minor.yy323 = yylhsminor.yy323;
         break;
       case 108: /* variables_or_function ::= IDENTIFIER LPAREN func_params RPAREN func_const opt_func_body */
-#line 679 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 679 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	VarOrFun fun;
 
@@ -2971,13 +2971,13 @@ static void yy_reduce(
 	fun.SourceLoc = yymsp[-5].minor.yy0.SourceLoc;
 	yylhsminor.yy338 = fun;
 }
-#line 2975 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2975 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-4].minor);
   yy_destructor(yypParser,73,&yymsp[-2].minor);
   yymsp[-5].minor.yy338 = yylhsminor.yy338;
         break;
       case 109: /* variables_or_function ::= variable_list SEMICOLON */
-#line 691 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 691 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	VarOrFun var;
 
@@ -2989,12 +2989,12 @@ static void yy_reduce(
 	var.SourceLoc = yymsp[-1].minor.yy90->SourceLoc;
 	yylhsminor.yy338 = var;
 }
-#line 2993 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 2993 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-1].minor.yy338 = yylhsminor.yy338;
         break;
       case 110: /* variables_or_function ::= error SEMICOLON */
-#line 703 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 703 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	VarOrFun bad;
 	bad.VarNames = NULL;
@@ -3005,143 +3005,143 @@ static void yy_reduce(
 	bad.SourceLoc = yymsp[0].minor.yy0.SourceLoc;
 	yymsp[-1].minor.yy338 = bad;
 }
-#line 3009 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3009 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 111: /* variable_name ::= IDENTIFIER */
-#line 720 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 720 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(VarName,var,yymsp[0].minor.yy0);
 	var->Name = ENamedName(yymsp[0].minor.yy0.Int);
 	var->ArraySize = NULL;
 	yylhsminor.yy90 = var;
 }
-#line 3019 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3019 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy90 = yylhsminor.yy90;
         break;
       case 112: /* variable_name ::= IDENTIFIER array_size */
-#line 727 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 727 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(VarName,var,yymsp[-1].minor.yy0);
 	var->Name = ENamedName(yymsp[-1].minor.yy0.Int);
 	var->ArraySize = yymsp[0].minor.yy66;
 	yylhsminor.yy90 = var;
 }
-#line 3030 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3030 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy90 = yylhsminor.yy90;
         break;
       case 113: /* variable_list ::= variable_list COMMA variable_name */
-#line 736 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 736 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[-2].minor.yy90->AppendSibling(yymsp[0].minor.yy90);
 	yymsp[-2].minor.yy90 = yymsp[-2].minor.yy90; /*X-overwrites-A*/
 }
-#line 3039 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3039 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,48,&yymsp[-1].minor);
         break;
       case 114: /* decl_flags ::= */
       case 132: /*func_param_flags ::= */ yytestcase(yyruleno==132);
-#line 741 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 741 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy0.Int = 0; yymsp[1].minor.yy0.SourceLoc = 0; }
-#line 3046 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3046 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 115: /* decl_flags ::= decl_flags NATIVE */
-#line 742 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 742 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Native; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3051 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3051 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 116: /* decl_flags ::= decl_flags STATIC */
-#line 743 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 743 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Static; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3057 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3057 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 117: /* decl_flags ::= decl_flags PRIVATE */
-#line 744 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 744 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Private; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3063 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3063 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 118: /* decl_flags ::= decl_flags PROTECTED */
-#line 745 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 745 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Protected; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3069 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3069 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 119: /* decl_flags ::= decl_flags LATENT */
-#line 746 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 746 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Latent; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3075 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3075 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 120: /* decl_flags ::= decl_flags FINAL */
-#line 747 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 747 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Final; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3081 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3081 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 121: /* decl_flags ::= decl_flags META */
-#line 748 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 748 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Meta; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3087 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3087 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 122: /* decl_flags ::= decl_flags ACTION */
-#line 749 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 749 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Action; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3093 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3093 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 123: /* decl_flags ::= decl_flags READONLY */
-#line 750 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 750 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_ReadOnly; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3099 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3099 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 124: /* decl_flags ::= decl_flags DEPRECATED */
-#line 751 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 751 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Deprecated; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3105 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3105 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 125: /* func_const ::= */
-#line 753 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 753 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy0.Int = 0; yymsp[1].minor.yy0.SourceLoc = stat->sc.GetMessageLine(); }
-#line 3111 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3111 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 126: /* func_const ::= CONST */
-#line 754 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 754 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_FuncConst; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 3116 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3116 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 127: /* opt_func_body ::= SEMICOLON */
 {  yy_destructor(yypParser,47,&yymsp[0].minor);
-#line 756 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 756 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy271 = NULL; }
-#line 3123 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3123 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 128: /* func_params ::= */
-#line 763 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 763 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy399 = NULL; }
-#line 3129 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3129 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 129: /* func_params ::= VOID */
 {  yy_destructor(yypParser,93,&yymsp[0].minor);
-#line 764 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 764 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy399 = NULL; }
-#line 3135 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3135 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 130: /* func_param_list ::= func_param_list COMMA func_param */
-#line 768 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 768 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-2].minor.yy399 = yymsp[-2].minor.yy399; /*X-overwrites-A*/ yymsp[-2].minor.yy399->AppendSibling(yymsp[0].minor.yy399); }
-#line 3141 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3141 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,48,&yymsp[-1].minor);
         break;
       case 131: /* func_param ::= func_param_flags type IDENTIFIER */
-#line 771 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 771 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(FuncParamDecl,parm,yymsp[-2].minor.yy0.SourceLoc ? yymsp[-2].minor.yy0.SourceLoc : yymsp[-1].minor.yy112->SourceLoc);
 	parm->Type = yymsp[-1].minor.yy112;
@@ -3149,29 +3149,29 @@ static void yy_reduce(
 	parm->Flags = yymsp[-2].minor.yy0.Int;
 	yylhsminor.yy399 = parm;
 }
-#line 3153 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3153 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-2].minor.yy399 = yylhsminor.yy399;
         break;
       case 133: /* func_param_flags ::= func_param_flags IN */
-#line 780 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 780 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_In; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3159 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3159 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 134: /* func_param_flags ::= func_param_flags OUT */
-#line 781 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 781 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Out; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3165 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3165 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 135: /* func_param_flags ::= func_param_flags OPTIONAL */
-#line 782 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 782 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = yymsp[-1].minor.yy0.Int | ZCC_Optional; yylhsminor.yy0.SourceLoc = yymsp[-1].minor.yy0.SourceLoc ? yymsp[-1].minor.yy0.SourceLoc : yymsp[0].minor.yy0.SourceLoc; }
-#line 3171 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3171 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy0 = yylhsminor.yy0;
         break;
       case 136: /* primary ::= IDENTIFIER */
-#line 798 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 798 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprID, expr, yymsp[0].minor.yy0);
 	expr->Operation = PEX_ID;
@@ -3179,48 +3179,48 @@ static void yy_reduce(
 	expr->Type = NULL;
 	yylhsminor.yy66 = expr;
 }
-#line 3183 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3183 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy66 = yylhsminor.yy66;
         break;
       case 137: /* primary ::= SUPER */
-#line 806 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 806 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Expression, expr, yymsp[0].minor.yy0);
 	expr->Operation = PEX_Super;
 	expr->Type = NULL;
 	yylhsminor.yy66 = expr;
 }
-#line 3194 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3194 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy66 = yylhsminor.yy66;
         break;
       case 138: /* primary ::= constant */
-#line 812 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 812 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy66 = yymsp[0].minor.yy313; /*X-overwrites-A*/ }
-#line 3200 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3200 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 139: /* primary ::= SELF */
-#line 814 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 814 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(Expression, expr, yymsp[0].minor.yy0);
 	expr->Operation = PEX_Self;
 	expr->Type = NULL;
 	yylhsminor.yy66 = expr;
 }
-#line 3210 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3210 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy66 = yylhsminor.yy66;
         break;
       case 140: /* primary ::= LPAREN expr RPAREN */
 {  yy_destructor(yypParser,43,&yymsp[-2].minor);
-#line 821 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 821 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[-2].minor.yy66 = yymsp[-1].minor.yy66; /*yymsp[-2].minor.yy66-overwrites-yymsp[-1].minor.yy66*/
 }
-#line 3219 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3219 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,73,&yymsp[0].minor);
 }
         break;
       case 141: /* primary ::= primary LPAREN func_expr_list RPAREN */
-#line 826 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 826 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprFuncCall, expr, yymsp[-3].minor.yy66);
 	expr->Operation = PEX_FuncCall;
@@ -3229,13 +3229,13 @@ static void yy_reduce(
 	expr->Parameters = yymsp[-1].minor.yy384;
 	yylhsminor.yy66 = expr;
 }
-#line 3233 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3233 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-2].minor);
   yy_destructor(yypParser,73,&yymsp[0].minor);
   yymsp[-3].minor.yy66 = yylhsminor.yy66;
         break;
       case 142: /* primary ::= primary LBRACKET expr RBRACKET */
-#line 835 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 835 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprBinary, expr, yymsp[-1].minor.yy66);
 	expr->Operation = PEX_ArrayAccess;
@@ -3244,13 +3244,13 @@ static void yy_reduce(
 	expr->Right = yymsp[-1].minor.yy66;
 	yylhsminor.yy66 = expr;
 }
-#line 3248 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3248 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,44,&yymsp[-2].minor);
   yy_destructor(yypParser,94,&yymsp[0].minor);
   yymsp[-3].minor.yy66 = yylhsminor.yy66;
         break;
       case 143: /* primary ::= primary DOT IDENTIFIER */
-#line 844 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 844 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprMemberAccess, expr, yymsp[0].minor.yy0);
 	expr->Operation = PEX_MemberAccess;
@@ -3259,33 +3259,33 @@ static void yy_reduce(
 	expr->Right = ENamedName(yymsp[0].minor.yy0.Int);
 	yylhsminor.yy66 = expr;
 }
-#line 3263 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3263 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,42,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 144: /* primary ::= primary ADDADD */
-#line 853 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 853 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[-1].minor.yy66,PEX_PostInc);
 	yylhsminor.yy66 = expr1;
 }
-#line 3273 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3273 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,40,&yymsp[0].minor);
   yymsp[-1].minor.yy66 = yylhsminor.yy66;
         break;
       case 145: /* primary ::= primary SUBSUB */
-#line 858 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 858 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[-1].minor.yy66,PEX_PostDec);
 	yylhsminor.yy66 = expr1;
 }
-#line 3283 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3283 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,41,&yymsp[0].minor);
   yymsp[-1].minor.yy66 = yylhsminor.yy66;
         break;
       case 146: /* unary_expr ::= SUB unary_expr */
 {  yy_destructor(yypParser,31,&yymsp[-1].minor);
-#line 873 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 873 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	ZCC_ExprConstant *con = static_cast<ZCC_ExprConstant *>(yymsp[0].minor.yy66);
 	if (yymsp[0].minor.yy66->Operation == PEX_ConstValue && (con->Type->IsA(RUNTIME_CLASS(PInt)) || con->Type->IsA(RUNTIME_CLASS(PFloat))))
@@ -3306,12 +3306,12 @@ static void yy_reduce(
 		yymsp[-1].minor.yy66 = expr1;
 	}
 }
-#line 3310 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3310 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 147: /* unary_expr ::= ADD unary_expr */
 {  yy_destructor(yypParser,32,&yymsp[-1].minor);
-#line 894 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 894 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	// Even though this is really a no-op, we still need to make a node for
 	// it so we can type check that it is being applied to something numeric.
@@ -3327,334 +3327,334 @@ static void yy_reduce(
 		yymsp[-1].minor.yy66 = yymsp[0].minor.yy66;
 	}
 }
-#line 3331 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3331 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 148: /* unary_expr ::= SUBSUB unary_expr */
 {  yy_destructor(yypParser,41,&yymsp[-1].minor);
-#line 910 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 910 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[0].minor.yy66,PEX_PreDec);
 	yymsp[-1].minor.yy66 = expr1;
 }
-#line 3341 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3341 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 149: /* unary_expr ::= ADDADD unary_expr */
 {  yy_destructor(yypParser,40,&yymsp[-1].minor);
-#line 915 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 915 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[0].minor.yy66,PEX_PreInc);
 	yymsp[-1].minor.yy66 = expr1;
 }
-#line 3351 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3351 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 150: /* unary_expr ::= TILDE unary_expr */
 {  yy_destructor(yypParser,109,&yymsp[-1].minor);
-#line 920 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 920 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[0].minor.yy66,PEX_BitNot);
 	yymsp[-1].minor.yy66 = expr1;
 }
-#line 3361 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3361 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 151: /* unary_expr ::= BANG unary_expr */
 {  yy_destructor(yypParser,110,&yymsp[-1].minor);
-#line 925 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 925 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[0].minor.yy66,PEX_BoolNot);
 	yymsp[-1].minor.yy66 = expr1;
 }
-#line 3371 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3371 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 152: /* unary_expr ::= SIZEOF unary_expr */
 {  yy_destructor(yypParser,111,&yymsp[-1].minor);
-#line 930 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 930 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[0].minor.yy66,PEX_SizeOf);
 	yymsp[-1].minor.yy66 = expr1;
 }
-#line 3381 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3381 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 153: /* unary_expr ::= ALIGNOF unary_expr */
 {  yy_destructor(yypParser,112,&yymsp[-1].minor);
-#line 935 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 935 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	UNARY_EXPR(yymsp[0].minor.yy66,PEX_AlignOf);
 	yymsp[-1].minor.yy66 = expr1;
 }
-#line 3391 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3391 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 154: /* expr ::= expr ADD expr */
-#line 948 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 948 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Add);
 	yylhsminor.yy66 = expr2;
 }
-#line 3400 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3400 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,32,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 155: /* expr ::= expr SUB expr */
-#line 953 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 953 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Sub);
 	yylhsminor.yy66 = expr2;
 }
-#line 3410 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3410 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,31,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 156: /* expr ::= expr MUL expr */
-#line 958 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 958 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Mul);
 	yylhsminor.yy66 = expr2;
 }
-#line 3420 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3420 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,33,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 157: /* expr ::= expr DIV expr */
-#line 963 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 963 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Div);
 	yylhsminor.yy66 = expr2;
 }
-#line 3430 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3430 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,34,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 158: /* expr ::= expr MOD expr */
-#line 968 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 968 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Mod);
 	yylhsminor.yy66 = expr2;
 }
-#line 3440 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3440 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,35,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 159: /* expr ::= expr POW expr */
-#line 973 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 973 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Pow);
 	yylhsminor.yy66 = expr2;
 }
-#line 3450 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3450 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,38,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 160: /* expr ::= expr CROSSPROD expr */
-#line 978 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 978 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_CrossProduct);
 	yylhsminor.yy66 = expr2;
 }
-#line 3460 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3460 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,36,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 161: /* expr ::= expr DOTPROD expr */
-#line 983 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 983 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_DotProduct);
 	yylhsminor.yy66 = expr2;
 }
-#line 3470 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3470 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,37,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 162: /* expr ::= expr LSH expr */
-#line 988 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 988 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_LeftShift);
 	yylhsminor.yy66 = expr2;
 }
-#line 3480 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3480 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,29,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 163: /* expr ::= expr RSH expr */
-#line 993 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 993 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_RightShift);
 	yylhsminor.yy66 = expr2;
 }
-#line 3490 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3490 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,30,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 164: /* expr ::= expr DOTDOT expr */
-#line 998 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 998 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Concat);
 	yylhsminor.yy66 = expr2;
 }
-#line 3500 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3500 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,25,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 165: /* expr ::= expr LT expr */
-#line 1004 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1004 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_LT);
 	yylhsminor.yy66 = expr2;
 }
-#line 3510 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3510 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,19,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 166: /* expr ::= expr GT expr */
-#line 1009 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1009 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_LTEQ);
 	UNARY_EXPR(expr2,PEX_BoolNot);
 	yylhsminor.yy66 = expr1;
 }
-#line 3521 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3521 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,20,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 167: /* expr ::= expr LTEQ expr */
-#line 1015 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1015 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_LTEQ);
 	yylhsminor.yy66 = expr2;
 }
-#line 3531 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3531 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,21,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 168: /* expr ::= expr GTEQ expr */
-#line 1020 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1020 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_LT);
 	UNARY_EXPR(expr1,PEX_BoolNot);
 	yylhsminor.yy66 = expr1;
 }
-#line 3542 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3542 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,22,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 169: /* expr ::= expr LTGTEQ expr */
-#line 1026 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1026 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_LTGTEQ);
 	yylhsminor.yy66 = expr2;
 }
-#line 3552 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3552 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,23,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 170: /* expr ::= expr IS expr */
-#line 1031 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1031 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Is);
 	yylhsminor.yy66 = expr2;
 }
-#line 3562 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3562 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,24,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 171: /* expr ::= expr EQEQ expr */
-#line 1037 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1037 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_EQEQ);
 	yylhsminor.yy66 = expr2;
 }
-#line 3572 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3572 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,16,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 172: /* expr ::= expr NEQ expr */
-#line 1042 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1042 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_EQEQ);
 	UNARY_EXPR(expr2,PEX_BoolNot);
 	yylhsminor.yy66 = expr1;
 }
-#line 3583 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3583 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,17,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 173: /* expr ::= expr APPROXEQ expr */
-#line 1048 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1048 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_APREQ);
 	yylhsminor.yy66 = expr2;
 }
-#line 3593 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3593 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,18,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 174: /* expr ::= expr AND expr */
-#line 1054 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1054 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_BitAnd);
 	yylhsminor.yy66 = expr2;
 }
-#line 3603 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3603 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,28,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 175: /* expr ::= expr XOR expr */
-#line 1059 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1059 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_BitXor);
 	yylhsminor.yy66 = expr2;
 }
-#line 3613 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3613 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,27,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 176: /* expr ::= expr OR expr */
-#line 1064 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1064 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_BitOr);
 	yylhsminor.yy66 = expr2;
 }
-#line 3623 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3623 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,26,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 177: /* expr ::= expr ANDAND expr */
-#line 1069 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1069 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_BoolAnd);
 	yylhsminor.yy66 = expr2;
 }
-#line 3633 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3633 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,15,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 178: /* expr ::= expr OROR expr */
-#line 1074 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1074 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_BoolOr);
 	yylhsminor.yy66 = expr2;
 }
-#line 3643 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3643 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,14,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 179: /* expr ::= expr SCOPE expr */
-#line 1080 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1080 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	BINARY_EXPR(yymsp[-2].minor.yy66,yymsp[0].minor.yy66,PEX_Scope);
 	yylhsminor.yy66 = expr2;
 }
-#line 3653 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3653 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,45,&yymsp[-1].minor);
   yymsp[-2].minor.yy66 = yylhsminor.yy66;
         break;
       case 180: /* expr ::= expr QUESTION expr COLON expr */
-#line 1088 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1088 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprTrinary, expr, yymsp[-4].minor.yy66);
 	expr->Operation = PEX_Trinary;
@@ -3664,22 +3664,22 @@ static void yy_reduce(
 	expr->Right = yymsp[0].minor.yy66;
 	yylhsminor.yy66 = expr;
 }
-#line 3668 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3668 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,12,&yymsp[-3].minor);
   yy_destructor(yypParser,13,&yymsp[-1].minor);
   yymsp[-4].minor.yy66 = yylhsminor.yy66;
         break;
       case 181: /* expr_list ::= expr_list COMMA expr */
-#line 1104 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1104 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[-2].minor.yy66 = yymsp[-2].minor.yy66;	/*X-overwrites-A*/
 	yymsp[-2].minor.yy66->AppendSibling(yymsp[0].minor.yy66);
 }
-#line 3679 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3679 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,48,&yymsp[-1].minor);
         break;
       case 182: /* func_expr_list ::= func_expr_list COMMA func_expr_item */
-#line 1120 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1120 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	// Omitted parameters still need to appear as nodes in the list.
 	if (yymsp[-2].minor.yy384 == NULL)
@@ -3699,40 +3699,40 @@ static void yy_reduce(
 	yymsp[-2].minor.yy384 = yymsp[-2].minor.yy384;	/*X-overwrites-A*/
 	yymsp[-2].minor.yy384->AppendSibling(yymsp[0].minor.yy384);
 }
-#line 3703 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3703 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 183: /* func_expr_item ::= */
-#line 1141 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1141 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[1].minor.yy384 = NULL;
 }
-#line 3710 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3710 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 184: /* named_expr ::= IDENTIFIER COLON expr */
-#line 1147 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1147 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(FuncParm, parm, yymsp[-2].minor.yy0);
 	parm->Value = yymsp[0].minor.yy66;
 	parm->Label = ENamedName(yymsp[-2].minor.yy0.Int);
 	yylhsminor.yy384 = parm;
 }
-#line 3720 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3720 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,13,&yymsp[-1].minor);
   yymsp[-2].minor.yy384 = yylhsminor.yy384;
         break;
       case 185: /* named_expr ::= expr */
-#line 1154 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1154 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(FuncParm, parm, yymsp[0].minor.yy66);
 	parm->Value = yymsp[0].minor.yy66;
 	parm->Label = NAME_None;
 	yylhsminor.yy384 = parm;
 }
-#line 3732 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3732 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy384 = yylhsminor.yy384;
         break;
       case 186: /* string_constant ::= STRCONST */
-#line 1167 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1167 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprConstant, strconst, yymsp[0].minor.yy0);
 	strconst->Operation = PEX_ConstValue;
@@ -3740,11 +3740,11 @@ static void yy_reduce(
 	strconst->StringVal = yymsp[0].minor.yy0.String;
 	yylhsminor.yy313 = strconst;
 }
-#line 3744 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3744 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 187: /* string_constant ::= string_constant STRCONST */
-#line 1175 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1175 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprConstant, strconst, yymsp[-1].minor.yy313);
 	strconst->Operation = PEX_ConstValue;
@@ -3752,29 +3752,29 @@ static void yy_reduce(
 	strconst->StringVal = stat->Strings.Alloc(*(yymsp[-1].minor.yy313->StringVal) + *(yymsp[0].minor.yy0.String));
 	yylhsminor.yy313 = strconst;
 }
-#line 3756 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3756 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-1].minor.yy313 = yylhsminor.yy313;
         break;
       case 188: /* constant ::= INTCONST */
-#line 1185 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1185 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_INTCONST_NODE(intconst, TypeSInt32, yymsp[0].minor.yy0.Int, yymsp[0].minor.yy0);
 	yylhsminor.yy313 = intconst;
 }
-#line 3765 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3765 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 189: /* constant ::= UINTCONST */
-#line 1190 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1190 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_INTCONST_NODE(intconst, TypeUInt32, yymsp[0].minor.yy0.Int, yymsp[0].minor.yy0);
 	yylhsminor.yy313 = intconst;
 }
-#line 3774 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3774 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 190: /* constant ::= FLOATCONST */
-#line 1195 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1195 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprConstant, floatconst, yymsp[0].minor.yy0);
 	floatconst->Operation = PEX_ConstValue;
@@ -3782,11 +3782,11 @@ static void yy_reduce(
 	floatconst->DoubleVal = yymsp[0].minor.yy0.Float;
 	yylhsminor.yy313 = floatconst;
 }
-#line 3786 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3786 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 191: /* constant ::= NAMECONST */
-#line 1203 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1203 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExprConstant, floatconst, yymsp[0].minor.yy0);
 	floatconst->Operation = PEX_ConstValue;
@@ -3794,169 +3794,169 @@ static void yy_reduce(
 	floatconst->IntVal = yymsp[0].minor.yy0.Int;
 	yylhsminor.yy313 = floatconst;
 }
-#line 3798 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3798 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 192: /* constant ::= FALSE */
-#line 1211 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1211 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_INTCONST_NODE(boolconst, TypeBool, false, yymsp[0].minor.yy0);
 	yylhsminor.yy313 = boolconst;
 }
-#line 3807 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3807 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 193: /* constant ::= TRUE */
-#line 1216 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1216 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_INTCONST_NODE(boolconst, TypeBool, true, yymsp[0].minor.yy0);
 	yylhsminor.yy313 = boolconst;
 }
-#line 3816 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3816 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy313 = yylhsminor.yy313;
         break;
       case 194: /* statement ::= SEMICOLON */
 {  yy_destructor(yypParser,47,&yymsp[0].minor);
-#line 1226 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1226 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = NULL; }
-#line 3823 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3823 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 }
         break;
       case 195: /* statement ::= labeled_statement */
-#line 1227 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1227 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = yymsp[0].minor.yy386; /*X-overwrites-A*/ }
-#line 3829 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3829 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 196: /* statement ::= compound_statement */
-#line 1228 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1228 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = yymsp[0].minor.yy271; /*X-overwrites-A*/ }
-#line 3834 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3834 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 197: /* statement ::= expression_statement SEMICOLON */
-#line 1229 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1229 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy117 = yymsp[-1].minor.yy22; /*X-overwrites-A*/ }
-#line 3839 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3839 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
         break;
       case 198: /* statement ::= assign_statement SEMICOLON */
-#line 1233 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1233 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy117 = yymsp[-1].minor.yy141; /*X-overwrites-A*/ }
-#line 3845 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3845 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
         break;
       case 199: /* statement ::= local_var SEMICOLON */
-#line 1234 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1234 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy117 = yymsp[-1].minor.yy264; /*X-overwrites-A*/ }
-#line 3851 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3851 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
         break;
       case 200: /* statement ::= error SEMICOLON */
-#line 1235 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1235 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[-1].minor.yy117 = NULL; }
-#line 3857 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3857 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
         break;
       case 201: /* jump_statement ::= CONTINUE SEMICOLON */
-#line 1242 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1242 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ContinueStmt, stmt, yymsp[-1].minor.yy0);
 	yylhsminor.yy117 = stmt;
 }
-#line 3866 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3866 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-1].minor.yy117 = yylhsminor.yy117;
         break;
       case 202: /* jump_statement ::= BREAK SEMICOLON */
-#line 1247 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1247 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(BreakStmt, stmt, yymsp[-1].minor.yy0);
 	yylhsminor.yy117 = stmt;
 }
-#line 3876 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3876 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-1].minor.yy117 = yylhsminor.yy117;
         break;
       case 203: /* jump_statement ::= RETURN SEMICOLON */
-#line 1252 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1252 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ReturnStmt, stmt, yymsp[-1].minor.yy0);
 	stmt->Values = NULL;
 	yylhsminor.yy117 = stmt;
 }
-#line 3887 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3887 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-1].minor.yy117 = yylhsminor.yy117;
         break;
       case 204: /* jump_statement ::= RETURN expr_list SEMICOLON */
-#line 1258 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1258 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ReturnStmt, stmt, yymsp[-2].minor.yy0);
 	stmt->Values = yymsp[-1].minor.yy66;
 	yylhsminor.yy117 = stmt;
 }
-#line 3898 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3898 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,47,&yymsp[0].minor);
   yymsp[-2].minor.yy117 = yylhsminor.yy117;
         break;
       case 205: /* compound_statement ::= LBRACE RBRACE */
-#line 1270 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1270 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(CompoundStmt,stmt,yymsp[-1].minor.yy0);
 	stmt->Content = NULL;
 	yylhsminor.yy271 = stmt;
 }
-#line 3909 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3909 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,55,&yymsp[0].minor);
   yymsp[-1].minor.yy271 = yylhsminor.yy271;
         break;
       case 206: /* compound_statement ::= LBRACE statement_list RBRACE */
-#line 1276 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1276 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(CompoundStmt,stmt,yymsp[-2].minor.yy0);
 	stmt->Content = yymsp[-1].minor.yy117;
 	yylhsminor.yy271 = stmt;
 }
-#line 3920 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3920 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,55,&yymsp[0].minor);
   yymsp[-2].minor.yy271 = yylhsminor.yy271;
         break;
       case 207: /* compound_statement ::= LBRACE error RBRACE */
-#line 1282 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1282 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(CompoundStmt,stmt,yymsp[-2].minor.yy0);
 	stmt->Content = NULL;
 	yylhsminor.yy271 = stmt;
 }
-#line 3931 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3931 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,55,&yymsp[0].minor);
   yymsp[-2].minor.yy271 = yylhsminor.yy271;
         break;
       case 208: /* statement_list ::= statement */
-#line 1289 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1289 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[0].minor.yy117 = yymsp[0].minor.yy117; /*X-overwrites-A*/
 }
-#line 3940 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3940 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 209: /* statement_list ::= statement_list statement */
-#line 1293 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1293 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	SAFE_APPEND(yymsp[-1].minor.yy117,yymsp[0].minor.yy117);
 }
-#line 3947 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3947 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 210: /* expression_statement ::= expr */
-#line 1302 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1302 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(ExpressionStmt, stmt, yymsp[0].minor.yy66);
 	stmt->Expression = yymsp[0].minor.yy66;
 	yylhsminor.yy22 = stmt;
 }
-#line 3956 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3956 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy22 = yylhsminor.yy22;
         break;
       case 211: /* iteration_statement ::= while_or_until LPAREN expr RPAREN statement */
-#line 1314 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1314 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(IterationStmt, iter, yymsp[-4].minor.yy0);
 	if (yymsp[-4].minor.yy0.Int == ZCC_UNTIL)
@@ -3973,13 +3973,13 @@ static void yy_reduce(
 	iter->CheckAt = ZCC_IterationStmt::Start;
 	yylhsminor.yy117 = iter;
 }
-#line 3977 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 3977 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-3].minor);
   yy_destructor(yypParser,73,&yymsp[-1].minor);
   yymsp[-4].minor.yy117 = yylhsminor.yy117;
         break;
       case 212: /* iteration_statement ::= DO statement while_or_until LPAREN expr RPAREN */
-#line 1332 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1332 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(IterationStmt, iter, yymsp[-5].minor.yy0);
 	if (yymsp[-3].minor.yy0.Int == ZCC_UNTIL)
@@ -3996,13 +3996,13 @@ static void yy_reduce(
 	iter->CheckAt = ZCC_IterationStmt::End;
 	yylhsminor.yy117 = iter;
 }
-#line 4000 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4000 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-2].minor);
   yy_destructor(yypParser,73,&yymsp[0].minor);
   yymsp[-5].minor.yy117 = yylhsminor.yy117;
         break;
       case 213: /* iteration_statement ::= FOR LPAREN for_init SEMICOLON opt_expr SEMICOLON for_bump RPAREN statement */
-#line 1350 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1350 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(IterationStmt, iter, yymsp[-8].minor.yy0);
 	iter->LoopCondition = yymsp[-4].minor.yy66;
@@ -4018,7 +4018,7 @@ static void yy_reduce(
 	wrap->Content = yymsp[-6].minor.yy117;
 	yylhsminor.yy117 = wrap;
 }
-#line 4022 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4022 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-7].minor);
   yy_destructor(yypParser,47,&yymsp[-5].minor);
   yy_destructor(yypParser,47,&yymsp[-3].minor);
@@ -4026,66 +4026,66 @@ static void yy_reduce(
   yymsp[-8].minor.yy117 = yylhsminor.yy117;
         break;
       case 214: /* while_or_until ::= WHILE */
-#line 1367 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1367 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yylhsminor.yy0.Int = ZCC_WHILE;
 	yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc;
 }
-#line 4035 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4035 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 215: /* while_or_until ::= UNTIL */
-#line 1372 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1372 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yylhsminor.yy0.Int = ZCC_UNTIL;
 	yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc;
 }
-#line 4044 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4044 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 216: /* for_init ::= local_var */
-#line 1378 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1378 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = yymsp[0].minor.yy264 /*X-overwrites-A*/; }
-#line 4050 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4050 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 217: /* for_init ::= for_bump */
-#line 1379 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1379 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = yymsp[0].minor.yy117 /*X-overwrites-A*/; }
-#line 4055 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4055 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 218: /* for_bump ::= */
-#line 1382 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1382 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[1].minor.yy117 = NULL; }
-#line 4060 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4060 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 219: /* for_bump ::= expression_statement */
-#line 1383 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1383 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = yymsp[0].minor.yy22; /*X-overwrites-A*/ }
-#line 4065 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4065 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 220: /* for_bump ::= assign_statement */
-#line 1384 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1384 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yymsp[0].minor.yy117 = yymsp[0].minor.yy141; /*X-overwrites-A*/ }
-#line 4070 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4070 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 221: /* selection_statement ::= if_front */
-#line 1398 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1398 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[0].minor.yy117 = yymsp[0].minor.yy383; /*X-overwrites-A*/
 }
-#line 4077 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4077 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
         break;
       case 222: /* selection_statement ::= if_front ELSE statement */
-#line 1402 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1402 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	yymsp[-2].minor.yy383->FalsePath = yymsp[0].minor.yy117;
 	yymsp[-2].minor.yy117 = yymsp[-2].minor.yy383; /*X-overwrites-A*/
 }
-#line 4085 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4085 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,125,&yymsp[-1].minor);
         break;
       case 223: /* if_front ::= IF LPAREN expr RPAREN statement */
-#line 1408 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1408 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(IfStmt,stmt,yymsp[-4].minor.yy0);
 	stmt->Condition = yymsp[-2].minor.yy66;
@@ -4093,48 +4093,48 @@ static void yy_reduce(
 	stmt->FalsePath = NULL;
 	yylhsminor.yy383 = stmt;
 }
-#line 4097 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4097 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-3].minor);
   yy_destructor(yypParser,73,&yymsp[-1].minor);
   yymsp[-4].minor.yy383 = yylhsminor.yy383;
         break;
       case 224: /* selection_statement ::= SWITCH LPAREN expr RPAREN statement */
-#line 1419 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1419 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(SwitchStmt,stmt,yymsp[-4].minor.yy0);
 	stmt->Condition = yymsp[-2].minor.yy66;
 	stmt->Content = yymsp[0].minor.yy117;
 	yylhsminor.yy117 = stmt;
 }
-#line 4110 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4110 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,43,&yymsp[-3].minor);
   yy_destructor(yypParser,73,&yymsp[-1].minor);
   yymsp[-4].minor.yy117 = yylhsminor.yy117;
         break;
       case 225: /* labeled_statement ::= CASE expr COLON */
-#line 1431 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1431 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(CaseStmt,stmt,yymsp[-2].minor.yy0);
 	stmt->Condition = yymsp[-1].minor.yy66;
 	yylhsminor.yy386 = stmt;
 }
-#line 4122 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4122 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,13,&yymsp[0].minor);
   yymsp[-2].minor.yy386 = yylhsminor.yy386;
         break;
       case 226: /* labeled_statement ::= DEFAULT COLON */
-#line 1437 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1437 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(CaseStmt,stmt,yymsp[-1].minor.yy0);
 	stmt->Condition = NULL;
 	yylhsminor.yy386 = stmt;
 }
-#line 4133 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4133 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yy_destructor(yypParser,13,&yymsp[0].minor);
   yymsp[-1].minor.yy386 = yylhsminor.yy386;
         break;
       case 227: /* assign_statement ::= expr_list assign_op expr_list */
-#line 1448 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1448 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(AssignStmt,stmt,yymsp[-1].minor.yy0);
 	stmt->AssignOp = yymsp[-1].minor.yy0.Int;
@@ -4142,77 +4142,77 @@ static void yy_reduce(
 	stmt->Sources = yymsp[0].minor.yy66;
 	yylhsminor.yy141 = stmt;
 }
-#line 4146 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4146 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-2].minor.yy141 = yylhsminor.yy141;
         break;
       case 228: /* assign_op ::= EQ */
-#line 1456 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1456 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_EQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4152 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4152 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 229: /* assign_op ::= MULEQ */
-#line 1457 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1457 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_MULEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4158 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4158 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 230: /* assign_op ::= DIVEQ */
-#line 1458 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1458 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_DIVEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4164 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4164 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 231: /* assign_op ::= MODEQ */
-#line 1459 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1459 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_MODEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4170 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4170 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 232: /* assign_op ::= ADDEQ */
-#line 1460 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1460 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_ADDEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4176 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4176 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 233: /* assign_op ::= SUBEQ */
-#line 1461 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1461 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_SUBEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4182 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4182 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 234: /* assign_op ::= LSHEQ */
-#line 1462 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1462 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_LSHEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4188 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4188 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 235: /* assign_op ::= RSHEQ */
-#line 1463 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1463 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_RSHEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4194 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4194 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 236: /* assign_op ::= ANDEQ */
-#line 1464 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1464 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_ANDEQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4200 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4200 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 237: /* assign_op ::= OREQ */
-#line 1465 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1465 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_OREQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4206 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4206 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 238: /* assign_op ::= XOREQ */
-#line 1466 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1466 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 { yylhsminor.yy0.Int = ZCC_XOREQ; yylhsminor.yy0.SourceLoc = yymsp[0].minor.yy0.SourceLoc; }
-#line 4212 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4212 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[0].minor.yy0 = yylhsminor.yy0;
         break;
       case 239: /* local_var ::= type variable_list var_init */
-#line 1473 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 1473 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 {
 	NEW_AST_NODE(LocalVarStmt,vardef,yymsp[-2].minor.yy112);
 	vardef->Type = yymsp[-2].minor.yy112;
@@ -4220,7 +4220,7 @@ static void yy_reduce(
 	vardef->Inits = yymsp[0].minor.yy66;
 	yylhsminor.yy264 = vardef;
 }
-#line 4224 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4224 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
   yymsp[-2].minor.yy264 = yylhsminor.yy264;
         break;
       default:
@@ -4295,9 +4295,9 @@ static void yy_parse_failed(
   /* Here code is inserted which will be executed whenever the
   ** parser fails */
 /************ Begin %parse_failure code ***************************************/
-#line 102 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 102 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
  /**failed = true;*/ 
-#line 4301 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4301 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 /************ End %parse_failure code *****************************************/
   ZCCParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
@@ -4314,7 +4314,7 @@ static void yy_syntax_error(
   ZCCParseARG_FETCH;
 #define TOKEN yyminor
 /************ Begin %syntax_error code ****************************************/
-#line 76 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 76 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
 
 	FString unexpected, expecting;
 
@@ -4339,7 +4339,7 @@ static void yy_syntax_error(
 		}
 	}
 	stat->sc.ScriptMessage("%s\n%s\n", unexpected.GetChars(), expecting.GetChars());
-#line 4343 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4343 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 /************ End %syntax_error code ******************************************/
   ZCCParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
@@ -4360,9 +4360,9 @@ static void yy_accept(
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
 /*********** Begin %parse_accept code *****************************************/
-#line 101 "C:/Users/Myers/git/world-of-kirbycraft/src/zscript/zcc-parse.lemon"
+#line 101 "D:/Git/MaryMagicalAdventure/src/zscript/zcc-parse.lemon"
  stat->sc.ScriptMessage("input accepted\n"); 
-#line 4366 "C:/Users/Myers/git/world-of-kirbycraft/src/zcc-parse.c"
+#line 4366 "D:/Git/MaryMagicalAdventure/src/zcc-parse.c"
 /*********** End %parse_accept code *******************************************/
   ZCCParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }

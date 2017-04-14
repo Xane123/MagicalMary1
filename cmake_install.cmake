@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/Myers/git/world-of-kirbycraft
+# Install script for directory: D:/Git/MaryMagicalAdventure
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Mary's Magical Adventure")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -29,16 +29,16 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/Myers/git/world-of-kirbycraft/zlib/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/jpeg-6b/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/bzip2/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/game-music-emu/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/lzma/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/tools/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/dumb/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/gdtoa/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/wadsrc/cmake_install.cmake")
-  include("C:/Users/Myers/git/world-of-kirbycraft/src/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/zlib/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/jpeg-6b/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/bzip2/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/game-music-emu/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/lzma/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/tools/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/dumb/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/gdtoa/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/wadsrc/cmake_install.cmake")
+  include("D:/Git/MaryMagicalAdventure/src/cmake_install.cmake")
 
 endif()
 
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Myers/git/world-of-kirbycraft/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/Git/MaryMagicalAdventure/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

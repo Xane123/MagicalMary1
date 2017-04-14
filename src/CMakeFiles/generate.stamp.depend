@@ -1,33 +1,28 @@
 # CMake generation dependency list for this directory.
-C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckCXXSourceCompiles.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckFunctionExists.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckCXXCompilerFlag.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckCXXSourceCompiles.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckLibraryExists.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPkgConfig.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageMessage.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeParseArguments.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindOpenAL.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageMessage.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeParseArguments.cmake
-C:/Users/Myers/git/world-of-kirbycraft/FindSndFile.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageMessage.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeParseArguments.cmake
-C:/Users/Myers/git/world-of-kirbycraft/FindMPG123.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageMessage.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeParseArguments.cmake
-C:/Users/Myers/git/world-of-kirbycraft/FindFluidSynth.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageMessage.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeParseArguments.cmake
-C:/Users/Myers/git/world-of-kirbycraft/launcher-templates/vcxproj.user.in
-C:/Users/Myers/git/world-of-kirbycraft/launcher-templates/targetlauncher.cmd.in
-C:/Users/Myers/git/world-of-kirbycraft/launcher-templates/targetlauncher.cmd.in
-C:/Users/Myers/git/world-of-kirbycraft/launcher-templates/targetlauncher.cmd.in
-C:/Users/Myers/git/world-of-kirbycraft/launcher-templates/targetlauncher.cmd.in
+D:/Git/MaryMagicalAdventure/src/CMakeLists.txt
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckCXXSourceCompiles.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckFunctionExists.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckCXXCompilerFlag.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckCXXSourceCompiles.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckLibraryExists.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPkgConfig.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageMessage.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindOpenAL.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageMessage.cmake
+D:/Git/MaryMagicalAdventure/FindSndFile.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageMessage.cmake
+D:/Git/MaryMagicalAdventure/FindMPG123.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageMessage.cmake
+D:/Git/MaryMagicalAdventure/FindFluidSynth.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageHandleStandardArgs.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/FindPackageMessage.cmake
+D:/Git/MaryMagicalAdventure/launcher-templates/vcxproj.user.in
+D:/Git/MaryMagicalAdventure/launcher-templates/targetlauncher.cmd.in
+D:/Git/MaryMagicalAdventure/launcher-templates/targetlauncher.cmd.in
+D:/Git/MaryMagicalAdventure/launcher-templates/targetlauncher.cmd.in
+D:/Git/MaryMagicalAdventure/launcher-templates/targetlauncher.cmd.in

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,36 +19,37 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{A237BEF5-0AD6-31D7-AE54-C712ED269A8F}</ProjectGUID>
-    <WindowsTargetPlatformVersion>10.0.10240.0</WindowsTargetPlatformVersion>
+    <ProjectGUID>{BD71EFAA-9B86-31A6-9E3F-F151F3E47354}</ProjectGUID>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
     <ProjectName>data_pk3</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -105,10 +106,10 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -116,12 +117,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -129,12 +130,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -142,12 +143,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -155,18 +156,18 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/wadsrc/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/wadsrc/CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\3a9aaacbda7a51759cc552b3129ba36a\data.pk3.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\1f03bb1abeeff62aecefb43e5c7d7a00\data.pk3.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating ../data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-..\tools\zipdir\Debug\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\Debug\zipdir.exe -udf D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/Debug/data.pk3
+D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/Debug/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -174,14 +175,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Debug\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/1f03bb1abeeff62aecefb43e5c7d7a00/data.pk3.rule;D:\Git\MaryMagicalAdventure\tools\zipdir\Debug\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating ../data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-..\tools\zipdir\Release\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\Release\zipdir.exe -udf D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/Release/data.pk3
+D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/Release/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -189,14 +190,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\Release\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/1f03bb1abeeff62aecefb43e5c7d7a00/data.pk3.rule;D:\Git\MaryMagicalAdventure\tools\zipdir\Release\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating ../data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-..\tools\zipdir\MinSizeRel\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\MinSizeRel\zipdir.exe -udf D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/MinSizeRel/data.pk3
+D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/MinSizeRel/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -204,14 +205,14 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\MinSizeRel\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/1f03bb1abeeff62aecefb43e5c7d7a00/data.pk3.rule;D:\Git\MaryMagicalAdventure\tools\zipdir\MinSizeRel\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating ../data.pk3</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-..\tools\zipdir\RelWithDebInfo\zipdir.exe -udf C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/wadsrc/static
+..\tools\zipdir\RelWithDebInfo\zipdir.exe -udf D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/git/world-of-kirbycraft/data.pk3 C:/Users/Myers/git/world-of-kirbycraft/RelWithDebInfo/data.pk3
+D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/MaryMagicalAdventure/data.pk3 D:/Git/MaryMagicalAdventure/RelWithDebInfo/data.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -219,16 +220,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/3a9aaacbda7a51759cc552b3129ba36a/data.pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\zipdir\RelWithDebInfo\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\data.pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/1f03bb1abeeff62aecefb43e5c7d7a00/data.pk3.rule;D:\Git\MaryMagicalAdventure\tools\zipdir\RelWithDebInfo\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\data.pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\78ac00bdc5b9f3f46d8be8977bdc2572\data_pk3.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\196006ff274136d5c54dfe06e40722c8\data_pk3.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E touch C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/Debug/zipdir.exe
+D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/MaryMagicalAdventure/tools/zipdir/Debug/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -236,12 +237,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/196006ff274136d5c54dfe06e40722c8/data_pk3.rule;D:\Git\MaryMagicalAdventure\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E touch C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/Release/zipdir.exe
+D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/MaryMagicalAdventure/tools/zipdir/Release/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -249,12 +250,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/196006ff274136d5c54dfe06e40722c8/data_pk3.rule;D:\Git\MaryMagicalAdventure\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E touch C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/MinSizeRel/zipdir.exe
+D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/MaryMagicalAdventure/tools/zipdir/MinSizeRel/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -262,12 +263,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/196006ff274136d5c54dfe06e40722c8/data_pk3.rule;D:\Git\MaryMagicalAdventure\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -E touch C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/RelWithDebInfo/zipdir.exe
+D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/MaryMagicalAdventure/tools/zipdir/RelWithDebInfo/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -275,23 +276,26 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/78ac00bdc5b9f3f46d8be8977bdc2572/data_pk3.rule;C:\Users\Myers\git\world-of-kirbycraft\data.pk3;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/196006ff274136d5c54dfe06e40722c8/data_pk3.rule;D:\Git\MaryMagicalAdventure\data.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\Myers\git\world-of-kirbycraft\wadsrc\CMakeFiles\data_pk3" />
+    <None Include="D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:/Users/Myers/git/world-of-kirbycraft/ZERO_CHECK.vcxproj">
-      <Project>C8A49BD1-0AB0-39DC-9063-51DFEA245659</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
+      <Name>ZERO_CHECK</Name>
     </ProjectReference>
-    <ProjectReference Include="C:/Users/Myers/git/world-of-kirbycraft/src/zdoom.vcxproj">
-      <Project>411D9D83-7E7C-3EBA-9AAF-36834EB1EE10</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\src\zdoom.vcxproj">
+      <Project>01E4734C-B56A-37CC-80F1-7FBC5821F66F</Project>
+      <Name>zdoom</Name>
     </ProjectReference>
-    <ProjectReference Include="C:/Users/Myers/git/world-of-kirbycraft/tools/zipdir/zipdir.vcxproj">
-      <Project>52F765F4-CA68-32EE-9EB8-655520D1DD0D</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\zipdir\zipdir.vcxproj">
+      <Project>8AFFA02C-1DF6-3B1A-BE84-143F0DD8E544</Project>
+      <Name>zipdir</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

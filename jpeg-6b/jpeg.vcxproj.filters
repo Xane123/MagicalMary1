@@ -1,73 +1,73 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jcomapi.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jcomapi.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdapimin.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdapimin.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdapistd.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdapistd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdatasrc.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdatasrc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdcoefct.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdcoefct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdcolor.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdcolor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jddctmgr.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jddctmgr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdhuff.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdhuff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdinput.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdinput.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdmainct.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmainct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdmarker.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmarker.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdmaster.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmaster.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdmerge.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmerge.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdphuff.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdphuff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdpostct.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdpostct.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jdsample.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdsample.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jerror.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jerror.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jidctint.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jidctint.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jmemmgr.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jmemmgr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\jutils.c">
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jutils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{281D1C2B-8FBD-3BE9-8CED-FA77CDABB679}</UniqueIdentifier>
+      <UniqueIdentifier>{D4487385-BD72-39A8-996C-F48DF028A1AA}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 # CMake generation dependency list for this directory.
-C:/Users/Myers/git/world-of-kirbycraft/tools/re2c/CMakeLists.txt
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckFunctionExists.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckTypeSize.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckIncludeFile.cmake
-C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CheckIncludeFileCXX.cmake
-C:/Users/Myers/git/world-of-kirbycraft/tools/re2c/config.h.in
+D:/Git/MaryMagicalAdventure/tools/re2c/CMakeLists.txt
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckFunctionExists.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckTypeSize.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckIncludeFile.cmake
+D:/Prpgrams/CMake/share/cmake-3.8/Modules/CheckIncludeFileCXX.cmake
+D:/Git/MaryMagicalAdventure/tools/re2c/config.h.in

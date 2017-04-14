@@ -1,9 +1,9 @@
-cd C:/Users/Myers/git/world-of-kirbycraft
+cd D:/Git/MaryMagicalAdventure
 set PATH=;%PATH%
 
 if [%1]==[--debugger] (
 	SHIFT
 )
 
-"C:\Users\Myers\git\world-of-kirbycraft\MinSizeRel\play.exe"  
+"D:\Git\MaryMagicalAdventure\MinSizeRel\play.exe"  
 pause

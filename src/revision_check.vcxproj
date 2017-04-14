@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,36 +19,37 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{EAF20C95-9FA4-338A-A834-8448795E2847}</ProjectGUID>
-    <WindowsTargetPlatformVersion>10.0.10240.0</WindowsTargetPlatformVersion>
+    <ProjectGUID>{417F6CC1-8598-37AC-A97E-A1A87F6BFDED}</ProjectGUID>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
     <ProjectName>revision_check</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -66,7 +67,7 @@
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;C:\Users\Myers\git\openal\include\AL;C:\Program Files (x86)\FMOD SoundSystem\FMOD Programmers API Win32\api\inc;C:\Users\Myers\git\world-of-kirbycraft\zlib;C:\Users\Myers\git\world-of-kirbycraft\bzip2;C:\Users\Myers\git\world-of-kirbycraft\lzma\C;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu;C:\Program Files (x86)\Mega-Nerd\libsndfile\include;C:\Users\Myers\git\mpg123-1.20.1-x86;C:\Users\Myers\git\world-of-kirbycraft\src;C:\Users\Myers\git\world-of-kirbycraft\src\.;C:\Users\Myers\git\world-of-kirbycraft\src\g_doom;C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic;C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen;C:\Users\Myers\git\world-of-kirbycraft\src\g_raven;C:\Users\Myers\git\world-of-kirbycraft\src\g_strife;C:\Users\Myers\git\world-of-kirbycraft\src\g_shared;C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth;C:\Users\Myers\git\world-of-kirbycraft\src\sound;C:\Users\Myers\git\world-of-kirbycraft\src\textures;C:\Users\Myers\git\world-of-kirbycraft\src\thingdef;C:\Users\Myers\git\world-of-kirbycraft\src\timidity;C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi;C:\Users\Myers\git\world-of-kirbycraft\src\xlat;C:\Users\Myers\git\world-of-kirbycraft\src\zscript;C:\Users\Myers\git\world-of-kirbycraft\src\..\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\..\dumb\include;C:\Users\Myers\git\world-of-kirbycraft\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\oplsynth;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -76,7 +77,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;C:\Users\Myers\git\openal\include\AL;C:\Program Files (x86)\FMOD SoundSystem\FMOD Programmers API Win32\api\inc;C:\Users\Myers\git\world-of-kirbycraft\zlib;C:\Users\Myers\git\world-of-kirbycraft\bzip2;C:\Users\Myers\git\world-of-kirbycraft\lzma\C;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu;C:\Program Files (x86)\Mega-Nerd\libsndfile\include;C:\Users\Myers\git\mpg123-1.20.1-x86;C:\Users\Myers\git\world-of-kirbycraft\src;C:\Users\Myers\git\world-of-kirbycraft\src\.;C:\Users\Myers\git\world-of-kirbycraft\src\g_doom;C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic;C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen;C:\Users\Myers\git\world-of-kirbycraft\src\g_raven;C:\Users\Myers\git\world-of-kirbycraft\src\g_strife;C:\Users\Myers\git\world-of-kirbycraft\src\g_shared;C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth;C:\Users\Myers\git\world-of-kirbycraft\src\sound;C:\Users\Myers\git\world-of-kirbycraft\src\textures;C:\Users\Myers\git\world-of-kirbycraft\src\thingdef;C:\Users\Myers\git\world-of-kirbycraft\src\timidity;C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi;C:\Users\Myers\git\world-of-kirbycraft\src\xlat;C:\Users\Myers\git\world-of-kirbycraft\src\zscript;C:\Users\Myers\git\world-of-kirbycraft\src\..\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\..\dumb\include;C:\Users\Myers\git\world-of-kirbycraft\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\oplsynth;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -86,7 +87,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;C:\Users\Myers\git\openal\include\AL;C:\Program Files (x86)\FMOD SoundSystem\FMOD Programmers API Win32\api\inc;C:\Users\Myers\git\world-of-kirbycraft\zlib;C:\Users\Myers\git\world-of-kirbycraft\bzip2;C:\Users\Myers\git\world-of-kirbycraft\lzma\C;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu;C:\Program Files (x86)\Mega-Nerd\libsndfile\include;C:\Users\Myers\git\mpg123-1.20.1-x86;C:\Users\Myers\git\world-of-kirbycraft\src;C:\Users\Myers\git\world-of-kirbycraft\src\.;C:\Users\Myers\git\world-of-kirbycraft\src\g_doom;C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic;C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen;C:\Users\Myers\git\world-of-kirbycraft\src\g_raven;C:\Users\Myers\git\world-of-kirbycraft\src\g_strife;C:\Users\Myers\git\world-of-kirbycraft\src\g_shared;C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth;C:\Users\Myers\git\world-of-kirbycraft\src\sound;C:\Users\Myers\git\world-of-kirbycraft\src\textures;C:\Users\Myers\git\world-of-kirbycraft\src\thingdef;C:\Users\Myers\git\world-of-kirbycraft\src\timidity;C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi;C:\Users\Myers\git\world-of-kirbycraft\src\xlat;C:\Users\Myers\git\world-of-kirbycraft\src\zscript;C:\Users\Myers\git\world-of-kirbycraft\src\..\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\..\dumb\include;C:\Users\Myers\git\world-of-kirbycraft\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\oplsynth;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -96,7 +97,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;C:\Users\Myers\git\openal\include\AL;C:\Program Files (x86)\FMOD SoundSystem\FMOD Programmers API Win32\api\inc;C:\Users\Myers\git\world-of-kirbycraft\zlib;C:\Users\Myers\git\world-of-kirbycraft\bzip2;C:\Users\Myers\git\world-of-kirbycraft\lzma\C;C:\Users\Myers\git\world-of-kirbycraft\jpeg-6b;C:\Users\Myers\git\world-of-kirbycraft\game-music-emu;C:\Program Files (x86)\Mega-Nerd\libsndfile\include;C:\Users\Myers\git\mpg123-1.20.1-x86;C:\Users\Myers\git\world-of-kirbycraft\src;C:\Users\Myers\git\world-of-kirbycraft\src\.;C:\Users\Myers\git\world-of-kirbycraft\src\g_doom;C:\Users\Myers\git\world-of-kirbycraft\src\g_heretic;C:\Users\Myers\git\world-of-kirbycraft\src\g_hexen;C:\Users\Myers\git\world-of-kirbycraft\src\g_raven;C:\Users\Myers\git\world-of-kirbycraft\src\g_strife;C:\Users\Myers\git\world-of-kirbycraft\src\g_shared;C:\Users\Myers\git\world-of-kirbycraft\src\oplsynth;C:\Users\Myers\git\world-of-kirbycraft\src\sound;C:\Users\Myers\git\world-of-kirbycraft\src\textures;C:\Users\Myers\git\world-of-kirbycraft\src\thingdef;C:\Users\Myers\git\world-of-kirbycraft\src\timidity;C:\Users\Myers\git\world-of-kirbycraft\src\wildmidi;C:\Users\Myers\git\world-of-kirbycraft\src\xlat;C:\Users\Myers\git\world-of-kirbycraft\src\zscript;C:\Users\Myers\git\world-of-kirbycraft\src\..\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\..\dumb\include;C:\Users\Myers\git\world-of-kirbycraft\gdtoa;C:\Users\Myers\git\world-of-kirbycraft\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\oplsynth;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -105,10 +106,10 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\src\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -116,12 +117,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindOpenAL.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindSndFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindMPG123.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -129,12 +130,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindOpenAL.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindSndFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindMPG123.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -142,12 +143,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindOpenAL.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindSndFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindMPG123.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files (x86)\CMake\bin\cmake.exe" -HC:/Users/Myers/git/world-of-kirbycraft -BC:/Users/Myers/git/world-of-kirbycraft --check-stamp-file C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -155,20 +156,20 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/src/CMakeLists.txt;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckFunctionExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CheckLibraryExists.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPkgConfig.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindOpenAL.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindSndFile.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindMPG123.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\FindFluidSynth.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeParseArguments.cmake;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\vcxproj.user.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\launcher-templates\targetlauncher.cmd.in;C:\Users\Myers\git\world-of-kirbycraft\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Prpgrams\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Myers\git\world-of-kirbycraft\CMakeFiles\e864f5f6ebec8d3f00a7793b7ba95348\revision_check.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\9df01fca94b42de4f7604479dd6e4c43\revision_check.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-cd C:\Users\Myers\git\world-of-kirbycraft
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
-C:
+D:
 if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\Debug\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\Debug\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -176,16 +177,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/e864f5f6ebec8d3f00a7793b7ba95348/revision_check.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\Debug\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\Debug\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-cd C:\Users\Myers\git\world-of-kirbycraft
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
-C:
+D:
 if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\Release\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\Release\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -193,16 +194,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/e864f5f6ebec8d3f00a7793b7ba95348/revision_check.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\Release\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\Release\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-cd C:\Users\Myers\git\world-of-kirbycraft
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
-C:
+D:
 if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\MinSizeRel\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\MinSizeRel\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -210,16 +211,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/e864f5f6ebec8d3f00a7793b7ba95348/revision_check.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\MinSizeRel\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\MinSizeRel\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-cd C:\Users\Myers\git\world-of-kirbycraft
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
-C:
+D:
 if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\RelWithDebInfo\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\RelWithDebInfo\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -227,20 +228,22 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/Myers/git/world-of-kirbycraft/CMakeFiles/e864f5f6ebec8d3f00a7793b7ba95348/revision_check.rule;C:\Users\Myers\git\world-of-kirbycraft\tools\updaterevision\RelWithDebInfo\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\RelWithDebInfo\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\Myers\git\world-of-kirbycraft\src\CMakeFiles\revision_check" />
+    <None Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:/Users/Myers/git/world-of-kirbycraft/ZERO_CHECK.vcxproj">
-      <Project>C8A49BD1-0AB0-39DC-9063-51DFEA245659</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
+      <Name>ZERO_CHECK</Name>
     </ProjectReference>
-    <ProjectReference Include="C:/Users/Myers/git/world-of-kirbycraft/tools/updaterevision/updaterevision.vcxproj">
-      <Project>920D479E-E823-3878-B2E0-92BC395E45F4</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\updaterevision\updaterevision.vcxproj">
+      <Project>F39B708B-7718-3977-AC81-1AF7FD472B02</Project>
+      <Name>updaterevision</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
