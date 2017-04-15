@@ -75,15 +75,6 @@ EXTERN_CVAR (Bool, am_showtotaltime)
 EXTERN_CVAR (Bool, noisedebug)
 EXTERN_CVAR (Int, con_scaletext)
 
-CVAR(Bool, wokpos, false, 0);
-EXTERN_CVAR(Bool, noisedebug)
-
-CUSTOM_CVAR(Bool, xane_debug, false, CVAR_ARCHIVE | CVAR_DEMOSAVE)
-{
-	wokpos = xane_debug;
-	noisedebug = xane_debug;
-}
-
 DBaseStatusBar *StatusBar;
 
 extern int setblocks;
@@ -103,8 +94,6 @@ CVAR (Flag, pf_hexenweaps,	paletteflash, PF_HEXENWEAPONS)
 CVAR (Flag, pf_poison,		paletteflash, PF_POISON)
 CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
-CVAR (Bool, msg_showminor, false, CVAR_ARCHIVE)	//[XANE]Write very minor/useless messages like "out of sync" to the HUD?
-CVAR (Bool, hud_debugstyle, true, CVAR_ARCHIVE)	//[XANE]Make WOKPOS text "transparent" or solid?
 
 // Stretch status bar to full screen width?
 CUSTOM_CVAR (Bool, st_scale, true, CVAR_ARCHIVE)
@@ -116,16 +105,18 @@ CUSTOM_CVAR (Bool, st_scale, true, CVAR_ARCHIVE)
 	}
 }
 
-CVAR (Int, crosshair, -2, CVAR_ARCHIVE)
+CVAR (Int, crosshair, 0, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
-CVAR (Color, crosshaircolor, 0x707090, CVAR_ARCHIVE);
+CVAR (Color, crosshaircolor, 0xff0000, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
 CVAR (Bool, crosshairscale, false, CVAR_ARCHIVE);
-CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);		//Grow crosshair briely when picking up items (coins)?
+CVAR (Bool, crosshairgrow, false, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
 }
+
+CVAR (Bool, idmypos, false, 0);
 
 //---------------------------------------------------------------------------
 //
@@ -1260,12 +1251,11 @@ void DBaseStatusBar::Draw (EHudState state)
 		RefreshBackground ();
 	}
 
-	if (wokpos)	//WOKPOS: Draw coordinates; Other similar code is for old automap coordinate code.
+	if (idmypos)
 	{ // Draw current coordinates
 		int height = SmallFont->GetHeight();
-		char labels[4] = { 'X', 'Y', 'F', 'C' };
+		char labels[3] = { 'X', 'Y', 'Z' };
 		fixed_t *value;
-
 		int i;
 
 		int vwidth;
@@ -1297,47 +1287,13 @@ void DBaseStatusBar::Draw (EHudState state)
 		}
 
 		fixedvec3 pos = CPlayer->mo->Pos();
-		if((hud_debugstyle == false) || (hud_debugstyle && ((level.time % TICRATE) % 2 == 0)))
+		for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
 		{
-			for (i = 2, value = &pos.z; i >= 0; y -= height, --value, --i)
-			{
-				if (i < 2)
-				{
-					mysnprintf(line, countof(line), "%c: %d", labels[i], *value >> FRACBITS);
-					screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
-						DTA_KeepRatio, true,
-						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-						TAG_DONE);
-				}
-				else
-				{
-					mysnprintf(line, countof(line), "%c: %d", labels[i], (*value >> FRACBITS) - (CPlayer->mo->floorz >> FRACBITS));
-					screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
-						DTA_KeepRatio, true,
-						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-						TAG_DONE);
-
-					y -= height;
-
-					mysnprintf(line, countof(line), "%c: %d", 'C', (CPlayer->mo->ceilingz >> FRACBITS) - (*value >> FRACBITS));
-					screen->DrawText(SmallFont, CR_CYAN, xpos, y - 64, line,
-						DTA_KeepRatio, true,
-						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-						TAG_DONE);
-				}
-
-				if (xane_debug && i <= 0)
-				{
-					y -= height;
-					mysnprintf(line, countof(line), GStrings("TXT_WOKPOS_DBGHEAD"));	//If Debug Mode is enabled, draw the "debug" header.
-					screen->DrawText(SmallFont, CR_YELLOW, xpos, y - 64, line,
-						DTA_KeepRatio, true,
-						DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
-						TAG_DONE);
-				}
-			
-			}
-
+			mysnprintf (line, countof(line), "%c: %d", labels[i], *value >> FRACBITS);
+			screen->DrawText (SmallFont, CR_GREEN, xpos, y, line, 
+				DTA_KeepRatio, true,
+				DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, 				
+				TAG_DONE);
 			V_SetBorderNeedRefresh();
 		}
 	}
@@ -1450,6 +1406,7 @@ void DBaseStatusBar::Draw (EHudState state)
 	}
 }
 
+
 void DBaseStatusBar::DrawLog ()
 {
 	int hudwidth, hudheight;
@@ -1543,9 +1500,9 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 {
 	if (demoplayback && demover != DEMOGAMEVERSION)
 	{
-		screen->DrawText(SmallFont, CR_TAN, 0, ST_Y - 40 * CleanYfac,
-			"THE DEMO YOU'RE WATCHING WAS MADE WITH A DIFFERENT\n"
-			"VERSION OF " GAMESIG "; IF THE PLAYER DOES ILLOGICAL THINGS,\nYOUR " GAMESIG "MAY NEED AN UPDATE.",
+		screen->DrawText (SmallFont, CR_TAN, 0, ST_Y - 40 * CleanYfac,
+			"Demo was recorded with a different version\n"
+			"of " GAMENAME ". Expect it to go out of sync.",
 			DTA_CleanNoMove, true, TAG_DONE);
 	}
 
@@ -1631,10 +1588,10 @@ void DBaseStatusBar::DrawConsistancy () const
 	{
 		if (playeringame[i] && players[i].inconsistant)
 		{
-			if (buff_p == NULL && msg_showminor)
+			if (buff_p == NULL)
 			{
-				strcpy(conbuff, "YOU ARE OUT OF SYNC WITH PLAYER x;\nIF YOU DON'T SEE OTHER PLAYERS, RESTART " GAMENAME ".");
-				buff_p = conbuff + 32;
+				strcpy (conbuff, "Out of sync with:");
+				buff_p = conbuff + 17;
 			}
 			*buff_p++ = ' ';
 			*buff_p++ = '1' + i;
@@ -1676,8 +1633,8 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy(conbuff, "CURRENTLY WAITING FOR PLAYER x;\nTHIS COULD MEAN THEIR COMPUTER DISCONNECTED FROM THE INTERNET OR THEY ARE MOVING THE GAME WINDOW AROUND.");
-				buff_p = conbuff + 29;
+				strcpy (conbuff, "Waiting for:");
+				buff_p = conbuff + 12;
 			}
 			*buff_p++ = ' ';
 			*buff_p++ = '1' + i;
@@ -1879,7 +1836,7 @@ CCMD (showpop)
 {
 	if (argv.argc() != 2)
 	{
-		Printf ("To show a popup defined in SBARINFO, type \"showpop <popnumber>\".\n\nMary's Magical Adventure doesn't use SBARINFO popups so this only applies to mods.\n");
+		Printf ("Usage: showpop <popnumber>\n");
 	}
 	else if (StatusBar != NULL)
 	{

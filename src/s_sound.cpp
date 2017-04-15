@@ -127,13 +127,12 @@ FSoundChan *Channels;
 FSoundChan *FreeChannels;
 
 FRolloffInfo S_Rolloff;
-BYTE *S_SoundCurve;	
+BYTE *S_SoundCurve;
 int S_SoundCurveSize;
 
 FBoolCVar noisedebug ("noise", false, 0);	// [RH] Print sound debugging info?
 CVAR (Int, snd_channels, 32, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)	// number of channels available
 CVAR (Bool, snd_flipstereo, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-EXTERN_CVAR (Bool, hud_debugstyle)
 
 // CODE --------------------------------------------------------------------
 
@@ -151,127 +150,122 @@ void S_NoiseDebug (void)
 	FVector3 origin;
 	int y, color;
 
-	if ((hud_debugstyle == false) || (hud_debugstyle && (level.time % TICRATE) == 0 || (level.time % TICRATE) == 2 || (level.time % TICRATE) == 4 || (level.time % TICRATE) == 6 || (level.time % TICRATE) == 8 || (level.time % TICRATE) == 10 || (level.time % TICRATE) == 12 || (level.time % TICRATE) == 14 || (level.time % TICRATE) == 16 || (level.time % TICRATE) == 18 || (level.time % TICRATE) == 20 || (level.time % TICRATE) == 22 || (level.time % TICRATE) == 24 || (level.time % TICRATE) == 26 || (level.time % TICRATE) == 28 || (level.time % TICRATE) == 30 || (level.time % TICRATE) == 32 || (level.time % TICRATE) == 34))
+	y = 32 * CleanYfac;
+	screen->DrawText (SmallFont, CR_YELLOW, 0, y, "*** SOUND DEBUG INFO ***", TAG_DONE);
+	y += 8;
+
+	screen->DrawText (SmallFont, CR_GOLD, 0, y, "name", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 70, y, "x", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 120, y, "y", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 170, y, "z", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 220, y, "vol", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 260, y, "dist", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 300, y, "chan", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 340, y, "pri", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 380, y, "flags", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 460, y, "aud", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 520, y, "pos", TAG_DONE);
+	y += 8;
+
+	if (Channels == NULL)
 	{
-		y = 28 * CleanYfac;
-		screen->DrawText(SmallFont, CR_YELLOW, 0, y, GStrings("TXT_NOISEHEADER"), TAG_DONE);
-		y += 24;
+		return;
+	}
 
-		screen->DrawText(SmallFont, CR_CYAN, 0, y, "NAME", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 82, y, "X", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 132, y, "Y", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 192, y, "Z", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 242, y, "VOL", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 282, y, "DIST", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 322, y, "CH", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 362, y, "PRI", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 422, y, "FLAGS", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 542, y, "AUD", TAG_DONE);
-		screen->DrawText(SmallFont, CR_CYAN, 582, y, "POS", TAG_DONE);
-		y += 16;
 
-		if (Channels == NULL)
+	listener.X = FIXED2FLOAT(players[consoleplayer].camera->SoundX());
+	listener.Y = FIXED2FLOAT(players[consoleplayer].camera->SoundZ());
+	listener.Z = FIXED2FLOAT(players[consoleplayer].camera->SoundY());
+
+	// Display the oldest channel first.
+	for (chan = Channels; chan->NextChan != NULL; chan = chan->NextChan)
+	{ }
+	while (y < SCREENHEIGHT - 16)
+	{
+		char temp[32];
+
+		CalcPosVel(chan, &origin, NULL);
+		color = (chan->ChanFlags & CHAN_LOOP) ? CR_BROWN : CR_GREY;
+
+		// Name
+		Wads.GetLumpName (temp, S_sfx[chan->SoundID].lumpnum);
+		temp[8] = 0;
+		screen->DrawText (SmallFont, color, 0, y, temp, TAG_DONE);
+
+		if (!(chan->ChanFlags & CHAN_IS3D))
 		{
-			return;
+			screen->DrawText(SmallFont, color, 70, y, "---", TAG_DONE);		// X
+			screen->DrawText(SmallFont, color, 120, y, "---", TAG_DONE);	// Y
+			screen->DrawText(SmallFont, color, 170, y, "---", TAG_DONE);	// Z
+			screen->DrawText(SmallFont, color, 260, y, "---", TAG_DONE);	// Distance
 		}
-
-
-		listener.X = FIXED2FLOAT(players[consoleplayer].camera->SoundX());
-		listener.Y = FIXED2FLOAT(players[consoleplayer].camera->SoundZ());
-		listener.Z = FIXED2FLOAT(players[consoleplayer].camera->SoundY());
-
-		// Display the oldest channel first.
-		for (chan = Channels; chan->NextChan != NULL; chan = chan->NextChan)
+		else
 		{
-		}
-		while (y < SCREENHEIGHT - 16)
-		{
-			char temp[32];
+			// X coordinate
+			mysnprintf(temp, countof(temp), "%.0f", origin.X);
+			screen->DrawText(SmallFont, color, 70, y, temp, TAG_DONE);
 
-			CalcPosVel(chan, &origin, NULL);
-			color = (chan->ChanFlags & CHAN_LOOP) ? CR_YELLOW : CR_LIGHTBLUE;
+			// Y coordinate
+			mysnprintf(temp, countof(temp), "%.0f", origin.Z);
+			screen->DrawText(SmallFont, color, 120, y, temp, TAG_DONE);
 
-			// Name
-			Wads.GetLumpName(temp, S_sfx[chan->SoundID].lumpnum);
-			temp[8] = 0;
-			screen->DrawText(SmallFont, color, 0, y, temp, TAG_DONE);
+			// Z coordinate
+			mysnprintf(temp, countof(temp), "%.0f", origin.Y);
+			screen->DrawText(SmallFont, color, 170, y, temp, TAG_DONE);
 
-			if (!(chan->ChanFlags & CHAN_IS3D))
+			// Distance
+			if (chan->DistanceScale > 0)
 			{
-				screen->DrawText(SmallFont, color, 92, y, "---", TAG_DONE);		// X
-				screen->DrawText(SmallFont, color, 142, y, "---", TAG_DONE);	// Y
-				screen->DrawText(SmallFont, color, 192, y, "---", TAG_DONE);	// Z
-				screen->DrawText(SmallFont, color, 282, y, "---", TAG_DONE);	// Distance
+				mysnprintf(temp, countof(temp), "%.0f", (origin - listener).Length());
+				screen->DrawText(SmallFont, color, 260, y, temp, TAG_DONE);
 			}
 			else
 			{
-				// X coordinate
-				mysnprintf(temp, countof(temp), "%.0f", origin.X);
-				screen->DrawText(SmallFont, color, 92, y, temp, TAG_DONE);
-
-				// Y coordinate
-				mysnprintf(temp, countof(temp), "%.0f", origin.Z);
-				screen->DrawText(SmallFont, color, 142, y, temp, TAG_DONE);
-
-				// Z coordinate
-				mysnprintf(temp, countof(temp), "%.0f", origin.Y);
-				screen->DrawText(SmallFont, color, 192, y, temp, TAG_DONE);
-
-				// Distance
-				if (chan->DistanceScale > 0)
-				{
-					mysnprintf(temp, countof(temp), "%.0f", (origin - listener).Length());
-					screen->DrawText(SmallFont, color, 282, y, temp, TAG_DONE);
-				}
-				else
-				{
-					screen->DrawText(SmallFont, color, 282, y, "---", TAG_DONE);
-				}
+				screen->DrawText(SmallFont, color, 260, y, "---", TAG_DONE);
 			}
-
-			// Volume
-			mysnprintf(temp, countof(temp), "%.2g", chan->Volume);
-			screen->DrawText(SmallFont, color, 242, y, temp, TAG_DONE);
-
-			// Channel
-			mysnprintf(temp, countof(temp), "%d", chan->EntChannel);
-			screen->DrawText(SmallFont, color, 322, y, temp, TAG_DONE);
-
-			// Priority
-			mysnprintf(temp, countof(temp), "%d", chan->Priority);
-			screen->DrawText(SmallFont, color, 362, y, temp, TAG_DONE);
-
-			// Flags
-			mysnprintf(temp, countof(temp), "%s3%sZ%sU%sM%sN%sA%sL%sE%sV",
-				(chan->ChanFlags & CHAN_IS3D) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_LISTENERZ) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_UI) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_MAYBE_LOCAL) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_NOPAUSE) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_AREA) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_LOOP) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_EVICTED) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE,
-				(chan->ChanFlags & CHAN_VIRTUAL) ? TEXTCOLOR_GREEN : TEXTCOLOR_OLIVE);
-			screen->DrawText(SmallFont, color, 422, y, temp, TAG_DONE);
-
-			// Audibility
-			mysnprintf(temp, countof(temp), "%.2f", GSnd->GetAudibility(chan));
-			screen->DrawText(SmallFont, color, 542, y, temp, TAG_DONE);
-
-			// Position
-			mysnprintf(temp, countof(temp), "%u", GSnd->GetPosition(chan));
-			screen->DrawText(SmallFont, color, 582, y, temp, TAG_DONE);
-
-
-			y += 16;
-			if (chan->PrevChan == &Channels)
-			{
-				break;
-			}
-			chan = (FSoundChan *)((size_t)chan->PrevChan - myoffsetof(FSoundChan, NextChan));
 		}
-	}
 
+		// Volume
+		mysnprintf(temp, countof(temp), "%.2g", chan->Volume);
+		screen->DrawText(SmallFont, color, 220, y, temp, TAG_DONE);
+
+		// Channel
+		mysnprintf(temp, countof(temp), "%d", chan->EntChannel);
+		screen->DrawText(SmallFont, color, 300, y, temp, TAG_DONE);
+
+		// Priority
+		mysnprintf(temp, countof(temp), "%d", chan->Priority);
+		screen->DrawText(SmallFont, color, 340, y, temp, TAG_DONE);
+
+		// Flags
+		mysnprintf(temp, countof(temp), "%s3%sZ%sU%sM%sN%sA%sL%sE%sV",
+			(chan->ChanFlags & CHAN_IS3D)			? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_LISTENERZ)		? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_UI)				? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_MAYBE_LOCAL)	? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_NOPAUSE)		? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_AREA)			? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_LOOP)			? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_EVICTED)		? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHAN_VIRTUAL)		? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK);
+		screen->DrawText(SmallFont, color, 380, y, temp, TAG_DONE);
+
+		// Audibility
+		mysnprintf(temp, countof(temp), "%.4f", GSnd->GetAudibility(chan));
+		screen->DrawText(SmallFont, color, 460, y, temp, TAG_DONE);
+
+		// Position
+		mysnprintf(temp, countof(temp), "%u", GSnd->GetPosition(chan));
+		screen->DrawText(SmallFont, color, 520, y, temp, TAG_DONE);
+
+
+		y += 8;
+		if (chan->PrevChan == &Channels)
+		{
+			break;
+		}
+		chan = (FSoundChan *)((size_t)chan->PrevChan - myoffsetof(FSoundChan, NextChan));
+	}
 	V_SetBorderNeedRefresh();
 }
 
@@ -304,7 +298,6 @@ void S_Init ()
 	curvelump = Wads.CheckNumForName ("SNDCURVE");
 	if (curvelump >= 0)
 	{
-		Printf("YOUR PK3 CONTAINS A SNDCURVE FILE.\nMary's Magical Adventure IS DOOM-BASED AND DOESN'T USE RAVEN'S SNDCURVE FILE.");
 		S_SoundCurveSize = Wads.LumpLength (curvelump);
 		S_SoundCurve = new BYTE[S_SoundCurveSize];
 		Wads.ReadLump(curvelump, S_SoundCurve);
@@ -743,9 +736,9 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 		// Only actors maintain velocity information.
 		if (type == SOURCE_Actor && actor != NULL)
 		{
-			vel->X = FIXED2FLOAT(actor->vel.x) * TICRATE;
-			vel->Y = FIXED2FLOAT(actor->vel.z) * TICRATE;
-			vel->Z = FIXED2FLOAT(actor->vel.y) * TICRATE;
+			vel->X = FIXED2FLOAT(actor->velx) * TICRATE;
+			vel->Y = FIXED2FLOAT(actor->velz) * TICRATE;
+			vel->Z = FIXED2FLOAT(actor->vely) * TICRATE;
 		}
 		else
 		{
@@ -1959,9 +1952,9 @@ static void S_SetListener(SoundListener &listener, AActor *listenactor)
 	{
 		listener.angle = ANGLE2RADF(listenactor->angle);
 		/*
-		listener.velocity.X = listenactor->vel.x * (TICRATE/65536.f);
-		listener.velocity.Y = listenactor->vel.z * (TICRATE/65536.f);
-		listener.velocity.Z = listenactor->vel.y * (TICRATE/65536.f);
+		listener.velocity.X = listenactor->velx * (TICRATE/65536.f);
+		listener.velocity.Y = listenactor->velz * (TICRATE/65536.f);
+		listener.velocity.Z = listenactor->vely * (TICRATE/65536.f);
 		*/
 		listener.velocity.Zero();
 		listener.position.X = FIXED2FLOAT(listenactor->SoundX());

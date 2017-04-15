@@ -741,7 +741,7 @@ public:
 	// Do I hate the other actor?
 	bool IsHostile (AActor *other);
 
-	inline bool IsNoClip2() const;	//If NOCLIP2 is enabled...
+	inline bool IsNoClip2() const;
 	void CheckPortalTransition(bool islinked);
 	fixedvec3 GetPortalTransition(fixed_t byoffset, sector_t **pSec = NULL);
 
@@ -851,14 +851,14 @@ public:
 	fixed_t Distance2D(AActor *other, bool absolute = false)
 	{
 		fixedvec3 otherpos = absolute ? other->Pos() : other->PosRelative(this);
-		return xs_RoundToInt(DVector2(X() - otherpos.x, Y() - otherpos.y).Length());
+		return xs_RoundToInt(TVector2<double>(X() - otherpos.x, Y() - otherpos.y).Length());
 	}
 
 	// a full 3D version of the above
 	fixed_t Distance3D(AActor *other, bool absolute = false)
 	{
 		fixedvec3 otherpos = absolute ? other->Pos() : other->PosRelative(this);
-		return xs_RoundToInt(DVector3(X() - otherpos.x, Y() - otherpos.y, Z() - otherpos.z).Length());
+		return xs_RoundToInt(TVector3<double>(X() - otherpos.x, Y() - otherpos.y, Z() - otherpos.z).Length());
 	}
 
 	angle_t AngleTo(AActor *other, bool absolute = false)
@@ -1000,7 +1000,7 @@ public:
 	FTextureID		ceilingpic;			// contacted sec ceilingpic
 	fixed_t			radius, height;		// for movement checking
 	fixed_t			projectilepassheight;	// height for clipping projectile movement against this actor
-	fixedvec3		vel;
+	fixed_t			velx, vely, velz;	// velocity
 	SDWORD			tics;				// state tic counter
 	FState			*state;
 	VMFunction		*Damage;			// For missiles and monster railgun
@@ -1054,7 +1054,7 @@ public:
 
 	AActor			*inext, **iprev;// Links to other mobjs in same bucket
 	TObjPtr<AActor> goal;			// Monster's goal if not chasing anything
-	int				waterlevel;		// 0=none, 1=feet, 2=waist, 3=eyes, 4=running on water.
+	int				waterlevel;		// 0=none, 1=feet, 2=waist, 3=eyes
 	BYTE			boomwaterlevel;	// splash information for non-swimmable water sectors
 	BYTE			MinMissileChance;// [RH] If a random # is > than this, then missile attack.
 	SBYTE			LastLookPlayerNumber;// Player number last looked for (if TIDtoHate == 0)
@@ -1170,7 +1170,7 @@ public:
 	void LinkToWorld (bool spawningmapthing=false, sector_t *sector = NULL);
 	void UnlinkFromWorld ();
 	void AdjustFloorClip ();
-	void SetOrigin (fixed_t x, fixed_t y, fixed_t z, bool moving = false);
+	virtual void SetOrigin (fixed_t x, fixed_t y, fixed_t z, bool moving = false);
 	bool InStateSequence(FState * newstate, FState * basestate);
 	int GetTics(FState * newstate);
 	bool SetState (FState *newstate, bool nofunction=false);
@@ -1284,6 +1284,14 @@ public:
 		__pos.y = npos.y;
 		__pos.z = npos.z;
 	}
+
+	// begin of GZDoom specific additions
+	TArray<TObjPtr<AActor> >		dynamiclights;
+	void *				lightassociations;
+	bool				hasmodel;
+	// end of GZDoom specific additions
+
+	size_t PropagateMark();
 };
 
 class FActorIterator

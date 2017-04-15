@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{F39B708B-7718-3977-AC81-1AF7FD472B02}</ProjectGUID>
+    <ProjectGUID>{D5C9889E-17B2-39F5-AF07-C890D8BE3ABA}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -60,25 +60,25 @@
   <PropertyGroup Label="UserMacros" />
     <PropertyGroup>
       <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\Debug\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\tools\updaterevision\Debug\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">updaterevision.dir\Debug\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">updaterevision</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
       <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
       <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\Release\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\tools\updaterevision\Release\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">updaterevision.dir\Release\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">updaterevision</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
       <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
       <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\MinSizeRel\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\tools\updaterevision\MinSizeRel\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">updaterevision.dir\MinSizeRel\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">updaterevision</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
       <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
       <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\RelWithDebInfo\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\tools\updaterevision\RelWithDebInfo\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">updaterevision.dir\RelWithDebInfo\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">updaterevision</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
@@ -122,7 +122,7 @@
     <PostBuildEvent>
       <Message>Embedding trustinfo into updaterevision</Message>
       <Command>setlocal
-mt -inputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/Debug/updaterevision.exe -manifest D:/Git/MaryMagicalAdventure/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/Debug/updaterevision.exe -nologo
+mt -inputresource:D:/Git/Failure5/tools/updaterevision/Debug/updaterevision.exe -manifest D:/Git/Failure5/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/Failure5/tools/updaterevision/Debug/updaterevision.exe -nologo
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -137,8 +137,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/updaterevision/Debug/updaterevision.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/updaterevision/Debug/updaterevision.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/Git/Failure5/tools/updaterevision/Debug/updaterevision.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/updaterevision/Debug/updaterevision.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <Version></Version>
     </Link>
@@ -184,7 +184,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message>Embedding trustinfo into updaterevision</Message>
       <Command>setlocal
-mt -inputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/Release/updaterevision.exe -manifest D:/Git/MaryMagicalAdventure/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/Release/updaterevision.exe -nologo
+mt -inputresource:D:/Git/Failure5/tools/updaterevision/Release/updaterevision.exe -manifest D:/Git/Failure5/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/Failure5/tools/updaterevision/Release/updaterevision.exe -nologo
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -199,9 +199,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/updaterevision/Release/updaterevision.lib</ImportLibrary>
+      <ImportLibrary>D:/Git/Failure5/tools/updaterevision/Release/updaterevision.lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/updaterevision/Release/updaterevision.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/updaterevision/Release/updaterevision.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
       <Version></Version>
@@ -248,7 +248,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message>Embedding trustinfo into updaterevision</Message>
       <Command>setlocal
-mt -inputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/MinSizeRel/updaterevision.exe -manifest D:/Git/MaryMagicalAdventure/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/MinSizeRel/updaterevision.exe -nologo
+mt -inputresource:D:/Git/Failure5/tools/updaterevision/MinSizeRel/updaterevision.exe -manifest D:/Git/Failure5/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/Failure5/tools/updaterevision/MinSizeRel/updaterevision.exe -nologo
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -263,9 +263,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/updaterevision/MinSizeRel/updaterevision.lib</ImportLibrary>
+      <ImportLibrary>D:/Git/Failure5/tools/updaterevision/MinSizeRel/updaterevision.lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/updaterevision/MinSizeRel/updaterevision.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/updaterevision/MinSizeRel/updaterevision.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
       <Version></Version>
@@ -312,7 +312,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message>Embedding trustinfo into updaterevision</Message>
       <Command>setlocal
-mt -inputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/RelWithDebInfo/updaterevision.exe -manifest D:/Git/MaryMagicalAdventure/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/MaryMagicalAdventure/tools/updaterevision/RelWithDebInfo/updaterevision.exe -nologo
+mt -inputresource:D:/Git/Failure5/tools/updaterevision/RelWithDebInfo/updaterevision.exe -manifest D:/Git/Failure5/tools/updaterevision/trustinfo.txt -outputresource:D:/Git/Failure5/tools/updaterevision/RelWithDebInfo/updaterevision.exe -nologo
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -327,9 +327,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/updaterevision/RelWithDebInfo/updaterevision.lib</ImportLibrary>
+      <ImportLibrary>D:/Git/Failure5/tools/updaterevision/RelWithDebInfo/updaterevision.lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/updaterevision/RelWithDebInfo/updaterevision.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/updaterevision/RelWithDebInfo/updaterevision.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
       <Version></Version>
@@ -339,10 +339,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\Failure5\tools\updaterevision\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -350,12 +350,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/tools/updaterevision/CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -363,12 +363,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/tools/updaterevision/CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -376,12 +376,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/tools/updaterevision/CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -389,17 +389,17 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/tools/updaterevision/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/tools/updaterevision/CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;D:\Git\Failure5\tools\updaterevision\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\tools\updaterevision\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\tools\updaterevision\updaterevision.c"  />
+    <ClCompile Include="D:\Git\Failure5\tools\updaterevision\updaterevision.c"  />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
-      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
+    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
+      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
   </ItemGroup>

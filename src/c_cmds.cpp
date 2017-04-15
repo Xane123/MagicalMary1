@@ -87,7 +87,7 @@ bool CheckCheatmode (bool printmsg)
 {
 	if ((G_SkillProperty(SKILLP_DisableCheats) || netgame || deathmatch) && (!sv_cheats))
 	{
-		if (printmsg) Printf("CHEATS ARE CURRENTLY DISABLED; CHANGE SV_CHEATS TO TRUE TO ENABLE THEM.\n");
+		if (printmsg) Printf ("sv_cheats must be true to enable this command.\n");
 		return true;
 	}
 	else
@@ -106,26 +106,6 @@ CCMD (exit)
 	if (!insave) exit (0);
 }
 
-/*player_t *player = NULL;
-
-CCMD(teleport)
-{
-	if (CheckCheatmode())
-		return;
-
-	if (argv.argc() == 3)
-	{
-		player->mo->__pos.x = argv[0][1];
-		player->mo->__pos.y = argv[0][2];
-		player->mo->__pos.z = argv[0][3];
-
-	}
-	else
-	{
-		Printf("YOU ONLY TYPED %d OF THE 3 ARGUMENTS THAT ARE REQUIRED TO TELEPORT; THESE ARE THE X, Y, AND Z COORDIATES TO TELEPORT TO.", argv.argc());
-	}
-}*/
-
 /*
 ==================
 Cmd_God
@@ -135,8 +115,7 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-
-/*CCMD (GOD)
+CCMD (god)
 {
 	if (CheckCheatmode ())
 		return;
@@ -152,19 +131,18 @@ CCMD(god2)
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_GOD2);
-}*/
+}
 
-CCMD (arthas)
+CCMD (iddqd)
 {
 	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_ARTHASMODE);
+	Net_WriteByte (CHT_IDDQD);
 }
 
-/*
-CCMD (marymode)
+CCMD (buddha)
 {
 	if (CheckCheatmode())
 		return;
@@ -173,14 +151,14 @@ CCMD (marymode)
 	Net_WriteByte(CHT_BUDDHA);
 }
 
-CCMD(uthermode)
+CCMD(buddha2)
 {
 	if (CheckCheatmode())
 		return;
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_BUDDHA2);
-}*/
+}
 
 CCMD (notarget)
 {
@@ -193,14 +171,11 @@ CCMD (notarget)
 
 CCMD (fly)
 {
-
-	Printf("THIS IS A USELESS COMMAND COMPARED TO NOCLIP2 OR ARTHAS' FLIGHT; USE NOCLIP2 INSTEAD.\n");
-
-/*	if (CheckCheatmode ())
+	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_FLY);*/
+	Net_WriteByte (CHT_FLY);
 }
 
 /*
@@ -212,9 +187,6 @@ argv(0) noclip
 */
 CCMD (noclip)
 {
-
-	Printf("USE NOCLIP2 INSTEAD.");
-
 	if (CheckCheatmode ())
 		return;
 
@@ -370,7 +342,7 @@ CCMD (hxvisit)
 				return;
 			}
 		}
-		Printf ("This map, although it has a definition in MAPINFO, doesn't exist.\n");
+		Printf ("No such map found\n");
 	}
 }
 
@@ -378,13 +350,13 @@ CCMD (changemap)
 {
 	if (who == NULL || !usergame)
 	{
-		Printf("Try \"map\" instead; You aren't in a game now so changemap doesn't work.\n");
+		Printf ("Use the map command when not in a game.\n");
 		return;
 	}
 
 	if (!players[who->player - players].settings_controller && netgame)
 	{
-		Printf ("Only the host can perfom map changes.\n");
+		Printf ("Only setting controllers can change the map.\n");
 		return;
 	}
 
@@ -394,7 +366,7 @@ CCMD (changemap)
 		{
 			if (!P_CheckMapData(argv[1]))
 			{
-				Printf ("The map %s doesn't exist.\n", argv[1]);
+				Printf ("No map %s\n", argv[1]);
 			}
 			else
 			{
@@ -418,7 +390,7 @@ CCMD (changemap)
 	}
 	else
 	{
-		Printf ("Usage: changemap <map name>\n");
+		Printf ("Usage: changemap <map name> [position]\n");
 	}
 }
 

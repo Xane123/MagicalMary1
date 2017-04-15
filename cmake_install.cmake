@@ -1,8 +1,8 @@
-# Install script for directory: D:/Git/MaryMagicalAdventure
+# Install script for directory: D:/Git/Failure5
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ZDoom")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/GZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -29,16 +29,18 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("D:/Git/MaryMagicalAdventure/zlib/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/jpeg-6b/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/bzip2/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/game-music-emu/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/lzma/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/tools/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/dumb/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/gdtoa/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/wadsrc/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/src/cmake_install.cmake")
+  include("D:/Git/Failure5/zlib/cmake_install.cmake")
+  include("D:/Git/Failure5/jpeg-6b/cmake_install.cmake")
+  include("D:/Git/Failure5/bzip2/cmake_install.cmake")
+  include("D:/Git/Failure5/game-music-emu/cmake_install.cmake")
+  include("D:/Git/Failure5/lzma/cmake_install.cmake")
+  include("D:/Git/Failure5/tools/cmake_install.cmake")
+  include("D:/Git/Failure5/dumb/cmake_install.cmake")
+  include("D:/Git/Failure5/gdtoa/cmake_install.cmake")
+  include("D:/Git/Failure5/wadsrc/cmake_install.cmake")
+  include("D:/Git/Failure5/wadsrc_bm/cmake_install.cmake")
+  include("D:/Git/Failure5/wadsrc_lights/cmake_install.cmake")
+  include("D:/Git/Failure5/src/cmake_install.cmake")
 
 endif()
 
@@ -50,5 +52,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/Git/MaryMagicalAdventure/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/Git/Failure5/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

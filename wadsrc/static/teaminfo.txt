@@ -1,25 +1,49 @@
 ClearTeams
 
-Team "Human"
+Team "Blue"
 {
-	PlayerColor "40 8F FF"
-	TextColor "Cyan"
+	PlayerColor "00 00 FF"
+	TextColor "Blue"
 }
 
-Team "Undead"
+Team "Red"
 {
-	PlayerColor "DF 10 40"
-	TextColor "Dark Red"
+	PlayerColor "FF 00 00"
+	TextColor "Red"
 }
 
-Team "Orc"
+Team "Green"
 {
-	PlayerColor "80 DF 10"
-	TextColor "Olive"
+	PlayerColor "00 FF 00"
+	TextColor "Green"
 }
 
-Team "Night Elf"
+Team "Gold"
 {
-	PlayerColor "FF DF 50"
-	TextColor "Light Blue"
+	PlayerColor "FF FF 00"
+	TextColor "Gold"
+}
+
+Team "Black"
+{
+	PlayerColor "00 00 00"
+	TextColor "Black"
+}
+
+Team "White"
+{
+	PlayerColor "FF FF FF"
+	TextColor "White"
+}
+
+Team "Orange"
+{
+	PlayerColor "FF 80 00"
+	TextColor "Orange"
+}
+
+Team "Purple"
+{
+	PlayerColor "FF 00 FF"
+	TextColor "Purple"
 }

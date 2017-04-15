@@ -342,7 +342,7 @@ void FTraceInfo::Setup3DFloors()
 					{
 						CurSector->floorplane = *rover->top.plane;
 						CurSector->SetTexture(sector_t::floor, *rover->top.texture, false);
-						CurSector->SkyBoxes[sector_t::floor] = nullptr;
+						CurSector->SkyBoxes[sector_t::floor] == NULL;
 						bf = ff_top;
 					}
 				}
@@ -354,7 +354,7 @@ void FTraceInfo::Setup3DFloors()
 						CurSector->ceilingplane = *rover->bottom.plane;
 						CurSector->SetTexture(sector_t::ceiling, *rover->bottom.texture, false);
 						bc = ff_bottom;
-						CurSector->SkyBoxes[sector_t::ceiling] = nullptr;
+						CurSector->SkyBoxes[sector_t::ceiling] == NULL;
 					}
 				}
 				else
@@ -364,7 +364,7 @@ void FTraceInfo::Setup3DFloors()
 					{
 						CurSector->floorplane = *rover->bottom.plane;
 						CurSector->SetTexture(sector_t::floor, *rover->bottom.texture, false);
-						CurSector->SkyBoxes[sector_t::floor] = nullptr;
+						CurSector->SkyBoxes[sector_t::floor] == NULL;
 						bf = ff_bottom;
 					}
 
@@ -372,7 +372,7 @@ void FTraceInfo::Setup3DFloors()
 					{
 						CurSector->ceilingplane = *rover->top.plane;
 						CurSector->SetTexture(sector_t::ceiling, *rover->top.texture, false);
-						CurSector->SkyBoxes[sector_t::ceiling] = nullptr;
+						CurSector->SkyBoxes[sector_t::ceiling] == NULL;
 						bc = ff_top;
 					}
 					inshootthrough = false;

@@ -3697,7 +3697,7 @@ FxReturnStatement::FxReturnStatement(FxVMFunctionCall *call, const FScriptPositi
 {
 }
 
-FxReturnStatement::~FxReturnStatement()	//Someone fixed the memory leak here.
+FxReturnStatement::~FxReturnStatement()
 {
 	SAFE_DELETE(Call);
 }

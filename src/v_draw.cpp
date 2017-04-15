@@ -61,7 +61,6 @@
 #include "d_net.h"
 #include "colormatcher.h"
 #include "r_data/colormaps.h"
-#include "version.h"
 
 // [RH] Stretch values to make a 320x200 image best fit the screen
 // without using fractional steppings
@@ -76,7 +75,7 @@ int CleanXfac_1, CleanYfac_1, CleanWidth_1, CleanHeight_1;
 // FillSimplePoly uses this
 extern "C" short spanend[MAXHEIGHT];
 
-CVAR (Bool, hud_scale, true, CVAR_ARCHIVE);
+CVAR (Bool, hud_scale, false, CVAR_ARCHIVE);
 
 // For routines that take RGB colors, cache the previous lookup in case there
 // are several repetitions with the same color.
@@ -521,16 +520,13 @@ bool DCanvas::ParseDrawTextureTags (FTexture *img, double x, double y, DWORD tag
 			parms->virtHeight = va_arg(tags, double);
 			break;
 
-		case DTA_Fullscreen: //[XANE]The title screen has its size altered with this. Unknown about positioning.
+		case DTA_Fullscreen:
 			boolval = va_arg(tags, INTBOOL);
 			if (boolval)
 			{
-				//parms->x = parms->y = 0;
-				parms->x = -45;
-				parms->y = 0;
-				
-				parms->virtWidth = SCREENWIDTH/4.5;//img->GetScaledWidthDouble();
-				parms->virtHeight = SCREENHEIGHT/3.5;//img->GetScaledHeightDouble();
+				parms->x = parms->y = 0;
+				parms->virtWidth = img->GetScaledWidthDouble();
+				parms->virtHeight = img->GetScaledHeightDouble();
 			}
 			break;
 
@@ -821,7 +817,7 @@ void DCanvas::VirtualToRealCoordsInt(int &x, int &y, int &w, int &h,
 
 void DCanvas::FillBorder (FTexture *img)
 {
-	int myratio = 0;//CheckRatio (Width, Height); [XANE TEST]
+	int myratio = CheckRatio (Width, Height);
 
     // if 21:9 AR, fill borders akin to 16:9, since all fullscreen
     // images are being drawn to that scale.
@@ -1283,7 +1279,7 @@ void DCanvas::FillSimplePoly(FTexture *tex, FVector2 *points, int npoints,
 					ds_x1 = x1;
 					ds_x2 = x2 - 1;
 
-					DVector2 tex(x1 - originx, y - originy);
+					TVector2<double> tex(x1 - originx, y - originy);
 					if (dorotate)
 					{
 						double t = tex.X;
@@ -1479,7 +1475,7 @@ void V_DrawBorder (int x1, int y1, int x2, int y2)
 	}
 	else
 	{
-		screen->Clear (x1, y1, x2, y2, BASECOLOR, 0);
+		screen->Clear (x1, y1, x2, y2, 0, 0);
 	}
 }
 

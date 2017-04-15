@@ -451,6 +451,9 @@ void P_SerializeWorld (FArchive &arc)
 				<< desaturate;
 			sec->ColorMap = GetSpecialLights (color, fade, desaturate);
 		}
+		// begin of GZDoom additions
+		arc << sec->reflect[sector_t::ceiling] << sec->reflect[sector_t::floor];
+		// end of GZDoom additions
 	}
 
 	// do lines
@@ -481,6 +484,11 @@ void P_SerializeWorld (FArchive &arc)
 			arc << li->portalindex;
 		}
 		else li->portalindex = UINT_MAX;
+
+		if (SaveVersion >= 4531)
+		{
+			arc << li->skybox;
+		}
 
 		for (j = 0; j < 2; j++)
 		{

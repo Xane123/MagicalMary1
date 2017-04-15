@@ -1,0 +1,1191 @@
+The system is: Windows - 10.0.14393 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:05 PM.
+Project "D:\Git\Failure5\CMakeFiles\3.8.0\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdC.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdC.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /nologo /W0 /WX- /diagnostics:classic /Od /Oy- /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue CMakeCCompilerId.c
+  CMakeCCompilerId.c
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X86 /SAFESEH Debug\CMakeCCompilerId.obj
+  CompilerIdC.vcxproj -> D:\Git\Failure5\CMakeFiles\3.8.0\CompilerIdC\.\CompilerIdC.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_C_COMPILER=D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdC.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\3.8.0\CompilerIdC\CompilerIdC.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.65
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+The C compiler identification is MSVC, found in "D:/Git/Failure5/CMakeFiles/3.8.0/CompilerIdC/CompilerIdC.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler:  
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:06 PM.
+Project "D:\Git\Failure5\CMakeFiles\3.8.0\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdCXX.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /nologo /W0 /WX- /diagnostics:classic /Od /Oy- /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue CMakeCXXCompilerId.cpp
+  CMakeCXXCompilerId.cpp
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X86 /SAFESEH Debug\CMakeCXXCompilerId.obj
+  CompilerIdCXX.vcxproj -> D:\Git\Failure5\CMakeFiles\3.8.0\CompilerIdCXX\.\CompilerIdCXX.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_CXX_COMPILER=D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdCXX.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\3.8.0\CompilerIdCXX\CompilerIdCXX.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.63
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+
+The CXX compiler identification is MSVC, found in "D:/Git/Failure5/CMakeFiles/3.8.0/CompilerIdCXX/CompilerIdCXX.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_05a29.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:07 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_05a29.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_05a29.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_05a29.dir\Debug\cmTC_05a29.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_05a29.dir\Debug\cmTC_05a29.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_05a29.dir\Debug\\" /Fd"cmTC_05a29.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\testCCompiler.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_05a29.dir\Debug\\" /Fd"cmTC_05a29.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\testCCompiler.c
+  testCCompiler.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_05a29.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_05a29.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_05a29.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_05a29.dir\Debug\testCCompiler.obj
+  cmTC_05a29.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_05a29.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_05a29.dir\Debug\cmTC_05a29.tlog\unsuccessfulbuild".
+  Touching "cmTC_05a29.dir\Debug\cmTC_05a29.tlog\cmTC_05a29.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_05a29.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.05
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_3ed68.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:08 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_3ed68.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_3ed68.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_3ed68.dir\Debug\cmTC_3ed68.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_3ed68.dir\Debug\cmTC_3ed68.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3ed68.dir\Debug\\" /Fd"cmTC_3ed68.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCCompilerABI.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3ed68.dir\Debug\\" /Fd"cmTC_3ed68.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCCompilerABI.c"
+  CMakeCCompilerABI.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_3ed68.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_3ed68.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_3ed68.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_3ed68.dir\Debug\CMakeCCompilerABI.obj
+  cmTC_3ed68.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_3ed68.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_3ed68.dir\Debug\cmTC_3ed68.tlog\unsuccessfulbuild".
+  Touching "cmTC_3ed68.dir\Debug\cmTC_3ed68.tlog\cmTC_3ed68.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_3ed68.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_39364.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:09 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_39364.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_39364.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_39364.dir\Debug\cmTC_39364.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_39364.dir\Debug\cmTC_39364.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_39364.dir\Debug\\" /Fd"cmTC_39364.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_39364.dir\Debug\\" /Fd"cmTC_39364.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
+  testCXXCompiler.cxx
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_39364.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_39364.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_39364.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_39364.dir\Debug\testCXXCompiler.obj
+  cmTC_39364.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_39364.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_39364.dir\Debug\cmTC_39364.tlog\unsuccessfulbuild".
+  Touching "cmTC_39364.dir\Debug\cmTC_39364.tlog\cmTC_39364.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_39364.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.78
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_f17d4.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:10 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_f17d4.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_f17d4.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_f17d4.dir\Debug\cmTC_f17d4.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_f17d4.dir\Debug\cmTC_f17d4.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_f17d4.dir\Debug\\" /Fd"cmTC_f17d4.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCXXCompilerABI.cpp"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_f17d4.dir\Debug\\" /Fd"cmTC_f17d4.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CMakeCXXCompilerABI.cpp"
+  CMakeCXXCompilerABI.cpp
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_f17d4.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_f17d4.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_f17d4.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_f17d4.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTC_f17d4.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_f17d4.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_f17d4.dir\Debug\cmTC_f17d4.tlog\unsuccessfulbuild".
+  Touching "cmTC_f17d4.dir\Debug\cmTC_f17d4.tlog\cmTC_f17d4.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_f17d4.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.71
+
+
+
+
+Detecting CXX [] compiler features compiled with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_1ea83.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:11 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_1ea83.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_1ea83.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_1ea83.dir\Debug\cmTC_1ea83.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_1ea83.dir\Debug\cmTC_1ea83.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1ea83.dir\Debug\\" /Fd"cmTC_1ea83.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\feature_tests.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1ea83.dir\Debug\\" /Fd"cmTC_1ea83.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\feature_tests.cxx
+  feature_tests.cxx
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_1ea83.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_1ea83.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_1ea83.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_1ea83.dir\Debug\feature_tests.obj
+  cmTC_1ea83.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_1ea83.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_1ea83.dir\Debug\cmTC_1ea83.tlog\unsuccessfulbuild".
+  Touching "cmTC_1ea83.dir\Debug\cmTC_1ea83.tlog\cmTC_1ea83.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_1ea83.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.77
+
+
+    Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_3e2bb.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:12 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_3e2bb.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_3e2bb.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_3e2bb.dir\Debug\cmTC_3e2bb.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_3e2bb.dir\Debug\cmTC_3e2bb.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_3e2bb.dir\Debug\\" /Fd"cmTC_3e2bb.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_3e2bb.dir\Debug\\" /Fd"cmTC_3e2bb.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  CheckIncludeFile.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_3e2bb.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_3e2bb.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_3e2bb.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_3e2bb.dir\Debug\CheckIncludeFile.obj
+  cmTC_3e2bb.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_3e2bb.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_3e2bb.dir\Debug\cmTC_3e2bb.tlog\unsuccessfulbuild".
+  Touching "cmTC_3e2bb.dir\Debug\cmTC_3e2bb.tlog\cmTC_3e2bb.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_3e2bb.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.70
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_0ed60.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:13 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_0ed60.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_0ed60.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_0ed60.dir\Debug\cmTC_0ed60.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_0ed60.dir\Debug\cmTC_0ed60.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_0ed60.dir\Debug\\" /Fd"cmTC_0ed60.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_0ed60.dir\Debug\\" /Fd"cmTC_0ed60.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  CheckIncludeFile.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_0ed60.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_0ed60.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_0ed60.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_0ed60.dir\Debug\CheckIncludeFile.obj
+  cmTC_0ed60.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_0ed60.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_0ed60.dir\Debug\cmTC_0ed60.tlog\unsuccessfulbuild".
+  Touching "cmTC_0ed60.dir\Debug\cmTC_0ed60.tlog\cmTC_0ed60.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_0ed60.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.68
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_8073a.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:14 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_8073a.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_8073a.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_8073a.dir\Debug\cmTC_8073a.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_8073a.dir\Debug\cmTC_8073a.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_8073a.dir\Debug\\" /Fd"cmTC_8073a.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_8073a.dir\Debug\\" /Fd"cmTC_8073a.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  CheckIncludeFile.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_8073a.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_8073a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_8073a.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_8073a.dir\Debug\CheckIncludeFile.obj
+  cmTC_8073a.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_8073a.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_8073a.dir\Debug\cmTC_8073a.tlog\unsuccessfulbuild".
+  Touching "cmTC_8073a.dir\Debug\cmTC_8073a.tlog\cmTC_8073a.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_8073a.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.74
+
+
+Determining if the function strdup exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_b7d17.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:17 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_b7d17.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_b7d17.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_b7d17.dir\Debug\cmTC_b7d17.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_b7d17.dir\Debug\cmTC_b7d17.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strdup /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_b7d17.dir\Debug\\" /Fd"cmTC_b7d17.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strdup /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_b7d17.dir\Debug\\" /Fd"cmTC_b7d17.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_b7d17.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_b7d17.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_b7d17.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_b7d17.dir\Debug\CheckFunctionExists.obj
+  cmTC_b7d17.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_b7d17.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_b7d17.dir\Debug\cmTC_b7d17.tlog\unsuccessfulbuild".
+  Touching "cmTC_b7d17.dir\Debug\cmTC_b7d17.tlog\cmTC_b7d17.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_b7d17.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.65
+
+
+Determining size of 0i8 passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_c8100.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:18 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c8100.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_c8100.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_c8100.dir\Debug\cmTC_c8100.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_c8100.dir\Debug\cmTC_c8100.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c8100.dir\Debug\\" /Fd"cmTC_c8100.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_0I8.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c8100.dir\Debug\\" /Fd"cmTC_c8100.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_0I8.c
+  SIZEOF_0I8.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_c8100.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_c8100.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_c8100.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_c8100.dir\Debug\SIZEOF_0I8.obj
+  cmTC_c8100.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_c8100.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_c8100.dir\Debug\cmTC_c8100.tlog\unsuccessfulbuild".
+  Touching "cmTC_c8100.dir\Debug\cmTC_c8100.tlog\cmTC_c8100.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c8100.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.76
+
+
+Determining size of 0l passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_06896.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:19 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_06896.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_06896.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_06896.dir\Debug\cmTC_06896.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_06896.dir\Debug\cmTC_06896.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_06896.dir\Debug\\" /Fd"cmTC_06896.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_0L.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_06896.dir\Debug\\" /Fd"cmTC_06896.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_0L.c
+  SIZEOF_0L.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_06896.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_06896.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_06896.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_06896.dir\Debug\SIZEOF_0L.obj
+  cmTC_06896.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_06896.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_06896.dir\Debug\cmTC_06896.tlog\unsuccessfulbuild".
+  Touching "cmTC_06896.dir\Debug\cmTC_06896.tlog\cmTC_06896.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_06896.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.68
+
+
+Determining size of 0ll passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_bd8da.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:20 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_bd8da.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_bd8da.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_bd8da.dir\Debug\cmTC_bd8da.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_bd8da.dir\Debug\cmTC_bd8da.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_bd8da.dir\Debug\\" /Fd"cmTC_bd8da.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_0LL.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_bd8da.dir\Debug\\" /Fd"cmTC_bd8da.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_0LL.c
+  SIZEOF_0LL.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_bd8da.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_bd8da.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_bd8da.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_bd8da.dir\Debug\SIZEOF_0LL.obj
+  cmTC_bd8da.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_bd8da.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_bd8da.dir\Debug\cmTC_bd8da.tlog\unsuccessfulbuild".
+  Touching "cmTC_bd8da.dir\Debug\cmTC_bd8da.tlog\cmTC_bd8da.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_bd8da.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.71
+
+
+Determining size of char passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_bdb4f.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:21 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_bdb4f.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_bdb4f.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_bdb4f.dir\Debug\cmTC_bdb4f.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_bdb4f.dir\Debug\cmTC_bdb4f.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_bdb4f.dir\Debug\\" /Fd"cmTC_bdb4f.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_CHAR.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_bdb4f.dir\Debug\\" /Fd"cmTC_bdb4f.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_CHAR.c
+  SIZEOF_CHAR.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_bdb4f.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_bdb4f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_bdb4f.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_bdb4f.dir\Debug\SIZEOF_CHAR.obj
+  cmTC_bdb4f.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_bdb4f.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_bdb4f.dir\Debug\cmTC_bdb4f.tlog\unsuccessfulbuild".
+  Touching "cmTC_bdb4f.dir\Debug\cmTC_bdb4f.tlog\cmTC_bdb4f.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_bdb4f.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.66
+
+
+Determining size of short passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_4998a.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:22 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_4998a.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_4998a.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_4998a.dir\Debug\cmTC_4998a.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_4998a.dir\Debug\cmTC_4998a.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_4998a.dir\Debug\\" /Fd"cmTC_4998a.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_SHORT.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_4998a.dir\Debug\\" /Fd"cmTC_4998a.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_SHORT.c
+  SIZEOF_SHORT.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_4998a.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_4998a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_4998a.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_4998a.dir\Debug\SIZEOF_SHORT.obj
+  cmTC_4998a.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_4998a.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_4998a.dir\Debug\cmTC_4998a.tlog\unsuccessfulbuild".
+  Touching "cmTC_4998a.dir\Debug\cmTC_4998a.tlog\cmTC_4998a.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_4998a.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.66
+
+
+Determining size of int passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_6db1a.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:23 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_6db1a.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_6db1a.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_6db1a.dir\Debug\cmTC_6db1a.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_6db1a.dir\Debug\cmTC_6db1a.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_6db1a.dir\Debug\\" /Fd"cmTC_6db1a.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_INT.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_6db1a.dir\Debug\\" /Fd"cmTC_6db1a.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_INT.c
+  SIZEOF_INT.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_6db1a.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_6db1a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_6db1a.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_6db1a.dir\Debug\SIZEOF_INT.obj
+  cmTC_6db1a.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_6db1a.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_6db1a.dir\Debug\cmTC_6db1a.tlog\unsuccessfulbuild".
+  Touching "cmTC_6db1a.dir\Debug\cmTC_6db1a.tlog\cmTC_6db1a.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_6db1a.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.72
+
+
+Determining size of long passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_2e394.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:23 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_2e394.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_2e394.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_2e394.dir\Debug\cmTC_2e394.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_2e394.dir\Debug\cmTC_2e394.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_2e394.dir\Debug\\" /Fd"cmTC_2e394.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_LONG.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_2e394.dir\Debug\\" /Fd"cmTC_2e394.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_LONG.c
+  SIZEOF_LONG.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_2e394.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_2e394.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_2e394.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_2e394.dir\Debug\SIZEOF_LONG.obj
+  cmTC_2e394.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_2e394.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_2e394.dir\Debug\cmTC_2e394.tlog\unsuccessfulbuild".
+  Touching "cmTC_2e394.dir\Debug\cmTC_2e394.tlog\cmTC_2e394.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_2e394.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80
+
+
+Determining size of long long passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_268c9.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:24 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_268c9.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_268c9.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_268c9.dir\Debug\cmTC_268c9.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_268c9.dir\Debug\cmTC_268c9.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_268c9.dir\Debug\\" /Fd"cmTC_268c9.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_LONG_LONG.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_268c9.dir\Debug\\" /Fd"cmTC_268c9.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_LONG_LONG.c
+  SIZEOF_LONG_LONG.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_268c9.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_268c9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_268c9.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_268c9.dir\Debug\SIZEOF_LONG_LONG.obj
+  cmTC_268c9.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_268c9.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_268c9.dir\Debug\cmTC_268c9.tlog\unsuccessfulbuild".
+  Touching "cmTC_268c9.dir\Debug\cmTC_268c9.tlog\cmTC_268c9.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_268c9.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.76
+
+
+Determining size of void * passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_9adaf.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:25 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_9adaf.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_9adaf.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_9adaf.dir\Debug\cmTC_9adaf.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_9adaf.dir\Debug\cmTC_9adaf.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_9adaf.dir\Debug\\" /Fd"cmTC_9adaf.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_VOID_P.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_9adaf.dir\Debug\\" /Fd"cmTC_9adaf.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF_VOID_P.c
+  SIZEOF_VOID_P.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_9adaf.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_9adaf.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_9adaf.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_9adaf.dir\Debug\SIZEOF_VOID_P.obj
+  cmTC_9adaf.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_9adaf.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_9adaf.dir\Debug\cmTC_9adaf.tlog\unsuccessfulbuild".
+  Touching "cmTC_9adaf.dir\Debug\cmTC_9adaf.tlog\cmTC_9adaf.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_9adaf.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.74
+
+
+Determining size of __int64 passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_2b55c.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:26 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_2b55c.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_2b55c.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_2b55c.dir\Debug\cmTC_2b55c.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_2b55c.dir\Debug\cmTC_2b55c.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_2b55c.dir\Debug\\" /Fd"cmTC_2b55c.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF___INT_64.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_2b55c.dir\Debug\\" /Fd"cmTC_2b55c.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CheckTypeSize\SIZEOF___INT_64.c
+  SIZEOF___INT_64.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_2b55c.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_2b55c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_2b55c.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_2b55c.dir\Debug\SIZEOF___INT_64.obj
+  cmTC_2b55c.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_2b55c.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_2b55c.dir\Debug\cmTC_2b55c.tlog\unsuccessfulbuild".
+  Touching "cmTC_2b55c.dir\Debug\cmTC_2b55c.tlog\cmTC_2b55c.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_2b55c.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.73
+
+
+Determining if the function itoa exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_1025d.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:27 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_1025d.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_1025d.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_1025d.dir\Debug\cmTC_1025d.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_1025d.dir\Debug\cmTC_1025d.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=itoa /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_1025d.dir\Debug\\" /Fd"cmTC_1025d.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=itoa /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_1025d.dir\Debug\\" /Fd"cmTC_1025d.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_1025d.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_1025d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_1025d.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_1025d.dir\Debug\CheckFunctionExists.obj
+  cmTC_1025d.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_1025d.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_1025d.dir\Debug\cmTC_1025d.tlog\unsuccessfulbuild".
+  Touching "cmTC_1025d.dir\Debug\cmTC_1025d.tlog\cmTC_1025d.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_1025d.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.70
+
+
+Performing C++ SOURCE FILE Test CAN_DO_ARCHSSE2 succeeded with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_e72e1.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:30 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_e72e1.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_e72e1.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_e72e1.dir\Debug\cmTC_e72e1.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_e72e1.dir\Debug\cmTC_e72e1.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CAN_DO_ARCHSSE2 /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:SSE2 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_e72e1.dir\Debug\\" /Fd"cmTC_e72e1.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\src.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CAN_DO_ARCHSSE2 /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:SSE2 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_e72e1.dir\Debug\\" /Fd"cmTC_e72e1.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\src.cxx
+  src.cxx
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_e72e1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_e72e1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_e72e1.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_e72e1.dir\Debug\src.obj
+  cmTC_e72e1.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_e72e1.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_e72e1.dir\Debug\cmTC_e72e1.tlog\unsuccessfulbuild".
+  Touching "cmTC_e72e1.dir\Debug\cmTC_e72e1.tlog\cmTC_e72e1.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_e72e1.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.78
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test HAVE_MMX succeeded with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_32c90.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:31 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_32c90.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_32c90.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_32c90.dir\Debug\cmTC_32c90.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_32c90.dir\Debug\cmTC_32c90.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAVE_MMX /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_32c90.dir\Debug\\" /Fd"cmTC_32c90.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\src.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAVE_MMX /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_32c90.dir\Debug\\" /Fd"cmTC_32c90.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\src.cxx
+  src.cxx
+  
+d:\git\failure5\cmakefiles\cmaketmp\src.cxx(2): warning C4799: function 'main' has no EMMS instruction [D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_32c90.vcxproj]
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_32c90.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_32c90.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_32c90.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_32c90.dir\Debug\src.obj
+  cmTC_32c90.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_32c90.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_32c90.dir\Debug\cmTC_32c90.tlog\unsuccessfulbuild".
+  Touching "cmTC_32c90.dir\Debug\cmTC_32c90.tlog\cmTC_32c90.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_32c90.vcxproj" (default targets).
+
+Build succeeded.
+
+"D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_32c90.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  d:\git\failure5\cmakefiles\cmaketmp\src.cxx(2): warning C4799: function 'main' has no EMMS instruction [D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_32c90.vcxproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.73
+
+Source file was:
+#include <mmintrin.h>
+		int main(void) { __m64 v = _m_from_int(0); }
+Determining if the function filelength exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_0b361.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:32 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_0b361.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_0b361.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_0b361.dir\Debug\cmTC_0b361.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_0b361.dir\Debug\cmTC_0b361.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=filelength /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_0b361.dir\Debug\\" /Fd"cmTC_0b361.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=filelength /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_0b361.dir\Debug\\" /Fd"cmTC_0b361.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_0b361.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_0b361.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_0b361.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_0b361.dir\Debug\CheckFunctionExists.obj
+  cmTC_0b361.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_0b361.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_0b361.dir\Debug\cmTC_0b361.tlog\unsuccessfulbuild".
+  Touching "cmTC_0b361.dir\Debug\cmTC_0b361.tlog\cmTC_0b361.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_0b361.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.73
+
+
+Determining if the function strupr exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_b4822.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:33 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_b4822.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_b4822.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_b4822.dir\Debug\cmTC_b4822.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_b4822.dir\Debug\cmTC_b4822.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strupr /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_b4822.dir\Debug\\" /Fd"cmTC_b4822.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strupr /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_b4822.dir\Debug\\" /Fd"cmTC_b4822.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_b4822.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_b4822.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_b4822.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_b4822.dir\Debug\CheckFunctionExists.obj
+  cmTC_b4822.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_b4822.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_b4822.dir\Debug\cmTC_b4822.tlog\unsuccessfulbuild".
+  Touching "cmTC_b4822.dir\Debug\cmTC_b4822.tlog\cmTC_b4822.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_b4822.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.69
+
+
+Determining if the function stricmp exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_42fa1.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:34 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_42fa1.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_42fa1.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_42fa1.dir\Debug\cmTC_42fa1.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_42fa1.dir\Debug\cmTC_42fa1.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=stricmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_42fa1.dir\Debug\\" /Fd"cmTC_42fa1.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=stricmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_42fa1.dir\Debug\\" /Fd"cmTC_42fa1.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_42fa1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_42fa1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_42fa1.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_42fa1.dir\Debug\CheckFunctionExists.obj
+  cmTC_42fa1.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_42fa1.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_42fa1.dir\Debug\cmTC_42fa1.tlog\unsuccessfulbuild".
+  Touching "cmTC_42fa1.dir\Debug\cmTC_42fa1.tlog\cmTC_42fa1.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_42fa1.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.72
+
+
+Determining if the function strnicmp exists passed with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_1b39f.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:35 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_1b39f.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_1b39f.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_1b39f.dir\Debug\cmTC_1b39f.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_1b39f.dir\Debug\cmTC_1b39f.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strnicmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_1b39f.dir\Debug\\" /Fd"cmTC_1b39f.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strnicmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_1b39f.dir\Debug\\" /Fd"cmTC_1b39f.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Prpgrams\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_1b39f.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_1b39f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_1b39f.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_1b39f.dir\Debug\CheckFunctionExists.obj
+  cmTC_1b39f.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_1b39f.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_1b39f.dir\Debug\cmTC_1b39f.tlog\unsuccessfulbuild".
+  Touching "cmTC_1b39f.dir\Debug\cmTC_1b39f.tlog\cmTC_1b39f.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_1b39f.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.70
+
+
+Performing C++ SOURCE FILE Test HAS_VA_COPY succeeded with the following output:
+Change Dir: D:/Git/Failure5/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_c9d04.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 4/14/2017 7:20:35 PM.
+Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c9d04.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_c9d04.dir\Debug\".
+  Creating directory "D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_c9d04.dir\Debug\cmTC_c9d04.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_c9d04.dir\Debug\cmTC_c9d04.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAS_VA_COPY /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c9d04.dir\Debug\\" /Fd"cmTC_c9d04.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\src.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAS_VA_COPY /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c9d04.dir\Debug\\" /Fd"cmTC_c9d04.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\Failure5\CMakeFiles\CMakeTmp\src.cxx
+  src.cxx
+  
+d:\git\failure5\cmakefiles\cmaketmp\src.cxx(2): warning C4700: uninitialized local variable 'list2' used [D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c9d04.vcxproj]
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_c9d04.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_c9d04.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/Failure5/CMakeFiles/CMakeTmp/Debug/cmTC_c9d04.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_c9d04.dir\Debug\src.obj
+  cmTC_c9d04.vcxproj -> D:\Git\Failure5\CMakeFiles\CMakeTmp\Debug\cmTC_c9d04.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_c9d04.dir\Debug\cmTC_c9d04.tlog\unsuccessfulbuild".
+  Touching "cmTC_c9d04.dir\Debug\cmTC_c9d04.tlog\cmTC_c9d04.lastbuildstate".
+Done Building Project "D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c9d04.vcxproj" (default targets).
+
+Build succeeded.
+
+"D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c9d04.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  d:\git\failure5\cmakefiles\cmaketmp\src.cxx(2): warning C4700: uninitialized local variable 'list2' used [D:\Git\Failure5\CMakeFiles\CMakeTmp\cmTC_c9d04.vcxproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.68
+
+Source file was:
+#include <stdarg.h>
+	int main() { va_list list1, list2; va_copy(list1, list2); return 0; }

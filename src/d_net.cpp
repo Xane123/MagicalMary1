@@ -712,7 +712,7 @@ void PlayerIsGone (int netnode, int netconsole)
 			{
 				Net_Arbitrator = i;
 				players[i].settings_controller = true;
-				Printf("%s IS NOW THE HOST.\nTHEY CAN CHANGE SETTINGS NOW!\n", players[i].userinfo.GetName());
+				Printf("%s is the new arbitrator\n", players[i].userinfo.GetName());
 				break;
 			}
 		}
@@ -2576,11 +2576,11 @@ void Net_DoCommand (int type, BYTE **stream, int player)
 				{
 					killcount += KillAll(cls_rep);
 				}
-				Printf ("DEFEATED %d %sS!\n",killcount, classname);
+				Printf ("Killed %d monsters of type %s.\n",killcount, classname);
 			}
 			else
 			{
-				Printf ("%s ISN'T A VALID CLASS\n", classname);
+				Printf ("%s is not an actor class.\n", classname);
 			}
 
 		}
@@ -2598,11 +2598,11 @@ void Net_DoCommand (int type, BYTE **stream, int player)
 			{
 				removecount += RemoveClass(cls_rep);
 			}
-			Printf("REMOVED %d %sS.\n", removecount, classname);
+			Printf("Removed %d actors of type %s.\n", removecount, classname);
 		}
 		else
 		{
-			Printf("%s ISN'T DEFINED AS A CLASS.\n", classname);
+			Printf("%s is not an actor class.\n", classname);
 		}
 	}
 		break;
@@ -2674,7 +2674,7 @@ void Net_DoCommand (int type, BYTE **stream, int player)
 		break;
 
 	default:
-		I_Error ("UNKNOWN COMMAND #%d", type);
+		I_Error ("Unknown net command: %d", type);
 		break;
 	}
 
@@ -2859,7 +2859,7 @@ static void Network_Controller (int playernum, bool add)
 {
 	if (consoleplayer != Net_Arbitrator)
 	{
-		Printf ("THIS COMMAND IS ONLY USABLE BY THE HOST.\n");
+		Printf ("This command is only accessible to the net arbitrator.\n");
 		return;
 	}
 
@@ -2877,13 +2877,13 @@ static void Network_Controller (int playernum, bool add)
 
 	if (!playeringame[playernum])
 	{
-		Printf ("PLAYER %d COULDN'T BE FOUND!\n", playernum);
+		Printf ("Player (%d) not found!\n", playernum);
 		return;
 	}
 
 	if (players[playernum].Bot != NULL)
 	{
-		Printf ("BOTS AREN'T ALLOWED TO CHANGE SETTINGS.\nIF THEY COULD, THEY'D TRY ANYTHING TO TAKE OVER" TEXTCOLOR_BOLD "THE WORLD!\n");
+		Printf ("Bots cannot be added to the controller list.\n");
 		return;
 	}
 
@@ -2921,7 +2921,6 @@ CCMD (net_addcontroller)
 		return;
 	}
 
-	Printf(TEXTCOLOR_BOLD "THAT PLAYER CAN NOW CHANGE SETTINGS.");
 	Network_Controller (atoi (argv[1]), true);
 }
 
@@ -2958,11 +2957,11 @@ CCMD (net_listcontrollers)
 {
 	if (!netgame)
 	{
-		Printf ("THIS COMMAND CAN ONLY BE USED WHEN PLAYING ONLINE.\n");
+		Printf ("This command can only be used when playing a net game.\n");
 		return;
 	}
 
-	Printf ("THE FOLLOWING PLAYERS CAN MODIY SETTINGS:\n");
+	Printf ("The following players can change the game settings:\n");
 
 	for (int i = 0; i < MAXPLAYERS; i++)
 	{

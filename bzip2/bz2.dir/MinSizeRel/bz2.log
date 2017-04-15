@@ -1,0 +1,11 @@
+﻿  Building Custom Rule D:/Git/MaryMagicalAdventure/bzip2/CMakeLists.txt
+  CMake does not need to re-run because D:/Git/MaryMagicalAdventure/bzip2/CMakeFiles/generate.stamp is up-to-date.
+  blocksort.c
+  bzlib.c
+  compress.c
+  crctable.c
+  decompress.c
+  huffman.c
+  randtable.c
+  Generating Code...
+  bz2.vcxproj -> D:\Git\MaryMagicalAdventure\bzip2\MinSizeRel\bz2.lib

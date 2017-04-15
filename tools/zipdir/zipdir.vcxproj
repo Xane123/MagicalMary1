@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{8AFFA02C-1DF6-3B1A-BE84-143F0DD8E544}</ProjectGUID>
+    <ProjectGUID>{28B03168-67BA-34A6-BC47-9197A4DBDC0C}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -60,25 +60,25 @@
   <PropertyGroup Label="UserMacros" />
     <PropertyGroup>
       <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\Debug\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\tools\zipdir\Debug\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipdir.dir\Debug\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zipdir</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
       <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
       <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\Release\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\tools\zipdir\Release\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipdir.dir\Release\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zipdir</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
       <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
       <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\MinSizeRel\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\tools\zipdir\MinSizeRel\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">zipdir.dir\MinSizeRel\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">zipdir</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
       <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
       <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\RelWithDebInfo\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\tools\zipdir\RelWithDebInfo\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">zipdir.dir\RelWithDebInfo\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">zipdir</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
@@ -87,7 +87,7 @@
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsC</CompileAs>
@@ -109,10 +109,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRTDBG_MAP_ALLOC;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -125,8 +125,8 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/zipdir/Debug/zipdir.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/zipdir/Debug/zipdir.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/Git/Failure5/tools/zipdir/Debug/zipdir.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/zipdir/Debug/zipdir.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <Version></Version>
     </Link>
@@ -136,7 +136,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -159,10 +159,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -175,9 +175,9 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/zipdir/Release/zipdir.lib</ImportLibrary>
+      <ImportLibrary>D:/Git/Failure5/tools/zipdir/Release/zipdir.lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/zipdir/Release/zipdir.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/zipdir/Release/zipdir.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
       <Version></Version>
@@ -188,7 +188,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -211,10 +211,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -227,9 +227,9 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/zipdir/MinSizeRel/zipdir.lib</ImportLibrary>
+      <ImportLibrary>D:/Git/Failure5/tools/zipdir/MinSizeRel/zipdir.lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/zipdir/MinSizeRel/zipdir.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/zipdir/MinSizeRel/zipdir.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
       <Version></Version>
@@ -240,7 +240,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -263,10 +263,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -279,9 +279,9 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Git/MaryMagicalAdventure/tools/zipdir/RelWithDebInfo/zipdir.lib</ImportLibrary>
+      <ImportLibrary>D:/Git/Failure5/tools/zipdir/RelWithDebInfo/zipdir.lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
-      <ProgramDataBaseFile>D:/Git/MaryMagicalAdventure/tools/zipdir/RelWithDebInfo/zipdir.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/Git/Failure5/tools/zipdir/RelWithDebInfo/zipdir.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
       <Version></Version>
@@ -291,10 +291,10 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\Failure5\tools\zipdir\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/tools/zipdir/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/zipdir/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -302,12 +302,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/tools/zipdir/CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/tools/zipdir/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/zipdir/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -315,12 +315,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/tools/zipdir/CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/tools/zipdir/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/zipdir/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -328,12 +328,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/tools/zipdir/CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/tools/zipdir/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/zipdir/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -341,29 +341,29 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/tools/zipdir/CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;D:\Git\Failure5\tools\zipdir\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\tools\zipdir\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\tools\zipdir\zipdir.c"  />
+    <ClCompile Include="D:\Git\Failure5\tools\zipdir\zipdir.c"  />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
-      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
+    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
+      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\MaryMagicalAdventure\bzip2\bz2.vcxproj">
-      <Project>F32A040A-EEFF-315B-8219-B7A5652669C9</Project>
+    <ProjectReference Include="D:\Git\Failure5\bzip2\bz2.vcxproj">
+      <Project>CCBBC0CB-17B9-30C5-A0B6-28B6CC835D97</Project>
       <Name>bz2</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\MaryMagicalAdventure\lzma\lzma.vcxproj">
-      <Project>8E312DDC-E4A4-37FB-8BA0-5AD0A0AA35D5</Project>
+    <ProjectReference Include="D:\Git\Failure5\lzma\lzma.vcxproj">
+      <Project>16C2CF9D-6802-332C-8541-DFC0A6118E30</Project>
       <Name>lzma</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\MaryMagicalAdventure\zlib\z.vcxproj">
-      <Project>E883438D-273F-390D-A124-71DFEE3AD065</Project>
+    <ProjectReference Include="D:\Git\Failure5\zlib\z.vcxproj">
+      <Project>FCBF41FA-DD3E-33F2-B629-8D0839700240</Project>
       <Name>z</Name>
     </ProjectReference>
   </ItemGroup>

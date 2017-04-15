@@ -1,8 +1,8 @@
-# Install script for directory: D:/Git/MaryMagicalAdventure/tools
+# Install script for directory: D:/Git/Failure5/tools
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ZDoom")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/GZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -29,11 +29,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("D:/Git/MaryMagicalAdventure/tools/lemon/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/tools/re2c/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/tools/fixrtext/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/tools/updaterevision/cmake_install.cmake")
-  include("D:/Git/MaryMagicalAdventure/tools/zipdir/cmake_install.cmake")
+  include("D:/Git/Failure5/tools/lemon/cmake_install.cmake")
+  include("D:/Git/Failure5/tools/re2c/cmake_install.cmake")
+  include("D:/Git/Failure5/tools/fixrtext/cmake_install.cmake")
+  include("D:/Git/Failure5/tools/updaterevision/cmake_install.cmake")
+  include("D:/Git/Failure5/tools/zipdir/cmake_install.cmake")
 
 endif()
 

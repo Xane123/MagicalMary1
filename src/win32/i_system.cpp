@@ -1243,11 +1243,11 @@ bool I_SetCursor(FTexture *cursorpic)
 	if (cursorpic != NULL && cursorpic->UseType != FTexture::TEX_Null &&
 		(screen == NULL || !screen->Is8BitMode()))
 	{
-		/*// Must be no larger than 32x32.
+		// Must be no larger than 32x32.
 		if (cursorpic->GetWidth() > 32 || cursorpic->GetHeight() > 32)
 		{
 			return false;
-		}*/		//[XANE]Any cursor is allowed!
+		}
 
 		cursor = CreateAlphaCursor(cursorpic);
 		if (cursor == NULL)
@@ -1271,16 +1271,16 @@ bool I_SetCursor(FTexture *cursorpic)
 	SetClassLongPtr(Window, GCLP_HCURSOR, (LONG_PTR)cursor);
 	if (NativeMouse)
 	{
-		//POINT pt;
-		//RECT client;
+		POINT pt;
+		RECT client;
 
 		// If the mouse pointer is within the window's client rect, set it now.
-		if (1/*GetCursorPos(&pt) && GetClientRect(Window, &client) &&
+		if (GetCursorPos(&pt) && GetClientRect(Window, &client) &&
 			ClientToScreen(Window, (LPPOINT)&client.left) &&
-			ClientToScreen(Window, (LPPOINT)&client.right)*/)
+			ClientToScreen(Window, (LPPOINT)&client.right))
 		{
-			if (1/*pt.x >= client.left && pt.x < client.right &&
-				pt.y >= client.top && pt.y < client.bottom*/)
+			if (pt.x >= client.left && pt.x < client.right &&
+				pt.y >= client.top && pt.y < client.bottom)
 			{
 				SetCursor(cursor);
 			}
@@ -1423,11 +1423,11 @@ static HCURSOR CreateBitmapCursor(int xhot, int yhot, HBITMAP and_mask, HBITMAP 
 {
 	ICONINFO iconinfo =
 	{
-		FALSE,			// fIcon
+		FALSE,		// fIcon
 		(DWORD)xhot,	// xHotspot
 		(DWORD)yhot,	// yHotspot
-		and_mask,		// hbmMask
-		color_mask		// hbmColor
+		and_mask,	// hbmMask
+		color_mask	// hbmColor
 	};
 	HCURSOR cursor = CreateIconIndirect(&iconinfo);
 
@@ -1478,7 +1478,7 @@ bool I_WriteIniFailed()
 	);
 	errortext.Format ("The config file %s could not be written:\n%s", GameConfig->GetPathName(), lpMsgBuf);
 	LocalFree (lpMsgBuf);
-	return MessageBox(Window, errortext.GetChars(), GAMESIG "'s configuration was not saved!", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
+	return MessageBox(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
 }
 
 //==========================================================================

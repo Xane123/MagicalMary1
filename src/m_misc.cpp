@@ -602,7 +602,7 @@ void WritePNGfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
 		!M_AppendPNGText (file, "Software", software) ||
 		!M_FinishPNG (file))
 	{
-		Printf("THIS SCREENSHOT COULDN'T BE SAVED!\nIF YOU PUSHED PRINTSCREEN (PRTSC), YOU CAN STILL PASTE THE IMAGE INTO AN IMAGE EDITOR.\n");
+		Printf ("Could not create screenshot.\n");
 	}
 }
 

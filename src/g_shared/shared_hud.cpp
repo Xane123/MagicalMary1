@@ -60,7 +60,7 @@
 
 EXTERN_CVAR(Bool,am_follow)
 EXTERN_CVAR (Int, con_scaletext)
-EXTERN_CVAR (Bool, wokpos)
+EXTERN_CVAR (Bool, idmypos)
 EXTERN_CVAR (Int, screenblocks)
 
 EXTERN_CVAR (Bool, am_showtime)
@@ -830,7 +830,7 @@ static void DrawCoordinates(player_t * CPlayer)
 	{
 		x=CPlayer->mo->X();
 		y=CPlayer->mo->Y();                     
-		z = CPlayer->mo->Z()-CPlayer->mo->floorz;
+		z=CPlayer->mo->Z();
 	}
 	else 
 	{
@@ -838,12 +838,10 @@ static void DrawCoordinates(player_t * CPlayer)
 		z = P_PointInSector(x, y)->floorplane.ZatPoint(x, y);
 	}
 
-	int vwidth = con_scaletext==0? SCREENWIDTH/2 : SCREENWIDTH/4;
-	int vheight = con_scaletext==0? SCREENHEIGHT/2 : SCREENHEIGHT/4;
+	int vwidth = con_scaletext==0? SCREENWIDTH : SCREENWIDTH/2;
+	int vheight = con_scaletext==0? SCREENHEIGHT : SCREENHEIGHT/2;
 	int xpos = vwidth - SmallFont->StringWidth("X: -00000")-6;
-	int ypos = -10;
-
-	Printf("ARGH");
+	int ypos = 18;
 
 	mysnprintf(coordstr, countof(coordstr), "X: %d", x>>FRACBITS);
 	screen->DrawText(SmallFont, hudcolor_xyco, xpos, ypos, coordstr,
@@ -855,8 +853,8 @@ static void DrawCoordinates(player_t * CPlayer)
 		DTA_KeepRatio, true,
 		DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
 
-	mysnprintf(coordstr, countof(coordstr), "FZ %d", z >> FRACBITS);
-	screen->DrawText(SmallFont, hudcolor_xyco, xpos, ypos + 2 * h, coordstr,
+	mysnprintf(coordstr, countof(coordstr), "Z: %d", z>>FRACBITS);
+	screen->DrawText(SmallFont, hudcolor_xyco, xpos, ypos+2*h, coordstr,
 		DTA_KeepRatio, true,
 		DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
 }
@@ -1067,7 +1065,7 @@ void DrawHUD()
 		{
 			StatusBar->DrawCrosshair();
 		}
-		if (wokpos) DrawCoordinates(CPlayer);
+		if (idmypos) DrawCoordinates(CPlayer);
 
 		DrawTime();
 		DrawLatency();

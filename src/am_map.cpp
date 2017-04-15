@@ -78,8 +78,8 @@
 //
 //=============================================================================
 
-CVAR (Bool,   am_rotate,				1,			CVAR_ARCHIVE);
-CVAR (Int,   am_overlay,			2,			CVAR_ARCHIVE);
+CVAR (Int,   am_rotate,				0,			CVAR_ARCHIVE);
+CVAR (Int,   am_overlay,			0,			CVAR_ARCHIVE);
 CVAR (Bool,  am_showsecrets,		true,		CVAR_ARCHIVE);
 CVAR (Bool,  am_showmonsters,		true,		CVAR_ARCHIVE);
 CVAR (Bool,  am_showitems,			false,		CVAR_ARCHIVE);
@@ -121,28 +121,26 @@ CVAR (Color, am_thingcolor_monster,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_thingcolor_ncmonster,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_thingcolor_item,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_thingcolor_citem,	0xfcfcfc,	CVAR_ARCHIVE);
-CVAR (Color, am_portalcolor,		0x404040,	CVAR_ARCHIVE);
-																//[XANE]Modified automap overlay colors.
-CVAR (Color, am_ovyourcolor,		0x8080cd,	CVAR_ARCHIVE);
-CVAR (Color, am_ovwallcolor,		0xffffff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovsecretwallcolor,	0xcae690,	CVAR_ARCHIVE);
-CVAR (Color, am_ovspecialwallcolor,	0xbbffbb,	CVAR_ARCHIVE);
-CVAR (Color, am_ovotherwallscolor,	0xffa0a0,	CVAR_ARCHIVE);
-CVAR (Color, am_ovlockedcolor,		0xffa0a0,	CVAR_ARCHIVE);
-CVAR (Color, am_ovefwallcolor,		0xe4e4e4,	CVAR_ARCHIVE);
-CVAR (Color, am_ovfdwallcolor,		0xc9c9c9,	CVAR_ARCHIVE);
-CVAR (Color, am_ovcdwallcolor,		0xf2f2f2,	CVAR_ARCHIVE);
-CVAR (Color, am_ovunseencolor,		0xff2020,	CVAR_ARCHIVE);
-CVAR (Color, am_ovtelecolor,		0xffa0ff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovinterlevelcolor,	0xc0ffff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovsecretsectorcolor,0xe6e690,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor,		0xc0ffff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_friend,	0xbbffbb,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_monster,	0xffc0c0,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_ncmonster,	0xffb995,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_item,		0xbbbbff,	CVAR_ARCHIVE);
-CVAR (Color, am_ovthingcolor_citem,		0xffffa0,	CVAR_ARCHIVE);
-CVAR (Color, am_ovportalcolor,			0x004022,	CVAR_ARCHIVE);
+
+CVAR (Color, am_ovyourcolor,		0xfce8d8,	CVAR_ARCHIVE);
+CVAR (Color, am_ovwallcolor,		0x00ff00,	CVAR_ARCHIVE);
+CVAR (Color, am_ovsecretwallcolor,	0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovspecialwallcolor,	0xffffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovotherwallscolor,	0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovlockedcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovefwallcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovfdwallcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovcdwallcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovunseencolor,		0x00226e,	CVAR_ARCHIVE);
+CVAR (Color, am_ovtelecolor,		0xffff00,	CVAR_ARCHIVE);
+CVAR (Color, am_ovinterlevelcolor,	0xffff00,	CVAR_ARCHIVE);
+CVAR (Color, am_ovsecretsectorcolor,0x00ffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor,		0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_friend,	0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_monster,	0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_ncmonster,	0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_item,		0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_citem,		0xe88800,	CVAR_ARCHIVE);
 
 //=============================================================================
 //
@@ -208,7 +206,6 @@ static const char *ColorNames[] = {
 		"IntraTeleportColor", 
 		"InterTeleportColor",
 		"SecretSectorColor",
-		"PortalColor",
 		"AlmostBackgroundColor",
 		NULL
 };
@@ -239,7 +236,6 @@ struct AMColorset
 		IntraTeleportColor, 
 		InterTeleportColor,
 		SecretSectorColor,
-		PortalColor,
 		AlmostBackgroundColor,
 		AM_NUM_COLORS
 	};
@@ -339,8 +335,7 @@ static FColorCVar *cv_standard[] = {
 	&am_lockedcolor,
 	&am_intralevelcolor,
 	&am_interlevelcolor,
-	&am_secretsectorcolor,
-	&am_portalcolor
+	&am_secretsectorcolor
 };
 
 static FColorCVar *cv_overlay[] = {
@@ -365,8 +360,7 @@ static FColorCVar *cv_overlay[] = {
 	&am_ovlockedcolor,
 	&am_ovtelecolor,
 	&am_ovinterlevelcolor,
-	&am_ovsecretsectorcolor,
-	&am_ovportalcolor
+	&am_ovsecretsectorcolor
 };
 
 CCMD(am_restorecolors)
@@ -409,7 +403,6 @@ static unsigned char DoomColors[]= {
 	NOT_USED,		// interteleport
 	NOT_USED,		// secretsector
 	0x10,0x10,0x10,	// almostbackground
-	0x40,0x40,0x40	// portal
 };
 
 static unsigned char StrifeColors[]= {
@@ -436,7 +429,6 @@ static unsigned char StrifeColors[]= {
 	NOT_USED,		// interteleport
 	NOT_USED,		// secretsector
 	0x10,0x10,0x10,	// almostbackground
-	0x40,0x40,0x40	// portal
 };
 
 static unsigned char RavenColors[]= {
@@ -463,7 +455,6 @@ static unsigned char RavenColors[]= {
 	NOT_USED,		// interteleport
 	NOT_USED,		// secretsector
 	0x10,0x10,0x10,	// almostbackground
-	0x50,0x50,0x50	// portal
 };
 
 #undef NOT_USED
@@ -498,7 +489,7 @@ void FMapInfoParser::ParseAMColors(bool overlay)
 
 		if (nextKey.CompareNoCase("base") == 0)
 		{
-			if (colorset) sc.ScriptError("'BASE' MUST BE SPECIIED BEFORE THE FIRST COLOR.");
+			if (colorset) sc.ScriptError("'base' must be specified before the first color");
 			sc.MustGetToken(TK_StringConst);
 			if (sc.Compare("doom"))
 			{
@@ -586,7 +577,6 @@ inline fixed_t MTOF(fixed_t x)
 
 static int bigstate = 0;
 static bool textured = 1;	// internal toggle for texture mode
-static int MapPortalGroup;
 
 CUSTOM_CVAR(Bool, am_textured, false, CVAR_ARCHIVE)
 {
@@ -822,7 +812,6 @@ void AM_minOutWindowScale ();
 
 
 CVAR(Bool, am_followplayer, true, CVAR_ARCHIVE)
-CVAR(Bool, am_portaloverlay, true, CVAR_ARCHIVE)
 
 
 CCMD(am_togglefollow)
@@ -1098,7 +1087,7 @@ static void AM_calcMinMaxMtoF()
 
 static void AM_ClipRotatedExtents (fixed_t pivotx, fixed_t pivoty)
 {
-	if (am_rotate)
+	if (am_rotate == 0 || (am_rotate == 2 && !viewactive))
 	{
 		if (m_x + m_w/2 > max_x)
 			m_x = max_x - m_w/2;
@@ -1214,7 +1203,7 @@ void AM_changeWindowLoc ()
 
 	oincx = incx = Scale(m_paninc.x, SCREENWIDTH, 320);
 	oincy = incy = Scale(m_paninc.y, SCREENHEIGHT, 200);
-	if (am_rotate)
+	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 	{
 		AM_rotate(&incx, &incy, players[consoleplayer].camera->angle - ANG90);
 	}
@@ -1596,7 +1585,7 @@ void AM_doFollowPlayer ()
   		// do the parallax parchment scrolling.
 		sx = (players[consoleplayer].camera->X() - f_oldloc.x) >> FRACTOMAPBITS;
 		sy = (f_oldloc.y - players[consoleplayer].camera->Y()) >> FRACTOMAPBITS;
-		if (am_rotate)
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
 			AM_rotate (&sx, &sy, players[consoleplayer].camera->angle - ANG90);
 		}
@@ -1876,7 +1865,7 @@ void AM_drawGrid (int color)
 		ml.b.x = x;
 		ml.a.y = miny - exty;
 		ml.b.y = ml.a.y + minlen;
-		if (am_rotate)
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
 			AM_rotatePoint (&ml.a.x, &ml.a.y);
 			AM_rotatePoint (&ml.b.x, &ml.b.y);
@@ -1898,7 +1887,7 @@ void AM_drawGrid (int color)
 		ml.b.x = ml.a.x + minlen;
 		ml.a.y = y;
 		ml.b.y = y;
-		if (am_rotate)
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
 			AM_rotatePoint (&ml.a.x, &ml.a.y);
 			AM_rotatePoint (&ml.b.x, &ml.b.y);
@@ -1936,19 +1925,13 @@ void AM_drawSubsectors()
 		{
 			continue;
 		}
-
-		if (am_portaloverlay && subsectors[i].render_sector->PortalGroup != MapPortalGroup && subsectors[i].render_sector->PortalGroup != 0)
-		{
-			continue;
-		}
-
 		// Fill the points array from the subsector.
 		points.Resize(subsectors[i].numlines);
 		for (DWORD j = 0; j < subsectors[i].numlines; ++j)
 		{
 			mpoint_t pt = { subsectors[i].firstline[j].v1->x >> FRACTOMAPBITS,
 							subsectors[i].firstline[j].v1->y >> FRACTOMAPBITS };
-			if (am_rotate)
+			if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 			{
 				AM_rotatePoint(&pt.x, &pt.y);
 			}
@@ -2040,7 +2023,7 @@ void AM_drawSubsectors()
 			AM_rotate(&originpt.x, &originpt.y, rotation);
 		}
 		// Apply the automap's rotation to the texture origin.
-		if (am_rotate)
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
 			rotation += ANG90 - players[consoleplayer].camera->angle;
 			AM_rotatePoint(&originpt.x, &originpt.y);
@@ -2124,7 +2107,7 @@ void AM_drawSeg(seg_t *seg, const AMColor &color)
 	l.b.x = seg->v2->x >> FRACTOMAPBITS;
 	l.b.y = seg->v2->y >> FRACTOMAPBITS;
 
-	if (am_rotate)
+	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 	{
 		AM_rotatePoint (&l.a.x, &l.a.y);
 		AM_rotatePoint (&l.b.x, &l.b.y);
@@ -2140,7 +2123,7 @@ void AM_drawPolySeg(FPolySeg *seg, const AMColor &color)
 	l.b.x = seg->v2.x >> FRACTOMAPBITS;
 	l.b.y = seg->v2.y >> FRACTOMAPBITS;
 
-	if (am_rotate)
+	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 	{
 		AM_rotatePoint (&l.a.x, &l.a.y);
 		AM_rotatePoint (&l.b.x, &l.b.y);
@@ -2406,143 +2389,108 @@ void AM_drawWalls (bool allmap)
 	static mline_t l;
 	int lock, color;
 
-	int numportalgroups = am_portaloverlay ? Displacements.size : 0;
-
-	for (int p = numportalgroups - 1; p >= -1; p--)
+	for (i = 0; i < numlines; i++)
 	{
-		if (p == MapPortalGroup) continue;
+		l.a.x = lines[i].v1->x >> FRACTOMAPBITS;
+		l.a.y = lines[i].v1->y >> FRACTOMAPBITS;
+		l.b.x = lines[i].v2->x >> FRACTOMAPBITS;
+		l.b.y = lines[i].v2->y >> FRACTOMAPBITS;
 
-
-		for (i = 0; i < numlines; i++)
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
-			int pg;
-			
-			if (lines[i].sidedef[0]->Flags & WALLF_POLYOBJ)
-			{
-				// For polyobjects we must test the surrounding sector to get the proper group.
-				pg = P_PointInSector(lines[i].v1->x + lines[i].dx / 2, lines[i].v1->y + lines[i].dy / 2)->PortalGroup;
-			}
-			else
-			{
-				pg = lines[i].frontsector->PortalGroup;
-			}
-			fixedvec2 offset;
-			bool portalmode = numportalgroups > 0 &&  pg != MapPortalGroup;
-			if (pg == p)
-			{
-				offset = Displacements.getOffset(pg, MapPortalGroup);
-			}
-			else if (p == -1 && (pg == MapPortalGroup || !am_portaloverlay))
-			{
-				offset = { 0, 0 };
-			}
-			else continue;
+			AM_rotatePoint (&l.a.x, &l.a.y);
+			AM_rotatePoint (&l.b.x, &l.b.y);
+		}
 
-			l.a.x = (lines[i].v1->x + offset.x) >> FRACTOMAPBITS;
-			l.a.y = (lines[i].v1->y + offset.y) >> FRACTOMAPBITS;
-			l.b.x = (lines[i].v2->x + offset.x) >> FRACTOMAPBITS;
-			l.b.y = (lines[i].v2->y + offset.y) >> FRACTOMAPBITS;
-
-			if (am_rotate)
+		if (am_cheat != 0 || (lines[i].flags & ML_MAPPED))
+		{
+			if ((lines[i].flags & ML_DONTDRAW) && (am_cheat == 0 || am_cheat >= 4))
 			{
-				AM_rotatePoint(&l.a.x, &l.a.y);
-				AM_rotatePoint(&l.b.x, &l.b.y);
+				if (!am_showallenabled || CheckCheatmode(false))
+				{
+					continue;
+				}
 			}
 
-			if (am_cheat != 0 || (lines[i].flags & ML_MAPPED))
+			if (AM_CheckSecret(&lines[i]))
 			{
-				if ((lines[i].flags & ML_DONTDRAW) && (am_cheat == 0 || am_cheat >= 4))
+				// map secret sectors like Boom
+				AM_drawMline(&l, AMColors.SecretSectorColor);
+			}
+			else if (lines[i].flags & ML_SECRET)
+			{ // secret door
+				if (am_cheat != 0 && lines[i].backsector != NULL)
+					AM_drawMline(&l, AMColors.SecretWallColor);
+			    else
+					AM_drawMline(&l, AMColors.WallColor);
+			}
+			else if (AM_isTeleportBoundary(lines[i]) && AMColors.isValid(AMColors.IntraTeleportColor))
+			{ // intra-level teleporters
+				AM_drawMline(&l, AMColors.IntraTeleportColor);
+			}
+			else if (AM_isExitBoundary(lines[i]) && AMColors.isValid(AMColors.InterTeleportColor))
+			{ // inter-level/game-ending teleporters
+				AM_drawMline(&l, AMColors.InterTeleportColor);
+			}
+			else if (AM_isLockBoundary(lines[i], &lock))
+			{
+				if (AMColors.displayLocks)
 				{
-					if (!am_showallenabled || CheckCheatmode(false))
-					{
-						continue;
-					}
-				}
+					color = P_GetMapColorForLock(lock);
 
-				if (portalmode)
-				{
-					AM_drawMline(&l, AMColors.PortalColor);
-				}
-				else if (AM_CheckSecret(&lines[i]))
-				{
-					// map secret sectors like Boom
-					AM_drawMline(&l, AMColors.SecretSectorColor);
-				}
-				else if (lines[i].flags & ML_SECRET)
-				{ // secret door
-					if (am_cheat != 0 && lines[i].backsector != NULL)
-						AM_drawMline(&l, AMColors.SecretWallColor);
-					else
-						AM_drawMline(&l, AMColors.WallColor);
-				}
-				else if (AM_isTeleportBoundary(lines[i]) && AMColors.isValid(AMColors.IntraTeleportColor))
-				{ // intra-level teleporters
-					AM_drawMline(&l, AMColors.IntraTeleportColor);
-				}
-				else if (AM_isExitBoundary(lines[i]) && AMColors.isValid(AMColors.InterTeleportColor))
-				{ // inter-level/game-ending teleporters
-					AM_drawMline(&l, AMColors.InterTeleportColor);
-				}
-				else if (AM_isLockBoundary(lines[i], &lock))
-				{
-					if (AMColors.displayLocks)
-					{
-						color = P_GetMapColorForLock(lock);
+					AMColor c;
 
-						AMColor c;
+					if (color >= 0)	c.FromRGB(RPART(color), GPART(color), BPART(color));
+					else c = AMColors[AMColors.LockedColor];
 
-						if (color >= 0)	c.FromRGB(RPART(color), GPART(color), BPART(color));
-						else c = AMColors[AMColors.LockedColor];
-
-						AM_drawMline(&l, c);
-					}
-					else
-					{
-						AM_drawMline(&l, AMColors.LockedColor);  // locked special
-					}
+					AM_drawMline (&l, c);
 				}
-				else if (am_showtriggerlines
-					&& AMColors.isValid(AMColors.SpecialWallColor)
-					&& AM_isTriggerBoundary(lines[i]))
+				else
 				{
-					AM_drawMline(&l, AMColors.SpecialWallColor);	// wall with special non-door action the player can do
-				}
-				else if (lines[i].backsector == NULL)
-				{
-					AM_drawMline(&l, AMColors.WallColor);	// one-sided wall
-				}
-				else if (lines[i].backsector->floorplane
-					!= lines[i].frontsector->floorplane)
-				{
-					AM_drawMline(&l, AMColors.FDWallColor); // floor level change
-				}
-				else if (lines[i].backsector->ceilingplane
-					!= lines[i].frontsector->ceilingplane)
-				{
-					AM_drawMline(&l, AMColors.CDWallColor); // ceiling level change
-				}
-				else if (AM_Check3DFloors(&lines[i]))
-				{
-					AM_drawMline(&l, AMColors.EFWallColor); // Extra floor border
-				}
-				else if (am_cheat > 0 && am_cheat < 4)
-				{
-					AM_drawMline(&l, AMColors.TSWallColor);
+					AM_drawMline (&l, AMColors.LockedColor);  // locked special
 				}
 			}
-			else if (allmap)
+			else if (am_showtriggerlines
+				&& AMColors.isValid(AMColors.SpecialWallColor)
+				&& AM_isTriggerBoundary(lines[i]))
 			{
-				if ((lines[i].flags & ML_DONTDRAW) && (am_cheat == 0 || am_cheat >= 4))
-				{
-					if (!am_showallenabled || CheckCheatmode(false))
-					{
-						continue;
-					}
-				}
-				AM_drawMline(&l, AMColors.NotSeenColor);
+				AM_drawMline(&l, AMColors.SpecialWallColor);	// wall with special non-door action the player can do
+			}
+			else if (lines[i].backsector == NULL)
+			{
+				AM_drawMline(&l, AMColors.WallColor);	// one-sided wall
+			}
+			else if (lines[i].backsector->floorplane
+				  != lines[i].frontsector->floorplane)
+			{
+				AM_drawMline(&l, AMColors.FDWallColor); // floor level change
+			}
+			else if (lines[i].backsector->ceilingplane
+				  != lines[i].frontsector->ceilingplane)
+			{
+				AM_drawMline(&l, AMColors.CDWallColor); // ceiling level change
+			}
+			else if (AM_Check3DFloors(&lines[i]))
+			{
+				AM_drawMline(&l, AMColors.EFWallColor); // Extra floor border
+			}
+			else if (am_cheat > 0 && am_cheat < 4)
+			{
+				AM_drawMline(&l, AMColors.TSWallColor);
 			}
 		}
-	}
+		else if (allmap)
+		{
+			if ((lines[i].flags & ML_DONTDRAW) && (am_cheat == 0 || am_cheat >= 4))
+			{
+				if (!am_showallenabled || CheckCheatmode(false))
+				{
+					continue;
+				}
+			}
+			AM_drawMline(&l, AMColors.NotSeenColor);
+		}
+    }
 }
 
 
@@ -2668,10 +2616,9 @@ void AM_drawPlayers ()
 		mline_t *arrow;
 		int numarrowlines;
 
-		fixedvec2 pos = am_portaloverlay? players[consoleplayer].camera->GetPortalTransition(players[consoleplayer].viewheight) : (fixedvec2)players[consoleplayer].camera->Pos();
-		pt.x = pos.x >> FRACTOMAPBITS;
-		pt.y = pos.y >> FRACTOMAPBITS;
-		if (am_rotate)
+		pt.x = players[consoleplayer].camera->X() >> FRACTOMAPBITS;
+		pt.y = players[consoleplayer].camera->Y() >> FRACTOMAPBITS;
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
 			angle = ANG90;
 			AM_rotatePoint (&pt.x, &pt.y);
@@ -2732,13 +2679,11 @@ void AM_drawPlayers ()
 
 		if (p->mo != NULL)
 		{
-			fixedvec3 pos = p->mo->PosRelative(MapPortalGroup);
-			pt.x = pos.x >> FRACTOMAPBITS;
-			pt.y = pos.y >> FRACTOMAPBITS;
-
+			pt.x = p->mo->X() >> FRACTOMAPBITS;
+			pt.y = p->mo->Y() >> FRACTOMAPBITS;
 			angle = p->mo->angle;
 
-			if (am_rotate)
+			if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 			{
 				AM_rotatePoint (&pt.x, &pt.y);
 				angle -= players[consoleplayer].camera->angle - ANG90;
@@ -2766,13 +2711,11 @@ void AM_drawKeys ()
 
 	while ((key = it.Next()) != NULL)
 	{
-		fixedvec3 pos = key->PosRelative(MapPortalGroup);
-		p.x = pos.x >> FRACTOMAPBITS;
-		p.y = pos.y >> FRACTOMAPBITS;
-
+		p.x = key->X() >> FRACTOMAPBITS;
+		p.y = key->Y() >> FRACTOMAPBITS;
 		angle = key->angle;
 
-		if (am_rotate)
+		if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 		{
 			AM_rotatePoint (&p.x, &p.y);
 			angle += ANG90 - players[consoleplayer].camera->angle;
@@ -2813,9 +2756,8 @@ void AM_drawThings ()
 		{
 			if (am_cheat > 0 || !(t->flags6 & MF6_NOTONAUTOMAP))
 			{
-				fixedvec3 pos = t->PosRelative(MapPortalGroup);
-				p.x = pos.x >> FRACTOMAPBITS;
-				p.y = pos.y >> FRACTOMAPBITS;
+				p.x = t->X() >> FRACTOMAPBITS;
+				p.y = t->Y() >> FRACTOMAPBITS;
 
 				if (am_showthingsprites > 0 && t->sprite > 0)
 				{
@@ -2832,7 +2774,7 @@ void AM_drawThings ()
 						frame = &SpriteFrames[spriteIndex];
 						angle_t angle = ANGLE_270 - t->angle;
 						if (frame->Texture[0] != frame->Texture[1]) angle += (ANGLE_180 / 16);
-						if (am_rotate)
+						if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 						{
 							angle += players[consoleplayer].camera->angle - ANGLE_90;
 						}
@@ -2855,7 +2797,7 @@ void AM_drawThings ()
 			drawTriangle:
 					angle = t->angle;
 
-					if (am_rotate)
+					if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 					{
 						AM_rotatePoint (&p.x, &p.y);
 						angle += ANG90 - players[consoleplayer].camera->angle;
@@ -2942,7 +2884,7 @@ static void DrawMarker (FTexture *tex, fixed_t x, fixed_t y, int yadjust,
 	{
 		return;
 	}
-	if (am_rotate)
+	if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 	{
 		AM_rotatePoint (&x, &y);
 	}
@@ -3075,13 +3017,6 @@ void AM_Drawer ()
 	bool allmap = (level.flags2 & LEVEL2_ALLMAP) != 0;
 	bool allthings = allmap && players[consoleplayer].mo->FindInventory(RUNTIME_CLASS(APowerScanner), true) != NULL;
 
-	if (am_portaloverlay)
-	{
-		sector_t *sec;
-		players[consoleplayer].camera->GetPortalTransition(players[consoleplayer].viewheight, &sec);
-		MapPortalGroup = sec->PortalGroup;
-	}
-	else MapPortalGroup = 0;
 	AM_initColors (viewactive);
 
 	if (!viewactive)
@@ -3105,7 +3040,7 @@ void AM_Drawer ()
 	}
 	AM_activateNewScale();
 
-	if ((am_textured && hasglnodes && textured) && (!viewactive || (viewactive && (level.time % TICRATE) % 2 == 0)))
+	if (am_textured && hasglnodes && textured && !viewactive)
 		AM_drawSubsectors();
 
 	if (grid)	
@@ -3115,7 +3050,7 @@ void AM_Drawer ()
 	AM_drawPlayers();
 	if (G_SkillProperty(SKILLP_EasyKey))
 		AM_drawKeys();
-	if ((am_cheat >= 2 && am_cheat != 4) || allthings) 
+	if ((am_cheat >= 2 && am_cheat != 4) || allthings)
 		AM_drawThings();
 
 	AM_drawAuthorMarkers();

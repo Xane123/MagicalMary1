@@ -217,7 +217,7 @@ bool DOptionMenu::MenuEvent (int mkey, bool fromcontroller)
 						y = -y;
 					}
 				}
-				y *= CleanYfac_1 * 2;
+				y *= CleanYfac_1;
 				int	rowheight = OptionSettings.mLinespacing * CleanYfac_1;
 				int maxitems = (screen->GetHeight() - rowheight - y) / rowheight + 1;
 
@@ -450,7 +450,7 @@ void DOptionMenu::Drawer ()
 		{
 			if (((DMenu::MenuTime%8) < 6) || DMenu::CurrentMenu != this)
 			{
-				M_DrawConText(CR_YELLOW/*OptionSettings.mFontColorSelection*/, cur_indent + 3 * CleanXfac_1, y+fontheight-17*CleanYfac_1, "\xd");
+				M_DrawConText(OptionSettings.mFontColorSelection, cur_indent + 3 * CleanXfac_1, y + fontheight - 17 * CleanYfac_1, "\xd");
 			}
 		}
 	}
@@ -573,7 +573,7 @@ public:
 		Super::Drawer();
 
 		char text[64];
-		mysnprintf(text, 64, "DM FLAGS #1 = %d   DM FLAGS #2 = %d", *dmflags, *dmflags2);
+		mysnprintf(text, 64, "dmflags = %d   dmflags2 = %d", *dmflags, *dmflags2);
 		screen->DrawText (SmallFont, OptionSettings.mFontColorValue,
 			(screen->GetWidth() - SmallFont->StringWidth (text) * CleanXfac_1) / 2, 0, text,
 			DTA_CleanNoMove_1, true, TAG_DONE);
@@ -595,7 +595,7 @@ public:
 		Super::Drawer();
 
 		char text[64];
-		mysnprintf(text, 64, "COMPATIBILITY #1 = %d  COMPATIBILITY #2 = %d", *compatflags, *compatflags2);
+		mysnprintf(text, 64, "compatflags = %d  compatflags2 = %d", *compatflags, *compatflags2);
 		screen->DrawText (SmallFont, OptionSettings.mFontColorValue,
 			(screen->GetWidth() - SmallFont->StringWidth (text) * CleanXfac_1) / 2, 0, text,
 			DTA_CleanNoMove_1, true, TAG_DONE);

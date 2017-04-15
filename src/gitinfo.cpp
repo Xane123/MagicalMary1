@@ -54,5 +54,5 @@ const char *GetGitTime()
 
 const char *GetVersionString()
 {
-	return "Mary's Magical Adventure " VERSIONSTR;	//Go to version.h to change the version number.	
+	return VERSIONSTR;
 }

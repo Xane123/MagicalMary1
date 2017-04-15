@@ -68,7 +68,7 @@ FileReader::FileReader (const char *filename)
 {
 	if (!Open(filename))
 	{
-		I_Error ("%s couldn't be opened.", filename);
+		I_Error ("Could not open %s", filename);
 	}
 }
 
@@ -257,12 +257,12 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (err != Z_OK && err != Z_STREAM_END)
 	{
-		I_FatalError("One of the PK3's that were loaded was modified while Mary's Magical Adventure was running.");
+		I_FatalError("One of the PK3's that were loaded was modified while Mary's Magical Adventure was running. Restart the game.");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_FatalError ("The PK3 stream ended unexpectedly.");
+		I_FatalError("The compressed stream unexpectedly ended. Restart the game.");
 	}
 
 	return len - Stream.avail_out;
@@ -331,12 +331,12 @@ long FileReaderBZ2::Read (void *buffer, long len)
 
 	if (err != BZ_OK && err != BZ_STREAM_END)
 	{
-		I_FatalError("One of the files that were loaded was modified while Mary's Magical Adventure was running.");
+		I_FatalError("One of the PK3's that were loaded was modified while Mary's Magical Adventure was running. Restart the game.");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_FatalError("The file stream ended unexpectedly.");
+		I_FatalError("The compressed BZIP2 stream abruptly ended.");
 	}
 
 	return len - Stream.avail_out;

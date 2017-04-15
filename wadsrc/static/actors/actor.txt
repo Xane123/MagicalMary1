@@ -41,8 +41,8 @@ ACTOR Actor native //: Thinker
 	native bool CheckClass(class<Actor> checkclass, int ptr_select = AAPTR_DEFAULT, bool match_superclass = false);
 	native bool IsPointerEqual(int ptr_select1, int ptr_select2);
 	native int	CountInv(class<Inventory> itemtype, int ptr_select = AAPTR_DEFAULT);
-	native float GetDistance(bool checkz, int ptr = AAPTR_TARGET);
- 	//native float GetAngle(bool relative, int ptr = AAPTR_TARGET);	native int GetSpawnHealth();
+	native float GetDistance(bool checkz, int ptr = AAPTR_DEFAULT);
+	native int GetSpawnHealth();
 	native int GetGibHealth();
 
 	// Action functions
@@ -175,7 +175,8 @@ ACTOR Actor native //: Thinker
 	action native A_ComboAttack();
 	action native A_BulletAttack();
 	action native A_WolfAttack(int flags = 0, sound whattoplay = "weapons/pistol", float snipe = 1.0, int maxdamage = 64, int blocksize = 128, int pointblank = 2, int longrange = 4, float runspeed = 160.0, class<Actor> pufftype = "BulletPuff");
-	action native A_PlaySound(sound whattoplay = "misc/splash", int slot = CHAN_BODY, float volume = 1.0, bool looping = false, float attenuation = ATTN_NORM, bool local = false);action native A_PlayWeaponSound(sound whattoplay);
+	action native A_PlaySound(sound whattoplay = "weapons/pistol", int slot = CHAN_BODY, float volume = 1.0, bool looping = false, float attenuation = ATTN_NORM);
+	action native A_PlayWeaponSound(sound whattoplay);
 	action native A_FLoopActiveSound();
 	action native A_LoopActiveSound();
 	action native A_StopSound(int slot = CHAN_VOICE);	// Bad default but that's what is originally was...
@@ -233,13 +234,13 @@ ACTOR Actor native //: Thinker
 	action native state A_JumpIfInTargetInventory(class<Inventory> itemtype, int amount, state label, int forward_ptr = AAPTR_DEFAULT);
 	action native bool A_GiveToTarget(class<Inventory> itemtype, int amount = 0, int forward_ptr = AAPTR_DEFAULT);
 	action native bool A_TakeFromTarget(class<Inventory> itemtype, int amount = 0, int flags = 0, int forward_ptr = AAPTR_DEFAULT);
-	action native int A_RadiusGive(class<Inventory> itemtype, float distance, int flags, int amount = 0, class<Actor> filter = "None", name species = "None", float mindist = 0);
+	action native int A_RadiusGive(class<Inventory> itemtype, float distance, int flags, int amount = 0, class<Actor> filter = "None", name species = "None", int mindist = 0);
 	action native state A_CheckSpecies(state jump, name species = "", int ptr = AAPTR_DEFAULT);
 	action native A_CountdownArg(int argnum, state targstate = "");
 	action native A_CustomMeleeAttack(int damage = 0, sound meleesound = "", sound misssound = "", name damagetype = "none", bool bleed = true);
 	action native A_CustomComboAttack(class<Actor> missiletype, float spawnheight, int damage, sound meleesound = "", name damagetype = "none", bool bleed = true);
 	action native A_Burst(class<Actor> chunktype);
-	action native A_Blast(int flags = 0, float strength = 255, float radius = 255, float speed = 20, bool no_z_thrust = true, class<Actor> blasteffect = "BlastEffect", sound blastsound = "BlastRadius");
+	action native A_Blast(int flags = 0, float strength = 255, float radius = 255, float speed = 20, class<Actor> blasteffect = "BlastEffect", sound blastsound = "BlastRadius");
 	action native A_RadiusThrust(int force = 128, int distance = -1, int flags = RTF_AFFECTSOURCE, int fullthrustdistance = 0);
 	action native A_Explode(int damage = -1, int distance = -1, int flags = XF_HURTSOURCE, bool alert = false, int fulldamagedistance = 0, int nails = 0, int naildamage = 10, class<Actor> pufftype = "BulletPuff");
 	action native A_Stop();
@@ -324,7 +325,9 @@ ACTOR Actor native //: Thinker
 	action native A_RearrangePointers(int newtarget, int newmaster = AAPTR_DEFAULT, int newtracer = AAPTR_DEFAULT, int flags=0);
 	action native A_TransferPointer(int ptr_source, int ptr_recepient, int sourcefield, int recepientfield=AAPTR_DEFAULT, int flags=0);
 	action native A_CopyFriendliness(int ptr_source = AAPTR_MASTER);
-
+	
+	action native A_PotteryCheck();
+	
 	action native int ACS_NamedExecute(name script, int mapnum=0, int arg1=0, int arg2=0, int arg3=0);
 	action native int ACS_NamedSuspend(name script, int mapnum=0);
 	action native int ACS_NamedTerminate(name script, int mapnum=0);
@@ -332,14 +335,6 @@ ACTOR Actor native //: Thinker
 	action native int ACS_NamedLockedExecuteDoor(name script, int mapnum=0, int arg1=0, int arg2=0, int lock=0);
 	action native int ACS_NamedExecuteWithResult(name script, int arg1=0, int arg2=0, int arg3=0, int arg4=0);
 	action native ACS_NamedExecuteAlways(name script, int mapnum=0, int arg1=0, int arg2=0, int arg3=0);
-	
-	action native A_RenderNormal();
-	action native A_RenderAdd();
-	
-	action native A_CoinSound();
-	action native A_CheckPit();
-	
-	action native A_PotteryCheck();
 	
 	States
 	{
@@ -355,13 +350,8 @@ ACTOR Actor native //: Thinker
 		"----" A 1 A_FreezeDeathChunks
 		Wait
 	GenericCrush:
-		TNT1 A 0
-		TNT1 A 0 A_ChangeFlag("COUNTITEM",FALSE)
-		TNT1 A 1 A_GiveInventory("CoinSP",1,AAPTR_PLAYER1)
-		Goto FadeLoopZ
-	FadeLoopZ:
-		TNT1 A 1 A_FadeOut(0.5,1)
-		Loop
+		POL5 A -1
+		Stop
 	}
 
 	// Internal functions

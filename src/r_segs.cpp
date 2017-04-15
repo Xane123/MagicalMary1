@@ -148,7 +148,7 @@ static void call_wallscan(int x1, int x2, short *uwal, short *dwal, fixed_t *swa
 // sectors with different fog.
 //=============================================================================
 
-CVAR(Bool, r_fogboundary, false, CVAR_ARCHIVE)
+CVAR(Bool, r_fogboundary, true, 0)
 
 inline bool IsFogBoundary (sector_t *front, sector_t *back)
 {

@@ -140,7 +140,7 @@ static int CheckForMissingSegs()
 		if (seg->sidedef!=NULL)
 		{
 			// check all the segs and calculate the length they occupy on their sidedef
-			DVector2 vec1(seg->v2->x - seg->v1->x, seg->v2->y - seg->v1->y);
+			TVector2<double> vec1(seg->v2->x - seg->v1->x, seg->v2->y - seg->v1->y);
 			added_seglen[seg->sidedef - sides] += float(vec1.Length());
 		}
 	}
@@ -150,7 +150,7 @@ static int CheckForMissingSegs()
 		side_t * side =&sides[i];
 		line_t * line = side->linedef;
 
-		DVector2 lvec(line->dx, line->dy);
+		TVector2<double> lvec(line->dx, line->dy);
 		float linelen = float(lvec.Length());
 
 		missing += (added_seglen[i] < linelen - FRACUNIT);
@@ -200,7 +200,7 @@ bool P_CheckForGLNodes()
 	int missing = CheckForMissingSegs();
 	if (missing > 0)
 	{
-		Printf("ERROR: %d segments were expected but not found.\nThis level's nodes need to be rebuilt.\n\nIf this is an official level, report this to github.com/Xane123/world-of-kirbycraft as a \"glitch\".\n", missing);
+		Printf("%d missing segs counted\nThe BSP needs to be rebuilt.\n", missing);
 	}
 	return missing == 0;
 }

@@ -121,7 +121,6 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw)
 	PARAM_SOUND_OPT	(fullsound)			{ fullsound = "weapons/sawfull"; }
 	PARAM_SOUND_OPT	(hitsound)			{ hitsound = "weapons/sawhit"; }
 	PARAM_INT_OPT	(damage)			{ damage = 2; }
-	PARAM_INT_OPT(channel) { channel = CHAN_BODY; }
 	PARAM_CLASS_OPT	(pufftype, AActor)	{ pufftype = NULL; }
 	PARAM_INT_OPT	(flags)				{ flags = 0; }
 	PARAM_FIXED_OPT	(range)				{ range = 0; }
@@ -177,7 +176,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw)
 		{
 			player->extralight = !player->extralight;
 		}
-		S_Sound (self, channel, fullsound, 1, ATTN_NORM);
+		S_Sound (self, CHAN_WEAPON, fullsound, 1, ATTN_NORM);
 		return 0;
 	}
 
@@ -228,7 +227,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Saw)
 		}
 	}
 
-	S_Sound (self, channel, hitsound, 1, ATTN_NORM);
+	S_Sound (self, CHAN_WEAPON, hitsound, 1, ATTN_NORM);
 		
 	// turn to face target
 	if (!(flags & SF_NOTURN))

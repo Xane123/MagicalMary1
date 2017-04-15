@@ -82,14 +82,21 @@ inline int GetSafeBlockY(long long blocky)
 // MAXRADIUS is for precalculated sector block boxes
 // the spider demon is larger,
 // but we do not have any moving sectors nearby
-#define MAXRADIUS		0
-#define MAXMOVE 		(30*FRACUNIT)	//Speed limit; Changing this makes springs break. Underwater speed limit is unaffected.
+#define MAXRADIUS		0/*32*FRACUNIT*/
+
+//#define GRAVITY 		FRACUNIT
+#define MAXMOVE 		(30*FRACUNIT)
 
 #define TALKRANGE		(128*FRACUNIT)
 #define USERANGE		(64*FRACUNIT)
 #define MELEERANGE		(64*FRACUNIT)
 #define MISSILERANGE	(32*64*FRACUNIT)
 #define PLAYERMISSILERANGE	(8192*FRACUNIT)	// [RH] New MISSILERANGE for players
+
+// follow a player exlusively for 3 seconds
+// No longer used.
+// #define BASETHRESHOLD	100
+
 
 //
 // P_PSPR
@@ -158,10 +165,10 @@ inline AActor *P_SpawnMissileXYZ(const fixedvec3 &pos, AActor *source, AActor *d
 {
 	return P_SpawnMissileXYZ(pos.x, pos.y, pos.z, source, dest, type, checkspawn, owner);
 }
-AActor *P_SpawnMissileAngle (AActor *source, PClassActor *type, angle_t angle, fixed_t vz);
-AActor *P_SpawnMissileAngleSpeed (AActor *source, PClassActor *type, angle_t angle, fixed_t vz, fixed_t speed);
-AActor *P_SpawnMissileAngleZ (AActor *source, fixed_t z, PClassActor *type, angle_t angle, fixed_t vz);
-AActor *P_SpawnMissileAngleZSpeed (AActor *source, fixed_t z, PClassActor *type, angle_t angle, fixed_t vz, fixed_t speed, AActor *owner=NULL, bool checkspawn = true);
+AActor *P_SpawnMissileAngle (AActor *source, PClassActor *type, angle_t angle, fixed_t velz);
+AActor *P_SpawnMissileAngleSpeed (AActor *source, PClassActor *type, angle_t angle, fixed_t velz, fixed_t speed);
+AActor *P_SpawnMissileAngleZ (AActor *source, fixed_t z, PClassActor *type, angle_t angle, fixed_t velz);
+AActor *P_SpawnMissileAngleZSpeed (AActor *source, fixed_t z, PClassActor *type, angle_t angle, fixed_t velz, fixed_t speed, AActor *owner=NULL, bool checkspawn = true);
 AActor *P_SpawnMissileZAimed (AActor *source, fixed_t z, AActor *dest, PClassActor *type);
 
 AActor *P_SpawnPlayerMissile (AActor* source, PClassActor *type);

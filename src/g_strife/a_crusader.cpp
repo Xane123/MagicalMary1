@@ -57,7 +57,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_CrusaderSweepLeft)
 	AActor *misl = P_SpawnMissileZAimed (self, self->Z() + 48*FRACUNIT, self->target, PClass::FindActor("FastFlameMissile"));
 	if (misl != NULL)
 	{
-		misl->vel.z += FRACUNIT;
+		misl->velz += FRACUNIT;
 	}
 	return 0;
 }
@@ -70,7 +70,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_CrusaderSweepRight)
 	AActor *misl = P_SpawnMissileZAimed (self, self->Z() + 48*FRACUNIT, self->target, PClass::FindActor("FastFlameMissile"));
 	if (misl != NULL)
 	{
-		misl->vel.z += FRACUNIT;
+		misl->velz += FRACUNIT;
 	}
 	return 0;
 }

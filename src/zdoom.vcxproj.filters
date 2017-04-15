@@ -1,2308 +1,2701 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\__autostart.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\__autostart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\eaxedit.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\eaxedit.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\fb_d3d9.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\fb_d3d9.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\fb_d3d9_wipe.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\fb_d3d9_wipe.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\fb_ddraw.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\fb_ddraw.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\hardware.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\hardware.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\helperthread.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\helperthread.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_cd.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_cd.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_crash.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_crash.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_input.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_input.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_keyboard.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_keyboard.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_mouse.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_mouse.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_dijoy.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_dijoy.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_rawps2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_rawps2.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_xinput.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_xinput.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_main.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_main.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_movie.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_movie.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\i_system.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_system.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\st_start.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\st_start.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\win32\win32video.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\win32gliface.cpp">
       <Filter>Win32 Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild_classify_sse2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\win32\win32video.cpp">
+      <Filter>Win32 Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq2x_asm.cpp">
+      <Filter>OpenGL Renderer\HQ Resize Assembly version</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq3x_asm.cpp">
+      <Filter>OpenGL Renderer\HQ Resize Assembly version</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq4x_asm.cpp">
+      <Filter>OpenGL Renderer\HQ Resize Assembly version</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hqnx_asm_Image.cpp">
+      <Filter>OpenGL Renderer\HQ Resize Assembly version</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_classify_sse2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_swrenderer.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_swrenderer.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_3dfloors.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_3dfloors.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_bsp.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_bsp.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_draw.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_draw.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_drawt.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_drawt.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_main.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_main.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_plane.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_plane.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_segs.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_segs.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_sky.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_sky.cpp">
       <Filter>Render Interface</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_things.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_things.cpp">
       <Filter>Render Core\Render Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\s_advsound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_advsound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\s_environment.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\s_playlist.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_playlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\s_sndseq.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_sndseq.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\s_sound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\GuillotineBinPack.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\GuillotineBinPack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\SkylineBinPack.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\SkylineBinPack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\intermission\intermission.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\intermission\intermission.cpp">
       <Filter>Intermission</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\intermission\intermission_parse.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\intermission\intermission_parse.cpp">
       <Filter>Intermission</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\colorpickermenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\colorpickermenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\joystickmenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\joystickmenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\listmenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\listmenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\loadsavemenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\loadsavemenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\menu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\menu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\menudef.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\menudef.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\menuinput.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\menuinput.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\messagebox.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\messagebox.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\optionmenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\optionmenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\playerdisplay.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\playerdisplay.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\playermenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\playermenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\readthis.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\readthis.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\menu\videomenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\videomenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\fmopl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\fmopl.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\mlopl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\mlopl_io.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl_io.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\music_opldumper_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opldumper_mididevice.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\music_opl_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opl_mididevice.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\opl_mus_player.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\dosbox\opl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.cpp">
       <Filter>Audio Files\OPL Synth\DOSBox</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\OPL3.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\OPL3.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\oplsynth\nukedopl3.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\nukedopl3.cpp">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\fmodsound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\fmodsound.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\i_music.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\i_music.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\i_sound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\i_sound.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\mpg123_decoder.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\mpg123_decoder.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_cd.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_cd.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_dumb.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_dumb.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_gme.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_gme.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_mus_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_midiout.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_smf_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_smf_midiout.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_hmi_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_hmi_midiout.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_xmi_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_xmi_midiout.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_midistream.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_midistream.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_midi_base.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_base.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_midi_timidity.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_timidity.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_mus_opl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_opl.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_stream.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_stream.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_fluidsynth_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_fluidsynth_mididevice.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_softsynth_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_softsynth_mididevice.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_timidity_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_timidity_mididevice.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_wildmidi_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_wildmidi_mididevice.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_win_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_win_mididevice.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\oalsound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\oalsound.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\sndfile_decoder.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\sndfile_decoder.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sound\music_pseudo_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_pseudo_mididevice.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\common.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\common.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\instrum.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\instrum_dls.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_dls.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\instrum_font.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_font.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\instrum_sf2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_sf2.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\mix.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\mix.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\playmidi.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\playmidi.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\resample.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\resample.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\timidity\timidity.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\timidity.cpp">
       <Filter>Audio Files\Timidity\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\wildmidi\file_io.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\file_io.cpp">
       <Filter>Audio Files\WildMidi\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\wildmidi\gus_pat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\gus_pat.cpp">
       <Filter>Audio Files\WildMidi\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\wildmidi\reverb.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\reverb.cpp">
       <Filter>Audio Files\WildMidi\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\wildmidi\wildmidi_lib.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\wildmidi_lib.cpp">
       <Filter>Audio Files\WildMidi\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\wildmidi\wm_error.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\wm_error.cpp">
       <Filter>Audio Files\WildMidi\Source</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_data\colormaps.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\colormaps.cpp">
       <Filter>Render Data\Resource Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_data\r_translate.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\r_translate.cpp">
       <Filter>Render Data\Resource Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\x86.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_data.cpp">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_portaldata.cpp">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_setup.cpp">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_matrix.cpp">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_vertexbuffer.cpp">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\a_dynlight.cpp">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_clock.cpp">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_cycler.cpp">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_geometric.cpp">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_renderer.cpp">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_renderstate.cpp">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_lightdata.cpp">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\init.cpp">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq2x.cpp">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq3x.cpp">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq4x.cpp">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hwtexture.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_texture.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_material.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hirestex.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_bitmap.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_samplers.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_translate.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hqresize.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_skyboxtexture.cpp">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_bsp.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_fakeflat.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_clipper.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_decal.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_drawinfo.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_flats.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_walls.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_sprite.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_skydome.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_renderhacks.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_weapon.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_scene.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_sky.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_portal.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_walls_draw.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_vertex.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_spritelight.cpp">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo3d.cpp">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_cvars.cpp">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_leftright.cpp">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\scoped_view_shifter.cpp">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_anaglyph.cpp">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight.cpp">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_glow.cpp">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight1.cpp">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_lightbuffer.cpp">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\shaders\gl_shader.cpp">
+      <Filter>OpenGL Renderer\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\shaders\gl_texshader.cpp">
+      <Filter>OpenGL Renderer\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_interface.cpp">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_framebuffer.cpp">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_menu.cpp">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_wipe.cpp">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_load.c">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models_md3.cpp">
+      <Filter>OpenGL Renderer\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models_md2.cpp">
+      <Filter>OpenGL Renderer\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models.cpp">
+      <Filter>OpenGL Renderer\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_voxels.cpp">
+      <Filter>OpenGL Renderer\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\x86.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Git\Failure5\src\actorptrselect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\actorptrselect.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\am_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\am_map.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\b_bot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\b_bot.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\b_func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\b_func.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\b_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\b_game.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\b_move.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\b_move.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\b_think.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\b_think.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\bbannouncer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\bbannouncer.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_bind.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_bind.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_cmds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_cmds.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_console.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_consolebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_consolebuffer.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_cvars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_cvars.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_dispatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_dispatch.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\c_expr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\c_expr.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\cmdlib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\cmdlib.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\colormatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\colormatcher.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\compatibility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\compatibility.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\configfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\configfile.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\ct_chat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\ct_chat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\d_dehacked.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\d_dehacked.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\d_iwad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\d_iwad.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\d_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\d_main.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\d_net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\d_net.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\d_netinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\d_netinfo.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\d_protocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\d_protocol.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\decallib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\decallib.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\dobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\dobject.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\dobjgc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\dobjgc.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\dobjtype.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\dobjtype.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\doomdef.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\doomdef.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\doomstat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\doomstat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\dsectoreffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\dsectoreffect.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\dthinker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\dthinker.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\edata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\edata.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\f_wipe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\f_wipe.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\farchive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\farchive.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\files.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\files.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_doomedmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_doomedmap.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_game.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_hub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_hub.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_level.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_mapinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_mapinfo.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_skill.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_skill.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gameconfigfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\gameconfigfile.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\gi.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gitinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\gitinfo.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\hu_scores.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\hu_scores.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\i_net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\i_net.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\info.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\keysections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\keysections.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\lumpconfigfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\lumpconfigfile.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_alloc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_alloc.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_argv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_argv.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_bbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_bbox.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_cheat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_cheat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_joy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_joy.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_misc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_misc.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_png.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_png.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_random.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\m_specialpaths.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\m_specialpaths.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\memarena.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\memarena.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\md5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\md5.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\name.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\name.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_classify_nosse2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild_classify_nosse2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_events.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild_events.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_extract.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild_extract.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_gl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild_gl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\nodebuild_utility.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\pathexpander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\pathexpander.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_3dfloors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_3dfloors.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_3dmidtex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_3dmidtex.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_acs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_acs.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_buildmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_buildmap.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_ceiling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_ceiling.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_conversation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_conversation.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_doors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_doors.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_effect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_effect.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_enemy.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_floor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_floor.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_glnodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_glnodes.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_interaction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_interaction.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_lights.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_linkedsectors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_linkedsectors.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_lnspec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_lnspec.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_map.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_maputl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_maputl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_mobj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_mobj.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_pillar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_pillar.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_plats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_plats.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_portals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_pspr.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_pspr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_saveg.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_saveg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_sectors.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_sectors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_setup.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_setup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_sight.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_sight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_slopes.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_slopes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_spec.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_spec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_states.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_states.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_switch.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_switch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_tags.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_tags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_teleport.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_teleport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_terrain.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_terrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_things.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_things.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_tick.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_tick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_trace.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_trace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_udmf.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_udmf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_usdf.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_usdf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_user.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_writemap.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_writemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\p_xlat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\p_xlat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\parsecontext.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\parsecontext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\po_man.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\po_man.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\portal.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\portal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_utility.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_utility.cpp">
       <Filter>Render Interface</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sc_man.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sc_man.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\st_stuff.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\st_stuff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\statistics.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\statistics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\stats.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\stringtable.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\stringtable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\strnatcmp.c">
+    <ClCompile Include="D:\Git\Failure5\src\strnatcmp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\tables.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\teaminfo.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\teaminfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\tempfiles.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\tempfiles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_blend.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_blend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_collection.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_collection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_draw.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_font.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_palette.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_palette.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_pfx.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_pfx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_text.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\v_video.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\v_video.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\w_wad.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\w_wad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\wi_stuff.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wi_stuff.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zstrformat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zstrformat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zstring.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zstring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_doommisc.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_doom\a_doommisc.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_hereticmisc.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_heretic\a_hereticmisc.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_hexenmisc.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_hexen\a_hexenmisc.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_raven\a_artitele.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_raven\a_artitele.cpp">
       <Filter>Games\Raven Shared</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_raven\a_minotaur.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_raven\a_minotaur.cpp">
       <Filter>Games\Raven Shared</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_strifestuff.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_strife\a_strifestuff.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_strife\strife_sbar.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_strife\strife_sbar.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_action.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_action.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_armor.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_armor.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_artifacts.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_artifacts.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_bridge.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_bridge.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_camera.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_camera.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_debris.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_debris.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_decals.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_decals.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_fastprojectile.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_fastprojectile.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_flashfader.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_flashfader.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_fountain.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_fountain.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_hatetarget.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_hatetarget.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_keys.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_keys.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_lightning.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_lightning.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_mapmarker.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_mapmarker.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_morph.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_morph.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_movingcamera.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_movingcamera.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_pickups.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_pickups.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_puzzleitems.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_puzzleitems.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_quake.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_quake.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_randomspawner.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_randomspawner.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_secrettrigger.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_secrettrigger.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_sectoraction.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_sectoraction.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_setcolor.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_setcolor.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_skies.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_skies.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_soundenvironment.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_soundenvironment.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_soundsequence.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_soundsequence.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_spark.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_spark.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_specialspot.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_specialspot.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_waterzone.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_waterzone.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_weaponpiece.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_weaponpiece.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_weapons.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_weapons.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\hudmessages.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\hudmessages.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\sbarinfo.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\sbarinfo.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\sbar_mugshot.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\sbar_mugshot.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\shared_hud.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\shared_hud.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\g_shared\shared_sbar.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\shared_sbar.cpp">
       <Filter>Shared Game</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\ancientzip.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\ancientzip.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_7z.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_7z.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_grp.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_grp.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_lump.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_lump.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_rff.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_rff.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_wad.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_wad.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_zip.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_zip.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_pak.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_pak.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\file_directory.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_directory.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\resourcefile.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\resourcefile.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sfmt\SFMT.cpp">
       <Filter>SFMT</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\animations.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\animations.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\anim_switches.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\anim_switches.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\automaptexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\automaptexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\bitmap.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\bitmap.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\buildtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\buildtexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\canvastexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\canvastexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\ddstexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\ddstexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\flattexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\flattexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\imgztexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\imgztexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\jpegtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\jpegtexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\multipatchtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\multipatchtexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\patchtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\patchtexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\pcxtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\pcxtexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\pngtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\pngtexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\rawpagetexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\rawpagetexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\emptytexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\emptytexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\texture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\texture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\texturemanager.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\texturemanager.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\tgatexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\tgatexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\textures\warptexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\textures\warptexture.cpp">
       <Filter>Render Data\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\olddecorations.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\olddecorations.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_codeptr.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_codeptr.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_data.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_data.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_exp.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_exp.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_expression.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_expression.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_parse.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_parse.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_properties.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_properties.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_states.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_states.cpp">
       <Filter>Decorate++</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\xlat\parse_xlat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\xlat\parse_xlat.cpp">
       <Filter>Xlat</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_fspic.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_fspic.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_func.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_func.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_load.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_load.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_oper.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_oper.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_parse.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_parse.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_prepro.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_prepro.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_script.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_script.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_spec.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_spec.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_variable.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_variable.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_cmd.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_cmd.cpp">
       <Filter>FraggleScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_data\sprites.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\sprites.cpp">
       <Filter>Render Data\Resource Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_data\voxels.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\voxels.cpp">
       <Filter>Render Data\Resource Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_data\renderstyle.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\renderstyle.cpp">
       <Filter>Render Data\Resource Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\r_data\r_interpolate.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\r_interpolate.cpp">
       <Filter>Render Data\Resource Sources</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\ast.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\ast.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\vmbuilder.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmbuilder.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\vmdisasm.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmdisasm.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\vmexec.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmexec.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\vmframe.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmframe.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc_compile.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_compile.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc_expr.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_expr.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc_parser.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_parser.cpp">
       <Filter>ZScript</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\src\zzautozend.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\zzautozend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\afxres.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\afxres.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\critsec.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\critsec.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\hardware.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\hardware.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\helperthread.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\helperthread.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\i_input.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\i_input.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\i_system.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\i_system.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\rawinput.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\rawinput.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\resource.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\resource.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\win32iface.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\wglext.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\win32\winres.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\win32gliface.h">
       <Filter>Win32 Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_fs.h">
+    <ClInclude Include="D:\Git\Failure5\src\win32\win32iface.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\win32\winres.h">
+      <Filter>Win32 Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\fragglescript\t_fs.h">
       <Filter>FraggleScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\fragglescript\t_script.h">
+    <ClInclude Include="D:\Git\Failure5\src\fragglescript\t_script.h">
       <Filter>FraggleScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_doomglobal.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_doomglobal.h">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_hexenglobal.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_hexenglobal.h">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_raven\ravenshared.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_raven\ravenshared.h">
       <Filter>Games\Raven Shared</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_action.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_action.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_artifacts.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_artifacts.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_keys.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_keys.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_lightning.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_lightning.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_morph.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_morph.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_pickups.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_pickups.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_sharedglobal.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_sharedglobal.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_specialspot.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_specialspot.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\a_weaponpiece.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\a_weaponpiece.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\sbar.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\sbar.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\sbarinfo.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\sbarinfo.h">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_strifeglobal.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_strifeglobal.h">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\intermission\intermission.h">
+    <ClInclude Include="D:\Git\Failure5\src\intermission\intermission.h">
       <Filter>Intermission</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\menu\menu.h">
+    <ClInclude Include="D:\Git\Failure5\src\menu\menu.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\menu\optionmenuitems.h">
+    <ClInclude Include="D:\Git\Failure5\src\menu\optionmenuitems.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\oplsynth\deftypes.h">
+    <ClInclude Include="D:\Git\Failure5\src\oplsynth\deftypes.h">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\oplsynth\muslib.h">
+    <ClInclude Include="D:\Git\Failure5\src\oplsynth\muslib.h">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\oplsynth\nukedopl3.h">
+    <ClInclude Include="D:\Git\Failure5\src\oplsynth\nukedopl3.h">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\oplsynth\opl.h">
+    <ClInclude Include="D:\Git\Failure5\src\oplsynth\opl.h">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\oplsynth\opl_mus_player.h">
+    <ClInclude Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.h">
       <Filter>Audio Files\OPL Synth</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\oplsynth\dosbox\opl.h">
+    <ClInclude Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.h">
       <Filter>Audio Files\OPL Synth\DOSBox</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\dikeys.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\dikeys.h">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\hardware.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\hardware.h">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\i_input.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\i_input.h">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\i_system.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\i_system.h">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\critsec.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\critsec.h">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_common.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_common.h">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\st_console.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\st_console.h">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\critsec.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\critsec.h">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\sdlvideo.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\sdlglvideo.h">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_data\colormaps.h">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\sdlvideo.h">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\r_data\colormaps.h">
       <Filter>Render Data\Resource Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_data\r_interpolate.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_data\r_interpolate.h">
       <Filter>Render Data\Resource Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_data\r_translate.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_data\r_translate.h">
       <Filter>Render Data\Resource Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_data\renderstyle.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_data\renderstyle.h">
       <Filter>Render Data\Resource Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_data\sprites.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_data\sprites.h">
       <Filter>Render Data\Resource Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_data\voxels.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_data\voxels.h">
       <Filter>Render Data\Resource Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\ancientzip.h">
+    <ClInclude Include="D:\Git\Failure5\src\resourcefiles\ancientzip.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\resourcefiles\resourcefile.h">
+    <ClInclude Include="D:\Git\Failure5\src\resourcefiles\resourcefile.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-alti.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-alti.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params11213.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params11213.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params1279.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params1279.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params132049.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params132049.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params19937.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params19937.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params216091.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params216091.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params2281.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params2281.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params4253.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params4253.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params44497.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params44497.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params607.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params607.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-params86243.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-params86243.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT-sse2.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT-sse2.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sfmt\SFMT.h">
+    <ClInclude Include="D:\Git\Failure5\src\sfmt\SFMT.h">
       <Filter>SFMT</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\efx.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\efx.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\except.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\except.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\fmod_wrap.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\fmod_wrap.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\fmodsound.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\fmodsound.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\i_music.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\i_music.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\i_musicinterns.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\i_musicinterns.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\i_sound.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\i_sound.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\i_soundinternal.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\i_soundinternal.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\mpg123_decoder.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\mpg123_decoder.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\oaldef.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\oaldef.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\oalload.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\oalload.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\oalsound.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\oalsound.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sound\sndfile_decoder.h">
+    <ClInclude Include="D:\Git\Failure5\src\sound\sndfile_decoder.h">
       <Filter>Audio Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\textures\bitmap.h">
+    <ClInclude Include="D:\Git\Failure5\src\textures\bitmap.h">
       <Filter>Render Data\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\textures\textures.h">
+    <ClInclude Include="D:\Git\Failure5\src\textures\textures.h">
       <Filter>Render Data\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef.h">
+    <ClInclude Include="D:\Git\Failure5\src\thingdef\thingdef.h">
       <Filter>Decorate++</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_exp.h">
+    <ClInclude Include="D:\Git\Failure5\src\thingdef\thingdef_exp.h">
       <Filter>Decorate++</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\thingdef\thingdef_type.h">
-      <Filter>Decorate++</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\xlat\xlat.h">
+    <ClInclude Include="D:\Git\Failure5\src\xlat\xlat.h">
       <Filter>Xlat</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\vm.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\vm.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\vmbuilder.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\vmbuilder.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\vmexec.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\vmexec.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\vmops.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\vmops.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc_compile.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\zcc_compile.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc_exprlist.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\zcc_errors.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc_parser.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\zcc_exprlist.h">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\GuillotineBinPack.h">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\zcc_parser.h">
+      <Filter>ZScript</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\gl_functions.h">
+      <Filter>OpenGL Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\data\gl_data.h">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\data\gl_matrix.h">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\data\gl_vertexbuffer.h">
+      <Filter>OpenGL Renderer\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight.h">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\dynlights\gl_glow.h">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\dynlights\gl_lightbuffer.h">
+      <Filter>OpenGL Renderer\Dynamic Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\hqnx\common.h">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\hqnx\hqx.h">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\hqnx\mystdint.h">
+      <Filter>OpenGL Renderer\HQ Resize</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\hqnx_asm\hqnx_asm.h">
+      <Filter>OpenGL Renderer\HQ Resize Assembly version</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\hqnx_asm\hqnx_asm_Image.h">
+      <Filter>OpenGL Renderer\HQ Resize Assembly version</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\models\gl_models.h">
+      <Filter>OpenGL Renderer\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\models\tab_anorms.h">
+      <Filter>OpenGL Renderer\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\renderer\gl_colormap.h">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\renderer\gl_lightdata.h">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\renderer\gl_renderer.h">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\renderer\gl_renderstate.h">
+      <Filter>OpenGL Renderer\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\scene\gl_clipper.h">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\scene\gl_drawinfo.h">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\scene\gl_portal.h">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\scene\gl_wall.h">
+      <Filter>OpenGL Renderer\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\stereo3d\gl_anaglyph.h">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo3d.h">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_leftright.h">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\stereo3d\scoped_color_mask.h">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\stereo3d\scoped_view_shifter.h">
+      <Filter>OpenGL Renderer\Stereo3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\shaders\gl_shader.h">
+      <Filter>OpenGL Renderer\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\shaders\gl_texshader.h">
+      <Filter>OpenGL Renderer\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\system\gl_cvars.h">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\system\gl_framebuffer.h">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\system\gl_interface.h">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\system\gl_load.h">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\system\gl_system.h">
+      <Filter>OpenGL Renderer\System</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_bitmap.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_hwtexture.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_material.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_samplers.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_skyboxtexture.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_texture.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\textures\gl_translate.h">
+      <Filter>OpenGL Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\utility\gl_clock.h">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\utility\gl_convert.h">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\utility\gl_cycler.h">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\utility\gl_geometric.h">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\gl\utility\gl_templates.h">
+      <Filter>OpenGL Renderer\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\GuillotineBinPack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\Rect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\Rect.h">
+    <ClInclude Include="D:\Git\Failure5\src\SkylineBinPack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\SkylineBinPack.h">
+    <ClInclude Include="D:\Git\Failure5\src\actionspecials.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\actionspecials.h">
+    <ClInclude Include="D:\Git\Failure5\src\actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\actor.h">
+    <ClInclude Include="D:\Git\Failure5\src\actorptrselect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\actorptrselect.h">
+    <ClInclude Include="D:\Git\Failure5\src\am_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\am_map.h">
+    <ClInclude Include="D:\Git\Failure5\src\announcer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\announcer.h">
+    <ClInclude Include="D:\Git\Failure5\src\autosegs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\autosegs.h">
+    <ClInclude Include="D:\Git\Failure5\src\b_bot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\b_bot.h">
+    <ClInclude Include="D:\Git\Failure5\src\basicinlines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\basicinlines.h">
+    <ClInclude Include="D:\Git\Failure5\src\basictypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\basictypes.h">
+    <ClInclude Include="D:\Git\Failure5\src\c_bind.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\c_bind.h">
+    <ClInclude Include="D:\Git\Failure5\src\c_console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\c_console.h">
+    <ClInclude Include="D:\Git\Failure5\src\c_consolebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\c_consolebuffer.h">
+    <ClInclude Include="D:\Git\Failure5\src\c_cvars.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\c_cvars.h">
+    <ClInclude Include="D:\Git\Failure5\src\c_dispatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\c_dispatch.h">
+    <ClInclude Include="D:\Git\Failure5\src\cmdlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\cmdlib.h">
+    <ClInclude Include="D:\Git\Failure5\src\colormatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\colormatcher.h">
+    <ClInclude Include="D:\Git\Failure5\src\compatibility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\compatibility.h">
+    <ClInclude Include="D:\Git\Failure5\src\configfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\configfile.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_dehacked.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_dehacked.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_event.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_gui.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_main.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_net.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_net.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_netinf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_netinf.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_player.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_protocol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_protocol.h">
+    <ClInclude Include="D:\Git\Failure5\src\d_ticcmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\d_ticcmd.h">
+    <ClInclude Include="D:\Git\Failure5\src\decallib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\decallib.h">
+    <ClInclude Include="D:\Git\Failure5\src\dobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\dobject.h">
+    <ClInclude Include="D:\Git\Failure5\src\dobjtype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\dobjtype.h">
+    <ClInclude Include="D:\Git\Failure5\src\doomdata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\doomdata.h">
+    <ClInclude Include="D:\Git\Failure5\src\doomdef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\doomdef.h">
+    <ClInclude Include="D:\Git\Failure5\src\doomerrors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\doomerrors.h">
+    <ClInclude Include="D:\Git\Failure5\src\doomstat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\doomstat.h">
+    <ClInclude Include="D:\Git\Failure5\src\doomtype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\doomtype.h">
+    <ClInclude Include="D:\Git\Failure5\src\dscript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\dscript.h">
+    <ClInclude Include="D:\Git\Failure5\src\dsectoreffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\dsectoreffect.h">
+    <ClInclude Include="D:\Git\Failure5\src\dthinker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\dthinker.h">
+    <ClInclude Include="D:\Git\Failure5\src\edata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\edata.h">
+    <ClInclude Include="D:\Git\Failure5\src\errors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\errors.h">
+    <ClInclude Include="D:\Git\Failure5\src\f_wipe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\f_wipe.h">
+    <ClInclude Include="D:\Git\Failure5\src\farchive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\farchive.h">
+    <ClInclude Include="D:\Git\Failure5\src\files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\files.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_game.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_hub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hub.h">
+    <ClInclude Include="D:\Git\Failure5\src\g_level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_level.h">
+    <ClInclude Include="D:\Git\Failure5\src\gameconfigfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gameconfigfile.h">
+    <ClInclude Include="D:\Git\Failure5\src\gametype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gametype.h">
+    <ClInclude Include="D:\Git\Failure5\src\gccinlines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gccinlines.h">
+    <ClInclude Include="D:\Git\Failure5\src\gi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gi.h">
+    <ClInclude Include="D:\Git\Failure5\src\gitinfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gstrings.h">
+    <ClInclude Include="D:\Git\Failure5\src\gstrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\hu_stuff.h">
+    <ClInclude Include="D:\Git\Failure5\src\hu_stuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\i_cd.h">
+    <ClInclude Include="D:\Git\Failure5\src\i_cd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\i_movie.h">
+    <ClInclude Include="D:\Git\Failure5\src\i_movie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\i_net.h">
+    <ClInclude Include="D:\Git\Failure5\src\i_net.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\i_video.h">
+    <ClInclude Include="D:\Git\Failure5\src\i_video.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\info.h">
+    <ClInclude Include="D:\Git\Failure5\src\info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\lists.h">
+    <ClInclude Include="D:\Git\Failure5\src\lists.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\lumpconfigfile.h">
+    <ClInclude Include="D:\Git\Failure5\src\lumpconfigfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_alloc.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_alloc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_argv.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_argv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_bbox.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_bbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_cheat.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_cheat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_crc32.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_crc32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_fixed.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_fixed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_joy.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_joy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_misc.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_misc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_png.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_png.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_random.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\m_swap.h">
+    <ClInclude Include="D:\Git\Failure5\src\m_swap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\md5.h">
+    <ClInclude Include="D:\Git\Failure5\src\md5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\memarena.h">
+    <ClInclude Include="D:\Git\Failure5\src\memarena.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\mscinlines.h">
+    <ClInclude Include="D:\Git\Failure5\src\mscinlines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\mus2midi.h">
+    <ClInclude Include="D:\Git\Failure5\src\mus2midi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\name.h">
+    <ClInclude Include="D:\Git\Failure5\src\name.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\namedef.h">
+    <ClInclude Include="D:\Git\Failure5\src\namedef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\nodebuild.h">
+    <ClInclude Include="D:\Git\Failure5\src\nodebuild.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_3dfloors.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_3dfloors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_3dmidtex.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_3dmidtex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_acs.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_acs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_blockmap.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_blockmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_checkposition.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_checkposition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_conversation.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_conversation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_effect.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_enemy.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_lnspec.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_lnspec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_local.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_local.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_maputl.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_maputl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_pspr.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_pspr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_saveg.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_saveg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_setup.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_setup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_spec.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_spec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_tags.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_tags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_terrain.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_tick.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_tick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_trace.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_trace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\p_udmf.h">
+    <ClInclude Include="D:\Git\Failure5\src\p_udmf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\parsecontext.h">
+    <ClInclude Include="D:\Git\Failure5\src\parsecontext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\pathexpander.h">
+    <ClInclude Include="D:\Git\Failure5\src\pathexpander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\po_man.h">
+    <ClInclude Include="D:\Git\Failure5\src\po_man.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\portal.h">
+    <ClInclude Include="D:\Git\Failure5\src\portal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_3dfloors.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_3dfloors.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_bsp.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_bsp.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_defs.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_defs.h">
       <Filter>Render Interface</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_draw.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_draw.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_local.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_local.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_main.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_main.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_plane.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_plane.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_renderer.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_renderer.h">
       <Filter>Render Interface</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_segs.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_segs.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_sky.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_sky.h">
       <Filter>Render Interface</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_state.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_state.h">
       <Filter>Render Interface</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_swrenderer.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_swrenderer.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_things.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_things.h">
       <Filter>Render Core\Render Headers</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\r_utility.h">
+    <ClInclude Include="D:\Git\Failure5\src\r_utility.h">
       <Filter>Render Interface</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\s_playlist.h">
+    <ClInclude Include="D:\Git\Failure5\src\s_playlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\s_sndseq.h">
+    <ClInclude Include="D:\Git\Failure5\src\s_sndseq.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\s_sound.h">
+    <ClInclude Include="D:\Git\Failure5\src\s_sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man.h">
+    <ClInclude Include="D:\Git\Failure5\src\sc_man.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_tokens.h">
+    <ClInclude Include="D:\Git\Failure5\src\sc_man_scanner.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\sc_man_tokens.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\skins.h">
+    <ClInclude Include="D:\Git\Failure5\src\skins.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\st_start.h">
+    <ClInclude Include="D:\Git\Failure5\src\st_start.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\st_stuff.h">
+    <ClInclude Include="D:\Git\Failure5\src\st_stuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\statnums.h">
+    <ClInclude Include="D:\Git\Failure5\src\statnums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\stats.h">
+    <ClInclude Include="D:\Git\Failure5\src\stats.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\stringtable.h">
+    <ClInclude Include="D:\Git\Failure5\src\stringtable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\strnatcmp.h">
+    <ClInclude Include="D:\Git\Failure5\src\strnatcmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\tables.h">
+    <ClInclude Include="D:\Git\Failure5\src\tables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\tagitem.h">
+    <ClInclude Include="D:\Git\Failure5\src\tagitem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\tarray.h">
+    <ClInclude Include="D:\Git\Failure5\src\tarray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\teaminfo.h">
+    <ClInclude Include="D:\Git\Failure5\src\teaminfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\tempfiles.h">
+    <ClInclude Include="D:\Git\Failure5\src\tempfiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\templates.h">
+    <ClInclude Include="D:\Git\Failure5\src\templates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\tflags.h">
+    <ClInclude Include="D:\Git\Failure5\src\tflags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\v_collection.h">
+    <ClInclude Include="D:\Git\Failure5\src\v_collection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\v_font.h">
+    <ClInclude Include="D:\Git\Failure5\src\v_font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\v_palette.h">
+    <ClInclude Include="D:\Git\Failure5\src\v_palette.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\v_pfx.h">
+    <ClInclude Include="D:\Git\Failure5\src\v_pfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\v_text.h">
+    <ClInclude Include="D:\Git\Failure5\src\v_text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\v_video.h">
+    <ClInclude Include="D:\Git\Failure5\src\v_video.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\vectors.h">
+    <ClInclude Include="D:\Git\Failure5\src\vectors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\version.h">
+    <ClInclude Include="D:\Git\Failure5\src\version.h">
       <Filter>Versioning</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\w_wad.h">
+    <ClInclude Include="D:\Git\Failure5\src\w_wad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\w_zip.h">
+    <ClInclude Include="D:\Git\Failure5\src\w_zip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\weightedlist.h">
+    <ClInclude Include="D:\Git\Failure5\src\weightedlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\wi_stuff.h">
+    <ClInclude Include="D:\Git\Failure5\src\wi_stuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\x86.h">
+    <ClInclude Include="D:\Git\Failure5\src\x86.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\xlat_parser.h">
+    <ClInclude Include="D:\Git\Failure5\src\xlat_parser.h">
       <Filter>Xlat</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\xs_Float.h">
+    <ClInclude Include="D:\Git\Failure5\src\xs_Float.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zcc-parse.h">
-      <Filter>ZScript</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zstring.h">
+    <ClInclude Include="D:\Git\Failure5\src\zcc-parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\i_cd.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\zstring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\posix\i_cd.cpp">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\i_movie.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\i_movie.cpp">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\i_steam.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\i_steam.cpp">
       <Filter>POSIX Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\crashcatcher.c">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\crashcatcher.c">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\hardware.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\hardware.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\i_gui.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\i_gui.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\i_input.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\i_input.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\i_joystick.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\i_joystick.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\i_main.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\i_main.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\i_system.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\i_system.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\i_timer.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\i_timer.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\sdlvideo.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\sdlvideo.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\sdl\st_start.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\sdlglvideo.cpp">
       <Filter>SDL Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\osx\iwadpicker_cocoa.mm">
+    <ClInclude Include="D:\Git\Failure5\src\posix\sdl\st_start.cpp">
+      <Filter>SDL Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Git\Failure5\src\posix\osx\iwadpicker_cocoa.mm">
       <Filter>OS X Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\osx\zdoom.icns">
+    <ClInclude Include="D:\Git\Failure5\src\posix\osx\zdoom.icns">
       <Filter>OS X Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\critsec.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\critsec.cpp">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_input.mm">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_input.mm">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_joystick.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_joystick.cpp">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_main.mm">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_main.mm">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_main_except.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_system.mm">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_system.mm">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_timer.cpp">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_timer.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\i_video.mm">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_video.mm">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\st_console.mm">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\st_console.mm">
+    <ClInclude Include="D:\Git\Failure5\src\posix\cocoa\st_start.mm">
       <Filter>Cocoa Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\st_start.mm">
-      <Filter>Cocoa Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h">
+    <ClInclude Include="D:\Git\Failure5\src\sc_man_scanner.re">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_arachnotron.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_arachnotron.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_archvile.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_archvile.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_bossbrain.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_bossbrain.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_bruiser.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_bruiser.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_cacodemon.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_cacodemon.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_cyberdemon.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_cyberdemon.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_demon.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_demon.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_doomimp.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_doomimp.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_doomweaps.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_doomweaps.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_fatso.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_fatso.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_keen.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_keen.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_lostsoul.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_lostsoul.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_painelemental.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_painelemental.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_possessed.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_possessed.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_revenant.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_revenant.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_scriptedmarine.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_scriptedmarine.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_spidermaster.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_doom\a_spidermaster.cpp">
       <Filter>Games\Doom Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_chicken.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_chicken.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_dsparil.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_dsparil.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_hereticartifacts.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_hereticartifacts.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_hereticimp.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_hereticimp.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_hereticweaps.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_hereticweaps.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_ironlich.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_ironlich.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_knight.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_knight.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_heretic\a_wizard.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_heretic\a_wizard.cpp">
       <Filter>Games\Heretic Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_bats.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_bats.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_bishop.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_bishop.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_blastradius.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_blastradius.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_boostarmor.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_boostarmor.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_centaur.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_centaur.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_clericflame.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_clericflame.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_clericholy.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_clericholy.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_clericmace.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_clericmace.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_clericstaff.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_clericstaff.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_dragon.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_dragon.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_fighteraxe.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_fighteraxe.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_fighterhammer.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_fighterhammer.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_fighterplayer.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_fighterplayer.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_fighterquietus.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_fighterquietus.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_firedemon.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_firedemon.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_flechette.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_flechette.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_flies.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_flies.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_fog.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_fog.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_healingradius.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_healingradius.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_heresiarch.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_heresiarch.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_hexenspecialdecs.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_hexenspecialdecs.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_iceguy.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_iceguy.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_korax.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_korax.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_magecone.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_magecone.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_magelightning.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_magelightning.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_magestaff.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_magestaff.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_pig.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_pig.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_serpent.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_serpent.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_spike.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_spike.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_summon.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_summon.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_teleportother.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_teleportother.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_hexen\a_wraith.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_hexen\a_wraith.cpp">
       <Filter>Games\Hexen Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_acolyte.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_acolyte.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_alienspectres.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_alienspectres.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_coin.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_coin.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_crusader.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_crusader.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_entityboss.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_entityboss.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_inquisitor.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_inquisitor.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_loremaster.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_loremaster.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_oracle.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_oracle.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_programmer.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_programmer.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_reaver.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_reaver.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_rebels.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_rebels.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_sentinel.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_sentinel.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_spectral.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_spectral.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_stalker.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_stalker.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_strifeitems.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_strifeitems.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_strifeweapons.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_strifeweapons.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_templar.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_templar.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_strife\a_thingstoblowup.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_strife\a_thingstoblowup.cpp">
       <Filter>Games\Strife Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_shared\sbarinfo_commands.cpp">
+    <ClInclude Include="D:\Git\Failure5\src\g_shared\sbarinfo_commands.cpp">
       <Filter>Shared Game</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\xlat\xlat_parser.y">
+    <ClInclude Include="D:\Git\Failure5\src\xlat\xlat_parser.y">
       <Filter>Xlat</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\xlat_parser.c">
+    <ClInclude Include="D:\Git\Failure5\src\xlat_parser.c">
       <Filter>Xlat</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zscript\zcc-parse.lemon">
+    <ClInclude Include="D:\Git\Failure5\src\zscript\zcc-parse.lemon">
       <Filter>ZScript</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\zcc-parse.c">
-      <Filter>ZScript</Filter>
+    <ClInclude Include="D:\Git\Failure5\src\zcc-parse.c">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_ia32\a.asm">
+    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\a.asm">
       <Filter>Assembly Files\ia32</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_ia32\misc.asm">
+    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\misc.asm">
       <Filter>Assembly Files\ia32</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_ia32\tmap.asm">
+    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\tmap.asm">
       <Filter>Assembly Files\ia32</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_ia32\tmap2.asm">
+    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\tmap2.asm">
       <Filter>Assembly Files\ia32</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_ia32\tmap3.asm">
+    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\tmap3.asm">
       <Filter>Assembly Files\ia32</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_x86_64\tmap3.asm">
+    <ClInclude Include="D:\Git\Failure5\src\asm_x86_64\tmap3.asm">
       <Filter>Assembly Files\x86_64</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\asm_x86_64\tmap3.s">
+    <ClInclude Include="D:\Git\Failure5\src\asm_x86_64\tmap3.s">
       <Filter>Assembly Files\x86_64</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\src\CMakeLists.txt" />
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\dce7eebb3d7e8ee717a40f4111ab9073\xlat_parser.c.rule">
+    <CustomBuild Include="D:\Git\Failure5\src\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\8d065d43cb23dc5f68c47ddf413620aa\sc_man_scanner.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\dce7eebb3d7e8ee717a40f4111ab9073\zcc-parse.c.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\8d065d43cb23dc5f68c47ddf413620aa\xlat_parser.c.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\dce7eebb3d7e8ee717a40f4111ab9073\sc_man_scanner.h.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\8d065d43cb23dc5f68c47ddf413620aa\zcc-parse.c.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\e2d5bcfe1cac1a0b14b0442176dacad9\a.obj.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\a.obj.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\e2d5bcfe1cac1a0b14b0442176dacad9\misc.obj.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\misc.obj.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\e2d5bcfe1cac1a0b14b0442176dacad9\tmap.obj.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\tmap.obj.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\e2d5bcfe1cac1a0b14b0442176dacad9\tmap2.obj.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\tmap2.obj.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\e2d5bcfe1cac1a0b14b0442176dacad9\tmap3.obj.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\tmap3.obj.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj">
+    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj">
       <Filter>Object Files</Filter>
     </Object>
-    <Object Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj">
+    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj">
       <Filter>Object Files</Filter>
     </Object>
-    <Object Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj">
+    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj">
       <Filter>Object Files</Filter>
     </Object>
-    <Object Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj">
+    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj">
       <Filter>Object Files</Filter>
     </Object>
-    <Object Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj">
+    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj">
       <Filter>Object Files</Filter>
     </Object>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="D:\Git\MaryMagicalAdventure\src\win32\zdoom.rc">
+    <ResourceCompile Include="D:\Git\Failure5\src\win32\zdoom.rc">
       <Filter>Versioning</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Games\Doom Game">
-      <UniqueIdentifier>{368C2021-86A2-35F1-8859-FD7F8C812426}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Heretic Game">
-      <UniqueIdentifier>{02834BCB-1998-34A5-A7B8-BA26EB463E1E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Hexen Game">
-      <UniqueIdentifier>{963C5011-8A7F-3966-BBB5-E78890610849}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Raven Shared">
-      <UniqueIdentifier>{EB6BF0BF-49BE-3B4E-93E8-E718B4A8BB02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Games\Strife Game">
-      <UniqueIdentifier>{CBA7CC9A-70A8-3C9E-9EAA-CA4C3EF52EA7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\OPL Synth\DOSBox">
-      <UniqueIdentifier>{F6ADF56A-B549-3916-ACBA-22FC8A1D45D6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Data\Resource Headers">
-      <UniqueIdentifier>{786F8B26-AC10-341D-A7F3-58664BB543FC}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Data\Resource Sources">
-      <UniqueIdentifier>{72896560-1452-31DE-844F-F83527ECFA62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Data\Textures">
-      <UniqueIdentifier>{E84AE1E7-5BC2-3F77-A1BB-3FC4DAB307A4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\OPL Synth">
-      <UniqueIdentifier>{CE98A472-3968-3932-8074-C4EDA2E1F3E5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\Timidity">
-      <UniqueIdentifier>{77761A77-370F-3EC7-8ED2-5DC7B292CD3B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\WildMidi">
-      <UniqueIdentifier>{A580E0FD-189C-3985-9C50-D2D751FA7357}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assembly Files\ia32">
-      <UniqueIdentifier>{9E019D04-D6E5-3B50-96A6-024A11BC19CB}</UniqueIdentifier>
+      <UniqueIdentifier>{5539F682-89BB-39D7-8370-5661994B2A85}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assembly Files\x86_64">
-      <UniqueIdentifier>{24BDFCA5-F923-397C-93B5-5C70AE1EE042}</UniqueIdentifier>
+      <UniqueIdentifier>{E4870958-E770-33F1-8ACC-028E5576441E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Core\Render Headers">
-      <UniqueIdentifier>{E050EB34-0775-37EF-BB70-CF87DD87A037}</UniqueIdentifier>
+    <Filter Include="Render Data\Resource Headers">
+      <UniqueIdentifier>{C6B96756-E197-3238-A22D-547A12071BFF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Core\Render Sources">
-      <UniqueIdentifier>{6224DB8C-F541-3FD6-9B13-A3F53B0FDA62}</UniqueIdentifier>
+    <Filter Include="Render Data\Resource Sources">
+      <UniqueIdentifier>{D8F27724-8192-3F5B-9418-876E46EBD3CA}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\Timidity\Source">
-      <UniqueIdentifier>{927DD403-DBA7-3D36-89E9-1A2CECC6A3EE}</UniqueIdentifier>
+    <Filter Include="Render Data\Textures">
+      <UniqueIdentifier>{B740DC52-6DAE-301E-B58E-3F2F074B057E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\WildMidi\Source">
-      <UniqueIdentifier>{4971B105-1295-3D46-B7AE-46F7B7204049}</UniqueIdentifier>
+    <Filter Include="Games\Doom Game">
+      <UniqueIdentifier>{2C6806F7-AC53-3367-94A4-C44FB85E19C0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Heretic Game">
+      <UniqueIdentifier>{842E3475-0ADF-363A-9DA5-625258897629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Hexen Game">
+      <UniqueIdentifier>{84486DAF-393E-33E1-A156-E3E0B39B96B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Raven Shared">
+      <UniqueIdentifier>{DE7421FE-6386-3845-8E21-94FE04BFC9FD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Games\Strife Game">
+      <UniqueIdentifier>{844FF32A-E258-3ABF-A6CF-483AAF1DC6B4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\OPL Synth\DOSBox">
+      <UniqueIdentifier>{CEAADCAF-73DC-352C-A024-B6021BF88129}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\OPL Synth">
+      <UniqueIdentifier>{3F7C80DC-BA9B-3B59-9986-7273FB92E740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity">
+      <UniqueIdentifier>{E998B7CB-7686-32A6-94FE-CCDC98AD2EAC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi">
+      <UniqueIdentifier>{0CBE6004-5E97-397D-9F0D-0C3E62A865CB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Data">
+      <UniqueIdentifier>{99ADF2B4-57D0-3C9E-8F8A-D648758E85DD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Dynamic Lights">
+      <UniqueIdentifier>{B060775C-A389-30B8-9E67-71B1007ECDB8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\HQ Resize">
+      <UniqueIdentifier>{743AEDB0-989E-3586-ABA2-CDE10B7E3695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\HQ Resize Assembly version">
+      <UniqueIdentifier>{BC053CA3-A5EB-347D-8108-F76ABCE30B46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Models">
+      <UniqueIdentifier>{548D9B08-8A4B-3E48-ADE0-C2CDC4C36C7F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Renderer">
+      <UniqueIdentifier>{EA4234BB-2B33-37AC-A062-03669D13526F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Scene">
+      <UniqueIdentifier>{611EEBB1-8270-3C87-A862-B9F5222100D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Stereo3D">
+      <UniqueIdentifier>{DCE90FE2-1095-33A7-AAD5-9F5191D1CB15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Shaders">
+      <UniqueIdentifier>{D59DA152-A04A-31AE-A42A-F1771DF5FD4C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\System">
+      <UniqueIdentifier>{8E678C3E-F8A0-39AA-BF62-3F30DEDE4D04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Textures">
+      <UniqueIdentifier>{FBB8EF08-28FF-3ABC-A4C7-34A22557D67B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Utilities">
+      <UniqueIdentifier>{4F1B1440-EF57-376F-A144-C6D2D0AADB4D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{D4487385-BD72-39A8-996C-F48DF028A1AA}</UniqueIdentifier>
+      <UniqueIdentifier>{E707ACC4-5D8A-3603-909E-867CE3067140}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{00098937-6B9E-3CEB-A993-37A808080D4A}</UniqueIdentifier>
+      <UniqueIdentifier>{47A2BD23-E380-3FFD-8A58-10A0ED68AFE0}</UniqueIdentifier>
     </Filter>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{39915B61-5B97-32B8-891A-7F6CFC741C08}</UniqueIdentifier>
+      <UniqueIdentifier>{ADA0F2DC-BA31-300E-B1F2-A8E9247EB1F6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Object Files">
-      <UniqueIdentifier>{C339EE06-3BF0-38D2-8562-2D8431913967}</UniqueIdentifier>
+      <UniqueIdentifier>{27CB070D-3B2F-310D-A223-C35A4E3FCCED}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assembly Files">
-      <UniqueIdentifier>{4C015E21-4703-36AF-889B-214C6F8B88EE}</UniqueIdentifier>
+      <UniqueIdentifier>{3C18441F-E60B-37E8-810B-778774F764BF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Audio Files">
-      <UniqueIdentifier>{7D41881E-E46B-32FF-BCA4-A6AF7CC43E59}</UniqueIdentifier>
+      <UniqueIdentifier>{9E7EC49B-A034-358D-8C89-741B2C53DA9C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Decorate++">
-      <UniqueIdentifier>{8616B184-A8F0-3FDF-B2E7-9F92DBAD706D}</UniqueIdentifier>
+      <UniqueIdentifier>{343F495C-5DD2-38E0-AF12-1A8DB56400E9}</UniqueIdentifier>
     </Filter>
     <Filter Include="FraggleScript">
-      <UniqueIdentifier>{3D823F2D-EAEF-3460-974F-0459F41371A2}</UniqueIdentifier>
+      <UniqueIdentifier>{CC7AEC6C-7E02-39F5-A7F5-2259F7C63E3B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Games">
-      <UniqueIdentifier>{D68A24F3-A9A5-3106-82E3-0EFFA917E11A}</UniqueIdentifier>
+      <UniqueIdentifier>{FAAEB6BC-FD63-3881-A35E-AB4F6ED62D54}</UniqueIdentifier>
     </Filter>
     <Filter Include="Intermission">
-      <UniqueIdentifier>{9CD29B4F-DFA9-366B-8C57-990F7B81889F}</UniqueIdentifier>
+      <UniqueIdentifier>{E671FE69-37F0-36B5-834D-90A939AA59C6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Menu">
-      <UniqueIdentifier>{46BFDD06-15C8-3366-9675-AC0467FE0E24}</UniqueIdentifier>
+      <UniqueIdentifier>{633DFE59-54FB-32DB-9F95-6E91844DD738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer">
+      <UniqueIdentifier>{B9D59275-8B57-3837-9D87-3C21512B29C7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Render Core">
-      <UniqueIdentifier>{FDE072B6-12A4-3754-BF57-9A7641A657AD}</UniqueIdentifier>
+      <UniqueIdentifier>{9DEAC57E-2802-35E1-A34A-F162E531160E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Render Data">
-      <UniqueIdentifier>{F4E87F01-4104-31CA-8362-4F2AB8CDE8C8}</UniqueIdentifier>
+      <UniqueIdentifier>{6F7E1668-35EF-3AFF-9D27-E0DB9B5609A3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Render Interface">
-      <UniqueIdentifier>{85ED8D6D-F08A-3AE9-9B39-666BE0895166}</UniqueIdentifier>
+      <UniqueIdentifier>{2EE254BC-FA6E-3A64-A8FD-6E5FA3AA876A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{EF503314-BC08-314A-BE43-35FECBA64B0F}</UniqueIdentifier>
+      <UniqueIdentifier>{0701D5F2-DDCC-3D87-AB9B-AAA1CFFBACD3}</UniqueIdentifier>
     </Filter>
     <Filter Include="POSIX Files">
-      <UniqueIdentifier>{F526D813-A4EB-32CD-B5B7-5A31EA06A206}</UniqueIdentifier>
+      <UniqueIdentifier>{EB30C841-1C92-32E5-828B-9DFF19689C4E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Cocoa Files">
-      <UniqueIdentifier>{2DB3A5B2-5B1E-3545-9B0B-33D21D593095}</UniqueIdentifier>
+      <UniqueIdentifier>{0DCF00A0-8AFB-3048-91D0-6BA0E7191D2F}</UniqueIdentifier>
     </Filter>
     <Filter Include="OS X Files">
-      <UniqueIdentifier>{36095C60-8179-30A0-8F88-CEE50457AE6F}</UniqueIdentifier>
+      <UniqueIdentifier>{9F70A64B-5B09-364C-B832-6FAD0F2EB2F1}</UniqueIdentifier>
     </Filter>
     <Filter Include="SDL Files">
-      <UniqueIdentifier>{FE94D603-B913-3D73-A8EB-D50AD18CA133}</UniqueIdentifier>
+      <UniqueIdentifier>{C091F49F-F130-342D-846B-F821F1E670E2}</UniqueIdentifier>
     </Filter>
     <Filter Include="SFMT">
-      <UniqueIdentifier>{AE9BA2A2-45E7-3C30-9AA5-5BB3E46EA43E}</UniqueIdentifier>
+      <UniqueIdentifier>{6228C5AF-1C76-38E7-958F-49723DCB8A48}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shared Game">
-      <UniqueIdentifier>{B5C9514E-08C7-36A9-B5A1-6A7DA483B497}</UniqueIdentifier>
+      <UniqueIdentifier>{B3714F88-B01A-3CF5-A6BB-17A1A1554329}</UniqueIdentifier>
     </Filter>
     <Filter Include="Versioning">
-      <UniqueIdentifier>{1340A587-A540-3435-BB19-494E48B01227}</UniqueIdentifier>
+      <UniqueIdentifier>{FD7FB1C5-213A-3BA3-A46A-F9A8A3156E0D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Win32 Files">
-      <UniqueIdentifier>{3AA422B8-547E-3519-AA91-A2FC9F575663}</UniqueIdentifier>
+      <UniqueIdentifier>{9C2C377C-4FF7-3B17-A117-E60BF2BC605C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Xlat">
-      <UniqueIdentifier>{6A78EFBA-9196-32AE-B349-CC4E1A12480A}</UniqueIdentifier>
+      <UniqueIdentifier>{0A42DC07-C417-33DB-B359-4C5D361235CF}</UniqueIdentifier>
     </Filter>
     <Filter Include="ZScript">
-      <UniqueIdentifier>{B03BEA77-A02F-3220-8FBD-807310710601}</UniqueIdentifier>
+      <UniqueIdentifier>{3AA95A07-9604-3587-B142-2FB7430F045E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi\Source">
+      <UniqueIdentifier>{0BCD9E7B-711F-3A32-9BCE-9E0C330D295F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity\Source">
+      <UniqueIdentifier>{FE34DB47-AB4B-3B1D-9C75-533C0C4BEF5C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Core\Render Headers">
+      <UniqueIdentifier>{DE1FCACD-FBC1-380D-88A8-24B758BD0463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Core\Render Sources">
+      <UniqueIdentifier>{4AB6227A-6285-364F-97F2-4742A27FB791}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

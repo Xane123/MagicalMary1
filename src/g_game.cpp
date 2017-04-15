@@ -107,7 +107,7 @@ void	G_DoPlayDemo (void);
 void	G_DoCompleted (void);
 void	G_DoVictory (void);
 void	G_DoWorldDone (void);
-void	G_DoSaveGame (bool okForQuicksave, FString filename, const char *description, bool showmsg);
+void	G_DoSaveGame (bool okForQuicksave, FString filename, const char *description);
 void	G_DoAutoSave ();
 
 void STAT_Write(FILE *file);
@@ -115,13 +115,12 @@ void STAT_Read(PNGHandle *png);
 
 FIntCVar gameskill ("skill", 2, CVAR_SERVERINFO|CVAR_LATCH);
 CVAR (Int, deathmatch, 0, CVAR_SERVERINFO|CVAR_LATCH);
-CVAR (Bool, chasedemo, true, 0);
+CVAR (Bool, chasedemo, false, 0);
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, longsavemessages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (String, save_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR (Bool, cl_waitforsave, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 EXTERN_CVAR (Float, con_midtime);
-EXTERN_CVAR (Bool, msg_showminor)
 
 //==========================================================================
 //
@@ -207,7 +206,7 @@ int				lookspeed[2] = {450, 512};
 
 CVAR (Bool,		cl_run,			false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always run?
 CVAR (Bool,		invertmouse,	false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Invert mouse look down/up?
-CVAR (Bool,		freelook,		true,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
+CVAR (Bool,		freelook,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
 CVAR (Bool,		lookstrafe,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always strafe with mouse?
 CVAR (Float,	m_pitch,		1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Mouse speeds
 CVAR (Float,	m_yaw,			1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
@@ -260,6 +259,36 @@ CUSTOM_CVAR (Float, turbo, 100.f, 0)
 		forwardmove[1] = (int)(normforwardmove[1]*scale);
 		sidemove[0] = (int)(normsidemove[0]*scale);
 		sidemove[1] = (int)(normsidemove[1]*scale);
+	}
+}
+
+CCMD (turnspeeds)
+{
+	if (argv.argc() == 1)
+	{
+		Printf ("Current turn speeds: %d %d %d %d\n", angleturn[0],
+			angleturn[1], angleturn[2], angleturn[3]);
+	}
+	else
+	{
+		int i;
+
+		for (i = 1; i <= 4 && i < argv.argc(); ++i)
+		{
+			angleturn[i-1] = atoi (argv[i]);
+		}
+		if (i <= 2)
+		{
+			angleturn[1] = angleturn[0] * 2;
+		}
+		if (i <= 3)
+		{
+			angleturn[2] = angleturn[0] / 2;
+		}
+		if (i <= 4)
+		{
+			angleturn[3] = angleturn[2];
+		}
 	}
 }
 
@@ -439,6 +468,41 @@ CCMD (drop)
 }
 
 PClassActor *GetFlechetteType(AActor *other);
+
+CCMD (useflechette)
+{ // Select from one of arti_poisonbag1-3, whichever the player has
+	static const ENamedName bagnames[3] =
+	{
+		NAME_ArtiPoisonBag1,
+		NAME_ArtiPoisonBag2,
+		NAME_ArtiPoisonBag3
+	};
+
+	if (who == NULL)
+		return;
+
+	PClassActor *type = GetFlechetteType(who);
+	if (type != NULL)
+	{
+		AInventory *item;
+		if ( (item = who->FindInventory (type) ))
+		{
+			SendItemUse = item;
+			return;
+		}
+	}
+
+	// The default flechette could not be found. Try all 3 types then.
+	for (int j = 0; j < 3; ++j)
+	{
+		AInventory *item;
+		if ( (item = who->FindInventory (bagnames[j])) )
+		{
+			SendItemUse = item;
+			break;
+		}
+	}
+}
 
 CCMD (select)
 {
@@ -1008,7 +1072,7 @@ void G_Ticker ()
 			G_DoLoadGame ();
 			break;
 		case ga_savegame:
-			G_DoSaveGame (true, savegamefile, savedescription, true);
+			G_DoSaveGame (true, savegamefile, savedescription);
 			gameaction = ga_nothing;
 			savegamefile = "";
 			savedescription[0] = '\0';
@@ -1106,7 +1170,7 @@ void G_Ticker ()
 			if (cmd->ucmd.forwardmove > TURBOTHRESHOLD &&
 				!(gametic&31) && ((gametic>>5)&(MAXPLAYERS-1)) == i )
 			{
-				if(msg_showminor) Printf ("%s IS USING TURBO!\n", players[i].userinfo.GetName());
+				Printf ("%s is turbo!\n", players[i].userinfo.GetName());
 			}
 
 			if (netgame && players[i].Bot == NULL && !demoplayback && (gametic%ticdup) == 0)
@@ -1651,13 +1715,13 @@ void G_DoPlayerPop(int playernum)
 
 	if (deathmatch)
 	{
-		Printf("%s LEFT AFTER EARNING %d POINTS.\n",
+		Printf("%s left the game with %d frags\n",
 			players[playernum].userinfo.GetName(),
 			players[playernum].fragcount);
 	}
 	else
 	{
-		Printf("%s LEFT;\nGOOD LUCK TO ALL REMAINING PLAYERS!\n", players[playernum].userinfo.GetName());
+		Printf("%s left the game\n", players[playernum].userinfo.GetName());
 	}
 
 	// [RH] Revert each player to their own view if spying through the player who left
@@ -1725,7 +1789,7 @@ static bool CheckSingleWad (char *name, bool &printRequires, bool printwarn)
 		{
 			if (!printRequires)
 			{
-				Printf ("THIS SAVE REQUIRES AN ADDITIONAL PK3/WAD, %s.\nMAKE SURE THAT FILE IS LOADED WITH -FILE WHEN STARTING Mary's Magical Adventure!\n", name);
+				Printf ("This savegame needs these wads:\n%s", name);
 			}
 			else
 			{
@@ -1789,7 +1853,7 @@ void G_DoLoadGame ()
 	if (png == NULL)
 	{
 		fclose (stdfile);
-		Printf ("'%s' IS A NORMAL PNG IMAGE AND IS NOT A VALID\nMary's Magical Adventure SAVE.\n", savename.GetChars());
+		Printf ("'%s' is not a valid (PNG) savegame\n", savename.GetChars());
 		return;
 	}
 
@@ -1799,17 +1863,17 @@ void G_DoLoadGame ()
 	// Since there are ZDoom derivates using the exact same savegame format but
 	// with mutual incompatibilities this check simplifies things significantly.
 	char *engine = M_GetPNGText (png, "Engine");
-	if (engine == NULL || 0 != strcmp (engine, GAMENAME))
+	if (engine == NULL || 0 != strcmp (engine, GAMESIG))
 	{
 		// Make a special case for the message printed for old savegames that don't
 		// have this information.
 		if (engine == NULL)
 		{
-			Printf ("THIS SAVE COMES FROM AN UNKNOWN ENGINE AND THEREFORE IS INCOMPATIBLE.\n");
+			Printf ("Savegame is from an incompatible version\n");
 		}
 		else
 		{
-			Printf ("THIS SAVE COMES FROM %s ANOTHER ENGINE BASED ON ZDOOM.\n", engine);
+			Printf ("Savegame is from another ZDoom-based engine: %s\n", engine);
 			delete[] engine;
 		}
 		delete png;
@@ -1828,10 +1892,10 @@ void G_DoLoadGame ()
 	{
 		delete png;
 		fclose (stdfile);
-		Printf("THIS SAVE IS TOO OLD TO BE USED WITH THIS VERSION OF %s;\nPLEASE DOWNLOAD THE OLDER VERSION REQUIRED,\n", GAMESIG);
+		Printf ("Savegame is from an incompatible version");
 		if (SaveVersion != 0)
 		{
-			Printf("%d; %d IS THE OLDEST VERSION SUPPORTED.", SaveVersion, MINSAVEVER);
+			Printf(": %d (%d is the oldest supported)", SaveVersion, MINSAVEVER);
 		}
 		Printf("\n");
 		return;
@@ -1846,19 +1910,10 @@ void G_DoLoadGame ()
 	map = M_GetPNGText (png, "Current Map");
 	if (map == NULL)
 	{
-		Printf ("THE LEVEL THIS SAVE WAS SAVED IN NO LONGER EXISTS IN THE CURRENT VERSION OF Mary's Magical Adventure.\n");
+		Printf ("Savegame is missing the current map\n");
 		fclose (stdfile);
 		return;
 	}
-
-	char *wokversion = M_GetPNGText(png, "WoK Version");	//[XANE]An experiment.
-	if (strcmp(wokversion, VERSIONNUM))
-	{
-		Printf("THIS SAVE CAME FROM A DIFFERENT VERSION BUT CAN STILL BE LOADED!\n(COMPARED %s AND %s)\n", wokversion, VERSIONNUM);
-		return;
-	}
-
-	delete[] wokversion;
 
 	// Now that it looks like we can load this save, hide the fullscreen console if it was up
 	// when the game was selected from the menu.
@@ -1951,16 +2006,16 @@ void G_SaveGame (const char *filename, const char *description)
 {
 	if (sendsave || gameaction == ga_savegame)
 	{
-		Printf ("Mary's Magical Adventure IS STILL WAITING ON A PREVIOUS SAVE.\n");
+		Printf ("A game save is still pending.\n");
 		return;
 	}
     else if (!usergame)
 	{
-        Printf ("YOU'RE NOT CURRENTLY IN A GAME.\n");
+        Printf ("not in a saveable game\n");
     }
     else if (gamestate != GS_LEVEL)
 	{
-        Printf ("YOU'RE NOT IN A LEVEL!\n");
+        Printf ("not in a level\n");
     }
     else if (players[consoleplayer].health <= 0 && !multiplayer)
     {
@@ -2001,7 +2056,7 @@ FString G_BuildSaveName (const char *prefix, int slot)
 	name << prefix;
 	if (slot >= 0)
 	{
-		name.AppendFormat("%d.png", slot);
+		name.AppendFormat("%d.zds", slot);
 	}
 	return name;
 }
@@ -2037,7 +2092,7 @@ void G_DoAutoSave ()
 	num.Int = nextautosave;
 	autosavenum.ForceSet (num, CVAR_Int);
 
-	file = G_BuildSaveName ("check", nextautosave);
+	file = G_BuildSaveName ("auto", nextautosave);
 
 	if (!(level.flags2 & LEVEL2_NOAUTOSAVEHINT))
 	{
@@ -2050,11 +2105,11 @@ void G_DoAutoSave ()
 	}
 
 	readableTime = myasctime ();
-	strcpy (description, "Chkpoint ");
+	strcpy (description, "Autosave ");
 	strncpy (description+9, readableTime+4, 12);
 	description[9+12] = 0;
 
-	G_DoSaveGame (false, file, description, false);
+	G_DoSaveGame (false, file, description);
 }
 
 
@@ -2119,7 +2174,7 @@ static void PutSavePic (FILE *file, int width, int height)
 	}
 }
 
-void G_DoSaveGame (bool okForQuicksave, FString filename, const char *description, bool showmsg)
+void G_DoSaveGame (bool okForQuicksave, FString filename, const char *description)
 {
 	char buf[100];
 
@@ -2132,7 +2187,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (demoplayback)
 	{
-		filename = G_BuildSaveName ("demo.png", -1);
+		filename = G_BuildSaveName ("demosave.zds", -1);
 	}
 
 	if (cl_waitforsave)
@@ -2145,7 +2200,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (stdfile == NULL)
 	{
-		Printf ("COULDN'T SAVE TO '%s'!\n", filename.GetChars());
+		Printf ("Could not create savegame '%s'\n", filename.GetChars());
 		insave = false;
 		I_FreezeTime(false);
 		return;
@@ -2153,13 +2208,12 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	SaveVersion = SAVEVER;
 	PutSavePic (stdfile, SAVEPICWIDTH, SAVEPICHEIGHT);
-	mysnprintf(buf, countof(buf), GAMESIG " %s", GetVersionString());
+	mysnprintf(buf, countof(buf), GAMENAME " %s", GetVersionString());
 	M_AppendPNGText (stdfile, "Software", buf);
-	M_AppendPNGText (stdfile, "Engine", GAMENAME);
+	M_AppendPNGText (stdfile, "Engine", GAMESIG);
 	M_AppendPNGText (stdfile, "ZDoom Save Version", SAVESIG);
 	M_AppendPNGText (stdfile, "Title", description);
 	M_AppendPNGText (stdfile, "Current Map", level.MapName);
-	M_AppendPNGText(stdfile, "WoK Version", VERSIONNUM);
 	PutSaveWads (stdfile);
 	PutSaveComment (stdfile);
 
@@ -2210,9 +2264,10 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	}
 	if (success) 
 	{
-		if(showmsg == true) Printf ("%s TO %s\n", GStrings("GGSAVED"), filename.GetChars());
+		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
+		else Printf ("%s\n", GStrings("GGSAVED"));
 	}
-	else Printf(PRINT_HIGH, "%s WAS UNABLE TO SAVE.\n", GAMESIG);
+	else Printf(PRINT_HIGH, "Save failed\n");
 
 	BackupSaveName = filename;
 

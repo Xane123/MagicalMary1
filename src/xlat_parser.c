@@ -1,27 +1,8 @@
-/*
-** 2000-05-29
-**
-** The author disclaims copyright to this source code.  In place of
-** a legal notice, here is a blessing:
-**
-**    May you do good and not evil.
-**    May you find forgiveness for yourself and forgive others.
-**    May you share freely, never taking more than you give.
-**
-*************************************************************************
-** Driver template for the LEMON parser generator.
-**
-** The "lemon" program processes an LALR(1) input grammar file, then uses
-** this template to construct a parser.  The "lemon" program inserts text
-** at each "%%" line.  Also, any "P-a-r-s-e" identifer prefix (without the
-** interstitial "-" characters) contained in this template is changed into
-** the value of the %name directive from the grammar.  Otherwise, the content
-** of this template is copied straight through into the generate parser
-** source file.
-**
-** The following is the concatenation of all %include directives from the
-** input grammar file:
+/* Driver template for the LEMON parser generator.
+** The author disclaims copyright to this source code.
 */
+/* First off, code is included that follows the "include" declaration
+** in the input grammar file. */
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -32,69 +13,58 @@
 #define CDECL
 #endif
 
-/************ Begin %include sections from the grammar ************************/
-/**************** End of %include directives **********************************/
-/* These constants specify the various numeric values for terminal symbols
-** in a format understandable to "makeheaders".  This section is blank unless
-** "lemon" is run with the "-m" command-line option.
-***************** Begin makeheaders token definitions *************************/
-/**************** End makeheaders token definitions ***************************/
-/* The next section is a series of control #defines.
+/* Next is all token values, in a form suitable for use by makeheaders.
+** This section will be null unless lemon is run with the -m switch.
+*/
+/* 
+** These constants (all generated automatically by the parser generator)
+** specify the various kinds of tokens (terminals) that the parser
+** understands. 
+**
+** Each symbol here is a terminal symbol in the grammar.
+*/
+/* Make sure the INTERFACE macro is defined.
+*/
+#ifndef INTERFACE
+# define INTERFACE 1
+#endif
+/* The next thing included is series of defines which control
 ** various aspects of the generated parser.
-**    YYCODETYPE         is the data type used to store the integer codes
-**                       that represent terminal and non-terminal symbols.
-**                       "unsigned char" is used if there are fewer than
-**                       256 symbols.  Larger types otherwise.
-**    YYNOCODE           is a number of type YYCODETYPE that is not used for
-**                       any terminal or nonterminal symbol.
+**    YYCODETYPE         is the data type used for storing terminal
+**                       and nonterminal numbers.  "unsigned char" is
+**                       used if there are fewer than 250 terminals
+**                       and nonterminals.  "int" is used otherwise.
+**    YYNOCODE           is a number of type YYCODETYPE which corresponds
+**                       to no legal terminal or nonterminal number.  This
+**                       number is used to fill in empty slots of the hash 
+**                       table.
 **    YYFALLBACK         If defined, this indicates that one or more tokens
 **                       have fall-back values which should be used if the
 **                       original value of the token will not parse.
-**                       (also known as: "terminal symbols") have fall-back
-**                       values which should be used if the original symbol
-**                       would not parse.  This permits keywords to sometimes
-**                       be used as identifiers, for example.
-**    YYACTIONTYPE       is the data type used for "action codes" - numbers
-**                       that indicate what to do in response to the next
-**                       token.
-**    XlatParseTOKENTYPE     is the data type used for minor type for terminal
-**                       symbols.  Background: A "minor type" is a semantic
-**                       value associated with a terminal or non-terminal
-**                       symbols.  For example, for an "ID" terminal symbol,
-**                       the minor type might be the name of the identifier.
-**                       Each non-terminal can have a different minor type.
-**                       Terminal symbols all have the same minor type, though.
-**                       This macros defines the minor type for terminal 
-**                       symbols.
-**    YYMINORTYPE        is the data type used for all minor types.
+**    YYACTIONTYPE       is the data type used for storing terminal
+**                       and nonterminal numbers.  "unsigned char" is
+**                       used if there are fewer than 250 rules and
+**                       states combined.  "int" is used otherwise.
+**    XlatParseTOKENTYPE     is the data type used for minor tokens given 
+**                       directly to the parser from the tokenizer.
+**    YYMINORTYPE        is the data type used for all minor tokens.
 **                       This is typically a union of many types, one of
 **                       which is XlatParseTOKENTYPE.  The entry in the union
-**                       for terminal symbols is called "yy0".
+**                       for base tokens is called "yy0".
 **    YYSTACKDEPTH       is the maximum depth of the parser's stack.  If
 **                       zero the stack is dynamically sized using realloc()
 **    XlatParseARG_SDECL     A static variable declaration for the %extra_argument
 **    XlatParseARG_PDECL     A parameter declaration for the %extra_argument
 **    XlatParseARG_STORE     Code to store %extra_argument into yypParser
 **    XlatParseARG_FETCH     Code to extract %extra_argument from yypParser
-**    YYERRORSYMBOL      is the code number of the error symbol.  If not
-**                       defined, then do no error processing.
 **    YYNSTATE           the combined number of states.
 **    YYNRULE            the number of rules in the grammar
-**    YY_MAX_SHIFT       Maximum value for shift actions
-**    YY_MIN_SHIFTREDUCE Minimum value for shift-reduce actions
-**    YY_MAX_SHIFTREDUCE Maximum value for shift-reduce actions
-**    YY_MIN_REDUCE      Maximum value for reduce actions
-**    YY_ERROR_ACTION    The yy_action[] code for syntax error
-**    YY_ACCEPT_ACTION   The yy_action[] code for accept
-**    YY_NO_ACTION       The yy_action[] code for no-op
+**    YYERRORSYMBOL      is the code number of the error symbol.  If not
+**                       defined, then do no error processing.
 */
-#ifndef INTERFACE
-# define INTERFACE 1
-#endif
-/************* Begin control #defines *****************************************/
 #define YYCODETYPE unsigned char
 #define YYNOCODE 71
-#define YYACTIONTYPE unsigned short int
+#define YYACTIONTYPE unsigned char
 #define XlatParseTOKENTYPE FParseToken
 typedef union {
   int yyinit;
@@ -115,17 +85,15 @@ typedef union {
 #define XlatParseARG_PDECL , FParseContext *context 
 #define XlatParseARG_FETCH  FParseContext *context  = yypParser->context 
 #define XlatParseARG_STORE yypParser->context  = context 
-#define YYNSTATE             100
-#define YYNRULE              78
-#define YY_MAX_SHIFT         99
-#define YY_MIN_SHIFTREDUCE   155
-#define YY_MAX_SHIFTREDUCE   232
-#define YY_MIN_REDUCE        233
-#define YY_MAX_REDUCE        310
-#define YY_ERROR_ACTION      311
-#define YY_ACCEPT_ACTION     312
-#define YY_NO_ACTION         313
-/************* End control #defines *******************************************/
+#define YYNSTATE 155
+#define YYNRULE 78
+#define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
+#define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
+#define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
+
+/* The yyzerominor constant is used to initialize instances of
+** YYMINORTYPE objects to zero. */
+static const YYMINORTYPE yyzerominor = { 0 };
 
 /* Define the yytestcase() macro to be a no-op if is not already defined
 ** otherwise.
@@ -148,20 +116,16 @@ typedef union {
 ** Suppose the action integer is N.  Then the action is determined as
 ** follows
 **
-**   0 <= N <= YY_MAX_SHIFT             Shift N.  That is, push the lookahead
+**   0 <= N < YYNSTATE                  Shift N.  That is, push the lookahead
 **                                      token onto the stack and goto state N.
 **
-**   N between YY_MIN_SHIFTREDUCE       Shift to an arbitrary state then
-**     and YY_MAX_SHIFTREDUCE           reduce by rule N-YY_MIN_SHIFTREDUCE.
+**   YYNSTATE <= N < YYNSTATE+YYNRULE   Reduce by rule N-YYNSTATE.
 **
-**   N between YY_MIN_REDUCE            Reduce by rule N-YY_MIN_REDUCE
-**     and YY_MAX_REDUCE
-
-**   N == YY_ERROR_ACTION               A syntax error has occurred.
+**   N == YYNSTATE+YYNRULE              A syntax error has occurred.
 **
-**   N == YY_ACCEPT_ACTION              The parser accepts its input.
+**   N == YYNSTATE+YYNRULE+1            The parser accepts its input.
 **
-**   N == YY_NO_ACTION                  No such action.  Denotes unused
+**   N == YYNSTATE+YYNRULE+2            No such action.  Denotes unused
 **                                      slots in the yy_action[] table.
 **
 ** The action table is constructed as a single large table named yy_action[].
@@ -190,128 +154,130 @@ typedef union {
 **  yy_reduce_ofst[]   For each state, the offset into yy_action for
 **                     shifting non-terminals after a reduce.
 **  yy_default[]       Default action for each state.
-**
-*********** Begin parsing tables **********************************************/
-#define YY_ACTTAB_COUNT (358)
+*/
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */   218,  219,  220,  221,  222,  223,  224,  225,  226,   69,
- /*    10 */    10,  312,    1,   95,   67,  187,   42,   40,   41,   46,
- /*    20 */    47,   45,   44,   43,   97,   42,   40,   41,   46,   47,
- /*    30 */    45,   44,   43,   42,   40,   41,   46,   47,   45,   44,
- /*    40 */    43,   46,   47,   45,   44,   43,  210,   48,    4,  191,
- /*    50 */    82,  212,  213,  294,  227,  206,   28,   84,   39,   91,
- /*    60 */    67,  186,   93,  214,  155,   38,  228,   99,  215,   49,
- /*    70 */    96,   48,    4,   88,   57,   34,  193,  194,  195,  196,
- /*    80 */   197,   21,   20,   19,   85,  192,   13,   94,   67,  186,
- /*    90 */    93,   61,   27,   81,  230,   42,   40,   26,   46,   47,
- /*   100 */    45,   44,   43,   42,   40,   41,   46,   47,   45,   44,
- /*   110 */    43,   50,   54,   25,  183,   73,   42,   40,   41,   46,
- /*   120 */    47,   45,   44,   43,   42,   40,   41,   46,   47,   45,
- /*   130 */    44,   43,   62,  209,   12,   75,   42,   40,   41,   46,
- /*   140 */    47,   45,   44,   43,  198,   42,   40,   41,   46,   47,
- /*   150 */    45,   44,   43,  199,  205,   42,   40,   41,   46,   47,
- /*   160 */    45,   44,   43,   70,   31,    7,   89,   42,   40,   41,
- /*   170 */    46,   47,   45,   44,   43,   42,   40,   41,   46,   47,
- /*   180 */    45,   44,   43,  179,   32,  178,  177,   18,   16,   17,
- /*   190 */    22,   23,   21,   20,   19,   77,   90,   78,  184,   42,
- /*   200 */    40,   41,   46,   47,   45,   44,   43,   51,   72,    3,
- /*   210 */    52,   53,   42,   40,   41,   46,   47,   45,   44,   43,
- /*   220 */    42,   40,   41,   46,   47,   45,   44,   43,   11,   24,
- /*   230 */    55,  166,   42,   40,   41,   46,   47,   45,   44,   43,
- /*   240 */    45,   44,   43,  165,   66,   58,   42,   40,   41,   46,
- /*   250 */    47,   45,   44,   43,   18,   16,   17,   22,   23,   21,
- /*   260 */    20,   19,   16,   17,   22,   23,   21,   20,   19,   40,
- /*   270 */    41,   46,   47,   45,   44,   43,   17,   22,   23,   21,
- /*   280 */    20,   19,   41,   46,   47,   45,   44,   43,   22,   23,
- /*   290 */    21,   20,   19,   46,   47,   45,   44,   43,   15,   59,
- /*   300 */    39,   60,   39,   63,  173,   14,  155,   38,  155,   38,
- /*   310 */    83,   39,   68,   39,  174,   56,   64,  155,   38,  155,
- /*   320 */    38,   92,   65,  164,   86,  203,   56,   74,   76,   71,
- /*   330 */   211,  160,   29,  159,  158,   86,   87,   79,   80,  231,
- /*   340 */    30,  207,  208,    6,    9,  201,  189,    5,   33,  167,
- /*   350 */   172,    2,    8,  171,   35,   36,   37,   98,
+ /*     0 */   138,  130,  128,  114,  107,  105,  102,  100,  125,   66,
+ /*    10 */    10,  234,    1,   96,   81,  110,   40,   28,   26,   25,
+ /*    20 */    44,   33,   47,   41,   57,   40,   28,   26,   25,   44,
+ /*    30 */    33,   47,   41,   40,   28,   26,   25,   44,   33,   47,
+ /*    40 */    41,   25,   44,   33,   47,   41,  142,   48,    5,  103,
+ /*    50 */    86,  145,  146,  155,  133,  132,   24,   84,   30,   64,
+ /*    60 */    51,   43,  109,   12,  143,   32,  129,   89,  151,   49,
+ /*    70 */    95,  116,  111,   54,   58,   31,  119,  120,  121,  122,
+ /*    80 */   123,   68,   91,   94,   90,   60,   22,   97,   67,  135,
+ /*    90 */    83,  113,   34,   67,  131,   40,   28,   26,   25,   44,
+ /*   100 */    33,   47,   41,   40,   28,   26,   25,   44,   33,   47,
+ /*   110 */    41,   77,    9,   13,   15,   20,   21,   19,   18,   17,
+ /*   120 */    23,   88,  117,   40,   28,   26,   25,   44,   33,   47,
+ /*   130 */    41,  118,  101,    2,   59,    4,   40,   28,   26,   25,
+ /*   140 */    44,   33,   47,   41,   40,   28,   26,   25,   44,   33,
+ /*   150 */    47,   41,   40,   28,   26,   25,   44,   33,   47,   41,
+ /*   160 */    33,   47,   41,  137,    6,   63,  154,   40,   28,   26,
+ /*   170 */    25,   44,   33,   47,   41,   40,   28,   26,   25,   44,
+ /*   180 */    33,   47,   41,  106,   38,   40,   28,   26,   25,   44,
+ /*   190 */    33,   47,   41,   48,    5,   99,  147,   26,   25,   44,
+ /*   200 */    33,   47,   41,  140,   42,  141,   61,  108,   40,   28,
+ /*   210 */    26,   25,   44,   33,   47,   41,   40,   28,   29,   25,
+ /*   220 */    44,   33,   47,   41,   25,   44,   33,   47,   41,   93,
+ /*   230 */    19,   18,   17,   62,   27,  112,   35,   40,   28,   26,
+ /*   240 */    25,   44,   33,   47,   41,   40,   28,   26,   25,   44,
+ /*   250 */    33,   47,   41,  148,   72,  124,   98,   74,   45,   16,
+ /*   260 */    14,   15,   20,   21,   19,   18,   17,  127,   11,   56,
+ /*   270 */   139,   85,   75,   40,   28,   26,   25,   44,   33,   47,
+ /*   280 */    41,   16,   14,   15,   20,   21,   19,   18,   17,   28,
+ /*   290 */    26,   25,   44,   33,   47,   41,   14,   15,   20,   21,
+ /*   300 */    19,   18,   17,   20,   21,   19,   18,   17,   30,   92,
+ /*   310 */    67,  135,   83,   30,  143,   32,   30,   78,   82,  143,
+ /*   320 */    32,   30,  143,   32,   46,  149,   87,  143,   32,   54,
+ /*   330 */     3,  144,   55,   52,   37,  235,   79,  134,   91,  115,
+ /*   340 */    80,  150,    8,   39,  136,  152,   69,  153,   70,   76,
+ /*   350 */    73,    7,   50,   65,   71,  235,   36,  235,   53,  104,
+ /*   360 */   235,  235,  235,  235,  126,
 };
 static const YYCODETYPE yy_lookahead[] = {
  /*     0 */    43,   44,   45,   46,   47,   48,   49,   50,   51,   52,
- /*    10 */    53,   41,   42,   56,   58,   59,    2,    3,    4,    5,
- /*    20 */     6,    7,    8,    9,   15,    2,    3,    4,    5,    6,
+ /*    10 */    53,   41,   42,   56,   54,   55,    2,    3,    4,    5,
+ /*    20 */     6,    7,    8,    9,   52,    2,    3,    4,    5,    6,
  /*    30 */     7,    8,    9,    2,    3,    4,    5,    6,    7,    8,
  /*    40 */     9,    5,    6,    7,    8,    9,   32,   65,   66,   67,
- /*    50 */    36,   37,   38,    0,    1,   32,   68,   34,    5,   57,
- /*    60 */    58,   59,   60,   32,   11,   12,   16,   14,   32,   19,
- /*    70 */    17,   65,   66,   67,   52,   22,   24,   25,   26,   27,
- /*    80 */    28,    7,    8,    9,   31,   63,   33,   57,   58,   59,
- /*    90 */    60,   58,   39,   54,   55,    2,    3,    4,    5,    6,
+ /*    50 */    36,   37,   38,    0,    1,   32,    5,   34,    5,   52,
+ /*    60 */    52,   30,   11,   12,   11,   12,   16,   14,   32,   19,
+ /*    70 */    17,   63,   21,   52,   52,   22,   24,   25,   26,   27,
+ /*    80 */    28,   52,   61,   62,   31,   52,   33,   57,   58,   59,
+ /*    90 */    60,   52,   39,   58,   59,    2,    3,    4,    5,    6,
  /*   100 */     7,    8,    9,    2,    3,    4,    5,    6,    7,    8,
- /*   110 */     9,   52,   52,   20,   58,   58,    2,    3,    4,    5,
- /*   120 */     6,    7,    8,    9,    2,    3,    4,    5,    6,    7,
- /*   130 */     8,    9,   52,   32,   20,   58,    2,    3,    4,    5,
- /*   140 */     6,    7,    8,    9,   20,    2,    3,    4,    5,    6,
- /*   150 */     7,    8,    9,   29,   32,    2,    3,    4,    5,    6,
- /*   160 */     7,    8,    9,   58,   30,   22,   13,    2,    3,    4,
+ /*   110 */     9,   52,   64,   20,    4,    5,    6,    7,    8,    9,
+ /*   120 */    19,   15,   20,    2,    3,    4,    5,    6,    7,    8,
+ /*   130 */     9,   29,   16,   12,   52,   18,    2,    3,    4,    5,
+ /*   140 */     6,    7,    8,    9,    2,    3,    4,    5,    6,    7,
+ /*   150 */     8,    9,    2,    3,    4,    5,    6,    7,    8,    9,
+ /*   160 */     7,    8,    9,   13,   22,   52,   32,    2,    3,    4,
  /*   170 */     5,    6,    7,    8,    9,    2,    3,    4,    5,    6,
- /*   180 */     7,    8,    9,   58,   19,   58,   58,    2,    3,    4,
- /*   190 */     5,    6,    7,    8,    9,   58,   23,   58,   13,    2,
- /*   200 */     3,    4,    5,    6,    7,    8,    9,   52,   52,   12,
- /*   210 */    52,   52,    2,    3,    4,    5,    6,    7,    8,    9,
- /*   220 */     2,    3,    4,    5,    6,    7,    8,    9,   52,   19,
- /*   230 */    52,   13,    2,    3,    4,    5,    6,    7,    8,    9,
- /*   240 */     7,    8,    9,   13,   52,   52,    2,    3,    4,    5,
- /*   250 */     6,    7,    8,    9,    2,    3,    4,    5,    6,    7,
- /*   260 */     8,    9,    3,    4,    5,    6,    7,    8,    9,    3,
- /*   270 */     4,    5,    6,    7,    8,    9,    4,    5,    6,    7,
- /*   280 */     8,    9,    4,    5,    6,    7,    8,    9,    5,    6,
- /*   290 */     7,    8,    9,    5,    6,    7,    8,    9,    5,   52,
- /*   300 */     5,   52,    5,   52,   11,   12,   11,   12,   11,   12,
- /*   310 */    15,    5,   52,    5,   21,   52,   52,   11,   12,   11,
- /*   320 */    12,   15,   52,   52,   61,   62,   52,   52,   52,   52,
- /*   330 */    32,   52,   35,   52,   52,   61,   62,   52,   52,   55,
- /*   340 */    20,   32,   32,   19,   64,   23,   16,   18,   12,   18,
- /*   350 */    13,   12,   19,   13,   20,   20,   12,   15,
+ /*   180 */     7,    8,    9,   13,   19,    2,    3,    4,    5,    6,
+ /*   190 */     7,    8,    9,   65,   66,   67,   13,    4,    5,    6,
+ /*   200 */     7,    8,    9,   52,   20,   32,   52,   18,    2,    3,
+ /*   210 */     4,    5,    6,    7,    8,    9,    2,    3,    4,    5,
+ /*   220 */     6,    7,    8,    9,    5,    6,    7,    8,    9,   23,
+ /*   230 */     7,    8,    9,   52,   20,   23,   12,    2,    3,    4,
+ /*   240 */     5,    6,    7,    8,    9,    2,    3,    4,    5,    6,
+ /*   250 */     7,    8,    9,   52,   52,   13,   13,   52,   20,    2,
+ /*   260 */     3,    4,    5,    6,    7,    8,    9,   32,   52,   52,
+ /*   270 */    13,   15,   52,    2,    3,    4,    5,    6,    7,    8,
+ /*   280 */     9,    2,    3,    4,    5,    6,    7,    8,    9,    3,
+ /*   290 */     4,    5,    6,    7,    8,    9,    3,    4,    5,    6,
+ /*   300 */     7,    8,    9,    5,    6,    7,    8,    9,    5,   57,
+ /*   310 */    58,   59,   60,    5,   11,   12,    5,   52,   15,   11,
+ /*   320 */    12,    5,   11,   12,   20,   58,   15,   11,   12,   52,
+ /*   330 */    12,   32,   52,   52,   12,   70,   58,   32,   61,   62,
+ /*   340 */    58,   58,   19,   35,   32,   58,   52,   58,   58,   58,
+ /*   350 */    58,   19,   52,   58,   52,   70,   68,   70,   52,   52,
+ /*   360 */    70,   70,   70,   70,   55,
 };
 #define YY_SHIFT_USE_DFLT (-1)
-#define YY_SHIFT_COUNT (99)
-#define YY_SHIFT_MIN   (0)
-#define YY_SHIFT_MAX   (344)
+#define YY_SHIFT_MAX 99
 static const short yy_shift_ofst[] = {
- /*     0 */    -1,   53,  293,  293,   52,   52,  308,  308,  293,  308,
- /*    10 */     9,   14,  295,  297,  293,  293,  293,  293,  293,  293,
- /*    20 */   293,  293,  293,  293,  306,  308,  308,  308,  308,  308,
- /*    30 */   308,  308,  308,  308,  308,  308,  308,  308,  308,  308,
- /*    40 */   308,  308,  308,  308,  308,  308,  308,  308,  124,    9,
- /*    50 */    23,   31,   93,  101,  114,  122,  134,  143,  153,  165,
- /*    60 */   173,  185,  197,  210,  218,  230,  244,  252,  244,  244,
- /*    70 */   259,  266,   36,  272,  278,  283,  288,   74,   74,  233,
- /*    80 */   233,   50,  298,  309,  310,  320,  324,  322,  330,  329,
- /*    90 */   336,  337,  339,  333,  340,  334,  331,  335,  344,  342,
+ /*     0 */    -1,   53,   51,   51,   52,   52,  316,  316,   51,  316,
+ /*    10 */   106,   14,   51,  303,   51,   51,   51,   51,   51,   51,
+ /*    20 */    51,   51,  308,  311,   51,  316,  316,  316,  316,  316,
+ /*    30 */   316,  316,  316,  316,  316,  316,  316,  316,  316,  316,
+ /*    40 */   316,  316,  316,  316,  316,  316,  316,  316,  102,  106,
+ /*    50 */    23,  142,   93,  101,   31,  121,  134,  243,  150,  165,
+ /*    60 */   173,  183,  206,  214,  235,  257,  271,  279,  271,  271,
+ /*    70 */   293,  286,   36,  110,  193,  219,  298,  153,  153,  223,
+ /*    80 */   223,   50,  312,  323,  305,  322,  299,  318,  304,  256,
+ /*    90 */   238,  332,  242,  224,  212,  189,  184,  170,  117,  116,
 };
-#define YY_REDUCE_USE_DFLT (-45)
-#define YY_REDUCE_COUNT (49)
-#define YY_REDUCE_MIN   (-44)
-#define YY_REDUCE_MAX   (286)
+#define YY_REDUCE_USE_DFLT (-44)
+#define YY_REDUCE_MAX 49
 static const short yy_reduce_ofst[] = {
- /*     0 */   -30,  -43,    2,   30,  -18,    6,  263,  274,  -44,   22,
- /*    10 */    39,  -12,   59,   60,   33,   56,   57,   77,  105,  125,
- /*    20 */   127,  128,  137,  139,   80,  155,  156,  158,  159,  176,
- /*    30 */   178,  192,  193,  247,  249,  251,  260,  264,  270,  271,
- /*    40 */   275,  276,  277,  279,  281,  282,  285,  286,  280,  284,
+ /*     0 */   -30,  -43,   30,  252,  128,  -18,   21,  277,   35,    8,
+ /*    10 */   -40,  288,  295,  300,  292,  291,  290,  289,  287,  283,
+ /*    20 */   282,  278,  281,  280,  267,  265,  220,  217,  205,  202,
+ /*    30 */   201,  181,  154,  151,  113,   82,   33,   22,  -28,  216,
+ /*    40 */   302,  307,  306,  294,   59,    7,   29,   39,   48,  309,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */   295,  311,  266,  266,  268,  268,  311,  311,  311,  311,
- /*    10 */   307,  311,  311,  311,  311,  311,  311,  311,  311,  311,
- /*    20 */   311,  311,  311,  311,  311,  311,  311,  311,  311,  311,
- /*    30 */   311,  311,  311,  311,  311,  311,  311,  311,  311,  311,
- /*    40 */   311,  311,  311,  311,  311,  311,  311,  311,  311,  311,
- /*    50 */   311,  311,  311,  311,  311,  311,  311,  278,  311,  311,
- /*    60 */   311,  311,  311,  311,  311,  311,  282,  263,  247,  248,
- /*    70 */   258,  239,  240,  260,  241,  259,  240,  254,  253,  235,
- /*    80 */   234,  311,  311,  311,  311,  311,  280,  311,  311,  311,
- /*    90 */   311,  311,  311,  310,  311,  311,  311,  246,  311,  311,
+ /*     0 */   156,  233,  204,  204,  207,  207,  233,  233,  233,  233,
+ /*    10 */   181,  233,  233,  233,  233,  233,  233,  233,  233,  233,
+ /*    20 */   233,  233,  233,  233,  233,  233,  233,  233,  233,  233,
+ /*    30 */   233,  233,  233,  233,  233,  233,  233,  233,  233,  233,
+ /*    40 */   233,  233,  233,  233,  233,  233,  233,  233,  233,  233,
+ /*    50 */   233,  217,  233,  233,  233,  233,  233,  233,  233,  233,
+ /*    60 */   233,  233,  233,  233,  233,  233,  186,  201,  185,  221,
+ /*    70 */   196,  173,  174,  198,  175,  174,  197,  168,  169,  191,
+ /*    80 */   192,  233,  233,  205,  233,  233,  233,  233,  184,  233,
+ /*    90 */   233,  219,  233,  233,  233,  233,  233,  233,  233,  233,
+ /*   100 */   164,  206,  163,  208,  172,  162,  187,  161,  180,  189,
+ /*   110 */   182,  190,  218,  171,  160,  220,  209,  215,  216,  210,
+ /*   120 */   211,  212,  213,  214,  188,  165,  183,  222,  159,  179,
+ /*   130 */   158,  203,  223,  166,  225,  202,  224,  178,  157,  200,
+ /*   140 */   170,  226,  227,  167,  228,  229,  230,  177,  176,  199,
+ /*   150 */   193,  232,  194,  195,  231,
 };
-/********** End of lemon-generated parsing tables *****************************/
+#define YY_SZ_ACTTAB (int)(sizeof(yy_action)/sizeof(yy_action[0]))
 
-/* The next table maps tokens (terminal symbols) into fallback tokens.  
-** If a construct like the following:
+/* The next table maps tokens into fallback tokens.  If a construct
+** like the following:
 ** 
 **      %fallback ID X Y Z.
 **
@@ -319,10 +285,6 @@ static const YYACTIONTYPE yy_default[] = {
 ** and Z.  Whenever one of the tokens X, Y, or Z is input to the parser
 ** but it does not parse, the type of the token is changed to ID and
 ** the parse is retried before an error is thrown.
-**
-** This feature can be used, for example, to cause some keywords in a language
-** to revert to identifiers if they keyword does not apply in the context where
-** it appears.
 */
 #ifdef YYFALLBACK
 static const YYCODETYPE yyFallback[] = {
@@ -340,13 +302,9 @@ static const YYCODETYPE yyFallback[] = {
 **   +  The semantic value stored at this level of the stack.  This is
 **      the information used by the action routines in the grammar.
 **      It is sometimes called the "minor" token.
-**
-** After the "shift" half of a SHIFTREDUCE action, the stateno field
-** actually contains the reduce action for the second half of the
-** SHIFTREDUCE.
 */
 struct yyStackEntry {
-  YYACTIONTYPE stateno;  /* The state-number, or reduce action in SHIFTREDUCE */
+  YYACTIONTYPE stateno;  /* The state-number */
   YYCODETYPE major;      /* The major token value.  This is the code
                          ** number for the token at this stack level */
   YYMINORTYPE minor;     /* The user-supplied minor token value.  This
@@ -361,9 +319,7 @@ struct yyParser {
 #ifdef YYTRACKMAXSTACKDEPTH
   int yyidxMax;                 /* Maximum value of yyidx */
 #endif
-#ifndef YYNOERRORRECOVERY
   int yyerrcnt;                 /* Shifts left before out of the error */
-#endif
   XlatParseARG_SDECL                /* A place to hold %extra_argument */
 #if YYSTACKDEPTH<=0
   int yystksz;                  /* Current side of the stack */
@@ -435,84 +391,84 @@ static const char *const yyTokenName[] = {
 /* For tracing reduce actions, the names of all rules are required.
 */
 static const char *const yyRuleName[] = {
- /*   0 */ "exp ::= NUM",
- /*   1 */ "exp ::= exp PLUS exp",
- /*   2 */ "exp ::= exp MINUS exp",
- /*   3 */ "exp ::= exp MULTIPLY exp",
- /*   4 */ "exp ::= exp DIVIDE exp",
- /*   5 */ "exp ::= exp MODULUS exp",
- /*   6 */ "exp ::= exp OR exp",
- /*   7 */ "exp ::= exp AND exp",
- /*   8 */ "exp ::= exp XOR exp",
- /*   9 */ "exp ::= MINUS exp",
- /*  10 */ "exp ::= LPAREN exp RPAREN",
- /*  11 */ "define_statement ::= DEFINE SYM LPAREN exp RPAREN",
- /*  12 */ "enum_open ::= ENUM LBRACE",
- /*  13 */ "single_enum ::= SYM",
- /*  14 */ "single_enum ::= SYM EQUALS exp",
- /*  15 */ "linetype_exp ::= exp",
- /*  16 */ "linetype_declaration ::= linetype_exp EQUALS exp COMMA exp LPAREN special_args RPAREN",
- /*  17 */ "linetype_declaration ::= linetype_exp EQUALS exp COMMA SYM LPAREN special_args RPAREN",
- /*  18 */ "exp_with_tag ::= NUM",
- /*  19 */ "exp_with_tag ::= TAG",
- /*  20 */ "exp_with_tag ::= exp_with_tag PLUS exp_with_tag",
- /*  21 */ "exp_with_tag ::= exp_with_tag MINUS exp_with_tag",
- /*  22 */ "exp_with_tag ::= exp_with_tag MULTIPLY exp_with_tag",
- /*  23 */ "exp_with_tag ::= exp_with_tag DIVIDE exp_with_tag",
- /*  24 */ "exp_with_tag ::= exp_with_tag MODULUS exp_with_tag",
- /*  25 */ "exp_with_tag ::= exp_with_tag OR exp_with_tag",
- /*  26 */ "exp_with_tag ::= exp_with_tag AND exp_with_tag",
- /*  27 */ "exp_with_tag ::= exp_with_tag XOR exp_with_tag",
- /*  28 */ "exp_with_tag ::= MINUS exp_with_tag",
- /*  29 */ "exp_with_tag ::= LPAREN exp_with_tag RPAREN",
- /*  30 */ "special_arg ::= exp_with_tag",
- /*  31 */ "multi_special_arg ::= special_arg",
- /*  32 */ "multi_special_arg ::= multi_special_arg COMMA special_arg",
- /*  33 */ "special_args ::=",
- /*  34 */ "boom_declaration ::= LBRACKET exp RBRACKET LPAREN exp COMMA exp RPAREN LBRACE boom_body RBRACE",
- /*  35 */ "boom_body ::=",
- /*  36 */ "boom_body ::= boom_line boom_body",
- /*  37 */ "boom_line ::= boom_selector boom_op boom_args",
- /*  38 */ "boom_selector ::= FLAGS",
- /*  39 */ "boom_selector ::= ARG2",
- /*  40 */ "boom_selector ::= ARG3",
- /*  41 */ "boom_selector ::= ARG4",
- /*  42 */ "boom_selector ::= ARG5",
- /*  43 */ "boom_op ::= EQUALS",
- /*  44 */ "boom_op ::= OR_EQUAL",
- /*  45 */ "boom_args ::= exp",
- /*  46 */ "boom_args ::= exp LBRACKET arg_list RBRACKET",
- /*  47 */ "arg_list ::= list_val",
- /*  48 */ "arg_list ::= list_val COMMA arg_list",
- /*  49 */ "list_val ::= exp COLON exp",
- /*  50 */ "maxlinespecial_def ::= MAXLINESPECIAL EQUALS exp SEMICOLON",
- /*  51 */ "sector_declaration ::= SECTOR exp EQUALS exp SEMICOLON",
- /*  52 */ "sector_declaration ::= SECTOR exp EQUALS SYM SEMICOLON",
- /*  53 */ "sector_declaration ::= SECTOR exp EQUALS exp NOBITMASK SEMICOLON",
- /*  54 */ "sector_bitmask ::= SECTOR BITMASK exp sector_op exp SEMICOLON",
- /*  55 */ "sector_bitmask ::= SECTOR BITMASK exp SEMICOLON",
- /*  56 */ "sector_bitmask ::= SECTOR BITMASK exp CLEAR SEMICOLON",
- /*  57 */ "sector_op ::= LSHASSIGN",
- /*  58 */ "sector_op ::= RSHASSIGN",
- /*  59 */ "lineflag_declaration ::= LINEFLAG exp EQUALS exp SEMICOLON",
- /*  60 */ "lineflag_declaration ::= LINEFLAG exp AND exp SEMICOLON",
- /*  61 */ "main ::= translation_unit",
- /*  62 */ "translation_unit ::=",
- /*  63 */ "translation_unit ::= translation_unit external_declaration",
- /*  64 */ "external_declaration ::= define_statement",
- /*  65 */ "external_declaration ::= enum_statement",
- /*  66 */ "external_declaration ::= linetype_declaration",
- /*  67 */ "external_declaration ::= boom_declaration",
- /*  68 */ "external_declaration ::= sector_declaration",
- /*  69 */ "external_declaration ::= lineflag_declaration",
- /*  70 */ "external_declaration ::= sector_bitmask",
- /*  71 */ "external_declaration ::= maxlinespecial_def",
- /*  72 */ "external_declaration ::= NOP",
- /*  73 */ "enum_statement ::= enum_open enum_list RBRACE",
- /*  74 */ "enum_list ::=",
- /*  75 */ "enum_list ::= single_enum",
- /*  76 */ "enum_list ::= enum_list COMMA single_enum",
- /*  77 */ "special_args ::= multi_special_arg",
+ /*   0 */ "main ::= translation_unit",
+ /*   1 */ "translation_unit ::=",
+ /*   2 */ "translation_unit ::= translation_unit external_declaration",
+ /*   3 */ "external_declaration ::= define_statement",
+ /*   4 */ "external_declaration ::= enum_statement",
+ /*   5 */ "external_declaration ::= linetype_declaration",
+ /*   6 */ "external_declaration ::= boom_declaration",
+ /*   7 */ "external_declaration ::= sector_declaration",
+ /*   8 */ "external_declaration ::= lineflag_declaration",
+ /*   9 */ "external_declaration ::= sector_bitmask",
+ /*  10 */ "external_declaration ::= maxlinespecial_def",
+ /*  11 */ "external_declaration ::= NOP",
+ /*  12 */ "exp ::= NUM",
+ /*  13 */ "exp ::= exp PLUS exp",
+ /*  14 */ "exp ::= exp MINUS exp",
+ /*  15 */ "exp ::= exp MULTIPLY exp",
+ /*  16 */ "exp ::= exp DIVIDE exp",
+ /*  17 */ "exp ::= exp MODULUS exp",
+ /*  18 */ "exp ::= exp OR exp",
+ /*  19 */ "exp ::= exp AND exp",
+ /*  20 */ "exp ::= exp XOR exp",
+ /*  21 */ "exp ::= MINUS exp",
+ /*  22 */ "exp ::= LPAREN exp RPAREN",
+ /*  23 */ "define_statement ::= DEFINE SYM LPAREN exp RPAREN",
+ /*  24 */ "enum_statement ::= enum_open enum_list RBRACE",
+ /*  25 */ "enum_open ::= ENUM LBRACE",
+ /*  26 */ "enum_list ::=",
+ /*  27 */ "enum_list ::= single_enum",
+ /*  28 */ "enum_list ::= enum_list COMMA single_enum",
+ /*  29 */ "single_enum ::= SYM",
+ /*  30 */ "single_enum ::= SYM EQUALS exp",
+ /*  31 */ "linetype_exp ::= exp",
+ /*  32 */ "linetype_declaration ::= linetype_exp EQUALS exp COMMA exp LPAREN special_args RPAREN",
+ /*  33 */ "linetype_declaration ::= linetype_exp EQUALS exp COMMA SYM LPAREN special_args RPAREN",
+ /*  34 */ "exp_with_tag ::= NUM",
+ /*  35 */ "exp_with_tag ::= TAG",
+ /*  36 */ "exp_with_tag ::= exp_with_tag PLUS exp_with_tag",
+ /*  37 */ "exp_with_tag ::= exp_with_tag MINUS exp_with_tag",
+ /*  38 */ "exp_with_tag ::= exp_with_tag MULTIPLY exp_with_tag",
+ /*  39 */ "exp_with_tag ::= exp_with_tag DIVIDE exp_with_tag",
+ /*  40 */ "exp_with_tag ::= exp_with_tag MODULUS exp_with_tag",
+ /*  41 */ "exp_with_tag ::= exp_with_tag OR exp_with_tag",
+ /*  42 */ "exp_with_tag ::= exp_with_tag AND exp_with_tag",
+ /*  43 */ "exp_with_tag ::= exp_with_tag XOR exp_with_tag",
+ /*  44 */ "exp_with_tag ::= MINUS exp_with_tag",
+ /*  45 */ "exp_with_tag ::= LPAREN exp_with_tag RPAREN",
+ /*  46 */ "special_arg ::= exp_with_tag",
+ /*  47 */ "multi_special_arg ::= special_arg",
+ /*  48 */ "multi_special_arg ::= multi_special_arg COMMA special_arg",
+ /*  49 */ "special_args ::=",
+ /*  50 */ "special_args ::= multi_special_arg",
+ /*  51 */ "boom_declaration ::= LBRACKET exp RBRACKET LPAREN exp COMMA exp RPAREN LBRACE boom_body RBRACE",
+ /*  52 */ "boom_body ::=",
+ /*  53 */ "boom_body ::= boom_line boom_body",
+ /*  54 */ "boom_line ::= boom_selector boom_op boom_args",
+ /*  55 */ "boom_selector ::= FLAGS",
+ /*  56 */ "boom_selector ::= ARG2",
+ /*  57 */ "boom_selector ::= ARG3",
+ /*  58 */ "boom_selector ::= ARG4",
+ /*  59 */ "boom_selector ::= ARG5",
+ /*  60 */ "boom_op ::= EQUALS",
+ /*  61 */ "boom_op ::= OR_EQUAL",
+ /*  62 */ "boom_args ::= exp",
+ /*  63 */ "boom_args ::= exp LBRACKET arg_list RBRACKET",
+ /*  64 */ "arg_list ::= list_val",
+ /*  65 */ "arg_list ::= list_val COMMA arg_list",
+ /*  66 */ "list_val ::= exp COLON exp",
+ /*  67 */ "maxlinespecial_def ::= MAXLINESPECIAL EQUALS exp SEMICOLON",
+ /*  68 */ "sector_declaration ::= SECTOR exp EQUALS exp SEMICOLON",
+ /*  69 */ "sector_declaration ::= SECTOR exp EQUALS SYM SEMICOLON",
+ /*  70 */ "sector_declaration ::= SECTOR exp EQUALS exp NOBITMASK SEMICOLON",
+ /*  71 */ "sector_bitmask ::= SECTOR BITMASK exp sector_op exp SEMICOLON",
+ /*  72 */ "sector_bitmask ::= SECTOR BITMASK exp SEMICOLON",
+ /*  73 */ "sector_bitmask ::= SECTOR BITMASK exp CLEAR SEMICOLON",
+ /*  74 */ "sector_op ::= LSHASSIGN",
+ /*  75 */ "sector_op ::= RSHASSIGN",
+ /*  76 */ "lineflag_declaration ::= LINEFLAG exp EQUALS exp SEMICOLON",
+ /*  77 */ "lineflag_declaration ::= LINEFLAG exp AND exp SEMICOLON",
 };
 #endif /* NDEBUG */
 
@@ -539,15 +495,6 @@ static void yyGrowStack(yyParser *p){
 }
 #endif
 
-/* Datatype of the argument to the memory allocated passed as the
-** second argument to XlatParseAlloc() below.  This can be changed by
-** putting an appropriate #define in the %include section of the input
-** grammar.
-*/
-#ifndef YYMALLOCARGTYPE
-# define YYMALLOCARGTYPE size_t
-#endif
-
 /* 
 ** This function allocates a new parser.
 ** The only argument is a pointer to a function which works like
@@ -560,9 +507,9 @@ static void yyGrowStack(yyParser *p){
 ** A pointer to a parser.  This pointer is used in subsequent calls
 ** to XlatParse and XlatParseFree.
 */
-void *XlatParseAlloc(void *(CDECL *mallocProc)(YYMALLOCARGTYPE)){
+void *XlatParseAlloc(void *(CDECL *mallocProc)(size_t)){
   yyParser *pParser;
-  pParser = (yyParser*)(*mallocProc)( (YYMALLOCARGTYPE)sizeof(yyParser) );
+  pParser = (yyParser*)(*mallocProc)( (size_t)sizeof(yyParser) );
   if( pParser ){
     pParser->yyidx = -1;
 #ifdef YYTRACKMAXSTACKDEPTH
@@ -577,12 +524,10 @@ void *XlatParseAlloc(void *(CDECL *mallocProc)(YYMALLOCARGTYPE)){
   return pParser;
 }
 
-/* The following function deletes the "minor type" or semantic value
-** associated with a symbol.  The symbol can be either a terminal
-** or nonterminal. "yymajor" is the symbol code, and "yypminor" is
-** a pointer to the value to be deleted.  The code used to do the 
-** deletions is derived from the %destructor and/or %token_destructor
-** directives of the input grammar.
+/* The following function deletes the value associated with a
+** symbol.  The symbol can be either a terminal or nonterminal.
+** "yymajor" is the symbol code, and "yypminor" is a pointer to
+** the value.
 */
 static void yy_destructor(
   yyParser *yypParser,    /* The parser */
@@ -598,10 +543,9 @@ static void yy_destructor(
     ** being destroyed before it is finished parsing.
     **
     ** Note: during a reduce, the only symbols destroyed are those
-    ** which appear on the RHS of the rule, but which are *not* used
+    ** which appear on the RHS of the rule, but which are not used
     ** inside the C code.
     */
-/********* Begin destructor definitions ***************************************/
       /* TERMINAL Destructor */
     case 1: /* NOP */
     case 2: /* OR */
@@ -643,12 +587,11 @@ static void yy_destructor(
     case 38: /* RSHASSIGN */
     case 39: /* LINEFLAG */
 {
-#line 4 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+#line 4 "xlat_parser.y"
 
-#line 649 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+#line 593 "xlat_parser.c"
 }
       break;
-/********* End destructor definitions *****************************************/
     default:  break;   /* If no destructor action specified: do nothing */
   }
 }
@@ -658,37 +601,45 @@ static void yy_destructor(
 **
 ** If there is a destructor routine associated with the token which
 ** is popped from the stack, then call it.
+**
+** Return the major token number for the symbol popped.
 */
-static void yy_pop_parser_stack(yyParser *pParser){
-  yyStackEntry *yytos;
-  assert( pParser->yyidx>=0 );
-  yytos = &pParser->yystack[pParser->yyidx--];
+static int yy_pop_parser_stack(yyParser *pParser){
+  YYCODETYPE yymajor;
+  yyStackEntry *yytos = &pParser->yystack[pParser->yyidx];
+
+  if( pParser->yyidx<0 ) return 0;
 #ifndef NDEBUG
-  if( yyTraceFILE ){
+  if( yyTraceFILE && pParser->yyidx>=0 ){
     fprintf(yyTraceFILE,"%sPopping %s\n",
       yyTracePrompt,
       yyTokenName[yytos->major]);
   }
 #endif
-  yy_destructor(pParser, yytos->major, &yytos->minor);
+  yymajor = yytos->major;
+  yy_destructor(pParser, yymajor, &yytos->minor);
+  pParser->yyidx--;
+  return yymajor;
 }
 
-/*
-** Deallocate and destroy a parser.  Destructors are called for
+/* 
+** Deallocate and destroy a parser.  Destructors are all called for
 ** all stack elements before shutting the parser down.
-*
-** If the YYPARSEFREENEVERNULL macro exists (for example because it
-** is defined in a %include section of the input grammar) then it is
-** assumed that the input pointer is never NULL.
+**
+** Inputs:
+** <ul>
+** <li>  A pointer to the parser.  This should be a pointer
+**       obtained from XlatParseAlloc.
+** <li>  A pointer to a function used to reclaim memory obtained
+**       from malloc.
+** </ul>
 */
 void XlatParseFree(
   void *p,                    /* The parser to be deleted */
   void (CDECL *freeProc)(void*)     /* Function used to reclaim memory */
 ){
   yyParser *pParser = (yyParser*)p;
-#ifndef YYPARSEFREENEVERNULL
   if( pParser==0 ) return;
-#endif
   while( pParser->yyidx>=0 ) yy_pop_parser_stack(pParser);
 #if YYSTACKDEPTH<=0
   free(pParser->yystack);
@@ -709,72 +660,66 @@ int XlatParseStackPeak(void *p){
 /*
 ** Find the appropriate action for a parser given the terminal
 ** look-ahead token iLookAhead.
+**
+** If the look-ahead token is YYNOCODE, then check to see if the action is
+** independent of the look-ahead.  If it is, return the action, otherwise
+** return YY_NO_ACTION.
 */
-static unsigned int yy_find_shift_action(
+static int yy_find_shift_action(
   yyParser *pParser,        /* The parser */
   YYCODETYPE iLookAhead     /* The look-ahead token */
 ){
   int i;
   int stateno = pParser->yystack[pParser->yyidx].stateno;
  
-  if( stateno>=YY_MIN_REDUCE ) return stateno;
-  assert( stateno <= YY_SHIFT_COUNT );
-  do{
-    i = yy_shift_ofst[stateno];
-    if( i==YY_SHIFT_USE_DFLT ) return yy_default[stateno];
-    assert( iLookAhead!=YYNOCODE );
-    i += iLookAhead;
-    if( i<0 || i>=YY_ACTTAB_COUNT || yy_lookahead[i]!=iLookAhead ){
-      if( iLookAhead>0 ){
+  if( stateno>YY_SHIFT_MAX || (i = yy_shift_ofst[stateno])==YY_SHIFT_USE_DFLT ){
+    return yy_default[stateno];
+  }
+  assert( iLookAhead!=YYNOCODE );
+  i += iLookAhead;
+  if( i<0 || i>=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){
+    if( iLookAhead>0 ){
 #ifdef YYFALLBACK
-        YYCODETYPE iFallback;            /* Fallback token */
-        if( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0])
-               && (iFallback = yyFallback[iLookAhead])!=0 ){
+      YYCODETYPE iFallback;            /* Fallback token */
+      if( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0])
+             && (iFallback = yyFallback[iLookAhead])!=0 ){
 #ifndef NDEBUG
-          if( yyTraceFILE ){
-            fprintf(yyTraceFILE, "%sFALLBACK %s => %s\n",
-               yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[iFallback]);
-          }
-#endif
-          assert( yyFallback[iFallback]==0 ); /* Fallback loop must terminate */
-          iLookAhead = iFallback;
-          continue;
+        if( yyTraceFILE ){
+          fprintf(yyTraceFILE, "%sFALLBACK %s => %s\n",
+             yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[iFallback]);
         }
+#endif
+        return yy_find_shift_action(pParser, iFallback);
+      }
 #endif
 #ifdef YYWILDCARD
-        {
-          int j = i - iLookAhead + YYWILDCARD;
-          if( 
-#if YY_SHIFT_MIN+YYWILDCARD<0
-            j>=0 &&
-#endif
-#if YY_SHIFT_MAX+YYWILDCARD>=YY_ACTTAB_COUNT
-            j<YY_ACTTAB_COUNT &&
-#endif
-            yy_lookahead[j]==YYWILDCARD
-          ){
+      {
+        int j = i - iLookAhead + YYWILDCARD;
+        if( j>=0 && j<YY_SZ_ACTTAB && yy_lookahead[j]==YYWILDCARD ){
 #ifndef NDEBUG
-            if( yyTraceFILE ){
-              fprintf(yyTraceFILE, "%sWILDCARD %s => %s\n",
-                 yyTracePrompt, yyTokenName[iLookAhead],
-                 yyTokenName[YYWILDCARD]);
-            }
-#endif /* NDEBUG */
-            return yy_action[j];
+          if( yyTraceFILE ){
+            fprintf(yyTraceFILE, "%sWILDCARD %s => %s\n",
+               yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[YYWILDCARD]);
           }
+#endif /* NDEBUG */
+          return yy_action[j];
         }
-#endif /* YYWILDCARD */
       }
-      return yy_default[stateno];
-    }else{
-      return yy_action[i];
+#endif /* YYWILDCARD */
     }
-  }while(1);
+    return yy_default[stateno];
+  }else{
+    return yy_action[i];
+  }
 }
 
 /*
 ** Find the appropriate action for a parser given the non-terminal
 ** look-ahead token iLookAhead.
+**
+** If the look-ahead token is YYNOCODE, then check to see if the action is
+** independent of the look-ahead.  If it is, return the action, otherwise
+** return YY_NO_ACTION.
 */
 static int yy_find_reduce_action(
   int stateno,              /* Current state number */
@@ -782,22 +727,22 @@ static int yy_find_reduce_action(
 ){
   int i;
 #ifdef YYERRORSYMBOL
-  if( stateno>YY_REDUCE_COUNT ){
+  if( stateno>YY_REDUCE_MAX ){
 	return yy_default[stateno];
   }
 #else
-  assert( stateno<=YY_REDUCE_COUNT );
+  assert( stateno<=YY_REDUCE_MAX );
 #endif
   i = yy_reduce_ofst[stateno];
   assert( i!=YY_REDUCE_USE_DFLT );
   assert( iLookAhead!=YYNOCODE );
   i += iLookAhead;
 #ifdef YYERRORSYMBOL
-  if( i<0 || i>=YY_ACTTAB_COUNT || yy_lookahead[i]!=iLookAhead ){
+  if( i<0 || i>=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){
     return yy_default[stateno];
   }
 #else
-  assert( i>=0 && i<YY_ACTTAB_COUNT );
+  assert( i>=0 && i<YY_SZ_ACTTAB );
   assert( yy_lookahead[i]==iLookAhead );
 #endif
   return yy_action[i];
@@ -806,7 +751,7 @@ static int yy_find_reduce_action(
 /*
 ** The following routine is called if the stack overflows.
 */
-static void yyStackOverflow(yyParser *yypParser){
+static void yyStackOverflow(yyParser *yypParser, YYMINORTYPE *yypMinor){
    XlatParseARG_FETCH;
    yypParser->yyidx--;
 #ifndef NDEBUG
@@ -817,30 +762,8 @@ static void yyStackOverflow(yyParser *yypParser){
    while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
    /* Here code is inserted which will execute if the parser
    ** stack ever overflows */
-/******** Begin %stack_overflow code ******************************************/
-/******** End %stack_overflow code ********************************************/
    XlatParseARG_STORE; /* Suppress warning about unused %extra_argument var */
 }
-
-/*
-** Print tracing information for a SHIFT action
-*/
-#ifndef NDEBUG
-static void yyTraceShift(yyParser *yypParser, int yyNewState){
-  if( yyTraceFILE ){
-    if( yyNewState<YYNSTATE ){
-      fprintf(yyTraceFILE,"%sShift '%s', go to state %d\n",
-         yyTracePrompt,yyTokenName[yypParser->yystack[yypParser->yyidx].major],
-         yyNewState);
-    }else{
-      fprintf(yyTraceFILE,"%sShift '%s'\n",
-         yyTracePrompt,yyTokenName[yypParser->yystack[yypParser->yyidx].major]);
-    }
-  }
-}
-#else
-# define yyTraceShift(X,Y)
-#endif
 
 /*
 ** Perform a shift action.
@@ -849,7 +772,7 @@ static void yy_shift(
   yyParser *yypParser,          /* The parser to be shifted */
   int yyNewState,               /* The new state to shift in */
   int yyMajor,                  /* The major token to shift in */
-  XlatParseTOKENTYPE yyMinor        /* The minor token to shift in */
+  YYMINORTYPE *yypMinor         /* Pointer to the minor token to shift in */
 ){
   yyStackEntry *yytos;
   yypParser->yyidx++;
@@ -860,14 +783,14 @@ static void yy_shift(
 #endif
 #if YYSTACKDEPTH>0
   if( yypParser->yyidx>=YYSTACKDEPTH ){
-    yyStackOverflow(yypParser);
+    yyStackOverflow(yypParser, yypMinor);
     return;
   }
 #else
   if( yypParser->yyidx>=yypParser->yystksz ){
     yyGrowStack(yypParser);
     if( yypParser->yyidx>=yypParser->yystksz ){
-      yyStackOverflow(yypParser);
+      yyStackOverflow(yypParser, yypMinor);
       return;
     }
   }
@@ -875,8 +798,17 @@ static void yy_shift(
   yytos = &yypParser->yystack[yypParser->yyidx];
   yytos->stateno = (YYACTIONTYPE)yyNewState;
   yytos->major = (YYCODETYPE)yyMajor;
-  yytos->minor.yy0 = yyMinor;
-  yyTraceShift(yypParser, yyNewState);
+  yytos->minor = *yypMinor;
+#ifndef NDEBUG
+  if( yyTraceFILE && yypParser->yyidx>0 ){
+    int i;
+    fprintf(yyTraceFILE,"%sShift %d\n",yyTracePrompt,yyNewState);
+    fprintf(yyTraceFILE,"%sStack:",yyTracePrompt);
+    for(i=1; i<=yypParser->yyidx; i++)
+      fprintf(yyTraceFILE," (%d)%s",yypParser->yystack[i].stateno,yyTokenName[yypParser->yystack[i].major]);
+    fprintf(yyTraceFILE,"\n");
+  }
+#endif
 }
 
 /* The following table contains information about every rule that
@@ -886,6 +818,18 @@ static const struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
+  { 41, 1 },
+  { 42, 0 },
+  { 42, 2 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
   { 52, 1 },
   { 52, 3 },
   { 52, 3 },
@@ -898,7 +842,11 @@ static const struct {
   { 52, 2 },
   { 52, 3 },
   { 44, 5 },
+  { 45, 3 },
   { 53, 2 },
+  { 54, 0 },
+  { 54, 1 },
+  { 54, 3 },
   { 55, 1 },
   { 55, 3 },
   { 56, 1 },
@@ -920,6 +868,7 @@ static const struct {
   { 60, 1 },
   { 60, 3 },
   { 57, 0 },
+  { 57, 1 },
   { 47, 11 },
   { 67, 0 },
   { 67, 2 },
@@ -947,23 +896,6 @@ static const struct {
   { 68, 1 },
   { 49, 5 },
   { 49, 5 },
-  { 41, 1 },
-  { 42, 0 },
-  { 42, 2 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 43, 1 },
-  { 45, 3 },
-  { 54, 0 },
-  { 54, 1 },
-  { 54, 3 },
-  { 57, 1 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -974,46 +906,39 @@ static void yy_accept(yyParser*);  /* Forward Declaration */
 */
 static void yy_reduce(
   yyParser *yypParser,         /* The parser */
-  unsigned int yyruleno        /* Number of the rule by which to reduce */
+  int yyruleno                 /* Number of the rule by which to reduce */
 ){
   int yygoto;                     /* The next state */
   int yyact;                      /* The next action */
+  YYMINORTYPE yygotominor;        /* The LHS of the rule reduced */
   yyStackEntry *yymsp;            /* The top of the parser's stack */
   int yysize;                     /* Amount to pop the stack */
   XlatParseARG_FETCH;
   yymsp = &yypParser->yystack[yypParser->yyidx];
 #ifndef NDEBUG
-  if( yyTraceFILE && yyruleno<(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){
-    yysize = yyRuleInfo[yyruleno].nrhs;
-    fprintf(yyTraceFILE, "%sReduce [%s], go to state %d.\n", yyTracePrompt,
-      yyRuleName[yyruleno], yymsp[-yysize].stateno);
+  if( yyTraceFILE && yyruleno>=0 
+        && yyruleno<(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){
+    fprintf(yyTraceFILE, "%sReduce [%s].\n", yyTracePrompt,
+      yyRuleName[yyruleno]);
   }
 #endif /* NDEBUG */
 
-  /* Check that the stack is large enough to grow by a single entry
-  ** if the RHS of the rule is empty.  This ensures that there is room
-  ** enough on the stack to push the LHS value */
-  if( yyRuleInfo[yyruleno].nrhs==0 ){
-#ifdef YYTRACKMAXSTACKDEPTH
-    if( yypParser->yyidx>yypParser->yyidxMax ){
-      yypParser->yyidxMax = yypParser->yyidx;
-    }
-#endif
-#if YYSTACKDEPTH>0
-    if( yypParser->yyidx>=YYSTACKDEPTH-1 ){
-      yyStackOverflow(yypParser);
-      return;
-    }
-#else
-    if( yypParser->yyidx>=yypParser->yystksz-1 ){
-      yyGrowStack(yypParser);
-      if( yypParser->yyidx>=yypParser->yystksz-1 ){
-        yyStackOverflow(yypParser);
-        return;
-      }
-    }
-#endif
-  }
+  /* Silence complaints from purify about yygotominor being uninitialized
+  ** in some cases when it is copied into the stack after the following
+  ** switch.  yygotominor is uninitialized when a rule reduces that does
+  ** not set the value of its left-hand side nonterminal.  Leaving the
+  ** value of the nonterminal uninitialized is utterly harmless as long
+  ** as the value is never used.  So really the only thing this code
+  ** accomplishes is to quieten purify.  
+  **
+  ** 2007-01-16:  The wireshark project (www.wireshark.org) reports that
+  ** without this code, their parser segfaults.  I'm not sure what there
+  ** parser is doing to make this happen.  This is the second bug report
+  ** from wireshark this week.  Clearly they are stressing Lemon in ways
+  ** that it has not been previously stressed...  (SQLite ticket #2172)
+  */
+  /*memset(&yygotominor, 0, sizeof(yygotominor));*/
+  yygotominor = yyzerominor;
 
   switch( yyruleno ){
   /* Beginning here are the reduction cases.  A typical example
@@ -1024,227 +949,233 @@ static void yy_reduce(
   **  #line <lineno> <thisfile>
   **     break;
   */
-/********** Begin reduce actions **********************************************/
-        YYMINORTYPE yylhsminor;
-      case 0: /* exp ::= NUM */
-#line 34 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[0].minor.yy0.val; }
-#line 1033 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 1: /* exp ::= exp PLUS exp */
-#line 35 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[-2].minor.yy32 + yymsp[0].minor.yy32; }
-#line 1039 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,6,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 2: /* exp ::= exp MINUS exp */
-#line 36 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[-2].minor.yy32 - yymsp[0].minor.yy32; }
-#line 1046 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,5,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 3: /* exp ::= exp MULTIPLY exp */
-#line 37 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[-2].minor.yy32 * yymsp[0].minor.yy32; }
-#line 1053 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,7,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 4: /* exp ::= exp DIVIDE exp */
-#line 38 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ if (yymsp[0].minor.yy32 != 0) yylhsminor.yy32 = yymsp[-2].minor.yy32 / yymsp[0].minor.yy32; else context->PrintError("Division by zero"); }
-#line 1060 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,8,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 5: /* exp ::= exp MODULUS exp */
-#line 39 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ if (yymsp[0].minor.yy32 != 0) yylhsminor.yy32 = yymsp[-2].minor.yy32 % yymsp[0].minor.yy32; else context->PrintError("Division by zero"); }
-#line 1067 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,9,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 6: /* exp ::= exp OR exp */
-#line 40 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[-2].minor.yy32 | yymsp[0].minor.yy32; }
-#line 1074 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,2,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 7: /* exp ::= exp AND exp */
-#line 41 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[-2].minor.yy32 & yymsp[0].minor.yy32; }
-#line 1081 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,4,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 8: /* exp ::= exp XOR exp */
-#line 42 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yylhsminor.yy32 = yymsp[-2].minor.yy32 ^ yymsp[0].minor.yy32; }
-#line 1088 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,3,&yymsp[-1].minor);
-  yymsp[-2].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 9: /* exp ::= MINUS exp */
-{  yy_destructor(yypParser,5,&yymsp[-1].minor);
-#line 43 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-1].minor.yy32 = -yymsp[0].minor.yy32; }
-#line 1096 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 11: /* external_declaration ::= NOP */
+#line 23 "xlat_parser.y"
+{
+  yy_destructor(yypParser,1,&yymsp[0].minor);
 }
+#line 958 "xlat_parser.c"
         break;
-      case 10: /* exp ::= LPAREN exp RPAREN */
-      case 29: /*exp_with_tag ::= LPAREN exp_with_tag RPAREN */ yytestcase(yyruleno==29);
-{  yy_destructor(yypParser,12,&yymsp[-2].minor);
-#line 44 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = yymsp[-1].minor.yy32; }
-#line 1104 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 12: /* exp ::= NUM */
+#line 34 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[0].minor.yy0.val; }
+#line 963 "xlat_parser.c"
+        break;
+      case 13: /* exp ::= exp PLUS exp */
+#line 35 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-2].minor.yy32 + yymsp[0].minor.yy32;   yy_destructor(yypParser,6,&yymsp[-1].minor);
+}
+#line 969 "xlat_parser.c"
+        break;
+      case 14: /* exp ::= exp MINUS exp */
+#line 36 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-2].minor.yy32 - yymsp[0].minor.yy32;   yy_destructor(yypParser,5,&yymsp[-1].minor);
+}
+#line 975 "xlat_parser.c"
+        break;
+      case 15: /* exp ::= exp MULTIPLY exp */
+#line 37 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-2].minor.yy32 * yymsp[0].minor.yy32;   yy_destructor(yypParser,7,&yymsp[-1].minor);
+}
+#line 981 "xlat_parser.c"
+        break;
+      case 16: /* exp ::= exp DIVIDE exp */
+#line 38 "xlat_parser.y"
+{ if (yymsp[0].minor.yy32 != 0) yygotominor.yy32 = yymsp[-2].minor.yy32 / yymsp[0].minor.yy32; else context->PrintError("Division by zero");   yy_destructor(yypParser,8,&yymsp[-1].minor);
+}
+#line 987 "xlat_parser.c"
+        break;
+      case 17: /* exp ::= exp MODULUS exp */
+#line 39 "xlat_parser.y"
+{ if (yymsp[0].minor.yy32 != 0) yygotominor.yy32 = yymsp[-2].minor.yy32 % yymsp[0].minor.yy32; else context->PrintError("Division by zero");   yy_destructor(yypParser,9,&yymsp[-1].minor);
+}
+#line 993 "xlat_parser.c"
+        break;
+      case 18: /* exp ::= exp OR exp */
+#line 40 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-2].minor.yy32 | yymsp[0].minor.yy32;   yy_destructor(yypParser,2,&yymsp[-1].minor);
+}
+#line 999 "xlat_parser.c"
+        break;
+      case 19: /* exp ::= exp AND exp */
+#line 41 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-2].minor.yy32 & yymsp[0].minor.yy32;   yy_destructor(yypParser,4,&yymsp[-1].minor);
+}
+#line 1005 "xlat_parser.c"
+        break;
+      case 20: /* exp ::= exp XOR exp */
+#line 42 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-2].minor.yy32 ^ yymsp[0].minor.yy32;   yy_destructor(yypParser,3,&yymsp[-1].minor);
+}
+#line 1011 "xlat_parser.c"
+        break;
+      case 21: /* exp ::= MINUS exp */
+#line 43 "xlat_parser.y"
+{ yygotominor.yy32 = -yymsp[0].minor.yy32;   yy_destructor(yypParser,5,&yymsp[-1].minor);
+}
+#line 1017 "xlat_parser.c"
+        break;
+      case 22: /* exp ::= LPAREN exp RPAREN */
+      case 45: /*exp_with_tag ::= LPAREN exp_with_tag RPAREN */ yytestcase(yyruleno==45);
+#line 44 "xlat_parser.y"
+{ yygotominor.yy32 = yymsp[-1].minor.yy32;   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
 }
+#line 1025 "xlat_parser.c"
         break;
-      case 11: /* define_statement ::= DEFINE SYM LPAREN exp RPAREN */
-#line 54 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 23: /* define_statement ::= DEFINE SYM LPAREN exp RPAREN */
+#line 54 "xlat_parser.y"
 {
 	context->AddSym (yymsp[-3].minor.yy0.sym, yymsp[-1].minor.yy32);
-}
-#line 1113 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,14,&yymsp[-4].minor);
   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
+}
+#line 1035 "xlat_parser.c"
         break;
-      case 12: /* enum_open ::= ENUM LBRACE */
-#line 67 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 24: /* enum_statement ::= enum_open enum_list RBRACE */
+#line 64 "xlat_parser.y"
+{
+  yy_destructor(yypParser,16,&yymsp[0].minor);
+}
+#line 1042 "xlat_parser.c"
+        break;
+      case 25: /* enum_open ::= ENUM LBRACE */
+#line 67 "xlat_parser.y"
 {
 	context->EnumVal = 0;
-}
-#line 1122 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,17,&yymsp[-1].minor);
   yy_destructor(yypParser,18,&yymsp[0].minor);
+}
+#line 1051 "xlat_parser.c"
         break;
-      case 13: /* single_enum ::= SYM */
-#line 76 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 28: /* enum_list ::= enum_list COMMA single_enum */
+#line 73 "xlat_parser.y"
+{
+  yy_destructor(yypParser,19,&yymsp[-1].minor);
+}
+#line 1058 "xlat_parser.c"
+        break;
+      case 29: /* single_enum ::= SYM */
+#line 76 "xlat_parser.y"
 {
 	context->AddSym (yymsp[0].minor.yy0.sym, context->EnumVal++);
 }
-#line 1130 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+#line 1065 "xlat_parser.c"
         break;
-      case 14: /* single_enum ::= SYM EQUALS exp */
-#line 81 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 30: /* single_enum ::= SYM EQUALS exp */
+#line 81 "xlat_parser.y"
 {
 	context->AddSym (yymsp[-2].minor.yy0.sym, yymsp[0].minor.yy32);
 	context->EnumVal = yymsp[0].minor.yy32+1;
-}
-#line 1138 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-1].minor);
-        break;
-      case 15: /* linetype_exp ::= exp */
-#line 94 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{
-	yylhsminor.yy32 = static_cast<XlatParseContext *>(context)->DefiningLineType = yymsp[0].minor.yy32;
 }
-#line 1146 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy32 = yylhsminor.yy32;
+#line 1074 "xlat_parser.c"
         break;
-      case 16: /* linetype_declaration ::= linetype_exp EQUALS exp COMMA exp LPAREN special_args RPAREN */
-#line 99 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 31: /* linetype_exp ::= exp */
+#line 94 "xlat_parser.y"
+{
+	yygotominor.yy32 = static_cast<XlatParseContext *>(context)->DefiningLineType = yymsp[0].minor.yy32;
+}
+#line 1081 "xlat_parser.c"
+        break;
+      case 32: /* linetype_declaration ::= linetype_exp EQUALS exp COMMA exp LPAREN special_args RPAREN */
+#line 99 "xlat_parser.y"
 {
 	SimpleLineTranslations.SetVal(yymsp[-7].minor.yy32, 
 		FLineTrans(yymsp[-3].minor.yy32&0xffff, yymsp[-5].minor.yy32+yymsp[-1].minor.yy7.addflags, yymsp[-1].minor.yy7.args[0], yymsp[-1].minor.yy7.args[1], yymsp[-1].minor.yy7.args[2], yymsp[-1].minor.yy7.args[3], yymsp[-1].minor.yy7.args[4]));
 	static_cast<XlatParseContext *>(context)->DefiningLineType = -1;
-}
-#line 1156 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-6].minor);
   yy_destructor(yypParser,19,&yymsp[-4].minor);
   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
+}
+#line 1094 "xlat_parser.c"
         break;
-      case 17: /* linetype_declaration ::= linetype_exp EQUALS exp COMMA SYM LPAREN special_args RPAREN */
-#line 106 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 33: /* linetype_declaration ::= linetype_exp EQUALS exp COMMA SYM LPAREN special_args RPAREN */
+#line 106 "xlat_parser.y"
 {
 	Printf ("%s, line %d: %s is undefined\n", context->SourceFile, context->SourceLine, yymsp[-3].minor.yy0.sym);
 	static_cast<XlatParseContext *>(context)->DefiningLineType = -1;
-}
-#line 1168 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,20,&yymsp[-6].minor);
   yy_destructor(yypParser,19,&yymsp[-4].minor);
   yy_destructor(yypParser,12,&yymsp[-2].minor);
   yy_destructor(yypParser,13,&yymsp[0].minor);
-        break;
-      case 18: /* exp_with_tag ::= NUM */
-#line 112 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ XlatExpressions.Push(yymsp[0].minor.yy0.val); yylhsminor.yy32 = XlatExpressions.Push(XEXP_Const); }
-#line 1177 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy32 = yylhsminor.yy32;
-        break;
-      case 19: /* exp_with_tag ::= TAG */
-{  yy_destructor(yypParser,21,&yymsp[0].minor);
-#line 113 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = XlatExpressions.Push(XEXP_Tag); }
-#line 1184 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
+#line 1106 "xlat_parser.c"
         break;
-      case 20: /* exp_with_tag ::= exp_with_tag PLUS exp_with_tag */
-#line 114 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Add); }
-#line 1190 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,6,&yymsp[-1].minor);
+      case 34: /* exp_with_tag ::= NUM */
+#line 112 "xlat_parser.y"
+{ XlatExpressions.Push(yymsp[0].minor.yy0.val); yygotominor.yy32 = XlatExpressions.Push(XEXP_Const); }
+#line 1111 "xlat_parser.c"
         break;
-      case 21: /* exp_with_tag ::= exp_with_tag MINUS exp_with_tag */
-#line 115 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Sub); }
-#line 1196 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,5,&yymsp[-1].minor);
-        break;
-      case 22: /* exp_with_tag ::= exp_with_tag MULTIPLY exp_with_tag */
-#line 116 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Mul); }
-#line 1202 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,7,&yymsp[-1].minor);
-        break;
-      case 23: /* exp_with_tag ::= exp_with_tag DIVIDE exp_with_tag */
-#line 117 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Div); }
-#line 1208 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,8,&yymsp[-1].minor);
-        break;
-      case 24: /* exp_with_tag ::= exp_with_tag MODULUS exp_with_tag */
-#line 118 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Mod); }
-#line 1214 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,9,&yymsp[-1].minor);
-        break;
-      case 25: /* exp_with_tag ::= exp_with_tag OR exp_with_tag */
-#line 119 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Or);  }
-#line 1220 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,2,&yymsp[-1].minor);
-        break;
-      case 26: /* exp_with_tag ::= exp_with_tag AND exp_with_tag */
-#line 120 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_And); }
-#line 1226 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,4,&yymsp[-1].minor);
-        break;
-      case 27: /* exp_with_tag ::= exp_with_tag XOR exp_with_tag */
-#line 121 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-2].minor.yy32 = XlatExpressions.Push(XEXP_Xor); }
-#line 1232 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,3,&yymsp[-1].minor);
-        break;
-      case 28: /* exp_with_tag ::= MINUS exp_with_tag */
-{  yy_destructor(yypParser,5,&yymsp[-1].minor);
-#line 122 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[-1].minor.yy32 = XlatExpressions.Push(XEXP_Neg); }
-#line 1239 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 35: /* exp_with_tag ::= TAG */
+#line 113 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Tag);   yy_destructor(yypParser,21,&yymsp[0].minor);
 }
+#line 1117 "xlat_parser.c"
         break;
-      case 30: /* special_arg ::= exp_with_tag */
-#line 129 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 36: /* exp_with_tag ::= exp_with_tag PLUS exp_with_tag */
+#line 114 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Add);   yy_destructor(yypParser,6,&yymsp[-1].minor);
+}
+#line 1123 "xlat_parser.c"
+        break;
+      case 37: /* exp_with_tag ::= exp_with_tag MINUS exp_with_tag */
+#line 115 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Sub);   yy_destructor(yypParser,5,&yymsp[-1].minor);
+}
+#line 1129 "xlat_parser.c"
+        break;
+      case 38: /* exp_with_tag ::= exp_with_tag MULTIPLY exp_with_tag */
+#line 116 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Mul);   yy_destructor(yypParser,7,&yymsp[-1].minor);
+}
+#line 1135 "xlat_parser.c"
+        break;
+      case 39: /* exp_with_tag ::= exp_with_tag DIVIDE exp_with_tag */
+#line 117 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Div);   yy_destructor(yypParser,8,&yymsp[-1].minor);
+}
+#line 1141 "xlat_parser.c"
+        break;
+      case 40: /* exp_with_tag ::= exp_with_tag MODULUS exp_with_tag */
+#line 118 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Mod);   yy_destructor(yypParser,9,&yymsp[-1].minor);
+}
+#line 1147 "xlat_parser.c"
+        break;
+      case 41: /* exp_with_tag ::= exp_with_tag OR exp_with_tag */
+#line 119 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Or);    yy_destructor(yypParser,2,&yymsp[-1].minor);
+}
+#line 1153 "xlat_parser.c"
+        break;
+      case 42: /* exp_with_tag ::= exp_with_tag AND exp_with_tag */
+#line 120 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_And);   yy_destructor(yypParser,4,&yymsp[-1].minor);
+}
+#line 1159 "xlat_parser.c"
+        break;
+      case 43: /* exp_with_tag ::= exp_with_tag XOR exp_with_tag */
+#line 121 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Xor);   yy_destructor(yypParser,3,&yymsp[-1].minor);
+}
+#line 1165 "xlat_parser.c"
+        break;
+      case 44: /* exp_with_tag ::= MINUS exp_with_tag */
+#line 122 "xlat_parser.y"
+{ yygotominor.yy32 = XlatExpressions.Push(XEXP_Neg);   yy_destructor(yypParser,5,&yymsp[-1].minor);
+}
+#line 1171 "xlat_parser.c"
+        break;
+      case 46: /* special_arg ::= exp_with_tag */
+#line 129 "xlat_parser.y"
 {
 	if (XlatExpressions[yymsp[0].minor.yy32] == XEXP_Tag)
 	{ // Store tags directly
-		yylhsminor.yy120.arg = 0;
-		yylhsminor.yy120.argop = ARGOP_Tag;
+		yygotominor.yy120.arg = 0;
+		yygotominor.yy120.argop = ARGOP_Tag;
 		XlatExpressions.Delete(yymsp[0].minor.yy32);
 	}
 	else
@@ -1263,70 +1194,74 @@ static void yy_reduce(
 		endpt = XlatExprEval[*xnode](&val, xnode, &state);
 		if (state.bIsConstant)
 		{
-			yylhsminor.yy120.arg = val;
-			yylhsminor.yy120.argop = ARGOP_Const;
+			yygotominor.yy120.arg = val;
+			yygotominor.yy120.argop = ARGOP_Const;
 			endpt++;
 			assert(endpt >= &XlatExpressions[0]);
 			XlatExpressions.Resize((unsigned)(endpt - &XlatExpressions[0]));
 		}
 		else
 		{
-			yylhsminor.yy120.arg = yymsp[0].minor.yy32;
-			yylhsminor.yy120.argop = ARGOP_Expr;
+			yygotominor.yy120.arg = yymsp[0].minor.yy32;
+			yygotominor.yy120.argop = ARGOP_Expr;
 		}
 	}
 }
-#line 1280 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy120 = yylhsminor.yy120;
+#line 1211 "xlat_parser.c"
         break;
-      case 31: /* multi_special_arg ::= special_arg */
-#line 169 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 47: /* multi_special_arg ::= special_arg */
+#line 169 "xlat_parser.y"
 {
-	yylhsminor.yy7.addflags = yymsp[0].minor.yy120.argop << LINETRANS_TAGSHIFT;
-	yylhsminor.yy7.argcount = 1;
-	yylhsminor.yy7.args[0] = yymsp[0].minor.yy120.arg;
-	yylhsminor.yy7.args[1] = 0;
-	yylhsminor.yy7.args[2] = 0;
-	yylhsminor.yy7.args[3] = 0;
-	yylhsminor.yy7.args[4] = 0;
+	yygotominor.yy7.addflags = yymsp[0].minor.yy120.argop << LINETRANS_TAGSHIFT;
+	yygotominor.yy7.argcount = 1;
+	yygotominor.yy7.args[0] = yymsp[0].minor.yy120.arg;
+	yygotominor.yy7.args[1] = 0;
+	yygotominor.yy7.args[2] = 0;
+	yygotominor.yy7.args[3] = 0;
+	yygotominor.yy7.args[4] = 0;
 }
-#line 1294 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy7 = yylhsminor.yy7;
+#line 1224 "xlat_parser.c"
         break;
-      case 32: /* multi_special_arg ::= multi_special_arg COMMA special_arg */
-#line 179 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 48: /* multi_special_arg ::= multi_special_arg COMMA special_arg */
+#line 179 "xlat_parser.y"
 {
-	yylhsminor.yy7 = yymsp[-2].minor.yy7;
-	if (yylhsminor.yy7.argcount < LINETRANS_MAXARGS)
+	yygotominor.yy7 = yymsp[-2].minor.yy7;
+	if (yygotominor.yy7.argcount < LINETRANS_MAXARGS)
 	{
-		yylhsminor.yy7.addflags |= yymsp[0].minor.yy120.argop << (LINETRANS_TAGSHIFT + yylhsminor.yy7.argcount * TAGOP_NUMBITS);
-		yylhsminor.yy7.args[yylhsminor.yy7.argcount] = yymsp[0].minor.yy120.arg;
-		yylhsminor.yy7.argcount++;
+		yygotominor.yy7.addflags |= yymsp[0].minor.yy120.argop << (LINETRANS_TAGSHIFT + yygotominor.yy7.argcount * TAGOP_NUMBITS);
+		yygotominor.yy7.args[yygotominor.yy7.argcount] = yymsp[0].minor.yy120.arg;
+		yygotominor.yy7.argcount++;
 	}
-	else if (yylhsminor.yy7.argcount++ == LINETRANS_MAXARGS)
+	else if (yygotominor.yy7.argcount++ == LINETRANS_MAXARGS)
 	{
 		context->PrintError("Line special has too many arguments\n");
 	}
-}
-#line 1312 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
   yy_destructor(yypParser,19,&yymsp[-1].minor);
-  yymsp[-2].minor.yy7 = yylhsminor.yy7;
-        break;
-      case 33: /* special_args ::= */
-#line 196 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{
-	yymsp[1].minor.yy7.addflags = 0;
-	yymsp[1].minor.yy7.argcount = 0;
-	yymsp[1].minor.yy7.args[0] = 0;
-	yymsp[1].minor.yy7.args[1] = 0;
-	yymsp[1].minor.yy7.args[2] = 0;
-	yymsp[1].minor.yy7.args[3] = 0;
-	yymsp[1].minor.yy7.args[4] = 0;
 }
-#line 1327 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+#line 1242 "xlat_parser.c"
         break;
-      case 34: /* boom_declaration ::= LBRACKET exp RBRACKET LPAREN exp COMMA exp RPAREN LBRACE boom_body RBRACE */
-#line 223 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 49: /* special_args ::= */
+#line 196 "xlat_parser.y"
+{
+	yygotominor.yy7.addflags = 0;
+	yygotominor.yy7.argcount = 0;
+	yygotominor.yy7.args[0] = 0;
+	yygotominor.yy7.args[1] = 0;
+	yygotominor.yy7.args[2] = 0;
+	yygotominor.yy7.args[3] = 0;
+	yygotominor.yy7.args[4] = 0;
+}
+#line 1255 "xlat_parser.c"
+        break;
+      case 50: /* special_args ::= multi_special_arg */
+#line 206 "xlat_parser.y"
+{
+	yygotominor.yy7 = yymsp[0].minor.yy7;
+}
+#line 1262 "xlat_parser.c"
+        break;
+      case 51: /* boom_declaration ::= LBRACKET exp RBRACKET LPAREN exp COMMA exp RPAREN LBRACE boom_body RBRACE */
+#line 226 "xlat_parser.y"
 {
 	int i;
 	MoreLines *probe;
@@ -1358,40 +1293,40 @@ static void yy_reduce(
 		}
 		NumBoomish++;
 	}
-}
-#line 1363 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,22,&yymsp[-10].minor);
   yy_destructor(yypParser,23,&yymsp[-8].minor);
   yy_destructor(yypParser,12,&yymsp[-7].minor);
   yy_destructor(yypParser,19,&yymsp[-5].minor);
   yy_destructor(yypParser,13,&yymsp[-3].minor);
   yy_destructor(yypParser,18,&yymsp[-2].minor);
   yy_destructor(yypParser,16,&yymsp[0].minor);
-        break;
-      case 35: /* boom_body ::= */
-#line 257 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{
-	yymsp[1].minor.yy129 = NULL;
 }
-#line 1376 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+#line 1305 "xlat_parser.c"
         break;
-      case 36: /* boom_body ::= boom_line boom_body */
-#line 261 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 52: /* boom_body ::= */
+#line 260 "xlat_parser.y"
 {
-	yylhsminor.yy129 = new MoreLines;
-	yylhsminor.yy129->next = yymsp[0].minor.yy129;
-	yylhsminor.yy129->arg = yymsp[-1].minor.yy130;
+	yygotominor.yy129 = NULL;
 }
-#line 1385 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[-1].minor.yy129 = yylhsminor.yy129;
+#line 1312 "xlat_parser.c"
         break;
-      case 37: /* boom_line ::= boom_selector boom_op boom_args */
-#line 268 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 53: /* boom_body ::= boom_line boom_body */
+#line 264 "xlat_parser.y"
 {
-	yylhsminor.yy130.bOrExisting = (yymsp[-1].minor.yy32 == OR_EQUAL);
-	yylhsminor.yy130.bUseConstant = (yymsp[0].minor.yy63.filters == NULL);
-	yylhsminor.yy130.ArgNum = yymsp[-2].minor.yy32;
-	yylhsminor.yy130.ConstantValue = yymsp[0].minor.yy63.constant;
-	yylhsminor.yy130.AndValue = yymsp[0].minor.yy63.mask;
+	yygotominor.yy129 = new MoreLines;
+	yygotominor.yy129->next = yymsp[0].minor.yy129;
+	yygotominor.yy129->arg = yymsp[-1].minor.yy130;
+}
+#line 1321 "xlat_parser.c"
+        break;
+      case 54: /* boom_line ::= boom_selector boom_op boom_args */
+#line 271 "xlat_parser.y"
+{
+	yygotominor.yy130.bOrExisting = (yymsp[-1].minor.yy32 == OR_EQUAL);
+	yygotominor.yy130.bUseConstant = (yymsp[0].minor.yy63.filters == NULL);
+	yygotominor.yy130.ArgNum = yymsp[-2].minor.yy32;
+	yygotominor.yy130.ConstantValue = yymsp[0].minor.yy63.constant;
+	yygotominor.yy130.AndValue = yymsp[0].minor.yy63.mask;
 
 	if (yymsp[0].minor.yy63.filters != NULL)
 	{
@@ -1403,8 +1338,8 @@ static void yy_reduce(
 			MoreFilters *next = probe->next;
 			if (i < 15)
 			{
-				yylhsminor.yy130.ResultFilter[i] = probe->filter.filter;
-				yylhsminor.yy130.ResultValue[i] = probe->filter.value;
+				yygotominor.yy130.ResultFilter[i] = probe->filter.filter;
+				yygotominor.yy130.ResultValue[i] = probe->filter.value;
 			}
 			else if (i == 15)
 			{
@@ -1413,253 +1348,257 @@ static void yy_reduce(
 			delete probe;
 			probe = next;
 		}
-		yylhsminor.yy130.ListSize = i > 15 ? 15 : i;
+		yygotominor.yy130.ListSize = i > 15 ? 15 : i;
 	}
 }
-#line 1420 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[-2].minor.yy130 = yylhsminor.yy130;
+#line 1355 "xlat_parser.c"
         break;
-      case 38: /* boom_selector ::= FLAGS */
-{  yy_destructor(yypParser,24,&yymsp[0].minor);
-#line 299 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = 4; }
-#line 1427 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 55: /* boom_selector ::= FLAGS */
+#line 302 "xlat_parser.y"
+{ yygotominor.yy32 = 4;   yy_destructor(yypParser,24,&yymsp[0].minor);
 }
+#line 1361 "xlat_parser.c"
         break;
-      case 39: /* boom_selector ::= ARG2 */
-{  yy_destructor(yypParser,25,&yymsp[0].minor);
-#line 300 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = 0; }
-#line 1434 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 56: /* boom_selector ::= ARG2 */
+#line 303 "xlat_parser.y"
+{ yygotominor.yy32 = 0;   yy_destructor(yypParser,25,&yymsp[0].minor);
 }
+#line 1367 "xlat_parser.c"
         break;
-      case 40: /* boom_selector ::= ARG3 */
-      case 57: /*sector_op ::= LSHASSIGN */ yytestcase(yyruleno==57);
-{  yy_destructor(yypParser,26,&yymsp[0].minor);
-#line 301 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = 1; }
-#line 1442 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 57: /* boom_selector ::= ARG3 */
+#line 304 "xlat_parser.y"
+{ yygotominor.yy32 = 1;   yy_destructor(yypParser,26,&yymsp[0].minor);
 }
+#line 1373 "xlat_parser.c"
         break;
-      case 41: /* boom_selector ::= ARG4 */
-{  yy_destructor(yypParser,27,&yymsp[0].minor);
-#line 302 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = 2; }
-#line 1449 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 58: /* boom_selector ::= ARG4 */
+#line 305 "xlat_parser.y"
+{ yygotominor.yy32 = 2;   yy_destructor(yypParser,27,&yymsp[0].minor);
 }
+#line 1379 "xlat_parser.c"
         break;
-      case 42: /* boom_selector ::= ARG5 */
-{  yy_destructor(yypParser,28,&yymsp[0].minor);
-#line 303 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = 3; }
-#line 1456 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 59: /* boom_selector ::= ARG5 */
+#line 306 "xlat_parser.y"
+{ yygotominor.yy32 = 3;   yy_destructor(yypParser,28,&yymsp[0].minor);
 }
+#line 1385 "xlat_parser.c"
         break;
-      case 43: /* boom_op ::= EQUALS */
-{  yy_destructor(yypParser,20,&yymsp[0].minor);
-#line 305 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = '='; }
-#line 1463 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 60: /* boom_op ::= EQUALS */
+#line 308 "xlat_parser.y"
+{ yygotominor.yy32 = '=';   yy_destructor(yypParser,20,&yymsp[0].minor);
 }
+#line 1391 "xlat_parser.c"
         break;
-      case 44: /* boom_op ::= OR_EQUAL */
-{  yy_destructor(yypParser,29,&yymsp[0].minor);
-#line 306 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = OR_EQUAL; }
-#line 1470 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+      case 61: /* boom_op ::= OR_EQUAL */
+#line 309 "xlat_parser.y"
+{ yygotominor.yy32 = OR_EQUAL;   yy_destructor(yypParser,29,&yymsp[0].minor);
 }
+#line 1397 "xlat_parser.c"
         break;
-      case 45: /* boom_args ::= exp */
-#line 309 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 62: /* boom_args ::= exp */
+#line 312 "xlat_parser.y"
 {
-	yylhsminor.yy63.constant = yymsp[0].minor.yy32;
-	yylhsminor.yy63.filters = NULL;
+	yygotominor.yy63.constant = yymsp[0].minor.yy32;
+	yygotominor.yy63.filters = NULL;
 }
-#line 1479 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy63 = yylhsminor.yy63;
+#line 1405 "xlat_parser.c"
         break;
-      case 46: /* boom_args ::= exp LBRACKET arg_list RBRACKET */
-#line 314 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 63: /* boom_args ::= exp LBRACKET arg_list RBRACKET */
+#line 317 "xlat_parser.y"
 {
-	yylhsminor.yy63.mask = yymsp[-3].minor.yy32;
-	yylhsminor.yy63.filters = yymsp[-1].minor.yy8;
-}
-#line 1488 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+	yygotominor.yy63.mask = yymsp[-3].minor.yy32;
+	yygotominor.yy63.filters = yymsp[-1].minor.yy8;
   yy_destructor(yypParser,22,&yymsp[-2].minor);
   yy_destructor(yypParser,23,&yymsp[0].minor);
-  yymsp[-3].minor.yy63 = yylhsminor.yy63;
-        break;
-      case 47: /* arg_list ::= list_val */
-#line 320 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{
-	yylhsminor.yy8 = new MoreFilters;
-	yylhsminor.yy8->next = NULL;
-	yylhsminor.yy8->filter = yymsp[0].minor.yy83;
 }
-#line 1500 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yymsp[0].minor.yy8 = yylhsminor.yy8;
+#line 1415 "xlat_parser.c"
         break;
-      case 48: /* arg_list ::= list_val COMMA arg_list */
-#line 326 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 64: /* arg_list ::= list_val */
+#line 323 "xlat_parser.y"
 {
-	yylhsminor.yy8 = new MoreFilters;
-	yylhsminor.yy8->next = yymsp[0].minor.yy8;
-	yylhsminor.yy8->filter = yymsp[-2].minor.yy83;
+	yygotominor.yy8 = new MoreFilters;
+	yygotominor.yy8->next = NULL;
+	yygotominor.yy8->filter = yymsp[0].minor.yy83;
 }
-#line 1510 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+#line 1424 "xlat_parser.c"
+        break;
+      case 65: /* arg_list ::= list_val COMMA arg_list */
+#line 329 "xlat_parser.y"
+{
+	yygotominor.yy8 = new MoreFilters;
+	yygotominor.yy8->next = yymsp[0].minor.yy8;
+	yygotominor.yy8->filter = yymsp[-2].minor.yy83;
   yy_destructor(yypParser,19,&yymsp[-1].minor);
-  yymsp[-2].minor.yy8 = yylhsminor.yy8;
-        break;
-      case 49: /* list_val ::= exp COLON exp */
-#line 333 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{
-	yylhsminor.yy83.filter = yymsp[-2].minor.yy32;
-	yylhsminor.yy83.value = yymsp[0].minor.yy32;
 }
-#line 1520 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-  yy_destructor(yypParser,30,&yymsp[-1].minor);
-  yymsp[-2].minor.yy83 = yylhsminor.yy83;
+#line 1434 "xlat_parser.c"
         break;
-      case 50: /* maxlinespecial_def ::= MAXLINESPECIAL EQUALS exp SEMICOLON */
-#line 345 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 66: /* list_val ::= exp COLON exp */
+#line 336 "xlat_parser.y"
+{
+	yygotominor.yy83.filter = yymsp[-2].minor.yy32;
+	yygotominor.yy83.value = yymsp[0].minor.yy32;
+  yy_destructor(yypParser,30,&yymsp[-1].minor);
+}
+#line 1443 "xlat_parser.c"
+        break;
+      case 67: /* maxlinespecial_def ::= MAXLINESPECIAL EQUALS exp SEMICOLON */
+#line 348 "xlat_parser.y"
 {
 	// Just kill all specials higher than the max.
 	// If the translator wants to redefine some later, just let it.
 	SimpleLineTranslations.Resize(yymsp[-1].minor.yy32+1);
-}
-#line 1531 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,31,&yymsp[-3].minor);
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1455 "xlat_parser.c"
         break;
-      case 51: /* sector_declaration ::= SECTOR exp EQUALS exp SEMICOLON */
-#line 360 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 68: /* sector_declaration ::= SECTOR exp EQUALS exp SEMICOLON */
+#line 363 "xlat_parser.y"
 {
 	FSectorTrans tr(yymsp[-1].minor.yy32, true);
 	SectorTranslations.SetVal(yymsp[-3].minor.yy32, tr);
-}
-#line 1541 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,33,&yymsp[-4].minor);
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1466 "xlat_parser.c"
         break;
-      case 52: /* sector_declaration ::= SECTOR exp EQUALS SYM SEMICOLON */
-#line 366 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 69: /* sector_declaration ::= SECTOR exp EQUALS SYM SEMICOLON */
+#line 369 "xlat_parser.y"
 {
 	Printf("Unknown constant '%s'\n", yymsp[-1].minor.yy0.sym);
-}
-#line 1550 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,33,&yymsp[-4].minor);
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1476 "xlat_parser.c"
         break;
-      case 53: /* sector_declaration ::= SECTOR exp EQUALS exp NOBITMASK SEMICOLON */
-#line 371 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 70: /* sector_declaration ::= SECTOR exp EQUALS exp NOBITMASK SEMICOLON */
+#line 374 "xlat_parser.y"
 {
 	FSectorTrans tr(yymsp[-2].minor.yy32, false);
 	SectorTranslations.SetVal(yymsp[-4].minor.yy32, tr);
-}
-#line 1560 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,33,&yymsp[-5].minor);
   yy_destructor(yypParser,20,&yymsp[-3].minor);
   yy_destructor(yypParser,34,&yymsp[-1].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1488 "xlat_parser.c"
         break;
-      case 54: /* sector_bitmask ::= SECTOR BITMASK exp sector_op exp SEMICOLON */
-#line 377 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 71: /* sector_bitmask ::= SECTOR BITMASK exp sector_op exp SEMICOLON */
+#line 380 "xlat_parser.y"
 {
 	FSectorMask sm = { yymsp[-3].minor.yy32, yymsp[-2].minor.yy32, yymsp[-1].minor.yy32};
 	SectorMasks.Push(sm);
-}
-#line 1571 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,33,&yymsp[-5].minor);
   yy_destructor(yypParser,35,&yymsp[-4].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1499 "xlat_parser.c"
         break;
-      case 55: /* sector_bitmask ::= SECTOR BITMASK exp SEMICOLON */
-#line 383 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 72: /* sector_bitmask ::= SECTOR BITMASK exp SEMICOLON */
+#line 386 "xlat_parser.y"
 {
 	FSectorMask sm = { yymsp[-1].minor.yy32, 0, 0};
 	SectorMasks.Push(sm);
-}
-#line 1581 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,33,&yymsp[-3].minor);
   yy_destructor(yypParser,35,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1510 "xlat_parser.c"
         break;
-      case 56: /* sector_bitmask ::= SECTOR BITMASK exp CLEAR SEMICOLON */
-#line 389 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 73: /* sector_bitmask ::= SECTOR BITMASK exp CLEAR SEMICOLON */
+#line 392 "xlat_parser.y"
 {
 	FSectorMask sm = { yymsp[-2].minor.yy32, 0, 1};
 	SectorMasks.Push(sm);
-}
-#line 1591 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,33,&yymsp[-4].minor);
   yy_destructor(yypParser,35,&yymsp[-3].minor);
   yy_destructor(yypParser,36,&yymsp[-1].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
-        break;
-      case 58: /* sector_op ::= RSHASSIGN */
-{  yy_destructor(yypParser,38,&yymsp[0].minor);
-#line 395 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
-{ yymsp[0].minor.yy32 = -1; }
-#line 1600 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
 }
+#line 1522 "xlat_parser.c"
         break;
-      case 59: /* lineflag_declaration ::= LINEFLAG exp EQUALS exp SEMICOLON */
-#line 400 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 74: /* sector_op ::= LSHASSIGN */
+#line 397 "xlat_parser.y"
+{ yygotominor.yy32 = 1;   yy_destructor(yypParser,37,&yymsp[0].minor);
+}
+#line 1528 "xlat_parser.c"
+        break;
+      case 75: /* sector_op ::= RSHASSIGN */
+#line 398 "xlat_parser.y"
+{ yygotominor.yy32 = -1;   yy_destructor(yypParser,38,&yymsp[0].minor);
+}
+#line 1534 "xlat_parser.c"
+        break;
+      case 76: /* lineflag_declaration ::= LINEFLAG exp EQUALS exp SEMICOLON */
+#line 403 "xlat_parser.y"
 {
 	if (yymsp[-3].minor.yy32 >= 0 && yymsp[-3].minor.yy32 < 16)
 	{
 		LineFlagTranslations[yymsp[-3].minor.yy32].newvalue = yymsp[-1].minor.yy32;
 		LineFlagTranslations[yymsp[-3].minor.yy32].ismask = false;
 	}
-}
-#line 1612 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,39,&yymsp[-4].minor);
   yy_destructor(yypParser,20,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1548 "xlat_parser.c"
         break;
-      case 60: /* lineflag_declaration ::= LINEFLAG exp AND exp SEMICOLON */
-#line 409 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+      case 77: /* lineflag_declaration ::= LINEFLAG exp AND exp SEMICOLON */
+#line 412 "xlat_parser.y"
 {
 	if (yymsp[-3].minor.yy32 >= 0 && yymsp[-3].minor.yy32 < 16)
 	{
 		LineFlagTranslations[yymsp[-3].minor.yy32].newvalue = yymsp[-1].minor.yy32;
 		LineFlagTranslations[yymsp[-3].minor.yy32].ismask = true;
 	}
-}
-#line 1625 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
+  yy_destructor(yypParser,39,&yymsp[-4].minor);
   yy_destructor(yypParser,4,&yymsp[-2].minor);
   yy_destructor(yypParser,32,&yymsp[0].minor);
+}
+#line 1562 "xlat_parser.c"
         break;
       default:
-      /* (61) main ::= translation_unit */ yytestcase(yyruleno==61);
-      /* (62) translation_unit ::= */ yytestcase(yyruleno==62);
-      /* (63) translation_unit ::= translation_unit external_declaration */ yytestcase(yyruleno==63);
-      /* (64) external_declaration ::= define_statement */ yytestcase(yyruleno==64);
-      /* (65) external_declaration ::= enum_statement */ yytestcase(yyruleno==65);
-      /* (66) external_declaration ::= linetype_declaration */ yytestcase(yyruleno==66);
-      /* (67) external_declaration ::= boom_declaration */ yytestcase(yyruleno==67);
-      /* (68) external_declaration ::= sector_declaration */ yytestcase(yyruleno==68);
-      /* (69) external_declaration ::= lineflag_declaration */ yytestcase(yyruleno==69);
-      /* (70) external_declaration ::= sector_bitmask */ yytestcase(yyruleno==70);
-      /* (71) external_declaration ::= maxlinespecial_def */ yytestcase(yyruleno==71);
-      /* (72) external_declaration ::= NOP */ yytestcase(yyruleno==72);
-      /* (73) enum_statement ::= enum_open enum_list RBRACE */ yytestcase(yyruleno==73);
-      /* (74) enum_list ::= */ yytestcase(yyruleno==74);
-      /* (75) enum_list ::= single_enum */ yytestcase(yyruleno==75);
-      /* (76) enum_list ::= enum_list COMMA single_enum */ yytestcase(yyruleno==76);
-      /* (77) special_args ::= multi_special_arg */ yytestcase(yyruleno==77);
+      /* (0) main ::= translation_unit */ yytestcase(yyruleno==0);
+      /* (1) translation_unit ::= */ yytestcase(yyruleno==1);
+      /* (2) translation_unit ::= translation_unit external_declaration */ yytestcase(yyruleno==2);
+      /* (3) external_declaration ::= define_statement */ yytestcase(yyruleno==3);
+      /* (4) external_declaration ::= enum_statement */ yytestcase(yyruleno==4);
+      /* (5) external_declaration ::= linetype_declaration */ yytestcase(yyruleno==5);
+      /* (6) external_declaration ::= boom_declaration */ yytestcase(yyruleno==6);
+      /* (7) external_declaration ::= sector_declaration */ yytestcase(yyruleno==7);
+      /* (8) external_declaration ::= lineflag_declaration */ yytestcase(yyruleno==8);
+      /* (9) external_declaration ::= sector_bitmask */ yytestcase(yyruleno==9);
+      /* (10) external_declaration ::= maxlinespecial_def */ yytestcase(yyruleno==10);
+      /* (26) enum_list ::= */ yytestcase(yyruleno==26);
+      /* (27) enum_list ::= single_enum */ yytestcase(yyruleno==27);
        break;
-/********** End reduce actions ************************************************/
   };
-  assert( yyruleno<sizeof(yyRuleInfo)/sizeof(yyRuleInfo[0]) );
   yygoto = yyRuleInfo[yyruleno].lhs;
   yysize = yyRuleInfo[yyruleno].nrhs;
+  yypParser->yyidx -= yysize;
   yyact = yy_find_reduce_action(yymsp[-yysize].stateno,(YYCODETYPE)yygoto);
-  if( yyact <= YY_MAX_SHIFTREDUCE ){
-    if( yyact>YY_MAX_SHIFT ) yyact += YY_MIN_REDUCE - YY_MIN_SHIFTREDUCE;
-    yypParser->yyidx -= yysize - 1;
-    yymsp -= yysize-1;
-    yymsp->stateno = (YYACTIONTYPE)yyact;
-    yymsp->major = (YYCODETYPE)yygoto;
-    yyTraceShift(yypParser, yyact);
+  if( yyact < YYNSTATE ){
+#ifdef NDEBUG
+    /* If we are not debugging and the reduce action popped at least
+    ** one element off the stack, then we can push the new element back
+    ** onto the stack here, and skip the stack overflow test in yy_shift().
+    ** That gives a significant speed improvement. */
+    if( yysize ){
+      yypParser->yyidx++;
+      yymsp -= yysize-1;
+      yymsp->stateno = (YYACTIONTYPE)yyact;
+      yymsp->major = (YYCODETYPE)yygoto;
+      yymsp->minor = yygotominor;
+    }else
+#endif
+    {
+      yy_shift(yypParser,yyact,yygoto,&yygotominor);
+    }
   }else{
-    assert( yyact == YY_ACCEPT_ACTION );
-    yypParser->yyidx -= yysize;
+    assert( yyact == YYNSTATE + YYNRULE + 1 );
     yy_accept(yypParser);
   }
 }
@@ -1680,8 +1619,6 @@ static void yy_parse_failed(
   while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
   /* Here code is inserted which will be executed whenever the
   ** parser fails */
-/************ Begin %parse_failure code ***************************************/
-/************ End %parse_failure code *****************************************/
   XlatParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 #endif /* YYNOERRORRECOVERY */
@@ -1692,15 +1629,13 @@ static void yy_parse_failed(
 static void yy_syntax_error(
   yyParser *yypParser,           /* The parser */
   int yymajor,                   /* The major type of the error token */
-  XlatParseTOKENTYPE yyminor         /* The minor type of the error token */
+  YYMINORTYPE yyminor            /* The minor type of the error token */
 ){
   XlatParseARG_FETCH;
-#define TOKEN yyminor
-/************ Begin %syntax_error code ****************************************/
-#line 7 "D:/Git/MaryMagicalAdventure/src/xlat/xlat_parser.y"
+#define TOKEN (yyminor.yy0)
+#line 7 "xlat_parser.y"
  context->PrintError("syntax error");
-#line 1703 "D:/Git/MaryMagicalAdventure/src/xlat_parser.c"
-/************ End %syntax_error code ******************************************/
+#line 1639 "xlat_parser.c"
   XlatParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -1719,8 +1654,6 @@ static void yy_accept(
   while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
   /* Here code is inserted which will be executed whenever the
   ** parser accepts */
-/*********** Begin %parse_accept code *****************************************/
-/*********** End %parse_accept code *******************************************/
   XlatParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -1750,10 +1683,8 @@ void XlatParse(
   XlatParseARG_PDECL               /* Optional %extra_argument parameter */
 ){
   YYMINORTYPE yyminorunion;
-  unsigned int yyact;   /* The parser action. */
-#if !defined(YYERRORSYMBOL) && !defined(YYNOERRORRECOVERY)
+  int yyact;            /* The parser action. */
   int yyendofinput;     /* True if we are at the end of input */
-#endif
 #ifdef YYERRORSYMBOL
   int yyerrorhit = 0;   /* True if yymajor has invoked an error */
 #endif
@@ -1764,51 +1695,41 @@ void XlatParse(
   if( yypParser->yyidx<0 ){
 #if YYSTACKDEPTH<=0
     if( yypParser->yystksz <=0 ){
-      yyStackOverflow(yypParser);
+      /*memset(&yyminorunion, 0, sizeof(yyminorunion));*/
+	  yyminorunion = yyzerominor;
+      yyStackOverflow(yypParser, &yyminorunion);
       return;
     }
 #endif
     yypParser->yyidx = 0;
-#ifndef YYNOERRORRECOVERY
     yypParser->yyerrcnt = -1;
-#endif
     yypParser->yystack[0].stateno = 0;
     yypParser->yystack[0].major = 0;
-#ifndef NDEBUG
-    if( yyTraceFILE ){
-      fprintf(yyTraceFILE,"%sInitialize. Empty stack. State 0\n",
-              yyTracePrompt);
-    }
-#endif
   }
-#if !defined(YYERRORSYMBOL) && !defined(YYNOERRORRECOVERY)
+  yyminorunion.yy0 = yyminor;
   yyendofinput = (yymajor==0);
-#endif
   XlatParseARG_STORE;
 
 #ifndef NDEBUG
   if( yyTraceFILE ){
-    fprintf(yyTraceFILE,"%sInput '%s'\n",yyTracePrompt,yyTokenName[yymajor]);
+    fprintf(yyTraceFILE,"%sInput %s\n",yyTracePrompt,yyTokenName[yymajor]);
   }
 #endif
 
   do{
     yyact = yy_find_shift_action(yypParser,(YYCODETYPE)yymajor);
-    if( yyact <= YY_MAX_SHIFTREDUCE ){
-      if( yyact > YY_MAX_SHIFT ) yyact += YY_MIN_REDUCE - YY_MIN_SHIFTREDUCE;
-      yy_shift(yypParser,yyact,yymajor,yyminor);
-#ifndef YYNOERRORRECOVERY
+    if( yyact<YYNSTATE ){
+      assert( !yyendofinput );  /* Impossible to shift the $ token */
+      yy_shift(yypParser,yyact,yymajor,&yyminorunion);
       yypParser->yyerrcnt--;
-#endif
       yymajor = YYNOCODE;
-    }else if( yyact <= YY_MAX_REDUCE ){
-      yy_reduce(yypParser,yyact-YY_MIN_REDUCE);
+    }else if( yyact < YYNSTATE + YYNRULE ){
+      yy_reduce(yypParser,yyact-YYNSTATE);
     }else{
 #ifdef YYERRORSYMBOL
       int yymx;
 #endif
       assert( yyact == YY_ERROR_ACTION );
-      yyminorunion.yy0 = yyminor;
 #ifndef NDEBUG
       if( yyTraceFILE ){
         fprintf(yyTraceFILE,"%sSyntax Error!\n",yyTracePrompt);
@@ -1817,7 +1738,7 @@ void XlatParse(
 #ifdef YYERRORSYMBOL
       /* A syntax error has occurred.
       ** The response to an error depends upon whether or not the
-      ** grammar defines an error token "ERROR".
+      ** grammar defines an error token "ERROR".  
       **
       ** This is what we do if the grammar does define ERROR:
       **
@@ -1835,7 +1756,7 @@ void XlatParse(
       **
       */
       if( yypParser->yyerrcnt<0 ){
-        yy_syntax_error(yypParser,yymajor,yyminor);
+        yy_syntax_error(yypParser,yymajor,yyminorunion);
       }
       yymx = yypParser->yystack[yypParser->yyidx].major;
       if( yymx==YYERRORSYMBOL || yyerrorhit ){
@@ -1845,15 +1766,15 @@ void XlatParse(
              yyTracePrompt,yyTokenName[yymajor]);
         }
 #endif
-        yy_destructor(yypParser, (YYCODETYPE)yymajor, &yyminorunion);
+        yy_destructor(yypParser, (YYCODETYPE)yymajor,&yyminorunion);
         yymajor = YYNOCODE;
       }else{
-        while(
+         while(
           yypParser->yyidx >= 0 &&
           yymx != YYERRORSYMBOL &&
           (yyact = yy_find_reduce_action(
                         yypParser->yystack[yypParser->yyidx].stateno,
-                        YYERRORSYMBOL)) >= YY_MIN_REDUCE
+                        YYERRORSYMBOL)) >= YYNSTATE
         ){
           yy_pop_parser_stack(yypParser);
         }
@@ -1862,7 +1783,9 @@ void XlatParse(
           yy_parse_failed(yypParser);
           yymajor = YYNOCODE;
         }else if( yymx!=YYERRORSYMBOL ){
-          yy_shift(yypParser,yyact,YYERRORSYMBOL,yyminor);
+          YYMINORTYPE u2;
+          u2.YYERRSYMDT = 0;
+          yy_shift(yypParser,yyact,YYERRORSYMBOL,&u2);
         }
       }
       yypParser->yyerrcnt = 3;
@@ -1875,7 +1798,7 @@ void XlatParse(
       ** Applications can set this macro (for example inside %include) if
       ** they intend to abandon the parse upon the first syntax error seen.
       */
-      yy_syntax_error(yypParser,yymajor, yyminor);
+      yy_syntax_error(yypParser,yymajor,yyminorunion);
       yy_destructor(yypParser,(YYCODETYPE)yymajor,&yyminorunion);
       yymajor = YYNOCODE;
 
@@ -1890,7 +1813,7 @@ void XlatParse(
       ** three input tokens have been successfully shifted.
       */
       if( yypParser->yyerrcnt<=0 ){
-        yy_syntax_error(yypParser,yymajor, yyminor);
+        yy_syntax_error(yypParser,yymajor,yyminorunion);
       }
       yypParser->yyerrcnt = 3;
       yy_destructor(yypParser,(YYCODETYPE)yymajor,&yyminorunion);
@@ -1901,15 +1824,5 @@ void XlatParse(
 #endif
     }
   }while( yymajor!=YYNOCODE && yypParser->yyidx>=0 );
-#ifndef NDEBUG
-  if( yyTraceFILE ){
-    int i;
-    fprintf(yyTraceFILE,"%sReturn. Stack=",yyTracePrompt);
-    for(i=1; i<=yypParser->yyidx; i++)
-      fprintf(yyTraceFILE,"%c%s", i==1 ? '[' : ' ', 
-              yyTokenName[yypParser->yystack[i].major]);
-    fprintf(yyTraceFILE,"]\n");
-  }
-#endif
   return;
 }

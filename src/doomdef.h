@@ -60,7 +60,6 @@ typedef enum
 
 // Amount of damage done by a telefrag.
 #define TELEFRAG_DAMAGE	1000000
-#define PIT_DAMAGE 100
 
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,
@@ -370,7 +369,6 @@ enum
 #define ORIG_FRICTION			0xE800	// original value
 #define ORIG_FRICTION_FACTOR	2048	// original value
 #define FRICTION_LOW			0xf900
-#define FRICTION_NONE			0xff00	//[XANE]This probably isn't no friction but...it's a larger number!
 #define FRICTION_FLY			0xeb00
 
 

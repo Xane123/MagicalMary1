@@ -9,8 +9,8 @@
 
 #define AL_NO_PROTOTYPES
 
-#include "AL/al.h"
-#include "AL/alc.h"
+#include "al.h"
+#include "alc.h"
 
 #ifndef ALC_ENUMERATE_ALL_EXT
 #define ALC_ENUMERATE_ALL_EXT 1

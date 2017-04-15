@@ -1134,6 +1134,7 @@ void R_Subsector (subsector_t *sub)
 	// killough 3/7/98: Add (x,y) offsets to flats, add deep water check
 	// killough 3/16/98: add floorlightlevel
 	// killough 10/98: add support for skies transferred from sidedefs
+
 	skybox = frontsector->GetSkyBox(sector_t::floor);
 	if (skybox != NULL && skybox->special1 >= SKYBOX_PLANE) skybox = NULL;	// skip unsupported portal types
 

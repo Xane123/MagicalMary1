@@ -532,7 +532,7 @@ void FCompressedMemFile::Serialize (FArchive &arc)
 	{
 		if (m_ImplodedBuffer == NULL)
 		{
-			I_FatalError ("FCompressedMemFile must be compressed before storing");
+			I_Error ("FCompressedMemFile must be compressed before storing");
 		}
 		arc.Write (ZSig, 4);
 

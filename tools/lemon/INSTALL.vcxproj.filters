@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\e5ea68ad6172d750fd49802d48d85162\INSTALL_force.rule">
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\3bb16a2e43ee73cf8479427e4dcc1cf4\INSTALL_force.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{39915B61-5B97-32B8-891A-7F6CFC741C08}</UniqueIdentifier>
+      <UniqueIdentifier>{ADA0F2DC-BA31-300E-B1F2-A8E9247EB1F6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

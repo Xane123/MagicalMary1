@@ -613,7 +613,7 @@ static void SummonActor (int command, int command2, FCommandLine argv)
 		PClassActor *type = PClass::FindActor(argv[1]);
 		if (type == NULL)
 		{
-			Printf ("'%s' DOEN'T EXIST OR HASN'T BEEN CREATED IN DECORATE YET.\n", argv[1]);
+			Printf ("Unknown actor '%s'\n", argv[1]);
 			return;
 		}
 		Net_WriteByte (argv.argc() > 2 ? command2 : command);
@@ -651,6 +651,7 @@ CCMD (summonfoe)
 {
 	SummonActor (DEM_SUMMONFOE, DEM_SUMMONFOE2, argv);
 }
+
 
 // Damage type defaults / global settings
 

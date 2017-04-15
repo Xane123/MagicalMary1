@@ -174,26 +174,24 @@ struct ZCC_Identifier : ZCC_TreeNode
 	ENamedName Id;
 };
 
-struct ZCC_NamedNode : ZCC_TreeNode
+struct ZCC_Class : ZCC_TreeNode
 {
-	ENamedName NodeName;
-};
-
-struct ZCC_Class : ZCC_NamedNode
-{
+	ENamedName ClassName;
 	ZCC_Identifier *ParentName;
 	ZCC_Identifier *Replaces;
 	VM_UWORD Flags;
 	ZCC_TreeNode *Body;
 };
 
-struct ZCC_Struct : ZCC_NamedNode
+struct ZCC_Struct : ZCC_TreeNode
 {
+	ENamedName StructName;
 	ZCC_TreeNode *Body;
 };
 
-struct ZCC_Enum : ZCC_NamedNode
+struct ZCC_Enum : ZCC_TreeNode
 {
+	ENamedName EnumName;
 	EZCCBuiltinType EnumType;
 	struct ZCC_ConstantDef *Elements;
 };
@@ -434,8 +432,9 @@ struct ZCC_FuncParamDecl : ZCC_TreeNode
 	int Flags;
 };
 
-struct ZCC_ConstantDef : ZCC_NamedNode
+struct ZCC_ConstantDef : ZCC_TreeNode
 {
+	ENamedName Name;
 	ZCC_Expression *Value;
 	PSymbolConst *Symbol;
 };

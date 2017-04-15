@@ -1232,10 +1232,4 @@ typedef TRotator<float>		FRotator;
 typedef TMatrix3x3<float>	FMatrix3x3;
 //typedef TAngle<float>		FAngle;
 
-typedef TVector2<double>		DVector2;
-typedef TVector3<double>		DVector3;
-typedef TRotator<double>		DRotator;
-typedef TMatrix3x3<double>		DMatrix3x3;
-typedef TAngle<double>			DAngle;
-
 #endif

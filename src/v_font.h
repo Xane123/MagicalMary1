@@ -67,7 +67,6 @@ enum EColorRange
 	CR_PURPLE,
 	CR_DARKGRAY,
 	CR_CYAN,
-	CR_LIGHTGREEN,	//[XANE]New font colos below here, starting at 22.
 	NUM_TEXT_COLORS
 };
 

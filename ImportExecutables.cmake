@@ -59,121 +59,121 @@ add_executable(zipdir IMPORTED)
 # Import target "lemon" for configuration "Debug"
 set_property(TARGET lemon APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(lemon PROPERTIES
-  IMPORTED_LOCATION_DEBUG "D:/Git/MaryMagicalAdventure/tools/lemon/Debug/lemon.exe"
+  IMPORTED_LOCATION_DEBUG "D:/Git/Failure5/tools/lemon/Debug/lemon.exe"
   )
 
 # Import target "re2c" for configuration "Debug"
 set_property(TARGET re2c APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(re2c PROPERTIES
-  IMPORTED_LOCATION_DEBUG "D:/Git/MaryMagicalAdventure/tools/re2c/Debug/re2c.exe"
+  IMPORTED_LOCATION_DEBUG "D:/Git/Failure5/tools/re2c/Debug/re2c.exe"
   )
 
 # Import target "fixrtext" for configuration "Debug"
 set_property(TARGET fixrtext APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(fixrtext PROPERTIES
-  IMPORTED_LOCATION_DEBUG "D:/Git/MaryMagicalAdventure/tools/fixrtext/Debug/fixrtext.exe"
+  IMPORTED_LOCATION_DEBUG "D:/Git/Failure5/tools/fixrtext/Debug/fixrtext.exe"
   )
 
 # Import target "updaterevision" for configuration "Debug"
 set_property(TARGET updaterevision APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(updaterevision PROPERTIES
-  IMPORTED_LOCATION_DEBUG "D:/Git/MaryMagicalAdventure/tools/updaterevision/Debug/updaterevision.exe"
+  IMPORTED_LOCATION_DEBUG "D:/Git/Failure5/tools/updaterevision/Debug/updaterevision.exe"
   )
 
 # Import target "zipdir" for configuration "Debug"
 set_property(TARGET zipdir APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(zipdir PROPERTIES
-  IMPORTED_LOCATION_DEBUG "D:/Git/MaryMagicalAdventure/tools/zipdir/Debug/zipdir.exe"
+  IMPORTED_LOCATION_DEBUG "D:/Git/Failure5/tools/zipdir/Debug/zipdir.exe"
   )
 
 # Import target "lemon" for configuration "Release"
 set_property(TARGET lemon APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(lemon PROPERTIES
-  IMPORTED_LOCATION_RELEASE "D:/Git/MaryMagicalAdventure/tools/lemon/Release/lemon.exe"
+  IMPORTED_LOCATION_RELEASE "D:/Git/Failure5/tools/lemon/Release/lemon.exe"
   )
 
 # Import target "re2c" for configuration "Release"
 set_property(TARGET re2c APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(re2c PROPERTIES
-  IMPORTED_LOCATION_RELEASE "D:/Git/MaryMagicalAdventure/tools/re2c/Release/re2c.exe"
+  IMPORTED_LOCATION_RELEASE "D:/Git/Failure5/tools/re2c/Release/re2c.exe"
   )
 
 # Import target "fixrtext" for configuration "Release"
 set_property(TARGET fixrtext APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(fixrtext PROPERTIES
-  IMPORTED_LOCATION_RELEASE "D:/Git/MaryMagicalAdventure/tools/fixrtext/Release/fixrtext.exe"
+  IMPORTED_LOCATION_RELEASE "D:/Git/Failure5/tools/fixrtext/Release/fixrtext.exe"
   )
 
 # Import target "updaterevision" for configuration "Release"
 set_property(TARGET updaterevision APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(updaterevision PROPERTIES
-  IMPORTED_LOCATION_RELEASE "D:/Git/MaryMagicalAdventure/tools/updaterevision/Release/updaterevision.exe"
+  IMPORTED_LOCATION_RELEASE "D:/Git/Failure5/tools/updaterevision/Release/updaterevision.exe"
   )
 
 # Import target "zipdir" for configuration "Release"
 set_property(TARGET zipdir APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(zipdir PROPERTIES
-  IMPORTED_LOCATION_RELEASE "D:/Git/MaryMagicalAdventure/tools/zipdir/Release/zipdir.exe"
+  IMPORTED_LOCATION_RELEASE "D:/Git/Failure5/tools/zipdir/Release/zipdir.exe"
   )
 
 # Import target "lemon" for configuration "MinSizeRel"
 set_property(TARGET lemon APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(lemon PROPERTIES
-  IMPORTED_LOCATION_MINSIZEREL "D:/Git/MaryMagicalAdventure/tools/lemon/MinSizeRel/lemon.exe"
+  IMPORTED_LOCATION_MINSIZEREL "D:/Git/Failure5/tools/lemon/MinSizeRel/lemon.exe"
   )
 
 # Import target "re2c" for configuration "MinSizeRel"
 set_property(TARGET re2c APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(re2c PROPERTIES
-  IMPORTED_LOCATION_MINSIZEREL "D:/Git/MaryMagicalAdventure/tools/re2c/MinSizeRel/re2c.exe"
+  IMPORTED_LOCATION_MINSIZEREL "D:/Git/Failure5/tools/re2c/MinSizeRel/re2c.exe"
   )
 
 # Import target "fixrtext" for configuration "MinSizeRel"
 set_property(TARGET fixrtext APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(fixrtext PROPERTIES
-  IMPORTED_LOCATION_MINSIZEREL "D:/Git/MaryMagicalAdventure/tools/fixrtext/MinSizeRel/fixrtext.exe"
+  IMPORTED_LOCATION_MINSIZEREL "D:/Git/Failure5/tools/fixrtext/MinSizeRel/fixrtext.exe"
   )
 
 # Import target "updaterevision" for configuration "MinSizeRel"
 set_property(TARGET updaterevision APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(updaterevision PROPERTIES
-  IMPORTED_LOCATION_MINSIZEREL "D:/Git/MaryMagicalAdventure/tools/updaterevision/MinSizeRel/updaterevision.exe"
+  IMPORTED_LOCATION_MINSIZEREL "D:/Git/Failure5/tools/updaterevision/MinSizeRel/updaterevision.exe"
   )
 
 # Import target "zipdir" for configuration "MinSizeRel"
 set_property(TARGET zipdir APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(zipdir PROPERTIES
-  IMPORTED_LOCATION_MINSIZEREL "D:/Git/MaryMagicalAdventure/tools/zipdir/MinSizeRel/zipdir.exe"
+  IMPORTED_LOCATION_MINSIZEREL "D:/Git/Failure5/tools/zipdir/MinSizeRel/zipdir.exe"
   )
 
 # Import target "lemon" for configuration "RelWithDebInfo"
 set_property(TARGET lemon APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(lemon PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/MaryMagicalAdventure/tools/lemon/RelWithDebInfo/lemon.exe"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/Failure5/tools/lemon/RelWithDebInfo/lemon.exe"
   )
 
 # Import target "re2c" for configuration "RelWithDebInfo"
 set_property(TARGET re2c APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(re2c PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/MaryMagicalAdventure/tools/re2c/RelWithDebInfo/re2c.exe"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/Failure5/tools/re2c/RelWithDebInfo/re2c.exe"
   )
 
 # Import target "fixrtext" for configuration "RelWithDebInfo"
 set_property(TARGET fixrtext APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(fixrtext PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/MaryMagicalAdventure/tools/fixrtext/RelWithDebInfo/fixrtext.exe"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/Failure5/tools/fixrtext/RelWithDebInfo/fixrtext.exe"
   )
 
 # Import target "updaterevision" for configuration "RelWithDebInfo"
 set_property(TARGET updaterevision APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(updaterevision PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/MaryMagicalAdventure/tools/updaterevision/RelWithDebInfo/updaterevision.exe"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/Failure5/tools/updaterevision/RelWithDebInfo/updaterevision.exe"
   )
 
 # Import target "zipdir" for configuration "RelWithDebInfo"
 set_property(TARGET zipdir APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(zipdir PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/MaryMagicalAdventure/tools/zipdir/RelWithDebInfo/zipdir.exe"
+  IMPORTED_LOCATION_RELWITHDEBINFO "D:/Git/Failure5/tools/zipdir/RelWithDebInfo/zipdir.exe"
   )
 
 # This file does not depend on other imported targets which have

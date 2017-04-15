@@ -80,27 +80,19 @@ struct InterpolationViewer
 static TArray<InterpolationViewer> PastViewers;
 static FRandom pr_torchflicker ("TorchFlicker");
 static FRandom pr_hom;
-static bool NoInterpolateView;
+bool NoInterpolateView;	// GL needs access to this.
 static TArray<fixedvec3a> InterpolationPath;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-CVAR (Bool, r_deathcamera, true, CVAR_ARCHIVE)	//Forcibly switch to third-person camera when the player dies?
-CVAR (Int, r_clearbuffer, 1, 0)	//What color to make out of bounds areas.
-CVAR (Bool, r_drawvoxels, true, 0)	//Draw "3D" voxel models?
+CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
+CVAR (Int, r_clearbuffer, 0, 0)
+CVAR (Bool, r_drawvoxels, true, 0)
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
-CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	//Amount earthquakes shake the screen.
+CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
-	if (self < 0.25f)
-	{
-		self = 0.25f;
-		Printf("ERROR: QUAKE EFFECTS MUST BE ON.");
-	}
-	else if (self > 1.5f)
-	{
-		self = 1.5f;
-		Printf("ERROR: QUAKE EFFECTS SHOULDN'T BE TOO INTENSE.");
-	}
+	if (self < 0.f) self = 0.f;
+	else if (self > 1.f) self = 1.f;
 }
 
 DCanvas			*RenderTarget;		// [RH] canvas to render to
@@ -495,7 +487,7 @@ void R_ExecuteSetViewSize ()
 //
 //==========================================================================
 
-CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)	//10 is the standard HUD, 11 is fullscreen, and 12 is no HUD, respectively.
+CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 {
 	if (self > 12)
 		self = 12;
@@ -623,7 +615,7 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 			{
 				fixedvec3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
 				fixedvec3a &end = InterpolationPath[i];
-				pathlen += xs_CRoundToInt(DVector2(end.x - start.x, end.y - start.y).Length());
+				pathlen += xs_CRoundToInt(TVector2<double>(end.x - start.x, end.y - start.y).Length());
 				totalzdiff += start.z;
 				totaladiff += start.angle;
 			}
@@ -633,7 +625,7 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 			{
 				fixedvec3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
 				fixedvec3a &end = InterpolationPath[i];
-				fixed_t fraglen = xs_CRoundToInt(DVector2(end.x - start.x, end.y - start.y).Length());
+				fixed_t fraglen = xs_CRoundToInt(TVector2<double>(end.x - start.x, end.y - start.y).Length());
 				zdiff += start.z;
 				adiff += start.angle;
 				if (fraglen <= interpolatedlen)
@@ -1186,7 +1178,7 @@ void R_SetupFrame (AActor *actor)
 		}
 		else
 		{
-			color = pr_hom();	//"Seizure Mode"
+			color = pr_hom();
 		}
 		Renderer->ClearBuffer(color);
 	}

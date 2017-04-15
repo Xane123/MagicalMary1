@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{BE7A666E-0F3C-322F-AC4C-56737204FE44}</ProjectGUID>
+    <ProjectGUID>{2C13826F-EDE3-378B-960A-B3B46FEB379A}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -60,19 +60,19 @@
   <PropertyGroup Label="UserMacros" />
     <PropertyGroup>
       <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\Debug\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\jpeg-6b\Debug\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">jpeg.dir\Debug\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">jpeg</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\Release\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\jpeg-6b\Release\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">jpeg.dir\Release\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">jpeg</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\MinSizeRel\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\jpeg-6b\MinSizeRel\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">jpeg.dir\MinSizeRel\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">jpeg</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\RelWithDebInfo\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\jpeg-6b\RelWithDebInfo\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">jpeg.dir\RelWithDebInfo\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">jpeg</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
@@ -234,10 +234,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\Failure5\jpeg-6b\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/jpeg-6b/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/jpeg-6b/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -245,12 +245,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/jpeg-6b/CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/jpeg-6b/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/jpeg-6b/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -258,12 +258,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/jpeg-6b/CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/jpeg-6b/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/jpeg-6b/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -271,12 +271,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/jpeg-6b/CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/jpeg-6b/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeFiles/generate.stamp
+D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/jpeg-6b/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -284,36 +284,36 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/jpeg-6b/CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/jpeg-6b/CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;D:\Git\Failure5\jpeg-6b\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\jpeg-6b\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jcomapi.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdapimin.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdapistd.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdatasrc.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdcoefct.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdcolor.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jddctmgr.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdhuff.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdinput.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmainct.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmarker.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmaster.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdmerge.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdphuff.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdpostct.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jdsample.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jerror.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jidctint.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jmemmgr.c"  />
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jutils.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jcomapi.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdapimin.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdapistd.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdatasrc.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdcoefct.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdcolor.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jddctmgr.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdhuff.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdinput.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdmainct.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdmarker.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdmaster.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdmerge.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdphuff.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdpostct.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jdsample.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jerror.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jidctint.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jmemmgr.c"  />
+    <ClCompile Include="D:\Git\Failure5\jpeg-6b\jutils.c"  />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
-      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
+    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
+      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
   </ItemGroup>

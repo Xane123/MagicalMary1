@@ -316,7 +316,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, GetDistance)
 			if (checkz)
 				diff.z += (target->height - self->height) / 2;
 
-			const double length = DVector3(FIXED2DBL(diff.x), FIXED2DBL(diff.y), (checkz) ? FIXED2DBL(diff.z) : 0).Length();
+			const double length = TVector3<double>(FIXED2DBL(diff.x), FIXED2DBL(diff.y), (checkz) ? FIXED2DBL(diff.z) : 0).Length();
 			ret->SetFloat(length);
 		}
 		return 1;
@@ -682,38 +682,21 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_BasicAttack)
 DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_PlaySound)
 {
 	PARAM_ACTION_PROLOGUE;
-	PARAM_SOUND_OPT	(soundid)		{ soundid = "misc/splash"; }
+	PARAM_SOUND_OPT	(soundid)		{ soundid = "weapons/pistol"; }
 	PARAM_INT_OPT	(channel)		{ channel = CHAN_BODY; }
 	PARAM_FLOAT_OPT	(volume)		{ volume = 1; }
 	PARAM_BOOL_OPT	(looping)		{ looping = false; }
 	PARAM_FLOAT_OPT	(attenuation)	{ attenuation = ATTN_NORM; }
-	PARAM_BOOL_OPT(local) { local = false; }
 
 	if (!looping)
 	{
-		if (!local)
-			{
-			S_Sound(self, channel, soundid, (float)volume, (float)attenuation);
-			}
-		else
-			{
-			if (self->CheckLocalView(consoleplayer))
-			 S_Sound(channel, soundid, (float)volume, ATTN_NONE);
-			}
+		S_Sound (self, channel, soundid, (float)volume, (float)attenuation);
 	}
 	else
 	{
 		if (!S_IsActorPlayingSomething (self, channel&7, soundid))
 		{
-			if (!local)
-				{
-				S_Sound(self, channel | CHAN_LOOP, soundid, (float)volume, (float)attenuation);
-				}
-			else
-				{
-				if (self->CheckLocalView(consoleplayer))
-					S_Sound(self, channel | CHAN_LOOP, soundid, (float)volume, ATTN_NONE);
-				}
+			S_Sound (self, channel | CHAN_LOOP, soundid, (float)volume, (float)attenuation);
 		}
 	}
 	return 0;
@@ -1277,16 +1260,16 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomMissile)
 				{
 					if (CMF_OFFSETPITCH & flags)
 					{
-							DVector2 velocity (missile->vel.x, missile->vel.y);
-							pitch += R_PointToAngle2(0,0, xs_CRoundToInt(velocity.Length()), missile->vel.z);
+							TVector2<double> velocity (missile->velx, missile->vely);
+							pitch += R_PointToAngle2(0,0, xs_CRoundToInt(velocity.Length()), missile->velz);
 					}
 					ang = pitch >> ANGLETOFINESHIFT;
 					missilespeed = abs(FixedMul(finecosine[ang], missile->Speed));
-					missile->vel.z = FixedMul(finesine[ang], missile->Speed);
+					missile->velz = FixedMul(finesine[ang], missile->Speed);
 				}
 				else
 				{
-					DVector2 velocity (missile->vel.x, missile->vel.y);
+					TVector2<double> velocity (missile->velx, missile->vely);
 					missilespeed = xs_CRoundToInt(velocity.Length());
 				}
 
@@ -1301,8 +1284,8 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomMissile)
 				missile->angle = (CMF_ABSOLUTEANGLE & flags) ? angle : missile->angle + angle ;
 
 				ang = missile->angle >> ANGLETOFINESHIFT;
-				missile->vel.x = FixedMul(missilespeed, finecosine[ang]);
-				missile->vel.y = FixedMul(missilespeed, finesine[ang]);
+				missile->velx = FixedMul(missilespeed, finecosine[ang]);
+				missile->vely = FixedMul(missilespeed, finesine[ang]);
 	
 				// handle projectile shooting projectiles - track the
 				// links back to a real owner
@@ -1694,12 +1677,12 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FireCustomMissile)
 			{
 				// This original implementation is to aim straight ahead and then offset
 				// the angle from the resulting direction. 
-				DVector3 velocity(misl->vel.x, misl->vel.y, 0);
+				TVector3<double> velocity(misl->velx, misl->vely, 0);
 				fixed_t missilespeed = xs_CRoundToInt(velocity.Length());
 				misl->angle += angle;
 				angle_t an = misl->angle >> ANGLETOFINESHIFT;
-				misl->vel.x = FixedMul (missilespeed, finecosine[an]);
-				misl->vel.y = FixedMul (missilespeed, finesine[an]);
+				misl->velx = FixedMul (missilespeed, finecosine[an]);
+				misl->vely = FixedMul (missilespeed, finesine[an]);
 			}
 		}
 	}
@@ -1949,7 +1932,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomRailgun)
 	{
 		// We probably won't hit the target, but aim at it anyway so we don't look stupid.
 		fixedvec2 pos = self->Vec2To(self->target);
-		DVector2 xydiff(pos.x, pos.y);
+		TVector2<double> xydiff(pos.x, pos.y);
 		double zdiff = (self->target->Z() + (self->target->height>>1)) -
 						(self->Z() + (self->height>>1) - self->floorclip);
 		self->pitch = int(atan2(zdiff, xydiff.Length()) * ANGLE_180 / -M_PI);
@@ -1957,7 +1940,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomRailgun)
 	// Let the aim trail behind the player
 	if (aim)
 	{
-		saved_angle = self->angle = self->AngleTo(self->target, -self->target->vel.x * 3, -self->target->vel.y * 3);
+		saved_angle = self->angle = self->AngleTo(self->target, -self->target->velx * 3, -self->target->vely * 3);
 
 		if (aim == CRF_AIMDIRECT)
 		{
@@ -1967,7 +1950,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CustomRailgun)
 				spawnofs_xy * finecosine[self->angle],
 				spawnofs_xy * finesine[self->angle]));
 			spawnofs_xy = 0;
-			self->angle = self->AngleTo(self->target,- self->target->vel.x * 3, -self->target->vel.y * 3);
+			self->angle = self->AngleTo(self->target,- self->target->velx * 3, -self->target->vely * 3);
 		}
 
 		if (self->target->flags & MF_SHADOW)
@@ -2535,15 +2518,15 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SpawnItemEx)
 		}
 		if (flags & SIXF_MULTIPLYSPEED)
 		{
-			mo->vel.x = FixedMul(xvel, mo->Speed);
-			mo->vel.y = FixedMul(yvel, mo->Speed);
-			mo->vel.z = FixedMul(zvel, mo->Speed);
+			mo->velx = FixedMul(xvel, mo->Speed);
+			mo->vely = FixedMul(yvel, mo->Speed);
+			mo->velz = FixedMul(zvel, mo->Speed);
 		}
 		else
 		{
-			mo->vel.x = xvel;
-			mo->vel.y = yvel;
-			mo->vel.z = zvel;
+			mo->velx = xvel;
+			mo->vely = yvel;
+			mo->velz = zvel;
 		}
 		mo->angle = angle;
 	}
@@ -2615,9 +2598,9 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ThrowGrenade)
 		fixed_t z_velx = FixedMul(z_xyscale, finecosine[angle]);
 		fixed_t z_vely = FixedMul(z_xyscale, finesine[angle]);
 
-		bo->vel.x = xy_velx + z_velx + (self->vel.x >> 1);
-		bo->vel.y = xy_vely + z_vely + (self->vel.y >> 1);
-		bo->vel.z = xy_velz + z_velz;
+		bo->velx = xy_velx + z_velx + (self->velx >> 1);
+		bo->vely = xy_vely + z_vely + (self->vely >> 1);
+		bo->velz = xy_velz + z_velz;
 
 		bo->target = self;
 		P_CheckMissileSpawn (bo, self->radius);
@@ -2642,8 +2625,8 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Recoil)
 
 	angle_t angle = self->angle + ANG180;
 	angle >>= ANGLETOFINESHIFT;
-	self->vel.x += FixedMul(xyvel, finecosine[angle]);
-	self->vel.y += FixedMul(xyvel, finesine[angle]);
+	self->velx += FixedMul(xyvel, finecosine[angle]);
+	self->vely += FixedMul(xyvel, finesine[angle]);
 	return 0;
 }
 
@@ -3002,9 +2985,9 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SpawnDebris)
 			{
 				mo->SetState (mo->GetClass()->OwnedStates + i);
 			}
-			mo->vel.z = FixedMul(mult_v, ((pr_spawndebris()&7)+5)*FRACUNIT);
-			mo->vel.x = FixedMul(mult_h, pr_spawndebris.Random2()<<(FRACBITS-6));
-			mo->vel.y = FixedMul(mult_h, pr_spawndebris.Random2()<<(FRACBITS-6));
+			mo->velz = FixedMul(mult_v, ((pr_spawndebris()&7)+5)*FRACUNIT);
+			mo->velx = FixedMul(mult_h, pr_spawndebris.Random2()<<(FRACBITS-6));
+			mo->vely = FixedMul(mult_h, pr_spawndebris.Random2()<<(FRACBITS-6));
 		}
 	}
 	return 0;
@@ -3361,7 +3344,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Burst)
 		return 0;
 	}
 
-	self->vel.x = self->vel.y = self->vel.z = 0;
+	self->velx = self->vely = self->velz = 0;
 	self->height = self->GetDefault()->height;
 
 	// [RH] In Hexen, this creates a random number of shards (range [24,56])
@@ -3380,9 +3363,9 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Burst)
 
 		if (mo)
 		{
-			mo->vel.z = FixedDiv(mo->Z() - self->Z(), self->height)<<2;
-			mo->vel.x = pr_burst.Random2 () << (FRACBITS-7);
-			mo->vel.y = pr_burst.Random2 () << (FRACBITS-7);
+			mo->velz = FixedDiv(mo->Z() - self->Z(), self->height)<<2;
+			mo->velx = pr_burst.Random2 () << (FRACBITS-7);
+			mo->vely = pr_burst.Random2 () << (FRACBITS-7);
 			mo->RenderStyle = self->RenderStyle;
 			mo->alpha = self->alpha;
 			mo->CopyFriendliness(self, true);
@@ -3446,11 +3429,11 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_CheckCeiling)
 DEFINE_ACTION_FUNCTION(AActor, A_Stop)
 {
 	PARAM_ACTION_PROLOGUE;
-	self->vel.x = self->vel.y = self->vel.z = 0;
+	self->velx = self->vely = self->velz = 0;
 	if (self->player && self->player->mo == self && !(self->player->cheats & CF_PREDICTING))
 	{
 		self->player->mo->PlayIdle();
-		self->player->vel.x = self->player->vel.y = 0;
+		self->player->velx = self->player->vely = 0;
 	}
 	return 0;
 }
@@ -3460,10 +3443,10 @@ static void CheckStopped(AActor *self)
 	if (self->player != NULL &&
 		self->player->mo == self &&
 		!(self->player->cheats & CF_PREDICTING) &&
-		!(self->vel.x | self->vel.y | self->vel.z))
+		!(self->velx | self->vely | self->velz))
 	{
 		self->player->mo->PlayIdle();
-		self->player->vel.x = self->player->vel.y = 0;
+		self->player->velx = self->player->vely = 0;
 	}
 }
 
@@ -4579,11 +4562,11 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ScaleVelocity)
 		return 0;
 	}
 
-	INTBOOL was_moving = ref->vel.x | ref->vel.y | ref->vel.z;
+	INTBOOL was_moving = ref->velx | ref->vely | ref->velz;
 
-	ref->vel.x = FixedMul(ref->vel.x, scale);
-	ref->vel.y = FixedMul(ref->vel.y, scale);
-	ref->vel.z = FixedMul(ref->vel.z, scale);
+	ref->velx = FixedMul(ref->velx, scale);
+	ref->vely = FixedMul(ref->vely, scale);
+	ref->velz = FixedMul(ref->velz, scale);
 
 	// If the actor was previously moving but now is not, and is a player,
 	// update its player variables. (See A_Stop.)
@@ -4616,7 +4599,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ChangeVelocity)
 		return 0;
 	}
 
-	INTBOOL was_moving = ref->vel.x | ref->vel.y | ref->vel.z;
+	INTBOOL was_moving = ref->velx | ref->vely | ref->velz;
 
 	fixed_t vx = x, vy = y, vz = z;
 	fixed_t sina = finesine[ref->angle >> ANGLETOFINESHIFT];
@@ -4629,15 +4612,15 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_ChangeVelocity)
 	}
 	if (flags & 2)	// discard old velocity - replace old velocity with new velocity
 	{
-		ref->vel.x = vx;
-		ref->vel.y = vy;
-		ref->vel.z = vz;
+		ref->velx = vx;
+		ref->vely = vy;
+		ref->velz = vz;
 	}
 	else	// add new velocity to old velocity
 	{
-		ref->vel.x += vx;
-		ref->vel.y += vy;
-		ref->vel.z += vz;
+		ref->velx += vx;
+		ref->vely += vy;
+		ref->velz += vz;
 	}
 
 	if (was_moving)
@@ -4920,7 +4903,7 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_Teleport)
 			ref->angle = spot->angle;
 
 		if (!(flags & TF_KEEPVELOCITY))
-			ref->vel.x = ref->vel.y = ref->vel.z = 0;
+			ref->velx = ref->vely = ref->velz = 0;
 
 		if (!(flags & TF_NOJUMP)) //The state jump should only happen with the calling actor.
 		{
@@ -5156,9 +5139,9 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_WolfAttack)
 	dist /= blocksize;
 
 	// Now for the speed accuracy thingie
-	fixed_t speed = FixedMul(self->target->vel.x, self->target->vel.x)
-				  + FixedMul(self->target->vel.y, self->target->vel.y)
-				  + FixedMul(self->target->vel.z, self->target->vel.z);
+	fixed_t speed = FixedMul(self->target->velx, self->target->velx)
+				  + FixedMul(self->target->vely, self->target->vely)
+				  + FixedMul(self->target->velz, self->target->velz);
 	int hitchance = speed < runspeed ? 256 : 160;
 
 	// Distance accuracy (factoring dodge)
@@ -5531,7 +5514,7 @@ static bool DoRadiusGive(AActor *self, AActor *thing, PClassActor *item, int amo
 		{ // check if inside a sphere
 			double distsquared = double(distance) * double(distance);
 			double minsquared = double(mindist) * double(mindist);
-			double lengthsquared = DVector3(diff.x, diff.y, diff.z).LengthSquared();
+			double lengthsquared = TVector3<double>(diff.x, diff.y, diff.z).LengthSquared();
 			if (lengthsquared > distsquared || (minsquared && (lengthsquared < minsquared)))
 			{
 				return false;
@@ -6793,10 +6776,10 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FaceMovementDirection)
 	}
 
 	//Don't bother calculating this if we don't have any horizontal movement.
-	if (!(flags & FMDF_NOANGLE) && (mobj->vel.x != 0 || mobj->vel.y != 0))
+	if (!(flags & FMDF_NOANGLE) && (mobj->velx != 0 || mobj->vely != 0))
 	{
 		angle_t current = mobj->angle;
-		const angle_t angle = R_PointToAngle2(0, 0, mobj->vel.x, mobj->vel.y);
+		const angle_t angle = R_PointToAngle2(0, 0, mobj->velx, mobj->vely);
 		//Done because using anglelimit directly causes a signed/unsigned mismatch.
 		const angle_t limit = anglelimit;
 
@@ -6831,8 +6814,8 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_FaceMovementDirection)
 	if (!(flags & FMDF_NOPITCH))
 	{
 		fixed_t current = mobj->pitch;
-		const DVector2 velocity(mobj->vel.x, mobj->vel.y);
-		const fixed_t pitch = R_PointToAngle2(0, 0, xs_CRoundToInt(velocity.Length()), -mobj->vel.z);
+		const TVector2<double> velocity(mobj->velx, mobj->vely);
+		const fixed_t pitch = R_PointToAngle2(0, 0, xs_CRoundToInt(velocity.Length()), -mobj->velz);
 		if (pitchlimit > 0)
 		{
 			// [MC] angle_t for pitchlimit was required because otherwise

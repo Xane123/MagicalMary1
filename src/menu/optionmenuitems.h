@@ -34,10 +34,11 @@
 #include "v_text.h"
 #include "gstrings.h"
 
+
 void M_DrawConText (int color, int x, int y, const char *str);
 void M_SetVideoMode();
 
-EXTERN_CVAR(Bool, menu_pausesp)
+
 
 //=============================================================================
 //
@@ -361,8 +362,7 @@ public:
 		if (ev->type == EV_KeyDown)
 		{
 			*pKey = ev->data1;
-			if (menu_pausesp == false) { menuactive = MENU_OnNoPause; }
-			else { menuactive = MENU_On; }
+			menuactive = MENU_On;
 			SetMenuMessage(0);
 			Close();
 			mParentMenu->MenuEvent((ev->data1 == KEY_ESCAPE)? MKEY_Abort : MKEY_Input, 0);
@@ -607,7 +607,7 @@ public:
 			// On 320x200 we need a shorter slider
 			M_DrawConText(CR_CYAN, x, cy + (4 * CleanYfac_1), "\x10\x11\x11\x11\x11\x11\x12");
 			M_DrawConText(CR_CREAM, x + int((5 + ((ccur * 38) / range)) * CleanXfac_1), cy + (6 * CleanYfac_1), "\x13");
-			right -= 5*8*CleanXfac_1;
+			right -= 5 * 8 * CleanXfac_1;
 		}
 
 		if (fracdigits >= 0 && right + maxlen <= screen->GetWidth())

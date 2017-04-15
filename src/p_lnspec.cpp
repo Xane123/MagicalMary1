@@ -76,6 +76,10 @@
 */
 static const BYTE ChangeMap[8] = { 0, 1, 5, 3, 7, 2, 6, 0 };
 
+int LS_Sector_SetPlaneReflection(line_t *ln, AActor *it, bool backSide, int arg0, int arg1, int arg2, int arg3, int arg4);
+int LS_SetGlobalFogParameter(line_t *ln, AActor *it, bool backSide, int arg0, int arg1, int arg2, int arg3, int arg4);
+
+
 #define FUNC(a) static int a (line_t *ln, AActor *it, bool backSide, \
 	int arg0, int arg1, int arg2, int arg3, int arg4)
 
@@ -1128,12 +1132,12 @@ FUNC(LS_ThrustThing)
 static void ThrustThingHelper (AActor *it, angle_t angle, int force, INTBOOL nolimit)
 {
 	angle >>= ANGLETOFINESHIFT;
-	it->vel.x += force * finecosine[angle];
-	it->vel.y += force * finesine[angle];
+	it->velx += force * finecosine[angle];
+	it->vely += force * finesine[angle];
 	if (!nolimit)
 	{
-		it->vel.x = clamp<fixed_t> (it->vel.x, -MAXMOVE, MAXMOVE);
-		it->vel.y = clamp<fixed_t> (it->vel.y, -MAXMOVE, MAXMOVE);
+		it->velx = clamp<fixed_t> (it->velx, -MAXMOVE, MAXMOVE);
+		it->vely = clamp<fixed_t> (it->vely, -MAXMOVE, MAXMOVE);
 	}
 }
 
@@ -1154,18 +1158,18 @@ FUNC(LS_ThrustThingZ)	// [BC]
 		while ( (victim = iterator.Next ()) )
 		{
 			if (!arg3)
-				victim->vel.z = thrust;
+				victim->velz = thrust;
 			else
-				victim->vel.z += thrust;
+				victim->velz += thrust;
 		}
 		return true;
 	}
 	else if (it)
 	{
 		if (!arg3)
-			it->vel.z = thrust;
+			it->velz = thrust;
 		else
-			it->vel.z += thrust;
+			it->velz += thrust;
 		return true;
 	}
 	return false;
@@ -1696,8 +1700,8 @@ FUNC(LS_Thing_Stop)
 	{
 		if (it != NULL)
 		{
-			it->vel.x = it->vel.y = it->vel.z = 0;
-			if (it->player != NULL) it->player->vel.x = it->player->vel.y = 0;
+			it->velx = it->vely = it->velz = 0;
+			if (it->player != NULL) it->player->velx = it->player->vely = 0;
 			ok = true;
 		}
 	}
@@ -1707,8 +1711,8 @@ FUNC(LS_Thing_Stop)
 
 		while ( (target = iterator.Next ()) )
 		{
-			target->vel.x = target->vel.y = target->vel.z = 0;
-			if (target->player != NULL) target->player->vel.x = target->player->vel.y = 0;
+			target->velx = target->vely = target->velz = 0;
+			if (target->player != NULL) target->player->velx = target->player->vely = 0;
 			ok = true;
 		}
 	}
@@ -3290,9 +3294,9 @@ FUNC(LS_GlassBreak)
 				glass->angle = an;
 				an >>= ANGLETOFINESHIFT;
 				speed = pr_glass() & 3;
-				glass->vel.x = finecosine[an] * speed;
-				glass->vel.y = finesine[an] * speed;
-				glass->vel.z = (pr_glass() & 7) << FRACBITS;
+				glass->velx = finecosine[an] * speed;
+				glass->vely = finesine[an] * speed;
+				glass->velz = (pr_glass() & 7) << FRACBITS;
 				// [RH] Let the shards stick around longer than they did in Strife.
 				glass->tics += pr_glass();
 			}
@@ -3556,9 +3560,9 @@ static lnSpecFunc LineSpecials[] =
 	/* 154 */ LS_Teleport_NoStop,
 	/* 155 */ LS_NOP,
 	/* 156 */ LS_NOP,
-	/* 157 */ LS_NOP,		// SetGlobalFogParameter // in GZDoom
+	/* 157 */ LS_SetGlobalFogParameter,
 	/* 158 */ LS_FS_Execute,
-	/* 159 */ LS_NOP,		// Sector_SetPlaneReflection in GZDoom
+	/* 159 */ LS_Sector_SetPlaneReflection,
 	/* 160 */ LS_NOP,		// Sector_Set3DFloor
 	/* 161 */ LS_NOP,		// Sector_SetContents
 	/* 162 */ LS_NOP,		// Reserved Doom64 branch

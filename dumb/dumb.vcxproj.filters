@@ -1,265 +1,265 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\unload.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\unload.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\rendsig.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\rendsig.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\rendduh.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\rendduh.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\register.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\register.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\readduh.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\readduh.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\rawsig.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\rawsig.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\makeduh.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\makeduh.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\loadduh.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\loadduh.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\dumbfile.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\dumbfile.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\duhtag.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\duhtag.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\duhlen.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\duhlen.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\atexit.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\core\atexit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\stdfile.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\stdfile.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\silence.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\silence.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\sampbuf.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\sampbuf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\riff.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\riff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\resample.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\resample.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\memfile.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\memfile.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\clickrem.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\clickrem.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\barray.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\barray.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\xmeffect.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\xmeffect.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readxm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readxm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readxm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readxm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readstm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readstm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readstm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readstm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\reads3m2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\reads3m2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\reads3m.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\reads3m.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readriff.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readriff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readptm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readptm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readpsm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readpsm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readoldpsm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readoldpsm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readokt2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readokt2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readokt.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readokt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readmtm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readmtm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readmod2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readmod2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readmod.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readmod.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readdsmf.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readdsmf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readasy.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readasy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readamf2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readamf2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readamf.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readamf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readam.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readam.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\read6692.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\read6692.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\read669.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\read669.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\ptmeffect.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\ptmeffect.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadxm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadxm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadxm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadxm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadstm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadstm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadstm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadstm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loads3m2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loads3m2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loads3m.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loads3m.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadriff2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadriff2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadriff.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadriff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadptm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadptm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadptm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadptm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadpsm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadpsm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadpsm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadpsm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadoldpsm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadoldpsm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadoldpsm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadoldpsm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadokt2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadokt2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadokt.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadokt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmtm2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmtm2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmtm.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmtm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmod2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmod2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmod.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmod.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadasy2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadasy2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadasy.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadasy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadamf2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadamf2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadamf.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadamf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\load6692.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\load6692.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\load669.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\load669.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itunload.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itunload.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itrender.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itrender.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itread2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itread2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itread.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itorder.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itorder.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itmisc.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itmisc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itload2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itload2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itload.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itload.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readany.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readany.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadany2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadany2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadany.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadany.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readany2.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readany2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\resampler.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\resampler.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\lpc.c">
+    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\lpc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\Failure5\dumb\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{D4487385-BD72-39A8-996C-F48DF028A1AA}</UniqueIdentifier>
+      <UniqueIdentifier>{E707ACC4-5D8A-3603-909E-867CE3067140}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -176,7 +176,7 @@ bool FCDThread::Init ()
 	CD_WindowClass.style = CS_NOCLOSE;
 	CD_WindowClass.lpfnWndProc = CD_WndProc;
 	CD_WindowClass.hInstance = g_hInst;
-	CD_WindowClass.lpszClassName = GAMESIG " CD Player";
+	CD_WindowClass.lpszClassName = GAMENAME " CD Player";
 	CD_WindowAtom = RegisterClass (&CD_WindowClass);
 
 	if (CD_WindowAtom == 0)
@@ -184,7 +184,7 @@ bool FCDThread::Init ()
 
 	CD_Window = CreateWindow (
 		(LPCTSTR)(INT_PTR)(int)CD_WindowAtom,
-		GAMESIG " CD Player",
+		GAMENAME " CD Player",
 		0,
 		0, 0, 10, 10,
 		NULL,

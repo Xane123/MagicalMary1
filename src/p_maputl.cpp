@@ -302,7 +302,6 @@ void AActor::UnlinkFromWorld ()
 				next->sprev = prev;
 			snext = NULL;
 			sprev = (AActor **)(size_t)0xBeefCafe;	// Woo! Bug-catching value!
-			//Printf("AN INVALID OBJECT WAS UNLINKED FROM THE WORLD!\n");
 
 			// phares 3/14/98
 			//
@@ -834,7 +833,6 @@ bool FMultiBlockLinesIterator::Next(FMultiBlockLinesIterator::CheckResult *item)
 	}
 	if (onlast)
 	{
-		cursector = startsector;
 		// We reached the end of the list. Check if we still need to check up- and downwards.
 		if (GoUp(checkpoint.x, checkpoint.y) ||
 			GoDown(checkpoint.x, checkpoint.y))
@@ -1981,10 +1979,6 @@ int P_VanillaPointOnDivlineSide(fixed_t x, fixed_t y, const divline_t* line)
 
 sector_t *P_PointInSectorBuggy(fixed_t x, fixed_t y)
 {
-	// single subsector is a special case
-	if (numgamenodes == 0)
-		return gamesubsectors->sector;
-
 	node_t *node = gamenodes + numgamenodes - 1;
 
 	do

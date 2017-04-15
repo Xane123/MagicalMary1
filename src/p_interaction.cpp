@@ -122,11 +122,11 @@ void P_TouchSpecialThing (AActor *special, AActor *toucher)
 //
 void SexMessage (const char *from, char *to, int gender, const char *victim, const char *killer)
 {
-	static const char *genderstuff[3][3] =	//Made text all-caps for World o Kirbycraft's font.
+	static const char *genderstuff[3][3] =
 	{
-		{ "HE",  "HIM", "HIS" },
-		{ "SHE", "HER", "HER" },
-		{ "IT",  "IT",  "ITS" }
+		{ "he",  "him", "his" },
+		{ "she", "her", "her" },
+		{ "it",  "it",  "its" }
 	};
 	static const int gendershift[3][3] =
 	{
@@ -974,7 +974,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 		{
 			target->tics = 1;
 			target->flags6 |= MF6_SHATTERING;
-			target->vel.x = target->vel.y = target->vel.z = 0;
+			target->velx = target->vely = target->velz = 0;
 		}
 		return -1;
 	}
@@ -982,7 +982,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 	// different here. At any rate, invulnerable is being checked before type factoring, which is then being 
 	// checked by player cheats/invul/buddha followed by monster buddha. This is inconsistent. Don't let the 
 	// original telefrag damage CHECK (rawdamage) be influenced by outside factors when looking at cheats/invul.
-	if ((target->flags2 & MF2_INVULNERABLE) && (1/*rawdamage < TELEFRAG_DAMAGE*/) && (!(flags & DMG_FORCED)))
+	if ((target->flags2 & MF2_INVULNERABLE) && (rawdamage < TELEFRAG_DAMAGE) && (!(flags & DMG_FORCED)))
 	{ // actor is invulnerable
 		if (target->player == NULL)
 		{
@@ -1029,7 +1029,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 	}
 	if (target->flags & MF_SKULLFLY)
 	{
-		target->vel.x = target->vel.y = target->vel.z = 0;
+		target->velx = target->vely = target->velz = 0;
 	}
 
 	player = target->player;
@@ -1041,7 +1041,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 			return -1;
 		}
 
-		if ((1/*rawdamage < TELEFRAG_DAMAGE*/) || (target->flags7 & MF7_LAXTELEFRAGDMG)) // TELEFRAG_DAMAGE may only be reduced with LAXTELEFRAGDMG or it may not guarantee its effect.
+		if ((rawdamage < TELEFRAG_DAMAGE) || (target->flags7 & MF7_LAXTELEFRAGDMG)) // TELEFRAG_DAMAGE may only be reduced with LAXTELEFRAGDMG or it may not guarantee its effect.
 		{
 			if (player && damage > 1)
 			{
@@ -1201,17 +1201,17 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 				(source->player->ReadyWeapon->WeaponFlags & WIF_STAFF2_KICKBACK))
 			{
 				// Staff power level 2
-				target->vel.x += FixedMul (10*FRACUNIT, finecosine[ang]);
-				target->vel.y += FixedMul (10*FRACUNIT, finesine[ang]);
+				target->velx += FixedMul (10*FRACUNIT, finecosine[ang]);
+				target->vely += FixedMul (10*FRACUNIT, finesine[ang]);
 				if (!(target->flags & MF_NOGRAVITY))
 				{
-					target->vel.z += 5*FRACUNIT;
+					target->velz += 5*FRACUNIT;
 				}
 			}
 			else
 			{
-				target->vel.x += FixedMul (thrust, finecosine[ang]);
-				target->vel.y += FixedMul (thrust, finesine[ang]);
+				target->velx += FixedMul (thrust, finecosine[ang]);
+				target->vely += FixedMul (thrust, finesine[ang]);
 			}
 		}
 	}
@@ -1289,7 +1289,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 				{
 					player->mo->Inventory->AbsorbDamage(damage, mod, newdam);
 				}
-				if ((1/*rawdamage < TELEFRAG_DAMAGE*/) || (player->mo->flags7 & MF7_LAXTELEFRAGDMG)) //rawdamage is never modified.
+				if ((rawdamage < TELEFRAG_DAMAGE) || (player->mo->flags7 & MF7_LAXTELEFRAGDMG)) //rawdamage is never modified.
 				{
 					// if we are telefragging don't let the damage value go below that magic value. Some further checks would fail otherwise.
 					damage = newdam;
@@ -1332,7 +1332,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 			// but telefragging should still do enough damage to kill the player)
 			// Ignore players that are already dead.
 			// [MC]Buddha2 absorbs telefrag damage, and anything else thrown their way.
-			if (!(flags & DMG_FORCED) && (((player->cheats & CF_BUDDHA2) || (((player->cheats & CF_BUDDHA) || (player->mo->flags7 & MF7_BUDDHA)) && (1/*rawdamage < TELEFRAG_DAMAGE*/))) && (player->playerstate != PST_DEAD)))
+			if (!(flags & DMG_FORCED) && (((player->cheats & CF_BUDDHA2) || (((player->cheats & CF_BUDDHA) || (player->mo->flags7 & MF7_BUDDHA)) && (rawdamage < TELEFRAG_DAMAGE))) && (player->playerstate != PST_DEAD)))
 			{
 				// If this is a voodoo doll we need to handle the real player as well.
 				player->mo->health = target->health = player->health = 1;
@@ -1397,7 +1397,7 @@ int P_DamageMobj (AActor *target, AActor *inflictor, AActor *source, int damage,
 	if (target->health <= 0)
 	{ 
 		//[MC]Buddha flag for monsters.
-		if (!(flags & DMG_FORCED) && ((target->flags7 & MF7_BUDDHA) && (1/*rawdamage < TELEFRAG_DAMAGE*/) && ((inflictor == NULL || !(inflictor->flags7 & MF7_FOILBUDDHA)) && !(flags & DMG_FOILBUDDHA))))
+		if (!(flags & DMG_FORCED) && ((target->flags7 & MF7_BUDDHA) && (rawdamage < TELEFRAG_DAMAGE) && ((inflictor == NULL || !(inflictor->flags7 & MF7_FOILBUDDHA)) && !(flags & DMG_FOILBUDDHA))))
 		{ //FOILBUDDHA or Telefrag damage must kill it.
 			target->health = 1;
 		}

@@ -1,0 +1,64 @@
+﻿  c_cmds.cpp
+  c_console.cpp
+  d_iwad.cpp
+  d_main.cpp
+  d_net.cpp
+  dobjgc.cpp
+  g_game.cpp
+  g_level.cpp
+  g_mapinfo.cpp
+  sbarinfo.cpp
+  shared_sbar.cpp
+  gameconfigfile.cpp
+  gitinfo.cpp
+  keysections.cpp
+  m_misc.cpp
+  m_specialpaths.cpp
+  p_acs.cpp
+  p_conversation.cpp
+  p_glnodes.cpp
+  thingdef_parse.cpp
+  Generating Code...
+  Compiling...
+  thingdef_states.cpp
+  v_video.cpp
+  hardware.cpp
+  i_cd.cpp
+  i_crash.cpp
+  i_input.cpp
+  i_main.cpp
+  i_mouse.cpp
+  i_system.cpp
+  win32gliface.cpp
+  win32video.cpp
+  Generating Code...
+  gl_interface.cpp
+  gl_menu.cpp
+  intermission.cpp
+  colorpickermenu.cpp
+  joystickmenu.cpp
+  listmenu.cpp
+  loadsavemenu.cpp
+  menu.cpp
+  menudef.cpp
+  menuinput.cpp
+  messagebox.cpp
+  optionmenu.cpp
+  playerdisplay.cpp
+  playermenu.cpp
+  readthis.cpp
+  videomenu.cpp
+  i_sound.cpp
+  music_midi_base.cpp
+  music_midi_timidity.cpp
+  oalsound.cpp
+  Generating Code...
+     Creating library D:/Git/Failure5/src/MinSizeRel/play3d.lib and object D:/Git/Failure5/src/MinSizeRel/play3d.exp
+LINK : warning LNK4199: /DELAYLOAD:fmodex.dll ignored; no imports found from fmodex.dll
+  zdoom.vcxproj -> D:\Git\Failure5\MinSizeRel\play3d.exe
+  Microsoft (R) Manifest Tool
+  
+  Copyright (c) Microsoft Corporation. 
+  
+  All rights reserved.
+  

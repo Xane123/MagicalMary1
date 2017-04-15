@@ -1,8 +1,8 @@
-# Install script for directory: D:/Git/MaryMagicalAdventure/tools/lemon
+# Install script for directory: D:/Git/Failure5/tools/lemon
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/ZDoom")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/GZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

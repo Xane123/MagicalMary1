@@ -127,8 +127,6 @@ static void TerminalResponse (const char *str);
 
 static FStrifeDialogueNode *PrevNode;
 
-EXTERN_CVAR(Bool, menu_pausesp)
-
 #define NUM_RANDOM_LINES 10
 #define NUM_RANDOM_GOODBYES 3
 
@@ -929,8 +927,7 @@ public:
 		// [CW] Freeze the game depending on MAPINFO options.
 		if (ConversationPauseTic < gametic && !multiplayer && !(level.flags2 & LEVEL2_CONV_SINGLE_UNFREEZE))
 		{
-			if (menu_pausesp == false) { menuactive = MENU_OnNoPause; }
-			else { menuactive = MENU_On; }
+			menuactive = MENU_On;
 		}
 
 		if (CurNode->Backdrop.isValid())
@@ -1094,8 +1091,8 @@ void P_StartConversation (AActor *npc, AActor *pc, bool facetalker, bool saveang
 			return;
 	}
 
-	pc->vel.x = pc->vel.y = 0;	// Stop moving
-	pc->player->vel.x = pc->player->vel.y = 0;
+	pc->velx = pc->vely = 0;	// Stop moving
+	pc->player->velx = pc->player->vely = 0;
 	static_cast<APlayerPawn*>(pc)->PlayIdle ();
 
 	pc->player->ConversationPC = pc;

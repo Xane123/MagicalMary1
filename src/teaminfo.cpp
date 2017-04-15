@@ -326,10 +326,10 @@ bool FTeam::GetAllowCustomPlayerColor () const
 
 CCMD (teamlist)
 {
-	Printf ("The teams in Mary's Magical Adventure are currently:\n");
+	Printf ("Defined teams are as follows:\n");
 
 	for (unsigned int uiTeam = 0; uiTeam < Teams.Size (); uiTeam++)
 		Printf ("%d : %s\n", uiTeam, Teams[uiTeam].GetName ());
 
-	Printf ("To add more, create a TEAMINFO file with new entries in the same format as Mary's Magical Adventure's built-in teams.\n");
+	Printf ("End of team list.\n");
 }

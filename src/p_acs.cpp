@@ -81,7 +81,6 @@
 #include "p_effect.h"
 #include "r_utility.h"
 #include "a_morph.h"
-#include "i_music.h"
 
 #include "g_shared/a_pickups.h"
 
@@ -148,31 +147,6 @@ enum
 	PICKAF_FORCETID = 1,
 	PICKAF_RETURNTID = 2,
 };
-
-// ACS specific conversion functions to and from fixed point.
-// These should be used to convert from and to sctipt variables
-// so that there is a clear distinction between leftover fixed point code
-// and genuinely needed conversions.
-
-inline double ACSToDouble(int acsval)
-{
-	return acsval / 65536.;
-}
-
-inline float ACSToFloat(int acsval)
-{
-	return acsval / 65536.f;
-}
-
-inline int DoubleToACS(double val)
-{
-	return xs_Fix<16>::ToFix(val);
-}
-
-inline DAngle ACSToAngle(int acsval)
-{
-	return acsval * (360. / 65536.);
-}
 
 struct CallReturn
 {
@@ -1197,11 +1171,11 @@ static void GiveInventory (AActor *activator, const char *type, int amount)
 	info = PClass::FindActor(type);
 	if (info == NULL)
 	{
-		Printf ("ACS: %s HASN'T BEEN CREATED IN DECORATE YET.\n", type);
+		Printf ("ACS: I don't know what %s is.\n", type);
 	}
 	else if (!info->IsDescendantOf (RUNTIME_CLASS(AInventory)))
 	{
-		Printf("ACS: %s IS NOT AN INVENTORY ITEM; INHERIT FROM INVENTORY OR CUSTOMINVENTORY.\n", type);
+		Printf ("ACS: %s is not an inventory item.\n", type);
 	}
 	else if (activator == NULL)
 	{
@@ -1491,7 +1465,7 @@ void FBehavior::StaticLoadDefaultModules ()
 			}
 			else
 			{
-				Printf (TEXTCOLOR_RED "AN ACS SCRIPT FILE YOU REQUESTED TO BE LOADED, %s, COULDN'T BE FOUND.\n", sc.String);
+				Printf (TEXTCOLOR_RED "Could not find autoloaded ACS library %s\n", sc.String);
 			}
 		}
 	}
@@ -1639,7 +1613,7 @@ void FBehavior::StaticSerializeModuleStates (FArchive &arc)
 
 	if (modnum != StaticModules.Size())
 	{
-		I_Error("THIS SAVE WAS SAVED WITH A DIFFERENT NUMBER OF ACS SCRIPTS;\n\nREDOWNLOAD THE SAME VERSION YOU SAVED THIS IN OR USE LEVEL SELECT TO GET BACK TO WHERE YOU SAVED THIS FILE.\n\nIF YOU'RE CURIOUS, THIS SAVE HAD %d PARTS WHILE THE CURRENT VERSION HAS %d PARTS INSTEAD.", modnum, StaticModules.Size());
+		I_Error("Level was saved with a different number of ACS modules. (Have %d, save has %d)", StaticModules.Size(), modnum);
 	}
 
 	for (modnum = 0; modnum < StaticModules.Size(); ++modnum)
@@ -1660,12 +1634,12 @@ void FBehavior::StaticSerializeModuleStates (FArchive &arc)
 			if (stricmp (modname, module->ModuleName) != 0)
 			{
 				delete[] modname;
-				I_Error("THIS SAVE WAS SAVED WITH A DIFFERENT SET OF ACS SCRIPT FILES;\n\nREDOWNLOAD THE SAME VERSION YOU SAVED THIS IN OR USE LEVEL SELECT TO GET BACK TO WHERE YOU SAVED THIS FILE.\n\nIF YOU'RE CURIOUS, THIS SAVE HAS %s FIRST, WHILE THE CURRENT VERSION HAS %s FIRST INSTEAD.", modname, module->ModuleName);
+				I_Error("Level was saved with a different set or order of ACS modules. (Have %s, save has %s)", module->ModuleName, modname);
 			}
 			else if (ModSize != module->GetDataSize())
 			{
 				delete[] modname;
-				I_Error("AN ACS SCRIPT FILE HAS CHANGED IN SIZE SINCE THIS SAVE WAS MADE.\n\nREDOWNLOAD THE SAME VERSION YOU SAVED THIS SAVE IN OR USE LEVEL SELECT TO RETURN TO WHERE YOU SAVED THIS FILE.\n\nIF YOU'RE CURIOUS, THE ACS SCRIPT IN THIS SAVE, %s, WAS %d BYTES BIG.", module->ModuleName, module->GetDataSize(), ModSize);
+				I_Error("ACS module %s has changed from what was saved. (Have %d bytes, save has %d bytes)", module->ModuleName, module->GetDataSize(), ModSize);
 			}
 			delete[] modname;
 		}
@@ -4210,12 +4184,12 @@ bool DLevelScript::DoCheckActorTexture(int tid, AActor *activator, int string, b
 
 	if (floor)
 	{
-		actor->Sector->NextLowestFloorAt(actor->X(), actor->Y(), actor->Z(), 0, actor->MaxStepHeight, &resultsec, &resffloor);
+		actor->Sector->NextLowestFloorAt(actor, actor->Z(), 0, &resultsec, &resffloor);
 		secpic = resffloor ? *resffloor->top.texture : resultsec->planes[sector_t::floor].Texture;
 	}
 	else
 	{
-		actor->Sector->NextHighestCeilingAt(actor->X(), actor->Y(), actor->Z(), actor->Top(), 0, &resultsec, &resffloor);
+		actor->Sector->NextHighestCeilingAt(actor, actor->Top(), 0, &resultsec, &resffloor);
 		secpic = resffloor ? *resffloor->bottom.texture : resultsec->planes[sector_t::ceiling].Texture;
 	}
 	return tex == TexMan[secpic];
@@ -4507,9 +4481,7 @@ enum EACSFunctions
 	ACSF_SetSectorDamage,
 	ACSF_SetSectorTerrain,
 	ACSF_SpawnParticle,
-	ACSF_SetMusicVolume,
-	// 2 more left...
-
+	
 	/* Zandronum's - these must be skipped when we reach 99!
 	-100:ResetMap(0),
 	-101 : PlayerIsSpectator(1),
@@ -4925,15 +4897,15 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 
 		case ACSF_GetActorVelX:
 			actor = SingleActorFromTID(args[0], activator);
-			return actor != NULL? actor->vel.x : 0;
+			return actor != NULL? actor->velx : 0;
 
 		case ACSF_GetActorVelY:
 			actor = SingleActorFromTID(args[0], activator);
-			return actor != NULL? actor->vel.y : 0;
+			return actor != NULL? actor->vely : 0;
 
 		case ACSF_GetActorVelZ:
 			actor = SingleActorFromTID(args[0], activator);
-			return actor != NULL? actor->vel.z : 0;
+			return actor != NULL? actor->velz : 0;
 
 		case ACSF_SetPointer:
 			if (activator)
@@ -5369,7 +5341,7 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 			return FLOAT2FIXED(sqrt(FIXED2DBL(args[0])));
 
 		case ACSF_VectorLength:
-			return FLOAT2FIXED(DVector2(FIXED2DBL(args[0]), FIXED2DBL(args[1])).Length());
+			return FLOAT2FIXED(TVector2<double>(FIXED2DBL(args[0]), FIXED2DBL(args[1])).Length());
 
 		case ACSF_SetHUDClipRect:
 			ClipRectLeft = argCount > 0 ? args[0] : 0;
@@ -5478,7 +5450,7 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 
 		case ACSF_PlaySound:
 		case ACSF_PlayActorSound:
-			// PlaySound(tid, "SoundName", channel, volume, looping, attenuation, local)
+			// PlaySound(tid, "SoundName", channel, volume, looping, attenuation)
 			{
 				FSoundID sid;
 
@@ -5499,7 +5471,6 @@ int DLevelScript::CallFunction(int argCount, int funcIndex, SDWORD *args)
 					float vol = argCount > 3 ? FIXED2FLOAT(args[3]) : 1.f;
 					INTBOOL looping = argCount > 4 ? args[4] : false;
 					float atten = argCount > 5 ? FIXED2FLOAT(args[5]) : ATTN_NORM;
-					INTBOOL local = argCount > 6 ? args[6] : false;
 
 					if (args[0] == 0)
 					{
@@ -5516,27 +5487,11 @@ doplaysound:			if (funcIndex == ACSF_PlayActorSound)
 						{
 							if (!looping)
 							{
-								if (!local)
-								{
-									S_Sound(spot, chan, sid, vol, atten);
-								}
-								else
-								{
-									if (activator->CheckLocalView(consoleplayer))
-										S_Sound(chan, sid, vol, ATTN_NONE);
-								}
+								S_Sound(spot, chan, sid, vol, atten);
 							}
 							else if (!S_IsActorPlayingSomething(spot, chan & 7, sid))
 							{
-								if (!local)
-								{
-									S_Sound(spot, chan | CHAN_LOOP, sid, vol, atten);
-								}
-								else
-								{
-									if (activator->CheckLocalView(consoleplayer))
-										S_Sound(chan | CHAN_LOOP, sid, vol, ATTN_NONE);
-								}
+								S_Sound(spot, chan | CHAN_LOOP, sid, vol, atten);
 							}
 						}
 					}
@@ -5991,8 +5946,8 @@ doplaysound:			if (funcIndex == ACSF_PlayActorSound)
 				reference = SingleActorFromTID(tid_dest, activator);
 			}
 
-			// If there is no activator or actor to warp to, fail.
-			if (activator == NULL || !reference)
+			// If there is no actor to warp to, fail.
+			if (!reference)
 				return false;
 
 			if (P_Thing_Warp(activator, reference, xofs, yofs, zofs, angle, flags, heightoffset, radiusoffset, pitch))
@@ -6074,10 +6029,6 @@ doplaysound:			if (funcIndex == ACSF_PlayActorSound)
 		}
 		break;
 		
-		case ACSF_SetMusicVolume:
-			I_SetMusicVolume(ACSToFloat(args[0]));
-			break;
-
 		default:
 			break;
 	}
@@ -6234,7 +6185,7 @@ int DLevelScript::RunScript ()
 	{
 		if (++runaway > 2000000)
 		{
-			Printf ("%s IS MISSING A DELAY AND HAS RAN TOO MANY COO\n", ScriptPresentation(script).GetChars());
+			Printf ("Runaway %s terminated\n", ScriptPresentation(script).GetChars());
 			state = SCRIPT_PleaseRemove;
 			break;
 		}
@@ -8732,7 +8683,7 @@ scriptwait:
 		case PCD_GETACTORCEILINGZ:
 			{
 				AActor *actor = SingleActorFromTID(STACK(1), activator);
-				STACK(1) = actor == NULL ? 0 : actor->ceilingz; 
+				STACK(1) = actor == NULL ? 0 : actor->ceilingz;
 			}
 			break;
 
@@ -8745,12 +8696,8 @@ scriptwait:
 
 		case PCD_GETACTORPITCH:
 			{
-				/*AActor *actor = SingleActorFromTID(STACK(1), activator);
-				STACK(1) = actor == NULL ? 0 : actor->pitch >> 16;*/
-
 				AActor *actor = SingleActorFromTID(STACK(1), activator);
-				if (actor->player && (actor->player->cmd.ucmd.forwardmove | actor->player->cmd.ucmd.sidemove) && actor != NULL && actor->BlockingLine->sidedef[1] != NULL) STACK(1) = true;
-				else STACK(1) = false;
+				STACK(1) = actor == NULL ? 0 : actor->pitch >> 16;
 			}
 			break;
 
@@ -9576,7 +9523,7 @@ scriptwait:
 			break;
 
 		case PCD_CONSOLECOMMAND:
-			Printf (TEXTCOLOR_RED GAMESIG " doesn't support execution of console commands from scripts\n");
+			Printf (TEXTCOLOR_RED GAMENAME " doesn't support execution of console commands from scripts\n");
 			sp -= 3;
 			break;
  		}
@@ -9589,12 +9536,12 @@ scriptwait:
 
 	if (state == SCRIPT_DivideBy0)
 	{
-		Printf ("THIS SCRIPT DIVIDED BY ZERO. %s\n", ScriptPresentation(script).GetChars());
+		Printf ("Divide by zero in %s\n", ScriptPresentation(script).GetChars());
 		state = SCRIPT_PleaseRemove;
 	}
 	else if (state == SCRIPT_ModulusBy0)
 	{
-		Printf ("THIS SCRIPT ATTEMPTED TO MODULO BY ZERO. %s\n", ScriptPresentation(script).GetChars());
+		Printf ("Modulus by zero in %s\n", ScriptPresentation(script).GetChars());
 		state = SCRIPT_PleaseRemove;
 	}
 	if (state == SCRIPT_PleaseRemove)

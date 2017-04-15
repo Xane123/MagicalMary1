@@ -408,10 +408,10 @@ public:
 	fixed_t		bob;					// bounded/scaled total velocity
 
 	// killough 10/98: used for realistic bobbing (i.e. not simply overall speed)
-	// mo->vel.x and mo->vel.y represent true velocity experienced by player.
+	// mo->velx and mo->vely represent true velocity experienced by player.
 	// This only represents the thrust that the player applies himself.
 	// This avoids anomalies with such things as Boom ice and conveyors.
-	fixedvec2	vel;
+	fixed_t		velx, vely;				// killough 10/98
 
 	bool		centering;
 	BYTE		turnticks;

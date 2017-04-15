@@ -62,8 +62,6 @@
 
 static FRandom pr_skullpop ("SkullPop");
 
-//CVAR(Bool, internal_onwater, 0, CVAR_DEMOSAVE)
-
 // [RH] # of ticks to complete a turn180
 #define TURN180_TICKS	((TICRATE / 4) + 1)
 
@@ -81,8 +79,6 @@ CUSTOM_CVAR(Float, cl_predict_lerpthreshold, 2.00f, CVAR_ARCHIVE | CVAR_GLOBALCO
 		self = 0.1f;
 	P_PredictionLerpReset();
 }
-
-EXTERN_CVAR(Bool, snd_style)
 
 struct PredictPos
 {
@@ -261,7 +257,8 @@ player_t::player_t()
   viewheight(0),
   deltaviewheight(0),
   bob(0),
-  vel({ 0,0 }),
+  velx(0),
+  vely(0),
   centering(0),
   turnticks(0),
   attackdown(0),
@@ -340,8 +337,8 @@ player_t &player_t::operator=(const player_t &p)
 	viewheight = p.viewheight;
 	deltaviewheight = p.deltaviewheight;
 	bob = p.bob;
-	vel.x = p.vel.x;
-	vel.y = p.vel.y;
+	velx = p.velx;
+	vely = p.vely;
 	centering = p.centering;
 	turnticks = p.turnticks;
 	attackdown = p.attackdown;
@@ -1230,63 +1227,23 @@ int APlayerPawn::GetMaxHealth() const
 //
 //===========================================================================
 
-bool APlayerPawn::UpdateWaterLevel(fixed_t oldz, bool splash)
+bool APlayerPawn::UpdateWaterLevel (fixed_t oldz, bool splash)
 {
 	int oldlevel = waterlevel;
-	bool retval = Super::UpdateWaterLevel(oldz, splash);
+	bool retval = Super::UpdateWaterLevel (oldz, splash);
 	if (player != NULL)
 	{
-			//TODO: Try to convert this to ACS in hopes of fixing multiplayer crashes. 
-/*		if (oldlevel == 0 && (waterlevel == 1 || waterlevel == 4) && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))
-		{
-			player->mo->vel.z = 1 * FRACUNIT;
-			player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.0175 * FRACUNIT));
-			player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.0175 * FRACUNIT));
-			Spawn("WaterSurface", X(), Y(), Z(), ALLOW_REPLACE);	//This crashes muttiplayer.
-			S_Sound(this, CHAN_BODY, "misc/watersurface", ((MAX(abs(player->mo->vel.x), abs(player->mo->vel.y)) * 0.0001) / 160), ATTN_NORM);
-			internal_onwater = true;	//Allow the player to jump on water for a short time.
-			waterlevel = 0;
-		}*/
-
 		if (oldlevel < 3 && waterlevel == 3)
-		{
-			if (!player->mo->IsNoClip2())
-			{
-				if (player->mo->vel.z < -16 * FRACUNIT)	//If going fast enough, play the splashing sound.
-				{ // Our head just went under.
-					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
-					else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
-				}
-				else
-				{
-					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-					else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-				}
-			}
-
+		{ // Our head just went under.
+			S_Sound (this, CHAN_VOICE, "*dive", 1, ATTN_NORM);
 		}
-
 		else if (oldlevel == 3 && waterlevel < 3)
 		{ // Our head just came up.
 			if (player->air_finished > level.time)
 			{ // We hadn't run out of air yet.
-				if (player->mo->vel.z > 16 * FRACUNIT)	//If going fast enough, play the splashing sound.
-				{ // Our head just went under.
-					if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
-					else S_Sound(this, CHAN_AUTO, "misc/splash8bit", 1, ATTN_NORM);
-				}
-				else
-				{
-					if (!player->mo->IsNoClip2())
-					{
-						if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-						else S_Sound(this, CHAN_AUTO, "misc/watersurface", 0.5, ATTN_NORM);
-						if (snd_style == false) S_Sound(this, CHAN_AUTO, "misc/splash", 1, ATTN_NORM);
-					}
-					
-				}
-				// If we were running out of air, then ResetAirSupply() will play *gasp.
+				S_Sound (this, CHAN_VOICE, "*surface", 1, ATTN_NORM);
 			}
+			// If we were running out of air, then ResetAirSupply() will play *gasp.
 		}
 	}
 	return retval;
@@ -1412,7 +1369,7 @@ void APlayerPawn::GiveDefaultInventory ()
 					{
 						// Player was morphed. This is illegal at game start.
 						// This problem is only detectable when it's too late to do something about it...
-						I_Error("YOU CAN'T TRANSFORM; YOU'RE STARTING Mary's Magical Adventure!");
+						I_Error("Cannot give morph items when starting a game");
 					}
 					item->Destroy ();
 					item = NULL;
@@ -1623,7 +1580,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 	// Handle the different player death screams
 	if ((((level.flags >> 15) | (dmflags)) &
 		(DF_FORCE_FALLINGZD | DF_FORCE_FALLINGHX)) &&
-		self->vel.z <= -39*FRACUNIT)
+		self->velz <= -39*FRACUNIT)
 	{
 		sound = S_FindSkinnedSound (self, "*splat");
 		chan = CHAN_BODY;
@@ -1695,9 +1652,9 @@ DEFINE_ACTION_FUNCTION_PARAMS(AActor, A_SkullPop)
 	self->flags &= ~MF_SOLID;
 	mo = (APlayerPawn *)Spawn (spawntype, self->PosPlusZ(48*FRACUNIT), NO_REPLACE);
 	//mo->target = self;
-	mo->vel.x = pr_skullpop.Random2() << 9;
-	mo->vel.y = pr_skullpop.Random2() << 9;
-	mo->vel.z = 2*FRACUNIT + (pr_skullpop() << 6);
+	mo->velx = pr_skullpop.Random2() << 9;
+	mo->vely = pr_skullpop.Random2() << 9;
+	mo->velz = 2*FRACUNIT + (pr_skullpop() << 6);
 	// Attach player mobj to bloody skull
 	player = self->player;
 	self->player = NULL;
@@ -1803,26 +1760,26 @@ void P_SideThrust (player_t *player, angle_t angle, fixed_t move)
 {
 	angle = (angle - ANGLE_90) >> ANGLETOFINESHIFT;
 
-	player->mo->vel.x += FixedMul (move, finecosine[angle]);
-	player->mo->vel.y += FixedMul (move, finesine[angle]);
+	player->mo->velx += FixedMul (move, finecosine[angle]);
+	player->mo->vely += FixedMul (move, finesine[angle]);
 }
 
 void P_ForwardThrust (player_t *player, angle_t angle, fixed_t move)
 {
 	angle >>= ANGLETOFINESHIFT;
 
-	if ((/*player->mo->waterlevel ||*/ (player->mo->flags & MF_NOGRAVITY))
+	if ((player->mo->waterlevel || (player->mo->flags & MF_NOGRAVITY))
 		&& player->mo->pitch != 0)
 	{
 		angle_t pitch = (angle_t)player->mo->pitch >> ANGLETOFINESHIFT;
 		fixed_t zpush = FixedMul (move, finesine[pitch]);
-		if (/*player->mo->waterlevel && player->mo->waterlevel < 2 &&*/ zpush < 0)
+		if (player->mo->waterlevel && player->mo->waterlevel < 2 && zpush < 0)
 			zpush = 0;
-		player->mo->vel.z -= zpush;
+		player->mo->velz -= zpush;
 		move = FixedMul (move, finecosine[pitch]);
 	}
-	player->mo->vel.x += FixedMul (move, finecosine[angle]);
-	player->mo->vel.y += FixedMul (move, finesine[angle]);
+	player->mo->velx += FixedMul (move, finecosine[angle]);
+	player->mo->vely += FixedMul (move, finesine[angle]);
 }
 
 //
@@ -1848,8 +1805,8 @@ void P_Bob (player_t *player, angle_t angle, fixed_t move, bool forward)
 
 	angle >>= ANGLETOFINESHIFT;
 
-	player->vel.x += FixedMul(move, finecosine[angle]);
-	player->vel.y += FixedMul(move, finesine[angle]);
+	player->velx += FixedMul(move, finecosine[angle]);
+	player->vely += FixedMul(move, finesine[angle]);
 }
 
 /*
@@ -1888,7 +1845,7 @@ void P_CalcHeight (player_t *player)
 	}
 	else
 	{
-		player->bob = DMulScale16 (player->vel.x, player->vel.x, player->vel.y, player->vel.y);
+		player->bob = DMulScale16 (player->velx, player->velx, player->vely, player->vely);
 		if (player->bob == 0)
 		{
 			still = true;
@@ -1985,7 +1942,7 @@ void P_CalcHeight (player_t *player)
 =
 =================
 */
-CUSTOM_CVAR (Float, sv_aircontrol, 0.0f, CVAR_SERVERINFO|CVAR_NOSAVE) //0.00390625f
+CUSTOM_CVAR (Float, sv_aircontrol, 0.00390625f, CVAR_SERVERINFO|CVAR_NOSAVE)
 {
 	level.aircontrol = (fixed_t)(self * 65536.f);
 	G_AirControlChanged ();
@@ -2025,20 +1982,11 @@ void P_MovePlayer (player_t *player)
 
 		movefactor = P_GetMoveFactor (mo, &friction);
 		bobfactor = friction < ORIG_FRICTION ? movefactor : ORIG_FRICTION_FACTOR;
-		if (!player->onground && !(player->mo->flags & MF_NOGRAVITY))
+		if (!player->onground && !(player->mo->flags & MF_NOGRAVITY) && !player->mo->waterlevel)
 		{
-			if (player->mo->waterlevel < 2)	//[XANE]Added separate water checks since swimming is removed.
-			{
-				// [RH] allow very limited movement if not on ground.
-				movefactor = FixedMul(movefactor, level.aircontrol);
-				bobfactor = FixedMul(bobfactor, level.aircontrol);
-			}
-			else //If the player's in the water...
-			{
-				movefactor = 860;
-				bobfactor = 860;
-			}
-			
+			// [RH] allow very limited movement if not on ground.
+			movefactor = FixedMul (movefactor, level.aircontrol);
+			bobfactor = FixedMul (bobfactor, level.aircontrol);
 		}
 
 		fm = cmd->ucmd.forwardmove;
@@ -2067,6 +2015,20 @@ void P_MovePlayer (player_t *player)
 		{
 			P_Bob (player, mo->angle-ANG90, (cmd->ucmd.sidemove * bobfactor) >> 8, false);
 			P_SideThrust (player, mo->angle, sidemove);
+		}
+
+		if (debugfile)
+		{
+			fprintf (debugfile, "move player for pl %d%c: (%d,%d,%d) (%d,%d) %d %d w%d [", int(player-players),
+				player->cheats&CF_PREDICTING?'p':' ',
+				player->mo->X(), player->mo->Y(), player->mo->Z(),forwardmove, sidemove, movefactor, friction, player->mo->waterlevel);
+			msecnode_t *n = player->mo->touching_sectorlist;
+			while (n != NULL)
+			{
+				fprintf (debugfile, "%td ", n->m_sector-sectors);
+				n = n->m_tnext;
+			}
+			fprintf (debugfile, "]\n");
 		}
 
 		if (!(player->cheats & CF_PREDICTING) && (forwardmove|sidemove))
@@ -2103,7 +2065,7 @@ void P_FallingDamage (AActor *actor)
 	if (actor->floorsector->Flags & SECF_NOFALLINGDAMAGE)
 		return;
 
-	vel = abs(actor->vel.z);
+	vel = abs(actor->velz);
 
 	// Since Hexen falling damage is stronger than ZDoom's, it takes
 	// precedence. ZDoom falling damage may not be as strong, but it
@@ -2124,7 +2086,7 @@ void P_FallingDamage (AActor *actor)
 		{
 			vel = FixedMul (vel, 16*FRACUNIT/23);
 			damage = ((FixedMul (vel, vel) / 10) >> FRACBITS) - 24;
-			if (actor->vel.z > -39*FRACUNIT && damage > actor->health
+			if (actor->velz > -39*FRACUNIT && damage > actor->health
 				&& actor->health != 1)
 			{ // No-death threshold
 				damage = actor->health-1;
@@ -2174,7 +2136,7 @@ void P_FallingDamage (AActor *actor)
 			damage = 999;
 		}
 	}
-	if (actor->player && actor->waterlevel < 2) P_DamageMobj(actor, NULL, NULL, damage, NAME_Falling);
+	P_DamageMobj (actor, NULL, NULL, damage, NAME_Falling);
 }
 
 //==========================================================================
@@ -2516,16 +2478,12 @@ void P_PlayerThink (player_t *player)
 		P_DeathThink (player);
 		return;
 	}
-
-//	if (player->onground) internal_onwater = false;
-
 	if (player->jumpTics != 0)
 	{
 		player->jumpTics--;
 		if (player->onground && player->jumpTics < -18)
 		{
 			player->jumpTics = 0;
-			//internal_onwater = false;
 		}
 	}
 	if (player->morphTics && !(player->cheats & CF_PREDICTING))
@@ -2615,31 +2573,26 @@ void P_PlayerThink (player_t *player)
 				// Jumping while crouching will force an un-crouch but not jump
 				player->crouching = 1;
 			}
-			/*else if (player->mo->waterlevel >= 2)
+			else if (player->mo->waterlevel >= 2)
 			{
-				player->mo->vel.z = FixedMul(4*FRACUNIT, player->mo->Speed);
-			}*/
+				player->mo->velz = FixedMul(4*FRACUNIT, player->mo->Speed);
+			}
 			else if (player->mo->flags & MF_NOGRAVITY)
 			{
-				player->mo->vel.z = 3*FRACUNIT;
+				player->mo->velz = 3*FRACUNIT;
 			}
-
-			else if ((level.IsJumpingAllowed() && player->onground) && /*|| (internal_onwater && (abs(player->mo->vel.x) > 13 * FRACUNIT || abs(player->mo->vel.y) > 13 * FRACUNIT))))*/ player->jumpTics == 0 && player->mo->vel.z <= 0 * FRACUNIT)
+			else if (level.IsJumpingAllowed() && player->onground && player->jumpTics == 0)
 			{
 				fixed_t jumpvelz = player->mo->JumpZ * 35 / TICRATE;
 
-				/*if (internal_onwater)	//[XANE]OLD CODE for jumping on water!
-				{
-					player->mo->vel.x = FixedDiv(player->mo->vel.x, (1.2 * FRACUNIT));
-					player->mo->vel.y = FixedDiv(player->mo->vel.y, (1.2 * FRACUNIT));
-				}*/
+				// [BC] If the player has the high jump power, double his jump velocity.
+				if ( player->cheats & CF_HIGHJUMP )	jumpvelz *= 2;
 
-				player->mo->vel.z += jumpvelz;
-				player->mo->flags2 &= ~MF2_ONMOBJ;	
+				player->mo->velz += jumpvelz;
+				player->mo->flags2 &= ~MF2_ONMOBJ;
 				player->jumpTics = -1;
 				if (!(player->cheats & CF_PREDICTING))
-					if(snd_style == false) S_Sound(player->mo, CHAN_VOICE, "*jump", 1, ATTN_NORM);
-					else S_Sound(player->mo, CHAN_VOICE, "misc/jump", 0.5, ATTN_NORM);
+					S_Sound(player->mo, CHAN_BODY, "*jump", 1, ATTN_NORM);
 			}
 		}
 
@@ -2659,14 +2612,14 @@ void P_PlayerThink (player_t *player)
 			{
 				cmd->ucmd.upmove = ksgn (cmd->ucmd.upmove) * 0x300;
 			}
-			if ((player->mo->flags2 & MF2_FLY) || (player->cheats & CF_NOCLIP2))
+			if (player->mo->waterlevel >= 2 || (player->mo->flags2 & MF2_FLY) || (player->cheats & CF_NOCLIP2))
 			{
-				player->mo->vel.z = FixedMul(player->mo->Speed, cmd->ucmd.upmove << 9);
+				player->mo->velz = FixedMul(player->mo->Speed, cmd->ucmd.upmove << 9);
 				if (player->mo->waterlevel < 2 && !(player->mo->flags & MF_NOGRAVITY))
 				{
 					player->mo->flags2 |= MF2_FLY;
 					player->mo->flags |= MF_NOGRAVITY;
-					if ((player->mo->vel.z <= -39 * FRACUNIT) && !(player->cheats & CF_PREDICTING))
+					if ((player->mo->velz <= -39 * FRACUNIT) && !(player->cheats & CF_PREDICTING))
 					{ // Stop falling scream
 						S_StopSound (player->mo, CHAN_VOICE);
 					}
@@ -2696,8 +2649,8 @@ void P_PlayerThink (player_t *player)
 			// Player must be touching the floor
 			P_PlayerOnSpecialFlat(player, P_GetThingFloorType(player->mo));
 		}
-		if (player->mo->vel.z <= -player->mo->FallingScreamMinSpeed &&
-			player->mo->vel.z >= -player->mo->FallingScreamMaxSpeed && !player->morphTics &&
+		if (player->mo->velz <= -player->mo->FallingScreamMinSpeed &&
+			player->mo->velz >= -player->mo->FallingScreamMaxSpeed && !player->morphTics &&
 			player->mo->waterlevel == 0)
 		{
 			int id = S_FindSkinnedSound (player->mo, "*falling");
@@ -2761,12 +2714,19 @@ void P_PlayerThink (player_t *player)
 			P_PoisonDamage (player, player->poisoner, 1, true);
 		}
 
-		// Apply timer.
-
-		/*if ((level.time % TICRATE / 2) == 0 && internal_onwater)
+		// Apply degeneration.
+		if (dmflags2 & DF2_YES_DEGENERATION)
 		{
-			internal_onwater = false;
-		}*/
+			if ((level.time % TICRATE) == 0 && player->health > deh.MaxHealth)
+			{
+				if (player->health - 5 < deh.MaxHealth)
+					player->health = deh.MaxHealth;
+				else
+					player->health--;
+
+				player->mo->health = player->health;
+			}
+		}
 
 		// Handle air supply
 		//if (level.airsupply > 0)
@@ -2793,13 +2753,13 @@ void P_PredictionLerpReset()
 
 bool P_LerpCalculate(PredictPos from, PredictPos to, PredictPos &result, float scale)
 {
-	DVector3 vecFrom(FIXED2DBL(from.x), FIXED2DBL(from.y), FIXED2DBL(from.z));
-	DVector3 vecTo(FIXED2DBL(to.x), FIXED2DBL(to.y), FIXED2DBL(to.z));
-	DVector3 vecResult;
+	TVector3<double> vecFrom(FIXED2DBL(from.x), FIXED2DBL(from.y), FIXED2DBL(from.z));
+	TVector3<double> vecTo(FIXED2DBL(to.x), FIXED2DBL(to.y), FIXED2DBL(to.z));
+	TVector3<double> vecResult;
 	vecResult = vecTo - vecFrom;
 	vecResult *= scale;
 	vecResult = vecResult + vecFrom;
-	DVector3 delta = vecResult - vecTo;
+	TVector3<double> delta = vecResult - vecTo;
 
 	result.x = FLOAT2FIXED(vecResult.X);
 	result.y = FLOAT2FIXED(vecResult.Y);
@@ -2915,7 +2875,7 @@ void P_PredictPlayer (player_t *player)
 			// Aditional Debug information
 			if (developer && DoLerp)
 			{
-				DPrintf("LERP! Ltic (%d) && Ptic (%d) | Lx (%d) && Px (%d) | Ly (%d) && Py (%d)\n",
+				DPrintf("Lerp! Ltic (%d) && Ptic (%d) | Lx (%d) && Px (%d) | Ly (%d) && Py (%d)\n",
 					PredictionLast.gametic, i,
 					(PredictionLast.x >> 16), (player->mo->X() >> 16),
 					(PredictionLast.y >> 16), (player->mo->Y() >> 16));
@@ -3112,8 +3072,8 @@ void player_t::Serialize (FArchive &arc)
 		<< viewheight
 		<< deltaviewheight
 		<< bob
-		<< vel.x
-		<< vel.y
+		<< velx
+		<< vely
 		<< centering
 		<< health
 		<< inventorytics;

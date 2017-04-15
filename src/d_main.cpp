@@ -185,7 +185,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 }
 
 CVAR (Float, timelimit, 0.f, CVAR_SERVERINFO);
-CVAR (Int, wipetype, 0, CVAR_ARCHIVE);
+CVAR (Int, wipetype, 1, CVAR_ARCHIVE);
 CVAR (Int, snd_drawoutput, 0, 0);
 CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
@@ -1048,7 +1048,7 @@ void D_PageTicker (void)
 //
 //==========================================================================
 
-void D_PageDrawer (void)	//[XANE]This is what draws the title screen (TITLEPIC)!
+void D_PageDrawer (void)
 {
 	if (Page != NULL)
 	{
@@ -1057,14 +1057,14 @@ void D_PageDrawer (void)	//[XANE]This is what draws the title screen (TITLEPIC)!
 			DTA_Masked, false,
 			DTA_BilinearFilter, true,
 			TAG_DONE);
-		screen->FillBorder (Page/*NULL*/);
+		screen->FillBorder (NULL);
 	}
 	else
 	{
-		screen->Clear (0, 0, SCREENWIDTH, SCREENHEIGHT, BASECOLOR, 0);
+		screen->Clear (0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
 		if (!PageBlank)
 		{
-			screen->DrawText (SmallFont, CR_RED, 0, 0, "Xane, are you looking for that stupid pillarboxing code?", TAG_DONE);
+			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Page graphic goes here", TAG_DONE);
 		}
 	}
 	if (Advisory != NULL)

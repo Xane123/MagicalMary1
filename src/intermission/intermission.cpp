@@ -191,7 +191,7 @@ void DIntermissionScreen::Drawer ()
 	}
 	else
 	{
-		screen->Clear (0, 0, SCREENWIDTH, SCREENHEIGHT, BASECOLOR, 0);
+		screen->Clear (0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
 	}
 	for (unsigned i=0; i < mOverlays.Size(); i++)
 	{

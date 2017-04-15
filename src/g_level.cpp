@@ -919,8 +919,8 @@ void G_DoLoadLevel (int position, bool autosave)
 	Printf (
 			"\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
 			"\36\36\36\36\36\36\36\36\36\36\36\36\37\n\n"
-			TEXTCOLOR_BOLD "%s (%s)\n\n",
-		level.LevelName.GetChars(), mapname.GetChars());
+			TEXTCOLOR_BOLD "%s - %s\n\n",
+			mapname.GetChars(), level.LevelName.GetChars());
 
 	if (wipegamestate == GS_LEVEL)
 		wipegamestate = GS_FORCEWIPE;
@@ -1244,9 +1244,9 @@ void G_FinishTravel ()
 				pawn->pitch = pawndup->pitch;
 			}
 			pawn->SetXYZ(pawndup->X(), pawndup->Y(), pawndup->Z());
-			pawn->vel.x = pawndup->vel.x;
-			pawn->vel.y = pawndup->vel.y;
-			pawn->vel.z = pawndup->vel.z;
+			pawn->velx = pawndup->velx;
+			pawn->vely = pawndup->vely;
+			pawn->velz = pawndup->velz;
 			pawn->Sector = pawndup->Sector;
 			pawn->floorz = pawndup->floorz;
 			pawn->ceilingz = pawndup->ceilingz;
@@ -1478,12 +1478,14 @@ void G_AirControlChanged ()
 //
 //
 //==========================================================================
+void gl_SerializeGlobals(FArchive &arc);
 
 void G_SerializeLevel (FArchive &arc, bool hubLoad)
 {
 	int i = level.totaltime;
 	
 	Renderer->StartSerialize(arc);
+	gl_SerializeGlobals(arc);
 
 	arc << level.flags
 		<< level.flags2

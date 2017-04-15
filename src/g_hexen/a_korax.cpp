@@ -29,8 +29,6 @@
 #include "g_level.h"
 */
 
-EXTERN_CVAR(Bool, snd_style)
-
 const int KORAX_SPIRIT_LIFETIME = 5*TICRATE/5;	// 5 seconds
 const int KORAX_COMMAND_HEIGHT	= 120;
 const int KORAX_COMMAND_OFFSET	= 27;
@@ -174,20 +172,6 @@ DEFINE_ACTION_FUNCTION(AActor, A_KoraxBonePop)
 	}
 
 	P_StartScript (self, NULL, 255, NULL, NULL, 0, 0);		// Death script
-	return 0;
-}
-
-DEFINE_ACTION_FUNCTION(AActor, A_CoinSound)	//[XANE]Play different sounds depending on the user's settings/water (SM64 reference)
-{
-	PARAM_ACTION_PROLOGUE;
-
-	if (snd_style == false)
-	{
-		if (self->waterlevel <= 1) S_Sound(self, CHAN_ITEM, "misc/coin_normal", 1, ATTN_NONE);
-		if (self->waterlevel > 1) S_Sound(self, CHAN_ITEM, "misc/coin_water", 0.65, ATTN_NONE);
-	}
-	else S_Sound(self, CHAN_ITEM, "misc/coin_8bit", 0.35, ATTN_NONE);
-
 	return 0;
 }
 
@@ -403,8 +387,8 @@ void A_KSpiritSeeker (AActor *actor, angle_t thresh, angle_t turnMax)
 		actor->angle -= delta;
 	}
 	angle = actor->angle>>ANGLETOFINESHIFT;
-	actor->vel.x = FixedMul (actor->Speed, finecosine[angle]);
-	actor->vel.y = FixedMul (actor->Speed, finesine[angle]);
+	actor->velx = FixedMul (actor->Speed, finecosine[angle]);
+	actor->vely = FixedMul (actor->Speed, finesine[angle]);
 
 	if (!(level.time&15) 
 		|| actor->Z() > target->Z()+(target->GetDefault()->height)
@@ -428,7 +412,7 @@ void A_KSpiritSeeker (AActor *actor, angle_t thresh, angle_t turnMax)
 		{
 			dist = 1;
 		}
-		actor->vel.z = deltaZ/dist;
+		actor->velz = deltaZ/dist;
 	}
 	return;
 }
@@ -536,13 +520,13 @@ AActor *P_SpawnKoraxMissile (fixed_t x, fixed_t y, fixed_t z,
 	}
 	th->angle = an;
 	an >>= ANGLETOFINESHIFT;
-	th->vel.x = FixedMul (th->Speed, finecosine[an]);
-	th->vel.y = FixedMul (th->Speed, finesine[an]);
+	th->velx = FixedMul (th->Speed, finecosine[an]);
+	th->vely = FixedMul (th->Speed, finesine[an]);
 	dist = dest->AproxDistance (th) / th->Speed;
 	if (dist < 1)
 	{
 		dist = 1;
 	}
-	th->vel.z = (dest->Z()-z+(30*FRACUNIT))/dist;
+	th->velz = (dest->Z()-z+(30*FRACUNIT))/dist;
 	return (P_CheckMissileSpawn(th, source->radius) ? th : NULL);
 }

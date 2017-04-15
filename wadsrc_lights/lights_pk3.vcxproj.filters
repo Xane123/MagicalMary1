@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Git\Failure5\wadsrc_lights\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\a2cab737ab28ce364d06caef61927dac\lights.pk3.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\cc301b3dd71a4187465b995657b300ce\lights_pk3.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Git\Failure5\wadsrc_lights\CMakeFiles\lights_pk3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{ADA0F2DC-BA31-300E-B1F2-A8E9247EB1F6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

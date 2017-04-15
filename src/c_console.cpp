@@ -158,8 +158,8 @@ static struct History *HistHead = NULL, *HistTail = NULL, *HistPos = NULL;
 static int HistSize;
 
 CVAR (Float, con_notifytime, 3.f, CVAR_ARCHIVE)
-CVAR (Bool, con_centernotify, true, CVAR_ARCHIVE)
-CUSTOM_CVAR (Int, con_scaletext, 2, CVAR_ARCHIVE)		// Scale notify text at high resolutions?
+CVAR (Bool, con_centernotify, false, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, con_scaletext, 0, CVAR_ARCHIVE)		// Scale notify text at high resolutions?
 {
 	if (self < 0) self = 0;
 	if (self > 2) self = 2;
@@ -348,7 +348,7 @@ CCMD (atexit)
 {
 	if (argv.argc() == 1)
 	{
-		Printf ("Commands set to run upon exit:\n");
+		Printf ("Registered atexit commands:\n");
 		GameAtExit *record = ExitCmdList;
 		while (record != NULL)
 		{
@@ -635,8 +635,8 @@ void C_AdjustBottom ()
 {
 	if (gamestate == GS_FULLCONSOLE || gamestate == GS_STARTUP)
 		ConBottom = SCREENHEIGHT;
-	else if (ConBottom > SCREENHEIGHT / 3 || ConsoleState == c_down)
-		ConBottom = SCREENHEIGHT / 3;
+	else if (ConBottom > SCREENHEIGHT / 2 || ConsoleState == c_down)
+		ConBottom = SCREENHEIGHT / 2;
 }
 
 void C_NewModeAdjust ()
@@ -665,9 +665,9 @@ void C_Ticker ()
 		if (ConsoleState == c_falling)
 		{
 			ConBottom += (consoletic - lasttic) * (SCREENHEIGHT * 2 / 25);
-			if (ConBottom >= SCREENHEIGHT / 3)
+			if (ConBottom >= SCREENHEIGHT / 2)
 			{
-				ConBottom = SCREENHEIGHT / 3;
+				ConBottom = SCREENHEIGHT / 2;
 				ConsoleState = c_down;
 			}
 		}
@@ -870,7 +870,7 @@ void C_DrawConsole (bool hw2d)
 			TAG_DONE);
 		if (conline && visheight < screen->GetHeight())
 		{
-			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 70, 0);	//Fixed pink console line.
+			screen->Clear(0, visheight, screen->GetWidth(), visheight + 1, 70, 0);	//Fixed pink console line.
 		}
 
 		if (ConBottom >= 12)
@@ -1535,13 +1535,13 @@ CCMD (echo)
 
 CVAR (Float, con_midtime, 3.f, CVAR_ARCHIVE)
 
-static const char bar1[] = TEXTCOLOR_LIGHTBLUE "\n\35\36\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37"
-						  "\37\37\37\37\37\37\37\37\37\37\37\37\37" TEXTCOLOR_TAN "\n";
-static const char bar2[] = TEXTCOLOR_LIGHTBLUE "\n\35\36\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37"
-						  "\37\37\37\37\37\37\37\37\37\37\37\37\37" TEXTCOLOR_GREEN "\n";
-static const char bar3[] = TEXTCOLOR_LIGHTBLUE "\n\35\36\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37\37"
-						  "\37\37\37\37\37\37\37\37\37\37\37\37\37" TEXTCOLOR_NORMAL "\n";
-static const char logbar[] = "\n<===============================>\n";
+static const char bar1[] = TEXTCOLOR_RED "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
+						  "\36\36\36\36\36\36\36\36\36\36\36\36\37" TEXTCOLOR_TAN "\n";
+static const char bar2[] = TEXTCOLOR_RED "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
+						  "\36\36\36\36\36\36\36\36\36\36\36\36\37" TEXTCOLOR_GREEN "\n";
+static const char bar3[] = TEXTCOLOR_RED "\n\35\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36\36"
+						  "\36\36\36\36\36\36\36\36\36\36\36\36\37" TEXTCOLOR_NORMAL "\n";
+static const char logbar[] = "\n<------------------------------->\n";
 
 void C_MidPrint (FFont *font, const char *msg)
 {
@@ -1811,7 +1811,7 @@ static bool C_TabCompleteList ()
 	{
 		size_t x = 0;
 		maxwidth += 3;
-		Printf (TEXTCOLOR_YELLOW "CVARs/CCMDs that start with '%s':\n", CmdLine+2);
+		Printf (TEXTCOLOR_BLUE "Completions for %s:\n", CmdLine+2);
 		for (i = TabPos; nummatches > 0; ++i, --nummatches)
 		{
 			// [Dusk] Print console commands blue, CVars green, aliases red.

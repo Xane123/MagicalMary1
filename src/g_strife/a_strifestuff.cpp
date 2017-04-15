@@ -611,9 +611,9 @@ DEFINE_ACTION_FUNCTION(AActor, A_TossGib)
 	an = pr_gibtosser() << 24;
 	gib->angle = an;
 	speed = pr_gibtosser() & 15;
-	gib->vel.x = speed * finecosine[an >> ANGLETOFINESHIFT];
-	gib->vel.y = speed * finesine[an >> ANGLETOFINESHIFT];
-	gib->vel.z = (pr_gibtosser() & 15) << FRACBITS;
+	gib->velx = speed * finecosine[an >> ANGLETOFINESHIFT];
+	gib->vely = speed * finesine[an >> ANGLETOFINESHIFT];
+	gib->velz = (pr_gibtosser() & 15) << FRACBITS;
 	return 0;
 }
 
@@ -671,25 +671,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_CheckTerrain)
 			fixed_t speed = (anglespeed % 10) << (FRACBITS - 4);
 			angle_t finean = (anglespeed / 10) << (32-3);
 			finean >>= ANGLETOFINESHIFT;
-			self->vel.x += FixedMul (speed, finecosine[finean]);
-			self->vel.y += FixedMul (speed, finesine[finean]);
-		}
-	}
-	return 0;
-}
-
-DEFINE_ACTION_FUNCTION(AActor, A_CheckPit)
-{
-	PARAM_ACTION_PROLOGUE;
-
-	sector_t *sec = self->Sector;
-
-	if (self->Z() == sec->floorplane.ZatPoint(self) && sec->PortalBlocksMovement(sector_t::floor))
-	{
-		if (sec->special == Damage_InstantDeath)
-		{
-			P_DamageMobj(self, NULL, NULL, 999, NAME_InstantDeath);
-			self->SetState(self->FindState("Score"));
+			self->velx += FixedMul (speed, finecosine[finean]);
+			self->vely += FixedMul (speed, finesine[finean]);
 		}
 	}
 	return 0;
@@ -739,7 +722,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_DropFire)
 	PARAM_ACTION_PROLOGUE;
 
 	AActor *drop = Spawn("FireDroplet", self->PosPlusZ(24*FRACUNIT), ALLOW_REPLACE);
-	drop->vel.z = -FRACUNIT;
+	drop->velz = -FRACUNIT;
 	P_RadiusAttack (self, self, 64, 64, NAME_Fire, 0);
 	return 0;
 }

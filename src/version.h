@@ -41,13 +41,14 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.6-alpha"
-#define VERSIONNUM "16"	//Prefix with "1" for final versions!
+#define VERSIONSTR "v1.7-alpha"
 
 // The version as seen in the Windows resource
-#define RC_FILEVERSION 1,6,9999,0
-#define RC_PRODUCTVERSION 1,6,9999,0
+#define RC_FILEVERSION 2,1,9999,0
+#define RC_PRODUCTVERSION 2,1,9999,0
 #define RC_PRODUCTVERSION2 VERSIONSTR
+
+#define BASECOLOR 84
 
 // Version identifier for network games.
 // Bump it every time you do a release unless you're certain you
@@ -73,28 +74,27 @@ const char *GetVersionString();
 // SAVESIG should match SAVEVER.
 
 // MINSAVEVER is the minimum level snapshot version that can be loaded.
-#define MINSAVEVER	533//3100
-
-#define BASECOLOR 77	//Used for the save game background and background while loading (planned).
+#define MINSAVEVER	3100
 
 // Use 4500 as the base git save version, since it's higher than the
 // SVN revision ever got.
-#define SAVEVER 4533	//The game considers this "533" at the momet.
+#define SAVEVER 4533
 
 #define SAVEVERSTRINGIFY2(x) #x
 #define SAVEVERSTRINGIFY(x) SAVEVERSTRINGIFY2(x)
 #define SAVESIG "ZDOOMSAVE" SAVEVERSTRINGIFY(SAVEVER)
 
+#define DYNLIGHT
+
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "Mary Magical Adventure"
-#define BASEWAD "data.pk3"	//Name of PK3 file that the EXE uses.
+#define GAMESIG "Mary's Magical Adventure"
+#define BASEWAD "data_3d.pk3"
 
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "Mary's Magical Adventure"
-#define GAMENAMELOWERCASE "Settings"	//Settings INI file's name.
-
-#define FORUM_URL "xanem1@gmail.com"
-#define BUGS_FORUM_URL	"http://worldofkirbycraft.miraheze.org (don't expect fixes for random access violations or multiplayer crashing!)"
+#define GAMENAMELOWERCASE "Settings"
+#define FORUM_URL "Xane doesn't have a forum and won't probably help you. He doesn't know C++ enough to fix this crash."
+#define BUGS_FORUM_URL	"xanem1@gmail.com"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME

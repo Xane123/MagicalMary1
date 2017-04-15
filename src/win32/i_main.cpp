@@ -947,7 +947,7 @@ void DoMain (HINSTANCE hInstance)
 		
 		/* create window */
 		char caption[100];
-		mysnprintf(caption, countof(caption), " %s " X64, GetVersionString());
+		mysnprintf(caption, countof(caption), GAMENAME VERSIONSTR X64);
 		Window = CreateWindowEx(
 				WS_EX_APPWINDOW,
 				(LPCTSTR)WinClassName,
@@ -960,7 +960,7 @@ void DoMain (HINSTANCE hInstance)
 				NULL);
 
 		if (!Window)
-			I_FatalError (GAMESIG "'s window couldn't be created.");
+			I_FatalError ("Could not open window");
 
 		if (kernel != NULL)
 		{

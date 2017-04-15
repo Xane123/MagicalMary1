@@ -1,34 +1,34 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\blocksort.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\blocksort.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\bzlib.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\bzlib.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\compress.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\compress.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\crctable.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\crctable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\decompress.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\decompress.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\huffman.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\huffman.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\MaryMagicalAdventure\bzip2\randtable.c">
+    <ClCompile Include="D:\Git\Failure5\bzip2\randtable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\bzip2\CMakeLists.txt" />
+    <CustomBuild Include="D:\Git\Failure5\bzip2\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{D4487385-BD72-39A8-996C-F48DF028A1AA}</UniqueIdentifier>
+      <UniqueIdentifier>{E707ACC4-5D8A-3603-909E-867CE3067140}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

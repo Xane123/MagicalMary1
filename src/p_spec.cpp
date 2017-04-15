@@ -609,7 +609,7 @@ void P_GiveSecret(AActor *actor, bool printmessage, bool playsound, int sectornu
 					C_MidPrint(SmallFont, s);
 				}
 			}
-			if (playsound) S_Sound (CHAN_AUTO | CHAN_UI, "misc/secret", 1, ATTN_NONE);	//Play secret found sound.
+			if (playsound) S_Sound (CHAN_AUTO | CHAN_UI, "misc/secret", 1, ATTN_NORM);
 		}
 	}
 	level.found_secrets++;
@@ -1022,6 +1022,23 @@ static void CopyPortal(int sectortag, int plane, ASkyViewpoint *origin, fixed_t 
 				}
 			}
 		}
+		if (tolines && lines[j].special == Sector_SetPortal &&
+			lines[j].args[1] == 5 &&
+			lines[j].args[3] == sectortag)
+		{
+			if (lines[j].args[0] == 0)
+			{
+				lines[j].skybox = origin;
+			}
+			else
+			{
+				FLineIdIterator itr(lines[j].args[0]);
+				while ((s = itr.Next()) >= 0)
+				{
+					lines[s].skybox = origin;
+				}
+			}
+		}
 	}
 }
 
@@ -1201,7 +1218,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		break;
 			
 	case dDamage_End:
-		P_SetupSectorDamage(sector, 0, 170, 256, NAME_None, SECF_ENDGODMODE|SECF_ENDLEVEL);
+		P_SetupSectorDamage(sector, 20, 32, 256, NAME_None, SECF_ENDGODMODE|SECF_ENDLEVEL);
 		break;
 
 	case dLight_StrobeSlowSync:
@@ -1222,10 +1239,8 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		sector->Flags |= SECF_FRICTION;
 		break;
 
-	case dFriction_None:	//80:No Friction (automated section)
-		sector->friction = FRICTION_NONE;
-		sector->movefactor = 0x000;
-		sector->Flags |= SECF_FRICTION;
+	case dDamage_SuperHellslime:
+		P_SetupSectorDamage(sector, 20, 32, 5, NAME_Slime, 0);
 		break;
 
 	case dLight_FireFlicker:
@@ -1266,7 +1281,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 
 	case Damage_InstantDeath:
 		// Strife's instant death sector
-		P_SetupSectorDamage(sector, PIT_DAMAGE, 1, 256, NAME_InstantDeath, 0);
+		P_SetupSectorDamage(sector, TELEFRAG_DAMAGE, 1, 256, NAME_InstantDeath, 0);
 		break;
 
 	case sDamage_SuperHellslime:
@@ -1337,6 +1352,7 @@ void P_SpawnSpecials (void)
 
 	//	Init special SECTORs.
 	sector = sectors;
+
 	for (i = 0; i < numsectors; i++, sector++)
 	{
 		if (sector->special == 0)
@@ -1455,6 +1471,15 @@ void P_SpawnSpecials (void)
 			if ((lines[i].args[1] == 0 || lines[i].args[1] == 6) && lines[i].args[3] == 0)
 			{
 				P_SpawnPortal(&lines[i], lines[i].args[0], lines[i].args[2], lines[i].args[4], lines[i].args[1]);
+			}
+			else if (lines[i].args[1] == 3 || lines[i].args[1] == 4)
+			{
+				line_t *line = &lines[i];
+				ASkyViewpoint *origin = Spawn<ASkyViewpoint>(0, 0, 0, NO_REPLACE);
+				origin->Sector = line->frontsector;
+				origin->special1 = line->args[1] == 3? SKYBOX_PLANE:SKYBOX_HORIZON;
+
+				CopyPortal(line->args[0], line->args[2], origin, 0, true);
 			}
 			break;
 
@@ -2285,8 +2310,8 @@ void DPusher::Tick ()
 					if (m_Source->GetClass()->TypeName == NAME_PointPusher)
 						pushangle += ANG180;    // away
 					pushangle >>= ANGLETOFINESHIFT;
-					thing->vel.x += FixedMul (speed, finecosine[pushangle]);
-					thing->vel.y += FixedMul (speed, finesine[pushangle]);
+					thing->velx += FixedMul (speed, finecosine[pushangle]);
+					thing->vely += FixedMul (speed, finesine[pushangle]);
 				}
 			}
 		}
@@ -2360,8 +2385,8 @@ void DPusher::Tick ()
 				yspeed = m_Ymag;
 			}
 		}
-		thing->vel.x += xspeed<<(FRACBITS-PUSH_FACTOR);
-		thing->vel.y += yspeed<<(FRACBITS-PUSH_FACTOR);
+		thing->velx += xspeed<<(FRACBITS-PUSH_FACTOR);
+		thing->vely += yspeed<<(FRACBITS-PUSH_FACTOR);
 	}
 }
 

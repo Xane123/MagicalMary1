@@ -1,0 +1,4 @@
+﻿  Building Custom Rule D:/Git/Failure5/tools/fixrtext/CMakeLists.txt
+  CMake does not need to re-run because D:/Git/Failure5/tools/fixrtext/CMakeFiles/generate.stamp is up-to-date.
+  fixrtext.c
+  fixrtext.vcxproj -> D:\Git\Failure5\tools\fixrtext\MinSizeRel\fixrtext.exe

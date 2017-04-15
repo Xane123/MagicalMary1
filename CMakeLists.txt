@@ -1,5 +1,5 @@
 cmake_minimum_required( VERSION 2.8.7 )
-project(ZDoom)
+project(GZDoom)
 
 if( COMMAND cmake_policy )
 	if( POLICY CMP0011 )
@@ -44,11 +44,11 @@ function( add_pk3 PK3_NAME PK3_DIR )
 			DEPENDS zipdir )
 	endif()
 
-	# Touch the zipdir executable here so that the pk3s are forced to
-	# rebuild each time since their dependecy has "changed."
-	add_custom_target( ${PK3_TARGET} ALL
-		COMMAND ${CMAKE_COMMAND} -E touch $<TARGET_FILE:zipdir>
-		DEPENDS ${ZDOOM_OUTPUT_DIR}/${PK3_NAME} )
+		# Touch the zipdir executable here so that the pk3s are forced to
+		# rebuild each time since their dependecy has "changed."
+		add_custom_target( ${PK3_TARGET} ALL
+			COMMAND ${CMAKE_COMMAND} -E touch $<TARGET_FILE:zipdir>
+			DEPENDS ${ZDOOM_OUTPUT_DIR}/${PK3_NAME} )
 endfunction()
 
 # Macro for building libraries without debugging information
@@ -68,7 +68,7 @@ IF( NOT CMAKE_BUILD_TYPE )
 ENDIF()
 
 set( ZDOOM_OUTPUT_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Directory where zdoom.pk3 and the executable will be created." )
-set( ZDOOM_EXE_NAME "zdoom" CACHE FILEPATH "Name of the executable to create." )
+set( ZDOOM_EXE_NAME "gzdoom" CACHE FILEPATH "Name of the executable to create" )
 if( MSVC )
 	# Allow the user to use ZDOOM_OUTPUT_DIR as a single release point.
 	# Use zdoom, zdoomd, zdoom64, and zdoomd64 for the binary names
@@ -167,11 +167,6 @@ else()
 	set( ALL_C_FLAGS "" )
 	set( REL_C_FLAGS "" )
 	set( DEB_C_FLAGS "" )
-
-	# If we're compiling with a custom GCC on the Mac (which we know since g++-4.2 doesn't support C++11) statically link libgcc.
-	if( APPLE AND "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
-		set( ALL_C_FLAGS "-static-libgcc" )
-	endif()
 endif()
 
 set( CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${REL_LINKER_FLAGS}" )
@@ -198,7 +193,7 @@ option(FORCE_INTERNAL_GME "Use internal gme" ON)
 # Fast math flags, required by some subprojects
 set( ZD_FASTMATH_FLAG "" )
 if( ZD_CMAKE_COMPILER_IS_GNUCXX_COMPATIBLE )
-	set( ZD_FASTMATH_FLAG "-ffast-math -ffp-contract=fast" )
+	set( ZD_FASTMATH_FLAG "-ffast-math" )
 elseif( MSVC )
 	set( ZD_FASTMATH_FLAG "/fp:fast" )
 endif()
@@ -255,6 +250,8 @@ add_subdirectory( tools )
 add_subdirectory( dumb )
 add_subdirectory( gdtoa )
 add_subdirectory( wadsrc )
+add_subdirectory( wadsrc_bm )
+add_subdirectory( wadsrc_lights )
 add_subdirectory( src )
 
 if( NOT WIN32 AND NOT APPLE )

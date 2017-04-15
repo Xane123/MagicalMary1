@@ -22,7 +22,7 @@
 //
 //==========================================================================
 
-void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner, PClassActor *blasteffect, bool dontdamage, bool no_vertical)
+void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner, PClassActor *blasteffect, bool dontdamage)
 {
 	angle_t angle,ang;
 	AActor *mo;
@@ -35,8 +35,8 @@ void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner,
 
 	angle = Owner->AngleTo(victim);
 	angle >>= ANGLETOFINESHIFT;
-	victim->vel.x = FixedMul (speed, finecosine[angle]);
-	victim->vel.y = FixedMul (speed, finesine[angle]);
+	victim->velx = FixedMul (speed, finecosine[angle]);
+	victim->vely = FixedMul (speed, finesine[angle]);
 
 	// Spawn blast puff
 	ang = victim->AngleTo(Owner);
@@ -48,23 +48,22 @@ void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner,
 	mo = Spawn (blasteffect, pos, ALLOW_REPLACE);
 	if (mo)
 	{
-		mo->vel.x = victim->vel.x;
-		mo->vel.y = victim->vel.y;
+		mo->velx = victim->velx;
+		mo->vely = victim->vely;
 	}
-	if (victim->flags & MF_MISSILE)
+	/*if (victim->flags & MF_MISSILE)
 	{
 		// [RH] Floor and ceiling huggers should not be blasted vertically.
 		if (!(victim->flags3 & (MF3_FLOORHUGGER|MF3_CEILINGHUGGER)))
 		{
-			victim->vel.z = 8*FRACUNIT;
-			mo->vel.z = victim->vel.z;
+			victim->velz = 8*FRACUNIT;
+			mo->velz = victim->velz;
 		}
 	}
 	else
 	{
-		if(no_vertical)mo->vel.z = victim->vel.z;	//[XANE]Added an option to disable vertical thrusting.
-		else victim->vel.z = (1000 / victim->Mass) << FRACBITS;
-	}
+		victim->velz = (1000 / victim->Mass) << FRACBITS;
+	}*/
 	if (victim->player)
 	{
 		// Players handled automatically
@@ -100,10 +99,9 @@ DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 {
 	PARAM_ACTION_PROLOGUE;
 	PARAM_INT_OPT	(blastflags)			{ blastflags = 0; }
-	PARAM_FIXED_OPT	(strength)				{ strength = 255*FRACUNIT; }
+	PARAM_INT_OPT	(strength)				{ strength = 255; }
 	PARAM_FIXED_OPT	(radius)				{ radius = 255*FRACUNIT; }
-	PARAM_FIXED_OPT	(speed)					{ speed = 20*FRACUNIT; }
-	PARAM_BOOL_OPT (no_thrust_vertical)		{ no_thrust_vertical = true; }
+	PARAM_FIXED_OPT	(speed)					{ speed = 20; }
 	PARAM_CLASS_OPT	(blasteffect, AActor)	{ blasteffect = PClass::FindActor("BlastEffect"); }
 	PARAM_SOUND_OPT	(blastsound)			{ blastsound = "BlastRadius"; }
 
@@ -158,7 +156,7 @@ DEFINE_ACTION_FUNCTION_PARAMS (AActor, A_Blast)
 			// in another region and cannot be seen.
 			continue;
 		}
-		BlastActor (mo, strength, speed, self, blasteffect, !!(blastflags & BF_NOIMPACTDAMAGE), no_thrust_vertical);
+		BlastActor (mo, strength, speed, self, blasteffect, !!(blastflags & BF_NOIMPACTDAMAGE));
 	}
 	return 0;
 }
