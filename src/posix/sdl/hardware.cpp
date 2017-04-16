@@ -74,14 +74,13 @@ CUSTOM_CVAR (Int, vid_renderer, 1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINI
 		switch (self)
 		{
 		case 0:
-			Printf("Switching to software renderer...\n");
-			break;
-		case 1:
-			Printf("Switching to OpenGL renderer...\n");
+			Printf("Switching to fake 3D (software) renderer...\n");
 			break;
 		default:
-			Printf("Unknown renderer (%d).  Falling back to software renderer...\n", (int) vid_renderer);
-			self = 0; // make sure to actually switch to the software renderer
+			Printf("Unknown renderer (%d).  Falling back to True 3D (OpenGL) renderer...\n", (int)vid_renderer);
+			self = 1; // make sure to actually switch to the software renderer
+		case 1:	//Intentional fall-through.
+			Printf("Switching to true 3D (OpenGL) renderer...\n");
 			break;
 		}
 		Printf("You must restart " GAMENAME " to switch the renderer\n");
@@ -123,7 +122,7 @@ void I_InitGraphics ()
 	else Video = new SDLVideo (0);
 	
 	if (Video == NULL)
-		I_FatalError ("Failed to initialize display");
+		I_FatalError ("Failed to initialize the renderer.");
 
 	atterm (I_ShutdownGraphics);
 

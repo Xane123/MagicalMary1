@@ -1,7 +1,4 @@
-﻿  gitinfo.cpp
-  i_main.cpp
-  Generating Code...
-  optionmenu.cpp
+﻿  m_alloc.cpp
      Creating library D:/Git/Failure5/src/MinSizeRel/play3d.lib and object D:/Git/Failure5/src/MinSizeRel/play3d.exp
 LINK : warning LNK4199: /DELAYLOAD:fmodex.dll ignored; no imports found from fmodex.dll
   zdoom.vcxproj -> D:\Git\Failure5\MinSizeRel\play3d.exe
@@ -11,16 +8,3 @@ LINK : warning LNK4199: /DELAYLOAD:fmodex.dll ignored; no imports found from fmo
   
   All rights reserved.
   
-  
-mt.exe : general error c101008d: Failed to write the updated manifest to the resource of file "D:/Git/Failure5/MinSizeRel/play3d.exe". The process cannot access the file because it is being used by another process.
-  
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: The command "setlocal
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: mt.exe -manifest "D:/Git/Failure5/src\win32\zdoom.exe.manifest" -outputresource:"D:/Git/Failure5/MinSizeRel/play3d.exe";#1
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: if %errorlevel% neq 0 goto :cmEnd
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: :cmEnd
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: :cmErrorLevel
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: exit /b %1
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: :cmDone
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: if %errorlevel% neq 0 goto :VCEnd
-D:\Programs\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(133,5): error MSB3073: :VCEnd" exited with code 31.

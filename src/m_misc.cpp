@@ -602,7 +602,7 @@ void WritePNGfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
 		!M_AppendPNGText (file, "Software", software) ||
 		!M_FinishPNG (file))
 	{
-		Printf ("Could not create screenshot.\n");
+		Printf ("Picture couldn't be saved. If you pushed PRINTSCREEN, the picture's still in your clipboard!\n");
 	}
 }
 
@@ -627,21 +627,21 @@ static bool FindFreeName (FString &fullname, const char *extension)
 
 		if (tm == NULL)
 		{
-			lbmname.Format ("%sScreenshot_%s_%04d.%s", fullname.GetChars(), gamename, i, extension);
+			lbmname.Format ("%sPicture #%04d.%s", fullname.GetChars(), i, extension);
 		}
 		else if (i == 0)
 		{
-			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
+			lbmname.Format ("%sPicture_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(),
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				extension);
 		}
 		else
 		{
-			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
+			lbmname.Format ("%sPicture #%02d timedate %04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), i,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
-				i, extension);
+				 extension);
 		}
 
 		if (!FileExists (lbmname.GetChars()))

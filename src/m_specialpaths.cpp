@@ -11,6 +11,7 @@
 
 #include "cmdlib.h"
 #include "m_misc.h"
+#include "gstrings.h"
 
 #if !defined(__APPLE__) && !defined(_WIN32)
 #include <sys/stat.h>
@@ -263,7 +264,10 @@ FString M_GetScreenshotsPath()
 
 	if (!UseKnownFolders())
 	{
-		return progdir;
+		path << progdir;
+		path << "/";
+		path << GStrings("FOLDER_SHOTS");
+		//return progdir;
 	}
 	else if (GetKnownFolder(-1, MyFOLDERID_Screenshots, true, path))
 	{
@@ -295,7 +299,9 @@ FString M_GetSavegamesPath()
 
 	if (!UseKnownFolders())
 	{
-		return progdir;
+		path << progdir;
+		path << "/";
+		path << GStrings("FOLDER_SAVES");
 	}
 	// Try standard Saved Games folder
 	else if (GetKnownFolder(-1, FOLDERID_SavedGames, true, path))

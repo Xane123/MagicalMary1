@@ -2105,7 +2105,7 @@ void G_DoAutoSave ()
 	}
 
 	readableTime = myasctime ();
-	strcpy (description, "Autosave ");
+	strcpy (description, "Chekpoint");
 	strncpy (description+9, readableTime+4, 12);
 	description[9+12] = 0;
 

@@ -67,7 +67,10 @@ EXTERN_CVAR (Bool, am_showtime)
 EXTERN_CVAR (Bool, am_showtotaltime)
 
 CVAR(Int,hud_althudscale, 2, CVAR_ARCHIVE)				// Scale the hud to 640x400?
-CVAR(Bool,hud_althud, false, CVAR_ARCHIVE)				// Enable/Disable the alternate HUD
+CUSTOM_CVAR(Bool, hud_althud, false, CVAR_ARCHIVE)				// Enable/Disable the alternate HUD
+{
+	if (self == true) self = false;
+}
 
 														// These are intentionally not the same as in the automap!
 CVAR (Bool,  hud_showsecrets,	true,CVAR_ARCHIVE);		// Show secrets on HUD

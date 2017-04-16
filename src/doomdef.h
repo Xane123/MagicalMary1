@@ -56,10 +56,10 @@ typedef enum
 #define MAXPLAYERS		8
 
 // State updates, number of tics / second.
-#define TICRATE 		35
+#define TICRATE 		35	//If only changing this didn't break physics or I'd change it to 30 or 60 then FMVs would be 30FPS/60FPS!
 
 // Amount of damage done by a telefrag.
-#define TELEFRAG_DAMAGE	1000000
+#define TELEFRAG_DAMAGE	200
 
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,

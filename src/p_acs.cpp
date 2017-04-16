@@ -6185,7 +6185,7 @@ int DLevelScript::RunScript ()
 	{
 		if (++runaway > 2000000)
 		{
-			Printf ("Runaway %s terminated\n", ScriptPresentation(script).GetChars());
+			Printf ("A script named %s didn't have a delay in a while loop.\n", ScriptPresentation(script).GetChars());
 			state = SCRIPT_PleaseRemove;
 			break;
 		}

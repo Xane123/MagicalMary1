@@ -80,7 +80,7 @@ void *M_Realloc(void *memblock, size_t size)
 	void *block = realloc(memblock, size);
 	if (block == NULL)
 	{
-		I_FatalError("Could not realloc %zu bytes", size);
+		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
 	}
 	GC::AllocBytes += _msize(block);
 	return block;
@@ -113,7 +113,7 @@ void *M_Realloc(void *memblock, size_t size)
 	void *block = realloc(((size_t*) memblock)-1, size+sizeof(size_t));
 	if (block == NULL)
 	{
-		I_FatalError("Could not realloc %zu bytes", size);
+		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
 	}
 
 	size_t *sizeStore = (size_t *) block;
@@ -150,7 +150,7 @@ void *M_Realloc_Dbg(void *memblock, size_t size, const char *file, int lineno)
 	void *block = _realloc_dbg(memblock, size, _NORMAL_BLOCK, file, lineno);
 	if (block == NULL)
 	{
-		I_FatalError("Could not realloc %zu bytes", size);
+		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
 	}
 	GC::AllocBytes += _msize(block);
 	return block;
@@ -184,7 +184,7 @@ void *M_Realloc_Dbg(void *memblock, size_t size, const char *file, int lineno)
 
 	if (block == NULL)
 	{
-		I_FatalError("Could not realloc %zu bytes", size);
+		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
 	}
 
 	size_t *sizeStore = (size_t *) block;

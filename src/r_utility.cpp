@@ -86,7 +86,7 @@ static TArray<fixedvec3a> InterpolationPath;
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
-CVAR (Int, r_clearbuffer, 0, 0)
+CVAR (Int, r_clearbuffer, 1, CVAR_ARCHIVE)
 CVAR (Bool, r_drawvoxels, true, 0)
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
 CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
@@ -493,6 +493,8 @@ CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 		self = 12;
 	else if (self < 3)
 		self = 3;
+	else if (self == 11)
+		self = 10;
 	else
 		R_SetViewSize (self);
 }
