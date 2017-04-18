@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -58,33 +58,33 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\Debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zdoom.dir\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">play</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zdoom.dir\Release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">play</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\MinSizeRel\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">zdoom.dir\MinSizeRel\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">play</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\RelWithDebInfo\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">zdoom.dir\RelWithDebInfo\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">play</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</GenerateManifest>
-  </PropertyGroup>
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\Debug\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">zdoom.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">play</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\Release\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">zdoom.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">play</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\MinSizeRel\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">zdoom.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">play</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\RelWithDebInfo\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">zdoom.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">play</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</GenerateManifest>
+    </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -103,11 +103,11 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <StringPooling>true</StringPooling>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRTDBG_MAP_ALLOC;_DEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRTDBG_MAP_ALLOC;_DEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRTDBG_MAP_ALLOC;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRTDBG_MAP_ALLOC;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -134,14 +134,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions)  /machine:X86</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;wsock32.lib;winmm.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dxguid.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dinput8.lib;ole32.lib;user32.lib;gdi32.lib;comctl32.lib;comdlg32.lib;ws2_32.lib;setupapi.lib;oleaut32.lib;DelayImp.lib;glu32.lib;opengl32.lib;..\zlib\Debug\zd.lib;..\jpeg-6b\Debug\jpeg.lib;..\bzip2\Debug\bz2.lib;..\game-music-emu\gme\Debug\gme.lib;D:\Programs\Mega-Nerd\libsndfile\lib\libsndfile-1.lib;D:\Git\Requirements\MPG123\libmpg123-0.lib;..\gdtoa\Debug\gdtoa.lib;..\dumb\Debug\dumb.lib;..\lzma\Debug\lzma.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>fmodex.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>OpenAL32.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>D:/Git/Failure5/src/Debug/play.lib</ImportLibrary>
       <ProgramDataBaseFile>D:/Git/Failure5/Debug/play.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -165,13 +164,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <StringPooling>true</StringPooling>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -198,7 +196,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions)  /machine:X86 /opt:ref /opt:icf /nodefaultlib:msvcrt</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;wsock32.lib;winmm.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dxguid.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dinput8.lib;ole32.lib;user32.lib;gdi32.lib;comctl32.lib;comdlg32.lib;ws2_32.lib;setupapi.lib;oleaut32.lib;DelayImp.lib;glu32.lib;opengl32.lib;..\zlib\Release\z.lib;..\jpeg-6b\Release\jpeg.lib;..\bzip2\Release\bz2.lib;..\game-music-emu\gme\Release\gme.lib;D:\Programs\Mega-Nerd\libsndfile\lib\libsndfile-1.lib;D:\Git\Requirements\MPG123\libmpg123-0.lib;..\gdtoa\Release\gdtoa.lib;..\dumb\Release\dumb.lib;..\lzma\Release\lzma.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>fmodex.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>OpenAL32.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>D:/Git/Failure5/src/Release/play.lib</ImportLibrary>
@@ -206,8 +204,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProgramDataBaseFile>D:/Git/Failure5/Release/play.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -231,13 +228,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <StringPooling>true</StringPooling>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -264,7 +260,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions)  /machine:X86 /opt:ref /opt:icf /nodefaultlib:msvcrt</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;wsock32.lib;winmm.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dxguid.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dinput8.lib;ole32.lib;user32.lib;gdi32.lib;comctl32.lib;comdlg32.lib;ws2_32.lib;setupapi.lib;oleaut32.lib;DelayImp.lib;glu32.lib;opengl32.lib;..\zlib\MinSizeRel\z.lib;..\jpeg-6b\MinSizeRel\jpeg.lib;..\bzip2\MinSizeRel\bz2.lib;..\game-music-emu\gme\MinSizeRel\gme.lib;D:\Programs\Mega-Nerd\libsndfile\lib\libsndfile-1.lib;D:\Git\Requirements\MPG123\libmpg123-0.lib;..\gdtoa\MinSizeRel\gdtoa.lib;..\dumb\MinSizeRel\dumb.lib;..\lzma\MinSizeRel\lzma.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>fmodex.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>OpenAL32.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>D:/Git/Failure5/src/MinSizeRel/play.lib</ImportLibrary>
@@ -272,8 +268,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProgramDataBaseFile>D:/Git/Failure5/MinSizeRel/play.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -298,11 +293,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <StringPooling>true</StringPooling>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;NO_FMOD=1;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -329,7 +324,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions)  /machine:X86 /opt:ref /opt:icf /nodefaultlib:msvcrt</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;wsock32.lib;winmm.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dxguid.lib;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Lib\x86\dinput8.lib;ole32.lib;user32.lib;gdi32.lib;comctl32.lib;comdlg32.lib;ws2_32.lib;setupapi.lib;oleaut32.lib;DelayImp.lib;glu32.lib;opengl32.lib;..\zlib\RelWithDebInfo\z.lib;..\jpeg-6b\RelWithDebInfo\jpeg.lib;..\bzip2\RelWithDebInfo\bz2.lib;..\game-music-emu\gme\RelWithDebInfo\gme.lib;D:\Programs\Mega-Nerd\libsndfile\lib\libsndfile-1.lib;D:\Git\Requirements\MPG123\libmpg123-0.lib;..\gdtoa\RelWithDebInfo\gdtoa.lib;..\dumb\RelWithDebInfo\dumb.lib;..\lzma\RelWithDebInfo\lzma.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>fmodex.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>OpenAL32.dll;libmpg123-0.dll;libsndfile-1.dll</DelayLoadDLLs>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>D:/Git/Failure5/src/RelWithDebInfo/play.lib</ImportLibrary>
@@ -337,8 +332,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProgramDataBaseFile>D:/Git/Failure5/RelWithDebInfo/play.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
       <TerminalServerAware>true</TerminalServerAware>
-      <Version>
-      </Version>
+      <Version></Version>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -617,367 +611,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\a.obj.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/a.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj" D:/Git/Failure5/src/asm_ia32/a.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Debug\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/a.obj.rule;D:\Git\Failure5\src\asm_ia32\a.asm;D:\Git\Failure5\tools\fixrtext\Debug\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/a.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj" D:/Git/Failure5/src/asm_ia32/a.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Release\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/a.obj.rule;D:\Git\Failure5\src\asm_ia32\a.asm;D:\Git\Failure5\tools\fixrtext\Release\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/a.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj" D:/Git/Failure5/src/asm_ia32/a.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\MinSizeRel\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/a.obj.rule;D:\Git\Failure5\src\asm_ia32\a.asm;D:\Git\Failure5\tools\fixrtext\MinSizeRel\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/a.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj" D:/Git/Failure5/src/asm_ia32/a.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\RelWithDebInfo\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/a.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/a.obj.rule;D:\Git\Failure5\src\asm_ia32\a.asm;D:\Git\Failure5\tools\fixrtext\RelWithDebInfo\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\misc.obj.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/misc.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj" D:/Git/Failure5/src/asm_ia32/misc.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Debug\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/misc.obj.rule;D:\Git\Failure5\src\asm_ia32\misc.asm;D:\Git\Failure5\tools\fixrtext\Debug\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/misc.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj" D:/Git/Failure5/src/asm_ia32/misc.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Release\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/misc.obj.rule;D:\Git\Failure5\src\asm_ia32\misc.asm;D:\Git\Failure5\tools\fixrtext\Release\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/misc.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj" D:/Git/Failure5/src/asm_ia32/misc.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\MinSizeRel\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/misc.obj.rule;D:\Git\Failure5\src\asm_ia32\misc.asm;D:\Git\Failure5\tools\fixrtext\MinSizeRel\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/misc.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj" D:/Git/Failure5/src/asm_ia32/misc.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\RelWithDebInfo\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/misc.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/misc.obj.rule;D:\Git\Failure5\src\asm_ia32\misc.asm;D:\Git\Failure5\tools\fixrtext\RelWithDebInfo\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\tmap.obj.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj" D:/Git/Failure5/src/asm_ia32/tmap.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Debug\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap.asm;D:\Git\Failure5\tools\fixrtext\Debug\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj" D:/Git/Failure5/src/asm_ia32/tmap.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Release\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap.asm;D:\Git\Failure5\tools\fixrtext\Release\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj" D:/Git/Failure5/src/asm_ia32/tmap.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\MinSizeRel\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap.asm;D:\Git\Failure5\tools\fixrtext\MinSizeRel\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj" D:/Git/Failure5/src/asm_ia32/tmap.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\RelWithDebInfo\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap.asm;D:\Git\Failure5\tools\fixrtext\RelWithDebInfo\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\tmap2.obj.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj" D:/Git/Failure5/src/asm_ia32/tmap2.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Debug\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap2.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap2.asm;D:\Git\Failure5\tools\fixrtext\Debug\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj" D:/Git/Failure5/src/asm_ia32/tmap2.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Release\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap2.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap2.asm;D:\Git\Failure5\tools\fixrtext\Release\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj" D:/Git/Failure5/src/asm_ia32/tmap2.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\MinSizeRel\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap2.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap2.asm;D:\Git\Failure5\tools\fixrtext\MinSizeRel\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj" D:/Git/Failure5/src/asm_ia32/tmap2.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\RelWithDebInfo\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap2.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap2.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap2.asm;D:\Git\Failure5\tools\fixrtext\RelWithDebInfo\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\83b6b61f3724e71139a924c92fa57dda\tmap3.obj.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj" D:/Git/Failure5/src/asm_ia32/tmap3.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Debug\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap3.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap3.asm;D:\Git\Failure5\tools\fixrtext\Debug\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj" D:/Git/Failure5/src/asm_ia32/tmap3.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\Release\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap3.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap3.asm;D:\Git\Failure5\tools\fixrtext\Release\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj" D:/Git/Failure5/src/asm_ia32/tmap3.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\MinSizeRel\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap3.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap3.asm;D:\Git\Failure5\tools\fixrtext\MinSizeRel\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -E make_directory D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32
-if %errorlevel% neq 0 goto :cmEnd
-C:\Users\Myers\AppData\Local\NASM\nasm.exe -f win32 -DWIN32 -iD:/Git/Failure5/src/ -o"D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj" D:/Git/Failure5/src/asm_ia32/tmap3.asm
-if %errorlevel% neq 0 goto :cmEnd
-..\tools\fixrtext\RelWithDebInfo\fixrtext.exe D:/Git/Failure5/src/CMakeFiles/zdoom.dir/asm_ia32/tmap3.obj
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/83b6b61f3724e71139a924c92fa57dda/tmap3.obj.rule;D:\Git\Failure5\src\asm_ia32\tmap3.asm;D:\Git\Failure5\tools\fixrtext\RelWithDebInfo\fixrtext.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="sound\commonsound.cpp" />
     <ClInclude Include="D:\Git\Failure5\src\win32\afxres.h" />
     <ClInclude Include="D:\Git\Failure5\src\win32\critsec.h" />
     <ClInclude Include="D:\Git\Failure5\src\win32\hardware.h" />
@@ -1171,7 +804,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\Failure5\src\g_level.h" />
     <ClInclude Include="D:\Git\Failure5\src\gameconfigfile.h" />
     <ClInclude Include="D:\Git\Failure5\src\gametype.h" />
-    <ClInclude Include="D:\Git\Failure5\src\gccinlines.h" />
     <ClInclude Include="D:\Git\Failure5\src\gi.h" />
     <ClInclude Include="D:\Git\Failure5\src\gitinfo.h" />
     <ClInclude Include="D:\Git\Failure5\src\gstrings.h" />
@@ -1196,7 +828,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\Failure5\src\m_swap.h" />
     <ClInclude Include="D:\Git\Failure5\src\md5.h" />
     <ClInclude Include="D:\Git\Failure5\src\memarena.h" />
-    <ClInclude Include="D:\Git\Failure5\src\mscinlines.h" />
     <ClInclude Include="D:\Git\Failure5\src\mus2midi.h" />
     <ClInclude Include="D:\Git\Failure5\src\name.h" />
     <ClInclude Include="D:\Git\Failure5\src\namedef.h" />
@@ -1225,19 +856,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\Failure5\src\pathexpander.h" />
     <ClInclude Include="D:\Git\Failure5\src\po_man.h" />
     <ClInclude Include="D:\Git\Failure5\src\portal.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_3dfloors.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_bsp.h" />
     <ClInclude Include="D:\Git\Failure5\src\r_defs.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_draw.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_local.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_main.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_plane.h" />
     <ClInclude Include="D:\Git\Failure5\src\r_renderer.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_segs.h" />
     <ClInclude Include="D:\Git\Failure5\src\r_sky.h" />
     <ClInclude Include="D:\Git\Failure5\src\r_state.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_swrenderer.h" />
-    <ClInclude Include="D:\Git\Failure5\src\r_things.h" />
     <ClInclude Include="D:\Git\Failure5\src\r_utility.h" />
     <ClInclude Include="D:\Git\Failure5\src\s_playlist.h" />
     <ClInclude Include="D:\Git\Failure5\src\s_sndseq.h" />
@@ -1382,884 +1004,810 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\Failure5\src\xlat_parser.c" />
     <ClInclude Include="D:\Git\Failure5\src\zscript\zcc-parse.lemon" />
     <ClInclude Include="D:\Git\Failure5\src\zcc-parse.c" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\a.asm" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\misc.asm" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\tmap.asm" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\tmap2.asm" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_ia32\tmap3.asm" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_x86_64\tmap3.asm" />
-    <ClInclude Include="D:\Git\Failure5\src\asm_x86_64\tmap3.s" />
-    <ClCompile Include="D:\Git\Failure5\src\__autostart.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\eaxedit.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\fb_d3d9.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\win32\fb_d3d9_wipe.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\win32\fb_ddraw.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\hardware.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\helperthread.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_cd.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_crash.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_input.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_keyboard.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_mouse.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_dijoy.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_rawps2.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_xinput.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_main.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_movie.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\i_system.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\st_start.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\win32gliface.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\win32\win32video.cpp" />
-    <ResourceCompile Include="D:\Git\Failure5\src\win32\zdoom.rc" />
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq2x_asm.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq3x_asm.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq4x_asm.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hqnx_asm_Image.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild_classify_sse2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\__autostart.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\eaxedit.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\hardware.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\helperthread.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_cd.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_crash.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_input.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_keyboard.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_mouse.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_dijoy.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_rawps2.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_xinput.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_main.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_movie.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\i_system.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\st_start.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\win32gliface.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\win32\win32video.cpp"  />
+    <ResourceCompile Include="D:\Git\Failure5\src\win32\zdoom.rc"  />
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq2x_asm.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq3x_asm.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hq4x_asm.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx_asm\hqnx_asm_Image.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_classify_sse2.cpp" >
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_swrenderer.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_sky.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_3dfloors.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_advsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_bsp.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_environment.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_draw.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_playlist.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_drawt.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_sndseq.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_main.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\s_sound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_plane.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\GuillotineBinPack.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_segs.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\SkylineBinPack.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_sky.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\intermission\intermission.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_things.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\intermission\intermission_parse.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\s_advsound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\colorpickermenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\s_environment.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\joystickmenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\s_playlist.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\listmenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\s_sndseq.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\loadsavemenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\s_sound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\menu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\GuillotineBinPack.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\menudef.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\SkylineBinPack.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\menuinput.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\intermission\intermission.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\messagebox.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\intermission\intermission_parse.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\optionmenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\colorpickermenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\playerdisplay.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\joystickmenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\playermenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\listmenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\readthis.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\loadsavemenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\menu\videomenu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\menu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\fmopl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\menudef.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\menuinput.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl_io.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\messagebox.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opldumper_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\optionmenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opl_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\playerdisplay.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\playermenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\readthis.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\OPL3.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\menu\videomenu.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\oplsynth\nukedopl3.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\fmopl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\commonsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\i_music.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl_io.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\i_sound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opldumper_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\mpg123_decoder.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opl_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_cd.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_dumb.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_gme.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\OPL3.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\nukedopl3.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_smf_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\fmodsound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_hmi_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\i_music.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_xmi_midiout.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\i_sound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_midistream.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\mpg123_decoder.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_base.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_cd.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_timidity.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_dumb.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_opl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_gme.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_stream.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_fluidsynth_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_smf_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_softsynth_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_hmi_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_timidity_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_xmi_midiout.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_wildmidi_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_midistream.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_win_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_base.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\oalsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_timidity.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\sndfile_decoder.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_opl.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\sound\music_pseudo_mididevice.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_stream.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\common.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_fluidsynth_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_softsynth_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_dls.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_timidity_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_font.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_wildmidi_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_sf2.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_win_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\mix.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\oalsound.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\playmidi.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\sndfile_decoder.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\resample.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_pseudo_mididevice.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\timidity\timidity.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\common.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\file_io.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\gus_pat.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_dls.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\reverb.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_font.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\wildmidi_lib.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\instrum_sf2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\wildmidi\wm_error.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\mix.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\colormaps.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\playmidi.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\r_data\r_translate.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\resample.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_data.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\timidity\timidity.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_portaldata.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\wildmidi\file_io.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_setup.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\wildmidi\gus_pat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_matrix.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\wildmidi\reverb.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_vertexbuffer.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\wildmidi\wildmidi_lib.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\a_dynlight.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\wildmidi\wm_error.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_clock.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_data\colormaps.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_cycler.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\r_data\r_translate.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_geometric.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_data.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_renderer.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_portaldata.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_renderstate.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_setup.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_lightdata.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_matrix.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\init.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\data\gl_vertexbuffer.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq2x.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\a_dynlight.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq3x.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_clock.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq4x.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_cycler.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hwtexture.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\utility\gl_geometric.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_texture.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_renderer.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_material.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_renderstate.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hirestex.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\renderer\gl_lightdata.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_bitmap.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\init.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_samplers.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq2x.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_translate.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq3x.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hqresize.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\hqnx\hq4x.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_skyboxtexture.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hwtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_bsp.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_texture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_fakeflat.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_material.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_clipper.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hirestex.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_decal.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_bitmap.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_drawinfo.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_samplers.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_flats.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_translate.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_walls.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_hqresize.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_sprite.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\textures\gl_skyboxtexture.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_skydome.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_bsp.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_renderhacks.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_fakeflat.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_weapon.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_clipper.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_scene.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_decal.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_sky.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_drawinfo.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_portal.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_flats.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_walls_draw.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_walls.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_vertex.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_sprite.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_spritelight.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_skydome.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo3d.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_renderhacks.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_cvars.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_weapon.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_leftright.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_scene.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\scoped_view_shifter.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_sky.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_anaglyph.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_portal.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_walls_draw.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_glow.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_vertex.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight1.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\scene\gl_spritelight.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_lightbuffer.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo3d.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\shaders\gl_shader.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_cvars.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\shaders\gl_texshader.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_stereo_leftright.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_interface.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\scoped_view_shifter.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_framebuffer.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\stereo3d\gl_anaglyph.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_menu.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_wipe.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_glow.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_dynlight1.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\dynlights\gl_lightbuffer.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\shaders\gl_shader.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\shaders\gl_texshader.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_interface.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_framebuffer.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_menu.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_wipe.cpp">
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_load.c">
+    <ClCompile Include="D:\Git\Failure5\src\gl\system\gl_load.c" >
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
@@ -2269,285 +1817,280 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">CompileAsC</CompileAs>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models_md3.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models_md3.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models_md2.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models_md2.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_models.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_voxels.cpp">
+    <ClCompile Include="D:\Git\Failure5\src\gl\models\gl_voxels.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\x86.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\actorptrselect.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\am_map.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\b_bot.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\b_func.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\b_game.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\b_move.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\b_think.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\bbannouncer.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_bind.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_cmds.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_console.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_consolebuffer.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_cvars.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_dispatch.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\c_expr.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\cmdlib.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\colormatcher.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\compatibility.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\configfile.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\ct_chat.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\d_dehacked.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\d_iwad.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\d_main.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\d_net.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\d_netinfo.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\d_protocol.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\decallib.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\dobject.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\dobjgc.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\dobjtype.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\doomdef.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\doomstat.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\dsectoreffect.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\dthinker.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\edata.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\f_wipe.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\farchive.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\files.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_doomedmap.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_game.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_hub.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_level.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_mapinfo.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_skill.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\gameconfigfile.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\gi.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\gitinfo.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\hu_scores.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\i_net.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\info.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\keysections.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\lumpconfigfile.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_alloc.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_argv.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_bbox.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_cheat.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_joy.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_misc.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_png.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_random.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\m_specialpaths.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\memarena.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\md5.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\name.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild_classify_nosse2.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild_events.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild_extract.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild_gl.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\nodebuild_utility.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\pathexpander.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_3dfloors.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_3dmidtex.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_acs.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_buildmap.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_ceiling.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_conversation.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_doors.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_effect.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_enemy.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_floor.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_glnodes.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_interaction.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_lights.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_linkedsectors.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_lnspec.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_map.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_maputl.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_mobj.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_pillar.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_plats.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_portals.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_pspr.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_saveg.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_sectors.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_setup.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_sight.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_slopes.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_spec.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_states.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_switch.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_tags.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_teleport.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_terrain.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_things.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_tick.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_trace.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_udmf.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_usdf.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_user.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_writemap.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\p_xlat.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\parsecontext.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\po_man.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\portal.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\r_utility.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\sc_man.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\st_stuff.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\statistics.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\stats.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\stringtable.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\strnatcmp.c">
+    <ClCompile Include="D:\Git\Failure5\src\x86.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\actorptrselect.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\am_map.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\b_bot.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\b_func.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\b_game.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\b_move.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\b_think.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\bbannouncer.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_bind.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_cmds.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_console.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_consolebuffer.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_cvars.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_dispatch.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\c_expr.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\cmdlib.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\colormatcher.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\compatibility.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\configfile.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\ct_chat.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\d_dehacked.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\d_iwad.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\d_main.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\d_net.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\d_netinfo.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\d_protocol.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\decallib.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\dobject.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\dobjgc.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\dobjtype.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\doomdef.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\doomstat.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\dsectoreffect.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\dthinker.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\edata.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\f_wipe.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\farchive.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\files.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_doomedmap.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_game.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_hub.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_level.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_mapinfo.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_skill.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\gameconfigfile.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\gi.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\gitinfo.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\hu_scores.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\i_net.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\info.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\keysections.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\lumpconfigfile.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_alloc.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_argv.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_bbox.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_cheat.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_joy.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_misc.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_png.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_random.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\m_specialpaths.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\memarena.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\md5.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\name.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_classify_nosse2.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_events.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_extract.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_gl.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\nodebuild_utility.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\pathexpander.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_3dfloors.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_3dmidtex.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_acs.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_buildmap.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_ceiling.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_conversation.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_doors.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_effect.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_enemy.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_floor.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_glnodes.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_interaction.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_lights.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_linkedsectors.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_lnspec.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_map.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_maputl.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_mobj.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_pillar.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_plats.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_portals.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_pspr.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_saveg.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_sectors.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_setup.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_sight.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_slopes.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_spec.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_states.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_switch.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_tags.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_teleport.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_terrain.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_things.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_tick.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_trace.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_udmf.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_usdf.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_user.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_writemap.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\p_xlat.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\parsecontext.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\po_man.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\portal.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\r_utility.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\sc_man.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\st_stuff.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\statistics.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\stats.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\stringtable.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\strnatcmp.c" >
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\tables.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\teaminfo.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\tempfiles.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_blend.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_collection.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_draw.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_font.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_palette.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_pfx.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_text.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\v_video.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\w_wad.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\wi_stuff.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zstrformat.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zstring.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_doom\a_doommisc.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_heretic\a_hereticmisc.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_hexen\a_hexenmisc.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_raven\a_artitele.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_raven\a_minotaur.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_strife\a_strifestuff.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_strife\strife_sbar.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_action.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_armor.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_artifacts.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_bridge.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_camera.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_debris.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_decals.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_fastprojectile.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_flashfader.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_fountain.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_hatetarget.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_keys.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_lightning.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_mapmarker.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_morph.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_movingcamera.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_pickups.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_puzzleitems.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_quake.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_randomspawner.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_secrettrigger.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_sectoraction.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_setcolor.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_skies.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_soundenvironment.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_soundsequence.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_spark.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_specialspot.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_waterzone.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_weaponpiece.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_weapons.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\hudmessages.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\sbarinfo.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\sbar_mugshot.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\shared_hud.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\g_shared\shared_sbar.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\ancientzip.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_7z.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_grp.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_lump.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_rff.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_wad.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_zip.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_pak.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_directory.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\resourcefile.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\sfmt\SFMT.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\animations.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\anim_switches.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\automaptexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\bitmap.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\buildtexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\canvastexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\ddstexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\flattexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\imgztexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\jpegtexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\multipatchtexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\patchtexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\pcxtexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\pngtexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\rawpagetexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\emptytexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\texture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\texturemanager.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\tgatexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\textures\warptexture.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\olddecorations.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_codeptr.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_data.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_exp.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_expression.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_parse.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_properties.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_states.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\xlat\parse_xlat.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_fspic.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_func.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_load.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_oper.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_parse.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_prepro.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_script.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_spec.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_variable.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_cmd.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\r_data\sprites.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\r_data\voxels.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\r_data\renderstyle.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\r_data\r_interpolate.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\ast.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\vmbuilder.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\vmdisasm.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\vmexec.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\vmframe.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_compile.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_expr.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_parser.cpp" />
-    <ClCompile Include="D:\Git\Failure5\src\zzautozend.cpp" />
-    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\a.obj" />
-    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\misc.obj" />
-    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap.obj" />
-    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap2.obj" />
-    <Object Include="D:\Git\Failure5\src\CMakeFiles\zdoom.dir\asm_ia32\tmap3.obj" />
+    <ClCompile Include="D:\Git\Failure5\src\tables.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\teaminfo.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\tempfiles.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_blend.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_collection.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_draw.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_font.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_palette.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_pfx.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_text.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\v_video.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\w_wad.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\wi_stuff.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zstrformat.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zstring.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_doom\a_doommisc.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_heretic\a_hereticmisc.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_hexen\a_hexenmisc.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_raven\a_artitele.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_raven\a_minotaur.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_strife\a_strifestuff.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_strife\strife_sbar.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_action.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_armor.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_artifacts.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_bridge.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_camera.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_debris.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_decals.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_fastprojectile.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_flashfader.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_fountain.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_hatetarget.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_keys.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_lightning.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_mapmarker.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_morph.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_movingcamera.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_pickups.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_puzzleitems.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_quake.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_randomspawner.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_secrettrigger.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_sectoraction.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_setcolor.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_skies.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_soundenvironment.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_soundsequence.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_spark.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_specialspot.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_waterzone.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_weaponpiece.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\a_weapons.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\hudmessages.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\sbarinfo.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\sbar_mugshot.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\shared_hud.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\g_shared\shared_sbar.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\ancientzip.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_7z.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_grp.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_lump.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_rff.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_wad.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_zip.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_pak.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\file_directory.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\resourcefiles\resourcefile.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\sfmt\SFMT.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\animations.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\anim_switches.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\automaptexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\bitmap.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\buildtexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\canvastexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\ddstexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\flattexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\imgztexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\jpegtexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\multipatchtexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\patchtexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\pcxtexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\pngtexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\rawpagetexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\emptytexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\texture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\texturemanager.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\tgatexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\textures\warptexture.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\olddecorations.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_codeptr.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_data.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_exp.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_expression.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_parse.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_properties.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\thingdef\thingdef_states.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\xlat\parse_xlat.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_fspic.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_func.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_load.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_oper.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_parse.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_prepro.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_script.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_spec.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_variable.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\fragglescript\t_cmd.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\r_data\sprites.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\r_data\voxels.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\r_data\renderstyle.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\r_data\r_interpolate.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\ast.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmbuilder.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmdisasm.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmexec.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\vmframe.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_compile.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_expr.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zscript\zcc_parser.cpp"  />
+    <ClCompile Include="D:\Git\Failure5\src\zzautozend.cpp"  />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
@@ -2561,10 +2104,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="D:\Git\Failure5\dumb\dumb.vcxproj">
       <Project>5E3C7F86-A926-3515-9C83-51D27A0514FB</Project>
       <Name>dumb</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\fixrtext\fixrtext.vcxproj">
-      <Project>E5BE4786-3830-3E0A-A570-70F38A118830</Project>
-      <Name>fixrtext</Name>
     </ProjectReference>
     <ProjectReference Include="D:\Git\Failure5\gdtoa\gdtoa.vcxproj">
       <Project>4DB4F1B2-1BB9-33C9-8065-44E627E36F9C</Project>

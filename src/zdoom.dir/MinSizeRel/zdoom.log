@@ -1,10 +1,77 @@
-﻿  m_alloc.cpp
-     Creating library D:/Git/Failure5/src/MinSizeRel/play3d.lib and object D:/Git/Failure5/src/MinSizeRel/play3d.exp
-LINK : warning LNK4199: /DELAYLOAD:fmodex.dll ignored; no imports found from fmodex.dll
-  zdoom.vcxproj -> D:\Git\Failure5\MinSizeRel\play3d.exe
-  Microsoft (R) Manifest Tool
-  
-  Copyright (c) Microsoft Corporation. 
-  
-  All rights reserved.
-  
+﻿  __autostart.cpp
+  eaxedit.cpp
+  hardware.cpp
+  helperthread.cpp
+  i_cd.cpp
+  i_crash.cpp
+  i_input.cpp
+  i_keyboard.cpp
+  i_mouse.cpp
+  i_dijoy.cpp
+  i_rawps2.cpp
+  i_xinput.cpp
+  i_main.cpp
+  i_movie.cpp
+  i_system.cpp
+  st_start.cpp
+  win32gliface.cpp
+  win32video.cpp
+  hq2x_asm.cpp
+  hq3x_asm.cpp
+  Generating Code...
+  Compiling...
+  hq4x_asm.cpp
+  hqnx_asm_Image.cpp
+  x86.cpp
+  actorptrselect.cpp
+  am_map.cpp
+  b_bot.cpp
+  b_func.cpp
+  b_game.cpp
+  b_move.cpp
+  b_think.cpp
+  bbannouncer.cpp
+  c_bind.cpp
+  c_cmds.cpp
+  c_console.cpp
+  c_consolebuffer.cpp
+  c_cvars.cpp
+  c_dispatch.cpp
+  c_expr.cpp
+  cmdlib.cpp
+  colormatcher.cpp
+  Generating Code...
+  Compiling...
+  compatibility.cpp
+  configfile.cpp
+  ct_chat.cpp
+  d_dehacked.cpp
+  d_iwad.cpp
+  d_main.cpp
+  d_net.cpp
+  d_netinfo.cpp
+  d_protocol.cpp
+  decallib.cpp
+  dobject.cpp
+  dobjgc.cpp
+  dobjtype.cpp
+  doomdef.cpp
+  doomstat.cpp
+  dsectoreffect.cpp
+  dthinker.cpp
+  edata.cpp
+  f_wipe.cpp
+  farchive.cpp
+  Generating Code...
+  Compiling...
+  files.cpp
+  g_doomedmap.cpp
+  g_game.cpp
+  g_hub.cpp
+  g_level.cpp
+  g_mapinfo.cpp
+  g_skill.cpp
+  gameconfigfile.cpp
+  gi.cpp
+  gitinfo.cpp
+  hu_scores.cpp
