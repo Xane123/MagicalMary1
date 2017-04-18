@@ -820,7 +820,6 @@ set( NOT_COMPILED_SOURCE_FILES
 
 # Enable fast math for some sources
 set( FASTMATH_SOURCES
-	r_swrenderer.cpp
 	r_3dfloors.cpp
 	r_bsp.cpp
 	r_draw.cpp

@@ -30,6 +30,8 @@
  **---------------------------------------------------------------------------
  **
  */
+ //Is this file necessary?
+ #include "gl/system/gl_load.h"
 
 #include "i_common.h"
 
@@ -46,7 +48,6 @@
 #include "i_system.h"
 #include "m_argv.h"
 #include "r_renderer.h"
-#include "r_swrenderer.h"
 #include "st_console.h"
 #include "stats.h"
 #include "textures.h"
@@ -1057,7 +1058,7 @@ void I_CreateRenderer()
 {
 	if (NULL == Renderer)
 	{
-		Renderer = new FSoftwareRenderer;
+		Renderer = gl_CreateInterface();//new FSoftwareRenderer; This'll probaably cause errors.'
 		atterm(I_DeleteRenderer);
 	}
 }

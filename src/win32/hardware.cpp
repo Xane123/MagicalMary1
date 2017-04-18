@@ -47,7 +47,7 @@
 #include "doomstat.h"
 #include "m_argv.h"
 #include "version.h"
-#include "r_swrenderer.h"
+#include "r_renderer.h"
 
 EXTERN_CVAR (Bool, ticker)
 EXTERN_CVAR (Bool, fullscreen)
@@ -71,28 +71,21 @@ int currentrenderer = -1;
 bool changerenderer;
 
 // [ZDoomGL]
-CUSTOM_CVAR (Int, vid_renderer, 1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
+CUSTOM_CVAR (Int, vid_renderer, 1, CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
-	// 0: Software renderer
-	// 1: OpenGL renderer
-
 	if (self != currentrenderer)
 	{
 		switch (self)
 		{
-		case 0:
-			Printf("Switching to software renderer...\n");
-			break;
-		case 1:
-			Printf("Switching to OpenGL renderer...\n");
-			break;
 		default:
-			Printf("Unknown renderer (%d).  Falling back to software renderer...\n", *vid_renderer);
+			Printf("Render #%d doesn't exist.\n", *vid_renderer);
 			self = 0; // make sure to actually switch to the software renderer
+		case 1:	//Intentional fallthrough
+			Printf("Switching to the true 3D (OpenGL) renderer...\n");
 			break;
 		}
 		//changerenderer = true;
-		Printf("You must restart " GAMENAME " to switch the renderer\n");
+		Printf(GAMENAME " doesn't include the fake 3D (software) renderer anymore; Visit Xane's website to download an outdated version that includes it.\n");
 	}
 }
 
@@ -158,8 +151,7 @@ void I_CreateRenderer()
 	currentrenderer = vid_renderer;
 	if (Renderer == NULL)
 	{
-		if (currentrenderer==1) Renderer = gl_CreateInterface();
-		else Renderer = new FSoftwareRenderer;
+		Renderer = gl_CreateInterface();
 		atterm(I_DeleteRenderer);
 	}
 }
