@@ -82,9 +82,7 @@ CVAR (Int, snd_buffersize, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (String, snd_output, "default", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 
 #define DEF_BACKEND "openal"
-#else
-#define DEF_BACKEND "null"
-#endif
+//#define DEF_BACKEND "null"
 
 CVAR(String, snd_backend, DEF_BACKEND, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 

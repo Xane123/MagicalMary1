@@ -109,7 +109,7 @@
     <CustomBuild Include="D:\Git\Failure5\wadsrc\CMakeLists.txt">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -122,7 +122,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -135,7 +135,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -148,7 +148,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/wadsrc/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/wadsrc/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -167,7 +167,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
 ..\tools\zipdir\Debug\zipdir.exe -udf D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/Debug/data_3d.pk3
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/Debug/data_3d.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -182,7 +182,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
 ..\tools\zipdir\Release\zipdir.exe -udf D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/Release/data_3d.pk3
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/Release/data_3d.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -197,7 +197,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
 ..\tools\zipdir\MinSizeRel\zipdir.exe -udf D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/MinSizeRel/data_3d.pk3
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/MinSizeRel/data_3d.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -212,7 +212,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
 ..\tools\zipdir\RelWithDebInfo\zipdir.exe -udf D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/wadsrc/static
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/RelWithDebInfo/data_3d.pk3
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/data_3d.pk3 D:/Git/Failure5/RelWithDebInfo/data_3d.pk3
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -229,7 +229,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <CustomBuild Include="D:\Git\Failure5\CMakeFiles\4481bb8ff6ddd600e4761ba65f9cd7cb\data_3d_pk3.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/Debug/zipdir.exe
+D:\Programs\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/Debug/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -242,7 +242,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/Release/zipdir.exe
+D:\Programs\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/Release/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -255,7 +255,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/MinSizeRel/zipdir.exe
+D:\Programs\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/MinSizeRel/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -268,7 +268,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/RelWithDebInfo/zipdir.exe
+D:\Programs\CMake\bin\cmake.exe -E touch D:/Git/Failure5/tools/zipdir/RelWithDebInfo/zipdir.exe
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone

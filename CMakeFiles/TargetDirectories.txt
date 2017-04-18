@@ -29,7 +29,7 @@ D:/Git/Failure5/dumb/CMakeFiles/INSTALL.dir
 D:/Git/Failure5/dumb/CMakeFiles/dumb.dir
 D:/Git/Failure5/gdtoa/CMakeFiles/gdtoa.dir
 D:/Git/Failure5/gdtoa/CMakeFiles/INSTALL.dir
-D:/Git/Failure5/wadsrc/CMakeFiles/data_3d_pk3.dir
+D:/Git/Failure5/wadsrc/CMakeFiles/data_pk3.dir
 D:/Git/Failure5/wadsrc/CMakeFiles/INSTALL.dir
 D:/Git/Failure5/wadsrc_bm/CMakeFiles/brightmaps_pk3.dir
 D:/Git/Failure5/wadsrc_bm/CMakeFiles/INSTALL.dir

@@ -342,7 +342,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <CustomBuild Include="D:\Git\Failure5\tools\updaterevision\CMakeLists.txt">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -355,7 +355,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -368,7 +368,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -381,7 +381,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone

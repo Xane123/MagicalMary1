@@ -124,7 +124,7 @@
       <Command>setlocal
 echo D:/Git/Failure5/tools/lemon/Debug
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/Debug
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/Debug
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -188,7 +188,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command>setlocal
 echo D:/Git/Failure5/tools/lemon/Release
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/Release
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/Release
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -254,7 +254,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command>setlocal
 echo D:/Git/Failure5/tools/lemon/MinSizeRel
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/MinSizeRel
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/MinSizeRel
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -320,7 +320,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Command>setlocal
 echo D:/Git/Failure5/tools/lemon/RelWithDebInfo
 if %errorlevel% neq 0 goto :cmEnd
-D:\Prpgrams\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/RelWithDebInfo
+D:\Programs\CMake\bin\cmake.exe -E copy_if_different D:/Git/Failure5/tools/lemon/lempar.c D:/Git/Failure5/tools/lemon/RelWithDebInfo
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -350,7 +350,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <CustomBuild Include="D:\Git\Failure5\tools\lemon\CMakeLists.txt">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/tools/lemon/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -363,7 +363,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/tools/lemon/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -376,7 +376,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/tools/lemon/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -389,7 +389,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/tools/lemon/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Prpgrams\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/tools/lemon/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone

@@ -1,4 +1,3 @@
 ﻿  Building Custom Rule D:/Git/Failure5/tools/updaterevision/CMakeLists.txt
   CMake does not need to re-run because D:/Git/Failure5/tools/updaterevision/CMakeFiles/generate.stamp is up-to-date.
-  updaterevision.c
   updaterevision.vcxproj -> D:\Git\Failure5\tools\updaterevision\MinSizeRel\updaterevision.exe
