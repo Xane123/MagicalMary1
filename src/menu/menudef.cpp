@@ -1,6 +1,6 @@
 /*
 ** menudef.cpp
-** MENUDEF parser amd menu generation code
+** MENUDEF parser and menu generation code
 **
 **---------------------------------------------------------------------------
 ** Copyright 2010 Christoph Oelckers
@@ -187,10 +187,6 @@ static bool CheckSkipOptionBlock(FScanner &sc)
 		else if (sc.Compare("OpenAL"))
 		{
 			filter |= IsOpenALPresent();
-		}
-		else if (sc.Compare("FModEx"))
-		{
-			filter |= IsFModExPresent();
 		}
 	}
 	while (sc.CheckString(","));

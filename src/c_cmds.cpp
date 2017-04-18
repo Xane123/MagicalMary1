@@ -623,7 +623,7 @@ CCMD (error)
 	}
 	else
 	{
-		Printf ("Usage: error <error text>\n");
+		Printf ("This will revert you tio the fullscreen console. YOU WILL LOSE PROGRESS!\n");
 	}
 }
 
@@ -636,7 +636,7 @@ CCMD (error_fatal)
 	}
 	else
 	{
-		Printf ("Usage: error_fatal <error text>\n");
+		Printf ("This crashes MMA to the initial console screen. YOU WILL LOSE PROGRESS!\n");
 	}
 }
 
@@ -747,7 +747,7 @@ CCMD (fov)
 		}
 		else
 		{
-			Printf ("A setting controller has disabled FOV changes.\n");
+			Printf ("An admin has disabled FOV changes.\n");
 			return;
 		}
 	}
@@ -847,13 +847,13 @@ CCMD (wdir)
 {
 	if (argv.argc() != 2)
 	{
-		Printf ("usage: wdir <wadfile>\n");
+		Printf ("usage: wdir <WAD file>\n");
 		return;
 	}
 	int wadnum = Wads.CheckIfWadLoaded (argv[1]);
 	if (wadnum < 0)
 	{
-		Printf ("%s must be loaded to view its directory.\n", argv[1]);
+		Printf ("%s must be from a directory to view it!.\n", argv[1]);
 		return;
 	}
 	for (int i = 0; i < Wads.GetNumLumps(); ++i)
@@ -878,12 +878,12 @@ CCMD(linetarget)
 	P_AimLineAttack(players[consoleplayer].mo,players[consoleplayer].mo->angle,MISSILERANGE, &t, 0);
 	if (t.linetarget)
 	{
-		Printf("Target=%s, Health=%d, Spawnhealth=%d\n",
+		Printf("You are pointing at %s.\n\n-HEALTH-\nCurrent: %d\nInitial: %d\n",
 			t.linetarget->GetClass()->TypeName.GetChars(),
 			t.linetarget->health,
 			t.linetarget->SpawnHealth());
 	}
-	else Printf("No target found\n");
+	else Printf("No valid enemy found!\n");
 }
 
 // As linetarget, but also give info about non-shootable actors

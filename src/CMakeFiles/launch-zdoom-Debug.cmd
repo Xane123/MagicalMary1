@@ -5,5 +5,5 @@ if [%1]==[--debugger] (
 	SHIFT
 )
 
-"D:\Git\Failure5\Debug\play3d.exe"  
+"D:\Git\Failure5\Debug\play.exe"  
 pause
