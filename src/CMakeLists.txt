@@ -393,9 +393,6 @@ endif()
 # Start defining source files for ZDoom
 set( PLAT_WIN32_SOURCES
 	win32/eaxedit.cpp
-	win32/fb_d3d9.cpp
-	win32/fb_d3d9_wipe.cpp
-	win32/fb_ddraw.cpp
 	win32/hardware.cpp
 	win32/helperthread.cpp
 	win32/i_cd.cpp
@@ -687,15 +684,7 @@ set( NOT_COMPILED_SOURCE_FILES
 
 # Enable fast math for some sources
 set( FASTMATH_SOURCES
-	r_3dfloors.cpp
-	r_bsp.cpp
-	r_draw.cpp
-	r_drawt.cpp
-	r_main.cpp
-	r_plane.cpp
-	r_segs.cpp
 	r_sky.cpp
-	r_things.cpp
 	s_advsound.cpp
 	s_environment.cpp
 	s_playlist.cpp
