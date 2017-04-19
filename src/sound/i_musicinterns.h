@@ -19,6 +19,7 @@
 #include "tempfiles.h"
 #include "c_cvars.h"
 #include "mus2midi.h"
+#include "critsec.h"
 #include "i_sound.h"
 #include "i_music.h"
 #include "s_sound.h"
