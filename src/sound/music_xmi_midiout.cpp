@@ -703,18 +703,6 @@ XMISong::EventSource XMISong::FindNextDue()
 	return (fake_delay <= real_delay) ? EVENT_Fake : EVENT_Real;
 }
 
-
-//==========================================================================
-//
-// XMISong :: GetOPLDumper
-//
-//==========================================================================
-
-MusInfo *XMISong::GetOPLDumper(const char *filename)
-{
-	return new XMISong(this, filename, MDEV_OPL);
-}
-
 //==========================================================================
 //
 // XMISong :: GetWaveDumper

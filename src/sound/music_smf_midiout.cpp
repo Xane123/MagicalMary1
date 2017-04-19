@@ -812,18 +812,6 @@ MIDISong2::TrackInfo *MIDISong2::FindNextDue ()
 	return NULL;
 }
 
-
-//==========================================================================
-//
-// MIDISong2 :: GetOPLDumper
-//
-//==========================================================================
-
-MusInfo *MIDISong2::GetOPLDumper(const char *filename)
-{
-	return new MIDISong2(this, filename, MDEV_OPL);
-}
-
 //==========================================================================
 //
 // MIDISong2 :: GetWaveDumper

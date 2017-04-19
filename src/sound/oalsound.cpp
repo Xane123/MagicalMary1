@@ -628,10 +628,9 @@ extern ReverbContainer *ForcedEnvironment;
 
 #define AREA_SOUND_RADIUS  (128.f)
 
-#define PITCH_MULT (0.7937005f) /* Approx. 4 semitones lower; what Nash suggested */
+#define PITCH_MULT (1.f) /* Approx. 4 semitones lower; what Nash suggested */
 
-#define PITCH(pitch) (snd_pitched ? (pitch)/128.f : 1.f)
-
+#define PITCH(pitch) 1.f
 
 static float GetRolloff(const FRolloffInfo *rolloff, float distance)
 {
@@ -702,7 +701,7 @@ OpenALSoundRenderer::OpenALSoundRenderer()
         current = alcGetString(Device, ALC_ALL_DEVICES_SPECIFIER);
     if(alcGetError(Device) != ALC_NO_ERROR || !current)
         current = alcGetString(Device, ALC_DEVICE_SPECIFIER);
-    Printf("  Opened device " TEXTCOLOR_ORANGE"%s\n", current);
+    Printf("  Selected %s as your output device.\nYou can change this in Sound Options.\n", current);
 
     ALCint major=0, minor=0;
     alcGetIntegerv(Device, ALC_MAJOR_VERSION, 1, &major);
@@ -749,7 +748,7 @@ OpenALSoundRenderer::OpenALSoundRenderer()
     AL.SOFT_deferred_updates = !!alIsExtensionPresent("AL_SOFT_deferred_updates");
     AL.SOFT_loop_points = !!alIsExtensionPresent("AL_SOFT_loop_points");
 
-    alDopplerFactor(0.5f);
+    alDopplerFactor(/*0.5*/1.f);
     alSpeedOfSound(343.3f * 96.0f);
     alDistanceModel(AL_INVERSE_DISTANCE);
     if(AL.EXT_source_distance_model)
@@ -903,7 +902,7 @@ OpenALSoundRenderer::OpenALSoundRenderer()
     }
 
     if(EnvSlot)
-        Printf("  EFX enabled\n");
+        Printf("  EFX has been enabled!\n");
 }
 #undef LOAD_FUNC
 
@@ -1080,7 +1079,7 @@ SoundHandle OpenALSoundRenderer::LoadSoundRaw(BYTE *sfxdata, int length, int fre
     {
         static bool warned = false;
         if(!warned)
-            Printf("Loop points not supported!\n");
+            Printf("Loop points are not supported by OpenAL(?)!\n");
         warned = true;
     }
 
@@ -1114,8 +1113,8 @@ SoundHandle OpenALSoundRenderer::LoadSound(BYTE *sfxdata, int length)
 
     if(format == AL_NONE)
     {
-        Printf("Unsupported audio format: %s, %s\n", GetChannelConfigName(chans),
-               GetSampleTypeName(type));
+        Printf("%s on channel %s is an unknown sound type.\n", GetSampleTypeName(type),
+			GetChannelConfigName(chans));
         delete decoder;
         return retval;
     }
@@ -1129,7 +1128,7 @@ SoundHandle OpenALSoundRenderer::LoadSound(BYTE *sfxdata, int length)
     ALenum err;
     if((err=getALError()) != AL_NO_ERROR)
     {
-        Printf("Failed to buffer data: %s\n", alGetString(err));
+        Printf("Couldn't buffer sound because %s.\n", alGetString(err));
         alDeleteBuffers(1, &buffer);
         getALError();
         delete decoder;
@@ -1233,9 +1232,9 @@ FISoundChannel *OpenALSoundRenderer::StartSound(SoundHandle sfx, float vol, int 
         alSourcef(source, AL_ROOM_ROLLOFF_FACTOR, 0.f);
     }
     if(WasInWater && !(chanflags&SNDF_NOREVERB))
-        alSourcef(source, AL_PITCH, PITCH(pitch)*PITCH_MULT);
+        alSourcef(source, AL_PITCH, 1.f/* *PITCH_MULT */);
     else
-        alSourcef(source, AL_PITCH, PITCH(pitch));
+        alSourcef(source, AL_PITCH, 1.f);
 
     if(!reuse_chan)
         alSourcef(source, AL_SEC_OFFSET, 0.f);
@@ -1407,9 +1406,9 @@ FISoundChannel *OpenALSoundRenderer::StartSound3D(SoundHandle sfx, SoundListener
         alSourcef(source, AL_ROOM_ROLLOFF_FACTOR, 0.f);
     }
     if(WasInWater && !(chanflags&SNDF_NOREVERB))
-        alSourcef(source, AL_PITCH, PITCH(pitch)*PITCH_MULT);
+        alSourcef(source, AL_PITCH, 1.f/* *PITCH_MULT */);
     else
-        alSourcef(source, AL_PITCH, PITCH(pitch));
+        alSourcef(source, AL_PITCH, 1.f);
 
     if(!reuse_chan)
         alSourcef(source, AL_SEC_OFFSET, 0.f);
@@ -1692,7 +1691,8 @@ void OpenALSoundRenderer::UpdateListener(SoundListener *listener)
             }
 
             for(uint32 i = 0;i < ReverbSfx.Size();++i)
-                alSourcef(ReverbSfx[i], AL_PITCH, PITCH_MULT);
+                
+				alSourcef(ReverbSfx[i], AL_PITCH, 1.f/*PITCH_MULT*/);
             getALError();
         }
     }
