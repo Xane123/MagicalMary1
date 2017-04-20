@@ -20,7 +20,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA */
 
 double const min_tempo = 0.25;
 double const oversample_factor = 5 / 3.0;
-double const fm_gain = 3.0;
+double const fm_gain = 1.0;	//For consistency with VGM files, 3x this volume made songs like Ocean Floor too loud compared to other songs in MMA.
 
 const long base_clock = 53700300;
 const long clock_rate = base_clock / 15;
