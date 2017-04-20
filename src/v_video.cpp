@@ -150,8 +150,8 @@ static DWORD Col2RGB8_2[63][256];
 // There's also only one, not four.
 DFrameBuffer *screen;
 
-CVAR (Int, vid_defwidth, 640, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Int, vid_defheight, 480, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defwidth, 1152, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defheight, 648, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Int, vid_defbits, 8, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Int, vid_fps, false, 0)
 CVAR (Bool, ticker, false, 0)
@@ -909,9 +909,9 @@ void DFrameBuffer::DrawRateStuff ()
 		static FPaletteTester palette;
 
 		palette.SetTranslation(vid_showpalette);
-		DrawTexture(&palette, 0, 0,
-			DTA_DestWidth, 16*7,
-			DTA_DestHeight, 16*7,
+		DrawTexture(&palette, 0, 8,
+			DTA_DestWidth, 16*14,
+			DTA_DestHeight, 16*14,
 			DTA_Masked, false,
 			TAG_DONE);
 	}

@@ -111,7 +111,7 @@ static FConsoleCommand *ScanChainForName (FConsoleCommand *start, const char *na
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-CVAR (Bool, lookspring, true, CVAR_ARCHIVE);	// Generate centerview when -mlook encountered?
+CVAR (Bool, lookspring, false, CVAR_ARCHIVE);	// Generate centerview when -mlook encountered?
 
 FConsoleCommand *Commands[FConsoleCommand::HASH_SIZE];
 FButtonStatus Button_Mlook, Button_Klook, Button_Use, Button_AltAttack,

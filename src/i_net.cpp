@@ -691,7 +691,7 @@ void HostGame (int i)
 
 	atterm (SendAbort);
 
-	StartScreen->NetInit ("Waiting for players", numplayers);
+	StartScreen->NetInit ("Awaiting friends...", numplayers);
 
 	// Wait for numplayers-1 different connections
 	if (!StartScreen->NetLoop (Host_CheckForConnects, (void *)(intptr_t)numplayers))
@@ -701,7 +701,7 @@ void HostGame (int i)
 
 	// Now inform everyone of all machines involved in the game
 	memset (gotack, 0, sizeof(gotack));
-	StartScreen->NetMessage ("Sending all here.");
+	StartScreen->NetMessage ("All little girls, go to the level instructed!");
 	StartScreen->NetInit ("Done waiting", 1);
 
 	if (!StartScreen->NetLoop (Host_SendAllHere, (void *)gotack))
@@ -712,7 +712,7 @@ void HostGame (int i)
 	popterm ();
 
 	// Now go
-	StartScreen->NetMessage ("Go");
+	StartScreen->NetMessage ("Okay, get ready to play together!");
 	packet.Fake = PRE_FAKE;
 	packet.Message = PRE_GO;
 	for (node = 1; node < doomcom.numnodes; node++)
@@ -725,7 +725,7 @@ void HostGame (int i)
 		}
 	}
 
-	StartScreen->NetMessage ("Total players: %d", doomcom.numnodes);
+	StartScreen->NetMessage ("%d/8 players are in the game now.", doomcom.numnodes);
 
 	doomcom.id = DOOMCOM_ID;
 	doomcom.numplayers = doomcom.numnodes;
@@ -807,7 +807,7 @@ bool Guest_WaitForOthers (void *userdata)
 				doomcom.numnodes = packet.NumNodes + 2;
 				sendplayer[0] = packet.ConsoleNum;	// My player number
 				doomcom.consoleplayer = packet.ConsoleNum;
-				StartScreen->NetMessage ("Console player number: %d", doomcom.consoleplayer);
+				StartScreen->NetMessage ("You are player %d.", doomcom.consoleplayer);
 				for (node = 0; node < packet.NumNodes; node++)
 				{
 					sendaddress[node+2].sin_addr.s_addr = packet.machines[node].address;
@@ -821,14 +821,14 @@ bool Guest_WaitForOthers (void *userdata)
 				}
 			}
 
-			StartScreen->NetMessage ("Received All Here, sending ACK.");
+			StartScreen->NetMessage ("All right, I'll tell the other players you're ready to play!.");
 			packet.Fake = PRE_FAKE;
 			packet.Message = PRE_ALLHEREACK;
 			PreSend (&packet, 2, &sendaddress[1]);
 			break;
 
 		case PRE_GO:
-			StartScreen->NetMessage ("Received \"Go.\"");
+			StartScreen->NetMessage ("The host said they're ready to play!");
 			return true;
 
 		case PRE_DISCONNECT:
@@ -849,7 +849,7 @@ void JoinGame (int i)
 	if ((i == Args->NumArgs() - 1) ||
 		(Args->GetArg(i+1)[0] == '-') ||
 		(Args->GetArg(i+1)[0] == '+'))
-		I_FatalError ("You need to specify the host machine's address");
+		I_FatalError ("Don't forget to get the host's local IP address! If playing with yourself, use 'localhost'.");
 
 	StartNetwork (true);
 
@@ -876,7 +876,7 @@ void JoinGame (int i)
 
 	popterm ();
 
-	StartScreen->NetMessage ("Total players: %d", doomcom.numnodes);
+	StartScreen->NetMessage ("%d players are ready to play!", doomcom.numnodes);
 
 	doomcom.id = DOOMCOM_ID;
 	doomcom.numplayers = doomcom.numnodes;

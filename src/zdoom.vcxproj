@@ -87,7 +87,7 @@
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -108,10 +108,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRTDBG_MAP_ALLOC;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -148,7 +148,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -170,10 +170,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -212,7 +212,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -234,10 +234,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -276,7 +276,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -298,10 +298,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_WIN32;HAVE_FILELENGTH=1;BACKPATCH;HAVE_MMX=1;NOASM;HAVE_SNDFILE;HAVE_MPG123;HAVE_FLUIDSYNTH;DYN_FLUIDSYNTH;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\oplsynth;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -643,12 +643,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\Failure5\src\intermission\intermission.h" />
     <ClInclude Include="D:\Git\Failure5\src\menu\menu.h" />
     <ClInclude Include="D:\Git\Failure5\src\menu\optionmenuitems.h" />
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\deftypes.h" />
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\muslib.h" />
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\nukedopl3.h" />
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\opl.h" />
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.h" />
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.h" />
     <ClInclude Include="D:\Git\Failure5\src\posix\dikeys.h" />
     <ClInclude Include="D:\Git\Failure5\src\posix\hardware.h" />
     <ClInclude Include="D:\Git\Failure5\src\posix\i_input.h" />
@@ -1171,60 +1165,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\fmopl.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl_io.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opldumper_mididevice.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opl_mididevice.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\OPL3.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\nukedopl3.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
     <ClCompile Include="D:\Git\Failure5\src\sound\commonsound.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
@@ -1304,12 +1244,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
     </ClCompile>
     <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_timidity.cpp" >
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>
-      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Fast</FloatingPointModel>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_opl.cpp" >
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Fast</FloatingPointModel>
       <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Fast</FloatingPointModel>

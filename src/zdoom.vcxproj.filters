@@ -139,33 +139,6 @@
     <ClCompile Include="D:\Git\Failure5\src\menu\videomenu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\fmopl.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\mlopl_io.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opldumper_mididevice.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\music_opl_mididevice.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.cpp">
-      <Filter>Audio Files\OPL Synth\DOSBox</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\OPL3.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\oplsynth\nukedopl3.cpp">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClCompile>
     <ClCompile Include="D:\Git\Failure5\src\sound\commonsound.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
@@ -206,9 +179,6 @@
       <Filter>Audio Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Git\Failure5\src\sound\music_midi_timidity.cpp">
-      <Filter>Audio Files</Filter>
-    </ClCompile>
-    <ClCompile Include="D:\Git\Failure5\src\sound\music_mus_opl.cpp">
       <Filter>Audio Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Git\Failure5\src\sound\music_stream.cpp">
@@ -1305,24 +1275,6 @@
     <ClInclude Include="D:\Git\Failure5\src\menu\optionmenuitems.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\deftypes.h">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\muslib.h">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\nukedopl3.h">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\opl.h">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\opl_mus_player.h">
-      <Filter>Audio Files\OPL Synth</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\Git\Failure5\src\oplsynth\dosbox\opl.h">
-      <Filter>Audio Files\OPL Synth\DOSBox</Filter>
-    </ClInclude>
     <ClInclude Include="D:\Git\Failure5\src\posix\dikeys.h">
       <Filter>POSIX Files</Filter>
     </ClInclude>
@@ -2407,59 +2359,20 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Audio Files\OPL Synth">
-      <UniqueIdentifier>{3F7C80DC-BA9B-3B59-9986-7273FB92E740}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Audio Files\Timidity">
       <UniqueIdentifier>{E998B7CB-7686-32A6-94FE-CCDC98AD2EAC}</UniqueIdentifier>
     </Filter>
     <Filter Include="Audio Files\WildMidi">
       <UniqueIdentifier>{0CBE6004-5E97-397D-9F0D-0C3E62A865CB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\OPL Synth\DOSBox">
-      <UniqueIdentifier>{CEAADCAF-73DC-352C-A024-B6021BF88129}</UniqueIdentifier>
+    <Filter Include="Render Data\Resource Headers">
+      <UniqueIdentifier>{C6B96756-E197-3238-A22D-547A12071BFF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\WildMidi\Source">
-      <UniqueIdentifier>{0BCD9E7B-711F-3A32-9BCE-9E0C330D295F}</UniqueIdentifier>
+    <Filter Include="Render Data\Resource Sources">
+      <UniqueIdentifier>{D8F27724-8192-3F5B-9418-876E46EBD3CA}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Audio Files\Timidity\Source">
-      <UniqueIdentifier>{FE34DB47-AB4B-3B1D-9C75-533C0C4BEF5C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Data">
-      <UniqueIdentifier>{99ADF2B4-57D0-3C9E-8F8A-D648758E85DD}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Dynamic Lights">
-      <UniqueIdentifier>{B060775C-A389-30B8-9E67-71B1007ECDB8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\HQ Resize">
-      <UniqueIdentifier>{743AEDB0-989E-3586-ABA2-CDE10B7E3695}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\HQ Resize Assembly version">
-      <UniqueIdentifier>{BC053CA3-A5EB-347D-8108-F76ABCE30B46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Models">
-      <UniqueIdentifier>{548D9B08-8A4B-3E48-ADE0-C2CDC4C36C7F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Renderer">
-      <UniqueIdentifier>{EA4234BB-2B33-37AC-A062-03669D13526F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Scene">
-      <UniqueIdentifier>{611EEBB1-8270-3C87-A862-B9F5222100D5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Stereo3D">
-      <UniqueIdentifier>{DCE90FE2-1095-33A7-AAD5-9F5191D1CB15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Shaders">
-      <UniqueIdentifier>{D59DA152-A04A-31AE-A42A-F1771DF5FD4C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\System">
-      <UniqueIdentifier>{8E678C3E-F8A0-39AA-BF62-3F30DEDE4D04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Textures">
-      <UniqueIdentifier>{FBB8EF08-28FF-3ABC-A4C7-34A22557D67B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL Renderer\Utilities">
-      <UniqueIdentifier>{4F1B1440-EF57-376F-A144-C6D2D0AADB4D}</UniqueIdentifier>
+    <Filter Include="Render Data\Textures">
+      <UniqueIdentifier>{B740DC52-6DAE-301E-B58E-3F2F074B057E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{E707ACC4-5D8A-3603-909E-867CE3067140}</UniqueIdentifier>
@@ -2530,6 +2443,12 @@
     <Filter Include="ZScript">
       <UniqueIdentifier>{3AA95A07-9604-3587-B142-2FB7430F045E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio Files\Timidity\Source">
+      <UniqueIdentifier>{FE34DB47-AB4B-3B1D-9C75-533C0C4BEF5C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi\Source">
+      <UniqueIdentifier>{0BCD9E7B-711F-3A32-9BCE-9E0C330D295F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Games\Doom Game">
       <UniqueIdentifier>{2C6806F7-AC53-3367-94A4-C44FB85E19C0}</UniqueIdentifier>
     </Filter>
@@ -2545,14 +2464,41 @@
     <Filter Include="Games\Strife Game">
       <UniqueIdentifier>{844FF32A-E258-3ABF-A6CF-483AAF1DC6B4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Data\Resource Headers">
-      <UniqueIdentifier>{C6B96756-E197-3238-A22D-547A12071BFF}</UniqueIdentifier>
+    <Filter Include="OpenGL Renderer\Data">
+      <UniqueIdentifier>{99ADF2B4-57D0-3C9E-8F8A-D648758E85DD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Data\Resource Sources">
-      <UniqueIdentifier>{D8F27724-8192-3F5B-9418-876E46EBD3CA}</UniqueIdentifier>
+    <Filter Include="OpenGL Renderer\Dynamic Lights">
+      <UniqueIdentifier>{B060775C-A389-30B8-9E67-71B1007ECDB8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Data\Textures">
-      <UniqueIdentifier>{B740DC52-6DAE-301E-B58E-3F2F074B057E}</UniqueIdentifier>
+    <Filter Include="OpenGL Renderer\HQ Resize">
+      <UniqueIdentifier>{743AEDB0-989E-3586-ABA2-CDE10B7E3695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\HQ Resize Assembly version">
+      <UniqueIdentifier>{BC053CA3-A5EB-347D-8108-F76ABCE30B46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Models">
+      <UniqueIdentifier>{548D9B08-8A4B-3E48-ADE0-C2CDC4C36C7F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Renderer">
+      <UniqueIdentifier>{EA4234BB-2B33-37AC-A062-03669D13526F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Scene">
+      <UniqueIdentifier>{611EEBB1-8270-3C87-A862-B9F5222100D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Stereo3D">
+      <UniqueIdentifier>{DCE90FE2-1095-33A7-AAD5-9F5191D1CB15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Shaders">
+      <UniqueIdentifier>{D59DA152-A04A-31AE-A42A-F1771DF5FD4C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\System">
+      <UniqueIdentifier>{8E678C3E-F8A0-39AA-BF62-3F30DEDE4D04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Textures">
+      <UniqueIdentifier>{FBB8EF08-28FF-3ABC-A4C7-34A22557D67B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL Renderer\Utilities">
+      <UniqueIdentifier>{4F1B1440-EF57-376F-A144-C6D2D0AADB4D}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

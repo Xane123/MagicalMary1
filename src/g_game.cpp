@@ -115,7 +115,7 @@ void STAT_Read(PNGHandle *png);
 
 FIntCVar gameskill ("skill", 2, CVAR_SERVERINFO|CVAR_LATCH);
 CVAR (Int, deathmatch, 0, CVAR_SERVERINFO|CVAR_LATCH);
-CVAR (Bool, chasedemo, false, 0);
+CVAR (Bool, chasedemo, true, 0);
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, longsavemessages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (String, save_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
@@ -206,7 +206,7 @@ int				lookspeed[2] = {450, 512};
 
 CVAR (Bool,		cl_run,			false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always run?
 CVAR (Bool,		invertmouse,	false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Invert mouse look down/up?
-CVAR (Bool,		freelook,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
+CVAR (Bool,		freelook,		true,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
 CVAR (Bool,		lookstrafe,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always strafe with mouse?
 CVAR (Float,	m_pitch,		1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Mouse speeds
 CVAR (Float,	m_yaw,			1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
@@ -2065,7 +2065,7 @@ CVAR (Int, autosavenum, 0, CVAR_NOSET|CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 static int nextautosave = -1;
 CVAR (Int, disableautosave, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, saveloadconfirmation, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG) // [mxd]
-CUSTOM_CVAR (Int, autosavecount, 4, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CUSTOM_CVAR (Int, autosavecount, 1, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)	//[XANE]Only one "autosave" (checkpoint) is needed, no save scumming involved.
 {
 	if (self < 0)
 		self = 0;
