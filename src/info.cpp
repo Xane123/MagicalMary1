@@ -613,7 +613,7 @@ static void SummonActor (int command, int command2, FCommandLine argv)
 		PClassActor *type = PClass::FindActor(argv[1]);
 		if (type == NULL)
 		{
-			Printf ("Unknown actor '%s'\n", argv[1]);
+			Printf ("What is %s? It doesn't exist, sorry.\n", argv[1]);
 			return;
 		}
 		Net_WriteByte (argv.argc() > 2 ? command2 : command);
