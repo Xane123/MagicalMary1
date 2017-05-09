@@ -1318,28 +1318,10 @@ void gl_ParseDefs()
 	atterm( gl_ReleaseLights ); 
 	gl_ReleaseLights();
 	gl_DestroyUserShaders();
-	switch (gameinfo.gametype)
-	{
-	case GAME_Heretic:
-		defsLump = "HTICDEFS";
-		break;
-	case GAME_Hexen:
-		defsLump = "HEXNDEFS";
-		break;
-	case GAME_Strife:
-		defsLump = "STRFDEFS";
-		break;
-	case GAME_Doom:
-		defsLump = "DOOMDEFS";
-		break;
-	case GAME_Chex:
-		defsLump = "CHEXDEFS";
-		break;
-	default: // silence GCC
-		break;
-	}
+
 	gl_ParseVavoomSkybox();
-	if (defsLump != NULL) gl_LoadGLDefs(defsLump);
+	
+	gl_LoadGLDefs("INGLDEFS");
 	gl_LoadGLDefs("GLDEFS");
 	gl_InitializeActorLights();
 }
