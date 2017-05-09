@@ -274,6 +274,7 @@ struct level_info_t
 	int			levelnum;
 
 	int			skyboxmovement;	//[XANE] Attempt to add a new MAPINFO option.
+	int			xanemusic;		//[XANE] Music ID used for this level.
 	int			world_number;	//[XANE] World number to display on title card.
 	int			world_level;	//[XANE] Level number (For example, in 1-3, the level number is 3.)
 
@@ -402,6 +403,7 @@ struct FLevelLocals
 	int			levelnum;
 
 	int			skyboxmovement;
+	int			xanemusic;
 	int			world_number;
 	int			world_level;
 
