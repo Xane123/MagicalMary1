@@ -5,9 +5,14 @@
 *.ilk
 *.aps
 *.obj
+*.log
+*.tlog
 /fmodapi*/
 /Release
 /wadsrc_wad
+/src/MinSizeRel/
+/src/Release/
+/src/Debug/
 *.user
 /build
 /debug
