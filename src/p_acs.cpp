@@ -9058,7 +9058,7 @@ scriptwait:
 				static bool StrlenInvalidPrintedAlready = false;
 				if (!StrlenInvalidPrintedAlready)
 				{
-					Printf(PRINT_BOLD, "Warning: ACS function strlen called with invalid string argument.\n");
+					Printf(PRINT_BOLD, "WARNING: STRLEN was called without a valid string to use!\n");
 					StrlenInvalidPrintedAlready = true;
 				}
 				STACK(1) = 0;
@@ -9095,6 +9095,7 @@ scriptwait:
 			case LEVELINFO_SKYBOXMOVEMENT:	STACK(1) = level.skyboxmovement;	break;
 			case LEVELINFO_WORLDNUMBER:	STACK(1) = level.world_number;	break;
 			case LEVELINFO_WORLDLEVEL:	STACK(1) = level.world_level;	break;
+			case LEVELINFO_MUSICID:	STACK(1) = level.xanemusic;	break;
 			default:						STACK(1) = 0;						break;
 			}
 			break;

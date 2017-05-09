@@ -1380,6 +1380,7 @@ void G_InitLevelLocals ()
 	level.skyboxmovement = info->skyboxmovement;	//[XANE] Update my new variables as well!
 	level.world_number = info->world_number;
 	level.world_level = info->world_level;
+	level.xanemusic = info->xanemusic;
 
 	level.Music = info->Music;
 	level.musicorder = info->musicorder;

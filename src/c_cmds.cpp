@@ -115,7 +115,7 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-CCMD (god)
+CCMD (arthas)
 {
 	if (CheckCheatmode ())
 		return;
@@ -124,40 +124,13 @@ CCMD (god)
 	Net_WriteByte (CHT_GOD);
 }
 
-CCMD(god2)
-{
-	if (CheckCheatmode())
-		return;
-
-	Net_WriteByte(DEM_GENERICCHEAT);
-	Net_WriteByte(CHT_GOD2);
-}
-
-CCMD (iddqd)
+CCMD (honor)
 {
 	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
 	Net_WriteByte (CHT_IDDQD);
-}
-
-CCMD (buddha)
-{
-	if (CheckCheatmode())
-		return;
-
-	Net_WriteByte(DEM_GENERICCHEAT);
-	Net_WriteByte(CHT_BUDDHA);
-}
-
-CCMD(buddha2)
-{
-	if (CheckCheatmode())
-		return;
-
-	Net_WriteByte(DEM_GENERICCHEAT);
-	Net_WriteByte(CHT_BUDDHA2);
 }
 
 CCMD (notarget)

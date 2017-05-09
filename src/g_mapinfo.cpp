@@ -233,6 +233,7 @@ void level_info_t::Reset()
 	skyboxmovement = 0;	//[XANE] Let's reset my new variables as well!
 	world_number = 0;
 	world_level = 0;
+	xanemusic = 0;
 
 	PName = "";
 	NextMap = "";
@@ -834,6 +835,13 @@ DEFINE_MAP_OPTION(level, true)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 	info->world_level = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(song, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->xanemusic = parse.sc.Number;
 }
 
 DEFINE_MAP_OPTION(next, true)
