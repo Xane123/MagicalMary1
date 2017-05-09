@@ -4177,7 +4177,7 @@ AActor *AActor::StaticSpawn (PClassActor *type, fixed_t ix, fixed_t iy, fixed_t 
 {
 	if (type == NULL)
 	{
-		I_Error ("Tried to spawn a class-less actor\n");
+		I_Error("MMA tried to spawn an actor that doesn't exist; Check your monsters' code for A_Blast. If there's a number after the last expected one, it may be causing the crash!\n");
 	}
 
 	if (allowreplacement)

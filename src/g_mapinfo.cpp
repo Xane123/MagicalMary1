@@ -227,7 +227,13 @@ void level_info_t::Reset()
 {
 	MapName = "";
 	MapBackground = "";
+
 	levelnum = 0;
+
+	skyboxmovement = 0;	//[XANE] Let's reset my new variables as well!
+	world_number = 0;
+	world_level = 0;
+
 	PName = "";
 	NextMap = "";
 	NextSecretMap = "";
@@ -807,6 +813,27 @@ DEFINE_MAP_OPTION(levelnum, true)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 	info->levelnum = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(moveskybox, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->skyboxmovement = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(world, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->world_number = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(level, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->world_level = parse.sc.Number;
 }
 
 DEFINE_MAP_OPTION(next, true)

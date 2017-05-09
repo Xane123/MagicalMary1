@@ -165,7 +165,7 @@ static ALenum checkALError(const char *fn, unsigned int ln)
             fn = strrchr(fn, '/')+1;
         else if(strchr(fn, '\\'))
             fn = strrchr(fn, '\\')+1;
-        Printf(">>>>>>>>>>>> Received AL error %s (%#x), %s:%u\n", alGetString(err), err, fn, ln);
+        Printf(TEXTCOLOR_RED "OpenAL got an error: " TEXTCOLOR_WHITE "%s (%#x), %s:%u\n", alGetString(err), err, fn, ln);
     }
     return err;
 }

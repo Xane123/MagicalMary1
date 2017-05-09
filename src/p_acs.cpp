@@ -9092,6 +9092,9 @@ scriptwait:
 			case LEVELINFO_FOUND_ITEMS:		STACK(1) = level.found_items;		break;
 			case LEVELINFO_TOTAL_MONSTERS:	STACK(1) = level.total_monsters;	break;
 			case LEVELINFO_KILLED_MONSTERS:	STACK(1) = level.killed_monsters;	break;
+			case LEVELINFO_SKYBOXMOVEMENT:	STACK(1) = level.skyboxmovement;	break;
+			case LEVELINFO_WORLDNUMBER:	STACK(1) = level.world_number;	break;
+			case LEVELINFO_WORLDLEVEL:	STACK(1) = level.world_level;	break;
 			default:						STACK(1) = 0;						break;
 			}
 			break;

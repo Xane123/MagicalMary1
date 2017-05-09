@@ -272,7 +272,11 @@ enum EMapType
 struct level_info_t
 {
 	int			levelnum;
-	
+
+	int			skyboxmovement;	//[XANE] Attempt to add a new MAPINFO option.
+	int			world_number;	//[XANE] World number to display on title card.
+	int			world_level;	//[XANE] Level number (For example, in 1-3, the level number is 3.)
+
 	FString		MapName;
 	FString		NextMap;
 	FString		NextSecretMap;
@@ -396,6 +400,11 @@ struct FLevelLocals
 	int			cluster;
 	int			clusterflags;
 	int			levelnum;
+
+	int			skyboxmovement;
+	int			world_number;
+	int			world_level;
+
 	int			lumpnum;
 	FString		LevelName;
 	FString		MapName;			// the lump name (E1M1, MAP01, etc)

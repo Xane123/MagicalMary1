@@ -4,6 +4,15 @@ ACTOR SkyViewpoint native
 	+NOBLOCKMAP
 	+NOGRAVITY
 	+DONTSPLASH
+	
+	States
+	{
+		Spawn:
+			TNT1 A 0
+			TNT1 A 1 ACS_NamedExecute("SkyboxChangeTID",0,0,0,0)
+			TNT1 A -1
+			Stop
+	}
 }
 
 ACTOR SkyPicker native 
