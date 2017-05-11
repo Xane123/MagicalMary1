@@ -749,7 +749,7 @@ public:
 		char goodbye[25];
 		mysnprintf(goodbye, countof(goodbye), "TXT_RANDOMGOODBYE_%d", 1+(pr_randomspeech() % NUM_RANDOM_GOODBYES));
 		const char *goodbyestr = GStrings[goodbye];
-		if (goodbyestr == NULL) goodbyestr = "Bye.";
+		if (goodbyestr == NULL) goodbyestr = "Why are you using this instead of the cutscene system?";
 		mResponses.Push(mResponseLines.Size());
 		mResponseLines.Push(FString(goodbyestr));
 

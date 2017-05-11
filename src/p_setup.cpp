@@ -4040,6 +4040,14 @@ void P_SetupLevel (const char *lumpname, int position)
 	// set up world state
 	P_SpawnSpecials ();
 
+	// From https://github.com/coelckers/gzdoom/commit/6322c8171966da0cdf1ded054fd2a6f6cf4359b8; Doesn't seem to be possible on this outdated version due to lack of .isSlope(). Don't put reflectiveness on slopes!
+	// disable reflective planes on sloped sectors.
+	/*for (auto i = 0; i < numsectors; i++)
+	{
+		if (sectors[i].floorplane.isSlope()) sectors[i].reflect[sector_t::floor] = 0;
+		if (sectors[i].ceilingplane.isSlope()) sectors[i].reflect[sector_t::ceiling] = 0;
+	}*/
+
 	// This must be done BEFORE the PolyObj Spawn!!!
 	Renderer->PreprocessLevel();
 
