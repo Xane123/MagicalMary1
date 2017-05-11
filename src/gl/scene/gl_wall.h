@@ -152,8 +152,6 @@ public:
 		FGLLinePortal *lineportal;	// line-to-line portals
 	};
 
-
-	FTextureID topflat,bottomflat;
 	secplane_t topplane, bottomplane;	// we need to save these to pass them to the shader for calculating glows.
 
 	// these are not the same as ytop and ybottom!!!
