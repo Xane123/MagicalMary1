@@ -558,7 +558,7 @@ FArchive &operator<< (FArchive &arc, sector_t::splane &p)
 {
 	arc << p.xform.xoffs << p.xform.yoffs << p.xform.xscale << p.xform.yscale 
 		<< p.xform.angle << p.xform.base_yoffs << p.xform.base_angle
-		<< p.Flags << p.Light << p.Texture << p.TexZ << p.alpha;
+		<< p.Flags << p.Light << p.Texture << p.TexZ << p.alpha << p.GlowColor << p.GlowHeight;
 	return arc;
 }
 
@@ -634,19 +634,19 @@ void P_SerializePolyobjs (FArchive &arc)
 
 		arc << data;
 		if (data != ASEG_POLYOBJS)
-			I_Error ("Polyobject marker missing");
+			I_Error ("A PolyObject's missing its 'marker' in this save file!");
 
 		arc << data;
 		if (data != po_NumPolyobjs)
 		{
-			I_Error ("UnarchivePolyobjs: Bad polyobj count");
+			I_Error ("This save file's number of PolyObjects doesn't match the amount in this level!");
 		}
 		for (i = 0, po = polyobjs; i < po_NumPolyobjs; i++, po++)
 		{
 			arc << data;
 			if (data != po->tag)
 			{
-				I_Error ("UnarchivePolyobjs: Invalid polyobj tag");
+				I_Error ("There's an invalid PolyObject inside this save file!");
 			}
 			arc << angle;
 			po->RotatePolyobj (angle, true);

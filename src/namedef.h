@@ -542,6 +542,12 @@ xx(damageterraineffect)
 xx(damagehazard)
 xx(floorterrain)
 xx(ceilingterrain)
+xx(floor_reflect)	//Added from https://github.com/coelckers/gzdoom/commit/6322c8171966da0cdf1ded054fd2a6f6cf4359b8
+xx(ceiling_reflect)
+xx(floorglowcolor)	//Added from https://github.com/coelckers/gzdoom/commit/02c3b3613fef339a70e26452156292297454e7c2
+xx(floorglowheight)
+xx(ceilingglowcolor)
+xx(ceilingglowheight)
 
 // USDF keywords
 xx(Amount)

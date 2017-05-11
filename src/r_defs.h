@@ -601,6 +601,8 @@ struct sector_t
 		int Flags;
 		int Light;
 		fixed_t alpha;
+		PalEntry GlowColor;
+		float GlowHeight;
 		FTextureID Texture;
 		fixed_t TexZ;
 	};
