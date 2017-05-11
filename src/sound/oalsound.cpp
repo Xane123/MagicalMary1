@@ -61,6 +61,8 @@
 CVAR (String, snd_aldevice, "Default", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, snd_efx, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 
+EXTERN_CVAR(Bool, minorerrors)
+
 #ifdef _WIN32
 static HMODULE hmodOpenAL;
 #define OPENALLIB "openal32.dll"

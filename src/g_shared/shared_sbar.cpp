@@ -95,6 +95,8 @@ CVAR (Flag, pf_poison,		paletteflash, PF_POISON)
 CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
 
+CVAR (Bool, minorerrors, false, CVAR_ARCHIVE)	//[XANE]Display the near-useless error messages like OpenAL errors and out of sync messages?
+
 // Stretch status bar to full screen width?
 CUSTOM_CVAR (Bool, st_scale, true, CVAR_ARCHIVE)
 {
@@ -1611,9 +1613,12 @@ void DBaseStatusBar::DrawConsistancy () const
 					players[1-consoleplayer].inconsistant/ticdup);
 			}
 		}
-		screen->DrawText (SmallFont, CR_GREEN, 
-			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
-			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);
+		if (minorerrors)
+		{
+			screen->DrawText(SmallFont, CR_GREEN,
+				(screen->GetWidth() - SmallFont->StringWidth(conbuff)*CleanXfac) / 2,
+				0, conbuff, DTA_CleanNoMove, true, TAG_DONE);
+		}
 		BorderTopRefresh = screen->GetPageCount ();
 	}
 }
@@ -1644,10 +1649,13 @@ void DBaseStatusBar::DrawWaiting () const
 
 	if (buff_p != NULL)
 	{
-		screen->DrawText (SmallFont, CR_ORANGE, 
-			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
-			SmallFont->GetHeight()*CleanYfac, conbuff, DTA_CleanNoMove, true, TAG_DONE);
-		BorderTopRefresh = screen->GetPageCount ();
+		if (minorerrors)
+		{
+			screen->DrawText(SmallFont, CR_ORANGE,
+				(screen->GetWidth() - SmallFont->StringWidth(conbuff)*CleanXfac) / 2,
+				SmallFont->GetHeight()*CleanYfac, conbuff, DTA_CleanNoMove, true, TAG_DONE);
+			BorderTopRefresh = screen->GetPageCount();
+		}
 	}
 }
 
