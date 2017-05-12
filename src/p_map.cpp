@@ -1514,7 +1514,7 @@ bool PIT_CheckThing(FMultiBlockThingsIterator &it, FMultiBlockThingsIterator::Ch
 		}
 
 		// Do damage
-		damage = tm.thing->GetMissileDamage((tm.thing->flags4 & MF4_STRIFEDAMAGE) ? 3 : 7, 1);
+		damage = tm.thing->GetMissileDamage((tm.thing->flags4 & MF4_STRIFEDAMAGE) ? 1 : 1, 1);	//[XANE]Randomness...who thought it was a good idea for weapons?
 		if ((damage > 0) || (tm.thing->flags6 & MF6_FORCEPAIN) || (tm.thing->flags7 & MF7_CAUSEPAIN))
 		{
 			int newdam = P_DamageMobj(thing, tm.thing, tm.thing->target, damage, tm.thing->DamageType);
