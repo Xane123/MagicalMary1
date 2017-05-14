@@ -182,7 +182,7 @@ static ALCenum checkALCError(ALCdevice *device, const char *fn, unsigned int ln)
             fn = strrchr(fn, '/')+1;
         else if(strchr(fn, '\\'))
             fn = strrchr(fn, '\\')+1;
-        Printf(">>>>>>>>>>>> Received ALC error %s (%#x), %s:%u\n", alcGetString(device, err), err, fn, ln);
+		if (minorerrors) Printf(">>>>>>>>>>>> Received ALC error %s (%#x), %s:%u\n", alcGetString(device, err), err, fn, ln);
     }
     return err;
 }
