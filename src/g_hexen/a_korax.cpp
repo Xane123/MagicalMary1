@@ -67,12 +67,13 @@ void A_KoraxChase (AActor *);
 void A_KoraxStep (AActor *);
 void A_KoraxStep2 (AActor *);
 void A_KoraxDecide (AActor *);
-void A_KoraxBonePop (AActor *);
+void A_KoraxBonePop(AActor *);
 void A_KoraxMissile (AActor *);
 void A_KoraxCommand (AActor *);
 void A_KSpiritRoam (AActor *);
 void A_KBolt (AActor *);
 void A_KBoltRaise (AActor *);
+void A_SpeedUp(AActor *);
 
 void KoraxFire (AActor *actor, PClassActor *type, int arm);
 void KSpiritInit (AActor *spirit, AActor *korax);
@@ -172,6 +173,16 @@ DEFINE_ACTION_FUNCTION(AActor, A_KoraxBonePop)
 	}
 
 	P_StartScript (self, NULL, 255, NULL, NULL, 0, 0);		// Death script
+	return 0;
+}
+
+DEFINE_ACTION_FUNCTION(AActor, A_SpeedUp)
+{
+	PARAM_ACTION_PROLOGUE;
+
+	AActor *mo;
+	mo->Speed = 200;
+
 	return 0;
 }
 

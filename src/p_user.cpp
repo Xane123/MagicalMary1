@@ -1280,14 +1280,14 @@ bool APlayerPawn::ResetAirSupply (bool playgasp)
 
 void APlayerPawn::PlayIdle ()
 {
-	if (InStateSequence(state, SeeState))
-		SetState (SpawnState);
+	//if (InStateSequence(state, SeeState))
+		//SetState (SpawnState);
 }
 
 void APlayerPawn::PlayRunning ()
 {
-	if (InStateSequence(state, SpawnState) && SeeState != NULL)
-		SetState (SeeState);
+	//if (InStateSequence(state, SpawnState) && SeeState != NULL)
+		//SetState (SeeState);
 }
 
 void APlayerPawn::PlayAttacking ()
