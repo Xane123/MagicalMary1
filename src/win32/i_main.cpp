@@ -432,7 +432,7 @@ LRESULT CALLBACK LConProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		lf.lfCharSet = ANSI_CHARSET;
 		lf.lfWeight = FW_BOLD;
 		lf.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
-		strcpy (lf.lfFaceName, "Trebuchet MS");
+		strcpy (lf.lfFaceName, "XPinball");
 		GameTitleFont = CreateFontIndirect (&lf);
 
 		oldfont = SelectObject (hdc, GetStockObject (DEFAULT_GUI_FONT));
@@ -475,7 +475,7 @@ LRESULT CALLBACK LConProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		format.crTextColor = RGB(223,223,223);
 		format.bCharSet = ANSI_CHARSET;
 		format.bPitchAndFamily = FF_SWISS | VARIABLE_PITCH;
-		wcscpy(format.szFaceName, L"DejaVu Sans");	// At least I have it. :p
+		wcscpy(format.szFaceName, L"XPinball");	// At least I have it. :p
 		SendMessageW(view, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&format);
 
 		ConWindow = view;
