@@ -1051,7 +1051,8 @@ EXTERN_CVAR(Float, maxviewpitch)
 
 int FGLInterface::GetMaxViewPitch(bool down)
 {
-	return int(maxviewpitch);
+	if(down) return int(maxviewpitch);	//[XANE]Let's add slight realism here; It's harder to look up than down with your head alone; How did that space marine do it?
+	else return int(maxviewpitch - (maxviewpitch / 2));
 }
 
 //===========================================================================
