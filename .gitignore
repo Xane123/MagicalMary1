@@ -26,9 +26,11 @@ CMakeCache.txt
 *.depend
 *.stamp
 *.lastbuildstate
+*.ipch
 /build
 /debug
 /release
+/.vs
 */debug
 */release
 /release_gcc
