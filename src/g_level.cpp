@@ -445,14 +445,14 @@ void G_InitNew (const char *mapname, bool bTitleLevel)
 		// Set the initial quest log text for Strife.
 		for (i = 0; i < MAXPLAYERS; ++i)
 		{
-			players[i].SetLogText ("Find help");
+			players[i].SetLogText ("Throw this game away as MMA beats it!");
 		}
 	}
 
 	// [RH] If this map doesn't exist, bomb out
 	if (!P_CheckMapData(mapname))
 	{
-		I_Error ("Could not find map %s\n", mapname);
+		I_Error ("The area %s doesn't exist!\n", mapname);
 	}
 
 	wantFast = !!G_SkillProperty(SKILLP_FastMonsters);

@@ -368,7 +368,7 @@ MapData *P_OpenMapData(const char * mapname, bool justcheck)
 
 					if (lumpname == NULL)
 					{
-						I_Error("Invalid map definition for %s", mapname);
+						I_Error("The area %s is invalidly formatted.", mapname);
 					}
 					else if (!stricmp(lumpname, "ZNODES"))
 					{
@@ -599,9 +599,9 @@ static void SetTexture (side_t *side, int position, const char *name, FMissingTe
 				{
 					if (lines[i].sidedef[j] == side)
 					{
-						Printf(TEXTCOLOR_RED"Unknown %s texture '"
+						Printf(TEXTCOLOR_RED"There is an unknown %s texture named"
 							TEXTCOLOR_ORANGE "%s" TEXTCOLOR_RED
-							"' on %s side of linedef %d\n",
+							" on the %s side of linedef #%d.\n",
 							positionnames[position], name, sidenames[j], i);
 					}
 				}
@@ -637,9 +637,9 @@ void SetTexture (sector_t *sector, int index, int position, const char *name, FM
 	{
 		if (++track[name].Count <= MISSING_TEXTURE_WARN_LIMIT)
 		{
-			Printf(TEXTCOLOR_RED"Unknown %s texture '"
+			Printf(TEXTCOLOR_RED"There is an unknown %s texture named "
 				TEXTCOLOR_ORANGE "%s" TEXTCOLOR_RED
-				"' in sector %d\n",
+				" used in sector #%d\n",
 				positionnames[position], name, index);
 		}
 		texture = TexMan.GetDefaultTexture();
@@ -665,9 +665,9 @@ static void SummarizeMissingTextures(const FMissingTextureTracker &missing)
 	{
 		if (pair->Value.Count > MISSING_TEXTURE_WARN_LIMIT)
 		{
-			Printf(TEXTCOLOR_RED "Missing texture '"
+			Printf(TEXTCOLOR_RED "The missing texture named "
 				TEXTCOLOR_ORANGE "%s" TEXTCOLOR_RED
-				"' is used %d more times\n",
+				" is used %d more times, so they won't be mentioned anymore for this area. Fix that, mapper!\n",
 				pair->Key.GetChars(), pair->Value.Count - MISSING_TEXTURE_WARN_LIMIT);
 		}
 	}
