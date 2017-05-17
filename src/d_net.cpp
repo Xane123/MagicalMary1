@@ -2674,7 +2674,7 @@ void Net_DoCommand (int type, BYTE **stream, int player)
 		break;
 
 	default:
-		I_Error ("Unknown net command: %d", type);
+		Printf ("Unknown demo/net command: %d\n", type);	//[XANE]Not sure what unknown commands past demos had but it doesn't warrant cutting my demos off!
 		break;
 	}
 

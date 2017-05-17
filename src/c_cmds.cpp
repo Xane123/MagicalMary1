@@ -229,7 +229,7 @@ CCMD (chase)
 	{
 		int i;
 
-		if (chasedemo)
+		if (0)
 		{
 			chasedemo = false;
 			for (i = 0; i < MAXPLAYERS; i++)

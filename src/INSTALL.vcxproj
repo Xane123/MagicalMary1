@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{F6F3BF2E-A889-3AB7-BFA5-3A2D2F86A61F}</ProjectGUID>
+    <ProjectGUID>{A8DFFEF6-BD30-3A4D-B9AD-F0B04F2CC2DF}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -67,7 +67,7 @@
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -89,7 +89,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -111,7 +111,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -133,7 +133,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -154,7 +154,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\d300d2a4d43acdf2baaca830c397632e\INSTALL_force.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\9df01fca94b42de4f7604479dd6e4c43\INSTALL_force.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
 cd .
@@ -165,8 +165,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
@@ -178,8 +178,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
@@ -191,8 +191,8 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"> </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
@@ -204,18 +204,18 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\INSTALL_force</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/INSTALL_force.rule;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\INSTALL_force</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
-      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\zlib\ALL_BUILD.vcxproj">
-      <Project>E4BA5F7E-204F-3418-9F04-43916F229AA8</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\zlib\ALL_BUILD.vcxproj">
+      <Project>7105F760-BBDB-38DA-8212-69481637B8E3</Project>
       <Name>ALL_BUILD</Name>
     </ProjectReference>
   </ItemGroup>

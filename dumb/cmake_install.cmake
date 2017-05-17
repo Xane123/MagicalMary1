@@ -1,8 +1,8 @@
-# Install script for directory: D:/Git/Failure5/dumb
+# Install script for directory: D:/Git/MaryMagicalAdventure/dumb
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/GZDoom")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Mary's Magical Adventure")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

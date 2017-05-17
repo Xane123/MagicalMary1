@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{E4BA5F7E-204F-3418-9F04-43916F229AA8}</ProjectGUID>
+    <ProjectGUID>{7105F760-BBDB-38DA-8212-69481637B8E3}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -106,10 +106,10 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -117,12 +117,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeLists.txt;D:\Git\Failure5\CMakeLists.txt;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\Failure5\CreateLaunchers.cmake;D:\Git\Failure5\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\MaryMagicalAdventure\CreateLaunchers.cmake;D:\Git\MaryMagicalAdventure\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -130,12 +130,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeLists.txt;D:\Git\Failure5\CMakeLists.txt;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\Failure5\CreateLaunchers.cmake;D:\Git\Failure5\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\MaryMagicalAdventure\CreateLaunchers.cmake;D:\Git\MaryMagicalAdventure\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -143,12 +143,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeLists.txt;D:\Git\Failure5\CMakeLists.txt;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\Failure5\CreateLaunchers.cmake;D:\Git\Failure5\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\MaryMagicalAdventure\CreateLaunchers.cmake;D:\Git\MaryMagicalAdventure\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -156,84 +156,84 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeLists.txt;D:\Git\Failure5\CMakeLists.txt;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\Failure5\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\Failure5\CreateLaunchers.cmake;D:\Git\Failure5\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeLists.txt;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInitialize.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCCompiler.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeCXXCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeSystemSpecificInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeGenericSystem.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\WindowsPaths.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-C.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CMakeRCCompiler.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeRCInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeLanguageInformation.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Compiler\MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\Platform\Windows-MSVC.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCommonLanguageInclude.cmake;D:\Git\MaryMagicalAdventure\CreateLaunchers.cmake;D:\Git\MaryMagicalAdventure\CleanDirectoryList.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindBZip2.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindJPEG.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindZLIB.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\SelectLibraryConfigurations.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
-      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\wadsrc_bm\brightmaps_pk3.vcxproj">
-      <Project>579185DC-8398-34BB-8C5E-B57CF09F1585</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\wadsrc_bm\brightmaps_pk3.vcxproj">
+      <Project>6A9B0841-E32F-3072-8CFB-775459B228B6</Project>
       <Name>brightmaps_pk3</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\bzip2\bz2.vcxproj">
-      <Project>CCBBC0CB-17B9-30C5-A0B6-28B6CC835D97</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\bzip2\bz2.vcxproj">
+      <Project>F32A040A-EEFF-315B-8219-B7A5652669C9</Project>
       <Name>bz2</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\wadsrc\data_pk3.vcxproj">
-      <Project>1F1EEBDD-0652-3E49-B049-0525B1E6DC3D</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\wadsrc\data_pk3.vcxproj">
+      <Project>BD71EFAA-9B86-31A6-9E3F-F151F3E47354</Project>
       <Name>data_pk3</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\dumb\dumb.vcxproj">
-      <Project>5E3C7F86-A926-3515-9C83-51D27A0514FB</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\dumb\dumb.vcxproj">
+      <Project>CAA1AAA9-63C6-398A-AC06-36EC9BFABFDA</Project>
       <Name>dumb</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\fixrtext\fixrtext.vcxproj">
-      <Project>E5BE4786-3830-3E0A-A570-70F38A118830</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\fixrtext\fixrtext.vcxproj">
+      <Project>E8B1826D-A1C2-33E3-9995-2E7D7F28DC69</Project>
       <Name>fixrtext</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\gdtoa\gdtoa.vcxproj">
-      <Project>4DB4F1B2-1BB9-33C9-8065-44E627E36F9C</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\gdtoa\gdtoa.vcxproj">
+      <Project>F4EC7253-4AC7-305B-9279-BD5B83C95FCD</Project>
       <Name>gdtoa</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\game-music-emu\gme\gme.vcxproj">
-      <Project>105F4EA4-863F-3636-A5D4-6A836D2B7305</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\game-music-emu\gme\gme.vcxproj">
+      <Project>FC80024B-4F21-3CE0-8A9B-E7B020418933</Project>
       <Name>gme</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\jpeg-6b\jpeg.vcxproj">
-      <Project>2C13826F-EDE3-378B-960A-B3B46FEB379A</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\jpeg-6b\jpeg.vcxproj">
+      <Project>BE7A666E-0F3C-322F-AC4C-56737204FE44</Project>
       <Name>jpeg</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\lemon\lemon.vcxproj">
-      <Project>97EFBD0E-D61D-3B3E-9622-BAD91EEBDF2A</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\lemon\lemon.vcxproj">
+      <Project>367CB657-D6BF-3DD0-BFAF-D9720D176175</Project>
       <Name>lemon</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\wadsrc_lights\lights_pk3.vcxproj">
-      <Project>856E6956-5BC1-310B-983E-98C985EAE500</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\wadsrc_lights\lights_pk3.vcxproj">
+      <Project>3ECC1945-1C25-3CA5-8E18-947F1D469201</Project>
       <Name>lights_pk3</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\lzma\lzma.vcxproj">
-      <Project>16C2CF9D-6802-332C-8541-DFC0A6118E30</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\lzma\lzma.vcxproj">
+      <Project>8E312DDC-E4A4-37FB-8BA0-5AD0A0AA35D5</Project>
       <Name>lzma</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\re2c\re2c.vcxproj">
-      <Project>65D24F60-CB28-3831-A829-08529D9322E5</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\re2c\re2c.vcxproj">
+      <Project>14572EDF-E7AC-31DB-B112-A05866397C42</Project>
       <Name>re2c</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\src\revision_check.vcxproj">
-      <Project>B33DFFE8-5444-3278-9E7B-76E0B623232A</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\src\revision_check.vcxproj">
+      <Project>417F6CC1-8598-37AC-A97E-A1A87F6BFDED</Project>
       <Name>revision_check</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\updaterevision\updaterevision.vcxproj">
-      <Project>D5C9889E-17B2-39F5-AF07-C890D8BE3ABA</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\updaterevision\updaterevision.vcxproj">
+      <Project>F39B708B-7718-3977-AC81-1AF7FD472B02</Project>
       <Name>updaterevision</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\zlib\z.vcxproj">
-      <Project>FCBF41FA-DD3E-33F2-B629-8D0839700240</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\zlib\z.vcxproj">
+      <Project>E883438D-273F-390D-A124-71DFEE3AD065</Project>
       <Name>z</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\src\zdoom.vcxproj">
-      <Project>2EAA1B2F-DB60-3E1E-8BCF-CF0B47FFD97F</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\src\zdoom.vcxproj">
+      <Project>01E4734C-B56A-37CC-80F1-7FBC5821F66F</Project>
       <Name>zdoom</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\zipdir\zipdir.vcxproj">
-      <Project>28B03168-67BA-34A6-BC47-9197A4DBDC0C</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\zipdir\zipdir.vcxproj">
+      <Project>8AFFA02C-1DF6-3B1A-BE84-143F0DD8E544</Project>
       <Name>zipdir</Name>
     </ProjectReference>
   </ItemGroup>

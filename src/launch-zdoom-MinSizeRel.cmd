@@ -1,9 +1,9 @@
-cd D:/Git/Failure5
+cd D:/Git/MaryMagicalAdventure
 set PATH=;%PATH%
 
 if [%1]==[--debugger] (
 	SHIFT
 )
 
-"D:\Git\Failure5\MinSizeRel\play.exe"  
+"D:\Git\MaryMagicalAdventure\MinSizeRel\play.exe"  
 pause

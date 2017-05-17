@@ -115,7 +115,7 @@ void STAT_Read(PNGHandle *png);
 
 FIntCVar gameskill ("skill", 2, CVAR_SERVERINFO|CVAR_LATCH);
 CVAR (Int, deathmatch, 0, CVAR_SERVERINFO|CVAR_LATCH);
-CVAR (Bool, chasedemo, true, 0);
+CVAR (Bool, chasedemo, false, 0);	//[XANE]My demos don't loook good with chasecam on!
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, longsavemessages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (String, save_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
@@ -262,36 +262,6 @@ CUSTOM_CVAR (Float, turbo, 100.f, 0)
 	}
 }
 
-CCMD (turnspeeds)
-{
-	if (argv.argc() == 1)
-	{
-		Printf ("Current turn speeds: %d %d %d %d\n", angleturn[0],
-			angleturn[1], angleturn[2], angleturn[3]);
-	}
-	else
-	{
-		int i;
-
-		for (i = 1; i <= 4 && i < argv.argc(); ++i)
-		{
-			angleturn[i-1] = atoi (argv[i]);
-		}
-		if (i <= 2)
-		{
-			angleturn[1] = angleturn[0] * 2;
-		}
-		if (i <= 3)
-		{
-			angleturn[2] = angleturn[0] / 2;
-		}
-		if (i <= 4)
-		{
-			angleturn[3] = angleturn[2];
-		}
-	}
-}
-
 CCMD (slot)
 {
 	if (argv.argc() > 1)
@@ -311,10 +281,10 @@ CCMD (centerview)
 	Net_WriteByte (DEM_CENTERVIEW);
 }
 
-CCMD(crouch)
+/*CCMD(crouch)
 {
 	Net_WriteByte(DEM_CROUCH);
-}
+}*/
 
 CCMD (land)
 {

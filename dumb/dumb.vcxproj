@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{5E3C7F86-A926-3515-9C83-51D27A0514FB}</ProjectGUID>
+    <ProjectGUID>{CAA1AAA9-63C6-398A-AC06-36EC9BFABFDA}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -60,26 +60,26 @@
   <PropertyGroup Label="UserMacros" />
     <PropertyGroup>
       <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\dumb\Debug\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\dumb\Debug\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dumb.dir\Debug\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dumb</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\dumb\Release\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\dumb\Release\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">dumb.dir\Release\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">dumb</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\dumb\MinSizeRel\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\dumb\MinSizeRel\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">dumb.dir\MinSizeRel\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">dumb</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\dumb\RelWithDebInfo\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\dumb\RelWithDebInfo\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">dumb.dir\RelWithDebInfo\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">dumb</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -103,10 +103,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NDEBUG;DEBUGMODE=1;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -119,7 +119,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -143,10 +143,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -159,7 +159,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -183,10 +183,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -199,7 +199,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsC</CompileAs>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -223,10 +223,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Git\Failure5\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Git\MaryMagicalAdventure\dumb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -238,10 +238,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\dumb\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/dumb/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/dumb/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/dumb/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -249,12 +249,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/dumb/CMakeLists.txt;D:\Git\Failure5\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\Failure5\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\dumb\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\dumb\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/dumb/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/dumb/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/dumb/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -262,12 +262,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/dumb/CMakeLists.txt;D:\Git\Failure5\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\Failure5\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\dumb\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\dumb\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/dumb/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/dumb/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/dumb/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -275,12 +275,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/dumb/CMakeLists.txt;D:\Git\Failure5\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\Failure5\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\dumb\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\dumb\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/dumb/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/dumb/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/dumb/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -288,100 +288,100 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/dumb/CMakeLists.txt;D:\Git\Failure5\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\Failure5\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\dumb\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/dumb/CMakeLists.txt;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Git\MaryMagicalAdventure\dumb\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\dumb\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\unload.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\rendsig.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\rendduh.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\register.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\readduh.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\rawsig.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\makeduh.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\loadduh.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\dumbfile.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\duhtag.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\duhlen.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\core\atexit.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\stdfile.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\silence.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\sampbuf.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\riff.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\resample.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\memfile.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\clickrem.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\barray.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\xmeffect.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readxm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readxm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readstm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readstm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\reads3m2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\reads3m.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readriff.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readptm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readpsm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readoldpsm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readokt2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readokt.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readmtm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readmod2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readmod.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readdsmf.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readasy.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readamf2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readamf.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readam.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\read6692.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\read669.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\ptmeffect.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadxm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadxm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadstm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadstm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loads3m2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loads3m.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadriff2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadriff.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadptm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadptm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadpsm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadpsm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadoldpsm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadoldpsm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadokt2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadokt.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmtm2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmtm.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmod2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadmod.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadasy2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadasy.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadamf2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadamf.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\load6692.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\load669.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itunload.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itrender.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itread2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itread.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itorder.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itmisc.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itload2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\itload.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readany.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadany2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\loadany.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\it\readany2.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\resampler.c"  />
-    <ClCompile Include="D:\Git\Failure5\dumb\src\helpers\lpc.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\unload.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\rendsig.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\rendduh.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\register.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\readduh.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\rawsig.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\makeduh.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\loadduh.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\dumbfile.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\duhtag.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\duhlen.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\core\atexit.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\stdfile.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\silence.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\sampbuf.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\riff.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\resample.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\memfile.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\clickrem.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\barray.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\xmeffect.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readxm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readxm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readstm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readstm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\reads3m2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\reads3m.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readriff.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readptm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readpsm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readoldpsm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readokt2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readokt.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readmtm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readmod2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readmod.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readdsmf.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readasy.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readamf2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readamf.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readam.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\read6692.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\read669.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\ptmeffect.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadxm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadxm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadstm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadstm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loads3m2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loads3m.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadriff2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadriff.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadptm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadptm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadpsm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadpsm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadoldpsm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadoldpsm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadokt2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadokt.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmtm2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmtm.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmod2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadmod.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadasy2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadasy.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadamf2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadamf.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\load6692.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\load669.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itunload.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itrender.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itread2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itread.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itorder.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itmisc.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itload2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\itload.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readany.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadany2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\loadany.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\it\readany2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\resampler.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\dumb\src\helpers\lpc.c"  />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
-      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
   </ItemGroup>

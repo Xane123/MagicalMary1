@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{16C2CF9D-6802-332C-8541-DFC0A6118E30}</ProjectGUID>
+    <ProjectGUID>{8E312DDC-E4A4-37FB-8BA0-5AD0A0AA35D5}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -60,19 +60,19 @@
   <PropertyGroup Label="UserMacros" />
     <PropertyGroup>
       <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\lzma\Debug\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\lzma\Debug\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lzma.dir\Debug\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lzma</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\lzma\Release\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\lzma\Release\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lzma.dir\Release\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lzma</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\lzma\MinSizeRel\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\lzma\MinSizeRel\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">lzma.dir\MinSizeRel\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">lzma</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
-      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\lzma\RelWithDebInfo\</OutDir>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\lzma\RelWithDebInfo\</OutDir>
       <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">lzma.dir\RelWithDebInfo\</IntDir>
       <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">lzma</TargetName>
       <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
@@ -234,10 +234,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\lzma\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/lzma/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/lzma/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/lzma/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -245,12 +245,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/lzma/CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\lzma\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\lzma\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/lzma/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/lzma/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/lzma/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -258,12 +258,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/lzma/CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\lzma\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\lzma\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/lzma/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/lzma/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/lzma/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -271,12 +271,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/lzma/CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\lzma\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\lzma\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/lzma/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/lzma/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/lzma/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -284,36 +284,36 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/lzma/CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;D:\Git\Failure5\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\lzma\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/lzma/CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;D:\Git\MaryMagicalAdventure\lzma\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\lzma\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Git\Failure5\lzma\C\7zArcIn.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\7zBuf.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\7zCrc.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\7zCrcOpt.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\7zDec.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\7zStream.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Bcj2.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Bra.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Bra86.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\BraIA64.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\CpuArch.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Delta.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\LzFind.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Lzma2Dec.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\LzmaDec.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\LzmaEnc.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Ppmd7.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Ppmd7Dec.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\LzFindMt.c"  />
-    <ClCompile Include="D:\Git\Failure5\lzma\C\Threads.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\7zArcIn.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\7zBuf.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\7zCrc.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\7zCrcOpt.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\7zDec.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\7zStream.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Bcj2.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Bra.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Bra86.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\BraIA64.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\CpuArch.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Delta.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\LzFind.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Lzma2Dec.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\LzmaDec.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\LzmaEnc.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Ppmd7.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Ppmd7Dec.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\LzFindMt.c"  />
+    <ClCompile Include="D:\Git\MaryMagicalAdventure\lzma\C\Threads.c"  />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
-      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
   </ItemGroup>

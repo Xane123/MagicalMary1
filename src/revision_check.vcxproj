@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{B33DFFE8-5444-3278-9E7B-76E0B623232A}</ProjectGUID>
+    <ProjectGUID>{417F6CC1-8598-37AC-A97E-A1A87F6BFDED}</ProjectGUID>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
@@ -67,7 +67,7 @@
     </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -77,7 +77,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -87,7 +87,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -97,7 +97,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\Failure5\zlib;D:\Git\Failure5\bzip2;D:\Git\Failure5\lzma\C;D:\Git\Failure5\jpeg-6b;D:\Git\Failure5\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\Failure5\src;D:\Git\Failure5\src\.;D:\Git\Failure5\src\g_doom;D:\Git\Failure5\src\g_heretic;D:\Git\Failure5\src\g_hexen;D:\Git\Failure5\src\g_raven;D:\Git\Failure5\src\g_strife;D:\Git\Failure5\src\g_shared;D:\Git\Failure5\src\sound;D:\Git\Failure5\src\textures;D:\Git\Failure5\src\thingdef;D:\Git\Failure5\src\timidity;D:\Git\Failure5\src\wildmidi;D:\Git\Failure5\src\xlat;D:\Git\Failure5\src\zscript;D:\Git\Failure5\src\..\gdtoa;D:\Git\Failure5\src\..\dumb\include;D:\Git\Failure5\gdtoa;D:\Git\Failure5\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;D:\Git\Requirements\OpenAL\include\AL;D:\Git\MaryMagicalAdventure\zlib;D:\Git\MaryMagicalAdventure\bzip2;D:\Git\MaryMagicalAdventure\lzma\C;D:\Git\MaryMagicalAdventure\jpeg-6b;D:\Git\MaryMagicalAdventure\game-music-emu;D:\Programs\Mega-Nerd\libsndfile\include;D:\Git\Requirements\MPG123;D:\Git\MaryMagicalAdventure\src;D:\Git\MaryMagicalAdventure\src\.;D:\Git\MaryMagicalAdventure\src\g_doom;D:\Git\MaryMagicalAdventure\src\g_heretic;D:\Git\MaryMagicalAdventure\src\g_hexen;D:\Git\MaryMagicalAdventure\src\g_raven;D:\Git\MaryMagicalAdventure\src\g_strife;D:\Git\MaryMagicalAdventure\src\g_shared;D:\Git\MaryMagicalAdventure\src\sound;D:\Git\MaryMagicalAdventure\src\textures;D:\Git\MaryMagicalAdventure\src\thingdef;D:\Git\MaryMagicalAdventure\src\timidity;D:\Git\MaryMagicalAdventure\src\wildmidi;D:\Git\MaryMagicalAdventure\src\xlat;D:\Git\MaryMagicalAdventure\src\zscript;D:\Git\MaryMagicalAdventure\src\..\gdtoa;D:\Git\MaryMagicalAdventure\src\..\dumb\include;D:\Git\MaryMagicalAdventure\gdtoa;D:\Git\MaryMagicalAdventure\src\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -106,10 +106,10 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\src\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/Failure5/src/CMakeLists.txt</Message>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\src\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/src/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -117,12 +117,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/src/CMakeLists.txt;D:\Git\Failure5\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\launcher-templates\vcxproj.user.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/Failure5/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/src/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -130,12 +130,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/src/CMakeLists.txt;D:\Git\Failure5\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\launcher-templates\vcxproj.user.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/Failure5/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/src/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -143,12 +143,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/src/CMakeLists.txt;D:\Git\Failure5\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\launcher-templates\vcxproj.user.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/Failure5/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/Git/MaryMagicalAdventure/src/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Programs\CMake\bin\cmake.exe -HD:/Git/Failure5 -BD:/Git/Failure5 --check-stamp-file D:/Git/Failure5/src/CMakeFiles/generate.stamp
+D:\Programs\CMake\bin\cmake.exe -HD:/Git/MaryMagicalAdventure -BD:/Git/MaryMagicalAdventure --check-stamp-file D:/Git/MaryMagicalAdventure/src/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -156,20 +156,20 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/src/CMakeLists.txt;D:\Git\Failure5\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\Failure5\launcher-templates\vcxproj.user.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\launcher-templates\targetlauncher.cmd.in;D:\Git\Failure5\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/src/CMakeLists.txt;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXCompilerFlag.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckCXXSourceCompiles.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\CheckLibraryExists.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPkgConfig.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenGL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindOpenAL.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindSndFile.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindMPG123.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\FindFluidSynth.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageHandleStandardArgs.cmake;D:\Programs\CMake\share\cmake-3.8\Modules\FindPackageMessage.cmake;D:\Git\MaryMagicalAdventure\launcher-templates\vcxproj.user.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\launcher-templates\targetlauncher.cmd.in;D:\Git\MaryMagicalAdventure\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\d300d2a4d43acdf2baaca830c397632e\revision_check.rule">
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\9df01fca94b42de4f7604479dd6e4c43\revision_check.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-cd D:\Git\Failure5
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-D:\Git\Failure5\tools\updaterevision\Debug\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\Debug\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -177,16 +177,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/revision_check.rule;D:\Git\Failure5\tools\updaterevision\Debug\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\Failure5\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\Debug\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-cd D:\Git\Failure5
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-D:\Git\Failure5\tools\updaterevision\Release\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\Release\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -194,16 +194,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/revision_check.rule;D:\Git\Failure5\tools\updaterevision\Release\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\Failure5\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\Release\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-cd D:\Git\Failure5
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-D:\Git\Failure5\tools\updaterevision\MinSizeRel\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\MinSizeRel\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -211,16 +211,16 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/revision_check.rule;D:\Git\Failure5\tools\updaterevision\MinSizeRel\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\Failure5\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\MinSizeRel\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'"></Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-cd D:\Git\Failure5
+cd D:\Git\MaryMagicalAdventure
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-D:\Git\Failure5\tools\updaterevision\RelWithDebInfo\updaterevision.exe src/gitinfo.h
+D:\Git\MaryMagicalAdventure\tools\updaterevision\RelWithDebInfo\updaterevision.exe src/gitinfo.h
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -228,21 +228,21 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/Failure5/CMakeFiles/d300d2a4d43acdf2baaca830c397632e/revision_check.rule;D:\Git\Failure5\tools\updaterevision\RelWithDebInfo\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\Failure5\src\CMakeFiles\revision_check</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/9df01fca94b42de4f7604479dd6e4c43/revision_check.rule;D:\Git\MaryMagicalAdventure\tools\updaterevision\RelWithDebInfo\updaterevision.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\Git\Failure5\src\CMakeFiles\revision_check" />
+    <None Include="D:\Git\MaryMagicalAdventure\src\CMakeFiles\revision_check" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Git\Failure5\ZERO_CHECK.vcxproj">
-      <Project>20956D98-6C14-3A6B-9647-B87ADE645DD9</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>6E709194-805F-321F-A575-9B8B30C059F8</Project>
       <Name>ZERO_CHECK</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Git\Failure5\tools\updaterevision\updaterevision.vcxproj">
-      <Project>D5C9889E-17B2-39F5-AF07-C890D8BE3ABA</Project>
+    <ProjectReference Include="D:\Git\MaryMagicalAdventure\tools\updaterevision\updaterevision.vcxproj">
+      <Project>F39B708B-7718-3977-AC81-1AF7FD472B02</Project>
       <Name>updaterevision</Name>
     </ProjectReference>
   </ItemGroup>
