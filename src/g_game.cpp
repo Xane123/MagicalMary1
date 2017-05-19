@@ -1815,7 +1815,7 @@ void G_DoLoadGame ()
 	FILE *stdfile = fopen (savename.GetChars(), "rb");
 	if (stdfile == NULL)
 	{
-		Printf ("Could not read savegame '%s'\n", savename.GetChars());
+		Printf("%s couldn't be read; If you duplicated the 'new save' option, you can safely delete it.\n", savename.GetChars());
 		return;
 	}
 
@@ -1843,7 +1843,7 @@ void G_DoLoadGame ()
 		}
 		else
 		{
-			Printf ("Savegame is from another ZDoom-based engine: %s\n", engine);
+			Printf("That is the save file used for the title demos; Please delete it.\n");
 			delete[] engine;
 		}
 		delete png;
@@ -2049,7 +2049,7 @@ void G_DoAutoSave ()
 {
 	char description[SAVESTRINGSIZE];
 	FString file;
-	// Keep up to four autosaves at a time
+	// Keep up to one checkpoint at a time
 	UCVarValue num;
 	const char *readableTime;
 	int count = autosavecount != 0 ? autosavecount : 1;
@@ -2075,10 +2075,13 @@ void G_DoAutoSave ()
 	}
 
 	readableTime = myasctime ();
-	if (demoplayback) strcpy(description, "Demo DEL!");
-	else strcpy(description, "Chekpoint");
-	strncpy (description+9, readableTime+4, 12);
-	description[9+12] = 0;
+	if (demoplayback) strcpy(description, "Demo! Delete this!");
+	else
+	{
+		strcpy(description, "Chekpoint");
+		strncpy(description + 9, readableTime + 4, 12);
+		description[9 + 12] = 0;
+	}
 
 	G_DoSaveGame (false, file, description);
 }
@@ -2183,9 +2186,13 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	PutSavePic (stdfile, SAVEPICWIDTH, SAVEPICHEIGHT);
 	mysnprintf(buf, countof(buf), GAMENAME " %s", GetVersionString());
 	M_AppendPNGText (stdfile, "Software", buf);
-	M_AppendPNGText (stdfile, "Engine", GAMESIG);
+	if (isdemosave) M_AppendPNGText (stdfile, "Engine", "DEMOSAVE");
+	else M_AppendPNGText(stdfile, "Engine", GAMESIG);
 	M_AppendPNGText (stdfile, "ZDoom Save Version", SAVESIG);
-	if (isdemosave) M_AppendPNGText (stdfile, "Title", "Demo - delete");
+	if (isdemosave)
+	{
+		M_AppendPNGText(stdfile, "Title", "Demo - delete");
+	}
 	else M_AppendPNGText(stdfile, "Title", description);
 	M_AppendPNGText (stdfile, "Current Map", level.MapName);
 	PutSaveWads (stdfile);
