@@ -503,7 +503,7 @@ void HSendPacket (int node, int len)
 		return;
 
 	if (!netgame)
-		I_Error ("Tried to transmit to another node");
+		I_Error ("Your game tried to transmit itself to another game node, or player.");
 
 #if SIMULATEERRORS
 	if (rand() < SIMULATEERRORS)

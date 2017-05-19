@@ -1759,7 +1759,7 @@ static bool CheckSingleWad (char *name, bool &printRequires, bool printwarn)
 		{
 			if (!printRequires)
 			{
-				Printf ("This savegame needs these wads:\n%s", name);
+				Printf ("The save file you're trying to load requires %s.\n", name);
 			}
 			else
 			{
@@ -2075,7 +2075,8 @@ void G_DoAutoSave ()
 	}
 
 	readableTime = myasctime ();
-	strcpy (description, "Chekpoint");
+	if (demoplayback) strcpy(description, "Demo DEL!");
+	else strcpy(description, "Chekpoint");
 	strncpy (description+9, readableTime+4, 12);
 	description[9+12] = 0;
 
@@ -2147,6 +2148,7 @@ static void PutSavePic (FILE *file, int width, int height)
 void G_DoSaveGame (bool okForQuicksave, FString filename, const char *description)
 {
 	char buf[100];
+	bool isdemosave = false;
 
 	// Do not even try, if we're not in a level. (Can happen after
 	// a demo finishes playback.)
@@ -2158,6 +2160,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	if (demoplayback)
 	{
 		filename = G_BuildSaveName ("demosave.zds", -1);
+		isdemosave = true;	//[XANE]This is a demo, so name it correctly!
 	}
 
 	if (cl_waitforsave)
@@ -2170,7 +2173,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (stdfile == NULL)
 	{
-		Printf ("Could not create savegame '%s'\n", filename.GetChars());
+		Printf ("Couldn't save your life to %s!\n", filename.GetChars());
 		insave = false;
 		I_FreezeTime(false);
 		return;
@@ -2182,7 +2185,8 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	M_AppendPNGText (stdfile, "Software", buf);
 	M_AppendPNGText (stdfile, "Engine", GAMESIG);
 	M_AppendPNGText (stdfile, "ZDoom Save Version", SAVESIG);
-	M_AppendPNGText (stdfile, "Title", description);
+	if (isdemosave) M_AppendPNGText (stdfile, "Title", "Demo - delete");
+	else M_AppendPNGText(stdfile, "Title", description);
 	M_AppendPNGText (stdfile, "Current Map", level.MapName);
 	PutSaveWads (stdfile);
 	PutSaveComment (stdfile);
@@ -2756,6 +2760,7 @@ bool G_CheckDemoStatus (void)
 		C_RestoreCVars ();		// [RH] Restore cvars demo might have changed
 		M_Free (demobuffer);
 		demobuffer = NULL;
+
 
 		P_SetupWeapons_ntohton();
 		demoplayback = false;

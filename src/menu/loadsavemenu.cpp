@@ -144,7 +144,7 @@ void ClearSaveGames()
 //
 //=============================================================================
 
-int DLoadSaveMenu::RemoveSaveSlot (int index)
+int DLoadSaveMenu::RemoveSaveSlot (int index)	//[XANE]This deletes a save!
 {
 	FSaveGameNode *file = SaveGames[index];
 
@@ -921,7 +921,7 @@ DSaveMenu::DSaveMenu(DMenu *parent, FListMenuDescriptor *desc)
 //
 //=============================================================================
 
-void DSaveMenu::Destroy()
+void DSaveMenu::Destroy()	//Used when closing the Save Game menu.
 {
 	if (SaveGames[0] == &NewSaveNode)
 	{
