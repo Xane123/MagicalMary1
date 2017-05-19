@@ -10,6 +10,12 @@
 *.pk3
 *.wad
 *.opendb
+*.db-shm
+*.db
+*.db-wal
+*.VC.db
+*.VC.db-shm
+*.VC.db-wal
 /CMakeFiles
 CMakeCache.txt
 /CMakeCache.txt
