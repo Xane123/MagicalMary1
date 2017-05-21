@@ -395,62 +395,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\dce7eebb3d7e8ee717a40f4111ab9073\sc_man_scanner.h.rule">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating sc_man_scanner.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-..\tools\re2c\Debug\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\Debug\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating sc_man_scanner.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-..\tools\re2c\Release\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\Release\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating sc_man_scanner.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-..\tools\re2c\MinSizeRel\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\MinSizeRel\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating sc_man_scanner.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-..\tools\re2c\RelWithDebInfo\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\RelWithDebInfo\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\dce7eebb3d7e8ee717a40f4111ab9073\xlat_parser.c.rule">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating xlat_parser.c, xlat_parser.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
@@ -607,6 +551,62 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/zcc-parse.c.rule;D:\Git\MaryMagicalAdventure\tools\lemon\RelWithDebInfo\lemon.exe;D:\Git\MaryMagicalAdventure\src\zscript\zcc-parse.lemon;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\zcc-parse.c;D:\Git\MaryMagicalAdventure\src\zcc-parse.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\dce7eebb3d7e8ee717a40f4111ab9073\sc_man_scanner.h.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating sc_man_scanner.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+..\tools\re2c\Debug\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\Debug\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating sc_man_scanner.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+..\tools\re2c\Release\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\Release\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Generating sc_man_scanner.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+..\tools\re2c\MinSizeRel\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\MinSizeRel\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Generating sc_man_scanner.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+..\tools\re2c\RelWithDebInfo\re2c.exe --no-generation-date -s -o D:/Git/MaryMagicalAdventure/src/sc_man_scanner.h D:/Git/MaryMagicalAdventure/src/sc_man_scanner.re
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:/Git/MaryMagicalAdventure/CMakeFiles/dce7eebb3d7e8ee717a40f4111ab9073/sc_man_scanner.h.rule;D:\Git\MaryMagicalAdventure\tools\re2c\RelWithDebInfo\re2c.exe;D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
@@ -797,7 +797,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gameconfigfile.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gametype.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gi.h" />
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gitinfo.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\gstrings.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\hu_stuff.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\i_cd.h" />
@@ -857,7 +856,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\s_sndseq.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\s_sound.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man.h" />
-    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_tokens.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\skins.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\st_start.h" />
@@ -915,6 +913,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\i_video.mm" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\st_console.mm" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\posix\cocoa\st_start.mm" />
+    <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_scanner.h" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\sc_man_scanner.re" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_arachnotron.cpp" />
     <ClInclude Include="D:\Git\MaryMagicalAdventure\src\g_doom\a_archvile.cpp" />

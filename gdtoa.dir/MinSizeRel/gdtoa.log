@@ -1,1 +1,7 @@
-﻿  gdtoa.vcxproj -> D:\Git\MaryMagicalAdventure\gdtoa\MinSizeRel\gdtoa.lib
+﻿  Building Custom Rule D:/Git/MaryMagicalAdventure/gdtoa/CMakeLists.txt
+  CMake does not need to re-run because D:/Git/MaryMagicalAdventure/gdtoa/CMakeFiles/generate.stamp is up-to-date.
+  dmisc.c
+  dtoa.c
+  misc.c
+  Generating Code...
+  gdtoa.vcxproj -> D:\Git\MaryMagicalAdventure\gdtoa\MinSizeRel\gdtoa.lib

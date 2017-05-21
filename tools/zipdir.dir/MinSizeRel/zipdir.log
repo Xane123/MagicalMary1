@@ -1,1 +1,4 @@
-﻿  zipdir.vcxproj -> D:\Git\MaryMagicalAdventure\tools\zipdir\MinSizeRel\zipdir.exe
+﻿  Building Custom Rule D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeLists.txt
+  CMake does not need to re-run because D:/Git/MaryMagicalAdventure/tools/zipdir/CMakeFiles/generate.stamp is up-to-date.
+  zipdir.c
+  zipdir.vcxproj -> D:\Git\MaryMagicalAdventure\tools\zipdir\MinSizeRel\zipdir.exe
