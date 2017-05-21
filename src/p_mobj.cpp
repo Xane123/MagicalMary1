@@ -4177,7 +4177,7 @@ AActor *AActor::StaticSpawn (PClassActor *type, fixed_t ix, fixed_t iy, fixed_t 
 {
 	if (type == NULL)
 	{
-		I_Error("MMA tried to spawn an actor that doesn't exist; Check your monsters' code for A_Blast. If there's a number after the last expected one, it may be causing the crash!\n");
+		I_Error("MMA tried to spawn an actor that doesn't exist!\n\nIf you're playing the normal Mary's Magical Adventure, report this to Xane123 on his GitHub issues, specifying what enemy was nearby, where you were, and what you were doing before the crash.\nYou should still have your last checkpoint save, so load from there and avoid the enemy that caused this, or XKILL them when you see them.\n\nIf you're the developer, check your monsters' code for A_Blast. If there's a number after the last expected one, it may be causing the crash!\n");
 	}
 
 	if (allowreplacement)

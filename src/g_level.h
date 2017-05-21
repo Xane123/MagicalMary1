@@ -273,10 +273,12 @@ struct level_info_t
 {
 	int			levelnum;
 
-	int			skyboxmovement;	//[XANE] Attempt to add a new MAPINFO option.
+	int			skyboxmovement1;	//[XANE] Horizontal skybox movement
+	int			skyboxmovement2;	//[XANE] Vertical skybox movement
 	int			xanemusic;		//[XANE] Music ID used for this level.
 	int			world_number;	//[XANE] World number to display on title card.
 	int			world_level;	//[XANE] Level number (For example, in 1-3, the level number is 3.)
+	int			specstgno;	//[XANE] Special Stage number
 
 	FString		MapName;
 	FString		NextMap;
@@ -402,10 +404,12 @@ struct FLevelLocals
 	int			clusterflags;
 	int			levelnum;
 
-	int			skyboxmovement;
+	int			skyboxmovement1;
+	int			skyboxmovement2;
 	int			xanemusic;
 	int			world_number;
 	int			world_level;
+	int			specstgno;
 
 	int			lumpnum;
 	FString		LevelName;

@@ -51,7 +51,7 @@ void BlastActor (AActor *victim, fixed_t strength, fixed_t speed, AActor *Owner,
 		mo->velx = victim->velx;
 		mo->vely = victim->vely;
 	}
-	/*if (victim->flags & MF_MISSILE)
+	/*if (victim->flags & MF_MISSILE) //[XANE]A_Blast won't blast vertically because it's used for the yellow HCPD cops' inhaling attack.
 	{
 		// [RH] Floor and ceiling huggers should not be blasted vertically.
 		if (!(victim->flags3 & (MF3_FLOORHUGGER|MF3_CEILINGHUGGER)))

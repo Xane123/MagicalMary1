@@ -74,7 +74,7 @@
 
 // [SO] Just the way Randy said to do it :)
 // [RH] Made this CVAR_SERVERINFO
-CVAR (Int, infighting, 0, CVAR_SERVERINFO)
+CVAR (Int, infighting, -1, CVAR_SERVERINFO)
 
 static bool LoadDehSupp ();
 static void UnloadDehSupp ();
@@ -1995,15 +1995,16 @@ static int PatchMisc (int dummy)
 
 
 	// 0xDD means "enable infighting"
-	if (infighting == 0xDD)
+	/*if (infighting == 0xDD)
 	{
 		infighting = 1;
 	}
 	else if (infighting != -1)
 	{
 		infighting = 0;
-	}
+	}*/
 
+	infighting = 0;	//[XANE]Infighting makes the game too easy.
 	return result;
 }
 

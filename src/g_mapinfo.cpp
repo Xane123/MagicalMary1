@@ -230,10 +230,12 @@ void level_info_t::Reset()
 
 	levelnum = 0;
 
-	skyboxmovement = 0;	//[XANE] Let's reset my new variables as well!
+	skyboxmovement1 = 0;	//[XANE] Let's reset my new variables as well!
+	skyboxmovement2 = 0;
 	world_number = 0;
 	world_level = 0;
 	xanemusic = 0;
+	specstgno = 0;
 
 	PName = "";
 	NextMap = "";
@@ -816,11 +818,18 @@ DEFINE_MAP_OPTION(levelnum, true)
 	info->levelnum = parse.sc.Number;
 }
 
-DEFINE_MAP_OPTION(moveskybox, true)
+DEFINE_MAP_OPTION(movesky_horizontal, true)
 {
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
-	info->skyboxmovement = parse.sc.Number;
+	info->skyboxmovement1 = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(movesky_vertical, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->skyboxmovement2 = parse.sc.Number;
 }
 
 DEFINE_MAP_OPTION(world, true)
@@ -842,6 +851,13 @@ DEFINE_MAP_OPTION(song, true)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 	info->xanemusic = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(specstg_number, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->specstgno = parse.sc.Number;
 }
 
 DEFINE_MAP_OPTION(next, true)
