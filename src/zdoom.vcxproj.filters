@@ -2359,6 +2359,18 @@
     <Filter Include="Render Data\Textures">
       <UniqueIdentifier>{E84AE1E7-5BC2-3F77-A1BB-3FC4DAB307A4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio Files\WildMidi\Source">
+      <UniqueIdentifier>{4971B105-1295-3D46-B7AE-46F7B7204049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity">
+      <UniqueIdentifier>{77761A77-370F-3EC7-8ED2-5DC7B292CD3B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\WildMidi">
+      <UniqueIdentifier>{A580E0FD-189C-3985-9C50-D2D751FA7357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio Files\Timidity\Source">
+      <UniqueIdentifier>{927DD403-DBA7-3D36-89E9-1A2CECC6A3EE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Games\Doom Game">
       <UniqueIdentifier>{368C2021-86A2-35F1-8859-FD7F8C812426}</UniqueIdentifier>
     </Filter>
@@ -2373,12 +2385,6 @@
     </Filter>
     <Filter Include="Games\Strife Game">
       <UniqueIdentifier>{CBA7CC9A-70A8-3C9E-9EAA-CA4C3EF52EA7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\Timidity">
-      <UniqueIdentifier>{77761A77-370F-3EC7-8ED2-5DC7B292CD3B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\WildMidi">
-      <UniqueIdentifier>{A580E0FD-189C-3985-9C50-D2D751FA7357}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{D4487385-BD72-39A8-996C-F48DF028A1AA}</UniqueIdentifier>
@@ -2484,12 +2490,6 @@
     </Filter>
     <Filter Include="OpenGL Renderer\Utilities">
       <UniqueIdentifier>{FFBFDCFB-8AAF-3EC3-84D9-17EA739D7F6F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\WildMidi\Source">
-      <UniqueIdentifier>{4971B105-1295-3D46-B7AE-46F7B7204049}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Audio Files\Timidity\Source">
-      <UniqueIdentifier>{927DD403-DBA7-3D36-89E9-1A2CECC6A3EE}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

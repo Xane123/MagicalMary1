@@ -2678,7 +2678,7 @@ DEFINE_CLASS_PROPERTY_PREFIX(player, scoreicon, S, PlayerPawn)
 	if (!defaults->ScoreIcon.isValid())
 	{
 		bag.ScriptPosition.Message(MSG_WARNING,
-			"Icon '%s' for '%s' not found\n", z, info->TypeName.GetChars ());
+			"The player icon %s, which is intended for %s, couldn't be found!\n", z, info->TypeName.GetChars ());
 	}
 }
 
@@ -2698,7 +2698,7 @@ DEFINE_CLASS_PROPERTY_PREFIX(player, crouchsprite, S, PlayerPawn)
 	}
 	else
 	{
-		I_Error("Sprite name must have exactly 4 characters");
+		I_Error("Sprite names must be 4 letters/numbers exactly.");
 	}
 }
 

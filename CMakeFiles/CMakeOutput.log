@@ -2380,3 +2380,1194 @@ Time Elapsed 00:00:00.80
 Source file was:
 #include <stdarg.h>
 	int main() { va_list list1, list2; va_copy(list1, list2); return 0; }
+The system is: Windows - 10.0.14393 - AMD64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler:  
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:05 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdC.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdC.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /nologo /W0 /WX- /diagnostics:classic /Od /Oy- /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue CMakeCCompilerId.c
+  CMakeCCompilerId.c
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdC.lib" /MACHINE:X86 /SAFESEH Debug\CMakeCCompilerId.obj
+  CompilerIdC.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CompilerIdC\.\CompilerIdC.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_C_COMPILER=D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdC.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdC.tlog\CompilerIdC.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CompilerIdC\CompilerIdC.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.91
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+
+The C compiler identification is MSVC, found in "D:/Git/MaryMagicalAdventure/CMakeFiles/3.8.0/CompilerIdC/CompilerIdC.exe"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler:  
+Build flags: 
+Id flags:  
+
+The output was:
+0
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:08 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "Debug\".
+  Creating directory "Debug\CompilerIdCXX.tlog\".
+InitializeBuildStatus:
+  Creating "Debug\CompilerIdCXX.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /nologo /W0 /WX- /diagnostics:classic /Od /Oy- /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue CMakeCXXCompilerId.cpp
+  CMakeCXXCompilerId.cpp
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:".\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CompilerIdCXX.lib" /MACHINE:X86 /SAFESEH Debug\CMakeCXXCompilerId.obj
+  CompilerIdCXX.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CompilerIdCXX\.\CompilerIdCXX.exe
+PostBuildEvent:
+  for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+  :VCEnd
+  CMAKE_CXX_COMPILER=D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\cl.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\CompilerIdCXX.tlog\unsuccessfulbuild".
+  Touching "Debug\CompilerIdCXX.tlog\CompilerIdCXX.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\3.8.0\CompilerIdCXX\CompilerIdCXX.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.00
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+
+The CXX compiler identification is MSVC, found in "D:/Git/MaryMagicalAdventure/CMakeFiles/3.8.0/CompilerIdCXX/CompilerIdCXX.exe"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_4471c.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:10 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_4471c.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_4471c.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_4471c.dir\Debug\cmTC_4471c.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_4471c.dir\Debug\cmTC_4471c.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_4471c.dir\Debug\\" /Fd"cmTC_4471c.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\testCCompiler.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_4471c.dir\Debug\\" /Fd"cmTC_4471c.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\testCCompiler.c
+  testCCompiler.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_4471c.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_4471c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_4471c.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_4471c.dir\Debug\testCCompiler.obj
+  cmTC_4471c.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_4471c.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_4471c.dir\Debug\cmTC_4471c.tlog\unsuccessfulbuild".
+  Touching "cmTC_4471c.dir\Debug\cmTC_4471c.tlog\cmTC_4471c.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_4471c.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.24
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_3d1b7.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:11 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_3d1b7.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_3d1b7.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_3d1b7.dir\Debug\cmTC_3d1b7.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_3d1b7.dir\Debug\cmTC_3d1b7.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3d1b7.dir\Debug\\" /Fd"cmTC_3d1b7.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCCompilerABI.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_3d1b7.dir\Debug\\" /Fd"cmTC_3d1b7.dir\Debug\vc141.pdb" /Gd /TC /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCCompilerABI.c"
+  CMakeCCompilerABI.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_3d1b7.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_3d1b7.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_3d1b7.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_3d1b7.dir\Debug\CMakeCCompilerABI.obj
+  cmTC_3d1b7.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_3d1b7.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_3d1b7.dir\Debug\cmTC_3d1b7.tlog\unsuccessfulbuild".
+  Touching "cmTC_3d1b7.dir\Debug\cmTC_3d1b7.tlog\cmTC_3d1b7.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_3d1b7.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.87
+
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_62fb7.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:12 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_62fb7.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_62fb7.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_62fb7.dir\Debug\cmTC_62fb7.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_62fb7.dir\Debug\cmTC_62fb7.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_62fb7.dir\Debug\\" /Fd"cmTC_62fb7.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_62fb7.dir\Debug\\" /Fd"cmTC_62fb7.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
+  testCXXCompiler.cxx
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_62fb7.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_62fb7.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_62fb7.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_62fb7.dir\Debug\testCXXCompiler.obj
+  cmTC_62fb7.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_62fb7.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_62fb7.dir\Debug\cmTC_62fb7.tlog\unsuccessfulbuild".
+  Touching "cmTC_62fb7.dir\Debug\cmTC_62fb7.tlog\cmTC_62fb7.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_62fb7.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.87
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_5182d.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:14 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_5182d.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_5182d.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_5182d.dir\Debug\cmTC_5182d.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_5182d.dir\Debug\cmTC_5182d.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5182d.dir\Debug\\" /Fd"cmTC_5182d.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXCompilerABI.cpp"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5182d.dir\Debug\\" /Fd"cmTC_5182d.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CMakeCXXCompilerABI.cpp"
+  CMakeCXXCompilerABI.cpp
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_5182d.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_5182d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_5182d.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_5182d.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTC_5182d.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_5182d.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_5182d.dir\Debug\cmTC_5182d.tlog\unsuccessfulbuild".
+  Touching "cmTC_5182d.dir\Debug\cmTC_5182d.tlog\cmTC_5182d.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_5182d.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.83
+
+
+
+
+Detecting CXX [] compiler features compiled with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_67c7c.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:15 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_67c7c.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_67c7c.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_67c7c.dir\Debug\cmTC_67c7c.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_67c7c.dir\Debug\cmTC_67c7c.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_67c7c.dir\Debug\\" /Fd"cmTC_67c7c.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\feature_tests.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_67c7c.dir\Debug\\" /Fd"cmTC_67c7c.dir\Debug\vc141.pdb" /Gd /TP /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\feature_tests.cxx
+  feature_tests.cxx
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_67c7c.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_67c7c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_67c7c.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_67c7c.dir\Debug\feature_tests.obj
+  cmTC_67c7c.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_67c7c.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_67c7c.dir\Debug\cmTC_67c7c.tlog\unsuccessfulbuild".
+  Touching "cmTC_67c7c.dir\Debug\cmTC_67c7c.tlog\cmTC_67c7c.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_67c7c.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.86
+
+
+    Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
+    Feature record: CXX_FEATURE:1cxx_alias_templates
+    Feature record: CXX_FEATURE:1cxx_alignas
+    Feature record: CXX_FEATURE:1cxx_alignof
+    Feature record: CXX_FEATURE:1cxx_attributes
+    Feature record: CXX_FEATURE:1cxx_attribute_deprecated
+    Feature record: CXX_FEATURE:1cxx_auto_type
+    Feature record: CXX_FEATURE:1cxx_binary_literals
+    Feature record: CXX_FEATURE:1cxx_constexpr
+    Feature record: CXX_FEATURE:1cxx_contextual_conversions
+    Feature record: CXX_FEATURE:1cxx_decltype
+    Feature record: CXX_FEATURE:1cxx_decltype_auto
+    Feature record: CXX_FEATURE:1cxx_default_function_template_args
+    Feature record: CXX_FEATURE:1cxx_defaulted_functions
+    Feature record: CXX_FEATURE:1cxx_defaulted_move_initializers
+    Feature record: CXX_FEATURE:1cxx_delegating_constructors
+    Feature record: CXX_FEATURE:1cxx_deleted_functions
+    Feature record: CXX_FEATURE:1cxx_digit_separators
+    Feature record: CXX_FEATURE:1cxx_enum_forward_declarations
+    Feature record: CXX_FEATURE:1cxx_explicit_conversions
+    Feature record: CXX_FEATURE:1cxx_extended_friend_declarations
+    Feature record: CXX_FEATURE:1cxx_extern_templates
+    Feature record: CXX_FEATURE:1cxx_final
+    Feature record: CXX_FEATURE:1cxx_func_identifier
+    Feature record: CXX_FEATURE:1cxx_generalized_initializers
+    Feature record: CXX_FEATURE:1cxx_generic_lambdas
+    Feature record: CXX_FEATURE:1cxx_inheriting_constructors
+    Feature record: CXX_FEATURE:1cxx_inline_namespaces
+    Feature record: CXX_FEATURE:1cxx_lambdas
+    Feature record: CXX_FEATURE:1cxx_lambda_init_captures
+    Feature record: CXX_FEATURE:1cxx_local_type_template_args
+    Feature record: CXX_FEATURE:1cxx_long_long_type
+    Feature record: CXX_FEATURE:1cxx_noexcept
+    Feature record: CXX_FEATURE:1cxx_nonstatic_member_init
+    Feature record: CXX_FEATURE:1cxx_nullptr
+    Feature record: CXX_FEATURE:1cxx_override
+    Feature record: CXX_FEATURE:1cxx_range_for
+    Feature record: CXX_FEATURE:1cxx_raw_string_literals
+    Feature record: CXX_FEATURE:1cxx_reference_qualified_functions
+    Feature record: CXX_FEATURE:1cxx_return_type_deduction
+    Feature record: CXX_FEATURE:1cxx_right_angle_brackets
+    Feature record: CXX_FEATURE:1cxx_rvalue_references
+    Feature record: CXX_FEATURE:1cxx_sizeof_member
+    Feature record: CXX_FEATURE:1cxx_static_assert
+    Feature record: CXX_FEATURE:1cxx_strong_enums
+    Feature record: CXX_FEATURE:1cxx_template_template_parameters
+    Feature record: CXX_FEATURE:1cxx_thread_local
+    Feature record: CXX_FEATURE:1cxx_trailing_return_types
+    Feature record: CXX_FEATURE:1cxx_unicode_literals
+    Feature record: CXX_FEATURE:1cxx_uniform_initialization
+    Feature record: CXX_FEATURE:1cxx_unrestricted_unions
+    Feature record: CXX_FEATURE:1cxx_user_literals
+    Feature record: CXX_FEATURE:1cxx_variable_templates
+    Feature record: CXX_FEATURE:1cxx_variadic_macros
+    Feature record: CXX_FEATURE:1cxx_variadic_templates
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_850ab.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:17 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_850ab.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_850ab.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_850ab.dir\Debug\cmTC_850ab.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_850ab.dir\Debug\cmTC_850ab.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_850ab.dir\Debug\\" /Fd"cmTC_850ab.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_850ab.dir\Debug\\" /Fd"cmTC_850ab.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  CheckIncludeFile.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_850ab.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_850ab.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_850ab.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_850ab.dir\Debug\CheckIncludeFile.obj
+  cmTC_850ab.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_850ab.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_850ab.dir\Debug\cmTC_850ab.tlog\unsuccessfulbuild".
+  Touching "cmTC_850ab.dir\Debug\cmTC_850ab.tlog\cmTC_850ab.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_850ab.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.90
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_a8c48.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:18 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_a8c48.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_a8c48.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_a8c48.dir\Debug\cmTC_a8c48.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_a8c48.dir\Debug\cmTC_a8c48.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_a8c48.dir\Debug\\" /Fd"cmTC_a8c48.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_a8c48.dir\Debug\\" /Fd"cmTC_a8c48.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  CheckIncludeFile.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_a8c48.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_a8c48.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_a8c48.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_a8c48.dir\Debug\CheckIncludeFile.obj
+  cmTC_a8c48.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_a8c48.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_a8c48.dir\Debug\cmTC_a8c48.tlog\unsuccessfulbuild".
+  Touching "cmTC_a8c48.dir\Debug\cmTC_a8c48.tlog\cmTC_a8c48.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_a8c48.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.97
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_0fc9b.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:19 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_0fc9b.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_0fc9b.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_0fc9b.dir\Debug\cmTC_0fc9b.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_0fc9b.dir\Debug\cmTC_0fc9b.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_0fc9b.dir\Debug\\" /Fd"cmTC_0fc9b.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_0fc9b.dir\Debug\\" /Fd"cmTC_0fc9b.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\CheckIncludeFile.c
+  CheckIncludeFile.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_0fc9b.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_0fc9b.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_0fc9b.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_0fc9b.dir\Debug\CheckIncludeFile.obj
+  cmTC_0fc9b.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_0fc9b.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_0fc9b.dir\Debug\cmTC_0fc9b.tlog\unsuccessfulbuild".
+  Touching "cmTC_0fc9b.dir\Debug\cmTC_0fc9b.tlog\cmTC_0fc9b.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_0fc9b.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.85
+
+
+Determining if the function strdup exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_87f49.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:23 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_87f49.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_87f49.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_87f49.dir\Debug\cmTC_87f49.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_87f49.dir\Debug\cmTC_87f49.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strdup /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_87f49.dir\Debug\\" /Fd"cmTC_87f49.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strdup /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_87f49.dir\Debug\\" /Fd"cmTC_87f49.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_87f49.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_87f49.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_87f49.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_87f49.dir\Debug\CheckFunctionExists.obj
+  cmTC_87f49.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_87f49.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_87f49.dir\Debug\cmTC_87f49.tlog\unsuccessfulbuild".
+  Touching "cmTC_87f49.dir\Debug\cmTC_87f49.tlog\cmTC_87f49.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_87f49.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.85
+
+
+Determining size of 0i8 passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_55c19.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:24 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_55c19.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_55c19.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_55c19.dir\Debug\cmTC_55c19.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_55c19.dir\Debug\cmTC_55c19.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_55c19.dir\Debug\\" /Fd"cmTC_55c19.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_0I8.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_55c19.dir\Debug\\" /Fd"cmTC_55c19.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_0I8.c
+  SIZEOF_0I8.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_55c19.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_55c19.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_55c19.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_55c19.dir\Debug\SIZEOF_0I8.obj
+  cmTC_55c19.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_55c19.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_55c19.dir\Debug\cmTC_55c19.tlog\unsuccessfulbuild".
+  Touching "cmTC_55c19.dir\Debug\cmTC_55c19.tlog\cmTC_55c19.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_55c19.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80
+
+
+Determining size of 0l passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_460fa.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:25 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_460fa.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_460fa.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_460fa.dir\Debug\cmTC_460fa.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_460fa.dir\Debug\cmTC_460fa.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_460fa.dir\Debug\\" /Fd"cmTC_460fa.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_0L.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_460fa.dir\Debug\\" /Fd"cmTC_460fa.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_0L.c
+  SIZEOF_0L.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_460fa.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_460fa.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_460fa.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_460fa.dir\Debug\SIZEOF_0L.obj
+  cmTC_460fa.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_460fa.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_460fa.dir\Debug\cmTC_460fa.tlog\unsuccessfulbuild".
+  Touching "cmTC_460fa.dir\Debug\cmTC_460fa.tlog\cmTC_460fa.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_460fa.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.82
+
+
+Determining size of 0ll passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_7ff9e.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:26 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_7ff9e.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_7ff9e.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_7ff9e.dir\Debug\cmTC_7ff9e.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_7ff9e.dir\Debug\cmTC_7ff9e.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_7ff9e.dir\Debug\\" /Fd"cmTC_7ff9e.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_0LL.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_7ff9e.dir\Debug\\" /Fd"cmTC_7ff9e.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_0LL.c
+  SIZEOF_0LL.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_7ff9e.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_7ff9e.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_7ff9e.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_7ff9e.dir\Debug\SIZEOF_0LL.obj
+  cmTC_7ff9e.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_7ff9e.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_7ff9e.dir\Debug\cmTC_7ff9e.tlog\unsuccessfulbuild".
+  Touching "cmTC_7ff9e.dir\Debug\cmTC_7ff9e.tlog\cmTC_7ff9e.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_7ff9e.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.89
+
+
+Determining size of char passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_df8a2.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:28 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_df8a2.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_df8a2.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_df8a2.dir\Debug\cmTC_df8a2.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_df8a2.dir\Debug\cmTC_df8a2.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_df8a2.dir\Debug\\" /Fd"cmTC_df8a2.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_CHAR.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_df8a2.dir\Debug\\" /Fd"cmTC_df8a2.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_CHAR.c
+  SIZEOF_CHAR.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_df8a2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_df8a2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_df8a2.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_df8a2.dir\Debug\SIZEOF_CHAR.obj
+  cmTC_df8a2.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_df8a2.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_df8a2.dir\Debug\cmTC_df8a2.tlog\unsuccessfulbuild".
+  Touching "cmTC_df8a2.dir\Debug\cmTC_df8a2.tlog\cmTC_df8a2.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_df8a2.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.85
+
+
+Determining size of short passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_aac3e.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:29 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_aac3e.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_aac3e.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_aac3e.dir\Debug\cmTC_aac3e.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_aac3e.dir\Debug\cmTC_aac3e.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_aac3e.dir\Debug\\" /Fd"cmTC_aac3e.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_SHORT.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_aac3e.dir\Debug\\" /Fd"cmTC_aac3e.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_SHORT.c
+  SIZEOF_SHORT.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_aac3e.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_aac3e.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_aac3e.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_aac3e.dir\Debug\SIZEOF_SHORT.obj
+  cmTC_aac3e.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_aac3e.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_aac3e.dir\Debug\cmTC_aac3e.tlog\unsuccessfulbuild".
+  Touching "cmTC_aac3e.dir\Debug\cmTC_aac3e.tlog\cmTC_aac3e.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_aac3e.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.84
+
+
+Determining size of int passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_1b518.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:30 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_1b518.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_1b518.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_1b518.dir\Debug\cmTC_1b518.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_1b518.dir\Debug\cmTC_1b518.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_1b518.dir\Debug\\" /Fd"cmTC_1b518.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_INT.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_1b518.dir\Debug\\" /Fd"cmTC_1b518.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_INT.c
+  SIZEOF_INT.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_1b518.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_1b518.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_1b518.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_1b518.dir\Debug\SIZEOF_INT.obj
+  cmTC_1b518.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_1b518.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_1b518.dir\Debug\cmTC_1b518.tlog\unsuccessfulbuild".
+  Touching "cmTC_1b518.dir\Debug\cmTC_1b518.tlog\cmTC_1b518.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_1b518.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80
+
+
+Determining size of long passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_11cdb.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:31 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_11cdb.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_11cdb.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_11cdb.dir\Debug\cmTC_11cdb.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_11cdb.dir\Debug\cmTC_11cdb.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_11cdb.dir\Debug\\" /Fd"cmTC_11cdb.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_LONG.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_11cdb.dir\Debug\\" /Fd"cmTC_11cdb.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_LONG.c
+  SIZEOF_LONG.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_11cdb.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_11cdb.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_11cdb.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_11cdb.dir\Debug\SIZEOF_LONG.obj
+  cmTC_11cdb.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_11cdb.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_11cdb.dir\Debug\cmTC_11cdb.tlog\unsuccessfulbuild".
+  Touching "cmTC_11cdb.dir\Debug\cmTC_11cdb.tlog\cmTC_11cdb.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_11cdb.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80
+
+
+Determining size of long long passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_c1c0d.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:32 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_c1c0d.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_c1c0d.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_c1c0d.dir\Debug\cmTC_c1c0d.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_c1c0d.dir\Debug\cmTC_c1c0d.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c1c0d.dir\Debug\\" /Fd"cmTC_c1c0d.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_LONG_LONG.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c1c0d.dir\Debug\\" /Fd"cmTC_c1c0d.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_LONG_LONG.c
+  SIZEOF_LONG_LONG.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_c1c0d.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_c1c0d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_c1c0d.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_c1c0d.dir\Debug\SIZEOF_LONG_LONG.obj
+  cmTC_c1c0d.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_c1c0d.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_c1c0d.dir\Debug\cmTC_c1c0d.tlog\unsuccessfulbuild".
+  Touching "cmTC_c1c0d.dir\Debug\cmTC_c1c0d.tlog\cmTC_c1c0d.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_c1c0d.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.88
+
+
+Determining size of void * passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_7e0b0.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:33 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_7e0b0.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_7e0b0.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_7e0b0.dir\Debug\cmTC_7e0b0.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_7e0b0.dir\Debug\cmTC_7e0b0.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_7e0b0.dir\Debug\\" /Fd"cmTC_7e0b0.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_VOID_P.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_7e0b0.dir\Debug\\" /Fd"cmTC_7e0b0.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF_VOID_P.c
+  SIZEOF_VOID_P.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_7e0b0.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_7e0b0.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_7e0b0.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_7e0b0.dir\Debug\SIZEOF_VOID_P.obj
+  cmTC_7e0b0.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_7e0b0.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_7e0b0.dir\Debug\cmTC_7e0b0.tlog\unsuccessfulbuild".
+  Touching "cmTC_7e0b0.dir\Debug\cmTC_7e0b0.tlog\cmTC_7e0b0.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_7e0b0.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.87
+
+
+Determining size of __int64 passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_9eb95.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:34 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_9eb95.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_9eb95.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_9eb95.dir\Debug\cmTC_9eb95.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_9eb95.dir\Debug\cmTC_9eb95.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_9eb95.dir\Debug\\" /Fd"cmTC_9eb95.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF___INT_64.c
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_9eb95.dir\Debug\\" /Fd"cmTC_9eb95.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CheckTypeSize\SIZEOF___INT_64.c
+  SIZEOF___INT_64.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_9eb95.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_9eb95.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_9eb95.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_9eb95.dir\Debug\SIZEOF___INT_64.obj
+  cmTC_9eb95.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_9eb95.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_9eb95.dir\Debug\cmTC_9eb95.tlog\unsuccessfulbuild".
+  Touching "cmTC_9eb95.dir\Debug\cmTC_9eb95.tlog\cmTC_9eb95.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_9eb95.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.81
+
+
+Determining if the function itoa exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_aa599.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:35 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_aa599.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_aa599.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_aa599.dir\Debug\cmTC_aa599.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_aa599.dir\Debug\cmTC_aa599.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=itoa /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_aa599.dir\Debug\\" /Fd"cmTC_aa599.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=itoa /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_aa599.dir\Debug\\" /Fd"cmTC_aa599.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_aa599.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_aa599.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_aa599.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_aa599.dir\Debug\CheckFunctionExists.obj
+  cmTC_aa599.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_aa599.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_aa599.dir\Debug\cmTC_aa599.tlog\unsuccessfulbuild".
+  Touching "cmTC_aa599.dir\Debug\cmTC_aa599.tlog\cmTC_aa599.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_aa599.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.84
+
+
+Performing C++ SOURCE FILE Test CAN_DO_ARCHSSE2 succeeded with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_514bd.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:37 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_514bd.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_514bd.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_514bd.dir\Debug\cmTC_514bd.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_514bd.dir\Debug\cmTC_514bd.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CAN_DO_ARCHSSE2 /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:SSE2 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_514bd.dir\Debug\\" /Fd"cmTC_514bd.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\src.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CAN_DO_ARCHSSE2 /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:SSE2 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_514bd.dir\Debug\\" /Fd"cmTC_514bd.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\src.cxx
+  src.cxx
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_514bd.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_514bd.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_514bd.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_514bd.dir\Debug\src.obj
+  cmTC_514bd.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_514bd.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_514bd.dir\Debug\cmTC_514bd.tlog\unsuccessfulbuild".
+  Touching "cmTC_514bd.dir\Debug\cmTC_514bd.tlog\cmTC_514bd.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_514bd.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.82
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test HAVE_MMX succeeded with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_443a1.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:38 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_443a1.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_443a1.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_443a1.dir\Debug\cmTC_443a1.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_443a1.dir\Debug\cmTC_443a1.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAVE_MMX /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_443a1.dir\Debug\\" /Fd"cmTC_443a1.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\src.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAVE_MMX /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_443a1.dir\Debug\\" /Fd"cmTC_443a1.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\src.cxx
+  src.cxx
+  
+d:\git\marymagicaladventure\cmakefiles\cmaketmp\src.cxx(2): warning C4799: function 'main' has no EMMS instruction [D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_443a1.vcxproj]
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_443a1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_443a1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_443a1.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_443a1.dir\Debug\src.obj
+  cmTC_443a1.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_443a1.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_443a1.dir\Debug\cmTC_443a1.tlog\unsuccessfulbuild".
+  Touching "cmTC_443a1.dir\Debug\cmTC_443a1.tlog\cmTC_443a1.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_443a1.vcxproj" (default targets).
+
+Build succeeded.
+
+"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_443a1.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  d:\git\marymagicaladventure\cmakefiles\cmaketmp\src.cxx(2): warning C4799: function 'main' has no EMMS instruction [D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_443a1.vcxproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.90
+
+Source file was:
+#include <mmintrin.h>
+		int main(void) { __m64 v = _m_from_int(0); }
+Determining if the function filelength exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_9a02c.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:39 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_9a02c.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_9a02c.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_9a02c.dir\Debug\cmTC_9a02c.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_9a02c.dir\Debug\cmTC_9a02c.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=filelength /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_9a02c.dir\Debug\\" /Fd"cmTC_9a02c.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=filelength /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_9a02c.dir\Debug\\" /Fd"cmTC_9a02c.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_9a02c.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_9a02c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_9a02c.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_9a02c.dir\Debug\CheckFunctionExists.obj
+  cmTC_9a02c.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_9a02c.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_9a02c.dir\Debug\cmTC_9a02c.tlog\unsuccessfulbuild".
+  Touching "cmTC_9a02c.dir\Debug\cmTC_9a02c.tlog\cmTC_9a02c.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_9a02c.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.80
+
+
+Determining if the function strupr exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_d03cf.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:40 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_d03cf.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_d03cf.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_d03cf.dir\Debug\cmTC_d03cf.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_d03cf.dir\Debug\cmTC_d03cf.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strupr /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_d03cf.dir\Debug\\" /Fd"cmTC_d03cf.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strupr /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_d03cf.dir\Debug\\" /Fd"cmTC_d03cf.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_d03cf.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_d03cf.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_d03cf.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_d03cf.dir\Debug\CheckFunctionExists.obj
+  cmTC_d03cf.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_d03cf.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_d03cf.dir\Debug\cmTC_d03cf.tlog\unsuccessfulbuild".
+  Touching "cmTC_d03cf.dir\Debug\cmTC_d03cf.tlog\cmTC_d03cf.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_d03cf.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.82
+
+
+Determining if the function stricmp exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_c9817.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:41 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_c9817.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_c9817.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_c9817.dir\Debug\cmTC_c9817.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_c9817.dir\Debug\cmTC_c9817.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=stricmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c9817.dir\Debug\\" /Fd"cmTC_c9817.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=stricmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_c9817.dir\Debug\\" /Fd"cmTC_c9817.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_c9817.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_c9817.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_c9817.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_c9817.dir\Debug\CheckFunctionExists.obj
+  cmTC_c9817.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_c9817.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_c9817.dir\Debug\cmTC_c9817.tlog\unsuccessfulbuild".
+  Touching "cmTC_c9817.dir\Debug\cmTC_c9817.tlog\cmTC_c9817.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_c9817.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.81
+
+
+Determining if the function strnicmp exists passed with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_66456.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:42 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_66456.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_66456.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_66456.dir\Debug\cmTC_66456.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_66456.dir\Debug\cmTC_66456.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strnicmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_66456.dir\Debug\\" /Fd"cmTC_66456.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=strnicmp /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_66456.dir\Debug\\" /Fd"cmTC_66456.dir\Debug\vc141.pdb" /Gd /TC /wd4996 /analyze- /errorReport:queue "D:\Programs\CMake\share\cmake-3.8\Modules\CheckFunctionExists.c"
+  CheckFunctionExists.c
+  
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_66456.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_66456.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_66456.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_66456.dir\Debug\CheckFunctionExists.obj
+  cmTC_66456.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_66456.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_66456.dir\Debug\cmTC_66456.tlog\unsuccessfulbuild".
+  Touching "cmTC_66456.dir\Debug\cmTC_66456.tlog\cmTC_66456.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_66456.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.81
+
+
+Performing C++ SOURCE FILE Test HAS_VA_COPY succeeded with the following output:
+Change Dir: D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp
+
+Run Build Command:"D:\Programs\Microsoft Visual Studio\2017\Community/MSBuild/15.0/Bin/MSBuild.exe" "cmTC_cbf37.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=15.0"
+Microsoft (R) Build Engine version 15.1.1012.6693
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Build started 5/29/2017 2:49:43 PM.
+Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_cbf37.vcxproj" on node 1 (default targets).
+PrepareForBuild:
+  Creating directory "cmTC_cbf37.dir\Debug\".
+  Creating directory "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\".
+  Creating directory "cmTC_cbf37.dir\Debug\cmTC_cbf37.tlog\".
+InitializeBuildStatus:
+  Creating "cmTC_cbf37.dir\Debug\cmTC_cbf37.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\CL.exe /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAS_VA_COPY /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_cbf37.dir\Debug\\" /Fd"cmTC_cbf37.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\src.cxx
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.10.25019 for x86
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  cl /c /Zi /W3 /WX- /diagnostics:classic /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D HAS_VA_COPY /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /GF /Gm- /EHsc /RTC1 /MDd /GS /Gy /arch:IA32 /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /Fo"cmTC_cbf37.dir\Debug\\" /Fd"cmTC_cbf37.dir\Debug\vc141.pdb" /Gd /TP /wd4996 /analyze- /errorReport:queue D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\src.cxx
+  src.cxx
+  
+d:\git\marymagicaladventure\cmakefiles\cmaketmp\src.cxx(2): warning C4700: uninitialized local variable 'list2' used [D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_cbf37.vcxproj]
+Link:
+  D:\Programs\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.25017\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_cbf37.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_cbf37.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Git/MaryMagicalAdventure/CMakeFiles/CMakeTmp/Debug/cmTC_cbf37.lib" /MACHINE:X86 /SAFESEH   /machine:X86 cmTC_cbf37.dir\Debug\src.obj
+  cmTC_cbf37.vcxproj -> D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\Debug\cmTC_cbf37.exe
+FinalizeBuildStatus:
+  Deleting file "cmTC_cbf37.dir\Debug\cmTC_cbf37.tlog\unsuccessfulbuild".
+  Touching "cmTC_cbf37.dir\Debug\cmTC_cbf37.tlog\cmTC_cbf37.lastbuildstate".
+Done Building Project "D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_cbf37.vcxproj" (default targets).
+
+Build succeeded.
+
+"D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_cbf37.vcxproj" (default target) (1) ->
+(ClCompile target) -> 
+  d:\git\marymagicaladventure\cmakefiles\cmaketmp\src.cxx(2): warning C4700: uninitialized local variable 'list2' used [D:\Git\MaryMagicalAdventure\CMakeFiles\CMakeTmp\cmTC_cbf37.vcxproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.86
+
+Source file was:
+#include <stdarg.h>
+	int main() { va_list list1, list2; va_copy(list1, list2); return 0; }

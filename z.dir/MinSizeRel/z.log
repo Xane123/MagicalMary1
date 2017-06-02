@@ -1,1 +1,15 @@
-﻿  z.vcxproj -> D:\Git\MaryMagicalAdventure\zlib\MinSizeRel\z.lib
+﻿  Building Custom Rule D:/Git/MaryMagicalAdventure/zlib/CMakeLists.txt
+  CMake does not need to re-run because D:/Git/MaryMagicalAdventure/zlib/CMakeFiles/generate.stamp is up-to-date.
+  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  inflate.c
+  infback.c
+  inftrees.c
+  inffast.c
+  trees.c
+  uncompr.c
+  zutil.c
+  Generating Code...
+  z.vcxproj -> D:\Git\MaryMagicalAdventure\zlib\MinSizeRel\z.lib

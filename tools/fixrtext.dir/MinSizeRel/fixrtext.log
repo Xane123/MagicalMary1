@@ -1,1 +1,4 @@
-﻿  fixrtext.vcxproj -> D:\Git\MaryMagicalAdventure\tools\fixrtext\MinSizeRel\fixrtext.exe
+﻿  Building Custom Rule D:/Git/MaryMagicalAdventure/tools/fixrtext/CMakeLists.txt
+  CMake does not need to re-run because D:/Git/MaryMagicalAdventure/tools/fixrtext/CMakeFiles/generate.stamp is up-to-date.
+  fixrtext.c
+  fixrtext.vcxproj -> D:\Git\MaryMagicalAdventure\tools\fixrtext\MinSizeRel\fixrtext.exe
