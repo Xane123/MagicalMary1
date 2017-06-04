@@ -871,7 +871,7 @@ void P_NewChaseDir(AActor * actor)
 	else
 	{
 		// Don't abort if this happens.
-		Printf ("P_NewChaseDir: called with no target\n");
+		Printf ("A new chase direction was requested, but the monster had no target!\n");
 		P_RandomChaseDir(actor);
 		return;
 	}

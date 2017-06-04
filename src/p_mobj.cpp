@@ -2494,14 +2494,14 @@ void P_ZMovement (AActor *mo, fixed_t oldfloorz)
 // adjust height
 //
 	if ((mo->flags & MF_FLOAT) && !(mo->flags2 & MF2_DORMANT) && mo->target)
-	{	// float down towards target if too close
+	{	// float down towards target [XANE] but "too close" was a stupid design choice by ZDoom's developers... :P
 		if (!(mo->flags & (MF_SKULLFLY | MF_INFLOAT)))
 		{
 			dist = mo->AproxDistance (mo->target);
 			delta = (mo->target->Z() + (mo->height>>1)) - mo->Z();
-			if (delta < 0 && dist < -(delta*3))
+			if (delta < 16 /*&& dist < -(delta*3)*/)
 				mo->AddZ(-mo->FloatSpeed);
-			else if (delta > 0 && dist < (delta*3))
+			else if (delta > 16 /*&& dist < (delta*3)*/)
 				mo->AddZ(mo->FloatSpeed);
 		}
 	}
