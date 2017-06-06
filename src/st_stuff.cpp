@@ -199,13 +199,22 @@ static bool Cht_Generic (cheatseq_t *cheat)
 	return true;
 }
 
-static bool Cht_Music (cheatseq_t *cheat)
+static bool Cht_Music(cheatseq_t *cheat)	//Ported from https://github.com/Xane123/MaryMagicalAdventure/commit/eb1bc900210d2f0ef2bf928d06f2f7f4f355c705
 {
-	char buf[9] = "idmus xx";
+	char buf[12] = "puke 254 xx";
 
-	buf[6] = cheat->Args[0];
-	buf[7] = cheat->Args[1];
-	C_DoCommand (buf);
+	if (cheat->Args[0] == 0)
+	{
+		buf[9] = cheat->Args[1];
+		buf[10] = '\0';
+	}
+	else
+	{
+		buf[9] = cheat->Args[0];
+		buf[10] = cheat->Args[1];
+	}
+
+	C_DoCommand(buf);
 	return true;
 }
 
