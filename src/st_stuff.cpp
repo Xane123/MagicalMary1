@@ -60,15 +60,15 @@ static bool Cht_Sound (cheatseq_t *);
 static bool Cht_Ticker (cheatseq_t *);
 
 // Smashing Pumpkins Into Small Piles Of Putrid Debris. 
-static BYTE CheatXKill[] =		{ 'x','k','i','l','l',255 };
-static BYTE CheatNoclip2[] =	{ 'g','h','o','s','t',255 };
-static BYTE CheatMus[] =		{ 'i','d','m','u','s',0,0,255 };
-static BYTE CheatGod[] =		{ 'h','o','n','o','r',255 };
-static BYTE CheatAmmo[] =		{ 'm','m','a','l','o','c','k','s',255 };
-static BYTE CheatAmmoNoKey[] =  { 'm','m','a','w','e','a','p','s',255 };
-static BYTE CheatClev[] =		{ 'i','d','c','l','e','v',0,0,255 };
-static BYTE CheatMypos[] =		{ 'm','m','a','p','o','s',255 };
-static BYTE CheatAmap[] =		{ 'x','a','n','e',255 };
+static BYTE CheatXKill[] =		{ 'x','k','i','l','l',255 };	//XKILL
+static BYTE CheatNoclip2[] =	{ 'x','g','h','o','s','t',255 };	//XGHOST
+static BYTE CheatMus[] =		{ 'x','p','l','a','y',0,0,255 };	//XPLAY##
+static BYTE CheatGod[] =		{ 'h','o','n','o','r',255 };	//HONOR
+static BYTE CheatAmmo[] =		{ 'm','m','a','l','o','c','k','s',255 };	//MMALOCKS
+static BYTE CheatAmmoNoKey[] =  { 'm','m','a','w','e','a','p','s',255 };	//MMAWEAPS
+static BYTE CheatClev[] =		{ 'x','c','h','g','l','v','l',0,0,255 };	//XCHGLVL##
+static BYTE CheatMypos[] =		{ 'm','m','a','p','o','s',255 };	//MMAPOS
+static BYTE CheatAmap[] =		{ 'x','a','n','e',255 };	//XANE
 
 static cheatseq_t MMACheats[] =
 {
