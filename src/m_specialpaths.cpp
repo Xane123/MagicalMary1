@@ -138,7 +138,7 @@ bool GetKnownFolder(int shell_folder, REFKNOWNFOLDERID known_folder, bool create
 
 FString M_GetCachePath(bool create)
 {
-	FString path;
+	FString path;	//[XANE]Should I change this to just be the program directory? Saving to AppData doesn't sound "portable"!
 
 	if (!GetKnownFolder(CSIDL_LOCAL_APPDATA, FOLDERID_LocalAppData, create, path))
 	{ // Failed (e.g. On Win9x): use program directory
@@ -161,7 +161,7 @@ FString M_GetCachePath(bool create)
 
 FString M_GetAutoexecPath()
 {
-	return "$PROGDIR/autoexec.cfg";
+	return "$PROGDIR/StartupCMDs.cfg";
 }
 
 //===========================================================================
@@ -197,7 +197,8 @@ FString M_GetCajunPath(const char *botfilename)
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	HRESULT hr;
+	path += GAMENAMELOWERCASE ".ini";	//[XANE]Don't care about multiple users; Just use Settings.ini as it works fine and is more portable.
+	/*HRESULT hr;
 
 	// Construct a user-specific config name
 	if (UseKnownFolders() && GetKnownFolder(CSIDL_APPDATA, FOLDERID_RoamingAppData, true, path))
@@ -228,10 +229,10 @@ FString M_GetConfigPath(bool for_reading)
 		}
 		else
 		{ // Couldn't get user name, so just use zdoom.ini
-			path += GAMENAMELOWERCASE ".ini";
+			path += GAMENAMELOWERCASE ".ini";	//[XANE]Don't care about multiple users; Just use Settings.ini as it works fine and is more portable.
 		}
 	}
-
+	*/
 	// If we are reading the config file, check if it exists. If not, fallback
 	// to $PROGDIR/zdoom.ini
 	if (for_reading)

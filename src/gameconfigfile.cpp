@@ -100,7 +100,6 @@ FGameConfigFile::FGameConfigFile ()
 	{
 		SetSection ("IWADSearch.Directories", true);
 		SetValueForKey ("Path", ".", true);
-		SetValueForKey ("Path", "$DOOMWADDIR", true);
 #ifdef __APPLE__
 		char cpath[PATH_MAX];
 		FSRef folder;
@@ -193,7 +192,7 @@ void FGameConfigFile::DoAutoloadSetup (FIWadManager *iwad_man)
 		if (lastver != NULL) last = atof(lastver);
 	}
 
-	if (last < 211)
+	/*if (last < 211)
 	{
 		RenameSection("Chex3.Autoload", "chex.chex3.Autoload");
 		RenameSection("Chex1.Autoload", "chex.chex1.Autoload");
@@ -210,7 +209,7 @@ void FGameConfigFile::DoAutoloadSetup (FIWadManager *iwad_man)
 		RenameSection("Plutonia.Autoload", "doom.doom2.plutonia.Autoload");
 		RenameSection("Doom2BFG.Autoload", "doom.doom2.bfg.Autoload");
 		RenameSection("Doom2.Autoload", "doom.doom2.commercial.Autoload");
-	}
+	}*/
 	const FString *pAuto;
 	for (int num = 0; (pAuto = iwad_man->GetAutoname(num)) != NULL; num++)
 	{
@@ -242,20 +241,23 @@ void FGameConfigFile::DoAutoloadSetup (FIWadManager *iwad_man)
 	MoveSectionToStart("IWADSearch.Directories");
 
 	SetSectionNote("Doom.AutoExec",
-		"# Files to automatically execute when running the corresponding game.\n"
+		"# Files to automatically execute when running Mary's Magical Adventure.\n"
 		"# Each file should be on its own line, preceded by Path=\n\n");
 	SetSectionNote("Global.Autoload",
-		"# WAD files to always load. These are loaded after the IWAD but before\n"
-		"# any files added with -file. Place each file on its own line, preceded\n"
-		"# by Path=\n");
+		"# Files to always load. These are loaded after the base game data but\n"
+		"# before any files added with -file. Place each file on its own line,\n"
+		"# preceded by Path=\n");
 	SetSectionNote("Doom.Autoload",
-		"# Wad files to automatically load depending on the game and IWAD you are\n"
+		"# Redundant with the above section. Don't use this as Mary's Magical\n"
+		"# Adventure is the only supported game for this program/app.\n");
+	/*SetSectionNote("Doom.Autoload",
+		"# Files to automatically load depending on the game and IWAD you are\n"
 		"# playing.  You may have have files that are loaded for all similar IWADs\n"
 		"# (the game) and files that are only loaded for particular IWADs. For example,\n"
 		"# any files listed under 'doom.Autoload' will be loaded for any version of Doom,\n"
 		"# but files listed under 'doom.doom2.Autoload' will only load when you are\n"
 		"# playing a Doom 2 based game (doom2.wad, tnt.wad or plutonia.wad), and files listed under\n"
-		"# 'doom.doom2.commercial.Autoload' only when playing doom2.wad.\n\n");
+		"# 'doom.doom2.commercial.Autoload' only when playing doom2.wad.\n\n");*/
 }
 
 void FGameConfigFile::DoGlobalSetup ()
@@ -274,7 +276,7 @@ void FGameConfigFile::DoGlobalSetup ()
 		if (lastver != NULL)
 		{
 			double last = atof (lastver);
-			if (last < 123.1)
+			/*if (last < 123.1)
 			{
 				FBaseCVar *noblitter = FindCVar ("vid_noblitter", NULL);
 				if (noblitter != NULL)
@@ -360,7 +362,7 @@ void FGameConfigFile::DoGlobalSetup ()
 					SetValueForKey ("6", "use ArtiPork");
 					SetValueForKey ("5", "use ArtiInvulnerability2");
 				}
-			}
+			}*/	//[XANE]My game was never this old!
 		}
 	}
 }

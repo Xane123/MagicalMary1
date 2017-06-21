@@ -49,6 +49,8 @@
 #include "r_utility.h"
 #include "a_morph.h"
 
+CVAR(Bool, notifycheats, false, CVAR_ARCHIVE);
+
 // [RH] Actually handle the cheat. The cheat code in st_stuff.c now just
 // writes some bytes to the network data stream, and the network code
 // later calls us.
@@ -541,7 +543,7 @@ void cht_DoCheat (player_t *player, int cheat)
 
 	if (player == &players[consoleplayer])
 		Printf ("%s\n", msg);
-	else if (cheat != CHT_CHASECAM)
+	else if (cheat != CHT_CHASECAM && notifycheats)	//[XANE]It isn't necessary to warn other players of every single cheat someone else does, especially when cheats are on!
 		Printf ("%s cheats: %s\n", player->userinfo.GetName(), msg);
 }
 
