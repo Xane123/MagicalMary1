@@ -3116,7 +3116,7 @@ FUNC(LS_TranslucentLine)
 		}
 		else
 		{
-			Printf ("Unknown translucency type used with TranslucentLine\n");
+			Printf ("Unknown translucency type used with TranslucentLine!\n");
 		}
 	}
 
@@ -3207,7 +3207,7 @@ FUNC(LS_SendToCommunicator)
 			const char *str = GStrings[msg];
 			if (str != NULL)
 			{
-				Printf (PRINT_CHAT, "%s\n", str);
+				Printf (PRINT_CHAT, "Stupid ol' Strife message incoming: %s\n", str);	//[XANE]Remember, don't use Strife with my game!
 			}
 		}
 		return true;

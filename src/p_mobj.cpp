@@ -3718,6 +3718,9 @@ void AActor::Tick ()
 					}
 				}
 
+				scrollx = 0;	//[XANE]I don't want decorative moving sectors to pull the player along.
+				scrolly = 0;
+
 				if ((scrollx | scrolly) == 0)
 				{
 					continue;
@@ -3803,7 +3806,7 @@ void AActor::Tick ()
 					vely += floorplane.b;
 				}
 			}
-		}
+		}	//[XANE] Check to see if commenting this out was a bad idea or not...allowing moving up ANY slope could be bad, but will allow very tall slopes for things like ramps.
 
 		// [RH] Missiles moving perfectly vertical need some X/Y movement, or they
 		// won't hurt anything. Don't do this if damage is 0! That way, you can

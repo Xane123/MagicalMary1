@@ -1293,7 +1293,7 @@ void P_InitSectorSpecial(sector_t *sector, int special, bool nothinkers)
 		break;
 
 	case Sector_Heal:
-		// CoD's healing sector
+		//[XANE]Some outdated mod I don't care about's healing sector.
 		P_SetupSectorDamage(sector, -1, 32, 0, NAME_None, 0);
 		break;
 
