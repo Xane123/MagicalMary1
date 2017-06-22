@@ -385,10 +385,10 @@ CCMD (invprev)
 	who->player->inventorytics = 5*TICRATE;
 }
 
-CCMD (invuseall)
+/*CCMD (invuseall)
 {
 	SendItemUse = (const AInventory *)1;
-}
+}*/
 
 CCMD (invuse)
 {
