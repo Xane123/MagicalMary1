@@ -41,7 +41,7 @@ struct FTranslatedLineTarget;
 
 #include <stdlib.h>
 
-#define STEEPSLOPE		46342	// [RH] Minimum floorplane.c value for walking
+#define STEEPSLOPE		1//46342	// [RH] Minimum floorplane.c value for walking
 
 #define BONUSADD		6
 
