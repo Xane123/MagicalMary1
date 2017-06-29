@@ -133,7 +133,7 @@ void I_InitGraphics ()
 	Video = gl_CreateVideo();
 
 	if (Video == NULL)
-		I_FatalError ("Failed to initialize display");
+		I_FatalError ("Couldn't initialize the video/renderer!");
 	
 	atterm (I_ShutdownGraphics);
 	
@@ -186,7 +186,7 @@ DFrameBuffer *I_SetMode (int &width, int &height, DFrameBuffer *old)
 	//* Right now, CreateFrameBuffer cannot return NULL
 	if (res == NULL)
 	{
-		I_FatalError ("Mode %dx%d is unavailable\n", width, height);
+		I_FatalError ("Mode %dx%d is unavailable.\n", width, height);
 	}
 	//*/
 	return res;

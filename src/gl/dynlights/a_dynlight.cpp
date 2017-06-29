@@ -72,7 +72,7 @@ DEFINE_CLASS_PROPERTY(type, S, DynamicLight)
 		PointLight, PulseLight, FlickerLight, SectorLight, RandomFlickerLight, ColorPulseLight, ColorFlickerLight, RandomColorFlickerLight };
 
 	int style = MatchString(str, ltype_names);
-	if (style < 0) I_Error("Unknown light type '%s'", str);
+	if (style < 0) I_Error("%s is an invalid Dynamic Light type!", str);
 	defaults->lighttype = ltype_values[style];
 }
 

@@ -407,7 +407,7 @@ void FBasicStartupScreen::NetInit(const char *message, int numplayers)
 
 		if (numplayers == 0)
 		{
-			// PBM_SETMARQUEE is only available under XP and above, so this might fail.
+			// PBM_SETMARQUEE is only available under XP and above, but sadly Windows 2000 isn't supported and probably wouldn't use OpenGL 3.0, anyways...
 			NetMarqueeMode = SendMessage (ctl, PBM_SETMARQUEE, TRUE, 100);
 			if (NetMarqueeMode == FALSE)
 			{
@@ -437,7 +437,7 @@ void FBasicStartupScreen::NetInit(const char *message, int numplayers)
 	}
 	NetMaxPos = numplayers;
 	NetCurPos = 0;
-	NetProgress(1);	// You always know about yourself
+	NetProgress(1);	// You always know about yourself, so...
 }
 
 //==========================================================================

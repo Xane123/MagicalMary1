@@ -2264,21 +2264,21 @@ void D_DoomMain (void)
 
 		if (!restart)
 		{
-			if (!batchrun) Printf ("I_Init: Setting up machine state.\n");
+			if (!batchrun) Printf ("Checking machine state. The game will start soon.\n");
 			I_Init ();
 			I_CreateRenderer();
 		}
 
-		if (!batchrun) Printf ("V_Init: allocate screen.\n");
+		if (!batchrun) Printf ("Setting up memory for displaying the game...\n");
 		V_Init (!!restart);
 
 		// Base systems have been inited; enable cvar callbacks
 		FBaseCVar::EnableCallbacks ();
 
-		if (!batchrun) Printf ("S_Init: Setting up sound.\n");
+		if (!batchrun) Printf ("Setting up sound system, OpenAL...\n");
 		S_Init ();
 
-		if (!batchrun) Printf ("ST_Init: Init startup screen.\n");
+		if (!batchrun) Printf ("Initializing startup screen...\n");
 		if (!restart)
 		{
 			StartScreen = FStartupScreen::CreateInstance (TexMan.GuesstimateNumTextures() + 5);
@@ -2293,26 +2293,27 @@ void D_DoomMain (void)
 		CheckCmdLine();
 
 		// [RH] Load sound environments
+		if (!batchrun) Printf("Loading REVERBS...\n");
 		S_ParseReverbDef ();
 
 		// [RH] Parse any SNDINFO lumps
-		if (!batchrun) Printf ("S_InitData: Load sound definitions.\n");
+		if (!batchrun) Printf ("Loading sound effect definitions...\n");
 		S_InitData ();
 
 		// [RH] Parse through all loaded mapinfo lumps
-		if (!batchrun) Printf ("G_ParseMapInfo: Load map definitions.\n");
+		if (!batchrun) Printf ("Loading map definitions...\n");
 		G_ParseMapInfo (iwad_info->MapInfo);
 		ReadStatistics();
 
 		// MUSINFO must be parsed after MAPINFO
 		S_ParseMusInfo();
 
-		if (!batchrun) Printf ("Texman.Init: Init texture manager.\n");
+		if (!batchrun) Printf ("Preparing generated TEXTURES...\n");
 		TexMan.Init();
 		C_InitConback();
 
 		// [CW] Parse any TEAMINFO lumps.
-		if (!batchrun) Printf ("ParseTeamInfo: Load team definitions.\n");
+		if (!batchrun) Printf ("Loading team definitions...\n");
 		TeamLibrary.ParseTeamInfo ();
 
 		PClassActor::StaticInit ();
@@ -2326,16 +2327,16 @@ void D_DoomMain (void)
 		// [GRB] Check if someone used clearplayerclasses but not addplayerclass
 		if (PlayerClasses.Size () == 0)
 		{
-			I_FatalError ("No player classes defined");
+			I_FatalError("No player classes were detected; Redownload the game data and executable and try again.");
 		}
 
 		StartScreen->Progress ();
 
-		if (!batchrun) Printf ("R_Init: Init %s refresh subsystem.\n", gameinfo.ConfigName.GetChars());
+		if (!batchrun) Printf("Initializing game system...\n");// , gameinfo.ConfigName.GetChars());
 		StartScreen->LoadingStatus ("Loading graphics", 0x3f);
 		R_Init ();
 
-		if (!batchrun) Printf ("DecalLibrary: Load decals.\n");
+		if (!batchrun) Printf ("Loading decals...\n");
 		DecalLibrary.ReadAllDecals ();
 
 		// [RH] Add any .deh and .bex files on the command line.
@@ -2352,7 +2353,7 @@ void D_DoomMain (void)
 			{
 				if (stricmp (key, "Path") == 0 && FileExists (value))
 				{
-					if (!batchrun) Printf ("Applying patch %s\n", value);
+					if (!batchrun) Printf("Applying DeHackEd patch from %s. This may not work; Try DECORATE or ACS instead.\n", value);
 					D_LoadDehFile(value);
 				}
 			}
@@ -2378,10 +2379,10 @@ void D_DoomMain (void)
 		bglobal.spawn_tries = 0;
 		bglobal.wanted_botnum = bglobal.getspawned.Size();
 
-		if (!batchrun) Printf ("M_Init: Init menus.\n");
+		if (!batchrun) Printf ("Setting up the menu system...\n");
 		M_Init ();
 
-		if (!batchrun) Printf ("P_Init: Init Playloop state.\n");
+		if (!batchrun) Printf("Get ready; The game is about to start!\n");
 		StartScreen->LoadingStatus ("Init game engine", 0x3f);
 		AM_StaticInit();
 		P_Init ();
@@ -2410,7 +2411,7 @@ void D_DoomMain (void)
 
 		if (!restart)
 		{
-			if (!batchrun) Printf ("D_CheckNetGame: Checking network game status.\n");
+			if (!batchrun) Printf ("Checking for a multiplayer game...\n");
 			StartScreen->LoadingStatus ("Checking network game status.", 0x3f);
 			D_CheckNetGame ();
 		}
@@ -2436,6 +2437,14 @@ void D_DoomMain (void)
 			if (v)
 			{
 				G_RecordDemo (v);
+				autostart = true;
+			}
+
+			v = Args->CheckValue("-recorddemo");	//[XANE]Check for "recorddemo" as well.
+
+			if (v)
+			{
+				G_RecordDemo(v);
 				autostart = true;
 			}
 
