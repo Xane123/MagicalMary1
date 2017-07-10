@@ -230,8 +230,8 @@ void level_info_t::Reset()
 
 	levelnum = 0;
 
-	skyboxmovement1 = 0;	//[XANE] Let's reset my new variables as well!
-	skyboxmovement2 = 0;
+	skyboxmovement1 = 4;	//[XANE] Let's reset my new variables as well!
+	skyboxmovement2 = 4;	//[XANE] 4 is to move at the same speed as the player. TODO: Verify this.
 	world_number = 0;
 	world_level = 0;
 	xanemusic = 0;

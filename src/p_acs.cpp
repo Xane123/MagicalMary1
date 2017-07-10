@@ -8052,11 +8052,17 @@ scriptwait:
 
 		case PCD_GAMETYPE:
 			if (gamestate == GS_TITLELEVEL)
-				PushToStack (GAME_TITLE_MAP);
+				PushToStack(GAME_TITLE_MAP);
 			else if (deathmatch)
-				PushToStack (GAME_NET_DEATHMATCH);
+				PushToStack(GAME_NET_DEATHMATCH);
 			else if (multiplayer)
-				PushToStack (GAME_NET_COOPERATIVE);
+				PushToStack(GAME_NET_COOPERATIVE);
+			else if (demoplayback)
+				PushToStack(GAME_DEMOREPLAY);	//[XANE]Added demo playback checking.
+			else if (demorecording)
+				PushToStack(GAME_DEMORECORD);	//[XANE]Same for recording.
+			else if (automapactive && !multiplayer && !deathmatch)	//This "game type" check will not return TRUE in multiplayer to avoid potential problems.
+				PushToStack(GAME_AUTOMAP_ON);	//[XANE]Testing to see how this variable works.
 			else
 				PushToStack (GAME_SINGLE_PLAYER);
 			break;

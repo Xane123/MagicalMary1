@@ -174,7 +174,7 @@ void BindToLocalPort (SOCKET s, u_short port)
 						
 	v = bind (s, (sockaddr *)&address, sizeof(address));
 	if (v == SOCKET_ERROR)
-		I_FatalError ("BindToPort: %s", neterror ());
+		I_FatalError ("There was a network error named '%s'.", neterror ());
 }
 
 int FindNode (const sockaddr_in *address)

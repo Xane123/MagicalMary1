@@ -477,7 +477,7 @@ bool P_Move (AActor *actor)
 	}
 
 	if ((unsigned)actor->movedir >= 8)
-		I_Error ("Weird actor->movedir!");
+		I_Error ("A weird actor->movedir was encountered!");
 
 	// killough 10/98: allow dogs to drop off of taller ledges sometimes.
 	// dropoff==1 means always allow it, dropoff==2 means only up to 128 high,
@@ -2291,13 +2291,15 @@ void A_DoChase (VMFrameStack *stack, AActor *actor, bool fastchase, FState *mele
 	{
 		actor->angle &= (angle_t)(7<<29);
 		delta = actor->angle - (actor->movedir << 29);
-		if (delta > 0)
+		if (delta > 0)	//[XANE]This isn't responsible for the stupid 45 degree limitation!
 		{
-			actor->angle -= ANG90/2;
+			actor->angle -= ANG45 / 2;
+			//actor->angle -= ANG90 / 2;
 		}
 		else if (delta < 0)
 		{
-			actor->angle += ANG90/2;
+			actor->angle += ANG45 / 2;
+			//actor->angle += ANG90 / 2;
 		}
 	}
 
