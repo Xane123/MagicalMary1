@@ -3,8 +3,8 @@ ACTOR Actor native //: Thinker
 	Scale 1
 	Health 1000
 	Reactiontime 8
-	Radius 20
-	Height 16
+	Radius 1
+	Height 2
 	Mass 100
 	RenderStyle Normal
 	Alpha 1

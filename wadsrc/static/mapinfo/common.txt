@@ -15,7 +15,6 @@ DoomEdNums
     11 = "$DeathmatchStart"
     14 = TeleportDest
    118 = ZBridge
-   888 = MBFHelperDog
   1400 = "$SSeqOverride", 0
   1401 = "$SSeqOverride", 1
   1402 = "$SSeqOverride", 2
