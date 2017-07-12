@@ -7882,11 +7882,11 @@ scriptwait:
 				Bindings.GetKeysForCommand ((char *)lookup, &key1, &key2);
 
 				if (key2)
-					work << KeyNames[key1] << " or " << KeyNames[key2];
+					work << KeyNames[key1] << " " << GStrings("TXT_OR") << " " << KeyNames[key2];	//[XANE]Who thought hardcoding English into the source was a good idea?
 				else if (key1)
 					work << KeyNames[key1];
 				else
-					work << "??? (" << (char *)lookup << ')';
+					work << GStrings("TXT_UNKNOWNBIND") << " (" << (char *)lookup << ')';
 			}
 			--sp;
 			break;
