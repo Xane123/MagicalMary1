@@ -4195,7 +4195,7 @@ static void yy_syntax_error(
 	int i;
 	int stateno = yypParser->yystack[yypParser->yyidx].stateno;
 
-	unexpected << "Unexpected " << ZCCTokenName(yymajor);
+	unexpected << "...wasn't expecting " << ZCCTokenName(yymajor);
 
 	// Determine all the terminals that the parser would have accepted at this point
 	// (see yy_find_shift_action). This list can get quite long. Is it worthwhile to
@@ -4208,7 +4208,7 @@ static void yy_syntax_error(
 			int k = i + j;
 			if (k >= 0 && k < YY_SZ_ACTTAB && yy_lookahead[k] == j)
 			{
-				expecting << (expecting.IsEmpty() ? "Expecting " : " or ") << ZCCTokenName(j);
+				expecting << (expecting.IsEmpty() ? "It was expected to include " : " or ") << ZCCTokenName(j);
 			}
 		}
 	}
@@ -4313,7 +4313,7 @@ void ZCCParse(
       assert( yyact == YY_ERROR_ACTION );
 #ifndef NDEBUG
       if( yyTraceFILE ){
-        fprintf(yyTraceFILE,"%sSyntax Error!\n",yyTracePrompt);
+        fprintf(yyTraceFILE,"%sThere was a syntax error in this script or whatever this is for.\n",yyTracePrompt);
       }
 #endif
 #ifdef YYERRORSYMBOL
@@ -4343,7 +4343,7 @@ void ZCCParse(
       if( yymx==YYERRORSYMBOL || yyerrorhit ){
 #ifndef NDEBUG
         if( yyTraceFILE ){
-          fprintf(yyTraceFILE,"%sDiscard input token %s\n",
+          fprintf(yyTraceFILE,"%sDiscarded the input token %s\n",
              yyTracePrompt,yyTokenName[yymajor]);
         }
 #endif
