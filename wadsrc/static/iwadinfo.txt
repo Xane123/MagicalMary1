@@ -9,7 +9,7 @@ IWad
 	Mapinfo = "mapinfo/mma.txt"
 	MustContain = "WGAMEPAL", "XANE_MMA"
 	BannerColors = "c0 40 c0", "40 20 40"
-	Load = "mma_extra.pk3", "mma_maps.wad", "fmv.pk3", "fmv_3d.pk3", "fmv_hires.pk3"
+	Load = "mma_extra.pk3", "mma_maps.wad", "fmv.pk3", "fmv_hires.pk3", "gfx_old.pk3"
 }
 
 Names { "mma_data.pk3" }
