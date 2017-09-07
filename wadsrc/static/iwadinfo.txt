@@ -1,4 +1,4 @@
-// World of Kirbycraft only has one IWAD, its own.
+// Mary's Magical Adventure only has one IWAD, its own.
 
 IWad
 {
@@ -7,7 +7,7 @@ IWad
 	Game = "Doom"
 	Config = "Doom"
 	Mapinfo = "mapinfo/mma.txt"
-	MustContain = "WGAMEPAL", "XANE_MMA"
+	MustContain = "MGAMEPAL", "XANE_MMA"
 	BannerColors = "c0 40 c0", "40 20 40"
 	Load = "mma_extra.pk3", "mma_maps.wad", "fmv.pk3", "fmv_hires.pk3", "gfx_old.pk3"
 }
