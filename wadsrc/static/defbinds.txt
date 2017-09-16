@@ -1,4 +1,7 @@
-/* Default keybindings for all games */
+/*Default keybindings for Mary's Magical Adventure. See Options (F4) > Controls to
+change them and use the bind command for more advanced bindings like double-binds.*/
+
+doublebind w +mc_run
 
 ` toggleconsole
 1 "slot 1"
@@ -11,28 +14,18 @@
 8 "slot 8"
 9 "slot 9"
 0 "slot 0"
-[ invprev
-] invnext
-mwheelleft invprev
-mwheelright invnext
-enter invuse
-- sizedown
-= sizeup
-ctrl +attack
-alt +strafe
+[ sizedown
+] sizeup
+q +attack
+e +altattack
 shift +speed
-space +use
-rightarrow +right
-leftarrow +left
-uparrow +forward
-downarrow +back
-, +moveleft
-. +moveright
+space +jump
+w +forward
+s +back
+a +moveleft
+d +moveright
 mouse1 +attack
-mouse2 +strafe
-mouse3 +forward
-mouse4 +speed
-capslock "toggle cl_run"
+mouse2 +jump
 f1 menu_help
 f2 menu_save
 f3 menu_load
@@ -52,9 +45,9 @@ t messagemode
 f12 spynext
 mwheeldown weapnext
 mwheelup weapprev
+num5 +user1
+/ +user2
 
-// Originally just for Heretic, Hexen, and Strife.
-// I can't see why they shouldn't be for Doom or Chex either.
 pgup +moveup
 ins +movedown
 home land
@@ -69,22 +62,22 @@ joy3 +speed
 joy4 +use
 
 // Xbox 360 / PS2 controllers
-pad_a +use
-pad_y +jump
+pad_b +jump
+pad_x +use
+pad_a +user1
+pad_y weapnext
 rtrigger +attack
 ltrigger +altattack
-lshoulder weapprev
-rshoulder weapnext
-dpadleft invprev
-dpadright invnext
+lshoulder +user2
+dpadleft invnext
+dpadright weapnext
 dpaddown invuse
 dpadup togglemap
-pad_start pause
-pad_back menu_main
-lthumb crouch
+pad_start menu_main
+pad_back pause
+lthumb +speed
 
-
-/* Default automap bindings */
+/* Default automap bindings
 mapbind f am_togglefollow
 mapbind g am_togglegrid
 mapbind p am_toggletexture
@@ -94,7 +87,7 @@ mapbind 0 am_gobig
 mapbind rightarrow +am_panright
 mapbind leftarrow +am_panleft
 mapbind uparrow +am_panup
-mapbind downarrow +am_pandown
+mapbind downarrow +am_pandown */
 mapbind - +am_zoomout
 mapbind = +am_zoomin
 mapbind kp- +am_zoomout

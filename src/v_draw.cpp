@@ -64,7 +64,7 @@
 #include "textures.h"
 #include "vm.h"
 
-CUSTOM_CVAR(Int, uiscale, 2, CVAR_ARCHIVE | CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, uiscale, 3, CVAR_ARCHIVE | CVAR_NOINITCALL)	//[XANE]This replicates the old HUD scale based on how HUD elements look. The Special Stage transition needs changing, though.
 {
 	if (self < 0)
 	{

@@ -1780,7 +1780,7 @@ void ScaleWithAspect (int &w, int &h, int Width, int Height)
 
 void IVideo::DumpAdapters ()
 {
-	Printf("Multi-monitor support unavailable.\n");
+	Printf("Multi-monitor support is unavailable.\n");
 }
 
 CCMD(vid_listadapters)

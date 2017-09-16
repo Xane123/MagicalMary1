@@ -2153,7 +2153,7 @@ template<> FSerializer &Serialize(FSerializer &arc, const char *key, FFont *&fon
 		font = V_GetFont(n);
 		if (font == nullptr)
 		{
-			Printf(TEXTCOLOR_ORANGE "Could not load font %s\n", n.GetChars());
+			Printf(TEXTCOLOR_ORANGE "The font %s doesn't exist.\n", n.GetChars());
 			font = SmallFont;
 		}
 		return arc;
