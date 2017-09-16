@@ -8,8 +8,10 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
-#include "../version.h"
-#include "../gitinfo.h"
+#include "../version.h"
+
+#include "../gitinfo.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -423,7 +425,7 @@ BEGIN
     PUSHBUTTON      "Abort Network Game",IDCANCEL,45,34,89,14
     CONTROL         "",IDC_NETSTARTMESSAGE,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,7,7,116,8
     CONTROL         "",IDC_NETSTARTCOUNT,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,153,7,29,8,WS_EX_RIGHT
-    CONTROL         "",IDC_NETSTARTPROGRESS,"msctls_progress32",PBS_SMOOTHREVERSE | WS_BORDER,7,18,175,10,WS_EX_STATICEDGE
+    CONTROL         "",IDC_NETSTARTPROGRESS,"msctls_progress32",WS_BORDER,7,18,175,10,WS_EX_STATICEDGE
 END
 
 
