@@ -106,7 +106,7 @@ CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
 
 // Stretch status bar to full screen width?
-CUSTOM_CVAR (Int, st_scale, 0, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, st_scale, -1, CVAR_ARCHIVE)	//[XANE]This makes the status bar look as intended and how it looked in older versions.
 {
 	if (self < -1)
 	{
