@@ -1510,8 +1510,8 @@ void APlayerPawn::PlayIdle ()
 {
 	IFVIRTUAL(APlayerPawn, PlayIdle)
 	{
-		VMValue params[1] = { (DObject*)this };
-		VMCall(func, params, 1, nullptr, 0);
+		/*VMValue params[1] = { (DObject*)this };
+		VMCall(func, params, 1, nullptr, 0);*/ //[XANE]This is risky. If it seems to cause crashes, try to leave it in, even if the sprite update becomes impossible.
 	}
 }
 
@@ -1596,7 +1596,7 @@ void APlayerPawn::GiveDefaultInventory ()
 						{
 							// Player was morphed. This is illegal at game start.
 							// This problem is only detectable when it's too late to do something about it...
-							I_Error("Cannot give morph items when starting a game");
+							I_Error("Cannot give morph items when starting a game!");
 						}
 						item->Destroy();
 						item = NULL;

@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\wadsrc\CMakeLists.txt" />
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\1f03bb1abeeff62aecefb43e5c7d7a00\data.pk3.rule">
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\CMakeFiles\a6258f587ab8c8a8787d9160051608b0\data.pk3.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\MaryMagicalAdventure\CMakeFiles\196006ff274136d5c54dfe06e40722c8\data_pk3.rule">
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\CMakeFiles\d94985ee522bab9385abe38e8a72cdc3\data_pk3.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\Git\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\CMakeFiles\data_pk3" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{39915B61-5B97-32B8-891A-7F6CFC741C08}</UniqueIdentifier>
+      <UniqueIdentifier>{6270EDE3-6658-397F-ABCF-20F05AF33C56}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

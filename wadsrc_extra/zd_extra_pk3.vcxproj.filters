@@ -783,24 +783,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source Files\sprites\dogs">
-      <UniqueIdentifier>{A2F675CC-A406-38A6-906B-8AC56CF892BA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\sprites\plyc">
-      <UniqueIdentifier>{95F9F991-7295-31DA-9226-80AA0DC6793C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\filter\game-doom">
-      <UniqueIdentifier>{139F90B7-7BB0-37D8-AA99-36ACD0BD4C4F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\filter\game-raven">
-      <UniqueIdentifier>{C384710D-ECCC-366A-AF85-57CC724DCF56}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\filter\game-doom\graphics">
-      <UniqueIdentifier>{876DDD72-6B76-3195-B332-E8F89FB7CAC7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\filter\game-raven\graphics">
-      <UniqueIdentifier>{73EB477F-4958-34B9-ACD5-B702E26C66EB}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\filter">
       <UniqueIdentifier>{89EF33A5-66AC-3E8C-9D13-641B75CFEDCD}</UniqueIdentifier>
     </Filter>
@@ -812,6 +794,24 @@
     </Filter>
     <Filter Include="Source Files\sprites">
       <UniqueIdentifier>{7E77BFCF-0774-332C-BA33-0BAA42B22B2C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-doom">
+      <UniqueIdentifier>{139F90B7-7BB0-37D8-AA99-36ACD0BD4C4F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-raven">
+      <UniqueIdentifier>{C384710D-ECCC-366A-AF85-57CC724DCF56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sprites\dogs">
+      <UniqueIdentifier>{A2F675CC-A406-38A6-906B-8AC56CF892BA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sprites\plyc">
+      <UniqueIdentifier>{95F9F991-7295-31DA-9226-80AA0DC6793C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-doom\graphics">
+      <UniqueIdentifier>{876DDD72-6B76-3195-B332-E8F89FB7CAC7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-raven\graphics">
+      <UniqueIdentifier>{73EB477F-4958-34B9-ACD5-B702E26C66EB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{643067AC-42B7-3542-8439-0BE5606108D2}</UniqueIdentifier>

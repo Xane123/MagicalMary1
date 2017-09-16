@@ -126,7 +126,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/gzdoom.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/Debug
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/soundfont.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/Debug
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -196,7 +196,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/gzdoom.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/Release
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/soundfont.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/Release
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -268,7 +268,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/gzdoom.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/MinSizeRel
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/soundfont.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/MinSizeRel
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -340,7 +340,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/gzdoom.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/RelWithDebInfo
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/soundfont/soundfont.sf2 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/RelWithDebInfo
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -920,6 +920,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gameconfigfile.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gametype.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gi.h" />
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gitinfo.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gstrings.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\hu_stuff.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\i_cd.h" />
@@ -981,6 +982,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\s_sndseq.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\s_sound.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man.h" />
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_scanner.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_tokens.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\serializer.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\skins.h" />
@@ -1009,7 +1011,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\weightedlist.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\wi_stuff.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\x86.h" />
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat_parser.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xs_Float.h" />
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zcc-parse.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zstring.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\posix\i_cd.cpp" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\posix\i_steam.cpp" />
@@ -1102,15 +1106,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\polyrenderer\drawers\poly_draw_args.cpp" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\polyrenderer\drawers\screen_triangle.cpp" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\polyrenderer\math\tri_matrix.cpp" />
-    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_scanner.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_scanner.re" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\g_statusbar\sbarinfo_commands.cpp" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat\xlat_parser.y" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat_parser.c" />
-    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat_parser.h" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\scripting\zscript\zcc-parse.lemon" />
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zcc-parse.c" />
-    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zcc-parse.h" />
     <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\__autostart.cpp"  />
     <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sound\mididevices\music_win_mididevice.cpp"  />
     <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\win32\eaxedit.cpp"  />

@@ -1281,7 +1281,7 @@ endif()
 
 add_custom_command(TARGET zdoom POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	${CMAKE_SOURCE_DIR}/soundfont/gzdoom.sf2 $<TARGET_FILE_DIR:zdoom>)
+	${CMAKE_SOURCE_DIR}/soundfont/soundfont.sf2 $<TARGET_FILE_DIR:zdoom>)
 
 if( CMAKE_COMPILER_IS_GNUCXX )
 	# GCC misoptimizes this file

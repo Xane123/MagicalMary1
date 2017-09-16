@@ -2265,6 +2265,9 @@
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gitinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\gstrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -2448,6 +2451,9 @@
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_scanner.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_tokens.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -2532,8 +2538,14 @@
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\x86.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat_parser.h">
+      <Filter>Xlat</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xs_Float.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zcc-parse.h">
+      <Filter>Scripting\ZScript frontend</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zstring.h">
       <Filter>Header Files</Filter>
@@ -2811,9 +2823,6 @@
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\polyrenderer\math\tri_matrix.cpp">
       <Filter>Poly Renderer\Math</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_scanner.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\sc_man_scanner.re">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -2826,16 +2835,10 @@
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat_parser.c">
       <Filter>Xlat</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\xlat_parser.h">
-      <Filter>Xlat</Filter>
-    </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\scripting\zscript\zcc-parse.lemon">
       <Filter>Scripting\ZScript frontend</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zcc-parse.c">
-      <Filter>Scripting\ZScript frontend</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zcc-parse.h">
       <Filter>Scripting\ZScript frontend</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2857,8 +2860,17 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Audio Files\OPL Synth\DOSBox">
-      <UniqueIdentifier>{17DB5683-7C6E-3F4D-8112-5FF5141EC85B}</UniqueIdentifier>
+    <Filter Include="Scripting\Decorate frontend">
+      <UniqueIdentifier>{E507DABF-1699-37EF-A20D-0AEF22D682F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting\ZScript frontend">
+      <UniqueIdentifier>{FF20E6F4-8AC0-3BD2-8154-177790E11A8F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting\Compiler backend">
+      <UniqueIdentifier>{38A9854F-F072-3185-8E7F-E7B6BE950B7C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting\VM">
+      <UniqueIdentifier>{301557C9-EB50-39F1-8603-C7379199131D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Audio Files\OPL Synth">
       <UniqueIdentifier>{BEB58D6F-C83A-3C17-AD2D-D66286E2EF6A}</UniqueIdentifier>
@@ -2875,50 +2887,29 @@
     <Filter Include="Audio Files\Music formats">
       <UniqueIdentifier>{6E12AA98-0C6B-3991-9BB9-9F8A213E2F3F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platforms\POSIX Files">
-      <UniqueIdentifier>{6B165F7C-1ED7-3941-A185-628B3FDFC87B}</UniqueIdentifier>
+    <Filter Include="Audio Files\OPL Synth\DOSBox">
+      <UniqueIdentifier>{17DB5683-7C6E-3F4D-8112-5FF5141EC85B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Platforms\Win32 Files">
-      <UniqueIdentifier>{7221EFDA-3580-364C-B523-EF51417CD08A}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Drawers">
+      <UniqueIdentifier>{1BACFE40-1D07-333A-A921-E6B9BEC79800}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripting\Decorate frontend">
-      <UniqueIdentifier>{E507DABF-1699-37EF-A20D-0AEF22D682F2}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Scene">
+      <UniqueIdentifier>{77DAA52B-904C-3400-AC44-E3745F173DAF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripting\ZScript frontend">
-      <UniqueIdentifier>{FF20E6F4-8AC0-3BD2-8154-177790E11A8F}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Segments">
+      <UniqueIdentifier>{8F9B5D56-4FF2-3306-8C3C-7619E53F0045}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripting\Compiler backend">
-      <UniqueIdentifier>{38A9854F-F072-3185-8E7F-E7B6BE950B7C}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Line">
+      <UniqueIdentifier>{C72546A1-6220-35F5-B3BA-396F5C98AD6E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripting\VM">
-      <UniqueIdentifier>{301557C9-EB50-39F1-8603-C7379199131D}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Plane">
+      <UniqueIdentifier>{4E6B35BA-2392-3DEE-9A30-2E5F1A5FB390}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Data\Resource Headers">
-      <UniqueIdentifier>{0E0DED64-6E79-3E52-A9CF-31DCAC7C0E33}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Things">
+      <UniqueIdentifier>{CA039819-1C6F-314B-A387-83D01034CFEA}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render Data\Resource Sources">
-      <UniqueIdentifier>{5331BEB5-A856-3118-9A38-1DCB516B31A9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Render Data\Textures">
-      <UniqueIdentifier>{CFF63CEC-14BC-34A8-ACC5-4D66617A799A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Poly Renderer\Math">
-      <UniqueIdentifier>{BE1A26D6-6227-3D91-AC07-2998CCBF4C2F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Poly Renderer\Drawers">
-      <UniqueIdentifier>{BAF2B7C3-4680-3124-8261-8DD681B08F5C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Poly Renderer\Scene">
-      <UniqueIdentifier>{2EB24224-426B-3AAB-ACCE-16466B93A244}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="External\Math">
-      <UniqueIdentifier>{59FC38C0-E418-33F2-B53F-4FB6AA13D236}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="External\RapidJSON">
-      <UniqueIdentifier>{0E0CC53A-99C4-38CB-A1C6-F25CE26B569D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="External\SFMT">
-      <UniqueIdentifier>{FE2792B7-2D3C-3095-BA7B-C83DFDC1FAE0}</UniqueIdentifier>
+    <Filter Include="Software Renderer\Viewport">
+      <UniqueIdentifier>{922A9B59-C370-3306-B9FB-49F3404C2538}</UniqueIdentifier>
     </Filter>
     <Filter Include="OpenGL Renderer\Data">
       <UniqueIdentifier>{BD328B1B-DA0C-36D6-91FA-E06BDECE2A0D}</UniqueIdentifier>
@@ -2955,27 +2946,6 @@
     </Filter>
     <Filter Include="OpenGL Renderer\Utilities">
       <UniqueIdentifier>{D67CCEC0-3895-3983-9394-C353A7D41C69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Drawers">
-      <UniqueIdentifier>{1BACFE40-1D07-333A-A921-E6B9BEC79800}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Scene">
-      <UniqueIdentifier>{77DAA52B-904C-3400-AC44-E3745F173DAF}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Segments">
-      <UniqueIdentifier>{8F9B5D56-4FF2-3306-8C3C-7619E53F0045}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Line">
-      <UniqueIdentifier>{C72546A1-6220-35F5-B3BA-396F5C98AD6E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Plane">
-      <UniqueIdentifier>{4E6B35BA-2392-3DEE-9A30-2E5F1A5FB390}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Things">
-      <UniqueIdentifier>{CA039819-1C6F-314B-A387-83D01034CFEA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Software Renderer\Viewport">
-      <UniqueIdentifier>{922A9B59-C370-3306-B9FB-49F3404C2538}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{643067AC-42B7-3542-8439-0BE5606108D2}</UniqueIdentifier>
@@ -3039,6 +3009,39 @@
     </Filter>
     <Filter Include="Xlat">
       <UniqueIdentifier>{30B96140-A6BA-31FD-91B4-63F27B0B0045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\Math">
+      <UniqueIdentifier>{59FC38C0-E418-33F2-B53F-4FB6AA13D236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\RapidJSON">
+      <UniqueIdentifier>{0E0CC53A-99C4-38CB-A1C6-F25CE26B569D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\SFMT">
+      <UniqueIdentifier>{FE2792B7-2D3C-3095-BA7B-C83DFDC1FAE0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Poly Renderer\Math">
+      <UniqueIdentifier>{BE1A26D6-6227-3D91-AC07-2998CCBF4C2F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Poly Renderer\Drawers">
+      <UniqueIdentifier>{BAF2B7C3-4680-3124-8261-8DD681B08F5C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Poly Renderer\Scene">
+      <UniqueIdentifier>{2EB24224-426B-3AAB-ACCE-16466B93A244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Resource Headers">
+      <UniqueIdentifier>{0E0DED64-6E79-3E52-A9CF-31DCAC7C0E33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Resource Sources">
+      <UniqueIdentifier>{5331BEB5-A856-3118-9A38-1DCB516B31A9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render Data\Textures">
+      <UniqueIdentifier>{CFF63CEC-14BC-34A8-ACC5-4D66617A799A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platforms\POSIX Files">
+      <UniqueIdentifier>{6B165F7C-1ED7-3941-A185-628B3FDFC87B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platforms\Win32 Files">
+      <UniqueIdentifier>{7221EFDA-3580-364C-B523-EF51417CD08A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -172,6 +172,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{0D56F376-6503-35CB-AC65-CAA3B066FBC2}</Project>
       <Name>bz2</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\data_pk3.vcxproj">
+      <Project>{A4B56F12-DC3A-309D-9855-ECFC117E87FE}</Project>
+      <Name>data_pk3</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\dumb\dumb.vcxproj">
       <Project>{2407BB78-7EC6-3112-8BA0-04EA1BC12ED4}</Project>
       <Name>dumb</Name>
@@ -183,10 +187,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\game-music-emu\gme\gme.vcxproj">
       <Project>{1325371F-094B-3F79-A7AF-AE73FAABF340}</Project>
       <Name>gme</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\gzdoom_pk3.vcxproj">
-      <Project>{5D4E714D-EF25-3E0B-96DE-579FAD74EB16}</Project>
-      <Name>gzdoom_pk3</Name>
     </ProjectReference>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jpeg.vcxproj">
       <Project>{160E7C6C-954C-3A04-883C-06EF2DB0E3CB}</Project>

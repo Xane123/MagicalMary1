@@ -2005,8 +2005,8 @@ void FMapInfoParser::ParseMapInfo (int lump, level_info_t &gamedefaults, level_i
 				// Do not allow overriding includes from the default MAPINFO
 				if (Wads.GetLumpFile(sc.LumpNum) == 0)
 				{
-					I_FatalError("File %s is overriding core lump %s.",
-						Wads.GetWadFullName(Wads.GetLumpFile(inclump)), sc.String);
+					/*I_FatalError("File %s is overriding core lump %s.",
+						Wads.GetWadFullName(Wads.GetLumpFile(inclump)), sc.String);*/	//[XANE]Disabled "core lump" check.
 				}
 			}
 			FScanner saved_sc = sc;
@@ -2200,8 +2200,8 @@ void G_ParseMapInfo (FString basemapinfo)
 		int baselump = Wads.GetNumForFullName(basemapinfo);
 		if (Wads.GetLumpFile(baselump) > 0)
 		{
-			I_FatalError("File %s is overriding core lump %s.", 
-				Wads.GetWadFullName(Wads.GetLumpFile(baselump)), basemapinfo.GetChars());
+			/*I_FatalError("File %s is overriding core lump %s.", 
+				Wads.GetWadFullName(Wads.GetLumpFile(baselump)), basemapinfo.GetChars());*/	//[XANE]Disabled "core lump" check.
 		}
 		parse.ParseMapInfo(baselump, gamedefaults, defaultinfo);
 	}
