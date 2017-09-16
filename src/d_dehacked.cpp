@@ -2425,7 +2425,6 @@ static bool isDehFile(int lumpnum)
 
 int D_LoadDehLumps(DehLumpSource source)
 {
-	I_FatalError("DeHackEd is outdated. Please don't use DEH or BEX files with Mary's Magical Adventure.");
 	int lastlump = 0, lumpnum, count = 0;
 
 	while ((lumpnum = Wads.FindLump("DEHACKED", &lastlump)) >= 0)
@@ -2478,7 +2477,6 @@ int D_LoadDehLumps(DehLumpSource source)
 
 bool D_LoadDehLump(int lumpnum)
 {
-	I_FatalError("DeHackEd is outdated. Please don't use DEH or BEX files with Mary's Magical Adventure.");
 	PatchSize = Wads.LumpLength(lumpnum);
 
 	PatchName = copystring(Wads.GetLumpFullPath(lumpnum));
