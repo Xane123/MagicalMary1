@@ -172,10 +172,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{0D56F376-6503-35CB-AC65-CAA3B066FBC2}</Project>
       <Name>bz2</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\data_pk3.vcxproj">
-      <Project>{A4B56F12-DC3A-309D-9855-ECFC117E87FE}</Project>
-      <Name>data_pk3</Name>
-    </ProjectReference>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\dumb\dumb.vcxproj">
       <Project>{2407BB78-7EC6-3112-8BA0-04EA1BC12ED4}</Project>
       <Name>dumb</Name>
@@ -196,10 +192,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{A89B8470-D69A-32E4-A8C6-686F3DD0C794}</Project>
       <Name>lemon</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_lights\lights_pk3.vcxproj">
-      <Project>{249E4221-3118-33D4-B120-82980F44F556}</Project>
-      <Name>lights_pk3</Name>
-    </ProjectReference>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\lzma\lzma.vcxproj">
       <Project>{89E9BD93-245C-3E2E-ADF6-7912C8001C5A}</Project>
       <Name>lzma</Name>
@@ -219,10 +211,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zlib\z.vcxproj">
       <Project>{7F7D9FBF-C998-3AA4-A5F5-0DEFC20B13AB}</Project>
       <Name>z</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\zd_extra_pk3.vcxproj">
-      <Project>{832DE013-82BC-3B23-9BBE-A903F59902A7}</Project>
-      <Name>zd_extra_pk3</Name>
     </ProjectReference>
     <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zdoom.vcxproj">
       <Project>{2E8D674D-373F-3F51-B0EE-84570C4168A3}</Project>

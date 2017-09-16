@@ -1506,18 +1506,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source Files\brightmaps\doom">
-      <UniqueIdentifier>{97DEAE8C-E34A-3B75-B8FB-692BB5CFD888}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\brightmaps\heretic">
-      <UniqueIdentifier>{249E353C-5A31-33AC-A6FB-46C510988AE4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\brightmaps\hexen">
-      <UniqueIdentifier>{F38646F3-D63C-3735-940A-E3FDADBC154C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\brightmaps\strife">
-      <UniqueIdentifier>{456B762C-58F9-3B64-869D-C1F8B5FFC89D}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\brightmaps">
       <UniqueIdentifier>{6707E306-8CD1-38FB-9C23-123E0ECDFC44}</UniqueIdentifier>
     </Filter>
@@ -1529,6 +1517,18 @@
     </Filter>
     <Filter Include="CMake Rules">
       <UniqueIdentifier>{6270EDE3-6658-397F-ABCF-20F05AF33C56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\brightmaps\doom">
+      <UniqueIdentifier>{97DEAE8C-E34A-3B75-B8FB-692BB5CFD888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\brightmaps\heretic">
+      <UniqueIdentifier>{249E353C-5A31-33AC-A6FB-46C510988AE4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\brightmaps\hexen">
+      <UniqueIdentifier>{F38646F3-D63C-3735-940A-E3FDADBC154C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\brightmaps\strife">
+      <UniqueIdentifier>{456B762C-58F9-3B64-869D-C1F8B5FFC89D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\filter\doom.doom1">
       <UniqueIdentifier>{84BEAC63-B4CA-360B-99E6-518628BD7B9E}</UniqueIdentifier>
