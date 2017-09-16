@@ -15,22 +15,22 @@ matrix:
       env:
         - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7"
 
-    - os: linux
-      compiler: gcc
-      env:
-        - GCC_VERSION=5
-        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=Release"
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-            - libsdl2-dev
-            - libopenal-dev
-            - libmpg123-dev
-            - libsndfile-dev
-            - libfluidsynth-dev
+#    - os: linux
+#      compiler: gcc
+#      env:
+#        - GCC_VERSION=5
+#        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=Release"
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#          packages:
+#            - g++-5
+#            - libsdl2-dev
+#            - libopenal-dev
+#            - libmpg123-dev
+#            - libsndfile-dev
+#            - libfluidsynth-dev
 
     - os: linux
       compiler: clang
