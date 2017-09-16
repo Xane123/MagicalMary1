@@ -89,3 +89,10 @@ script:
 
 notifications:
   email: false
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $githubtoken # Set in travis-ci.org dashboard
+  on:
+    branch: master
