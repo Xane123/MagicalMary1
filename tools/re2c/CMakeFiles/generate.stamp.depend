@@ -1,7 +1,0 @@
-# CMake generation dependency list for this directory.
-D:/Git/MaryMagicalAdventure/tools/re2c/CMakeLists.txt
-D:/Programs/CMake/share/cmake-3.8/Modules/CheckFunctionExists.cmake
-D:/Programs/CMake/share/cmake-3.8/Modules/CheckTypeSize.cmake
-D:/Programs/CMake/share/cmake-3.8/Modules/CheckIncludeFile.cmake
-D:/Programs/CMake/share/cmake-3.8/Modules/CheckIncludeFileCXX.cmake
-D:/Git/MaryMagicalAdventure/tools/re2c/config.h.in
