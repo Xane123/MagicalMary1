@@ -27,31 +27,10 @@ matrix:
           packages:
             - g++-5
             - libsdl2-dev
-
-    - os: linux
-      compiler: gcc
-      env:
-        - GCC_VERSION=6
-        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-            - libsdl2-dev
-
-    - os: linux
-      compiler: gcc
-      env:
-        - GCC_VERSION=7
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-            - libsdl2-dev
+            - libopenal-dev
+            - libmpg123-dev
+            - libsndfile-dev
+            - libfluidsynth-dev
 
     - os: linux
       compiler: clang
