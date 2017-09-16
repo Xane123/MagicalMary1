@@ -1,20 +1,1948 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="D:\Git\Failure5\wadsrc\CMakeLists.txt" />
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\a2cab737ab28ce364d06caef61927dac\gzdoom.pk3.rule">
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\CMakeFiles\a6258f587ab8c8a8787d9160051608b0\gzdoom.pk3.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="D:\Git\Failure5\CMakeFiles\4481bb8ff6ddd600e4761ba65f9cd7cb\gzdoom_pk3.rule">
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\CMakeFiles\d94985ee522bab9385abe38e8a72cdc3\gzdoom_pk3.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="D:\Git\Failure5\wadsrc\CMakeFiles\gzdoom_pk3" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn191.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn193.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn196.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn197.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn201.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn205.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn209.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn211.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn214.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn218.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn220.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn223.png">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta164.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta165.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta182.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta188.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta191.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta60.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta61.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta62.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta63.png">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\glstuff\gllight.png">
+      <Filter>Source Files\glstuff</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\glstuff\glpart.png">
+      <Filter>Source Files\glstuff</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\glstuff\glpart2.png">
+      <Filter>Source Files\glstuff</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\glstuff\mirror.png">
+      <Filter>Source Files\glstuff</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\artibox.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bal7scr1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bal7scr2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bfglite1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bfglite2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bfgscrc1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bfgscrc2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\blast1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsmear1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsmear2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat3.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat4.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat5.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat6.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\bsplat7.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\cbalscr1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\cbalscr2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\cbowmark.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\chexcurs.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\chip1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\chip2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\chip3.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\chip4.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\chip5.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\cursor.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\doomcurs.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\hamoback.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\herecurs.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\hexncurs.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\invgeml1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\invgeml2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\invgemr1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\invgemr2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\m_back_d.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\m_back_h.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\m_back_s.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\m_back_x.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\plasma1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\plasma2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\readyico.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\scorch1.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\selectbo.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\stfbany.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\stkeys6.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\stkeys7.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\stkeys8.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\stpbany.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\strfcurs.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\twirl.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\wislash.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb2.png">
+      <Filter>Source Files\graphics</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\AFLYA0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\AFLYB0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\AFLYC0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\AFLYD0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\iceca0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\icecb0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\icecc0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\icecd0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\tnt1a0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\unkna0.png">
+      <Filter>Source Files\sprites</Filter>
+    </Image>
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\textures\-NOFLAT-.png">
+      <Filter>Source Files\textures</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\CMakeFiles\gzdoom_pk3" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\SPALDOOM.pal">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\SPALHTIC.pal">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\althudcf.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\animated.lmp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\animdefs.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\compatibility.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\confont.fon1">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\dbigfont.lmp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\decaldef.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\decorate.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\decorate.z">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\defbinds.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\dehsupp.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\etc.h.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\doom.doom1\sprofs.txt">
+      <Filter>Source Files\filter\doom.doom1</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\doom.doom2\sprofs.txt">
+      <Filter>Source Files\filter\doom.doom2</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\doom.freedoom\decaldef.z">
+      <Filter>Source Files\filter\doom.freedoom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn191.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn193.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn196.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn197.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn201.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn205.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn209.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn211.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn214.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn218.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn220.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doom\graphics\stcfn223.lmp">
+      <Filter>Source Files\filter\game-doom\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doomchex\animated.lmp">
+      <Filter>Source Files\filter\game-doomchex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-doomchex\sndinfo.txt">
+      <Filter>Source Files\filter\game-doomchex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-heretic\animated.lmp">
+      <Filter>Source Files\filter\game-heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-heretic\defbinds.txt">
+      <Filter>Source Files\filter\game-heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-heretic\sndinfo.txt">
+      <Filter>Source Files\filter\game-heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-heretic\sndseq.txt">
+      <Filter>Source Files\filter\game-heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-hexen\defbinds.txt">
+      <Filter>Source Files\filter\game-hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-hexen\sndinfo.txt">
+      <Filter>Source Files\filter\game-hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta164.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta165.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta182.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta188.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta191.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta60.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta61.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta62.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-raven\graphics\fonta63.lmp">
+      <Filter>Source Files\filter\game-raven\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-strife\acs\strfhelp.o">
+      <Filter>Source Files\filter\game-strife\acs</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-strife\animated.lmp">
+      <Filter>Source Files\filter\game-strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-strife\defbinds.txt">
+      <Filter>Source Files\filter\game-strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-strife\loadacs.txt">
+      <Filter>Source Files\filter\game-strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\game-strife\sndinfo.txt">
+      <Filter>Source Files\filter\game-strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\heretic\sprofs.txt">
+      <Filter>Source Files\filter\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\hexen\sprofs.txt">
+      <Filter>Source Files\filter\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\strife\sprofs.txt">
+      <Filter>Source Files\filter\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\strifeteaser1\mapinfo\conversationids.txt">
+      <Filter>Source Files\filter\strifeteaser1\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\filter\strifeteaser2\mapinfo\conversationids.txt">
+      <Filter>Source Files\filter\strifeteaser2\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\fontdefs.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\-badpatc.lmp">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb1.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb3.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb4.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb5.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb6.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairb7.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs1.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs2.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs3.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs4.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs5.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs6.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\graphics\xhairs7.imgz">
+      <Filter>Source Files\graphics</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\indexfont">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\iwadinfo.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\language.eng">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\lockdefs.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\maparrows\arrow.txt">
+      <Filter>Source Files\maparrows</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\maparrows\dagger.txt">
+      <Filter>Source Files\maparrows</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\maparrows\ddtarrow.txt">
+      <Filter>Source Files\maparrows</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\maparrows\key.txt">
+      <Filter>Source Files\maparrows</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\maparrows\ravenkey.txt">
+      <Filter>Source Files\maparrows</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\chex.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\chex3.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\common.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\conversationids.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\doom1.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\doom2.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\doom2bfg.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\doomcommon.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\doomitems.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\eternity.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\hacx.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\hacxharm.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\harmony.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\heretic.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\hereticsw.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\hexdd.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\hexen.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\mindefaults.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\mma.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\plutonia.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\strife.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\tnt.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\ultdoom.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\mapinfo\urbanbrawl.txt">
+      <Filter>Source Files\mapinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\menudef.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\menudef.z">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\netnotch.dat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\notch.dat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\reverbs.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\rgbcolor.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sbarinfo.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sbarinfo\doom.txt">
+      <Filter>Source Files\sbarinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sbarinfo\heretic.txt">
+      <Filter>Source Files\sbarinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sbarinfo\hexen.txt">
+      <Filter>Source Files\sbarinfo</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sbigfont.lmp">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\build.bat">
+      <Filter>Source Files\shaders\d3d</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\shaders.ps">
+      <Filter>Source Files\shaders\d3d</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\BurnWipe.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\GammaCorrection.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormap.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapInv.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapInvDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapPal.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapPalDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapPalInv.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\InGameColormapPalInvDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\NormalColor.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\NormalColorInv.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\NormalColorPal.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\NormalColorPalInv.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\RedToAlpha.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\RedToAlphaInv.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\SpecialColormap.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\SpecialColormapPal.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\VertexColor.pso">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm14\build.bat">
+      <Filter>Source Files\shaders\d3d\sm14</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\BurnWipe.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\GammaCorrection.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormap.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapInv.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapInvDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapPal.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapPalDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapPalInv.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\InGameColormapPalInvDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\NormalColor.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\NormalColorInv.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\NormalColorPal.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\NormalColorPalInv.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\RedToAlpha.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\RedToAlphaInv.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\SpecialColormap.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\SpecialColormapPal.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\VertexColor.pso">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm20\build.bat">
+      <Filter>Source Files\shaders\d3d\sm20</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\BurnWipe.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\GammaCorrection.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormap.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapInv.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapInvDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapPal.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapPalDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapPalInv.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\InGameColormapPalInvDesat.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\NormalColor.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\NormalColorInv.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\NormalColorPal.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\NormalColorPalInv.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\RedToAlpha.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\RedToAlphaInv.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\SpecialColormap.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\SpecialColormapPal.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\VertexColor.pso">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\d3d\sm30\build.bat">
+      <Filter>Source Files\shaders\d3d\sm30</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\bloomcombine.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\bloomextract.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\burn.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\colormap.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\depthblur.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\exposureaverage.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\exposurecombine.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\exposureextract.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fogboundary.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_brightmap.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_defaultlight.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_normal.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_notexture.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_warp1.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_warp2.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_warp3.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\func_wavex.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_jagged.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_noise.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_smooth.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_smoothnoise.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_smoothtranslucent.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_standard.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fuzz_swirly.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\fxaa.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\lensdistortion.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\lineardepth.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\main.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\main.vp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\present.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\present_checker3d.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\present_column3d.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\present_row3d.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\screenquad.vp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\screenquadscale.vp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\shaderdefs.i">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\shadowmap.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\ssao.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\ssaocombine.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\stencil.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\swshader.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\swshader.vp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\shaders\glsl\tonemap.fp">
+      <Filter>Source Files\shaders\glsl</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sndinfo.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sndseq.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\NULL_SND.ogg">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\dsempty.lmp">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\dsquake.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\dssecret.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\icebrk1a.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\icedth1.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\railgf1.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\spark1.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\spark2.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sounds\spark3.flac">
+      <Filter>Source Files\sounds</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\TLGLA0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\TLGLB0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\TLGLC0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\TLGLD0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\TLGLE0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\amrka0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\sprites\spkra0.lmp">
+      <Filter>Source Files\sprites</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\strifehelp.acs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\teaminfo.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\terrain.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\textcolors.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\textures.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\things.h.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\vga-rom-font.16">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\x11r6rgb.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xhairs.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\base.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\defines.i">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\doom.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\doom_base.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\eternity.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\heretic.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\heretic_base.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\strife.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\xlat\strife_base.txt">
+      <Filter>Source Files\xlat</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript.txt">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\actor.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\actor_checks.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\base.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexammo.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexdecorations.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexitems.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexkeys.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexmonsters.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexplayer.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\chex\chexweapons.txt">
+      <Filter>Source Files\zscript\chex</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\compatibility.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\constants.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\arachnotron.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\archvile.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\bossbrain.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\bruiser.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\cacodemon.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\cyberdemon.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\deadthings.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\demon.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomammo.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomarmor.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomartifacts.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomdecorations.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomhealth.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomimp.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomkeys.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doommisc.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomplayer.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\doomweapons.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\fatso.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\keen.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\lostsoul.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\painelemental.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\possessed.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\revenant.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\scriptedmarine.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\spidermaster.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\stealthmonsters.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponbfg.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponchaingun.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponchainsaw.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponfist.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponpistol.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponplasma.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponrlaunch.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponshotgun.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\doom\weaponssg.txt">
+      <Filter>Source Files\zscript\doom</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\dynarrays.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\events.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\beast.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\chicken.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\clink.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\dsparil.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticammo.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticarmor.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticartifacts.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticdecorations.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticimp.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\heretickeys.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticmisc.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\hereticplayer.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\ironlich.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\knight.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\mummy.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\snake.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponblaster.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponcrossbow.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weapongauntlets.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponmace.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponphoenix.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponskullrod.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponstaff.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\weaponwand.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\heretic\wizard.txt">
+      <Filter>Source Files\zscript\heretic</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\baseweapons.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\bats.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\bishop.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\blastradius.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\boostarmor.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\centaur.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\clericboss.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\clericflame.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\clericholy.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\clericmace.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\clericplayer.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\clericstaff.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\demons.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\dragon.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\ettin.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fighteraxe.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fighterboss.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fighterfist.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fighterhammer.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fighterplayer.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fighterquietus.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\firedemon.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\flame.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\flechette.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\flies.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\fog.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\healingradius.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\heresiarch.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\hexenarmor.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\hexendecorations.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\hexenkeys.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\hexenspecialdecs.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\iceguy.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\korax.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\mageboss.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\magecone.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\magelightning.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\mageplayer.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\magestaff.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\magewand.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\mana.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\pig.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\puzzleitems.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\scriptprojectiles.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\serpent.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\speedboots.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\spike.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\summon.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\teleportother.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\hexen\wraith.txt">
+      <Filter>Source Files\zscript\hexen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\ammo.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\armor.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\health.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\inv_misc.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\inventory.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\powerups.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\stateprovider.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\weaponpiece.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\inventory\weapons.txt">
+      <Filter>Source Files\zscript\inventory</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\mapdata.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\colorpickermenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\conversationmenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\joystickmenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\listmenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\listmenuitems.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\loadsavemenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\menu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\menuitembase.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\messagebox.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\optionmenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\optionmenuitems.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\playercontrols.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\playerdisplay.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\playermenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\readthis.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\textentermenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\menu\videomenu.txt">
+      <Filter>Source Files\zscript\menu</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\raven\artiegg.txt">
+      <Filter>Source Files\zscript\raven</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\raven\artitele.txt">
+      <Filter>Source Files\zscript\raven</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\raven\minotaur.txt">
+      <Filter>Source Files\zscript\raven</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\raven\ravenambient.txt">
+      <Filter>Source Files\zscript\raven</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\raven\ravenartifacts.txt">
+      <Filter>Source Files\zscript\raven</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\raven\ravenhealth.txt">
+      <Filter>Source Files\zscript\raven</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\blood.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\botstuff.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\bridge.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\camera.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\debris.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\decal.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\dog.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\dynlights.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\fastprojectile.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\fountain.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\hatetarget.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\ice.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\itemeffects.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\mapmarker.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\morph.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\movingcamera.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\player.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\player_cheat.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\randomspawner.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\secrettrigger.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\sectoraction.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\setcolor.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\sharedmisc.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\skies.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\soundenvironment.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\soundsequence.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\spark.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\specialspot.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\splashes.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\teleport.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\shared\waterzone.txt">
+      <Filter>Source Files\zscript\shared</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\sounddata.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statscreen\statscreen.txt">
+      <Filter>Source Files\zscript\statscreen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statscreen\statscreen_coop.txt">
+      <Filter>Source Files\zscript\statscreen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statscreen\statscreen_dm.txt">
+      <Filter>Source Files\zscript\statscreen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statscreen\statscreen_sp.txt">
+      <Filter>Source Files\zscript\statscreen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statscreen\types.txt">
+      <Filter>Source Files\zscript\statscreen</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\doom_sbar.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\harm_sbar.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\heretic_sbar.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\hexen_sbar.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\sbarinfowrapper.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\statusbar.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\statusbar\strife_sbar.txt">
+      <Filter>Source Files\zscript\statusbar</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\acolyte.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\alienspectres.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\beggars.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\coin.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\crusader.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\entityboss.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\inquisitor.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\klaxon.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\loremaster.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\macil.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\merchants.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\oracle.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\peasants.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\programmer.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\questitems.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\ratbuddy.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\reaver.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\rebels.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\sentinel.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\sigil.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\spectral.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\stalker.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifeammo.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifearmor.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifebishop.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifefunctions.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifehumanoid.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifeitems.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifekeys.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifeplayer.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifestuff.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\strifeweapons.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\svelights.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\svestuff.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\templar.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\thingstoblowup.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weaponassault.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weaponcrossbow.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weapondagger.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weaponflamer.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weapongrenade.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weaponmauler.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\weaponmissile.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\strife\zombie.txt">
+      <Filter>Source Files\zscript\strife</Filter>
+    </None>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc\static\zscript\zscript_license.txt">
+      <Filter>Source Files\zscript</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files\shaders\d3d">
+      <UniqueIdentifier>{C249C169-E719-3DEE-A975-6CAEAABF5E40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\glsl">
+      <UniqueIdentifier>{8A7A2E2F-41B6-3D2B-9E87-CE0DEB95EFF0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\chex">
+      <UniqueIdentifier>{6C69EEF3-9AEF-3D3B-A707-FE851511B93D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\doom">
+      <UniqueIdentifier>{0FD1C1DC-F704-3791-AA18-3FBAF5C22987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\heretic">
+      <UniqueIdentifier>{78C8C8C0-38BD-31B2-BBFD-3B7817E0F7D9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\hexen">
+      <UniqueIdentifier>{75613343-DFE2-3CC7-BF0C-9BD3087B6F60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\inventory">
+      <UniqueIdentifier>{3FBAA477-5CAB-356C-B61D-978EDC186A2E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\menu">
+      <UniqueIdentifier>{FEF6767F-A171-31D9-B8B0-36C09B7EAE0F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\raven">
+      <UniqueIdentifier>{38895A9B-FB84-33E2-A43C-E01405F56A7F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\shared">
+      <UniqueIdentifier>{61FFC522-FCBA-3BAB-A755-66B6B23AD8E3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\statscreen">
+      <UniqueIdentifier>{FECCDB11-0B75-3E9D-9DB2-BDCC1E634028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\statusbar">
+      <UniqueIdentifier>{507FFB75-717F-33E7-8F9A-FE365AF575F1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript\strife">
+      <UniqueIdentifier>{999F3527-8547-3DB3-B87F-B78BE51A9CF5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\doom.doom1">
+      <UniqueIdentifier>{84BEAC63-B4CA-360B-99E6-518628BD7B9E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\doom.doom2">
+      <UniqueIdentifier>{5C917E77-0D63-3E01-9212-E67D6A16AA8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\doom.freedoom">
+      <UniqueIdentifier>{6520102C-AA37-3C90-AD05-2871B13A0BC6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-doom">
+      <UniqueIdentifier>{139F90B7-7BB0-37D8-AA99-36ACD0BD4C4F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-doomchex">
+      <UniqueIdentifier>{40F0E7BB-012F-3F02-91ED-33988783383A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-heretic">
+      <UniqueIdentifier>{3BF21409-4195-3509-A01A-3992F5DD3E11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-hexen">
+      <UniqueIdentifier>{0A335CC6-DA10-36E4-8E65-865D067CD5AF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-raven">
+      <UniqueIdentifier>{C384710D-ECCC-366A-AF85-57CC724DCF56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-strife">
+      <UniqueIdentifier>{1B579AE4-9696-3583-8D94-1E7D0B698F20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\heretic">
+      <UniqueIdentifier>{D1D29DC8-ECE7-38DD-B751-E5D1FFAA6A50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\hexen">
+      <UniqueIdentifier>{7C4DC0AF-D0E1-31E2-9149-D84F7F75CA63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\strife">
+      <UniqueIdentifier>{2A406E51-F612-314A-8DE6-3546D0922274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\strifeteaser1">
+      <UniqueIdentifier>{AA3E5107-4440-3271-9916-EE36CBB09905}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\strifeteaser2">
+      <UniqueIdentifier>{D5F91F84-D278-390D-B63F-1B84FFC43A80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-doom\graphics">
+      <UniqueIdentifier>{876DDD72-6B76-3195-B332-E8F89FB7CAC7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\strifeteaser2\mapinfo">
+      <UniqueIdentifier>{9DB03F8E-8061-310F-8610-8E59CC19840F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-raven\graphics">
+      <UniqueIdentifier>{73EB477F-4958-34B9-ACD5-B702E26C66EB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\game-strife\acs">
+      <UniqueIdentifier>{25C82FA2-BAB7-3D8E-8246-6CA461C8358D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter\strifeteaser1\mapinfo">
+      <UniqueIdentifier>{50562CA2-06E3-3A96-8688-DD866E9FD758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\d3d\sm14">
+      <UniqueIdentifier>{AC7EDFBA-73AD-31FA-90EA-BD0CD9BDCA5E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\d3d\sm20">
+      <UniqueIdentifier>{C93878A5-3953-31E4-96DE-5C7262F6720E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\d3d\sm30">
+      <UniqueIdentifier>{218B7480-E2AA-313A-99CB-90DC18A18A5C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\filter">
+      <UniqueIdentifier>{89EF33A5-66AC-3E8C-9D13-641B75CFEDCD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\glstuff">
+      <UniqueIdentifier>{4C87EE55-D0AE-3381-8490-A5EDC2BC00D1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{FA0B1D2E-BC4C-3035-95F1-EA1EB296242B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\maparrows">
+      <UniqueIdentifier>{A7A2B90E-8F00-3F00-B101-AAFAA1F27165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mapinfo">
+      <UniqueIdentifier>{2DAAC528-700C-30D5-A619-7C930E58F85F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sbarinfo">
+      <UniqueIdentifier>{4CEC1647-C5F1-3A97-AE9E-57D22C115C11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders">
+      <UniqueIdentifier>{B2CA3552-1D2F-30FA-B42F-B40C46390E1F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sounds">
+      <UniqueIdentifier>{BA076193-046F-358C-9632-CE65FE0211F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sprites">
+      <UniqueIdentifier>{7E77BFCF-0774-332C-BA33-0BAA42B22B2C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\textures">
+      <UniqueIdentifier>{2FDC9C5D-CAB6-3DB6-B0A1-4EA3D72FF582}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xlat">
+      <UniqueIdentifier>{E6CBD31D-F6E7-3A37-B7DB-D60DC11A1256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\zscript">
+      <UniqueIdentifier>{520906DE-894E-3F74-AEEB-FE897A863E95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{643067AC-42B7-3542-8439-0BE5606108D2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{ADA0F2DC-BA31-300E-B1F2-A8E9247EB1F6}</UniqueIdentifier>
+      <UniqueIdentifier>{6270EDE3-6658-397F-ABCF-20F05AF33C56}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

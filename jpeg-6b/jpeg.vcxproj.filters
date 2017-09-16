@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jcomapi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdapimin.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdapistd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdatasrc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdcoefct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdcolor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jddctmgr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdhuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdinput.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdmainct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdmarker.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdmaster.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdmerge.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdphuff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdpostct.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jdsample.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jerror.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jidctint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jmemmgr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\jutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\jpeg-6b\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{643067AC-42B7-3542-8439-0BE5606108D2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

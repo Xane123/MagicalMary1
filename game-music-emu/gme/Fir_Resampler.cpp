@@ -25,8 +25,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA */
 
 static void gen_sinc( double rolloff, int width, double offset, double spacing, double scale,
 		int count, short* out )
-{
-	double const maxh = 256;
+{	//[XANE] TODO: Either get help fixing this or find out why this is too complex for the compiler. It never was before!
+	/*double const maxh = 256;
 	double const step = PI / maxh * spacing;
 	double const to_w = maxh * 2 / width;
 	double const pow_a_n = pow( rolloff, maxh );
@@ -49,7 +49,7 @@ static void gen_sinc( double rolloff, int width, double offset, double spacing, 
 			out [-1] = (short) (cos( w ) * sinc + sinc);
 		}
 		angle += step;
-	}
+	}*/
 }
 
 Fir_Resampler_::Fir_Resampler_( int width, sample_t* impulses_ ) :

@@ -1,0 +1,556 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{832DE013-82BC-3B23-9BBE-A903F59902A7}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>zd_extra_pk3</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure -BC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure --check-stamp-file C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure -BC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure --check-stamp-file C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure -BC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure --check-stamp-file C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure -BC:/Users/Myers/Documents/GitHub/MaryMagicalAdventure --check-stamp-file C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\CMakeFiles\a6258f587ab8c8a8787d9160051608b0\zd_extra.pk3.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating ../zd_extra.pk3</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+..\tools\zipdir\Debug\zipdir.exe -udf C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/static
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/Debug/zd_extra.pk3
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/a6258f587ab8c8a8787d9160051608b0/zd_extra.pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\tools\zipdir\Debug\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating ../zd_extra.pk3</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+..\tools\zipdir\Release\zipdir.exe -udf C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/static
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/Release/zd_extra.pk3
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/a6258f587ab8c8a8787d9160051608b0/zd_extra.pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\tools\zipdir\Release\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Generating ../zd_extra.pk3</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+..\tools\zipdir\MinSizeRel\zipdir.exe -udf C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/static
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/MinSizeRel/zd_extra.pk3
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/a6258f587ab8c8a8787d9160051608b0/zd_extra.pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\tools\zipdir\MinSizeRel\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Generating ../zd_extra.pk3</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+..\tools\zipdir\RelWithDebInfo\zipdir.exe -udf C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc_extra/static
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/zd_extra.pk3 C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/RelWithDebInfo/zd_extra.pk3
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/a6258f587ab8c8a8787d9160051608b0/zd_extra.pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\tools\zipdir\RelWithDebInfo\zipdir.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\CMakeFiles\acfed4288997f3cb97e725ae48f90a09\zd_extra_pk3.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/tools/zipdir/Debug/zipdir.exe
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/acfed4288997f3cb97e725ae48f90a09/zd_extra_pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\zd_extra_pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/tools/zipdir/Release/zipdir.exe
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/acfed4288997f3cb97e725ae48f90a09/zd_extra_pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\zd_extra_pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/tools/zipdir/MinSizeRel/zipdir.exe
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/acfed4288997f3cb97e725ae48f90a09/zd_extra_pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\zd_extra_pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E touch C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/tools/zipdir/RelWithDebInfo/zipdir.exe
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/CMakeFiles/acfed4288997f3cb97e725ae48f90a09/zd_extra_pk3.rule;C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\zd_extra.pk3;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\zd_extra_pk3</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\CMakeFiles\zd_extra_pk3" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn191.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn193.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn196.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn197.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn201.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn205.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn209.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn211.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn214.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn218.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn220.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-doom\graphics\stcfn223.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta164.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta165.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta182.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta188.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta191.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta60.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta61.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta62.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\filter\game-raven\graphics\fonta63.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\-badpatc.lmp" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\artibox.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bal7scr1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bal7scr2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bfglite1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bfglite2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bfgscrc1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bfgscrc2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\blast1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsmear1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsmear2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\bsplat7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\cbalscr1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\cbalscr2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\cbowmark.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\chexcurs.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\chip1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\chip2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\chip3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\chip4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\chip5.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\clerface.lmp" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\cursor.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\doomcurs.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\fiteface.lmp" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\hamoback.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\herecurs.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\hexncurs.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\invgeml1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\invgeml2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\invgemr1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\invgemr2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\m_back_d.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\m_back_h.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\m_back_s.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\m_back_x.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\mageface.lmp" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\plasma1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\plasma2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\readyico.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\scorch1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\selectbo.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\stfbany.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\stkeys6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\stkeys7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\stkeys8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\stpbany.lmp" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\strfcurs.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\twirl.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\wislash.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb1.imgz" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb2.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb3.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb4.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb5.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb6.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairb7.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs1.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs2.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs3.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs4.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs5.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs6.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\graphics\xhairs7.imgz" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\DSDGACT.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\DSDGATK.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\DSDGDTH.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\DSDGPAIN.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\DSDGSIT.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\dsempty.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\dsquake.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\dssecret.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\icebrk1a.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\icedth1.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\railgf1.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\spark1.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\spark2.flac" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sounds\spark3.flac" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\AFLYA0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\AFLYB0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\AFLYC0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\AFLYD0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\GWANA0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1A0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1B0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1C0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1D0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1E0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1F0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS1G0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS2A0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS2B0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS2C0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS2D0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\PLS2E0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\amrka0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSA1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSA2A8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSA3A7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSA4A6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSA5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSB1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSB2B8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSB3B7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSB4B6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSB5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSC1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSC2C8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSC3C7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSC4C6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSC5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSD1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSD2D8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSD3D7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSD4D6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSD5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSE8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSF8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSG8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH6.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH7.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSH8.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSI0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSJ0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSK0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSL0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSM0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\dogs\DOGSN0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\iceca0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\icecb0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\icecc0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\icecd0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\minza0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\pista0.png" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyca1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyca2a8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyca3a7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyca4a6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyca5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycb1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycb2b8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycb3b7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycb4b6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycb5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycc1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycc2c8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycc3c7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycc4c6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycc5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycd1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycd2d8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycd3d7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycd4d6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycd5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyce1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyce2e8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyce3e7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyce4e6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyce5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycf1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycf2f8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycf3f7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycf4f6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycf5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycg1.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycg2g8.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycg3g7.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycg4g6.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycg5.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plych0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyci0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycj0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyck0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycl0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycm0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycn0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyco0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycp0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycq0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycr0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycs0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plyct0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycu0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycv0.lmp" />
+    <None Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\plyc\plycw0.lmp" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\rsmka0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\rsmkb0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\rsmkc0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\rsmkd0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\rsmke0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\sgrna1.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\sgrna5.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\sgrna6a4.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\sgrna7a3.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\sgrna8a2.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\spkra0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\tlgla0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\tlglb0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\tlglc0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\tlgld0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\tlgle0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\tnt1a0.png" />
+    <Image Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\wadsrc_extra\static\sprites\unkna0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\ZERO_CHECK.vcxproj">
+      <Project>{F5FC9AF8-9A61-3CD6-9BE9-1967936FD067}</Project>
+      <Name>ZERO_CHECK</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\src\zdoom.vcxproj">
+      <Project>{2E8D674D-373F-3F51-B0EE-84570C4168A3}</Project>
+      <Name>zdoom</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Myers\Documents\GitHub\MaryMagicalAdventure\tools\zipdir\zipdir.vcxproj">
+      <Project>{42DBC9C7-F542-3935-9DBC-F0E9B8494132}</Project>
+      <Name>zipdir</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

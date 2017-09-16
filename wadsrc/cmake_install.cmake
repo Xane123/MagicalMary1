@@ -1,8 +1,8 @@
-# Install script for directory: D:/Git/MaryMagicalAdventure/wadsrc
+# Install script for directory: C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/wadsrc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/GZDoom")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files/GZDoom")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -25,5 +25,9 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   else()
     set(CMAKE_INSTALL_COMPONENT)
   endif()
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Game resources" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE FILE FILES "C:/Users/Myers/Documents/GitHub/MaryMagicalAdventure/gzdoom.pk3")
 endif()
 
