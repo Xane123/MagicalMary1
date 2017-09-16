@@ -1,41 +1,30 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2010-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 /*
 ** gl_voxels.cpp
 **
 ** Voxel management
 **
-**---------------------------------------------------------------------------
-** Copyright 2010 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
-**
-*/
+**/
 
 #include "gl/system/gl_system.h"
 #include "w_wad.h"
@@ -48,6 +37,7 @@
 #include "g_level.h"
 #include "colormatcher.h"
 #include "textures/bitmap.h"
+#include "g_levellocals.h"
 //#include "gl/gl_intern.h"
 
 #include "gl/system/gl_interface.h"
@@ -60,6 +50,7 @@
 #include "gl/utility/gl_convert.h"
 #include "gl/renderer/gl_renderstate.h"
 
+extern int modellightindex;
 
 //===========================================================================
 //
@@ -76,8 +67,8 @@ public:
 
 	FVoxelTexture(FVoxel *voxel);
 	~FVoxelTexture();
-	const BYTE *GetColumn (unsigned int column, const Span **spans_out);
-	const BYTE *GetPixels ();
+	const uint8_t *GetColumn (unsigned int column, const Span **spans_out);
+	const uint8_t *GetPixels ();
 	void Unload ();
 
 	int CopyTrueColorPixels(FBitmap *bmp, int x, int y, int rotate, FCopyInfo *inf);
@@ -85,7 +76,7 @@ public:
 
 protected:
 	FVoxel *SourceVox;
-	BYTE *Pixels;
+	uint8_t *Pixels;
 
 };
 
@@ -118,20 +109,20 @@ FVoxelTexture::~FVoxelTexture()
 {
 }
 
-const BYTE *FVoxelTexture::GetColumn (unsigned int column, const Span **spans_out)
+const uint8_t *FVoxelTexture::GetColumn (unsigned int column, const Span **spans_out)
 {
 	// not needed
 	return NULL;
 }
 
-const BYTE *FVoxelTexture::GetPixels ()
+const uint8_t *FVoxelTexture::GetPixels ()
 {
 	// GetPixels gets called when a translated palette is used so we still need to implement it here.
 	if (Pixels == NULL)
 	{
-		Pixels = new BYTE[256];
+		Pixels = new uint8_t[256];
 
-		BYTE *pp = SourceVox->Palette;
+		uint8_t *pp = SourceVox->Palette;
 
 		if(pp != NULL)
 		{
@@ -148,7 +139,7 @@ const BYTE *FVoxelTexture::GetPixels ()
 		{
 			for(int i=0;i<256;i++, pp+=3)
 			{
-				Pixels[i] = (BYTE)i;
+				Pixels[i] = (uint8_t)i;
 			}
 		}  
 	}
@@ -176,14 +167,14 @@ void FVoxelTexture::Unload ()
 int FVoxelTexture::CopyTrueColorPixels(FBitmap *bmp, int x, int y, int rotate, FCopyInfo *inf)
 {
 	PalEntry pe[256];
-	BYTE bitmap[256];
-	BYTE *pp = SourceVox->Palette;
+	uint8_t bitmap[256];
+	uint8_t *pp = SourceVox->Palette;
 
 	if(pp != NULL)
 	{
 		for(int i=0;i<256;i++, pp+=3)
 		{
-			bitmap[i] = (BYTE)i;
+			bitmap[i] = (uint8_t)i;
 			pe[i].r = (pp[0] << 2) | (pp[0] >> 4);
 			pe[i].g = (pp[1] << 2) | (pp[1] >> 4);
 			pe[i].b = (pp[2] << 2) | (pp[2] >> 4);
@@ -194,7 +185,7 @@ int FVoxelTexture::CopyTrueColorPixels(FBitmap *bmp, int x, int y, int rotate, F
 	{
 		for(int i=0;i<256;i++, pp+=3)
 		{
-			bitmap[i] = (BYTE)i;
+			bitmap[i] = (uint8_t)i;
 			pe[i] = GPalette.BaseColors[i];
 			pe[i].a = 255;
 		}
@@ -213,7 +204,7 @@ FVoxelModel::FVoxelModel(FVoxel *voxel, bool owned)
 {
 	mVoxel = voxel;
 	mOwningVoxel = owned;
-	mPalette = new FVoxelTexture(voxel);
+	mPalette = TexMan.AddTexture(new FVoxelTexture(voxel));
 }
 
 //===========================================================================
@@ -224,7 +215,6 @@ FVoxelModel::FVoxelModel(FVoxel *voxel, bool owned)
 
 FVoxelModel::~FVoxelModel()
 {
-	delete mPalette;
 	if (mOwningVoxel) delete mVoxel;
 }
 
@@ -251,15 +241,16 @@ unsigned int FVoxelModel::AddVertex(FModelVertex &vert, FVoxelMap &check)
 //
 //===========================================================================
 
-void FVoxelModel::AddFace(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4, BYTE col, FVoxelMap &check)
+void FVoxelModel::AddFace(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4, uint8_t col, FVoxelMap &check)
 {
-	float PivotX = mVoxel->Mips[0].PivotX / 256.f;
-	float PivotY = mVoxel->Mips[0].PivotY / 256.f;
-	float PivotZ = mVoxel->Mips[0].PivotZ / 256.f;
+	float PivotX = mVoxel->Mips[0].Pivot.X;
+	float PivotY = mVoxel->Mips[0].Pivot.Y;
+	float PivotZ = mVoxel->Mips[0].Pivot.Z;
 	int h = mVoxel->Mips[0].SizeZ;
 	FModelVertex vert;
 	unsigned int indx[4];
 
+	vert.packedNormal = 0;	// currently this is not being used for voxels.
 	vert.u = (((col & 15) * 255 / 16) + 7) / 255.f;
 	vert.v = (((col / 16) * 255 / 16) + 7) / 255.f;
 
@@ -283,12 +274,13 @@ void FVoxelModel::AddFace(int x1, int y1, int z1, int x2, int y2, int z2, int x3
 	vert.y = -z3 + PivotZ;
 	indx[3] = AddVertex(vert, check);
 
+
 	mIndices.Push(indx[0]);
 	mIndices.Push(indx[1]);
 	mIndices.Push(indx[3]);
 	mIndices.Push(indx[1]);
-	mIndices.Push(indx[3]);
 	mIndices.Push(indx[2]);
+	mIndices.Push(indx[3]);
 }
 
 //===========================================================================
@@ -299,7 +291,7 @@ void FVoxelModel::AddFace(int x1, int y1, int z1, int x2, int y2, int z2, int x3
 
 void FVoxelModel::MakeSlabPolys(int x, int y, kvxslab_t *voxptr, FVoxelMap &check)
 {
-	const BYTE *col = voxptr->col;
+	const uint8_t *col = voxptr->col;
 	int zleng = voxptr->zleng;
 	int ztop = voxptr->ztop;
 	int cull = voxptr->backfacecull;
@@ -324,12 +316,12 @@ void FVoxelModel::MakeSlabPolys(int x, int y, kvxslab_t *voxptr, FVoxelMap &chec
 		}
 		if (cull & 4)
 		{
-			AddFace(x, y, z, x+1, y, z, x, y, z+c, x+1, y, z+c, *col, check);
+			AddFace(x+1, y, z, x, y, z, x+1, y, z+c, x, y, z+c, *col, check);
 		}
 		if (cull & 8)
 		{
-			AddFace(x+1, y+1, z, x, y+1, z, x+1, y+1, z+c, x, y+1, z+c, *col, check);
-		}
+			AddFace(x, y+1, z, x+1, y+1, z, x, y+1, z+c, x+1, y+1, z+c, *col, check);
+		}	
 		z+=c;
 		col+=c;
 	}
@@ -352,13 +344,13 @@ void FVoxelModel::Initialize()
 	FVoxelMipLevel *mip = &mVoxel->Mips[0];
 	for (int x = 0; x < mip->SizeX; x++)
 	{
-		BYTE *slabxoffs = &mip->SlabData[mip->OffsetX[x]];
+		uint8_t *slabxoffs = &mip->SlabData[mip->OffsetX[x]];
 		short *xyoffs = &mip->OffsetXY[x * (mip->SizeY + 1)];
 		for (int y = 0; y < mip->SizeY; y++)
 		{
 			kvxslab_t *voxptr = (kvxslab_t *)(slabxoffs + xyoffs[y]);
 			kvxslab_t *voxend = (kvxslab_t *)(slabxoffs + xyoffs[y+1]);
-			for (; voxptr < voxend; voxptr = (kvxslab_t *)((BYTE *)voxptr + voxptr->zleng + 3))
+			for (; voxptr < voxend; voxptr = (kvxslab_t *)((uint8_t *)voxptr + voxptr->zleng + 3))
 			{
 				MakeSlabPolys(x, y, voxptr, check);
 			}
@@ -378,7 +370,7 @@ void FVoxelModel::BuildVertexBuffer()
 	{
 		Initialize();
 
-		mVBuf = new FModelVertexBuffer(true);
+		mVBuf = new FModelVertexBuffer(true, true);
 		FModelVertex *vertptr = mVBuf->LockVertexBuffer(mVertices.Size());
 		unsigned int *indxptr = mVBuf->LockIndexBuffer(mIndices.Size());
 
@@ -397,6 +389,17 @@ void FVoxelModel::BuildVertexBuffer()
 	}
 }
 
+
+//===========================================================================
+//
+// for skin precaching
+//
+//===========================================================================
+
+void FVoxelModel::AddSkins(uint8_t *hitlist)
+{
+	hitlist[mPalette.GetIndex()] |= FTexture::TEX_Flat;
+}
 
 //===========================================================================
 //
@@ -428,7 +431,7 @@ int FVoxelModel::FindFrame(const char * name)
 
 float FVoxelModel::getAspectFactor()
 {
-	return glset.pixelstretch;
+	return level.info->pixelstretch;
 }
 
 //===========================================================================
@@ -443,7 +446,8 @@ void FVoxelModel::RenderFrame(FTexture * skin, int frame, int frame2, double int
 	gl_RenderState.SetMaterial(tex, CLAMP_NOFILTER, translation, -1, false);
 
 	gl_RenderState.Apply();
-	mVBuf->SetupFrame(0, 0);
+	if (modellightindex != -1) gl_RenderState.ApplyLightIndex(modellightindex);
+	mVBuf->SetupFrame(0, 0, 0);
 	glDrawElements(GL_TRIANGLES, mNumIndices, GL_UNSIGNED_INT, (void*)(intptr_t)0);
 }
 

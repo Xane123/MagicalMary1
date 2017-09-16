@@ -51,14 +51,14 @@
 #include "colormatcher.h"
 #include "v_palette.h"
 #include "d_player.h"
-#include "farchive.h"
-#include "a_hexenglobal.h"
+#include "g_levellocals.h"
 
-
+CVAR( Float, blood_fade_scalar, 1.0f, CVAR_ARCHIVE )	// [SP] Pulled from Skulltag - changed default from 0.5 to 1.0
+CVAR( Float, pickup_fade_scalar, 1.0f, CVAR_ARCHIVE )	// [SP] Uses same logic as blood_fade_scalar except for pickups
 
 // [RH] Amount of red flash for up to 114 damage points. Calculated by hand
 //		using a logarithmic scale and my trusty HP48G.
-static BYTE DamageToAlpha[114] =
+static uint8_t DamageToAlpha[114] =
 {
 	  0,   8,  16,  23,  30,  36,  42,  47,  53,  58,  62,  67,  71,  75,  79,
 	 83,  87,  90,  94,  97, 100, 103, 107, 109, 112, 115, 118, 120, 123, 125,
@@ -105,7 +105,7 @@ void V_AddPlayerBlend (player_t *CPlayer, float blend[4], float maxinvalpha, int
 	// [RH] All powerups can affect the screen blending now
 	for (AInventory *item = CPlayer->mo->Inventory; item != NULL; item = item->Inventory)
 	{
-		PalEntry color = item->GetBlend ();
+		PalEntry color = item->CallGetBlend ();
 		if (color.a != 0)
 		{
 			V_AddBlend (color.r/255.f, color.g/255.f, color.b/255.f, color.a/255.f, blend);
@@ -115,18 +115,24 @@ void V_AddPlayerBlend (player_t *CPlayer, float blend[4], float maxinvalpha, int
 	if (CPlayer->bonuscount)
 	{
 		cnt = CPlayer->bonuscount << 3;
+
+		// [SP] Allow player to tone down intensity of pickup flash.
+		cnt = (int)( cnt * pickup_fade_scalar );
 		
 		V_AddBlend (RPART(gameinfo.pickupcolor)/255.f, GPART(gameinfo.pickupcolor)/255.f, 
 					BPART(gameinfo.pickupcolor)/255.f, cnt > 128 ? 0.5f : cnt / 255.f, blend);
 	}
 
 	PalEntry painFlash = CPlayer->mo->DamageFade;
-	CPlayer->mo->GetClass()->GetPainFlash(CPlayer->mo->DamageTypeReceived, &painFlash);
+	CPlayer->GetPainFlash(CPlayer->mo->DamageTypeReceived, &painFlash);
 
 	if (painFlash.a != 0)
 	{
 		cnt = DamageToAlpha[MIN (113, CPlayer->damagecount * painFlash.a / 255)];
-			
+
+		// [BC] Allow users to tone down the intensity of the blood on the screen.
+		cnt = (int)( cnt * blood_fade_scalar );
+
 		if (cnt)
 		{
 			if (cnt > maxpainblend)
@@ -163,13 +169,19 @@ void V_AddPlayerBlend (player_t *CPlayer, float blend[4], float maxinvalpha, int
 		{
 			if (CPlayer->hazardcount > 16*TICRATE || (CPlayer->hazardcount & 8))
 			{
-				V_AddBlend (0.f, 1.f, 0.f, 0.125f, blend);
+				float r = ((level.hazardflash & 0xff0000) >> 16) / 255.f;
+				float g = ((level.hazardflash & 0xff00) >> 8) / 255.f;
+				float b = ((level.hazardflash & 0xff)) / 255.f;
+				V_AddBlend (r, g, b, 0.125f, blend);
 			}
 		}
 		else
 		{
 			cnt= MIN(CPlayer->hazardcount/8, 64);
-			V_AddBlend (0.f, 0.2571f, 0.f, cnt/93.2571428571f, blend);
+			float r = ((level.hazardcolor & 0xff0000) >> 16) / 255.f;
+			float g = ((level.hazardcolor & 0xff00) >> 8) / 255.f;
+			float b = ((level.hazardcolor & 0xff)) / 255.f;
+			V_AddBlend (r, g, b, cnt/93.2571428571f, blend);
 		}
 	}
 

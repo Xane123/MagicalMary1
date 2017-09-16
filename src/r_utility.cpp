@@ -1,20 +1,24 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1994-1996 Raven Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// $Log:$
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //		Rendering main loop and setup functions,
@@ -53,10 +57,15 @@
 #include "v_font.h"
 #include "r_renderer.h"
 #include "r_data/colormaps.h"
-#include "farchive.h"
+#include "serializer.h"
 #include "r_utility.h"
 #include "d_player.h"
 #include "p_local.h"
+#include "g_levellocals.h"
+#include "p_maputl.h"
+#include "sbar.h"
+#include "math/cmath.h"
+#include "vm.h"
 
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
@@ -68,12 +77,15 @@ EXTERN_CVAR (Bool, cl_capfps)
 
 struct InterpolationViewer
 {
+	struct instance
+	{
+		DVector3 Pos;
+		DRotator Angles;
+	};
+
 	AActor *ViewActor;
 	int otic;
-	fixed_t oviewx, oviewy, oviewz;
-	fixed_t nviewx, nviewy, nviewz;
-	int oviewpitch, nviewpitch;
-	angle_t oviewangle, nviewangle;
+	instance Old, New;
 };
 
 // PRIVATE DATA DECLARATIONS -----------------------------------------------
@@ -81,12 +93,12 @@ static TArray<InterpolationViewer> PastViewers;
 static FRandom pr_torchflicker ("TorchFlicker");
 static FRandom pr_hom;
 bool NoInterpolateView;	// GL needs access to this.
-static TArray<fixedvec3a> InterpolationPath;
+static TArray<DVector3a> InterpolationPath;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
-CVAR (Int, r_clearbuffer, 1, CVAR_ARCHIVE)
+CVAR (Int, r_clearbuffer, 0, 0)
 CVAR (Bool, r_drawvoxels, true, 0)
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
 CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
@@ -95,256 +107,57 @@ CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 	else if (self > 1.f) self = 1.f;
 }
 
-DCanvas			*RenderTarget;		// [RH] canvas to render to
-
 int 			viewwindowx;
 int 			viewwindowy;
+int				viewwidth;
+int 			viewheight;
 
-fixed_t 		viewx;
-fixed_t 		viewy;
-fixed_t 		viewz;
-int				viewpitch;
-
-extern "C" 
+FRenderViewpoint::FRenderViewpoint()
 {
-		int 	viewwidth;
-		int 	viewheight;
-		int		centerx;
-		int		centery;
-		int		centerxwide;
+	player = nullptr;
+	Pos = { 0.0, 0.0, 0.0 };
+	ActorPos = { 0.0, 0.0, 0.0 };
+	Angles = { 0.0, 0.0, 0.0 };
+	Path[0] = { 0.0, 0.0, 0.0 };
+	Path[1] = { 0.0, 0.0, 0.0 };
+	Cos = 0.0;
+	Sin = 0.0;
+	TanCos = 0.0;
+	TanSin = 0.0;
+	camera = nullptr;
+	sector = nullptr;
+	FieldOfView = 90.; // Angles in the SCREENWIDTH wide window
+	TicFrac = 0.0;
+	FrameTime = 0;
+	extralight = 0;
+	showviewer = false;
 }
+
+FRenderViewpoint r_viewpoint;
+FViewWindow		r_viewwindow;
 
 int				otic;
 
-angle_t 		viewangle;
-sector_t		*viewsector;
-
-fixed_t 		viewcos, viewtancos;
-fixed_t 		viewsin, viewtansin;
-
-AActor			*camera;	// [RH] camera to draw from. doesn't have to be a player
-
-fixed_t			r_TicFrac;			// [RH] Fractional tic to render
-DWORD			r_FrameTime;		// [RH] Time this frame started drawing (in ms)
 bool			r_NoInterpolate;
-bool			r_showviewer;
 
 angle_t			LocalViewAngle;
 int				LocalViewPitch;
 bool			LocalKeyboardTurner;
 
-float			LastFOV;
-int				WidescreenRatio;
 int				setblocks;
-int				extralight;
 bool			setsizeneeded;
-fixed_t			FocalTangent;
 
 unsigned int	R_OldBlend = ~0;
 int 			validcount = 1; 	// increment every time a check is made
-int				FieldOfView = 2048;		// Fineangles in the SCREENWIDTH wide window
-
 FCanvasTextureInfo *FCanvasTextureInfo::List;
 
+DVector3a view;
+DAngle viewpitch;
+
+DEFINE_GLOBAL(LocalViewPitch);
 
 // CODE --------------------------------------------------------------------
 static void R_Shutdown ();
-
-//==========================================================================
-//
-// SlopeDiv
-//
-// Utility function, called by R_PointToAngle.
-//
-//==========================================================================
-
-angle_t SlopeDiv (unsigned int num, unsigned den)
-{
-	unsigned int ans;
-
-	if (den < 512)
-		return (ANG45 - 1); //tantoangle[SLOPERANGE]
-
-	ans = (num << 3) / (den >> 8);
-
-	return ans <= SLOPERANGE ? tantoangle[ans] : (ANG45 - 1);
-}
-
-
-//==========================================================================
-//
-// R_PointToAngle
-//
-// To get a global angle from cartesian coordinates, the coordinates are
-// flipped until they are in the first octant of the coordinate system,
-// then the y (<=x) is scaled and divided by x to get a tangent (slope)
-// value which is looked up in the tantoangle[] table.
-//
-//==========================================================================
-
-angle_t R_PointToAngle2 (fixed_t x1, fixed_t y1, fixed_t x, fixed_t y)
-{
-	x -= x1;
-	y -= y1;
-
-	if ((x | y) == 0)
-	{
-		return 0;
-	}
-
-	// We need to be aware of overflows here. If the values get larger than INT_MAX/4
-	// this code won't work anymore.
-
-	if (x < INT_MAX/4 && x > -INT_MAX/4 && y < INT_MAX/4 && y > -INT_MAX/4)
-	{
-		if (x >= 0)
-		{
-			if (y >= 0)
-			{
-				if (x > y)
-				{ // octant 0
-					return SlopeDiv(y, x);
-				}
-				else
-				{ // octant 1
-					return ANG90 - 1 - SlopeDiv(x, y);
-				}
-			}
-			else // y < 0
-			{
-				y = -y;
-				if (x > y)
-				{ // octant 8
-					return 0 - SlopeDiv(y, x);
-				}
-				else
-				{ // octant 7
-					return ANG270 + SlopeDiv(x, y);
-				}
-			}
-		}
-		else // x < 0
-		{
-			x = -x;
-			if (y >= 0)
-			{
-				if (x > y)
-				{ // octant 3
-					return ANG180 - 1 - SlopeDiv(y, x);
-				}
-				else
-				{ // octant 2
-					return ANG90 + SlopeDiv(x, y);
-				}
-			}
-			else // y < 0
-			{
-				y = -y;
-				if (x > y)
-				{ // octant 4
-					return ANG180 + SlopeDiv(y, x);
-				}
-				else
-				{ // octant 5
-					return ANG270 - 1 - SlopeDiv(x, y);
-				}
-			}
-		}
-	}
-	else
-	{
-		// we have to use the slower but more precise floating point atan2 function here.
-		return xs_RoundToUInt(atan2(double(y), double(x)) * (ANGLE_180/M_PI));
-	}
-}
-
-//==========================================================================
-//
-// R_InitPointToAngle
-//
-//==========================================================================
-
-void R_InitPointToAngle (void)
-{
-	double f;
-	int i;
-//
-// slope (tangent) to angle lookup
-//
-	for (i = 0; i <= SLOPERANGE; i++)
-	{
-		f = atan2 ((double)i, (double)SLOPERANGE) / (6.28318530718 /* 2*pi */);
-		tantoangle[i] = (angle_t)(0xffffffff*f);
-	}
-}
-
-//==========================================================================
-//
-// R_PointToDist2
-//
-// Returns the distance from (0,0) to some other point. In a
-// floating point environment, we'd probably be better off using the
-// Pythagorean Theorem to determine the result.
-//
-// killough 5/2/98: simplified
-// [RH] Simplified further [sin (t + 90 deg) == cos (t)]
-// Not used. Should it go away?
-//
-//==========================================================================
-
-fixed_t R_PointToDist2 (fixed_t dx, fixed_t dy)
-{
-	dx = abs (dx);
-	dy = abs (dy);
-
-	if ((dx | dy) == 0)
-	{
-		return 0;
-	}
-
-	if (dy > dx)
-	{
-		swapvalues (dx, dy);
-	}
-
-	return FixedDiv (dx, finecosine[tantoangle[FixedDiv (dy, dx) >> DBITS] >> ANGLETOFINESHIFT]);
-}
-
-//==========================================================================
-//
-// R_InitTables
-//
-//==========================================================================
-
-void R_InitTables (void)
-{
-	int i;
-	const double pimul = PI*2/FINEANGLES;
-
-	// viewangle tangent table
-	finetangent[0] = (fixed_t)(FRACUNIT*tan ((0.5-FINEANGLES/4)*pimul)+0.5);
-	for (i = 1; i < FINEANGLES/2; i++)
-	{
-		finetangent[i] = (fixed_t)(FRACUNIT*tan ((i-FINEANGLES/4)*pimul)+0.5);
-	}
-	
-	// finesine table
-	for (i = 0; i < FINEANGLES/4; i++)
-	{
-		finesine[i] = (fixed_t)(FRACUNIT * sin (i*pimul));
-	}
-	for (i = 0; i < FINEANGLES/4; i++)
-	{
-		finesine[i+FINEANGLES/4] = finesine[FINEANGLES/4-1-i];
-	}
-	for (i = 0; i < FINEANGLES/2; i++)
-	{
-		finesine[i+FINEANGLES/2] = -finesine[i];
-	}
-	finesine[FINEANGLES/4] = FRACUNIT;
-	finesine[FINEANGLES*3/4] = -FRACUNIT;
-	memcpy (&finesine[FINEANGLES], &finesine[0], sizeof(angle_t)*FINEANGLES/4);
-}
 
 //==========================================================================
 //
@@ -354,31 +167,16 @@ void R_InitTables (void)
 //
 //==========================================================================
 
-void R_SetFOV (float fov)
+void R_SetFOV (FRenderViewpoint &viewpoint, DAngle fov)
 {
-	if (fov < 5.f)
-		fov = 5.f;
-	else if (fov > 170.f)
-		fov = 170.f;
-	if (fov != LastFOV)
+
+	if (fov < 5.) fov = 5.;
+	else if (fov > 170.) fov = 170.;
+	if (fov != viewpoint.FieldOfView)
 	{
-		LastFOV = fov;
-		FieldOfView = (int)(fov * (float)FINEANGLES / 360.f);
+		viewpoint.FieldOfView = fov;
 		setsizeneeded = true;
 	}
-}
-
-//==========================================================================
-//
-// R_GetFOV
-//
-// Returns the current field of view in degrees
-//
-//==========================================================================
-
-float R_GetFOV ()
-{
-	return LastFOV;
 }
 
 //==========================================================================
@@ -402,10 +200,8 @@ void R_SetViewSize (int blocks)
 //
 //==========================================================================
 
-void R_SetWindow (int windowSize, int fullWidth, int fullHeight, int stHeight)
+void R_SetWindow (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, int windowSize, int fullWidth, int fullHeight, int stHeight, bool renderingToCanvas)
 {
-	int trueratio;
-
 	if (windowSize >= 11)
 	{
 		viewwidth = fullWidth;
@@ -424,39 +220,42 @@ void R_SetWindow (int windowSize, int fullWidth, int fullHeight, int stHeight)
 		freelookviewheight = ((setblocks*fullHeight)/10)&~7;
 	}
 
-	// If the screen is approximately 16:9 or 16:10, consider it widescreen.
-	WidescreenRatio = CheckRatio (fullWidth, fullHeight, &trueratio);
+	if (renderingToCanvas)
+	{
+		viewwindow.WidescreenRatio = fullWidth / (float)fullHeight;
+	}
+	else
+	{
+		viewwindow.WidescreenRatio = ActiveRatio(fullWidth, fullHeight);
+	}
 
 	DrawFSHUD = (windowSize == 11);
 	
 	// [RH] Sky height fix for screens not 200 (or 240) pixels tall
 	R_InitSkyMap ();
 
-	centery = viewheight/2;
-	centerx = viewwidth/2;
-	if (Is54Aspect(WidescreenRatio))
+	viewwindow.centery = viewheight/2;
+	viewwindow.centerx = viewwidth/2;
+	if (AspectTallerThanWide(viewwindow.WidescreenRatio))
 	{
-		centerxwide = centerx;
+		viewwindow.centerxwide = viewwindow.centerx;
 	}
 	else
 	{
-		centerxwide = centerx * BaseRatioSizes[WidescreenRatio][3] / 48;
+		viewwindow.centerxwide = viewwindow.centerx * AspectMultiplier(viewwindow.WidescreenRatio) / 48;
 	}
 
 
-	int fov = FieldOfView;
+	DAngle fov = viewpoint.FieldOfView;
 
 	// For widescreen displays, increase the FOV so that the middle part of the
 	// screen that would be visible on a 4:3 display has the requested FOV.
-	if (centerxwide != centerx)
+	if (viewwindow.centerxwide != viewwindow.centerx)
 	{ // centerxwide is what centerx would be if the display was not widescreen
-		fov = int(atan(double(centerx)*tan(double(fov)*M_PI/(FINEANGLES))/double(centerxwide))*(FINEANGLES)/M_PI);
-		if (fov > 170*FINEANGLES/360)
-			fov = 170*FINEANGLES/360;
+		fov = DAngle::ToDegrees(2 * atan(viewwindow.centerx * tan(fov.Radians()/2) / double(viewwindow.centerxwide)));
+		if (fov > 170.) fov = 170.;
 	}
-
-	FocalTangent = finetangent[FINEANGLES/4+fov/2];
-	Renderer->SetWindow(windowSize, fullWidth, fullHeight, stHeight, trueratio);
+	viewwindow.FocalTangent = tan(fov.Radians() / 2);
 }
 
 //==========================================================================
@@ -465,18 +264,89 @@ void R_SetWindow (int windowSize, int fullWidth, int fullHeight, int stHeight)
 //
 //==========================================================================
 
-void R_ExecuteSetViewSize ()
+void R_ExecuteSetViewSize (FRenderViewpoint &viewpoint, FViewWindow &viewwindow)
 {
 	setsizeneeded = false;
 	V_SetBorderNeedRefresh();
 
-	R_SetWindow (setblocks, SCREENWIDTH, SCREENHEIGHT, ST_Y);
+	R_SetWindow (viewpoint, viewwindow, setblocks, SCREENWIDTH, SCREENHEIGHT, StatusBar->GetTopOfStatusbar());
 
 	// Handle resize, e.g. smaller view windows with border and/or status bar.
 	viewwindowx = (screen->GetWidth() - viewwidth) >> 1;
 
 	// Same with base row offset.
-	viewwindowy = (viewwidth == screen->GetWidth()) ? 0 : (ST_Y - viewheight) >> 1;
+	viewwindowy = (viewwidth == screen->GetWidth()) ? 0 : (StatusBar->GetTopOfStatusbar() - viewheight) >> 1;
+}
+
+//==========================================================================
+//
+// r_visibility
+//
+// Controls how quickly light ramps across a 1/z range.
+//
+//==========================================================================
+
+double R_ClampVisibility(double vis)
+{
+	// Allow negative visibilities, just for novelty's sake
+	return clamp(vis, -204.7, 204.7);	// (205 and larger do not work in 5:4 aspect ratio)
+}
+
+CUSTOM_CVAR(Float, r_visibility, 8.0f, CVAR_NOINITCALL)
+{
+	if (netgame && self != 8.0f)
+	{
+		Printf("Visibility cannot be changed in net games.\n");
+		self = 8.0f;
+	}
+	else
+	{
+		float clampValue = (float)R_ClampVisibility(self);
+		if (self != clampValue)
+			self = clampValue;
+	}
+}
+
+//==========================================================================
+//
+// R_GetGlobVis
+//
+// Calculates the global visibility constant used by the software renderer
+//
+//==========================================================================
+
+double R_GetGlobVis(const FViewWindow &viewwindow, double vis)
+{
+	vis = R_ClampVisibility(vis);
+
+	double virtwidth = screen->GetWidth();
+	double virtheight = screen->GetHeight();
+
+	if (AspectTallerThanWide(viewwindow.WidescreenRatio))
+	{
+		virtheight = (virtheight * AspectMultiplier(viewwindow.WidescreenRatio)) / 48;
+	}
+	else
+	{
+		virtwidth = (virtwidth * AspectMultiplier(viewwindow.WidescreenRatio)) / 48;
+	}
+
+	double YaspectMul = 320.0 * virtheight / (200.0 * virtwidth);
+	double InvZtoScale = YaspectMul * viewwindow.centerx;
+
+	double wallVisibility = vis;
+
+	// Prevent overflow on walls
+	double maxVisForWall = (InvZtoScale * (screen->GetWidth() * r_Yaspect) / (viewwidth * screen->GetHeight() * viewwindow.FocalTangent));
+	maxVisForWall = 32767.0 / maxVisForWall;
+	if (vis < 0 && vis < -maxVisForWall)
+		wallVisibility = -maxVisForWall;
+	else if (vis > 0 && vis > maxVisForWall)
+		wallVisibility = maxVisForWall;
+
+	wallVisibility = InvZtoScale * screen->GetWidth() * AspectBaseHeight(viewwindow.WidescreenRatio) / (viewwidth * screen->GetHeight() * 3) * (wallVisibility * viewwindow.FocalTangent);
+
+	return wallVisibility / viewwindow.FocalTangent;
 }
 
 //==========================================================================
@@ -493,8 +363,6 @@ CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 		self = 12;
 	else if (self < 3)
 		self = 3;
-	else if (self == 11)
-		self = 10;
 	else
 		R_SetViewSize (self);
 }
@@ -511,10 +379,10 @@ subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 	int side;
 
 	// single subsector is a special case
-	if (numnodes == 0)
-		return subsectors;
+	if (level.nodes.Size() == 0)
+		return &level.subsectors[0];
 				
-	node = nodes + numnodes - 1;
+	node = level.HeadNode();
 
 	do
 	{
@@ -523,7 +391,7 @@ subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 	}
 	while (!((size_t)node & 1));
 		
-	return (subsector_t *)((BYTE *)node - 1);
+	return (subsector_t *)((uint8_t *)node - 1);
 }
 
 //==========================================================================
@@ -537,14 +405,10 @@ void R_Init ()
 	atterm (R_Shutdown);
 
 	StartScreen->Progress();
-	V_InitFonts();
-	StartScreen->Progress();
 	// Colormap init moved back to InitPalette()
 	//R_InitColormaps ();
 	//StartScreen->Progress();
 
-	R_InitPointToAngle ();
-	R_InitTables ();
 	R_InitTranslationTables ();
 	R_SetViewSize (screenblocks);
 	Renderer->Init();
@@ -572,98 +436,99 @@ static void R_Shutdown ()
 //CVAR (Int, tf, 0, 0)
 EXTERN_CVAR (Bool, cl_noprediction)
 
-void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *iview)
+void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Frac, InterpolationViewer *iview)
 {
-//	frac = tf;
 	if (NoInterpolateView)
 	{
 		InterpolationPath.Clear();
 		NoInterpolateView = false;
-		iview->oviewx = iview->nviewx;
-		iview->oviewy = iview->nviewy;
-		iview->oviewz = iview->nviewz;
-		iview->oviewpitch = iview->nviewpitch;
-		iview->oviewangle = iview->nviewangle;
+		iview->Old = iview->New;
 	}
-	int oldgroup = R_PointInSubsector(iview->oviewx, iview->oviewy)->sector->PortalGroup;
-	int newgroup = R_PointInSubsector(iview->nviewx, iview->nviewy)->sector->PortalGroup;
+	int oldgroup = R_PointInSubsector(iview->Old.Pos)->sector->PortalGroup;
+	int newgroup = R_PointInSubsector(iview->New.Pos)->sector->PortalGroup;
 
-	fixed_t oviewangle = iview->oviewangle;
-	fixed_t nviewangle = iview->nviewangle;
-	if ((iview->oviewx != iview->nviewx || iview->oviewy != iview->nviewy) && InterpolationPath.Size() > 0)
+	DAngle oviewangle = iview->Old.Angles.Yaw;
+	DAngle nviewangle = iview->New.Angles.Yaw;
+	if (!cl_capfps)
 	{
-		viewx = iview->nviewx;
-		viewy = iview->nviewy;
-		viewz = iview->nviewz;
-
-		// Interpolating through line portals is a messy affair.
-		// What needs be done is to store the portal transitions of the camera actor as waypoints
-		// and then find out on which part of the path the current view lies.
-		// Needless to say, this doesn't work for chasecam mode.
-		if (!r_showviewer)
+		if ((iview->Old.Pos.X != iview->New.Pos.X || iview->Old.Pos.Y != iview->New.Pos.Y) && InterpolationPath.Size() > 0)
 		{
-			fixed_t pathlen = 0;
-			fixed_t zdiff = 0;
-			fixed_t totalzdiff = 0;
-			angle_t adiff = 0;
-			angle_t totaladiff = 0;
-			fixed_t oviewz = iview->oviewz;
-			fixed_t nviewz = iview->nviewz;
-			fixedvec3a oldpos = { iview->oviewx, iview->oviewy, 0, 0 };
-			fixedvec3a newpos = { iview->nviewx, iview->nviewy, 0, 0 };
-			InterpolationPath.Push(newpos);	// add this to  the array to simplify the loops below
+			DVector3 view = iview->New.Pos;
 
-			for (unsigned i = 0; i < InterpolationPath.Size(); i += 2)
+			// Interpolating through line portals is a messy affair.
+			// What needs be done is to store the portal transitions of the camera actor as waypoints
+			// and then find out on which part of the path the current view lies.
+			// Needless to say, this doesn't work for chasecam mode.
+			if (!viewpoint.showviewer)
 			{
-				fixedvec3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
-				fixedvec3a &end = InterpolationPath[i];
-				pathlen += xs_CRoundToInt(TVector2<double>(end.x - start.x, end.y - start.y).Length());
-				totalzdiff += start.z;
-				totaladiff += start.angle;
-			}
-			fixed_t interpolatedlen = FixedMul(frac, pathlen);
+				double pathlen = 0;
+				double zdiff = 0;
+				double totalzdiff = 0;
+				DAngle adiff = 0.;
+				DAngle totaladiff = 0.;
+				double oviewz = iview->Old.Pos.Z;
+				double nviewz = iview->New.Pos.Z;
+				DVector3a oldpos = { { iview->Old.Pos.X, iview->Old.Pos.Y, 0 }, 0. };
+				DVector3a newpos = { { iview->New.Pos.X, iview->New.Pos.Y, 0 }, 0. };
+				InterpolationPath.Push(newpos);	// add this to  the array to simplify the loops below
 
-			for (unsigned i = 0; i < InterpolationPath.Size(); i += 2)
-			{
-				fixedvec3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
-				fixedvec3a &end = InterpolationPath[i];
-				fixed_t fraglen = xs_CRoundToInt(TVector2<double>(end.x - start.x, end.y - start.y).Length());
-				zdiff += start.z;
-				adiff += start.angle;
-				if (fraglen <= interpolatedlen)
+				for (unsigned i = 0; i < InterpolationPath.Size(); i += 2)
 				{
-					interpolatedlen -= fraglen;
+					DVector3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
+					DVector3a &end = InterpolationPath[i];
+					pathlen += (end.pos - start.pos).Length();
+					totalzdiff += start.pos.Z;
+					totaladiff += start.angle;
 				}
-				else
+				double interpolatedlen = Frac * pathlen;
+
+				for (unsigned i = 0; i < InterpolationPath.Size(); i += 2)
 				{
-					fixed_t fragfrac = FixedDiv(interpolatedlen, fraglen);
-					oviewz += zdiff;
-					nviewz -= totalzdiff - zdiff;
-					oviewangle += adiff;
-					nviewangle -= totaladiff - adiff;
-					viewx = start.x + FixedMul(fragfrac, end.x - start.x);
-					viewy = start.y + FixedMul(fragfrac, end.y - start.y);
-					viewz = oviewz + FixedMul(frac, nviewz - oviewz);
-					break;
+					DVector3a &start = i == 0 ? oldpos : InterpolationPath[i - 1];
+					DVector3a &end = InterpolationPath[i];
+					double fraglen = (end.pos - start.pos).Length();
+					zdiff += start.pos.Z;
+					adiff += start.angle;
+					if (fraglen <= interpolatedlen)
+					{
+						interpolatedlen -= fraglen;
+					}
+					else
+					{
+						double fragfrac = interpolatedlen / fraglen;
+						oviewz += zdiff;
+						nviewz -= totalzdiff - zdiff;
+						oviewangle += adiff;
+						nviewangle -= totaladiff - adiff;
+						DVector2 viewpos = start.pos + (fragfrac * (end.pos - start.pos));
+						viewpoint.Pos = { viewpos, oviewz + Frac * (nviewz - oviewz) };
+						break;
+					}
 				}
+				InterpolationPath.Pop();
+				viewpoint.Path[0] = iview->Old.Pos;
+				viewpoint.Path[1] = viewpoint.Path[0] + (InterpolationPath[0].pos - viewpoint.Path[0]).XY().MakeResize(pathlen);
 			}
-			InterpolationPath.Pop();
+		}
+		else
+		{
+			DVector2 disp = Displacements.getOffset(oldgroup, newgroup);
+			viewpoint.Pos = iview->Old.Pos + (iview->New.Pos - iview->Old.Pos - disp) * Frac;
+			viewpoint.Path[0] = viewpoint.Path[1] = iview->New.Pos;
 		}
 	}
 	else
 	{
-		fixedvec2 disp = Displacements.getOffset(oldgroup, newgroup);
-		viewx = iview->oviewx + FixedMul(frac, iview->nviewx - iview->oviewx - disp.x);
-		viewy = iview->oviewy + FixedMul(frac, iview->nviewy - iview->oviewy - disp.y);
-		viewz = iview->oviewz + FixedMul(frac, iview->nviewz - iview->oviewz);
+		viewpoint.Pos = iview->New.Pos;
+		viewpoint.Path[0] = viewpoint.Path[1] = iview->New.Pos;
 	}
 	if (player != NULL &&
 		!(player->cheats & CF_INTERPVIEW) &&
 		player - players == consoleplayer &&
-		camera == player->mo &&
+		viewpoint.camera == player->mo &&
 		!demoplayback &&
-		iview->nviewx == camera->X() &&
-		iview->nviewy == camera->Y() && 
+		iview->New.Pos.X == viewpoint.camera->X() &&
+		iview->New.Pos.Y == viewpoint.camera->Y() && 
 		!(player->cheats & (CF_TOTALLYFROZEN|CF_FROZEN)) &&
 		player->playerstate == PST_LIVE &&
 		player->mo->reactiontime == 0 &&
@@ -672,67 +537,41 @@ void R_InterpolateView (player_t *player, fixed_t frac, InterpolationViewer *ivi
 		(!netgame || !cl_noprediction) &&
 		!LocalKeyboardTurner)
 	{
-		viewangle = nviewangle + (LocalViewAngle & 0xFFFF0000);
-
-		fixed_t delta = player->centering ? 0 : -(signed)(LocalViewPitch & 0xFFFF0000);
-
-		viewpitch = iview->nviewpitch;
-		if (delta > 0)
-		{
-			// Avoid overflowing viewpitch (can happen when a netgame is stalled)
-			if (viewpitch > INT_MAX - delta)
-			{
-				viewpitch = player->MaxPitch;
-			}
-			else
-			{
-				viewpitch = MIN(viewpitch + delta, player->MaxPitch);
-			}
-		}
-		else if (delta < 0)
-		{
-			// Avoid overflowing viewpitch (can happen when a netgame is stalled)
-			if (viewpitch < INT_MIN - delta)
-			{
-				viewpitch = player->MinPitch;
-			}
-			else
-			{
-				viewpitch = MAX(viewpitch + delta, player->MinPitch);
-			}
-		}
+		viewpoint.Angles.Yaw = (nviewangle + AngleToFloat(LocalViewAngle & 0xFFFF0000)).Normalized180();
+		DAngle delta = player->centering ? DAngle(0.) : AngleToFloat(int(LocalViewPitch & 0xFFFF0000));
+		viewpoint.Angles.Pitch = clamp<DAngle>((iview->New.Angles.Pitch - delta).Normalized180(), player->MinPitch, player->MaxPitch);
+		viewpoint.Angles.Roll = iview->New.Angles.Roll.Normalized180();
 	}
 	else
 	{
-		viewpitch = iview->oviewpitch + FixedMul (frac, iview->nviewpitch - iview->oviewpitch);
-		viewangle = oviewangle + FixedMul (frac, nviewangle - oviewangle);
+		viewpoint.Angles.Pitch = (iview->Old.Angles.Pitch + deltaangle(iview->Old.Angles.Pitch, iview->New.Angles.Pitch) * Frac).Normalized180();
+		viewpoint.Angles.Yaw = (oviewangle + deltaangle(oviewangle, nviewangle) * Frac).Normalized180();
+		viewpoint.Angles.Roll = (iview->Old.Angles.Roll + deltaangle(iview->Old.Angles.Roll, iview->New.Angles.Roll) * Frac).Normalized180();
 	}
 	
 	// Due to interpolation this is not necessarily the same as the sector the camera is in.
-	viewsector = R_PointInSubsector(viewx, viewy)->sector;
+	viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 	bool moved = false;
-	while (!viewsector->PortalBlocksMovement(sector_t::ceiling))
+	while (!viewpoint.sector->PortalBlocksMovement(sector_t::ceiling))
 	{
-		AActor *point = viewsector->SkyBoxes[sector_t::ceiling];
-		if (viewz > point->threshold)
+		if (viewpoint.Pos.Z > viewpoint.sector->GetPortalPlaneZ(sector_t::ceiling))
 		{
-			viewx += point->scaleX;
-			viewy += point->scaleY;
-			viewsector = R_PointInSubsector(viewx, viewy)->sector;
+			viewpoint.Pos += viewpoint.sector->GetPortalDisplacement(sector_t::ceiling);
+			viewpoint.ActorPos += viewpoint.sector->GetPortalDisplacement(sector_t::ceiling);
+			viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 			moved = true;
 		}
 		else break;
 	}
 	if (!moved)
 	{
-		while (!viewsector->PortalBlocksMovement(sector_t::floor))
+		while (!viewpoint.sector->PortalBlocksMovement(sector_t::floor))
 		{
-			AActor *point = viewsector->SkyBoxes[sector_t::floor];
-			if (viewz < point->threshold)
+			if (viewpoint.Pos.Z < viewpoint.sector->GetPortalPlaneZ(sector_t::floor))
 			{
-				viewx += point->scaleX;
-				viewy += point->scaleY;
-				viewsector = R_PointInSubsector(viewx, viewy)->sector;
+				viewpoint.Pos += viewpoint.sector->GetPortalDisplacement(sector_t::floor);
+				viewpoint.ActorPos += viewpoint.sector->GetPortalDisplacement(sector_t::floor);
+				viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 				moved = true;
 			}
 			else break;
@@ -758,15 +597,13 @@ void R_ResetViewInterpolation ()
 //
 //==========================================================================
 
-void R_SetViewAngle ()
+void R_SetViewAngle (FRenderViewpoint &viewpoint, const FViewWindow &viewwindow)
 {
-	angle_t ang = viewangle >> ANGLETOFINESHIFT;
+	viewpoint.Sin = viewpoint.Angles.Yaw.Sin();
+	viewpoint.Cos = viewpoint.Angles.Yaw.Cos();
 
-	viewsin = finesine[ang];
-	viewcos = finecosine[ang];
-
-	viewtansin = FixedMul (FocalTangent, viewsin);
-	viewtancos = FixedMul (FocalTangent, viewcos);
+	viewpoint.TanSin = viewwindow.FocalTangent * viewpoint.Sin;
+	viewpoint.TanCos = viewwindow.FocalTangent * viewpoint.Cos;
 }
 
 //==========================================================================
@@ -786,7 +623,8 @@ static InterpolationViewer *FindPastViewer (AActor *actor)
 	}
 
 	// Not found, so make a new one
-	InterpolationViewer iview = { NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	InterpolationViewer iview;
+	memset(&iview, 0, sizeof(iview));
 	iview.ViewActor = actor;
 	iview.otic = -1;
 	InterpolationPath.Clear();
@@ -850,11 +688,7 @@ void R_RebuildViewInterpolation(player_t *player)
 
 	InterpolationViewer *iview = FindPastViewer(player->camera);
 
-	iview->oviewx = iview->nviewx;
-	iview->oviewy = iview->nviewy;
-	iview->oviewz = iview->nviewz;
-	iview->oviewpitch = iview->nviewpitch;
-	iview->oviewangle = iview->nviewangle;
+	iview->Old = iview->New;
 	InterpolationPath.Clear();
 }
 
@@ -887,7 +721,7 @@ void R_ClearInterpolationPath()
 //
 //==========================================================================
 
-void R_AddInterpolationPoint(const fixedvec3a &vec)
+void R_AddInterpolationPoint(const DVector3a &vec)
 {
 	InterpolationPath.Push(vec);
 }
@@ -898,19 +732,18 @@ void R_AddInterpolationPoint(const fixedvec3a &vec)
 //
 //==========================================================================
 
-static fixed_t QuakePower(fixed_t factor, fixed_t intensity, fixed_t offset)
+static double QuakePower(double factor, double intensity, double offset)
 { 
-	fixed_t randumb;
-
+	double randumb;
 	if (intensity == 0)
 	{
 		randumb = 0;
 	}
 	else
 	{
-		randumb = pr_torchflicker(intensity * 2) - intensity;
+		randumb = pr_torchflicker.GenRand_Real2() * (intensity * 2) - intensity;
 	}
-	return FixedMul(factor, randumb + offset);
+	return factor * (offset + randumb);
 }
 
 //==========================================================================
@@ -919,7 +752,7 @@ static fixed_t QuakePower(fixed_t factor, fixed_t intensity, fixed_t offset)
 //
 //==========================================================================
 
-void R_SetupFrame (AActor *actor)
+void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor *actor)
 {
 	if (actor == NULL)
 	{
@@ -933,175 +766,166 @@ void R_SetupFrame (AActor *actor)
 
 	if (player != NULL && player->mo == actor)
 	{	// [RH] Use camera instead of viewplayer
-		camera = player->camera;
-		if (camera == NULL)
+		viewpoint.camera = player->camera;
+		if (viewpoint.camera == NULL)
 		{
-			camera = player->camera = player->mo;
+			viewpoint.camera = player->camera = player->mo;
 		}
 	}
 	else
 	{
-		camera = actor;
+		viewpoint.camera = actor;
 	}
 
-	if (camera == NULL)
+	if (viewpoint.camera == NULL)
 	{
 		I_Error ("You lost your body. Bad dehacked work is likely to blame.");
 	}
 
-	iview = FindPastViewer (camera);
+	iview = FindPastViewer (viewpoint.camera);
 
 	int nowtic = I_GetTime (false);
 	if (iview->otic != -1 && nowtic > iview->otic)
 	{
 		iview->otic = nowtic;
-		iview->oviewx = iview->nviewx;
-		iview->oviewy = iview->nviewy;
-		iview->oviewz = iview->nviewz;
-		iview->oviewpitch = iview->nviewpitch;
-		iview->oviewangle = iview->nviewangle;
+		iview->Old = iview->New;
 	}
 
 	if (player != NULL && gamestate != GS_TITLELEVEL &&
-		((player->cheats & CF_CHASECAM) || (r_deathcamera && camera->health <= 0)))
+		((player->cheats & CF_CHASECAM) || (r_deathcamera && viewpoint.camera->health <= 0)))
 	{
-		sector_t *oldsector = R_PointInSubsector(iview->oviewx, iview->oviewy)->sector;
+		sector_t *oldsector = R_PointInSubsector(iview->Old.Pos)->sector;
 		// [RH] Use chasecam view
-		P_AimCamera (camera, iview->nviewx, iview->nviewy, iview->nviewz, viewsector, unlinked);
-		r_showviewer = true;
+		DVector3 campos;
+		DAngle camangle;
+		P_AimCamera (viewpoint.camera, campos, camangle, viewpoint.sector, unlinked);	// fixme: This needs to translate the angle, too.
+		iview->New.Pos = campos;
+		iview->New.Angles.Yaw = camangle;
+		
+		viewpoint.showviewer = true;
 		// Interpolating this is a very complicated thing because nothing keeps track of the aim camera's movement, so whenever we detect a portal transition
 		// it's probably best to just reset the interpolation for this move.
 		// Note that this can still cause problems with unusually linked portals
-		if (viewsector->PortalGroup != oldsector->PortalGroup || (unlinked && P_AproxDistance(iview->oviewx - iview->nviewx, iview->oviewy - iview->nviewy) > 256 * FRACUNIT))
+		if (viewpoint.sector->PortalGroup != oldsector->PortalGroup || (unlinked && ((iview->New.Pos.XY() - iview->Old.Pos.XY()).LengthSquared()) > 256*256))
 		{
 			iview->otic = nowtic;
-			iview->oviewx = iview->nviewx;
-			iview->oviewy = iview->nviewy;
-			iview->oviewz = iview->nviewz;
-			iview->oviewpitch = iview->nviewpitch;
-			iview->oviewangle = iview->nviewangle;
+			iview->Old = iview->New;
+			r_NoInterpolate = true;
 		}
+		viewpoint.ActorPos = campos;
 	}
 	else
 	{
-		iview->nviewx = camera->X();
-		iview->nviewy = camera->Y();
-		iview->nviewz = camera->player ? camera->player->viewz : camera->Z() + camera->GetCameraHeight();
-		viewsector = camera->Sector;
-		r_showviewer = false;
+		viewpoint.ActorPos = iview->New.Pos = { viewpoint.camera->Pos().XY(), viewpoint.camera->player ? viewpoint.camera->player->viewz : viewpoint.camera->Z() + viewpoint.camera->GetCameraHeight() };
+		viewpoint.sector = viewpoint.camera->Sector;
+		viewpoint.showviewer = false;
 	}
-	iview->nviewpitch = camera->pitch;
-	if (camera->player != 0)
+	iview->New.Angles = viewpoint.camera->Angles;
+	if (viewpoint.camera->player != 0)
 	{
-		player = camera->player;
+		player = viewpoint.camera->player;
 	}
 
-	iview->nviewangle = camera->angle;
 	if (iview->otic == -1 || r_NoInterpolate)
 	{
 		R_ResetViewInterpolation ();
 		iview->otic = nowtic;
 	}
 
-	r_TicFrac = I_GetTimeFrac (&r_FrameTime);
+	viewpoint.TicFrac = I_GetTimeFrac (&viewpoint.FrameTime);
 	if (cl_capfps || r_NoInterpolate)
 	{
-		r_TicFrac = FRACUNIT;
+		viewpoint.TicFrac = 1.;
 	}
+	R_InterpolateView (viewpoint, player, viewpoint.TicFrac, iview);
 
-	R_InterpolateView (player, r_TicFrac, iview);
+	R_SetViewAngle (viewpoint, viewwindow);
 
-#ifdef TEST_X
-	viewx = TEST_X;
-	viewy = TEST_Y;
-	viewz = TEST_Z;
-	viewangle = TEST_ANGLE;
-#endif
-
-	R_SetViewAngle ();
-
-	interpolator.DoInterpolations (r_TicFrac);
+	interpolator.DoInterpolations (viewpoint.TicFrac);
 
 	// Keep the view within the sector's floor and ceiling
-	if (viewsector->PortalBlocksMovement(sector_t::ceiling))
+	if (viewpoint.sector->PortalBlocksMovement(sector_t::ceiling))
 	{
-		fixed_t theZ = viewsector->ceilingplane.ZatPoint(viewx, viewy) - 4 * FRACUNIT;
-		if (viewz > theZ)
+		double theZ = viewpoint.sector->ceilingplane.ZatPoint(viewpoint.Pos) - 4;
+		if (viewpoint.Pos.Z > theZ)
 		{
-			viewz = theZ;
+			viewpoint.Pos.Z = theZ;
 		}
 	}
 
-	if (viewsector->PortalBlocksMovement(sector_t::floor))
+	if (viewpoint.sector->PortalBlocksMovement(sector_t::floor))
 	{
-		fixed_t theZ = viewsector->floorplane.ZatPoint(viewx, viewy) + 4 * FRACUNIT;
-		if (viewz < theZ)
+		double theZ = viewpoint.sector->floorplane.ZatPoint(viewpoint.Pos) + 4;
+		if (viewpoint.Pos.Z < theZ)
 		{
-			viewz = theZ;
+			viewpoint.Pos.Z = theZ;
 		}
 	}
 
 	if (!paused)
 	{
-		FQuakeJiggers jiggers = { 0, };
+		FQuakeJiggers jiggers;
 
-		if (DEarthquake::StaticGetQuakeIntensities(camera, jiggers) > 0)
+		memset(&jiggers, 0, sizeof(jiggers));
+		if (DEarthquake::StaticGetQuakeIntensities(viewpoint.camera, jiggers) > 0)
 		{
-			fixed_t quakefactor = FLOAT2FIXED(r_quakeintensity);
+			double quakefactor = r_quakeintensity;
+			DAngle an;
 
-			if ((jiggers.RelIntensityX | jiggers.RelOffsetX) != 0)
+			if (jiggers.RollIntensity != 0 || jiggers.RollWave != 0)
 			{
-				int ang = (camera->angle) >> ANGLETOFINESHIFT;
-				fixed_t power = QuakePower(quakefactor, jiggers.RelIntensityX, jiggers.RelOffsetX);
-				viewx += FixedMul(finecosine[ang], power);
-				viewy += FixedMul(finesine[ang], power);
+				viewpoint.Angles.Roll += QuakePower(quakefactor, jiggers.RollIntensity, jiggers.RollWave);
 			}
-			if ((jiggers.RelIntensityY | jiggers.RelOffsetY) != 0)
+			if (jiggers.RelIntensity.X != 0 || jiggers.RelOffset.X != 0)
 			{
-				int ang = (camera->angle + ANG90) >> ANGLETOFINESHIFT;
-				fixed_t power = QuakePower(quakefactor, jiggers.RelIntensityY, jiggers.RelOffsetY);
-				viewx += FixedMul(finecosine[ang], power);
-				viewy += FixedMul(finesine[ang], power);
+				an = viewpoint.camera->Angles.Yaw;
+				double power = QuakePower(quakefactor, jiggers.RelIntensity.X, jiggers.RelOffset.X);
+				viewpoint.Pos += an.ToVector(power);
+			}
+			if (jiggers.RelIntensity.Y != 0 || jiggers.RelOffset.Y != 0)
+			{
+				an = viewpoint.camera->Angles.Yaw + 90;
+				double power = QuakePower(quakefactor, jiggers.RelIntensity.Y, jiggers.RelOffset.Y);
+				viewpoint.Pos += an.ToVector(power);
 			}
 			// FIXME: Relative Z is not relative
-			// [MC]On it! Will be introducing pitch after QF_WAVE.
-			if ((jiggers.RelIntensityZ | jiggers.RelOffsetZ) != 0)
+			if (jiggers.RelIntensity.Z != 0 || jiggers.RelOffset.Z != 0)
 			{
-				viewz += QuakePower(quakefactor, jiggers.RelIntensityZ, jiggers.RelOffsetZ);
+				viewpoint.Pos.Z += QuakePower(quakefactor, jiggers.RelIntensity.Z, jiggers.RelOffset.Z);
 			}
-			if ((jiggers.IntensityX | jiggers.OffsetX) != 0)
+			if (jiggers.Intensity.X != 0 || jiggers.Offset.X != 0)
 			{
-				viewx += QuakePower(quakefactor, jiggers.IntensityX, jiggers.OffsetX);
+				viewpoint.Pos.X += QuakePower(quakefactor, jiggers.Intensity.X, jiggers.Offset.X);
 			}
-			if ((jiggers.IntensityY | jiggers.OffsetY) != 0)
+			if (jiggers.Intensity.Y != 0 || jiggers.Offset.Y != 0)
 			{
-				viewy += QuakePower(quakefactor, jiggers.IntensityY, jiggers.OffsetY);
+				viewpoint.Pos.Y += QuakePower(quakefactor, jiggers.Intensity.Y, jiggers.Offset.Y);
 			}
-			if ((jiggers.IntensityZ | jiggers.OffsetZ) != 0)
+			if (jiggers.Intensity.Z != 0 || jiggers.Offset.Z != 0)
 			{
-				viewz += QuakePower(quakefactor, jiggers.IntensityZ, jiggers.OffsetZ);
+				viewpoint.Pos.Z += QuakePower(quakefactor, jiggers.Intensity.Z, jiggers.Offset.Z);
 			}
 		}
 	}
 
-	extralight = camera->player ? camera->player->extralight : 0;
+	viewpoint.extralight = viewpoint.camera->player ? viewpoint.camera->player->extralight : 0;
 
 	// killough 3/20/98, 4/4/98: select colormap based on player status
 	// [RH] Can also select a blend
 	newblend = 0;
 
-	TArray<lightlist_t> &lightlist = viewsector->e->XFloor.lightlist;
+	TArray<lightlist_t> &lightlist = viewpoint.sector->e->XFloor.lightlist;
 	if (lightlist.Size() > 0)
 	{
 		for(unsigned int i = 0; i < lightlist.Size(); i++)
 		{
 			secplane_t *plane;
 			int viewside;
-			plane = (i < lightlist.Size()-1) ? &lightlist[i+1].plane : &viewsector->floorplane;
-			viewside = plane->PointOnSide(viewx, viewy, viewz);
+			plane = (i < lightlist.Size()-1) ? &lightlist[i+1].plane : &viewpoint.sector->floorplane;
+			viewside = plane->PointOnSide(viewpoint.Pos);
 			// Reverse the direction of the test if the plane was downward facing.
 			// We want to know if the view is above it, whatever its orientation may be.
-			if (plane->c < 0)
+			if (plane->fC() < 0)
 				viewside = -viewside;
 			if (viewside > 0)
 			{
@@ -1117,15 +941,15 @@ void R_SetupFrame (AActor *actor)
 	}
 	else
 	{
-		const sector_t *s = viewsector->GetHeightSec();
+		const sector_t *s = viewpoint.sector->GetHeightSec();
 		if (s != NULL)
 		{
-			newblend = s->floorplane.PointOnSide(viewx, viewy, viewz) < 0
+			newblend = s->floorplane.PointOnSide(viewpoint.Pos) < 0
 				? s->bottommap
-				: s->ceilingplane.PointOnSide(viewx, viewy, viewz) < 0
+				: s->ceilingplane.PointOnSide(viewpoint.Pos) < 0
 				? s->topmap
 				: s->midmap;
-			if (APART(newblend) == 0 && newblend >= numfakecmaps)
+			if (APART(newblend) == 0 && newblend >= fakecmaps.Size())
 				newblend = 0;
 		}
 	}
@@ -1142,22 +966,17 @@ void R_SetupFrame (AActor *actor)
 			BaseBlendG = GPART(newblend);
 			BaseBlendB = BPART(newblend);
 			BaseBlendA = APART(newblend) / 255.f;
-			NormalLight.Maps = realcolormaps;
 		}
 		else
 		{
-			NormalLight.Maps = realcolormaps + NUMCOLORMAPS*256*newblend;
 			BaseBlendR = BaseBlendG = BaseBlendB = 0;
 			BaseBlendA = 0.f;
 		}
 	}
 
-	Renderer->CopyStackedViewParameters();
-	Renderer->SetupFrame(player);
-
 	validcount++;
 
-	if (RenderTarget == screen && r_clearbuffer != 0)
+	if (r_clearbuffer != 0)
 	{
 		int color;
 		int hom = r_clearbuffer;
@@ -1182,7 +1001,7 @@ void R_SetupFrame (AActor *actor)
 		{
 			color = pr_hom();
 		}
-		Renderer->ClearBuffer(color);
+		Renderer->SetClearColor(color);
 	}
 }
 
@@ -1195,7 +1014,7 @@ void R_SetupFrame (AActor *actor)
 //
 //==========================================================================
 
-void FCanvasTextureInfo::Add (AActor *viewpoint, FTextureID picnum, int fov)
+void FCanvasTextureInfo::Add (AActor *viewpoint, FTextureID picnum, double fov)
 {
 	FCanvasTextureInfo *probe;
 	FCanvasTexture *texture;
@@ -1235,6 +1054,18 @@ void FCanvasTextureInfo::Add (AActor *viewpoint, FTextureID picnum, int fov)
 	probe->Next = List;
 	texture->bFirstUpdate = true;
 	List = probe;
+}
+
+// [ZZ] expose this to ZScript
+DEFINE_ACTION_FUNCTION(_TexMan, SetCameraToTexture)
+{
+	PARAM_PROLOGUE;
+	PARAM_OBJECT(viewpoint, AActor);
+	PARAM_STRING(texturename); // [ZZ] there is no point in having this as FTextureID because it's easier to refer to a cameratexture by name and it isn't executed too often to cache it.
+	PARAM_FLOAT(fov);
+	FTextureID textureid = TexMan.CheckForTexture(texturename, FTexture::TEX_Wall, FTextureManager::TEXMAN_Overridable);
+	FCanvasTextureInfo::Add(viewpoint, textureid, fov);
+	return 0;
 }
 
 //==========================================================================
@@ -1287,33 +1118,49 @@ void FCanvasTextureInfo::EmptyList ()
 //
 //==========================================================================
 
-void FCanvasTextureInfo::Serialize (FArchive &arc)
+void FCanvasTextureInfo::Serialize(FSerializer &arc)
 {
-	if (arc.IsStoring ())
+	if (arc.isWriting())
 	{
-		FCanvasTextureInfo *probe;
-
-		for (probe = List; probe != NULL; probe = probe->Next)
+		if (List != nullptr)
 		{
-			if (probe->Texture != NULL && probe->Viewpoint != NULL)
+			if (arc.BeginArray("canvastextures"))
 			{
-				arc << probe->Viewpoint << probe->FOV << probe->PicNum;
+				FCanvasTextureInfo *probe;
+
+				for (probe = List; probe != nullptr; probe = probe->Next)
+				{
+					if (probe->Texture != nullptr && probe->Viewpoint != nullptr)
+					{
+						if (arc.BeginObject(nullptr))
+						{
+							arc("viewpoint", probe->Viewpoint)
+								("fov", probe->FOV)
+								("texture", probe->PicNum)
+								.EndObject();
+						}
+					}
+				}
+				arc.EndArray();
 			}
 		}
-		AActor *nullactor = NULL;
-		arc << nullactor;
 	}
 	else
 	{
-		AActor *viewpoint;
-		int fov;
-		FTextureID picnum;
-		
-		EmptyList ();
-		while (arc << viewpoint, viewpoint != NULL)
+		if (arc.BeginArray("canvastextures"))
 		{
-			arc << fov << picnum;
-			Add (viewpoint, picnum, fov);
+			AActor *viewpoint = nullptr;
+			double fov;
+			FTextureID picnum;
+			while (arc.BeginObject(nullptr))
+			{
+				arc("viewpoint", viewpoint)
+					("fov", fov)
+					("texture", picnum)
+					.EndObject();
+				Add(viewpoint, picnum, fov);
+			}
+			arc.EndArray();
 		}
 	}
 }
@@ -1334,3 +1181,38 @@ void FCanvasTextureInfo::Mark()
 	}
 }
 
+
+//==========================================================================
+//
+// CVAR transsouls
+//
+// How translucent things drawn with STYLE_SoulTrans are. Normally, only
+// Lost Souls have this render style.
+// Values less than 0.25 will automatically be set to
+// 0.25 to ensure some degree of visibility. Likewise, values above 1.0 will
+// be set to 1.0, because anything higher doesn't make sense.
+//
+//==========================================================================
+
+CUSTOM_CVAR(Float, transsouls, 0.75f, CVAR_ARCHIVE)
+{
+	if (self < 0.25f)
+	{
+		self = 0.25f;
+	}
+	else if (self > 1.f)
+	{
+		self = 1.f;
+	}
+}
+
+CUSTOM_CVAR(Float, maxviewpitch, 90.f, CVAR_ARCHIVE | CVAR_SERVERINFO)
+{
+	if (self>90.f) self = 90.f;
+	else if (self<-90.f) self = -90.f;
+	if (usergame)
+	{
+		// [SP] Update pitch limits to the netgame/gamesim.
+		players[consoleplayer].SendPitchLimits();
+	}
+}

@@ -1,18 +1,23 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //		System specific interface stuff.
@@ -36,44 +41,11 @@ enum
 	LANGIDX_SysPreferred,
 	LANGIDX_SysDefault
 };
-extern uint32 LanguageIDs[4];
+extern uint32_t LanguageIDs[4];
 extern void SetLanguageIDs ();
 
 // [RH] Detects the OS the game is running under.
 void I_DetectOS (void);
-
-typedef enum {
-	os_unknown,
-	os_Win95,
-	os_WinNT4,
-	os_Win2k
-} os_t;
-
-extern os_t OSPlatform;
-
-// Helper template so that we can access newer Win32 functions with a single static
-// variable declaration. If this were C++11 it could be totally transparent.
-template<typename Proto>
-class TOptWin32Proc
-{
-	static Proto GetOptionalWin32Proc(const char* module, const char* function)
-	{
-		HMODULE hmodule = GetModuleHandle(module);
-		if (hmodule == NULL)
-			return NULL;
-
-		return (Proto)GetProcAddress(hmodule, function);
-	}
-
-public:
-	const Proto Call;
-
-	TOptWin32Proc(const char* module, const char* function)
-		: Call(GetOptionalWin32Proc(module, function)) {}
-
-	// Wrapper object can be tested against NULL, but not directly called.
-	operator const void*() const { return Call; }
-};
 
 // Called by DoomMain.
 void I_Init (void);
@@ -90,7 +62,8 @@ extern int (*I_WaitForTic) (int);
 // tic will never arrive (unless it's the current one).
 extern void (*I_FreezeTime) (bool frozen);
 
-fixed_t I_GetTimeFrac (uint32 *ms);
+double I_GetTimeFrac (uint32_t *ms);
+void I_SetFrameTime();
 
 // Return a seed value for the RNG.
 unsigned int I_MakeRNGSeed();
@@ -132,8 +105,8 @@ void I_Quit (void);
 
 void I_Tactile (int on, int off, int total);
 
-void STACK_ARGS I_Error (const char *error, ...) GCCPRINTF(1,2);
-void STACK_ARGS I_FatalError (const char *error, ...) GCCPRINTF(1,2);
+void I_Error (const char *error, ...) GCCPRINTF(1,2);
+void I_FatalError (const char *error, ...) GCCPRINTF(1,2);
 
 void atterm (void (*func)(void));
 void popterm ();
@@ -144,6 +117,8 @@ bool I_SetCursor(FTexture *cursor);
 
 // Repaint the pre-game console
 void I_PaintConsole (void);
+
+void I_DebugPrint (const char *cp);
 
 // Print a console string
 void I_PrintStr (const char *cp);
@@ -197,20 +172,32 @@ FString I_GetLongPathName(FString shortpath);
 
 struct findstate_t
 {
-	DWORD Attribs;
-	DWORD Times[3*2];
-	DWORD Size[2];
-	DWORD Reserved[2];
+private:
+	uint32_t Attribs;
+	uint32_t Times[3*2];
+	uint32_t Size[2];
+	uint32_t Reserved[2];
 	char Name[MAX_PATH];
 	char AltName[14];
+
+	friend void *I_FindFirst(const char *filespec, findstate_t *fileinfo);
+	friend int I_FindNext(void *handle, findstate_t *fileinfo);
+	friend const char *I_FindName(findstate_t *fileinfo);
+	friend int I_FindAttr(findstate_t *fileinfo);
 };
 
 void *I_FindFirst (const char *filespec, findstate_t *fileinfo);
 int I_FindNext (void *handle, findstate_t *fileinfo);
 int I_FindClose (void *handle);
 
-#define I_FindName(a)	((a)->Name)
-#define I_FindAttr(a)	((a)->Attribs)
+inline const char *I_FindName(findstate_t *fileinfo)
+{
+	return fileinfo->Name;
+}
+inline int I_FindAttr(findstate_t *fileinfo)
+{
+	return fileinfo->Attribs;
+}
 
 #define FA_RDONLY	0x00000001
 #define FA_HIDDEN	0x00000002

@@ -10,6 +10,7 @@ This is a simplified version of VSMatrix that has been adjusted for GZDoom's nee
 
 ----------------------------------------------------*/
 
+#include <algorithm>
 #include "gl/system/gl_system.h"
 #include <math.h>
 #include <stdlib.h>
@@ -120,37 +121,27 @@ VSMatrix::loadMatrix(const float *aMatrix)
 #endif
 
 
-// gl Translate implementation with matrix selection
+// gl Translate implementation
 void 
 VSMatrix::translate(FLOATTYPE x, FLOATTYPE y, FLOATTYPE z) 
 {
-	FLOATTYPE mat[16];
-
-	setIdentityMatrix(mat);
-	mat[12] = x;
-	mat[13] = y;
-	mat[14] = z;
-
-	multMatrix(mat);
+	mMatrix[12] = mMatrix[0] * x + mMatrix[4] * y + mMatrix[8] * z + mMatrix[12];
+	mMatrix[13] = mMatrix[1] * x + mMatrix[5] * y + mMatrix[9] * z + mMatrix[13];
+	mMatrix[14] = mMatrix[2] * x + mMatrix[6] * y + mMatrix[10] * z + mMatrix[14];
 }
 
 
-// gl Scale implementation with matrix selection
+// gl Scale implementation
 void 
 VSMatrix::scale(FLOATTYPE x, FLOATTYPE y, FLOATTYPE z) 
 {
-	FLOATTYPE mat[16];
-
-	setIdentityMatrix(mat,4);
-	mat[0] = x;
-	mat[5] = y;
-	mat[10] = z;
-
-	multMatrix(mat);
+	mMatrix[0] *= x;   mMatrix[1] *= x;   mMatrix[2] *= x;   mMatrix[3] *= x;
+	mMatrix[4] *= y;   mMatrix[5] *= y;   mMatrix[6] *= y;   mMatrix[7] *= y;
+	mMatrix[8] *= z;   mMatrix[9] *= z;   mMatrix[10] *= z;   mMatrix[11] *= z;
 }
 
 
-// gl Rotate implementation with matrix selection
+// gl Rotate implementation
 void 
 VSMatrix::rotate(FLOATTYPE angle, FLOATTYPE x, FLOATTYPE y, FLOATTYPE z)
 {
@@ -431,7 +422,7 @@ void
 VSMatrix::computeNormalMatrix(const FLOATTYPE *aMatrix) 
 {
 
-	FLOATTYPE mMat3x3[9];
+	double mMat3x3[9];
 
 	mMat3x3[0] = aMatrix[0];
 	mMat3x3[1] = aMatrix[1];
@@ -445,13 +436,13 @@ VSMatrix::computeNormalMatrix(const FLOATTYPE *aMatrix)
 	mMat3x3[7] = aMatrix[9];
 	mMat3x3[8] = aMatrix[10];
 
-	FLOATTYPE det, invDet;
+	double det, invDet;
 
 	det = mMat3x3[0] * (mMat3x3[4] * mMat3x3[8] - mMat3x3[5] * mMat3x3[7]) +
 		  mMat3x3[1] * (mMat3x3[5] * mMat3x3[6] - mMat3x3[8] * mMat3x3[3]) +
 		  mMat3x3[2] * (mMat3x3[3] * mMat3x3[7] - mMat3x3[4] * mMat3x3[6]);
 
-	invDet = 1.0f/det;
+	invDet = 1.0/det;
 
 	mMatrix[0] = (mMat3x3[4] * mMat3x3[8] - mMat3x3[5] * mMat3x3[7]) * invDet;
 	mMatrix[1] = (mMat3x3[5] * mMat3x3[6] - mMat3x3[8] * mMat3x3[3]) * invDet;

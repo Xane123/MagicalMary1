@@ -43,7 +43,7 @@
 #include "templates.h"
 #include "w_wad.h"
 #include "g_level.h"
-#include "farchive.h"
+#include "serializer.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ FAnimDef *FTextureManager::AddAnim (FAnimDef *anim)
 //
 //==========================================================================
 
-FAnimDef *FTextureManager::AddSimpleAnim (FTextureID picnum, int animcount, DWORD speedmin, DWORD speedrange)
+FAnimDef *FTextureManager::AddSimpleAnim (FTextureID picnum, int animcount, uint32_t speedmin, uint32_t speedrange)
 {
 	if (AreTexturesCompatible(picnum, picnum + (animcount - 1)))
 	{
@@ -161,6 +161,16 @@ FAnimDef *FTextureManager::AddComplexAnim (FTextureID picnum, const TArray<FAnim
 // [RH] Rewritten to support BOOM ANIMATED lump but also make absolutely
 //		no assumptions about how the compiler packs the animdefs array.
 //
+// Since animdef_t no longer exists in ZDoom, here is some documentation
+// of the format:
+//
+//   This is an array of <n> entries, terminated by a 0xFF byte. Each entry
+//   is 23 bytes long and consists of the following fields:
+//     Byte      0: Bit 1 set for wall texture, clear for flat texture.
+//     Bytes   1-9: '\0'-terminated name of first texture.
+//     Bytes 10-18: '\0'-terminated name of last texture.
+//     Bytes 19-22: Tics per frame (stored in little endian order).
+//
 //==========================================================================
 
 CVAR(Bool, debuganimated, false, 0)
@@ -177,11 +187,11 @@ void FTextureManager::InitAnimated (void)
 	{
 		FMemLump animatedlump = Wads.ReadLump (lumpnum);
 		int animatedlen = Wads.LumpLength(lumpnum);
-		const BYTE *animdefs = (const BYTE *)animatedlump.GetMem();
-		const BYTE *anim_p;
+		const uint8_t *animdefs = (const uint8_t *)animatedlump.GetMem();
+		const uint8_t *anim_p;
 		FTextureID pic1, pic2;
 		int animtype;
-		DWORD animspeed;
+		uint32_t animspeed;
 
 		// Init animation
 		animtype = FAnimDef::ANIM_Forward;
@@ -219,7 +229,7 @@ void FTextureManager::InitAnimated (void)
 			// SMMU-style swirly hack? Don't apply on already-warping texture
 			if (animspeed > 65535 && tex1 != NULL && !tex1->bWarped)
 			{
-				FTexture *warper = new FWarp2Texture (tex1);
+				FTexture *warper = new FWarpTexture (tex1, 2);
 				ReplaceTexture (pic1, warper, false);
 			}
 			// These tests were not really relevant for swirling textures, or even potentially
@@ -339,7 +349,7 @@ void FTextureManager::ParseAnim (FScanner &sc, int usetype)
 	int defined = 0;
 	bool optional = false, missing = false;
 	FAnimDef *ani = NULL;
-	BYTE type = FAnimDef::ANIM_Forward;
+	uint8_t type = FAnimDef::ANIM_Forward;
 
 	sc.MustGetString ();
 	if (sc.Compare ("optional"))
@@ -457,7 +467,7 @@ FAnimDef *FTextureManager::ParseRangeAnim (FScanner &sc, FTextureID picnum, int 
 {
 	int type;
 	FTextureID framenum;
-	DWORD min, max;
+	uint32_t min, max;
 
 	type = FAnimDef::ANIM_Forward;
 	framenum = ParseFramenum (sc, picnum, usetype, missing);
@@ -497,7 +507,7 @@ FAnimDef *FTextureManager::ParseRangeAnim (FScanner &sc, FTextureID picnum, int 
 void FTextureManager::ParsePicAnim (FScanner &sc, FTextureID picnum, int usetype, bool missing, TArray<FAnimDef::FAnimFrame> &frames)
 {
 	FTextureID framenum;
-	DWORD min = 1, max = 1;
+	uint32_t min = 1, max = 1;
 
 	framenum = ParseFramenum (sc, picnum, usetype, missing);
 	ParseTime (sc, min, max);
@@ -551,20 +561,20 @@ FTextureID FTextureManager::ParseFramenum (FScanner &sc, FTextureID basepicnum, 
 //
 //==========================================================================
 
-void FTextureManager::ParseTime (FScanner &sc, DWORD &min, DWORD &max)
+void FTextureManager::ParseTime (FScanner &sc, uint32_t &min, uint32_t &max)
 {
 	sc.MustGetString ();
 	if (sc.Compare ("tics"))
 	{
 		sc.MustGetFloat ();
-		min = max = DWORD(sc.Float * 1000 / 35);
+		min = max = uint32_t(sc.Float * 1000 / 35);
 	}
 	else if (sc.Compare ("rand"))
 	{
 		sc.MustGetFloat ();
-		min = DWORD(sc.Float * 1000 / 35);
+		min = uint32_t(sc.Float * 1000 / 35);
 		sc.MustGetFloat ();
-		max = DWORD(sc.Float * 1000 / 35);
+		max = uint32_t(sc.Float * 1000 / 35);
 	}
 	else
 	{
@@ -617,9 +627,7 @@ void FTextureManager::ParseWarp(FScanner &sc)
 		// don't warp a texture more than once
 		if (!warper->bWarped)
 		{
-			if (type2) warper = new FWarp2Texture (warper);
-			else warper = new FWarpTexture (warper);
-
+			warper = new FWarpTexture (warper, type2? 2:1);
 			ReplaceTexture (picnum, warper, false);
 		}
 
@@ -868,7 +876,7 @@ FDoorAnimation *FTextureManager::FindAnimatedDoor (FTextureID picnum)
 //
 //==========================================================================
 
-void FAnimDef::SetSwitchTime (DWORD mstime)
+void FAnimDef::SetSwitchTime (uint32_t mstime)
 {
 	int speedframe = bDiscrete ? CurFrame : 0;
 
@@ -909,7 +917,7 @@ void FTextureManager::SetTranslation (FTextureID fromtexnum, FTextureID totexnum
 //
 //==========================================================================
 
-void FTextureManager::UpdateAnimations (DWORD mstime)
+void FTextureManager::UpdateAnimations (uint32_t mstime)
 {
 	for (unsigned int j = 0; j < mAnimations.Size(); ++j)
 	{
@@ -947,7 +955,7 @@ void FTextureManager::UpdateAnimations (DWORD mstime)
 				// select a random frame other than the current one
 				if (anim->NumFrames > 1)
 				{
-					WORD rndFrame = (WORD)pr_animatepictures(anim->NumFrames - 1);
+					uint16_t rndFrame = (uint16_t)pr_animatepictures(anim->NumFrames - 1);
 					if (rndFrame >= anim->CurFrame) rndFrame++;
 					anim->CurFrame = rndFrame;
 				}
@@ -992,17 +1000,13 @@ void FTextureManager::UpdateAnimations (DWORD mstime)
 //
 //==========================================================================
 
-template<> FArchive &operator<< (FArchive &arc, FDoorAnimation* &Doorani)
+template<> FSerializer &Serialize(FSerializer &arc, const char *key, FDoorAnimation *&p, FDoorAnimation **def)
 {
-	if (arc.IsStoring())
+	FTextureID tex = p? p->BaseTexture : FNullTextureID();
+	Serialize(arc, key, tex, def ? &(*def)->BaseTexture : nullptr);
+	if (arc.isReading())
 	{
-		arc << Doorani->BaseTexture;
-	}
-	else
-	{
-		FTextureID tex;
-		arc << tex;
-		Doorani = TexMan.FindAnimatedDoor(tex);
+		p = TexMan.FindAnimatedDoor(tex);
 	}
 	return arc;
 }

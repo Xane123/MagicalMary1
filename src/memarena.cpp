@@ -43,8 +43,6 @@
 #include "c_dispatch.h"
 #include "zstring.h"
 
-#define BLOCK_SIZE			(10*1024)
-
 struct FMemArena::Block
 {
 	Block *NextBlock;
@@ -74,10 +72,11 @@ static inline void *RoundPointer(void *ptr)
 //
 //==========================================================================
 
-FMemArena::FMemArena()
+FMemArena::FMemArena(size_t blocksize)
 {
 	TopBlock = NULL;
 	FreeBlocks = NULL;
+	BlockSize = blocksize;
 }
 
 //==========================================================================
@@ -149,6 +148,43 @@ void FMemArena::FreeAllBlocks()
 
 //==========================================================================
 //
+// FMemArena :: DumpInfo
+//
+// Prints some info about this arena
+//
+//==========================================================================
+
+void FMemArena::DumpInfo()
+{
+	size_t allocated = 0;
+	size_t used = 0;
+	for (auto block = TopBlock; block != NULL; block = block->NextBlock)
+	{
+		allocated += BlockSize;
+		used += BlockSize - ((char*)block->Limit - (char*)block->Avail);
+	}
+	Printf("%zu bytes allocated, %zu bytes in use\n", allocated, used);
+}
+
+//==========================================================================
+//
+// FMemArena :: DumpInfo
+//
+// Dumps the arena to a file (for debugging)
+//
+//==========================================================================
+
+void FMemArena::DumpData(FILE *f)
+{
+	for (auto block = TopBlock; block != NULL; block = block->NextBlock)
+	{
+		auto used = BlockSize - ((char*)block->Limit - (char*)block->Avail);
+		fwrite(block, 1, used, f);
+	}
+}
+
+//==========================================================================
+//
 // FMemArena :: FreeBlockChain
 //
 // Frees a chain of blocks.
@@ -182,7 +218,7 @@ FMemArena::Block *FMemArena::AddBlock(size_t size)
 	// Search for a free block to use
 	for (last = &FreeBlocks, mem = FreeBlocks; mem != NULL; last = &mem->NextBlock, mem = mem->NextBlock)
 	{
-		if ((BYTE *)mem->Limit - (BYTE *)mem >= (ptrdiff_t)size)
+		if ((uint8_t *)mem->Limit - (uint8_t *)mem >= (ptrdiff_t)size)
 		{
 			*last = mem->NextBlock;
 			break;
@@ -191,17 +227,17 @@ FMemArena::Block *FMemArena::AddBlock(size_t size)
 	if (mem == NULL)
 	{
 		// Allocate a new block
-		if (size < BLOCK_SIZE)
+		if (size < BlockSize)
 		{
-			size = BLOCK_SIZE;
+			size = BlockSize;
 		}
 		else
 		{ // Stick some free space at the end so we can use this block for
 		  // other things.
-			size += BLOCK_SIZE/2;
+			size += BlockSize/2;
 		}
 		mem = (Block *)M_Malloc(size);
-		mem->Limit = (BYTE *)mem + size;
+		mem->Limit = (uint8_t *)mem + size;
 	}
 	mem->Reset();
 	mem->NextBlock = TopBlock;
@@ -219,7 +255,7 @@ FMemArena::Block *FMemArena::AddBlock(size_t size)
 
 void FMemArena::Block::Reset()
 {
-	Avail = RoundPointer(this + sizeof(*this));
+	Avail = RoundPointer(reinterpret_cast<char*>(this) + sizeof(*this));
 }
 
 //==========================================================================

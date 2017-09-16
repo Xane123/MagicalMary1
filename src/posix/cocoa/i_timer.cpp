@@ -35,10 +35,7 @@
 #include <sys/sysctl.h>
 #include <sys/time.h>
 #include <pthread.h>
-#include <libkern/OSAtomic.h>
 
-#include "basictypes.h"
-#include "basicinlines.h"
 #include "doomdef.h"
 #include "i_system.h"
 #include "templates.h"
@@ -126,12 +123,7 @@ void* TimerThreadFunc(void*)
 
 		if (!s_isTicFrozen)
 		{
-			// The following GCC/Clang intrinsic can be used instead of OS X specific function:
-			// __sync_add_and_fetch(&s_tics, 1);
-			// Although it's not supported on all platform/compiler combination,
-			// e.g. GCC 4.0.1 with PowerPC target architecture
-
-			OSAtomicIncrement32(&s_tics);
+			__sync_add_and_fetch(&s_tics, 1);
 		}
 
 		s_timerStart = I_MSTime();
@@ -186,9 +178,17 @@ unsigned int I_FPSTime()
 }
 
 
-fixed_t I_GetTimeFrac(uint32* ms)
+static uint32_t FrameTime;
+
+void I_SetFrameTime()
 {
-	const uint32_t now = I_MSTime();
+	FrameTime = I_MSTime();
+}
+
+
+double I_GetTimeFrac(uint32_t* ms)
+{
+	const uint32_t now = FrameTime;
 
 	if (NULL != ms)
 	{
@@ -196,8 +196,8 @@ fixed_t I_GetTimeFrac(uint32* ms)
 	}
 
 	return 0 == s_ticStart
-		? FRACUNIT
-		: clamp<fixed_t>( (now - s_ticStart) * FRACUNIT * TICRATE / 1000, 0, FRACUNIT);
+		? 1.
+		: clamp<double>( (now - s_ticStart) * TICRATE / 1000., 0, 1);
 }
 
 

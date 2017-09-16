@@ -61,7 +61,7 @@
 
 #include "doomstat.h"
 #include "m_random.h"
-#include "farchive.h"
+#include "serializer.h"
 #include "b_bot.h"
 #include "m_png.h"
 #include "m_crc32.h"
@@ -94,10 +94,10 @@ extern FRandom pr_damagemobj;
 FRandom M_Random;
 
 // Global seed. This is modified predictably to initialize every RNG.
-DWORD rngseed;
+uint32_t rngseed;
 
 // Static RNG marker. This is only used when the RNG is set for each new game.
-DWORD staticrngseed;
+uint32_t staticrngseed;
 bool use_staticrng;
 
 // Allows checking or staticly setting the global seed.
@@ -156,6 +156,7 @@ FRandom::FRandom ()
 #endif
 	Next = RNGList;
 	RNGList = this;
+	Init(0);
 }
 
 //==========================================================================
@@ -168,7 +169,7 @@ FRandom::FRandom ()
 
 FRandom::FRandom (const char *name)
 {
-	NameCRC = CalcCRC32 ((const BYTE *)name, (unsigned int)strlen (name));
+	NameCRC = CalcCRC32 ((const uint8_t *)name, (unsigned int)strlen (name));
 #ifndef NDEBUG
 	initialized = false;
 	Name = name;
@@ -199,6 +200,7 @@ FRandom::FRandom (const char *name)
 
 	Next = probe;
 	*prev = this;
+	Init(0);
 }
 
 //==========================================================================
@@ -255,12 +257,12 @@ void FRandom::StaticClearRandom ()
 //
 //==========================================================================
 
-void FRandom::Init(DWORD seed)
+void FRandom::Init(uint32_t seed)
 {
 	// [RH] Use the RNG's name's CRC to modify the original seed.
 	// This way, new RNGs can be added later, and it doesn't matter
 	// which order they get initialized in.
-	DWORD seeds[2] = { NameCRC, seed };
+	uint32_t seeds[2] = { NameCRC, seed };
 	InitByArray(seeds, 2);
 }
 
@@ -268,13 +270,13 @@ void FRandom::Init(DWORD seed)
 //
 // FRandom :: StaticSumSeeds
 //
-// This function produces a DWORD that can be used to check the consistancy
+// This function produces a uint32_t that can be used to check the consistancy
 // of network games between different machines. Only a select few RNGs are
 // used for the sum, because not all RNGs are important to network sync.
 //
 //==========================================================================
 
-DWORD FRandom::StaticSumSeeds ()
+uint32_t FRandom::StaticSumSeeds ()
 {
 	return
 		pr_spawnmobj.sfmt.u[0] + pr_spawnmobj.idx +
@@ -291,24 +293,29 @@ DWORD FRandom::StaticSumSeeds ()
 //
 //==========================================================================
 
-void FRandom::StaticWriteRNGState (FILE *file)
+void FRandom::StaticWriteRNGState (FSerializer &arc)
 {
 	FRandom *rng;
-	FPNGChunkArchive arc (file, RAND_ID);
 
-	arc << rngseed;
+	arc("rngseed", rngseed);
 
-	for (rng = FRandom::RNGList; rng != NULL; rng = rng->Next)
+	if (arc.BeginArray("rngs"))
 	{
-		// Only write those RNGs that have names
-		if (rng->NameCRC != 0)
+		for (rng = FRandom::RNGList; rng != NULL; rng = rng->Next)
 		{
-			arc << rng->NameCRC << rng->idx;
-			for (int i = 0; i < SFMT::N32; ++i)
+			// Only write those RNGs that have names
+			if (rng->NameCRC != 0)
 			{
-				arc << rng->sfmt.u[i];
+				if (arc.BeginObject(nullptr))
+				{
+					arc("crc", rng->NameCRC)
+						("index", rng->idx)
+						.Array("u", rng->sfmt.u, SFMT::N32)
+						.EndObject();
+				}
 			}
 		}
+		arc.EndArray();
 	}
 }
 
@@ -321,51 +328,39 @@ void FRandom::StaticWriteRNGState (FILE *file)
 //
 //==========================================================================
 
-void FRandom::StaticReadRNGState (PNGHandle *png)
+void FRandom::StaticReadRNGState(FSerializer &arc)
 {
 	FRandom *rng;
 
-	size_t len = M_FindPNGChunk (png, RAND_ID);
+	arc("rngseed", rngseed);
 
-	if (len != 0)
+	// Call StaticClearRandom in order to ensure that SFMT is initialized
+	FRandom::StaticClearRandom ();
+
+	if (arc.BeginArray("rngs"))
 	{
-		const size_t sizeof_rng = sizeof(rng->NameCRC) + sizeof(rng->idx) + sizeof(rng->sfmt.u);
-		const int rngcount = (int)((len-4) / sizeof_rng);
-		int i;
-		DWORD crc;
+		int count = arc.ArraySize();
 
-		FPNGChunkArchive arc (png->File->GetFile(), RAND_ID, len);
-
-		arc << rngseed;
-		FRandom::StaticClearRandom ();
-
-		for (i = rngcount; i; --i)
+		for (int i = 0; i < count; i++)
 		{
-			arc << crc;
-			for (rng = FRandom::RNGList; rng != NULL; rng = rng->Next)
+			if (arc.BeginObject(nullptr))
 			{
-				if (rng->NameCRC == crc)
+				uint32_t crc;
+				arc("crc", crc);
+
+				for (rng = FRandom::RNGList; rng != NULL; rng = rng->Next)
 				{
-					arc << rng->idx;
-					for (int i = 0; i < SFMT::N32; ++i)
+					if (rng->NameCRC == crc)
 					{
-						arc << rng->sfmt.u[i];
+						arc("index", rng->idx)
+							.Array("u", rng->sfmt.u, SFMT::N32);
+						break;
 					}
-					break;
 				}
-			}
-			if (rng == NULL)
-			{ // The RNG was removed. Skip it.
-				int idx;
-				DWORD sfmt;
-				arc << idx;
-				for (int i = 0; i < SFMT::N32; ++i)
-				{
-					arc << sfmt;
-				}
+				arc.EndObject();
 			}
 		}
-		png->File->ResetFilePtr();
+		arc.EndArray();
 	}
 }
 
@@ -382,7 +377,7 @@ void FRandom::StaticReadRNGState (PNGHandle *png)
 
 FRandom *FRandom::StaticFindRNG (const char *name)
 {
-	DWORD NameCRC = CalcCRC32 ((const BYTE *)name, (unsigned int)strlen (name));
+	uint32_t NameCRC = CalcCRC32 ((const uint8_t *)name, (unsigned int)strlen (name));
 
 	// Use the default RNG if this one happens to have a CRC of 0.
 	if (NameCRC == 0) return &pr_exrandom;

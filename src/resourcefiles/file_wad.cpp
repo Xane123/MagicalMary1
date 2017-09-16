@@ -49,7 +49,7 @@ private:
 
 	FileReader &File;
 	bool SawEOF;
-	BYTE InBuff[BUFF_SIZE];
+	uint8_t InBuff[BUFF_SIZE];
 
 	enum StreamState
 	{
@@ -62,15 +62,15 @@ private:
 	{
 		StreamState State;
 
-		BYTE *In;
+		uint8_t *In;
 		unsigned int AvailIn;
 		unsigned int InternalOut;
 
-		BYTE CFlags, Bits;
+		uint8_t CFlags, Bits;
 
-		BYTE Window[WINDOW_SIZE+INTERNAL_BUFFER_SIZE];
-		const BYTE *WindowData;
-		BYTE *InternalBuffer;
+		uint8_t Window[WINDOW_SIZE+INTERNAL_BUFFER_SIZE];
+		const uint8_t *WindowData;
+		uint8_t *InternalBuffer;
 	} Stream;
 
 	void FillBuffer()
@@ -109,8 +109,8 @@ private:
 				return false;
 			Stream.AvailIn -= 2;
 
-			WORD pos = BigShort(*(WORD*)Stream.In);
-			BYTE len = (pos & 0xF)+1;
+			uint16_t pos = BigShort(*(uint16_t*)Stream.In);
+			uint8_t len = (pos & 0xF)+1;
 			pos >>= 4;
 			Stream.In += 2;
 			if(len == 1)
@@ -120,7 +120,7 @@ private:
 				return true;
 			}
 
-			const BYTE* copyStart = Stream.InternalBuffer-pos-1;
+			const uint8_t* copyStart = Stream.InternalBuffer-pos-1;
 
 			// Complete overlap: Single byte repeated
 			if(pos == 0)
@@ -182,7 +182,7 @@ public:
 	long Read(void *buffer, long len)
 	{
 
-		BYTE *Out = (BYTE*)buffer;
+		uint8_t *Out = (uint8_t*)buffer;
 		long AvailOut = len;
 
 		do
@@ -222,7 +222,7 @@ public:
 		while(AvailOut && Stream.State != STREAM_FINAL);
 
 		assert(AvailOut == 0);
-		return (long)(Out - (BYTE*)buffer);
+		return (long)(Out - (uint8_t*)buffer);
 	}
 };
 
@@ -329,7 +329,7 @@ FWadFile::~FWadFile()
 bool FWadFile::Open(bool quiet)
 {
 	wadinfo_t header;
-	DWORD InfoTableOfs;
+	uint32_t InfoTableOfs;
 	bool isBigEndian = false; // Little endian is assumed until proven otherwise
 	const long wadSize = Reader->GetLength();
 
@@ -358,7 +358,7 @@ bool FWadFile::Open(bool quiet)
 
 	Lumps = new FWadFileLump[NumLumps];
 
-	for(DWORD i = 0; i < NumLumps; i++)
+	for(uint32_t i = 0; i < NumLumps; i++)
 	{
 		uppercopy (Lumps[i].Name, fileinfo[i].Name);
 		Lumps[i].Name[8] = 0;
@@ -471,7 +471,7 @@ void FWadFile::SetNamespace(const char *startmarker, const char *endmarker, name
 				{
 					// We can't add this to the flats namespace but 
 					// it needs to be flagged for the texture manager.
-					DPrintf("Marking %s as potential flat\n", Lumps[i].Name);
+					DPrintf(DMSG_NOTIFY, "Marking %s as potential flat\n", Lumps[i].Name);
 					Lumps[i].Flags |= LUMPF_MAYBEFLAT;
 				}
 			}
@@ -517,7 +517,7 @@ void FWadFile::SetNamespace(const char *startmarker, const char *endmarker, name
 		}
 
 		// we found a marked block
-		DPrintf("Found %s block at (%d-%d)\n", startmarker, markers[start].index, end);
+		DPrintf(DMSG_NOTIFY, "Found %s block at (%d-%d)\n", startmarker, markers[start].index, end);
 		for(int j = markers[start].index + 1; j < end; j++)
 		{
 			if (Lumps[j].Namespace != ns_global)
@@ -534,7 +534,7 @@ void FWadFile::SetNamespace(const char *startmarker, const char *endmarker, name
 				// ignore sprite lumps smaller than 8 bytes (the smallest possible)
 				// in size -- this was used by some dmadds wads
 				// as an 'empty' graphics resource
-				DPrintf(" Skipped empty sprite %s (lump %d)\n", Lumps[j].Name, j);
+				DPrintf(DMSG_WARNING, " Skipped empty sprite %s (lump %d)\n", Lumps[j].Name, j);
 			}
 			else
 			{
@@ -563,7 +563,7 @@ void FWadFile::SkinHack ()
 	static int namespc = ns_firstskin;
 	bool skinned = false;
 	bool hasmap = false;
-	DWORD i;
+	uint32_t i;
 
 	for (i = 0; i < NumLumps; i++)
 	{
@@ -580,7 +580,7 @@ void FWadFile::SkinHack ()
 			if (!skinned)
 			{
 				skinned = true;
-				DWORD j;
+				uint32_t j;
 
 				for (j = 0; j < NumLumps; j++)
 				{
@@ -627,7 +627,7 @@ void FWadFile::SkinHack ()
 
 void FWadFile::FindStrifeTeaserVoices ()
 {
-	for (DWORD i = 0; i <= NumLumps; ++i)
+	for (uint32_t i = 0; i <= NumLumps; ++i)
 	{
 		if (Lumps[i].Name[0] == 'V' &&
 			Lumps[i].Name[1] == 'O' &&

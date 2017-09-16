@@ -40,12 +40,14 @@
 class FMemArena
 {
 public:
-	FMemArena();
+	FMemArena(size_t blocksize = 10*1024);
 	~FMemArena();
 
 	void *Alloc(size_t size);
 	void FreeAll();
 	void FreeAllBlocks();
+	void DumpInfo();
+	void DumpData(FILE *f);
 
 protected:
 	struct Block;
@@ -55,6 +57,7 @@ protected:
 
 	Block *TopBlock;
 	Block *FreeBlocks;
+	size_t BlockSize;
 };
 
 // An arena specializing in storage of FStrings. It knows how to free them,

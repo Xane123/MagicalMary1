@@ -1,21 +1,23 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
 //
-// $Log:$
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //		Default Config File.
@@ -32,6 +34,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "r_defs.h"
+
 #include "doomtype.h"
 #include "version.h"
 
@@ -40,6 +44,7 @@
 #else
 #include <unistd.h>
 #endif
+
 
 #include <ctype.h>
 
@@ -57,7 +62,6 @@
 #include "i_system.h"
 #include "i_video.h"
 #include "v_video.h"
-#include "r_defs.h"
 
 #include "hu_stuff.h"
 
@@ -114,19 +118,20 @@ bool M_WriteFile (char const *name, void *source, int length)
 //
 // M_ReadFile
 //
-int M_ReadFile (char const *name, BYTE **buffer)
+int M_ReadFile (char const *name, uint8_t **buffer)
 {
 	int handle, count, length;
 	struct stat fileinfo;
-	BYTE *buf;
+	uint8_t *buf;
 
 	handle = open (name, O_RDONLY | O_BINARY, 0666);
 	if (handle == -1)
 		I_Error ("Couldn't read file %s", name);
-	if (fstat (handle,&fileinfo) == -1)
+	// [BL] Use stat instead of fstat for v140_xp hack
+	if (stat (name,&fileinfo) == -1)
 		I_Error ("Couldn't read file %s", name);
 	length = fileinfo.st_size;
-	buf = new BYTE[length];
+	buf = new uint8_t[length];
 	count = read (handle, buf, length);
 	close (handle);
 
@@ -140,19 +145,20 @@ int M_ReadFile (char const *name, BYTE **buffer)
 //
 // M_ReadFile (same as above but use malloc instead of new to allocate the buffer.)
 //
-int M_ReadFileMalloc (char const *name, BYTE **buffer)
+int M_ReadFileMalloc (char const *name, uint8_t **buffer)
 {
 	int handle, count, length;
 	struct stat fileinfo;
-	BYTE *buf;
+	uint8_t *buf;
 
 	handle = open (name, O_RDONLY | O_BINARY, 0666);
 	if (handle == -1)
 		I_Error ("Couldn't read file %s", name);
-	if (fstat (handle,&fileinfo) == -1)
+	// [BL] Use stat instead of fstat for v140_xp hack
+	if (stat (name,&fileinfo) == -1)
 		I_Error ("Couldn't read file %s", name);
 	length = fileinfo.st_size;
-	buf = (BYTE*)M_Malloc(length);
+	buf = (uint8_t*)M_Malloc(length);
 	count = read (handle, buf, length);
 	close (handle);
 
@@ -227,7 +233,7 @@ void M_FindResponseFile (void)
 				ParseCommandLine (file, NULL, argv);
 
 				// Create a new argument vector
-				DArgs *newargs = new DArgs;
+				FArgs *newargs = new FArgs;
 
 				// Copy parameters before response file.
 				for (index = 0; index < i; ++index)
@@ -242,6 +248,7 @@ void M_FindResponseFile (void)
 					newargs->AppendArg(Args->GetArg(index));
 
 				// Use the new argument vector as the global Args object.
+				delete Args;
 				Args = newargs;
 				if (++added_stuff == limit)
 				{
@@ -425,42 +432,47 @@ void M_LoadDefaults ()
 
 struct pcx_t
 {
-	char				manufacturer;
-	char				version;
-	char				encoding;
-	char				bits_per_pixel;
+	int8_t				manufacturer;
+	int8_t				version;
+	int8_t				encoding;
+	int8_t				bits_per_pixel;
 
-	unsigned short		xmin;
-	unsigned short		ymin;
-	unsigned short		xmax;
-	unsigned short		ymax;
+	uint16_t			xmin;
+	uint16_t			ymin;
+	uint16_t			xmax;
+	uint16_t			ymax;
 	
-	unsigned short		hdpi;
-	unsigned short		vdpi;
+	uint16_t			hdpi;
+	uint16_t			vdpi;
 
-	unsigned char		palette[48];
+	uint8_t				palette[48];
 	
-	char				reserved;
-	char				color_planes;
-	unsigned short		bytes_per_line;
-	unsigned short		palette_type;
+	int8_t				reserved;
+	int8_t				color_planes;
+	uint16_t			bytes_per_line;
+	uint16_t			palette_type;
 	
-	char				filler[58];
+	int8_t				filler[58];
 };
 
+
+inline void putc(unsigned char chr, FileWriter *file)
+{
+	file->Write(&chr, 1);
+}
 
 //
 // WritePCXfile
 //
-void WritePCXfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
+void WritePCXfile (FileWriter *file, const uint8_t *buffer, const PalEntry *palette,
 				   ESSType color_type, int width, int height, int pitch)
 {
-	BYTE temprow[MAXWIDTH * 3];
-	const BYTE *data;
+	uint8_t temprow[MAXWIDTH * 3];
+	const uint8_t *data;
 	int x, y;
 	int runlen;
 	int bytes_per_row_minus_one;
-	BYTE color;
+	uint8_t color;
 	pcx_t pcx;
 
 	pcx.manufacturer = 10;				// PCX id
@@ -480,7 +492,7 @@ void WritePCXfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
 	pcx.palette_type = 1;				// not a grey scale
 	memset (pcx.filler, 0, sizeof(pcx.filler));
 
-	fwrite (&pcx, 128, 1, file);
+	file->Write(&pcx, 128);
 
 	bytes_per_row_minus_one = ((color_type == SS_PAL) ? width : width * 3) - 1;
 
@@ -593,7 +605,7 @@ void WritePCXfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
 //
 // WritePNGfile
 //
-void WritePNGfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
+void WritePNGfile (FileWriter *file, const uint8_t *buffer, const PalEntry *palette,
 				   ESSType color_type, int width, int height, int pitch)
 {
 	char software[100];
@@ -602,7 +614,7 @@ void WritePNGfile (FILE *file, const BYTE *buffer, const PalEntry *palette,
 		!M_AppendPNGText (file, "Software", software) ||
 		!M_FinishPNG (file))
 	{
-		Printf ("Picture couldn't be saved. If you pushed PRINTSCREEN, the picture's still in your clipboard!\n");
+		Printf ("Could not create screenshot.\n");
 	}
 }
 
@@ -627,21 +639,21 @@ static bool FindFreeName (FString &fullname, const char *extension)
 
 		if (tm == NULL)
 		{
-			lbmname.Format ("%sPicture #%04d.%s", fullname.GetChars(), i, extension);
+			lbmname.Format ("%sScreenshot_%s_%04d.%s", fullname.GetChars(), gamename, i, extension);
 		}
 		else if (i == 0)
 		{
-			lbmname.Format ("%sPicture_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(),
+			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				extension);
 		}
 		else
 		{
-			lbmname.Format ("%sPicture #%02d timedate %04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), i,
+			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
-				 extension);
+				i, extension);
 		}
 
 		if (!FileExists (lbmname.GetChars()))
@@ -655,7 +667,7 @@ static bool FindFreeName (FString &fullname, const char *extension)
 
 void M_ScreenShot (const char *filename)
 {
-	FILE *file;
+	FileWriter *file;
 	FString autoname;
 	bool writepcx = (stricmp (screenshot_type, "pcx") == 0);	// PNG is the default
 
@@ -696,7 +708,7 @@ void M_ScreenShot (const char *filename)
 	}
 
 	// save the screenshot
-	const BYTE *buffer;
+	const uint8_t *buffer;
 	int pitch;
 	ESSType color_type;
 
@@ -709,7 +721,7 @@ void M_ScreenShot (const char *filename)
 		{
 			screen->GetFlashedPalette(palette);
 		}
-		file = fopen (autoname, "wb");
+		file = FileWriter::Open(autoname);
 		if (file == NULL)
 		{
 			Printf ("Could not open %s\n", autoname.GetChars());
@@ -726,7 +738,7 @@ void M_ScreenShot (const char *filename)
 			WritePNGfile(file, buffer, palette, color_type,
 				screen->GetWidth(), screen->GetHeight(), pitch);
 		}
-		fclose(file);
+		delete file;
 		screen->ReleaseScreenshotBuffer();
 
 		if (!screenshot_quiet)

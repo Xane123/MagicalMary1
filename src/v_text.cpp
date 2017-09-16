@@ -46,13 +46,20 @@
 
 #include "doomstat.h"
 #include "templates.h"
+#include "gstrings.h"
+#include "vm.h"
 
+int ListGetInt(VMVa_List &tags);
+
+//==========================================================================
 //
 // DrawChar
 //
 // Write a single character using the given font
 //
-void STACK_ARGS DCanvas::DrawChar (FFont *font, int normalcolor, int x, int y, BYTE character, ...)
+//==========================================================================
+
+void DCanvas::DrawChar (FFont *font, int normalcolor, double x, double y, int character, int tag_first, ...)
 {
 	if (font == NULL)
 		return;
@@ -65,148 +72,103 @@ void STACK_ARGS DCanvas::DrawChar (FFont *font, int normalcolor, int x, int y, B
 
 	if (NULL != (pic = font->GetChar (character, &dummy)))
 	{
-		const FRemapTable *range = font->GetColorTranslation ((EColorRange)normalcolor);
-		va_list taglist;
-		va_start (taglist, character);
-		DrawTexture (pic, x, y, DTA_Translation, range, TAG_MORE, &taglist);
-		va_end (taglist);
+		DrawParms parms;
+		Va_List tags;
+		va_start(tags.list, tag_first);
+		bool res = ParseDrawTextureTags(pic, x, y, tag_first, tags, &parms, false);
+		va_end(tags.list);
+		if (!res)
+		{
+			return;
+		}
+		PalEntry color = 0xffffffff;
+		parms.remap = font->GetColorTranslation((EColorRange)normalcolor, &color);
+		parms.color = PalEntry((color.a * parms.color.a) / 255, (color.r * parms.color.r) / 255, (color.g * parms.color.g) / 255, (color.b * parms.color.b) / 255);
+		DrawTextureParms(pic, parms);
 	}
 }
 
+void DCanvas::DrawChar(FFont *font, int normalcolor, double x, double y, int character, VMVa_List &args)
+{
+	if (font == NULL)
+		return;
+
+	if (normalcolor >= NumTextColors)
+		normalcolor = CR_UNTRANSLATED;
+
+	FTexture *pic;
+	int dummy;
+
+	if (NULL != (pic = font->GetChar(character, &dummy)))
+	{
+		DrawParms parms;
+		uint32_t tag = ListGetInt(args);
+		bool res = ParseDrawTextureTags(pic, x, y, tag, args, &parms, false);
+		if (!res) return;
+		PalEntry color = 0xffffffff;
+		parms.remap = font->GetColorTranslation((EColorRange)normalcolor, &color);
+		parms.color = PalEntry((color.a * parms.color.a) / 255, (color.r * parms.color.r) / 255, (color.g * parms.color.g) / 255, (color.b * parms.color.b) / 255);
+		DrawTextureParms(pic, parms);
+	}
+}
+
+DEFINE_ACTION_FUNCTION(_Screen, DrawChar)
+{
+	PARAM_PROLOGUE;
+	PARAM_POINTER(font, FFont);
+	PARAM_INT(cr);
+	PARAM_FLOAT(x);
+	PARAM_FLOAT(y);
+	PARAM_INT(chr);
+
+	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to draw to screen outside a draw function");
+	VMVa_List args = { param + 5, 0, numparam - 5 };
+	screen->DrawChar(font, cr, x, y, chr, args);
+	return 0;
+}
+
+//==========================================================================
 //
 // DrawText
 //
 // Write a string using the given font
 //
-void DCanvas::DrawTextV(FFont *font, int normalcolor, int x, int y, const char *string, va_list taglist)
-{
-	INTBOOL boolval;
-	va_list tags;
-	uint32 tag;
+//==========================================================================
 
-	int			maxstrlen = INT_MAX;
-	int 		w, maxwidth;
-	const BYTE *ch;
+void DCanvas::DrawTextCommon(FFont *font, int normalcolor, double x, double y, const char *string, DrawParms &parms)
+{
+	int 		w;
+	const uint8_t *ch;
 	int 		c;
-	int 		cx;
-	int 		cy;
+	double 		cx;
+	double 		cy;
 	int			boldcolor;
-	const FRemapTable *range;
-	int			height;
-	int			forcedwidth = 0;
-	int			scalex, scaley;
+	FRemapTable *range;
 	int			kerning;
 	FTexture *pic;
 
-	if (font == NULL || string == NULL)
-		return;
+	assert(string[0] != '$');
+
+	if (parms.celly == 0) parms.celly = font->GetHeight() + 1;
+	parms.celly *= parms.scaley;
 
 	if (normalcolor >= NumTextColors)
 		normalcolor = CR_UNTRANSLATED;
 	boldcolor = normalcolor ? normalcolor - 1 : NumTextColors - 1;
 
-	range = font->GetColorTranslation ((EColorRange)normalcolor);
-	height = font->GetHeight () + 1;
-	kerning = font->GetDefaultKerning ();
+	PalEntry colorparm = parms.color;
+	PalEntry color = 0xffffffff;
+	range = font->GetColorTranslation((EColorRange)normalcolor, &color);
+	parms.color = PalEntry(colorparm.a, (color.r * colorparm.r) / 255, (color.g * colorparm.g) / 255, (color.b * colorparm.b) / 255);
 
-	ch = (const BYTE *)string;
+	kerning = font->GetDefaultKerning();
+
+	ch = (const uint8_t *)string;
 	cx = x;
 	cy = y;
 
-	// Parse the tag list to see if we need to adjust for scaling.
- 	maxwidth = Width;
-	scalex = scaley = 1;
 
-#ifndef NO_VA_COPY
-	va_copy(tags, taglist);
-#else
-	tags = taglist;
-#endif
-	tag = va_arg(tags, uint32);
-
-	while (tag != TAG_DONE)
-	{
-		va_list *more_p;
-		DWORD data;
-
-		switch (tag)
-		{
-		case TAG_IGNORE:
-		default:
-			data = va_arg (tags, DWORD);
-			break;
-
-		case TAG_MORE:
-			more_p = va_arg (tags, va_list*);
-			va_end (tags);
-#ifndef NO_VA_COPY
-			va_copy (tags, *more_p);
-#else
-			tags = *more_p;
-#endif
-			break;
-
-		// We don't handle these. :(
-		case DTA_DestWidth:
-		case DTA_DestHeight:
-		case DTA_Translation:
-			assert("Bad parameter for DrawText" && false);
-			return;
-
-		case DTA_CleanNoMove_1:
-			boolval = va_arg (tags, INTBOOL);
-			if (boolval)
-			{
-				scalex = CleanXfac_1;
-				scaley = CleanYfac_1;
-				maxwidth = Width - (Width % scalex);
-			}
-			break;
-
-		case DTA_CleanNoMove:
-			boolval = va_arg (tags, INTBOOL);
-			if (boolval)
-			{
-				scalex = CleanXfac;
-				scaley = CleanYfac;
-				maxwidth = Width - (Width % scalex);
-			}
-			break;
-
-		case DTA_Clean:
-		case DTA_320x200:
-			boolval = va_arg (tags, INTBOOL);
-			if (boolval)
-			{
-				scalex = scaley = 1;
-				maxwidth = 320;
-			}
-			break;
-
-		case DTA_VirtualWidth:
-			maxwidth = va_arg (tags, int);
-			scalex = scaley = 1;
-			break;
-
-		case DTA_TextLen:
-			maxstrlen = va_arg (tags, int);
-			break;
-
-		case DTA_CellX:
-			forcedwidth = va_arg (tags, int);
-			break;
-
-		case DTA_CellY:
-			height = va_arg (tags, int);
-			break;
-		}
-		tag = va_arg (tags, uint32);
-	}
-	va_end(tags);
-
-	height *= scaley;
-		
-	while ((const char *)ch - string < maxstrlen)
+	while ((const char *)ch - string < parms.maxstrlen)
 	{
 		c = *ch++;
 		if (!c)
@@ -214,111 +176,96 @@ void DCanvas::DrawTextV(FFont *font, int normalcolor, int x, int y, const char *
 
 		if (c == TEXTCOLOR_ESCAPE)
 		{
-			EColorRange newcolor = V_ParseFontColor (ch, normalcolor, boldcolor);
+			EColorRange newcolor = V_ParseFontColor(ch, normalcolor, boldcolor);
 			if (newcolor != CR_UNDEFINED)
 			{
-				range = font->GetColorTranslation (newcolor);
+				range = font->GetColorTranslation(newcolor, &color);
+				parms.color = PalEntry(colorparm.a, (color.r * colorparm.r) / 255, (color.g * colorparm.g) / 255, (color.b * colorparm.b) / 255);
 			}
 			continue;
 		}
-		
+
 		if (c == '\n')
 		{
 			cx = x;
-			cy += height;
+			cy += parms.celly;
 			continue;
 		}
 
-		if (NULL != (pic = font->GetChar (c, &w)))
+		if (NULL != (pic = font->GetChar(c, &w)))
 		{
-#ifndef NO_VA_COPY
-			va_copy(tags, taglist);
-#else
-			tags = taglist;
-#endif
-			if (forcedwidth)
+			parms.remap = range;
+			SetTextureParms(&parms, pic, cx, cy);
+			if (parms.cellx)
 			{
-				w = forcedwidth;
-				DrawTexture (pic, cx, cy,
-					DTA_Translation, range,
-					DTA_DestWidth, forcedwidth,
-					DTA_DestHeight, height,
-					TAG_MORE, &tags);
+				w = parms.cellx;
+				parms.destwidth = parms.cellx;
+				parms.destheight = parms.celly;
 			}
-			else
-			{
-				DrawTexture (pic, cx, cy,
-					DTA_Translation, range,
-					TAG_MORE, &tags);
-			}
-			va_end (tags);
+			DrawTextureParms(pic, parms);
 		}
-		cx += (w + kerning) * scalex;
+		cx += (w + kerning) * parms.scalex;
 	}
-	va_end(taglist);
 }
 
-void STACK_ARGS DCanvas::DrawText (FFont *font, int normalcolor, int x, int y, const char *string, ...)
+void DCanvas::DrawText(FFont *font, int normalcolor, double x, double y, const char *string, int tag_first, ...)
 {
-	va_list tags;
-	va_start(tags, string);
-	DrawTextV(font, normalcolor, x, y, string, tags);
-}
+	Va_List tags;
+	DrawParms parms;
 
-// A synonym so that this can still be used in files that #include Windows headers
-void STACK_ARGS DCanvas::DrawTextA (FFont *font, int normalcolor, int x, int y, const char *string, ...)
-{
-	va_list tags;
-	va_start(tags, string);
-	DrawTextV(font, normalcolor, x, y, string, tags);
-}
+	if (font == NULL || string == NULL)
+		return;
 
-//
-// Find string width using this font
-//
-int FFont::StringWidth (const BYTE *string) const
-{
-	int w = 0;
-	int maxw = 0;
-		
-	while (*string)
+	va_start(tags.list, tag_first);
+	bool res = ParseDrawTextureTags(nullptr, 0, 0, tag_first, tags, &parms, true);
+	va_end(tags.list);
+	if (!res)
 	{
-		if (*string == TEXTCOLOR_ESCAPE)
-		{
-			++string;
-			if (*string == '[')
-			{
-				while (*string != '\0' && *string != ']')
-				{
-					++string;
-				}
-			}
-			if (*string != '\0')
-			{
-				++string;
-			}
-			continue;
-		}
-		else if (*string == '\n')
-		{
-			if (w > maxw)
-				maxw = w;
-			w = 0;
-			++string;
-		}
-		else
-		{
-			w += GetCharWidth (*string++) + GlobalKerning;
-		}
+		return;
 	}
-				
-	return MAX (maxw, w);
+	DrawTextCommon(font, normalcolor, x, y, string, parms);
 }
 
+void DCanvas::DrawText(FFont *font, int normalcolor, double x, double y, const char *string, VMVa_List &args)
+{
+	DrawParms parms;
+
+	if (font == NULL || string == NULL)
+		return;
+
+	uint32_t tag = ListGetInt(args);
+	bool res = ParseDrawTextureTags(nullptr, 0, 0, tag, args, &parms, true);
+	if (!res)
+	{
+		return;
+	}
+	DrawTextCommon(font, normalcolor, x, y, string, parms);
+}
+
+DEFINE_ACTION_FUNCTION(_Screen, DrawText)
+{
+	PARAM_PROLOGUE;
+	PARAM_POINTER(font, FFont);
+	PARAM_INT(cr);
+	PARAM_FLOAT(x);
+	PARAM_FLOAT(y);
+	PARAM_STRING(chr);
+
+	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to draw to screen outside a draw function");
+	VMVa_List args = { param + 5, 0, numparam - 5 };
+	const char *txt = chr[0] == '$' ? GStrings(&chr[1]) : chr.GetChars();
+	screen->DrawText(font, cr, x, y, txt, args);
+	return 0;
+}
+
+
+//==========================================================================
 //
 // Break long lines of text into multiple lines no longer than maxwidth pixels
 //
-static void breakit (FBrokenLines *line, FFont *font, const BYTE *start, const BYTE *stop, FString &linecolor)
+//==========================================================================
+
+static void breakit (FBrokenLines *line, FFont *font, const uint8_t *start, const uint8_t *stop, FString &linecolor)
 {
 	if (!linecolor.IsEmpty())
 	{
@@ -329,20 +276,19 @@ static void breakit (FBrokenLines *line, FFont *font, const BYTE *start, const B
 	line->Width = font->StringWidth (line->Text);
 }
 
-FBrokenLines *V_BreakLines (FFont *font, int maxwidth, const BYTE *string, bool preservecolor)
+FBrokenLines *V_BreakLines (FFont *font, int maxwidth, const uint8_t *string, bool preservecolor, unsigned int *count)
 {
-	FBrokenLines lines[128];	// Support up to 128 lines (should be plenty)
+	TArray<FBrokenLines> Lines(128);
 
-	const BYTE *space = NULL, *start = string;
-	size_t i, ii;
+	const uint8_t *space = NULL, *start = string;
 	int c, w, nw;
 	FString lastcolor, linecolor;
 	bool lastWasSpace = false;
 	int kerning = font->GetDefaultKerning ();
 
-	i = w = 0;
+	w = 0;
 
-	while ( (c = *string++) && i < countof(lines) )
+	while ( (c = *string++) )
 	{
 		if (c == TEXTCOLOR_ESCAPE)
 		{
@@ -350,7 +296,7 @@ FBrokenLines *V_BreakLines (FFont *font, int maxwidth, const BYTE *string, bool 
 			{
 				if (*string == '[')
 				{
-					const BYTE *start = string;
+					const uint8_t *start = string;
 					while (*string != ']' && *string != '\0')
 					{
 						string++;
@@ -389,14 +335,14 @@ FBrokenLines *V_BreakLines (FFont *font, int maxwidth, const BYTE *string, bool 
 			if (!space)
 				space = string - 1;
 
-			breakit (&lines[i], font, start, space, linecolor);
+			auto index = Lines.Reserve(1);
+			breakit (&Lines[index], font, start, space, linecolor);
 			if (c == '\n' && !preservecolor)
 			{
 				lastcolor = "";		// Why, oh why, did I do it like this?
 			}
 			linecolor = lastcolor;
 
-			i++;
 			w = 0;
 			lastWasSpace = false;
 			start = space;
@@ -418,29 +364,34 @@ FBrokenLines *V_BreakLines (FFont *font, int maxwidth, const BYTE *string, bool 
 	}
 
 	// String here is pointing one character after the '\0'
-	if (i < countof(lines) && --string - start >= 1)
+	if (--string - start >= 1)
 	{
-		const BYTE *s = start;
+		const uint8_t *s = start;
 
 		while (s < string)
 		{
 			// If there is any non-white space in the remainder of the string, add it.
 			if (!isspace (*s++))
 			{
-				breakit (&lines[i++], font, start, string, linecolor);
+				auto i = Lines.Reserve(1);
+				breakit (&Lines[i], font, start, string, linecolor);
 				break;
 			}
 		}
 	}
 
 	// Make a copy of the broken lines and return them
-	FBrokenLines *broken = new FBrokenLines[i+1];
+	FBrokenLines *broken = new FBrokenLines[Lines.Size() + 1];
 
-	for (ii = 0; ii < i; ++ii)
+	for (unsigned ii = 0; ii < Lines.Size(); ++ii)
 	{
-		broken[ii] = lines[ii];
+		broken[ii] = Lines[ii];
 	}
-	broken[ii].Width = -1;
+	broken[Lines.Size()].Width = -1;
+	if (count != nullptr)
+	{
+		*count = Lines.Size();
+	}
 
 	return broken;
 }
@@ -451,4 +402,57 @@ void V_FreeBrokenLines (FBrokenLines *lines)
 	{
 		delete[] lines;
 	}
+}
+
+class DBrokenLines : public DObject
+{
+	DECLARE_ABSTRACT_CLASS(DBrokenLines, DObject)
+
+public:
+	FBrokenLines *mBroken;
+	unsigned int mCount;
+
+	DBrokenLines(FBrokenLines *broken, unsigned int count)
+	{
+		mBroken = broken;
+		mCount = count;
+	}
+
+	void OnDestroy() override
+	{
+		V_FreeBrokenLines(mBroken);
+	}
+};
+
+IMPLEMENT_CLASS(DBrokenLines, true, false);
+
+DEFINE_ACTION_FUNCTION(DBrokenLines, Count)
+{
+	PARAM_SELF_PROLOGUE(DBrokenLines);
+	ACTION_RETURN_INT(self->mCount);
+}
+
+DEFINE_ACTION_FUNCTION(DBrokenLines, StringWidth)
+{
+	PARAM_SELF_PROLOGUE(DBrokenLines);
+	PARAM_INT(index);
+	ACTION_RETURN_INT((unsigned)index >= self->mCount? -1 : self->mBroken[index].Width);
+}
+
+DEFINE_ACTION_FUNCTION(DBrokenLines, StringAt)
+{
+	PARAM_SELF_PROLOGUE(DBrokenLines);
+	PARAM_INT(index);
+	ACTION_RETURN_STRING((unsigned)index >= self->mCount? -1 : self->mBroken[index].Text);
+}
+
+DEFINE_ACTION_FUNCTION(FFont, BreakLines)
+{
+	PARAM_SELF_STRUCT_PROLOGUE(FFont);
+	PARAM_STRING(text);
+	PARAM_INT(maxwidth);
+
+	unsigned int count;
+	FBrokenLines *broken = V_BreakLines(self, maxwidth, text, true, &count);
+	ACTION_RETURN_OBJECT(Create<DBrokenLines>(broken, count));
 }

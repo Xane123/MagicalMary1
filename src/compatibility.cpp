@@ -52,6 +52,8 @@
 #include "p_tags.h"
 #include "r_state.h"
 #include "w_wad.h"
+#include "textures.h"
+#include "g_levellocals.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -60,7 +62,7 @@
 struct FCompatOption
 {
 	const char *Name;
-	DWORD CompatFlags;
+	uint32_t CompatFlags;
 	int WhichSlot;
 };
 
@@ -79,11 +81,17 @@ enum
 	CP_SETSPECIAL,
 	CP_CLEARSPECIAL,
 	CP_SETACTIVATION,
-	CP_SECTORFLOOROFFSET,
+	CP_SETSECTOROFFSET,
+	CP_SETSECTORSPECIAL,
 	CP_SETWALLYSCALE,
+	CP_SETWALLTEXTURE,
 	CP_SETTHINGZ,
 	CP_SETTAG,
 	CP_SETTHINGFLAGS,
+	CP_SETVERTEX,
+	CP_SETTHINGSKILLS,
+	CP_SETSECTORTEXTURE,
+	CP_SETSECTORLIGHT,
 };
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
@@ -109,8 +117,9 @@ static FCompatOption Options[] =
 	{ "ignoreteleporttags",		BCOMPATF_BADTELEPORTERS, SLOT_BCOMPAT },
 	{ "rebuildnodes",			BCOMPATF_REBUILDNODES, SLOT_BCOMPAT },
 	{ "linkfrozenprops",		BCOMPATF_LINKFROZENPROPS, SLOT_BCOMPAT },
-	{ "disablepushwindowcheck",	BCOMPATF_NOWINDOWCHECK, SLOT_BCOMPAT },
 	{ "floatbob",				BCOMPATF_FLOATBOB, SLOT_BCOMPAT },
+	{ "noslopeid",				BCOMPATF_NOSLOPEID, SLOT_BCOMPAT },
+	{ "clipmidtex",				BCOMPATF_CLIPMIDTEX, SLOT_BCOMPAT },
 
 	// list copied from g_mapinfo.cpp
 	{ "shorttex",				COMPATF_SHORTTEX, SLOT_COMPAT },
@@ -147,7 +156,8 @@ static FCompatOption Options[] =
 	{ "soundcutoff",			COMPATF2_SOUNDCUTOFF, SLOT_COMPAT2 },
 	{ "pointonline",			COMPATF2_POINTONLINE, SLOT_COMPAT2 },
 	{ "multiexit",				COMPATF2_MULTIEXIT, SLOT_COMPAT2 },
-
+	{ "teleport",				COMPATF2_TELEPORT, SLOT_COMPAT2 },
+	{ "disablepushwindowcheck",	COMPATF2_PUSHWINDOW, SLOT_COMPAT2 },
 	{ NULL, 0, 0 }
 };
 
@@ -161,8 +171,14 @@ static const char *const WallTiers[] =
 	"Top", "Mid", "Bot", NULL
 };
 
+static const char *const SectorPlanes[] =
+{
+	"floor", "ceil", NULL
+};
+
 static TArray<int> CompatParams;
 static int ii_compatparams;
+static TArray<FString> TexNames;
 
 // CODE --------------------------------------------------------------------
 
@@ -283,14 +299,25 @@ void ParseCompatibility()
 				sc.MustGetNumber();
 				CompatParams.Push(sc.Number);
 			}
-			else if (sc.Compare("sectorflooroffset"))
+			else if (sc.Compare("setsectoroffset"))
 			{
 				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
-				CompatParams.Push(CP_SECTORFLOOROFFSET);
+				CompatParams.Push(CP_SETSECTOROFFSET);
 				sc.MustGetNumber();
 				CompatParams.Push(sc.Number);
+				sc.MustGetString();
+				CompatParams.Push(sc.MustMatchString(SectorPlanes));
 				sc.MustGetFloat();
-				CompatParams.Push(FLOAT2FIXED(sc.Float));
+				CompatParams.Push(int(sc.Float*65536.));
+			}
+			else if (sc.Compare("setsectorspecial"))
+			{
+				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
+				CompatParams.Push(CP_SETSECTORSPECIAL);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
 			}
 			else if (sc.Compare("setwallyscale"))
 			{
@@ -303,7 +330,27 @@ void ParseCompatibility()
 				sc.MustGetString();
 				CompatParams.Push(sc.MustMatchString(WallTiers));
 				sc.MustGetFloat();
-				CompatParams.Push(FLOAT2FIXED(sc.Float));
+				CompatParams.Push(int(sc.Float*65536.));
+			}
+			else if (sc.Compare("setwalltexture"))
+			{
+				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
+				CompatParams.Push(CP_SETWALLTEXTURE);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+				sc.MustGetString();
+				CompatParams.Push(sc.MustMatchString(LineSides));
+				sc.MustGetString();
+				CompatParams.Push(sc.MustMatchString(WallTiers));
+				sc.MustGetString();
+				const FString texName = sc.String;
+				const unsigned int texIndex = TexNames.Find(texName);
+				const unsigned int texCount = TexNames.Size();
+				if (texIndex == texCount)
+				{
+					TexNames.Push(texName);
+				}
+				CompatParams.Push(texIndex);
 			}
 			else if (sc.Compare("setthingz"))
 			{
@@ -312,7 +359,7 @@ void ParseCompatibility()
 				sc.MustGetNumber();
 				CompatParams.Push(sc.Number);
 				sc.MustGetFloat();
-				CompatParams.Push(FLOAT2FIXED(sc.Float));
+				CompatParams.Push(int(sc.Float*256));	// do not use full fixed here so that it can eventually handle larger levels
 			}
 			else if (sc.Compare("setsectortag"))
 			{
@@ -332,7 +379,55 @@ void ParseCompatibility()
 				sc.MustGetNumber();
 				CompatParams.Push(sc.Number);
 			}
-			else 
+			else if (sc.Compare("setvertex"))
+			{
+				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
+				CompatParams.Push(CP_SETVERTEX);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+				sc.MustGetFloat();
+				CompatParams.Push(int(sc.Float * 256));	// do not use full fixed here so that it can eventually handle larger levels
+				sc.MustGetFloat();
+				CompatParams.Push(int(sc.Float * 256));	// do not use full fixed here so that it can eventually handle larger levels
+				flags.CompatFlags[SLOT_BCOMPAT] |= BCOMPATF_REBUILDNODES;
+			}
+			else if (sc.Compare("setthingskills"))
+			{
+				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
+				CompatParams.Push(CP_SETTHINGSKILLS);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+			}
+			else if (sc.Compare("setsectortexture"))
+			{
+				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
+				CompatParams.Push(CP_SETSECTORTEXTURE);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+				sc.MustGetString();
+				CompatParams.Push(sc.MustMatchString(SectorPlanes));
+				sc.MustGetString();
+				const FString texName = sc.String;
+				const unsigned int texIndex = TexNames.Find(texName);
+				const unsigned int texCount = TexNames.Size();
+				if (texIndex == texCount)
+				{
+					TexNames.Push(texName);
+				}
+				CompatParams.Push(texIndex);
+			}
+			else if (sc.Compare("setsectorlight"))
+			{
+				if (flags.ExtCommandIndex == ~0u) flags.ExtCommandIndex = CompatParams.Size();
+				CompatParams.Push(CP_SETSECTORLIGHT);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+				sc.MustGetNumber();
+				CompatParams.Push(sc.Number);
+			}
+			else
 			{
 				sc.UnGet();
 				break;
@@ -361,7 +456,11 @@ void CheckCompatibility(MapData *map)
 {
 	FMD5Holder md5;
 	FCompatValues *flags;
-	bool onlyparams = true;
+
+	ii_compatflags = 0;
+	ii_compatflags2 = 0;
+	ib_compatflags = 0;
+	ii_compatparams = -1;
 
 	// When playing Doom IWAD levels force COMPAT_SHORTTEX and COMPATF_LIGHT.
 	// I'm not sure if the IWAD maps actually need COMPATF_LIGHT but it certainly does not hurt.
@@ -370,34 +469,13 @@ void CheckCompatibility(MapData *map)
 	{
 		ii_compatflags = COMPATF_SHORTTEX|COMPATF_LIGHT;
 		if (gameinfo.flags & GI_COMPATSTAIRS) ii_compatflags |= COMPATF_STAIRINDEX;
-		ii_compatflags2 = 0;
-		ib_compatflags = 0;
-		ii_compatparams = -1;
-	}
-	else if (Wads.GetLumpFile(map->lumpnum) == 1 && (gameinfo.flags & GI_COMPATPOLY1) && Wads.CheckLumpName(map->lumpnum, "MAP36"))
-	{
-		ii_compatflags = COMPATF_POLYOBJ;
-		ii_compatflags2 = 0;
-		ib_compatflags = 0;
-		ii_compatparams = -1;
-	}
-	else if (Wads.GetLumpFile(map->lumpnum) == 2 && (gameinfo.flags & GI_COMPATPOLY2) && Wads.CheckLumpName(map->lumpnum, "MAP47"))
-	{
-		ii_compatflags = COMPATF_POLYOBJ;
-		ii_compatflags2 = 0;
-		ib_compatflags = 0;
-		ii_compatparams = -1;
-	}
-	else
-	{
-		onlyparams = false;
 	}
 
 	map->GetChecksum(md5.Bytes);
 
 	flags = BCompatMap.CheckKey(md5);
 
-	if (developer)
+	if (developer >= DMSG_NOTIFY)
 	{
 		Printf("MD5 = ");
 		for (size_t j = 0; j < sizeof(md5.Bytes); ++j)
@@ -417,24 +495,12 @@ void CheckCompatibility(MapData *map)
 
 	if (flags != NULL)
 	{
-		if (!onlyparams)
-		{
-			ii_compatflags = flags->CompatFlags[SLOT_COMPAT];
-			ii_compatflags2 = flags->CompatFlags[SLOT_COMPAT2];
-			ib_compatflags = flags->CompatFlags[SLOT_BCOMPAT];
-		}
+		ii_compatflags |= flags->CompatFlags[SLOT_COMPAT];
+		ii_compatflags2 |= flags->CompatFlags[SLOT_COMPAT2];
+		ib_compatflags |= flags->CompatFlags[SLOT_BCOMPAT];
 		ii_compatparams = flags->ExtCommandIndex;
 	}
-	else
-	{
-		if (!onlyparams)
-		{
-			ii_compatflags = 0;
-			ii_compatflags2 = 0;
-			ib_compatflags = 0;
-		}
-		ii_compatparams = -1;
-	}
+
 	// Reset i_compatflags
 	compatflags.Callback();
 	compatflags2.Callback();
@@ -463,9 +529,9 @@ void SetCompatibilityParams()
 			{
 				case CP_CLEARFLAGS:
 				{
-					if (CompatParams[i+1] < numlines)
+					if ((unsigned)CompatParams[i+1] < level.lines.Size())
 					{
-						line_t *line = &lines[CompatParams[i+1]];
+						line_t *line = &level.lines[CompatParams[i+1]];
 						line->flags &= ~CompatParams[i+2];
 					}
 					i+=3;
@@ -473,9 +539,9 @@ void SetCompatibilityParams()
 				}
 				case CP_SETFLAGS:
 				{
-					if (CompatParams[i+1] < numlines)
+					if ((unsigned)CompatParams[i+1] < level.lines.Size())
 					{
-						line_t *line = &lines[CompatParams[i+1]];
+						line_t *line = &level.lines[CompatParams[i+1]];
 						line->flags |= CompatParams[i+2];
 					}
 					i+=3;
@@ -483,9 +549,9 @@ void SetCompatibilityParams()
 				}
 				case CP_SETSPECIAL:
 				{
-					if (CompatParams[i+1] < numlines)
+					if ((unsigned)CompatParams[i+1] < level.lines.Size())
 					{
-						line_t *line = &lines[CompatParams[i+1]];
+						line_t *line = &level.lines[CompatParams[i+1]];
 						line->special = CompatParams[i+2];
 						for(int ii=0;ii<5;ii++)
 						{
@@ -497,9 +563,9 @@ void SetCompatibilityParams()
 				}
 				case CP_CLEARSPECIAL:
 				{
-					if (CompatParams[i+1] < numlines)
+					if ((unsigned)CompatParams[i+1] < level.lines.Size())
 					{
-						line_t *line = &lines[CompatParams[i+1]];
+						line_t *line = &level.lines[CompatParams[i+1]];
 						line->special = 0;
 						memset(line->args, 0, sizeof(line->args));
 					}
@@ -508,33 +574,62 @@ void SetCompatibilityParams()
 				}
 				case CP_SETACTIVATION:
 				{
-					if (CompatParams[i+1] < numlines)
+					if ((unsigned)CompatParams[i+1] < level.lines.Size())
 					{
-						line_t *line = &lines[CompatParams[i+1]];
+						line_t *line = &level.lines[CompatParams[i+1]];
 						line->activation = CompatParams[i+2];
 					}
 					i += 3;
 					break;
 				}
-				case CP_SECTORFLOOROFFSET:
+				case CP_SETSECTOROFFSET:
 				{
-					if (CompatParams[i+1] < numsectors)
+					if ((unsigned)CompatParams[i+1] < level.sectors.Size())
 					{
-						sector_t *sec = &sectors[CompatParams[i+1]];
-						sec->floorplane.ChangeHeight(CompatParams[i+2]);
-						sec->ChangePlaneTexZ(sector_t::floor, CompatParams[i+2]);
+						sector_t *sec = &level.sectors[CompatParams[i+1]];
+						const double delta = CompatParams[i + 3] / 65536.0;
+						secplane_t& plane = sector_t::floor == CompatParams[i + 2] 
+							? sec->floorplane 
+							: sec->ceilingplane;
+						plane.ChangeHeight(delta);
+						sec->ChangePlaneTexZ(CompatParams[i + 2], delta);
+					}
+					i += 4;
+					break;
+				}
+				case CP_SETSECTORSPECIAL:
+				{
+					const unsigned index = CompatParams[i + 1];
+					if (index < level.sectors.Size())
+					{
+						level.sectors[index].special = CompatParams[i + 2];
 					}
 					i += 3;
 					break;
 				}
 				case CP_SETWALLYSCALE:
 				{
-					if (CompatParams[i+1] < numlines)
+					if ((unsigned)CompatParams[i+1] < level.lines.Size())
 					{
-						side_t *side = lines[CompatParams[i+1]].sidedef[CompatParams[i+2]];
+						side_t *side = level.lines[CompatParams[i+1]].sidedef[CompatParams[i+2]];
 						if (side != NULL)
 						{
-							side->SetTextureYScale(CompatParams[i+3], CompatParams[i+4]);
+							side->SetTextureYScale(CompatParams[i+3], CompatParams[i+4] / 65536.);
+						}
+					}
+					i += 5;
+					break;
+				}
+				case CP_SETWALLTEXTURE:
+				{
+					if ((unsigned)CompatParams[i + 1] < level.lines.Size())
+					{
+						side_t *side = level.lines[CompatParams[i + 1]].sidedef[CompatParams[i + 2]];
+						if (side != NULL)
+						{
+							assert(TexNames.Size() > (unsigned int)CompatParams[i + 4]);
+							const FTextureID texID = TexMan.GetTexture(TexNames[CompatParams[i + 4]], FTexture::TEX_Any);
+							side->SetTexture(CompatParams[i + 3], texID);
 						}
 					}
 					i += 5;
@@ -545,17 +640,24 @@ void SetCompatibilityParams()
 					// When this is called, the things haven't been spawned yet so we can alter the position inside the MapThings array.
 					if ((unsigned)CompatParams[i+1] < MapThingsConverted.Size())
 					{
-						MapThingsConverted[CompatParams[i+1]].z = CompatParams[i+2];
+						MapThingsConverted[CompatParams[i+1]].pos.Z = CompatParams[i+2]/256.;
 					}
 					i += 3;
 					break;
 				}	
 				case CP_SETTAG:
 				{
-					if ((unsigned)CompatParams[i + 1] < (unsigned)numsectors)
+					if ((unsigned)CompatParams[i + 1] < level.sectors.Size())
 					{
 						// this assumes that the sector does not have any tags yet!
-						tagManager.AddSectorTag(CompatParams[i + 1],  CompatParams[i + 2]);
+						if (CompatParams[i + 2] == 0)
+						{
+							tagManager.RemoveSectorTags(CompatParams[i + 1]);
+						}
+						else
+						{
+							tagManager.AddSectorTag(CompatParams[i + 1], CompatParams[i + 2]);
+						}
 					}
 					i += 3;
 					break;
@@ -565,6 +667,54 @@ void SetCompatibilityParams()
 					if ((unsigned)CompatParams[i + 1] < MapThingsConverted.Size())
 					{
 						MapThingsConverted[CompatParams[i + 1]].flags = CompatParams[i + 2];
+					}
+					i += 3;
+					break;
+				}
+				case CP_SETVERTEX:
+				{
+					if ((unsigned)CompatParams[i + 1] < level.vertexes.Size())
+					{
+						level.vertexes[CompatParams[i + 1]].p.X = CompatParams[i + 2] / 256.;
+						level.vertexes[CompatParams[i + 1]].p.Y = CompatParams[i + 3] / 256.;
+					}
+					i += 4;
+					break;
+				}
+				case CP_SETTHINGSKILLS:
+				{
+					if ((unsigned)CompatParams[i + 1] < MapThingsConverted.Size())
+					{
+						MapThingsConverted[CompatParams[i + 1]].SkillFilter = CompatParams[i + 2];
+					}
+					i += 3;
+					break;
+				}
+				case CP_SETSECTORTEXTURE:
+				{
+					if ((unsigned)CompatParams[i + 1] < level.sectors.Size())
+					{
+						sector_t *sec = &level.sectors[CompatParams[i+1]];
+						assert (sec != nullptr);
+						secplane_t& plane = sector_t::floor == CompatParams[i + 2] 
+							? sec->floorplane 
+							: sec->ceilingplane;
+						assert(TexNames.Size() > (unsigned int)CompatParams[i + 3]);
+						const FTextureID texID = TexMan.GetTexture(TexNames[CompatParams[i + 3]], FTexture::TEX_Any);
+
+						sec->SetTexture(CompatParams[i + 2], texID);
+					}
+					i += 4;
+					break;
+				}
+				case CP_SETSECTORLIGHT:
+				{
+					if ((unsigned)CompatParams[i + 1] < level.sectors.Size())
+					{
+						sector_t *sec = &level.sectors[CompatParams[i+1]];
+						assert (sec != nullptr);
+
+						sec->SetLightLevel((unsigned)CompatParams[i + 2]);
 					}
 					i += 3;
 					break;
@@ -583,7 +733,7 @@ void SetCompatibilityParams()
 CCMD (mapchecksum)
 {
 	MapData *map;
-	BYTE cksum[16];
+	uint8_t cksum[16];
 
 	if (argv.argc() < 2)
 	{

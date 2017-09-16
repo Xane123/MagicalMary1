@@ -1,20 +1,23 @@
-// Emacs style mode select   -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// $Log:$
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //      Put all global state variables here.
@@ -29,6 +32,7 @@
 #include "i_system.h"
 #include "g_level.h"
 #include "p_local.h"
+#include "g_levellocals.h"
 
 int SaveVersion;
 
@@ -39,11 +43,10 @@ FStringTable	GStrings;
 EGameSpeed		GameSpeed = SPEED_Normal;
 
 // Show developer messages if true.
-CVAR (Bool, developer, false, 0)
+CVAR (Int, developer, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 
 // [RH] Feature control cvars
 CVAR (Bool, var_friction, true, CVAR_SERVERINFO);
-CVAR (Bool, var_pushers, true, CVAR_SERVERINFO);
 
 CVAR (Bool, alwaysapplydmflags, false, CVAR_SERVERINFO);
 

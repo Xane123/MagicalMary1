@@ -1,41 +1,30 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2005-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 /*
 ** gl_models.cpp
 **
 ** MD2/DMD model format code
 **
-**---------------------------------------------------------------------------
-** Copyright 2005 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
-**
-*/
+**/
 
 #include "gl/system/gl_system.h"
 #include "w_wad.h"
@@ -51,6 +40,8 @@
 #include "gl/shaders/gl_shader.h"
 #include "gl/data/gl_vertexbuffer.h"
 
+extern int modellightindex;
+
 static float   avertexnormals[NUMVERTEXNORMALS][3] = {
 #include "tab_anorms.h"
 };
@@ -64,8 +55,8 @@ static float   avertexnormals[NUMVERTEXNORMALS][3] = {
 
 static void UnpackVector(unsigned short packed, float vec[3])
 {
-	float   yaw = (packed & 511) / 512.0f * 2 * PI;
-	float   pitch = ((packed >> 9) / 127.0f - 0.5f) * PI;
+	float   yaw = (packed & 511) / 512.0f * 2 * M_PI;
+	float   pitch = ((packed >> 9) / 127.0f - 0.5f) * M_PI;
 	float   cosp = (float) cos(pitch);
 
 	vec[VX] = (float) cos(yaw) * cosp;
@@ -89,7 +80,7 @@ struct dmd_chunk_t
 #pragma pack(1)
 struct dmd_packedVertex_t
 {
-	byte            vertex[3];
+	uint8_t         vertex[3];
 	unsigned short  normal;		   // Yaw and pitch.
 };
 
@@ -159,7 +150,7 @@ bool FDMDModel::Load(const char * path, int lumpnum, const char * buffer, int le
 	}
 
 	// Allocate and load in the data.
-	skins = new FTexture *[info.numSkins];
+	skins = new FTextureID[info.numSkins];
 
 	for (i = 0; i < info.numSkins; i++)
 	{
@@ -213,7 +204,7 @@ void FDMDModel::LoadGeometry()
 			for(c = 0; c < 3; c++)
 			{
 				framev->vertices[k].xyz[axis[c]] =
-					(pVtx->vertex[c] * FLOAT(pfr->scale[c]) + FLOAT(pfr->translate[c]));
+					(pVtx->vertex[c] * float(pfr->scale[c]) + float(pfr->translate[c]));
 			}
 		}
 	}
@@ -304,7 +295,7 @@ void FDMDModel::BuildVertexBuffer()
 		int VertexBufferSize = info.numFrames * lodInfo[0].numTriangles * 3;
 		unsigned int vindex = 0;
 
-		mVBuf = new FModelVertexBuffer(false);
+		mVBuf = new FModelVertexBuffer(false, info.numFrames == 1);
 		FModelVertex *vertptr = mVBuf->LockVertexBuffer(VertexBufferSize);
 
 		for (int i = 0; i < info.numFrames; i++)
@@ -336,7 +327,22 @@ void FDMDModel::BuildVertexBuffer()
 	}
 }
 
+//===========================================================================
+//
+// for skin precaching
+//
+//===========================================================================
 
+void FDMDModel::AddSkins(uint8_t *hitlist)
+{
+	for (int i = 0; i < info.numSkins; i++)
+	{
+		if (skins[i].isValid())
+		{
+			hitlist[skins[i].GetIndex()] |= FTexture::TEX_Flat;
+		}
+	}
+}
 
 //===========================================================================
 //
@@ -364,8 +370,8 @@ void FDMDModel::RenderFrame(FTexture * skin, int frameno, int frameno2, double i
 
 	if (!skin)
 	{
-		if (info.numSkins == 0) return;
-		skin = skins[0];
+		if (info.numSkins == 0 || !skins[0].isValid()) return;
+		skin = TexMan(skins[0]);
 		if (!skin) return;
 	}
 
@@ -375,7 +381,8 @@ void FDMDModel::RenderFrame(FTexture * skin, int frameno, int frameno2, double i
 	gl_RenderState.SetInterpolationFactor((float)inter);
 
 	gl_RenderState.Apply();
-	mVBuf->SetupFrame(frames[frameno].vindex, frames[frameno2].vindex);
+	if (modellightindex != -1) gl_RenderState.ApplyLightIndex(modellightindex);
+	mVBuf->SetupFrame(frames[frameno].vindex, frames[frameno2].vindex, lodInfo[0].numTriangles * 3);
 	glDrawArrays(GL_TRIANGLES, 0, lodInfo[0].numTriangles * 3);
 	gl_RenderState.SetInterpolationFactor(0.f);
 }
@@ -411,8 +418,8 @@ struct md2_header_t
 
 struct md2_triangleVertex_t
 {
-	byte            vertex[3];
-	byte            lightNormalIndex;
+	uint8_t            vertex[3];
+	uint8_t            lightNormalIndex;
 };
 
 struct md2_packedFrame_t
@@ -433,7 +440,7 @@ bool FMD2Model::Load(const char * path, int lumpnum, const char * buffer, int le
 {
 	md2_header_t * md2header = (md2_header_t *)buffer;
 	ModelFrame *frame;
-	byte   *md2_frames;
+	uint8_t   *md2_frames;
 	int     i;
 
 	// Convert it to DMD.
@@ -469,7 +476,7 @@ bool FMD2Model::Load(const char * path, int lumpnum, const char * buffer, int le
 		return false;
 	}
 
-	skins = new FTexture *[info.numSkins];
+	skins = new FTextureID[info.numSkins];
 
 	for (i = 0; i < info.numSkins; i++)
 	{
@@ -477,7 +484,7 @@ bool FMD2Model::Load(const char * path, int lumpnum, const char * buffer, int le
 	}
 
 	// The frames need to be unpacked.
-	md2_frames = (byte*)buffer + info.offsetFrames;
+	md2_frames = (uint8_t*)buffer + info.offsetFrames;
 	frames = new ModelFrame[info.numFrames];
 
 	for (i = 0, frame = frames; i < info.numFrames; i++, frame++)
@@ -500,14 +507,14 @@ bool FMD2Model::Load(const char * path, int lumpnum, const char * buffer, int le
 void FMD2Model::LoadGeometry()
 {
 	static int axis[3] = { VX, VY, VZ };
-	byte   *md2_frames;
+	uint8_t   *md2_frames;
 	FMemLump lumpdata = Wads.ReadLump(mLumpNum);
 	const char *buffer = (const char *)lumpdata.GetMem();
 
 	texCoords = new FTexCoord[info.numTexCoords];
-	memcpy(texCoords, (byte*)buffer + info.offsetTexCoords, info.numTexCoords * sizeof(FTexCoord));
+	memcpy(texCoords, (uint8_t*)buffer + info.offsetTexCoords, info.numTexCoords * sizeof(FTexCoord));
 
-	md2_frames = (byte*)buffer + info.offsetFrames;
+	md2_frames = (uint8_t*)buffer + info.offsetFrames;
 	framevtx = new ModelFrameVertexData[info.numFrames];
 	ModelFrameVertexData *framev;
 	int i, k, c;

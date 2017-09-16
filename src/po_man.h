@@ -4,16 +4,37 @@
 #include "tarray.h"
 #include "r_defs.h"
 #include "m_bbox.h"
+#include "dthinker.h"
 
+class DPolyAction : public DThinker
+{
+	DECLARE_CLASS(DPolyAction, DThinker)
+	HAS_OBJECT_POINTERS
+public:
+	DPolyAction(int polyNum);
+	void Serialize(FSerializer &arc);
+	void OnDestroy() override;
+	void Stop();
+	double GetSpeed() const { return m_Speed; }
+
+	void StopInterpolation();
+protected:
+	DPolyAction();
+	int m_PolyObj;
+	double m_Speed;
+	double m_Dist;
+	TObjPtr<DInterpolation*> m_Interpolation;
+
+	void SetInterpolation();
+};
 
 struct FPolyVertex
 {
-	fixed_t x, y;
+	DVector2 pos;
 
 	FPolyVertex &operator=(vertex_t *v)
 	{
-		x = v->x;
-		y = v->y;
+		pos = v->fPos();
 		return *this;
 	}
 };
@@ -56,38 +77,41 @@ struct FPolyObj
 	subsector_t				*CenterSubsector;
 	int						MirrorNum;
 
-	angle_t		angle;
+	DAngle		Angle;
 	int			tag;			// reference tag assigned in HereticEd
 	int			bbox[4];		// bounds in blockmap coordinates
 	int			validcount;
 	int			crush; 			// should the polyobj attempt to crush mobjs?
 	bool		bHurtOnTouch;	// should the polyobj hurt anything it touches?
+	bool		bBlocked;
+	uint8_t		bHasPortals;	// 1 for any portal, 2 for a linked portal (2 must block rotations.)
 	int			seqType;
-	fixed_t		size;			// polyobj size (area of POLY_AREAUNIT == size of FRACUNIT)
+	double		Size;			// polyobj size (area of POLY_AREAUNIT == size of FRACUNIT)
 	FPolyNode	*subsectorlinks;
-	DPolyAction	*specialdata;	// pointer to a thinker, if the poly is moving
-	TObjPtr<DInterpolation> interpolation;
+	TObjPtr<DPolyAction*> specialdata;	// pointer to a thinker, if the poly is moving
+	TObjPtr<DInterpolation*> interpolation;
 
 	FPolyObj();
 	DInterpolation *SetInterpolation();
 	void StopInterpolation();
 
 	int GetMirror();
-	bool MovePolyobj (int x, int y, bool force = false);
-	bool RotatePolyobj (angle_t angle, bool fromsave = false);
-	void ClosestPoint(fixed_t fx, fixed_t fy, fixed_t &ox, fixed_t &oy, side_t **side) const;
+	bool MovePolyobj (const DVector2 &pos, bool force = false);
+	bool RotatePolyobj (DAngle angle, bool fromsave = false);
+	void ClosestPoint(const DVector2 &fpos, DVector2 &out, side_t **side) const;
 	void LinkPolyobj ();
 	void RecalcActorFloorCeil(FBoundingBox bounds) const;
 	void CreateSubsectorLinks();
 	void ClearSubsectorLinks();
 	void CalcCenter();
+	void UpdateLinks();
 	static void ClearAllSubsectorLinks();
 
 private:
 
 	void ThrustMobj (AActor *actor, side_t *side);
 	void UpdateBBox ();
-	void DoMovePolyobj (int x, int y);
+	void DoMovePolyobj (const DVector2 &pos);
 	void UnLinkPolyobj ();
 	bool CheckMobjBlocking (side_t *sd);
 
@@ -103,8 +127,6 @@ struct polyblock_t
 
 
 void PO_LinkToSubsectors();
-FArchive &operator<< (FArchive &arc, FPolyObj *&poly);
-FArchive &operator<< (FArchive &arc, const FPolyObj *&poly);
 
 
 // ===== PO_MAN =====
@@ -117,9 +139,9 @@ typedef enum
 } podoortype_t;
 
 bool EV_RotatePoly (line_t *line, int polyNum, int speed, int byteAngle, int direction, bool overRide);
-bool EV_MovePoly (line_t *line, int polyNum, int speed, angle_t angle, fixed_t dist, bool overRide);
-bool EV_MovePolyTo (line_t *line, int polyNum, int speed, fixed_t x, fixed_t y, bool overRide);
-bool EV_OpenPolyDoor (line_t *line, int polyNum, int speed, angle_t angle, int delay, int distance, podoortype_t type);
+bool EV_MovePoly (line_t *line, int polyNum, double speed, DAngle angle, double dist, bool overRide);
+bool EV_MovePolyTo (line_t *line, int polyNum, double speed, const DVector2 &pos, bool overRide);
+bool EV_OpenPolyDoor (line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type);
 bool EV_StopPoly (int polyNum);
 
 
@@ -128,8 +150,7 @@ bool EV_StopPoly (int polyNum);
 struct polyspawns_t
 {
 	polyspawns_t *next;
-	fixed_t x;
-	fixed_t y;
+	DVector2 pos;
 	short angle;
 	short type;
 };

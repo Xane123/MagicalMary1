@@ -1,12 +1,13 @@
 
-#ifndef __GL_TEXTURE_H
-#define __GL_TEXTURE_H
+#ifndef __GL_MATERIAL_H
+#define __GL_MATERIAL_H
 
 #include "m_fixed.h"
 #include "textures/textures.h"
 #include "gl/textures/gl_hwtexture.h"
 #include "gl/renderer/gl_colormap.h"
 #include "i_system.h"
+#include "r_defs.h"
 
 EXTERN_CVAR(Bool, gl_precache)
 
@@ -31,17 +32,15 @@ struct FTexCoordInfo
 	int mRenderWidth;
 	int mRenderHeight;
 	int mWidth;
-	fixed_t mScaleX;
-	fixed_t mScaleY;
-	fixed_t mTempScaleX;
-	fixed_t mTempScaleY;
+	FVector2 mScale;
+	FVector2 mTempScale;
 	bool mWorldPanning;
 
 	float FloatToTexU(float v) const { return v / mRenderWidth; }
 	float FloatToTexV(float v) const { return v / mRenderHeight; }
-	fixed_t RowOffset(fixed_t ofs) const;
-	fixed_t TextureOffset(fixed_t ofs) const;
-	fixed_t TextureAdjustWidth() const;
+	float RowOffset(float ofs) const;
+	float TextureOffset(float ofs) const;
+	float TextureAdjustWidth() const;
 };
 
 //===========================================================================
@@ -58,7 +57,7 @@ class FGLTexture
 public:
 	FTexture * tex;
 	FTexture * hirestexture;
-	char bIsTransparent;
+	int8_t bIsTransparent;
 	int HiresLump;
 
 private:
@@ -66,6 +65,8 @@ private:
 
 	bool bHasColorkey;		// only for hires
 	bool bExpandFlag;
+	uint8_t lastSampler;
+	int lastTranslation;
 
 	unsigned char * LoadHiresTexture(FTexture *hirescheck, int *width, int *height);
 
@@ -77,9 +78,10 @@ public:
 	FGLTexture(FTexture * tx, bool expandpatches);
 	~FGLTexture();
 
-	unsigned char * CreateTexBuffer(int translation, int & w, int & h, FTexture *hirescheck, bool createexpanded = true);
+	unsigned char * CreateTexBuffer(int translation, int & w, int & h, FTexture *hirescheck, bool createexpanded = true, bool alphatrans = false);
 
 	void Clean(bool all);
+	void CleanUnused(SpriteHits &usedtranslations);
 	int Dump(int i);
 
 };
@@ -127,6 +129,7 @@ public:
 	FMaterial(FTexture *tex, bool forceexpand);
 	~FMaterial();
 	void Precache();
+	void PrecacheList(SpriteHits &translations);
 	bool isMasked() const
 	{
 		return !!mBaseLayer->tex->bMasked;
@@ -157,7 +160,12 @@ public:
 		*r = mSpriteRect;
 	}
 
-	void GetTexCoordInfo(FTexCoordInfo *tci, fixed_t x, fixed_t y) const;
+	void GetTexCoordInfo(FTexCoordInfo *tci, float x, float y) const;
+
+	void GetTexCoordInfo(FTexCoordInfo *tci, side_t *side, int texpos) const
+	{
+		GetTexCoordInfo(tci, (float)side->GetTextureXScale(texpos), (float)side->GetTextureYScale(texpos));
+	}
 
 	// This is scaled size in integer units as needed by walls and flats
 	int TextureHeight() const { return mRenderHeight; }
@@ -187,33 +195,33 @@ public:
 
 	int GetScaledLeftOffset() const
 	{
-		return DivScale16(mLeftOffset, tex->xScale);
+		return int(mLeftOffset / tex->Scale.X);
 	}
 
 	int GetScaledTopOffset() const
 	{
-		return DivScale16(mTopOffset, tex->yScale);
+		return int(mTopOffset / tex->Scale.Y);
 	}
 
 	float GetScaledLeftOffsetFloat() const
 	{
-		return mLeftOffset / FIXED2FLOAT(tex->xScale);
+		return float(mLeftOffset / tex->Scale.X);
 	}
 
 	float GetScaledTopOffsetFloat() const
 	{
-		return mTopOffset/ FIXED2FLOAT(tex->yScale);
+		return float(mTopOffset/ tex->Scale.Y);
 	}
 
 	// This is scaled size in floating point as needed by sprites
 	float GetScaledWidthFloat() const
 	{
-		return mWidth / FIXED2FLOAT(tex->xScale);
+		return float(mWidth / tex->Scale.X);
 	}
 
 	float GetScaledHeightFloat() const
 	{
-		return mHeight / FIXED2FLOAT(tex->yScale);
+		return float(mHeight / tex->Scale.Y);
 	}
 
 	// Get right/bottom UV coordinates for patch drawing
@@ -255,6 +263,9 @@ public:
 	static FMaterial *ValidateTexture(FTextureID no, bool expand, bool trans);
 	static void ClearLastTexture();
 
+	static void InitGlobalState();
 };
 
 #endif
+
+

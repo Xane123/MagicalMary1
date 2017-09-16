@@ -1,3 +1,4 @@
+#pragma once
 /*
 ** zstring.h
 **
@@ -31,8 +32,6 @@
 **
 */
 
-#ifndef ZSTRING_H
-#define ZSTRING_H
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -47,16 +46,10 @@
 #define PRINTFISH(x)
 #endif
 
-#ifdef __clang__
+#ifdef __GNUC__
 #define IGNORE_FORMAT_PRE \
 	_Pragma("GCC diagnostic push") \
-	_Pragma("GCC diagnostic ignored \"-Wformat-invalid-specifier\"") \
-	_Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"")
-#define IGNORE_FORMAT_POST _Pragma("GCC diagnostic pop")
-#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && (__GNUC_MINOR__ >= 6)))
-#define IGNORE_FORMAT_PRE \
-	_Pragma("GCC diagnostic push") \
-	_Pragma("GCC diagnostic ignored \"-Wformat=\"") \
+	_Pragma("GCC diagnostic ignored \"-Wformat\"") \
 	_Pragma("GCC diagnostic ignored \"-Wformat-extra-args\"")
 #define IGNORE_FORMAT_POST _Pragma("GCC diagnostic pop")
 #else
@@ -236,11 +229,45 @@ public:
 	void Insert (size_t index, const char *instr);
 	void Insert (size_t index, const char *instr, size_t instrlen);
 
+	template<typename Func>
+	void ReplaceChars (Func IsOldChar, char newchar)
+	{
+		size_t i, j;
+
+		LockBuffer();
+		for (i = 0, j = Len(); i < j; ++i)
+		{
+			if (IsOldChar(Chars[i]))
+			{
+				Chars[i] = newchar;
+			}
+		}
+		UnlockBuffer();
+	}
+
 	void ReplaceChars (char oldchar, char newchar);
 	void ReplaceChars (const char *oldcharset, char newchar);
 
+	template<typename Func>
+	void StripChars (Func IsKillChar)
+	{
+		size_t read, write, mylen;
+
+		LockBuffer();
+		for (read = write = 0, mylen = Len(); read < mylen; ++read)
+		{
+			if (!IsKillChar(Chars[read]))
+			{
+				Chars[write++] = Chars[read];
+			}
+		}
+		Chars[write] = '\0';
+		ReallocBuffer (write);
+		UnlockBuffer();
+	}
+
 	void StripChars (char killchar);
-	void StripChars (const char *killchars);
+	void StripChars (const char *killcharset);
 
 	void MergeChars (char merger);
 	void MergeChars (char merger, char newchar);
@@ -267,7 +294,8 @@ public:
 	bool IsEmpty() const { return Len() == 0; }
 	bool IsNotEmpty() const { return Len() != 0; }
 
-	void Truncate (long newlen);
+	void Truncate (size_t newlen);
+	void Remove(size_t index, size_t remlen);
 
 	int Compare (const FString &other) const { return strcmp (Chars, other.Chars); }
 	int Compare (const char *other) const { return strcmp (Chars, other); }
@@ -297,16 +325,74 @@ protected:
 
 	friend struct FStringData;
 
+public:
+	bool operator == (const FString &other) const
+	{
+		return Compare(other) == 0;
+	}
+
+	bool operator != (const FString &other) const
+	{
+		return Compare(other) != 0;
+	}
+
+	bool operator < (const FString &other) const
+	{
+		return Compare(other) < 0;
+	}
+
+	bool operator > (const FString &other) const
+	{
+		return Compare(other) > 0;
+	}
+
+	bool operator <= (const FString &other) const
+	{
+		return Compare(other) <= 0;
+	}
+
+	bool operator >= (const FString &other) const
+	{
+		return Compare(other) >= 0;
+	}
+
+	bool operator == (const char *) const = delete;
+	bool operator != (const char *) const = delete;
+	bool operator <  (const char *) const = delete;
+	bool operator >  (const char *) const = delete;
+	bool operator <= (const char *) const = delete;
+	bool operator >= (const char *) const = delete;
+
+	bool operator == (FName) const = delete;
+	bool operator != (FName) const = delete;
+	bool operator <  (FName) const = delete;
+	bool operator >  (FName) const = delete;
+	bool operator <= (FName) const = delete;
+	bool operator >= (FName) const = delete;
+
 private:
-	// Prevent these from being called as current practices are to use Compare.
-	// Without this FStrings will be accidentally compared against char* ptrs.
-	bool operator == (const FString &illegal) const;
-	bool operator != (const FString &illegal) const;
-	bool operator < (const FString &illegal) const;
-	bool operator > (const FString &illegal) const;
-	bool operator <= (const FString &illegal) const;
-	bool operator >= (const FString &illegal) const;
 };
+
+bool operator == (const char *, const FString &) = delete;
+bool operator != (const char *, const FString &) = delete;
+bool operator <  (const char *, const FString &) = delete;
+bool operator >  (const char *, const FString &) = delete;
+bool operator <= (const char *, const FString &) = delete;
+bool operator >= (const char *, const FString &) = delete;
+
+bool operator == (FName, const FString &) = delete;
+bool operator != (FName, const FString &) = delete;
+bool operator <  (FName, const FString &) = delete;
+bool operator >  (FName, const FString &) = delete;
+bool operator <= (FName, const FString &) = delete;
+bool operator >= (FName, const FString &) = delete;
+
+class FStringf : public FString
+{
+public:
+	FStringf(const char *fmt, ...);
+};
+
 
 namespace StringFormat
 {
@@ -356,4 +442,4 @@ template<> struct THashTraits<FString>
 	// Compares two keys, returning zero if they are the same.
 	int Compare(const FString &left, const FString &right) { return left.Compare(right); }
 };
-#endif
+

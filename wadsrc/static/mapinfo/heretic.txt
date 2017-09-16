@@ -25,7 +25,8 @@ gameinfo
 	defaultbloodparticlecolor = "ff 00 00"
 	backpacktype = "BagOfHolding"
 	armoricons = "SHLDA0", 0.75, "SHD2A0"
-	statusbar = "sbarinfo/heretic.txt"
+	//statusbar = "sbarinfo/heretic.txt"
+	statusbarclass = "HereticStatusBar"
 	intermissionmusic = "mus_intr"
 	intermissioncounter = false
 	weaponslot = 1, "Staff", "Gauntlets"
@@ -37,6 +38,7 @@ gameinfo
 	weaponslot = 7, "Mace"
 	dimcolor = "00 00 ff"
 	dimamount = 0.2
+	bluramount = 0
 	definventorymaxamount = 16
 	defaultrespawntime = 12
 	defaultdropstyle = 1
@@ -63,6 +65,10 @@ gameinfo
 	statscreen_mapnamefont = "BigFont"
 	statscreen_finishedfont = "SmallFont"
 	statscreen_enteringfont = "SmallFont"
+	statscreen_coop = "CoopStatusScreen"
+	statscreen_dm = "DeathmatchStatusScreen"
+	statscreen_single = "RavenStatusScreen"
+	messageboxclass = "MessageBoxMenu"
 }
 
 DoomEdNums
@@ -805,35 +811,30 @@ map E6M3 "Untitled"
 cluster 1
 {
 	flat = "FLOOR25"
-	music = "MUS_CPTD"
 	exittext = lookup, "HE1TEXT"
 }
 
 cluster 2
 {
 	flat = "FLATHUH1"
-	music = "MUS_CPTD"
 	exittext = lookup, "HE2TEXT"
 }
 
 cluster 3
 {
 	flat = "FLTWAWA2"
-	music = "MUS_CPTD"
 	exittext = lookup, "HE3TEXT"
 }
 
 cluster 4
 {
 	flat = "FLOOR28"
-	music = "MUS_CPTD"
 	exittext = lookup, "HE4TEXT"
 }
 
 cluster 5
 {
 	flat = "FLOOR08"
-	music = "MUS_CPTD"
 	exittext = lookup, "HE5TEXT"
 }
 

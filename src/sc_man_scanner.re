@@ -1,3 +1,38 @@
+/*
+**
+**
+**---------------------------------------------------------------------------
+** Copyright 2005-2016 Randy Heit
+** Copyright 2005-2016 Christoph Oelckers
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions
+** are met:
+**
+** 1. Redistributions of source code must retain the above copyright
+**    notice, this list of conditions and the following disclaimer.
+** 2. Redistributions in binary form must reproduce the above copyright
+**    notice, this list of conditions and the following disclaimer in the
+**    documentation and/or other materials provided with the distribution.
+** 3. The name of the author may not be used to endorse or promote products
+**    derived from this software without specific prior written permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**---------------------------------------------------------------------------
+**
+*/
+
+
 #define	YYCTYPE		unsigned char
 #define	YYCURSOR	cursor
 #define	YYLIMIT		limit
@@ -111,6 +146,10 @@ std2:
 		'sbyte'						{ RET(TK_SByte); }
 		'short'						{ RET(TK_Short); }
 		'ushort'					{ RET(TK_UShort); }
+		'int8'						{ RET(TK_Int8); }
+		'uint8'						{ RET(TK_UInt8); }
+		'int16'						{ RET(TK_Int16); }
+		'uint16'					{ RET(TK_UInt16); }
 		'int'						{ RET(TK_Int); }
 		'uint'						{ RET(TK_UInt); }
 		'long'						{ RET(TK_Long); }
@@ -118,14 +157,14 @@ std2:
 		'void'						{ RET(TK_Void); }
 		'struct'					{ RET(TK_Struct); }
 		'class'						{ RET(TK_Class); }
-		'mode'						{ RET(TK_Mode); }
 		'enum'						{ RET(TK_Enum); }
 		'name'						{ RET(TK_Name); }
 		'string'					{ RET(TK_String); }
 		'sound'						{ RET(TK_Sound); }
 		'state'						{ RET(TK_State); }
 		'color'						{ RET(TK_Color); }
-		'vector'					{ RET(TK_Vector); }
+		'vector2'					{ RET(TK_Vector2); }
+		'vector3'					{ RET(TK_Vector3); }
 		'map'						{ RET(TK_Map); }
 		'array'						{ RET(TK_Array); }
 		'in'						{ RET(TK_In); }
@@ -138,48 +177,39 @@ std2:
 		'true'						{ RET(TK_True); }
 		'false'						{ RET(TK_False); }
 		'none'						{ RET(TK_None); }
-		'new'						{ RET(TK_New); }
-		'instanceof'				{ RET(TK_InstanceOf); }
 		'auto'						{ RET(TK_Auto); }
-		'exec'						{ RET(TK_Exec); }
-		'defaultproperties'			{ RET(TK_DefaultProperties); }
+		'property'					{ RET(TK_Property); }
 		'native'					{ RET(TK_Native); }
 		'var'						{ RET(TK_Var); }
-		'out'						{ RET(TK_Out); }
-		'ref'						{ RET(TK_Ref); }
-		'event'						{ RET(TK_Event); }
+		'out'						{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Out : TK_Identifier); }
 		'static'					{ RET(TK_Static); }
-		'transient'					{ RET(TK_Transient); }
-		'final'						{ RET(TK_Final); }
-		'throws'					{ RET(TK_Throws); }
-		'extends'					{ RET(TK_Extends); }
-		'public'					{ RET(TK_Public); }
-		'protected'					{ RET(TK_Protected); }
-		'private'					{ RET(TK_Private); }
+		'transient'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Transient : TK_Identifier); }
+		'final'						{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Final : TK_Identifier); }
+		'extend'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Extend : TK_Identifier); }
+		'protected'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Protected : TK_Identifier); }
+		'private'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Private : TK_Identifier); }
 		'dot'						{ RET(TK_Dot); }
 		'cross'						{ RET(TK_Cross); }
-		'ignores'					{ RET(TK_Ignores); }
-		'localized'					{ RET(TK_Localized); }
-		'latent'					{ RET(TK_Latent); }
-		'singular'					{ RET(TK_Singular); }
-		'config'					{ RET(TK_Config); }
-		'coerce'					{ RET(TK_Coerce); }
-		'iterator'					{ RET(TK_Iterator); }
-		'optional'					{ RET(TK_Optional); }
-		'export'					{ RET(TK_Export); }
-		'virtual'					{ RET(TK_Virtual); }
-		'super'						{ RET(TK_Super); }
-		'global'					{ RET(TK_Global); }
-		'self'						{ RET(TK_Self); }
+		'virtual'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Virtual : TK_Identifier); }
+		'override'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Override : TK_Identifier); }
+		'vararg'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_VarArg : TK_Identifier); }
+		'ui'						{ RET(ParseVersion >= MakeVersion(2, 4, 0)? TK_UI : TK_Identifier); }
+		'play'						{ RET(ParseVersion >= MakeVersion(2, 4, 0)? TK_Play : TK_Identifier); }
+		'clearscope'				{ RET(ParseVersion >= MakeVersion(2, 4, 0)? TK_ClearScope : TK_Identifier); }
+		'virtualscope'				{ RET(ParseVersion >= MakeVersion(2, 4, 0)? TK_VirtualScope : TK_Identifier); }
+		'super'						{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Super : TK_Identifier); }
 		'stop'						{ RET(TK_Stop); }
+		'null'						{ RET(TK_Null); }
 
-		'is'						{ RET(TK_Is); }
-		'replaces'					{ RET(TK_Replaces); }
+		'is'						{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Is : TK_Identifier); }
+		'replaces'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Replaces : TK_Identifier); }
 		'states'					{ RET(TK_States); }
-		'meta'						{ RET(TK_Meta); }
-		'deprecated'				{ RET(TK_Deprecated); }
-		'action'					{ RET(TK_Action); }
-		'readonly'					{ RET(TK_ReadOnly); }
+		'meta'						{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Meta : TK_Identifier); }
+		'deprecated'				{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Deprecated : TK_Identifier); }
+		'version'					{ RET(ParseVersion >= MakeVersion(2, 4, 0)? TK_Version : TK_Identifier); }
+		'action'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Action : TK_Identifier); }
+		'readonly'					{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_ReadOnly : TK_Identifier); }
+		'let'						{ RET(ParseVersion >= MakeVersion(1, 0, 0)? TK_Let : TK_Identifier); }
 
 		/* Actor state options */
 		'bright'					{ RET(StateOptions ? TK_Bright : TK_Identifier); }
@@ -192,8 +222,6 @@ std2:
 		
 		/* other DECORATE top level keywords */
 		'#include'					{ RET(TK_Include); }
-		'fixed_t'					{ RET(TK_Fixed_t); }
-		'angle_t'					{ RET(TK_Angle_t); }
 
 		L (L|D)*					{ RET(TK_Identifier); }
 
@@ -237,6 +265,7 @@ std2:
 		"<>="						{ RET(TK_LtGtEq); }
 		"**"						{ RET(TK_MulMul); }
 		"::"						{ RET(TK_ColonColon); }
+		"->"						{ RET(TK_Arrow); }
 		";"							{ StateOptions = false; RET(';'); }
 		"{"							{ StateOptions = false; RET('{'); }
 		"}"							{ RET('}'); }
@@ -261,6 +290,8 @@ std2:
 		"^"							{ RET('^'); }
 		"|"							{ RET('|'); }
 		"?"							{ RET('?'); }
+		"#"							{ RET('#'); }
+		"@"							{ RET('@'); }
 
 		[ \t\v\f\r]+				{ goto std1; }
 		"\n"						{ goto newline; }

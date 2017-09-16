@@ -113,7 +113,7 @@ bool FIntermissionAction::ParseKey(FScanner &sc)
 		if (!sc.CheckToken('-'))
 		{
 			sc.MustGetFloat();
-			mDuration = xs_RoundToInt(sc.Float*TICRATE);
+			mDuration = int(sc.Float*TICRATE);
 		}
 		else
 		{
@@ -329,7 +329,7 @@ bool FIntermissionActionTextscreen::ParseKey(FScanner &sc)
 		if (!sc.CheckToken('-'))
 		{
 			sc.MustGetFloat();
-			mTextDelay = xs_RoundToInt(sc.Float*TICRATE);
+			mTextDelay = int(sc.Float*TICRATE);
 		}
 		else
 		{
@@ -382,10 +382,10 @@ bool FIntermissionActionCast::ParseKey(FScanner &sc)
 		FCastSound *cs = &mCastSounds[mCastSounds.Reserve(1)];
 		sc.MustGetToken('=');
 		sc.MustGetToken(TK_StringConst);
-		cs->mSequence = (BYTE)sc.MatchString(seqs);
+		cs->mSequence = (uint8_t)sc.MatchString(seqs);
 		sc.MustGetToken(',');
 		sc.MustGetToken(TK_IntConst);
-		cs->mIndex = (BYTE)sc.Number;
+		cs->mIndex = (uint8_t)sc.Number;
 		sc.MustGetToken(',');
 		sc.MustGetToken(TK_StringConst);
 		cs->mSound = sc.String;
@@ -438,7 +438,7 @@ bool FIntermissionActionScroller::ParseKey(FScanner &sc)
 		if (!sc.CheckToken('-'))
 		{
 			sc.MustGetFloat();
-			mScrollDelay = xs_RoundToInt(sc.Float*TICRATE);
+			mScrollDelay = int(sc.Float*TICRATE);
 		}
 		else
 		{
@@ -453,7 +453,7 @@ bool FIntermissionActionScroller::ParseKey(FScanner &sc)
 		if (!sc.CheckToken('-'))
 		{
 			sc.MustGetFloat();
-			mScrollTime = xs_RoundToInt(sc.Float*TICRATE);
+			mScrollTime = int(sc.Float*TICRATE);
 		}
 		else
 		{
@@ -573,7 +573,7 @@ void FMapInfoParser::ParseIntermission()
 
 struct EndSequence
 {
-	SBYTE EndType;
+	int8_t EndType;
 	bool MusicLooping;
 	bool PlayTheEnd;
 	FString PicName;

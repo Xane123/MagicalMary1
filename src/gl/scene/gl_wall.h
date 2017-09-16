@@ -6,6 +6,7 @@
 //
 //==========================================================================
 #include "r_defs.h"
+#include "r_data/renderstyle.h"
 #include "textures/textures.h"
 #include "gl/renderer/gl_colormap.h"
 
@@ -22,7 +23,13 @@ struct FTexCoordInfo;
 struct FPortal;
 struct FFlatVertex;
 struct FGLLinePortal;
+class GLSceneDrawer;
 
+enum
+{
+	GLSector_NoSkyDraw = 89,
+	GLSector_Skybox = 90,
+};
 
 enum WallTypes
 {
@@ -55,6 +62,15 @@ struct GLSeg
 	float x1,x2;
 	float y1,y2;
 	float fracleft, fracright;	// fractional offset of the 2 vertices on the linedef
+
+	FVector3 Normal() const 
+	{
+		// we do not use the vector math inlines here because they are not optimized for speed but accuracy in the playsim and this is called quite frequently.
+		float x = y2 - y1;
+		float y = x1 - x2;
+		float ilength = 1.f / sqrtf(x*x + y*y);
+		return FVector3(x * ilength, 0, y * ilength);
+	}
 };
 
 struct texcoord
@@ -72,21 +88,21 @@ struct GLSectorPlane
 {
 	FTextureID texture;
 	secplane_t plane;
-	fixed_t texheight;
-	fixed_t xoffs,  yoffs;
-	fixed_t	xscale, yscale;
-	angle_t	angle;
+	float Texheight;
+	float	Angle;
+	FVector2 Offs;
+	FVector2 Scale;
 
 	void GetFromSector(sector_t * sec, int ceiling)
 	{
-		xoffs = sec->GetXOffset(ceiling);
-		yoffs = sec->GetYOffset(ceiling);
-		xscale = sec->GetXScale(ceiling);
-		yscale = sec->GetYScale(ceiling);
-		angle = sec->GetAngle(ceiling);
+		Offs.X = (float)sec->GetXOffset(ceiling);
+		Offs.Y = (float)sec->GetYOffset(ceiling);
+		Scale.X = (float)sec->GetXScale(ceiling);
+		Scale.Y = (float)sec->GetYScale(ceiling);
+		Angle = (float)sec->GetAngle(ceiling).Degrees;
 		texture = sec->GetTexture(ceiling);
 		plane = sec->GetSecPlane(ceiling);
-		texheight = (ceiling == sector_t::ceiling)? plane.d : -plane.d;
+		Texheight = (float)((ceiling == sector_t::ceiling)? plane.fD() : -plane.fD());
 	}
 };
 
@@ -114,26 +130,34 @@ public:
 		RWF_NORENDER = 8,
 	};
 
+	enum
+	{
+		LOLFT,
+		UPLFT,
+		UPRGT,
+		LORGT,
+	};
 
 	friend struct GLDrawList;
 	friend class GLPortal;
 
+	GLSceneDrawer *mDrawer;
 	GLSeg glseg;
 	vertex_t * vertexes[2];				// required for polygon splitting
 	float ztop[2],zbottom[2];
-	texcoord uplft, uprgt, lolft, lorgt;
+	texcoord tcs[4];
 	float alpha;
 	FMaterial *gltexture;
 
 	FColormap Colormap;
 	ERenderStyle RenderStyle;
 	
-	fixed_t viewdistance;
+	float ViewDistance;
 
 	TArray<lightlist_t> *lightlist;
 	int lightlevel;
-	BYTE type;
-	BYTE flags;
+	uint8_t type;
+	uint8_t flags;
 	short rellight;
 
 	float topglowcolor[4];
@@ -144,7 +168,7 @@ public:
 	union
 	{
 		// it's either one of them but never more!
-		AActor * skybox;			// for skyboxes
+		FSectorPortal *secportal;	// sector portal (formerly skybox)
 		GLSkyInfo * sky;			// for normal sky
 		GLHorizonInfo * horizon;	// for horizon information
 		FPortal * portal;			// stacked sector portals
@@ -152,11 +176,15 @@ public:
 		FGLLinePortal *lineportal;	// line-to-line portals
 	};
 
+
 	secplane_t topplane, bottomplane;	// we need to save these to pass them to the shader for calculating glows.
 
 	// these are not the same as ytop and ybottom!!!
 	float zceil[2];
 	float zfloor[2];
+
+	unsigned int vertindex;
+	unsigned int vertcount;
 
 public:
 	seg_t * seg;			// this gives the easiest access to all other structs involved
@@ -164,16 +192,22 @@ public:
 private:
 
 	void CheckGlowing();
+	bool PutWallCompat(int passflag);
 	void PutWall(bool translucent);
 	void PutPortal(int ptype);
-	void CheckTexturePosition();
+	void CheckTexturePosition(FTexCoordInfo *tci);
+
+	void RenderFogBoundaryCompat();
+	void RenderLightsCompat(int pass);
 
 	void Put3DWall(lightlist_t * lightlist, bool translucent);
+	bool SplitWallComplex(sector_t * frontsector, bool translucent, float& maplightbottomleft, float& maplightbottomright);
 	void SplitWall(sector_t * frontsector, bool translucent);
 
 	void SetupLights();
-	bool PrepareLight(texcoord * tcs, ADynamicLight * light);
-	void RenderWall(int textured, unsigned int *store = NULL);
+	bool PrepareLight(ADynamicLight * light, int pass);
+	void MakeVertices(bool nosplit);
+	void RenderWall(int textured);
 	void RenderTextured(int rflags);
 
 	void FloodPlane(int pass);
@@ -189,34 +223,34 @@ private:
 	bool DoHorizon(seg_t * seg,sector_t * fs, vertex_t * v1,vertex_t * v2);
 
 	bool SetWallCoordinates(seg_t * seg, FTexCoordInfo *tci, float ceilingrefheight,
-							int topleft,int topright, int bottomleft,int bottomright, int texoffset);
+		float topleft, float topright, float bottomleft, float bottomright, float t_ofs);
 
 	void DoTexture(int type,seg_t * seg,int peg,
-						   int ceilingrefheight,int floorrefheight,
-						   int CeilingHeightstart,int CeilingHeightend,
-						   int FloorHeightstart,int FloorHeightend,
-						   int v_offset);
+						   float ceilingrefheight, float floorrefheight,
+						   float CeilingHeightstart,float CeilingHeightend,
+						   float FloorHeightstart,float FloorHeightend,
+						   float v_offset);
 
 	void DoMidTexture(seg_t * seg, bool drawfogboundary,
 					  sector_t * front, sector_t * back,
 					  sector_t * realfront, sector_t * realback,
-					  fixed_t fch1, fixed_t fch2, fixed_t ffh1, fixed_t ffh2,
-					  fixed_t bch1, fixed_t bch2, fixed_t bfh1, fixed_t bfh2);
+					  float fch1, float fch2, float ffh1, float ffh2,
+					  float bch1, float bch2, float bfh1, float bfh2);
 
-	void GetPlanePos(F3DFloor::planeref *planeref, int &left, int &right);
+	void GetPlanePos(F3DFloor::planeref * planeref, float & left, float & right);
 
 	void BuildFFBlock(seg_t * seg, F3DFloor * rover,
-					  fixed_t ff_topleft, fixed_t ff_topright, 
-					  fixed_t ff_bottomleft, fixed_t ff_bottomright);
+					  float ff_topleft, float ff_topright, 
+					  float ff_bottomleft, float ff_bottomright);
 	void InverseFloors(seg_t * seg, sector_t * frontsector,
-					   fixed_t topleft, fixed_t topright, 
-					   fixed_t bottomleft, fixed_t bottomright);
+					   float topleft, float topright, 
+					   float bottomleft, float bottomright);
 	void ClipFFloors(seg_t * seg, F3DFloor * ffloor, sector_t * frontsector,
-					fixed_t topleft, fixed_t topright, 
-					fixed_t bottomleft, fixed_t bottomright);
+					float topleft, float topright, 
+					float bottomleft, float bottomright);
 	void DoFFloorBlocks(seg_t * seg, sector_t * frontsector, sector_t * backsector,
-					  fixed_t fch1, fixed_t fch2, fixed_t ffh1, fixed_t ffh2,
-					  fixed_t bch1, fixed_t bch2, fixed_t bfh1, fixed_t bfh2);
+					  float fch1, float fch2, float ffh1, float ffh2,
+					  float bch1, float bch2, float bfh1, float bfh2);
 
 	void DrawDecal(DBaseDecal *actor);
 	void DoDrawDecals();
@@ -225,12 +259,17 @@ private:
 	void RenderMirrorSurface();
 	void RenderTranslucentWall();
 
-	void SplitLeftEdge(texcoord * tcs, FFlatVertex *&ptr);
-	void SplitRightEdge(texcoord * tcs, FFlatVertex *&ptr);
-	void SplitUpperEdge(texcoord * tcs, FFlatVertex *&ptr);
-	void SplitLowerEdge(texcoord * tcs, FFlatVertex *&ptr);
+	void SplitLeftEdge (FFlatVertex *&ptr);
+	void SplitRightEdge(FFlatVertex *&ptr);
+	void SplitUpperEdge(FFlatVertex *&ptr);
+	void SplitLowerEdge(FFlatVertex *&ptr);
 
 public:
+
+	GLWall(GLSceneDrawer *drawer)
+	{
+		mDrawer = drawer;
+	}
 
 	void Process(seg_t *seg, sector_t *frontsector, sector_t *backsector);
 	void ProcessLowerMiniseg(seg_t *seg, sector_t *frontsector, sector_t *backsector);
@@ -264,30 +303,39 @@ class GLFlat
 public:
 	friend struct GLDrawList;
 
+	GLSceneDrawer *mDrawer;
 	sector_t * sector;
-	subsector_t * sub;	// only used for translucent planes
 	float dz; // z offset for rendering hacks
 	float z; // the z position of the flat (only valid for non-sloped planes)
 	FMaterial *gltexture;
 
 	FColormap Colormap;	// light and fog
+	PalEntry FlatColor;
 	ERenderStyle renderstyle;
 
 	float alpha;
 	GLSectorPlane plane;
 	int lightlevel;
 	bool stack;
-	bool foggy;
 	bool ceiling;
-	BYTE renderflags;
+	uint8_t renderflags;
 	int vboindex;
-	int vboheight;
+	//int vboheight;
 
 	int dynlightindex;
 
+	GLFlat(GLSceneDrawer *drawer)
+	{
+		mDrawer = drawer;
+	}
+	// compatibility fallback stuff.
+	void DrawSubsectorLights(subsector_t * sub, int pass);
+	void DrawLightsCompat(int pass);
+	bool PutFlatCompat(bool fog);
+
 	void SetupSubsectorLights(int pass, subsector_t * sub, int *dli = NULL);
 	void DrawSubsector(subsector_t * sub);
-	void DrawSubsectorLights(subsector_t * sub, int pass);
+	void DrawSkyboxSector(int pass, bool processlights);
 	void DrawSubsectors(int pass, bool processlights, bool istrans);
 	void ProcessLights(bool istrans);
 
@@ -312,9 +360,10 @@ public:
 	friend struct GLDrawList;
 	friend void Mod_RenderModel(GLSprite * spr, model_t * mdl, int framenumber);
 
-	BYTE lightlevel;
-	BYTE foglevel;
-	BYTE hw_styleflags;
+	GLSceneDrawer *mDrawer;
+	int lightlevel;
+	uint8_t foglevel;
+	uint8_t hw_styleflags;
 	bool fullbright;
 	PalEntry ThingColor;	// thing's own color
 	FColormap Colormap;
@@ -325,6 +374,9 @@ public:
 	int translation;
 	int index;
 	int depth;
+
+	float topclip;
+	float bottomclip;
 
 	float x,y,z;	// needed for sorting!
 
@@ -338,15 +390,22 @@ public:
 	AActor * actor;
 	particle_t * particle;
 	TArray<lightlist_t> *lightlist;
+	DRotator Angles;
 
+	void SplitSprite(sector_t * frontsector, bool translucent);
 	void SetLowerParam();
-	void PerformSpriteClipAdjustment(AActor *thing, fixed_t thingx, fixed_t thingy, float spriteheight);
+	void PerformSpriteClipAdjustment(AActor *thing, const DVector2 &thingpos, float spriteheight);
+	void CalculateVertices(FVector3 *v);
 
 public:
 
+	GLSprite(GLSceneDrawer *drawer)
+	{
+		mDrawer = drawer;
+	}
 	void Draw(int pass);
 	void PutSprite(bool translucent);
-	void Process(AActor* thing,sector_t * sector);
+	void Process(AActor* thing,sector_t * sector, int thruportal = false);
 	void ProcessParticle (particle_t *particle, sector_t *sector);//, int shade, int fakeside)
 	void SetThingColor(PalEntry);
 
@@ -361,7 +420,8 @@ inline float Dist2(float x1,float y1,float x2,float y2)
 
 // Light + color
 
-void gl_SetDynSpriteLight(AActor *self, fixed_t x, fixed_t y, fixed_t z, subsector_t *subsec);
+void gl_SetDynSpriteLight(AActor *self, float x, float y, float z, subsector_t *subsec);
 void gl_SetDynSpriteLight(AActor *actor, particle_t *particle);
+void gl_SetDynModelLight(AActor *self, bool hudmodel);
 
 #endif

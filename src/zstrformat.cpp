@@ -92,12 +92,8 @@
 #include "zstring.h"
 #include "gdtoa.h"
 
-#ifndef _MSC_VER
 #include <stdint.h>
-#else
-typedef unsigned __int64 uint64_t;
-typedef signed __int64 int64_t;
-#endif
+
 
 /*
  * MAXEXPDIG is the maximum number of decimal digits needed to store a
@@ -117,7 +113,6 @@ static const char hexits[16] = {'0','1','2','3','4','5','6','7','8','9','a','b',
 static const char HEXits[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 static const char spaces[16] = {' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '};
 static const char zeroes[17] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','.'};
-static const char dotchar = '.';
 
 namespace StringFormat
 {
@@ -704,7 +699,7 @@ fp_begin:
 			{
 				flags |= F_NEGATIVE;
 			}
-			if (expt == INT_MAX)	// inf or nan
+			if (expt == 9999)	// inf or nan
 			{
 				if (*obuff == 'N')
 				{

@@ -1,18 +1,23 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //	 Duh.
@@ -24,7 +29,6 @@
 #define __G_GAME__
 
 struct event_t;
-struct PNGHandle;
 
 
 //
@@ -65,11 +69,12 @@ void G_Ticker (void);
 bool G_Responder (event_t*	ev);
 
 void G_ScreenShot (char *filename);
+void G_StartSlideshow(FName whichone);
 
 FString G_BuildSaveName (const char *prefix, int slot);
 
-struct PNGHandle;
-bool G_CheckSaveGameWads (PNGHandle *png, bool printwarn);
+class FSerializer;
+bool G_CheckSaveGameWads (FSerializer &arc, bool printwarn);
 
 enum EFinishLevelType
 {
@@ -95,6 +100,7 @@ extern AActor *bodyque[BODYQUESIZE];
 extern int bodyqueslot; 
 class AInventory;
 extern const AInventory *SendItemUse, *SendItemDrop;
+extern int SendItemDropAmount;
 
 
 #endif

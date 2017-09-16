@@ -1,40 +1,27 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2002-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 /*
 ** gl_light.cpp
 ** Light level / fog management / dynamic lights
-**
-**---------------------------------------------------------------------------
-** Copyright 2002-2005 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-** 5. Full disclosure of the entire project's source code, except for third
-**    party libraries is mandatory. (NOTE: This clause is non-negotiable!)
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
 **
 */
 
@@ -45,6 +32,8 @@
 #include "vectors.h"
 #include "gl/gl_functions.h"
 #include "g_level.h"
+#include "g_levellocals.h"
+#include "actorinlines.h"
 
 #include "gl/system/gl_cvars.h"
 #include "gl/renderer/gl_renderer.h"
@@ -55,7 +44,10 @@
 #include "gl/scene/gl_portal.h"
 #include "gl/shaders/gl_shader.h"
 #include "gl/textures/gl_material.h"
+#include "gl/dynlights/gl_lightbuffer.h"
 
+FDynLightData modellightdata;
+int modellightindex = -1;
 
 //==========================================================================
 //
@@ -63,7 +55,7 @@
 //
 //==========================================================================
 
-void gl_SetDynSpriteLight(AActor *self, fixed_t x, fixed_t y, fixed_t z, subsector_t * subsec)
+void gl_SetDynSpriteLight(AActor *self, float x, float y, float z, subsector_t * subsec)
 {
 	ADynamicLight *light;
 	float frac, lr, lg, lb;
@@ -75,52 +67,167 @@ void gl_SetDynSpriteLight(AActor *self, fixed_t x, fixed_t y, fixed_t z, subsect
 	while (node)
 	{
 		light=node->lightsource;
-		//if (!light->owned || light->target == NULL || light->target->IsVisibleToPlayer())
+		if (light->visibletoplayer && !(light->flags2&MF2_DORMANT) && (!(light->lightflags&LF_DONTLIGHTSELF) || light->target != self) && !(light->lightflags&LF_DONTLIGHTACTORS))
 		{
-			if (!(light->flags2&MF2_DORMANT) &&
-				(!(light->flags4&MF4_DONTLIGHTSELF) || light->target != self))
+			float dist;
+
+			// This is a performance critical section of code where we cannot afford to let the compiler decide whether to inline the function or not.
+			// This will do the calculations explicitly rather than calling one of AActor's utility functions.
+			if (Displacements.size > 0)
 			{
-				float dist = FVector3(FIXED2FLOAT(x - light->X()), FIXED2FLOAT(y - light->Y()), FIXED2FLOAT(z - light->Z())).Length();
-				radius = light->GetRadius() * gl_lights_size;
+				int fromgroup = light->Sector->PortalGroup;
+				int togroup = subsec->sector->PortalGroup;
+				if (fromgroup == togroup || fromgroup == 0 || togroup == 0) goto direct;
 
-				if (dist < radius)
+				DVector2 offset = Displacements.getOffset(fromgroup, togroup);
+				dist = FVector3(x - light->X() - offset.X, y - light->Y() - offset.Y, z - light->Z()).LengthSquared();
+			}
+			else
+			{
+			direct:
+				dist = FVector3(x - light->X(), y - light->Y(), z - light->Z()).LengthSquared();
+			}
+
+			radius = light->GetRadius();
+
+			if (dist < radius * radius)
+			{
+				dist = sqrtf(dist);	// only calculate the square root if we really need it.
+
+				frac = 1.0f - (dist / radius);
+
+				if (frac > 0 && GLRenderer->mShadowMap.ShadowTest(light, { x, y, z }))
 				{
-					frac = 1.0f - (dist / radius);
-
-					if (frac > 0)
+					lr = light->GetRed() / 255.0f;
+					lg = light->GetGreen() / 255.0f;
+					lb = light->GetBlue() / 255.0f;
+					if (light->IsSubtractive())
 					{
-						lr = light->GetRed() / 255.0f * gl_lights_intensity;
-						lg = light->GetGreen() / 255.0f * gl_lights_intensity;
-						lb = light->GetBlue() / 255.0f * gl_lights_intensity;
-						if (light->IsSubtractive())
-						{
-							float bright = FVector3(lr, lg, lb).Length();
-							FVector3 lightColor(lr, lg, lb);
-							lr = (bright - lr) * -1;
-							lg = (bright - lg) * -1;
-							lb = (bright - lb) * -1;
-						}
-
-						out[0] += lr * frac;
-						out[1] += lg * frac;
-						out[2] += lb * frac;
+						float bright = FVector3(lr, lg, lb).Length();
+						FVector3 lightColor(lr, lg, lb);
+						lr = (bright - lr) * -1;
+						lg = (bright - lg) * -1;
+						lb = (bright - lb) * -1;
 					}
+
+					out[0] += lr * frac;
+					out[1] += lg * frac;
+					out[2] += lb * frac;
 				}
 			}
 		}
 		node = node->nextLight;
 	}
 	gl_RenderState.SetDynLight(out[0], out[1], out[2]);
+	modellightindex = -1;
 }
 
 void gl_SetDynSpriteLight(AActor *thing, particle_t *particle)
 {
 	if (thing != NULL)
 	{
-		gl_SetDynSpriteLight(thing, thing->X(), thing->Y(), thing->Z() + (thing->height >> 1), thing->subsector);
+		gl_SetDynSpriteLight(thing, thing->X(), thing->Y(), thing->Center(), thing->subsector);
 	}
 	else if (particle != NULL)
 	{
-		gl_SetDynSpriteLight(NULL, particle->x, particle->y, particle->z, particle->subsector);
+		gl_SetDynSpriteLight(NULL, particle->Pos.X, particle->Pos.Y, particle->Pos.Z, particle->subsector);
 	}
+}
+
+// Check if circle potentially intersects with node AABB
+static bool CheckBBoxCircle(float *bbox, float x, float y, float radiusSquared)
+{
+	float centerX = (bbox[BOXRIGHT] + bbox[BOXLEFT]) * 0.5f;
+	float centerY = (bbox[BOXBOTTOM] + bbox[BOXTOP]) * 0.5f;
+	float extentX = (bbox[BOXRIGHT] - bbox[BOXLEFT]) * 0.5f;
+	float extentY = (bbox[BOXBOTTOM] - bbox[BOXTOP]) * 0.5f;
+	float aabbRadiusSquared = extentX * extentX + extentY * extentY;
+	x -= centerX;
+	y -= centerY;
+	float dist = x * x + y * y;
+	return dist <= radiusSquared + aabbRadiusSquared;
+}
+
+template<typename Callback>
+void BSPNodeWalkCircle(void *node, float x, float y, float radiusSquared, const Callback &callback)
+{
+	while (!((size_t)node & 1))
+	{
+		node_t *bsp = (node_t *)node;
+
+		if (CheckBBoxCircle(bsp->bbox[0], x, y, radiusSquared))
+			BSPNodeWalkCircle(bsp->children[0], x, y, radiusSquared, callback);
+
+		if (!CheckBBoxCircle(bsp->bbox[1], x, y, radiusSquared))
+			return;
+
+		node = bsp->children[1];
+	}
+
+	subsector_t *sub = (subsector_t *)((uint8_t *)node - 1);
+	callback(sub);
+}
+
+template<typename Callback>
+void BSPWalkCircle(float x, float y, float radiusSquared, const Callback &callback)
+{
+	if (level.nodes.Size() == 0)
+		callback(&level.subsectors[0]);
+	else
+		BSPNodeWalkCircle(level.HeadNode(), x, y, radiusSquared, callback);
+}
+
+void gl_SetDynModelLight(AActor *self, bool hudmodel)
+{
+	// Legacy and deferred render paths gets the old flat model light
+	if (gl.lightmethod != LM_DIRECT)
+	{
+		gl_SetDynSpriteLight(self, nullptr);
+		return;
+	}
+
+	modellightdata.Clear();
+
+	if (self)
+	{
+		static std::vector<ADynamicLight*> addedLights; // static so that we build up a reserve (memory allocations stop)
+
+		addedLights.clear();
+
+		float x = self->X();
+		float y = self->Y();
+		float z = self->Center();
+		float radiusSquared = self->renderradius * self->renderradius;
+
+		BSPWalkCircle(x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
+		{
+			FLightNode * node = subsector->lighthead;
+			while (node) // check all lights touching a subsector
+			{
+				ADynamicLight *light = node->lightsource;
+				if (light->visibletoplayer && !(light->flags2&MF2_DORMANT) && (!(light->lightflags&LF_DONTLIGHTSELF) || light->target != self) && !(light->lightflags&LF_DONTLIGHTACTORS))
+				{
+					int group = subsector->sector->PortalGroup;
+					DVector3 pos = light->PosRelative(group);
+					float radius = light->GetRadius();
+					double dx = pos.X - x;
+					double dy = pos.Y - y;
+					double dz = pos.Z - z;
+					double distSquared = dx * dx + dy * dy + dz * dz;
+					if (distSquared < radiusSquared + radius * radius) // Light and actor touches
+					{
+						if (std::find(addedLights.begin(), addedLights.end(), light) == addedLights.end()) // Check if we already added this light from a different subsector
+						{
+							gl_AddLightToList(group, light, modellightdata, hudmodel);
+							addedLights.push_back(light);
+						}
+					}
+				}
+				node = node->nextLight;
+			}
+		});
+	}
+
+	gl_RenderState.SetDynLight(0, 0, 0);
+	modellightindex = GLRenderer->mLights->UploadLights(modellightdata);
 }

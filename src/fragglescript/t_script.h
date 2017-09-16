@@ -20,19 +20,6 @@
 //
 //---------------------------------------------------------------------------
 //
-// FraggleScript is from SMMU which is under the GPL. Technically, 
-// therefore, combining the FraggleScript code with the non-free 
-// ZDoom code is a violation of the GPL.
-//
-// As this may be a problem for you, I hereby grant an exception to my 
-// copyright on the SMMU source (including FraggleScript). You may use 
-// any code from SMMU in (G)ZDoom, provided that:
-//
-//    * For any binary release of the port, the source code is also made 
-//      available.
-//    * The copyright notice is kept on any file containing my code.
-//
-//
 
 #ifndef __T_SCRIPT_H__
 #define __T_SCRIPT_H__
@@ -41,11 +28,21 @@
 #include "p_lnspec.h"
 #include "m_fixed.h"
 #include "actor.h"
+#include "doomerrors.h"
 
 #ifdef _MSC_VER
 // This pragma saves 8kb of wasted code.
 #pragma pointers_to_members( full_generality, single_inheritance )
 #endif
+
+
+class CFraggleScriptError : public CDoomError
+{
+public:
+	CFraggleScriptError() : CDoomError() {}
+	CFraggleScriptError(const char *message) : CDoomError(message) {}
+};
+
 
 class DRunningScript;
 
@@ -82,15 +79,17 @@ enum
 //
 //
 //==========================================================================
+typedef int fsfix;
 
 struct svalue_t
 {
 	int type;
+
 	FString string;
 	union
 	{
 		int i;
-		fixed_t f;      // haleyjd: 8-17
+		fsfix f;      // haleyjd: 8-17
 		AActor *mobj;
 	} value;
 
@@ -106,10 +105,28 @@ struct svalue_t
 		string = other.string;
 		value = other.value;
 	}
+
+	void setInt(int ip)
+	{
+		value.i = ip;
+		type = svt_int;
+	}
+
+	void setFixed(fsfix fp)
+	{
+		value.f = fp;
+		type = svt_fixed;
+	}
+
+	void setDouble(double dp)
+	{
+		value.f = fsfix(dp * 65536);
+		type = svt_fixed;
+	}
 };
 
 int intvalue(const svalue_t & v);
-fixed_t fixedvalue(const svalue_t & v);
+fsfix fixedvalue(const svalue_t & v);
 double floatvalue(const svalue_t & v);
 const char *stringvalue(const svalue_t & v);
 AActor *actorvalue(const svalue_t &svalue);
@@ -144,16 +161,16 @@ struct DFsVariable : public DObject
 
 public:
 	FString Name;
-	TObjPtr<DFsVariable> next;       // for hashing
+	TObjPtr<DFsVariable*> next;       // for hashing
 
 	int type;       // svt_string or svt_int: same as in svalue_t
 	FString string;
-	TObjPtr<AActor> actor;
+	TObjPtr<AActor*> actor;
 
 	union value_t
 	{
-		SDWORD i;
-		fixed_t fixed;          // haleyjd: fixed-point
+		int32_t i;
+		fsfix fixed;          // haleyjd: fixed-point
 		
 		// the following are only used in the global script so we don't need to bother with them
 		// when serializing variables.
@@ -169,7 +186,7 @@ public:
 
 	void GetValue(svalue_t &result);
 	void SetValue(const svalue_t &newvalue);
-	void Serialize(FArchive &ar);
+	void Serialize(FSerializer &ar);
 };
 
 //==========================================================================
@@ -211,14 +228,14 @@ public:
 	int start_index;
 	int end_index;
 	int loop_index;
-	TObjPtr<DFsSection> next;        // for hashing
+	TObjPtr<DFsSection*> next;        // for hashing
 
 	DFsSection()
 	{
 		next = NULL;
 	}
 
-	void Serialize(FArchive &ar);
+	void Serialize(FSerializer &ar);
 };
 
 
@@ -290,34 +307,35 @@ public:
 
 	// {} sections
 
-	TObjPtr<DFsSection> sections[SECTIONSLOTS];
+	TObjPtr<DFsSection*> sections[SECTIONSLOTS];
 
 	// variables:
 
-	TObjPtr<DFsVariable> variables[VARIABLESLOTS];
+	TObjPtr<DFsVariable*> variables[VARIABLESLOTS];
 
 	// ptr to the parent script
 	// the parent script is the script above this level
 	// eg. individual linetrigger scripts are children
 	// of the levelscript, which is a child of the
 	// global_script
-	TObjPtr<DFsScript> parent;
+	TObjPtr<DFsScript*> parent;
 
 	// haleyjd: 8-17
 	// child scripts.
 	// levelscript holds ptrs to all of the level's scripts
 	// here.
-	TObjPtr<DFsScript> children[MAXSCRIPTS];
+	TObjPtr<DFsScript*> children[MAXSCRIPTS];
 
 
-	TObjPtr<AActor> trigger;        // object which triggered this script
+	TObjPtr<AActor*> trigger;        // object which triggered this script
 
 	bool lastiftrue;     // haleyjd: whether last "if" statement was 
 	// true or false
 
 	DFsScript();
-	void Destroy();
-	void Serialize(FArchive &ar);
+	~DFsScript();
+	void OnDestroy() override;
+	void Serialize(FSerializer &ar);
 
 	DFsVariable *NewVariable(const char *name, int vtype);
 	void NewFunction(const char *name, void (FParser::*handler)());
@@ -631,10 +649,10 @@ class DRunningScript : public DObject
 
 public:
 	DRunningScript(AActor *trigger=NULL, DFsScript *owner = NULL, int index = 0) ;
-	void Destroy();
-	void Serialize(FArchive &arc);
+	void OnDestroy() override;
+	void Serialize(FSerializer &arc);
 
-	TObjPtr<DFsScript> script;
+	TObjPtr<DFsScript*> script;
 	
 	// where we are
 	int save_point;
@@ -643,10 +661,10 @@ public:
 	int wait_data;  // data for wait: tagnum, counter, script number etc
 	
 	// saved variables
-	TObjPtr<DFsVariable> variables[VARIABLESLOTS];
+	TObjPtr<DFsVariable*> variables[VARIABLESLOTS];
 	
-	TObjPtr<DRunningScript> prev, next;  // for chain
-	TObjPtr<AActor> trigger;
+	TObjPtr<DRunningScript*> prev, next;  // for chain
+	TObjPtr<AActor*> trigger;
 };
 
 //-----------------------------------------------------------------------------
@@ -660,23 +678,24 @@ class DFraggleThinker : public DThinker
 	HAS_OBJECT_POINTERS
 public:
 
-	TObjPtr<DFsScript> LevelScript;
-	TObjPtr<DRunningScript> RunningScripts;
-	TArray<TObjPtr<AActor> > SpawnedThings;
-	bool nocheckposition;
+	TObjPtr<DFsScript*> LevelScript;
+	TObjPtr<DRunningScript*> RunningScripts;
+	TArray<TObjPtr<AActor*> > SpawnedThings;
+	bool nocheckposition = false;
+	bool setcolormaterial = false;
 
 	DFraggleThinker();
-	void Destroy();
+	void OnDestroy() override;
 
 
-	void Serialize(FArchive & arc);
+	void Serialize(FSerializer & arc);
 	void Tick();
 	size_t PropagateMark();
 	size_t PointerSubstitution (DObject *old, DObject *notOld);
 	bool wait_finished(DRunningScript *script);
 	void AddRunningScript(DRunningScript *runscr);
 
-	static TObjPtr<DFraggleThinker> ActiveThinker;
+	static TObjPtr<DFraggleThinker*> ActiveThinker;
 };
 
 //-----------------------------------------------------------------------------
@@ -687,7 +706,7 @@ public:
 
 #include "t_fs.h"
 
-void script_error(const char *s, ...);
+void script_error(const char *s, ...) GCCPRINTF(1,2);
 void FS_EmulateCmd(char * string);
 
 extern AActor *trigger_obj;

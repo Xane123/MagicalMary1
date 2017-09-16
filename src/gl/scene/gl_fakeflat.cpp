@@ -1,49 +1,37 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2001-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 /*
 ** gl_fakeflat.cpp
 ** Fake flat functions to render stacked sectors
-**
-**---------------------------------------------------------------------------
-** Copyright 2001-2011 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-** 5. Full disclosure of the entire project's source code, except for third
-**    party libraries is mandatory. (NOTE: This clause is non-negotiable!)
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
 **
 */
 
 #include "p_lnspec.h"
 #include "p_local.h"
+#include "g_levellocals.h"
 #include "a_sharedglobal.h"
 #include "r_sky.h"
 #include "gl/renderer/gl_renderer.h"
-#include "gl/scene/gl_clipper.h"
+#include "gl/scene/gl_scenedrawer.h"
 #include "gl/data/gl_data.h"
 
 
@@ -57,22 +45,24 @@ CVAR(Bool, gltest_slopeopt, false, 0)
 bool gl_CheckClip(side_t * sidedef, sector_t * frontsector, sector_t * backsector)
 {
 	line_t *linedef = sidedef->linedef;
-	fixed_t bs_floorheight1;
-	fixed_t bs_floorheight2;
-	fixed_t bs_ceilingheight1;
-	fixed_t bs_ceilingheight2;
-	fixed_t fs_floorheight1;
-	fixed_t fs_floorheight2;
-	fixed_t fs_ceilingheight1;
-	fixed_t fs_ceilingheight2;
+	double bs_floorheight1;
+	double bs_floorheight2;
+	double bs_ceilingheight1;
+	double bs_ceilingheight2;
+	double fs_floorheight1;
+	double fs_floorheight2;
+	double fs_ceilingheight1;
+	double fs_ceilingheight2;
 
 	// Mirrors and horizons always block the view
 	//if (linedef->special==Line_Mirror || linedef->special==Line_Horizon) return true;
 
-	// Lines with stacked sectors must never block!
-
-	if (backsector->portals[sector_t::ceiling] != NULL || backsector->portals[sector_t::floor] != NULL ||
-		frontsector->portals[sector_t::ceiling] != NULL || frontsector->portals[sector_t::floor] != NULL)
+	// Lines with portals must never block.
+	// Portals which require the sky flat are excluded here, because for them the special sky semantics apply.
+	if (!(frontsector->GetPortal(sector_t::ceiling)->mFlags & PORTSF_SKYFLATONLY) ||
+		!(frontsector->GetPortal(sector_t::floor)->mFlags & PORTSF_SKYFLATONLY) ||
+		!(backsector->GetPortal(sector_t::ceiling)->mFlags & PORTSF_SKYFLATONLY) ||
+		!(backsector->GetPortal(sector_t::floor)->mFlags & PORTSF_SKYFLATONLY))
 	{
 		return false;
 	}
@@ -80,84 +70,84 @@ bool gl_CheckClip(side_t * sidedef, sector_t * frontsector, sector_t * backsecto
 	// on large levels this distinction can save some time
 	// That's a lot of avoided multiplications if there's a lot to see!
 
-	if (frontsector->ceilingplane.a | frontsector->ceilingplane.b)
+	if (frontsector->ceilingplane.isSlope())
 	{
-		fs_ceilingheight1=frontsector->ceilingplane.ZatPoint(linedef->v1);
-		fs_ceilingheight2=frontsector->ceilingplane.ZatPoint(linedef->v2);
+		fs_ceilingheight1 = frontsector->ceilingplane.ZatPoint(linedef->v1);
+		fs_ceilingheight2 = frontsector->ceilingplane.ZatPoint(linedef->v2);
 	}
 	else
 	{
-		fs_ceilingheight2=fs_ceilingheight1=frontsector->ceilingplane.d;
+		fs_ceilingheight2 = fs_ceilingheight1 = frontsector->ceilingplane.fD();
 	}
 
-	if (frontsector->floorplane.a | frontsector->floorplane.b)
+	if (frontsector->floorplane.isSlope())
 	{
-		fs_floorheight1=frontsector->floorplane.ZatPoint(linedef->v1);
-		fs_floorheight2=frontsector->floorplane.ZatPoint(linedef->v2);
+		fs_floorheight1 = frontsector->floorplane.ZatPoint(linedef->v1);
+		fs_floorheight2 = frontsector->floorplane.ZatPoint(linedef->v2);
 	}
 	else
 	{
-		fs_floorheight2=fs_floorheight1=-frontsector->floorplane.d;
-	}
-	
-	if (backsector->ceilingplane.a | backsector->ceilingplane.b)
-	{
-		bs_ceilingheight1=backsector->ceilingplane.ZatPoint(linedef->v1);
-		bs_ceilingheight2=backsector->ceilingplane.ZatPoint(linedef->v2);
-	}
-	else
-	{
-		bs_ceilingheight2=bs_ceilingheight1=backsector->ceilingplane.d;
+		fs_floorheight2 = fs_floorheight1 = -frontsector->floorplane.fD();
 	}
 
-	if (backsector->floorplane.a | backsector->floorplane.b)
+	if (backsector->ceilingplane.isSlope())
 	{
-		bs_floorheight1=backsector->floorplane.ZatPoint(linedef->v1);
-		bs_floorheight2=backsector->floorplane.ZatPoint(linedef->v2);
+		bs_ceilingheight1 = backsector->ceilingplane.ZatPoint(linedef->v1);
+		bs_ceilingheight2 = backsector->ceilingplane.ZatPoint(linedef->v2);
 	}
 	else
 	{
-		bs_floorheight2=bs_floorheight1=-backsector->floorplane.d;
+		bs_ceilingheight2 = bs_ceilingheight1 = backsector->ceilingplane.fD();
+	}
+
+	if (backsector->floorplane.isSlope())
+	{
+		bs_floorheight1 = backsector->floorplane.ZatPoint(linedef->v1);
+		bs_floorheight2 = backsector->floorplane.ZatPoint(linedef->v2);
+	}
+	else
+	{
+		bs_floorheight2 = bs_floorheight1 = -backsector->floorplane.fD();
 	}
 
 	// now check for closed sectors!
-	if (bs_ceilingheight1<=fs_floorheight1 && bs_ceilingheight2<=fs_floorheight2) 
+	if (bs_ceilingheight1 <= fs_floorheight1 && bs_ceilingheight2 <= fs_floorheight2)
 	{
 		FTexture * tex = TexMan(sidedef->GetTexture(side_t::top));
-		if (!tex || tex->UseType==FTexture::TEX_Null) return false;
-		if (backsector->GetTexture(sector_t::ceiling)==skyflatnum && 
-			frontsector->GetTexture(sector_t::ceiling)==skyflatnum) return false;
+		if (!tex || tex->UseType == FTexture::TEX_Null) return false;
+		if (backsector->GetTexture(sector_t::ceiling) == skyflatnum &&
+			frontsector->GetTexture(sector_t::ceiling) == skyflatnum) return false;
 		return true;
 	}
 
-	if (fs_ceilingheight1<=bs_floorheight1 && fs_ceilingheight2<=bs_floorheight2) 
+	if (fs_ceilingheight1 <= bs_floorheight1 && fs_ceilingheight2 <= bs_floorheight2)
 	{
 		FTexture * tex = TexMan(sidedef->GetTexture(side_t::bottom));
-		if (!tex || tex->UseType==FTexture::TEX_Null) return false;
+		if (!tex || tex->UseType == FTexture::TEX_Null) return false;
 
 		// properly render skies (consider door "open" if both floors are sky):
-		if (backsector->GetTexture(sector_t::ceiling)==skyflatnum && 
-			frontsector->GetTexture(sector_t::ceiling)==skyflatnum) return false;
+		if (backsector->GetTexture(sector_t::ceiling) == skyflatnum &&
+			frontsector->GetTexture(sector_t::ceiling) == skyflatnum) return false;
 		return true;
 	}
 
-	if (bs_ceilingheight1<=bs_floorheight1 && bs_ceilingheight2<=bs_floorheight2)
+	if (bs_ceilingheight1 <= bs_floorheight1 && bs_ceilingheight2 <= bs_floorheight2)
 	{
 		// preserve a kind of transparent door/lift special effect:
-		if (bs_ceilingheight1 < fs_ceilingheight1 || bs_ceilingheight2 < fs_ceilingheight2) 
+		if (bs_ceilingheight1 < fs_ceilingheight1 || bs_ceilingheight2 < fs_ceilingheight2)
 		{
 			FTexture * tex = TexMan(sidedef->GetTexture(side_t::top));
-			if (!tex || tex->UseType==FTexture::TEX_Null) return false;
+			if (!tex || tex->UseType == FTexture::TEX_Null) return false;
 		}
 		if (bs_floorheight1 > fs_floorheight1 || bs_floorheight2 > fs_floorheight2)
 		{
 			FTexture * tex = TexMan(sidedef->GetTexture(side_t::bottom));
-			if (!tex || tex->UseType==FTexture::TEX_Null) return false;
+			if (!tex || tex->UseType == FTexture::TEX_Null) return false;
 		}
-		if (backsector->GetTexture(sector_t::ceiling)==skyflatnum && 
-			frontsector->GetTexture(sector_t::ceiling)==skyflatnum) return false;
-		if (backsector->GetTexture(sector_t::floor)==skyflatnum && frontsector->GetTexture(sector_t::floor)
-			==skyflatnum) return false;
+		if (backsector->GetTexture(sector_t::ceiling) == skyflatnum &&
+			frontsector->GetTexture(sector_t::ceiling) == skyflatnum) return false;
+		if (backsector->GetTexture(sector_t::floor) == skyflatnum && frontsector->GetTexture(sector_t::floor)
+			== skyflatnum) return false;
 		return true;
 	}
 
@@ -170,24 +160,24 @@ bool gl_CheckClip(side_t * sidedef, sector_t * frontsector, sector_t * backsecto
 //
 //==========================================================================
 
-void gl_CheckViewArea(vertex_t *v1, vertex_t *v2, sector_t *frontsector, sector_t *backsector)
+void GLSceneDrawer::CheckViewArea(vertex_t *v1, vertex_t *v2, sector_t *frontsector, sector_t *backsector)
 {
-	if (in_area==area_default && 
+	if (in_area == area_default &&
 		(backsector->heightsec && !(backsector->heightsec->MoreFlags & SECF_IGNOREHEIGHTSEC)) &&
 		(!frontsector->heightsec || frontsector->heightsec->MoreFlags & SECF_IGNOREHEIGHTSEC))
 	{
 		sector_t * s = backsector->heightsec;
 
-		fixed_t cz1 = frontsector->ceilingplane.ZatPoint(v1);
-		fixed_t cz2 = frontsector->ceilingplane.ZatPoint(v2);
-		fixed_t fz1 = s->floorplane.ZatPoint(v1);
-		fixed_t fz2 = s->floorplane.ZatPoint(v2);
+		double cz1 = frontsector->ceilingplane.ZatPoint(v1);
+		double cz2 = frontsector->ceilingplane.ZatPoint(v2);
+		double fz1 = s->floorplane.ZatPoint(v1);
+		double fz2 = s->floorplane.ZatPoint(v2);
 
 		// allow some tolerance in case slopes are involved
-		if (cz1 <= fz1 + FRACUNIT/100 && cz2<=fz2 + FRACUNIT/100) 
-			in_area=area_below;
-		else 
-			in_area=area_normal;
+		if (cz1 <= fz1 + 1. / 100 && cz2 <= fz2 + 1. / 100)
+			in_area = area_below;
+		else
+			in_area = area_normal;
 	}
 }
 
@@ -206,14 +196,14 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		// visual glitches because upper amd lower textures overlap.
 		if (back && sec->planes[sector_t::floor].TexZ > sec->planes[sector_t::ceiling].TexZ)
 		{
-			if (!(sec->floorplane.a | sec->floorplane.b | sec->ceilingplane.a | sec->ceilingplane.b))
+			if (!sec->floorplane.isSlope() && !sec->ceilingplane.isSlope())
 			{
 				*dest = *sec;
 				dest->ceilingplane=sec->floorplane;
 				dest->ceilingplane.FlipVert();
 				dest->planes[sector_t::ceiling].TexZ = dest->planes[sector_t::floor].TexZ;
-				dest->portals[sector_t::ceiling] = NULL;
-				dest->portals[sector_t::floor] = NULL;
+				dest->ClearPortal(sector_t::ceiling);
+				dest->ClearPortal(sector_t::floor);
 				return dest;
 			}
 		}
@@ -221,7 +211,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 	}
 
 #ifdef _DEBUG
-	if (sec-sectors==560)
+	if (sec->sectornum==560)
 	{
 		int a = 0;
 	}
@@ -255,7 +245,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		{
 			if (in_area==area_below)
 			{
-				dest->ColorMap=s->ColorMap;
+				dest->CopyColors(s);
 				if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 				{
 					dest->lightlevel  = s->lightlevel;
@@ -301,7 +291,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 
 	if (in_area==area_below)
 	{
-		dest->ColorMap=s->ColorMap;
+		dest->CopyColors(s);
 		dest->SetPlaneTexZ(sector_t::floor, sec->GetPlaneTexZ(sector_t::floor));
 		dest->SetPlaneTexZ(sector_t::ceiling, s->GetPlaneTexZ(sector_t::floor));
 		dest->floorplane=sec->floorplane;
@@ -314,7 +304,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		dest->vboindex[sector_t::ceiling] = sec->vboindex[sector_t::vbo_fakefloor];
 		dest->vboheight[sector_t::ceiling] = s->vboheight[sector_t::floor];
 
-		dest->portals[sector_t::ceiling] = NULL;
+		dest->ClearPortal(sector_t::ceiling);
 
 		if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 		{
@@ -354,7 +344,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 	}
 	else if (in_area == area_above)
 	{
-		dest->ColorMap = s->ColorMap;
+		dest->CopyColors(s);
 		dest->SetPlaneTexZ(sector_t::ceiling, sec->GetPlaneTexZ(sector_t::ceiling));
 		dest->SetPlaneTexZ(sector_t::floor, s->GetPlaneTexZ(sector_t::ceiling));
 		dest->ceilingplane = sec->ceilingplane;
@@ -367,7 +357,7 @@ sector_t * gl_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		dest->vboindex[sector_t::ceiling] = sec->vboindex[sector_t::ceiling];
 		dest->vboheight[sector_t::ceiling] = sec->vboheight[sector_t::ceiling];
 
-		dest->portals[sector_t::floor] = NULL;
+		dest->ClearPortal(sector_t::floor);
 
 		if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 		{

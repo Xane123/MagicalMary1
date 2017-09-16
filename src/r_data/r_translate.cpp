@@ -46,8 +46,11 @@
 #include "i_system.h"
 #include "w_wad.h"
 #include "r_data/colormaps.h"
-#include "farchive.h"
+#include "serializer.h"
 #include "d_player.h"
+#include "r_data/sprites.h"
+#include "r_state.h"
+#include "vm.h"
 
 #include "gi.h"
 #include "stats.h"
@@ -55,7 +58,7 @@
 TAutoGrowArray<FRemapTablePtr, FRemapTable *> translationtables[NUM_TRANSLATION_TABLES];
 
 
-const BYTE IcePalette[16][3] =
+const uint8_t IcePalette[16][3] =
 {
 	{  10,  8, 18 },
 	{  15, 15, 26 },
@@ -107,7 +110,7 @@ FRemapTable::~FRemapTable()
 
 void FRemapTable::Alloc(int count)
 {
-	Remap = (BYTE *)M_Malloc(count*sizeof(*Remap) + count*sizeof(*Palette));
+	Remap = (uint8_t *)M_Malloc(count*sizeof(*Remap) + count*sizeof(*Palette));
 	assert (Remap != NULL);
 	Palette = (PalEntry *)(Remap + count*(sizeof(*Remap)));
 	Native = NULL;
@@ -192,27 +195,62 @@ bool FRemapTable::operator==(const FRemapTable &o)
 //
 //----------------------------------------------------------------------------
 
-void FRemapTable::Serialize(FArchive &arc)
+void FRemapTable::Serialize(FSerializer &arc)
 {
 	int n = NumEntries;
 
-	arc << NumEntries;
-	if (arc.IsStoring())
-	{
-		arc.Write (Remap, NumEntries);
-	}
-	else
+	arc("numentries", NumEntries);
+	if (arc.isReading())
 	{
 		if (n != NumEntries)
 		{
 			Free();
 			Alloc(NumEntries);
 		}
-		arc.Read (Remap, NumEntries);
 	}
-	for (int j = 0; j < NumEntries; ++j)
+	arc.Array("remap", Remap, NumEntries);
+	arc.Array("palette", Palette, NumEntries);
+}
+
+void FRemapTable::StaticSerializeTranslations(FSerializer &arc)
+{
+	if (arc.BeginArray("translations"))
 	{
-		arc << Palette[j];
+		// Does this level have custom translations?
+		FRemapTable *trans;
+		int w;
+		if (arc.isWriting())
+		{
+			for (unsigned int i = 0; i < translationtables[TRANSLATION_LevelScripted].Size(); ++i)
+			{
+				trans = translationtables[TRANSLATION_LevelScripted][i];
+				if (trans != NULL && !trans->IsIdentity())
+				{
+					if (arc.BeginObject(nullptr))
+					{
+						arc("index", i);
+						trans->Serialize(arc);
+						arc.EndObject();
+					}
+				}
+			}
+		}
+		else
+		{
+			while (arc.BeginObject(nullptr))
+			{
+				arc("index", w);
+				trans = translationtables[TRANSLATION_LevelScripted].GetVal(w);
+				if (trans == NULL)
+				{
+					trans = new FRemapTable;
+					translationtables[TRANSLATION_LevelScripted].SetVal(w, trans);
+				}
+				trans->Serialize(arc);
+				arc.EndObject();
+			}
+		}
+		arc.EndArray();
 	}
 }
 
@@ -310,7 +348,7 @@ FNativePalette *FRemapTable::GetNative()
 
 void FRemapTable::AddIndexRange(int start, int end, int pal1, int pal2)
 {
-	fixed_t palcol, palstep;
+	double palcol, palstep;
 
 	if (start > end)
 	{
@@ -326,11 +364,11 @@ void FRemapTable::AddIndexRange(int start, int end, int pal1, int pal2)
 		Palette[start].a = start == 0 ? 0 : 255;
 		return;
 	}
-	palcol = pal1 << FRACBITS;
-	palstep = ((pal2 << FRACBITS) - palcol) / (end - start);
+	palcol = pal1;
+	palstep = (pal2 - palcol) / (end - start);
 	for (int i = start; i <= end; palcol += palstep, ++i)
 	{
-		int j = GPalette.Remap[i], k = GPalette.Remap[palcol >> FRACBITS];
+		int j = GPalette.Remap[i], k = GPalette.Remap[int(palcol)];
 		Remap[j] = k;
 		Palette[j] = GPalette.BaseColors[k];
 		Palette[j].a = j == 0 ? 0 : 255;
@@ -345,14 +383,14 @@ void FRemapTable::AddIndexRange(int start, int end, int pal1, int pal2)
 
 void FRemapTable::AddColorRange(int start, int end, int _r1,int _g1, int _b1, int _r2, int _g2, int _b2)
 {
-	fixed_t r1 = _r1 << FRACBITS;
-	fixed_t g1 = _g1 << FRACBITS;
-	fixed_t b1 = _b1 << FRACBITS;
-	fixed_t r2 = _r2 << FRACBITS;
-	fixed_t g2 = _g2 << FRACBITS;
-	fixed_t b2 = _b2 << FRACBITS;
-	fixed_t r, g, b;
-	fixed_t rs, gs, bs;
+	double r1 = _r1;
+	double g1 = _g1;
+	double b1 = _b1;
+	double r2 = _r2;
+	double g2 = _g2;
+	double b2 = _b2;
+	double r, g, b;
+	double rs, gs, bs;
 
 	if (start > end)
 	{
@@ -376,9 +414,8 @@ void FRemapTable::AddColorRange(int start, int end, int _r1,int _g1, int _b1, in
 	if (start == end)
 	{
 		start = GPalette.Remap[start];
-		Remap[start] = ColorMatcher.Pick(r >> FRACBITS, g >> FRACBITS, b >> FRACBITS);
-		Palette[start] = PalEntry(r >> FRACBITS, g >> FRACBITS, b >> FRACBITS);
-		Palette[start].a = start == 0 ? 0 : 255;
+		Palette[start] = PalEntry(start == 0 ? 0 : 255, int(r), int(g), int(b));
+		Remap[start] = ColorMatcher.Pick(Palette[start]);
 	}
 	else
 	{
@@ -388,8 +425,8 @@ void FRemapTable::AddColorRange(int start, int end, int _r1,int _g1, int _b1, in
 		for (int i = start; i <= end; ++i)
 		{
 			int j = GPalette.Remap[i];
-			Remap[j] = ColorMatcher.Pick(r >> FRACBITS, g >> FRACBITS, b >> FRACBITS);
-			Palette[j] = PalEntry(j == 0 ? 0 : 255, r >> FRACBITS, g >> FRACBITS, b >> FRACBITS);
+			Palette[j] = PalEntry(j == 0 ? 0 : 255, int(r), int(g), int(b));
+			Remap[j] = ColorMatcher.Pick(Palette[j]);
 			r += rs;
 			g += gs;
 			b += bs;
@@ -451,6 +488,56 @@ void FRemapTable::AddDesaturation(int start, int end, double r1, double g1, doub
 //
 //----------------------------------------------------------------------------
 
+void FRemapTable::AddColourisation(int start, int end, int r, int g, int b)
+{
+	for (int i = start; i < end; ++i)
+	{
+		double br = GPalette.BaseColors[i].r;
+		double bg = GPalette.BaseColors[i].g;
+		double bb = GPalette.BaseColors[i].b;
+		double grey = (br * 0.299 + bg * 0.587 + bb * 0.114) / 255.0f;
+		if (grey > 1.0) grey = 1.0;
+		br = r * grey;
+		bg = g * grey;
+		bb = b * grey;
+
+		int j = GPalette.Remap[i];
+		Palette[j] = PalEntry(j == 0 ? 0 : 255, int(br), int(bg), int(bb));
+		Remap[j] = ColorMatcher.Pick(Palette[j]);
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+//
+//
+//----------------------------------------------------------------------------
+
+void FRemapTable::AddTint(int start, int end, int r, int g, int b, int amount)
+{
+	for (int i = start; i < end; ++i)
+	{
+		float br = GPalette.BaseColors[i].r;
+		float bg = GPalette.BaseColors[i].g;
+		float bb = GPalette.BaseColors[i].b;
+		float a = amount * 0.01f;
+		float ia = 1.0f - a;
+		br = br * ia + r * a;
+		bg = bg * ia + g * a;
+		bb = bb * ia + b * a;
+
+		int j = GPalette.Remap[i];
+		Palette[j] = PalEntry(j == 0 ? 0 : 255, int(br), int(bg), int(bb));
+		Remap[j] = ColorMatcher.Pick(Palette[j]);
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+//
+//
+//----------------------------------------------------------------------------
+
 void FRemapTable::AddToTranslation(const char *range)
 {
 	int start,end;
@@ -476,18 +563,7 @@ void FRemapTable::AddToTranslation(const char *range)
 
 		sc.MustGetAnyToken();
 
-		if (sc.TokenType != '[' && sc.TokenType != '%')
-		{
-			int pal1,pal2;
-
-			sc.TokenMustBe(TK_IntConst);
-			pal1 = sc.Number;
-			sc.MustGetToken(':');
-			sc.MustGetToken(TK_IntConst);
-			pal2 = sc.Number;
-			AddIndexRange(start, end, pal1, pal2);
-		}
-		else if (sc.TokenType == '[')
+		if (sc.TokenType == '[')
 		{ 
 			// translation using RGB values
 			int r1,g1,b1,r2,g2,b2;
@@ -560,6 +636,54 @@ void FRemapTable::AddToTranslation(const char *range)
 
 			AddDesaturation(start, end, r1, g1, b1, r2, g2, b2);
 		}
+		else if (sc.TokenType == '#')
+		{
+			// Colourise translation
+			int r, g, b;
+			sc.MustGetToken('[');
+			sc.MustGetToken(TK_IntConst);
+			r = sc.Number;
+			sc.MustGetToken(',');
+			sc.MustGetToken(TK_IntConst);
+			g = sc.Number;
+			sc.MustGetToken(',');
+			sc.MustGetToken(TK_IntConst);
+			b = sc.Number;
+			sc.MustGetToken(']');
+
+			AddColourisation(start, end, r, g, b);
+		}
+		else if (sc.TokenType == '@')
+		{
+			// Tint translation
+			int a, r, g, b;
+
+			sc.MustGetToken(TK_IntConst);
+			a = sc.Number;
+			sc.MustGetToken('[');
+			sc.MustGetToken(TK_IntConst);
+			r = sc.Number;
+			sc.MustGetToken(',');
+			sc.MustGetToken(TK_IntConst);
+			g = sc.Number;
+			sc.MustGetToken(',');
+			sc.MustGetToken(TK_IntConst);
+			b = sc.Number;
+			sc.MustGetToken(']');
+
+			AddTint(start, end, r, g, b, a);
+		}
+		else
+		{
+			int pal1, pal2;
+
+			sc.TokenMustBe(TK_IntConst);
+			pal1 = sc.Number;
+			sc.MustGetToken(':');
+			sc.MustGetToken(TK_IntConst);
+			pal2 = sc.Number;
+			AddIndexRange(start, end, pal1, pal2);
+		}
 	}
 	catch (CRecoverableError &err)
 	{
@@ -573,26 +697,26 @@ void FRemapTable::AddToTranslation(const char *range)
 //
 //----------------------------------------------------------------------------
 
-int FRemapTable::StoreTranslation()
+int FRemapTable::StoreTranslation(int slot)
 {
 	unsigned int i;
 
-	for (i = 0; i < translationtables[TRANSLATION_Decorate].Size(); i++)
+	for (i = 0; i < translationtables[slot].Size(); i++)
 	{
-		if (*this == *translationtables[TRANSLATION_Decorate][i])
+		if (*this == *translationtables[slot][i])
 		{
 			// A duplicate of this translation already exists
-			return TRANSLATION(TRANSLATION_Decorate, i);
+			return TRANSLATION(slot, i);
 		}
 	}
-	if (translationtables[TRANSLATION_Decorate].Size() >= MAX_DECORATE_TRANSLATIONS)
+	if (translationtables[slot].Size() >= MAX_DECORATE_TRANSLATIONS)
 	{
 		I_Error("Too many DECORATE translations");
 	}
 	FRemapTable *newtrans = new FRemapTable;
 	*newtrans = *this;
-	i = translationtables[TRANSLATION_Decorate].Push(newtrans);
-	return TRANSLATION(TRANSLATION_Decorate, i);
+	i = translationtables[slot].Push(newtrans);
+	return TRANSLATION(slot, i);
 }
 
 
@@ -602,7 +726,7 @@ int FRemapTable::StoreTranslation()
 //
 //----------------------------------------------------------------------------
 
-TArray<PalEntry> BloodTranslationColors;
+static TArray<PalEntry> BloodTranslationColors;
 
 int CreateBloodTranslation(PalEntry color)
 {
@@ -630,10 +754,12 @@ int CreateBloodTranslation(PalEntry color)
 		I_Error("Too many blood colors");
 	}
 	FRemapTable *trans = new FRemapTable;
-	for (i = 0; i < 256; i++)
+	trans->Palette[0] = 0;
+	trans->Remap[0] = 0;
+	for (i = 1; i < 256; i++)
 	{
 		int bright = MAX(MAX(GPalette.BaseColors[i].r, GPalette.BaseColors[i].g), GPalette.BaseColors[i].b);
-		PalEntry pe = PalEntry(color.r*bright/255, color.g*bright/255, color.b*bright/255);
+		PalEntry pe = PalEntry(255, color.r*bright/255, color.g*bright/255, color.b*bright/255);
 		int entry = ColorMatcher.Pick(pe.r, pe.g, pe.b);
 
 		trans->Palette[i] = pe;
@@ -810,13 +936,15 @@ void R_InitTranslationTables ()
 	// Doom palette has no good substitutes for these bluish-tinted grays, so
 	// they will just look gray unless you use a different PLAYPAL with Doom.
 
-	BYTE IcePaletteRemap[16];
+	uint8_t IcePaletteRemap[16];
 	for (i = 0; i < 16; ++i)
 	{
 		IcePaletteRemap[i] = ColorMatcher.Pick (IcePalette[i][0], IcePalette[i][1], IcePalette[i][2]);
 	}
 	FRemapTable *remap = translationtables[TRANSLATION_Standard][7];
-	for (i = 0; i < 256; ++i)
+	remap->Remap[0] = 0;
+	remap->Palette[0] = 0;
+	for (i = 1; i < 256; ++i)
 	{
 		int r = GPalette.BaseColors[i].r;
 		int g = GPalette.BaseColors[i].g;
@@ -829,7 +957,9 @@ void R_InitTranslationTables ()
 	// The alphatexture translation. Since alphatextures use the red channel this is just a standard grayscale mapping.
 	PushIdentityTable(TRANSLATION_Standard);
 	remap = translationtables[TRANSLATION_Standard][8];
-	for (i = 0; i < 256; i++)
+	remap->Remap[0] = 0;
+	remap->Palette[0] = 0;
+	for (i = 1; i < 256; i++)
 	{
 		remap->Remap[i] = i;
 		remap->Palette[i] = PalEntry(255, i, i, i);
@@ -936,8 +1066,8 @@ static void R_CreatePlayerTranslation (float h, float s, float v, const FPlayerC
 	FPlayerSkin *skin, FRemapTable *table, FRemapTable *alttable, FRemapTable *pillartable)
 {
 	int i;
-	BYTE start = skin->range0start;
-	BYTE end = skin->range0end;
+	uint8_t start = skin->range0start;
+	uint8_t end = skin->range0end;
 	float r, g, b;
 	float bases, basev;
 	float sdelta, vdelta;
@@ -1001,7 +1131,7 @@ static void R_CreatePlayerTranslation (float h, float s, float v, const FPlayerC
 		else
 		{
 			FMemLump translump = Wads.ReadLump(colorset->Lump);
-			const BYTE *trans = (const BYTE *)translump.GetMem();
+			const uint8_t *trans = (const uint8_t *)translump.GetMem();
 			for (i = start; i <= end; ++i)
 			{
 				table->Remap[i] = GPalette.Remap[trans[i]];
@@ -1135,7 +1265,7 @@ void R_BuildPlayerTranslation (int player)
 	D_GetPlayerColor (player, &h, &s, &v, &colorset);
 
 	R_CreatePlayerTranslation (h, s, v, colorset,
-		&skins[players[player].userinfo.GetSkin()],
+		&Skins[players[player].userinfo.GetSkin()],
 		translationtables[TRANSLATION_Players][player],
 		translationtables[TRANSLATION_PlayersExtra][player],
 		translationtables[TRANSLATION_RainPillar][player]
@@ -1161,3 +1291,171 @@ void R_GetPlayerTranslation (int color, const FPlayerColorSet *colorset, FPlayer
 
 	R_CreatePlayerTranslation (h, s, v, colorset, skin, table, NULL, NULL);
 }
+
+
+DEFINE_ACTION_FUNCTION(_Translation, SetPlayerTranslation)
+{
+	PARAM_PROLOGUE;
+	PARAM_UINT(tgroup);
+	PARAM_UINT(tnum);
+	PARAM_UINT(pnum);
+	PARAM_POINTER(cls, FPlayerClass);
+
+	if (pnum >= MAXPLAYERS || tgroup >= NUM_TRANSLATION_TABLES || tnum >= translationtables[tgroup].Size())
+	{
+		ACTION_RETURN_BOOL(false);
+	}
+	auto self = &players[pnum];
+	int PlayerColor = self->userinfo.GetColor();
+	int	PlayerSkin = self->userinfo.GetSkin();
+	int PlayerColorset = self->userinfo.GetColorSet();
+
+	if (cls != nullptr)
+	{
+		PlayerSkin = R_FindSkin(Skins[PlayerSkin].Name, int(cls - &PlayerClasses[0]));
+		R_GetPlayerTranslation(PlayerColor, GetColorSet(cls->Type, PlayerColorset),
+			&Skins[PlayerSkin], translationtables[tgroup][tnum]);
+	}
+	ACTION_RETURN_BOOL(true);
+}
+
+//----------------------------------------------------------------------------
+//
+//
+//
+//----------------------------------------------------------------------------
+static TMap<FName, int> customTranslationMap;
+
+int R_FindCustomTranslation(FName name)
+{
+	switch (name)
+	{
+	case NAME_Ice:
+		// Ice is a special case which will remain in its original slot.
+		return TRANSLATION(TRANSLATION_Standard, 7);
+
+	case NAME_None:
+		return 0;
+
+	case NAME_RainPillar1:
+	case NAME_RainPillar2:
+	case NAME_RainPillar3:
+	case NAME_RainPillar4:
+	case NAME_RainPillar5:
+	case NAME_RainPillar6:
+	case NAME_RainPillar7:
+	case NAME_RainPillar8:
+		return TRANSLATION(TRANSLATION_RainPillar, name.GetIndex() - NAME_RainPillar1);
+
+	case NAME_Player1:
+	case NAME_Player2:
+	case NAME_Player3:
+	case NAME_Player4:
+	case NAME_Player5:
+	case NAME_Player6:
+	case NAME_Player7:
+	case NAME_Player8:
+		return TRANSLATION(TRANSLATION_Players, name.GetIndex() - NAME_Player1);
+
+	}
+	int *t = customTranslationMap.CheckKey(FName(name, true));
+	return (t != nullptr)? *t : -1;
+}
+
+DEFINE_ACTION_FUNCTION(_Translation, GetID)
+{
+	PARAM_PROLOGUE;
+	PARAM_NAME(t);
+	ACTION_RETURN_INT(R_FindCustomTranslation(t));
+}
+
+//----------------------------------------------------------------------------
+//
+//
+//
+//----------------------------------------------------------------------------
+
+void R_ParseTrnslate()
+{
+	customTranslationMap.Clear();
+	translationtables[TRANSLATION_Custom].Clear();
+
+	int lump;
+	int lastlump = 0;
+	while (-1 != (lump = Wads.FindLump("TRNSLATE", &lastlump)))
+	{
+		FScanner sc(lump);
+		while (sc.GetToken())
+		{
+			sc.TokenMustBe(TK_Identifier);
+
+			FName newtrans = sc.String;
+			FRemapTable *base = nullptr;
+			if (sc.CheckToken(':'))
+			{
+				sc.MustGetAnyToken();
+				if (sc.TokenType == TK_IntConst)
+				{
+					int max = 6;
+					if (sc.Number < 0 || sc.Number > max)
+					{
+						sc.ScriptError("Translation must be in the range [0,%d]", max);
+					}
+					base = translationtables[TRANSLATION_Standard][sc.Number];
+				}
+				else if (sc.TokenType == TK_Identifier)
+				{
+					int tnum = R_FindCustomTranslation(sc.String);
+					if (tnum == -1)
+					{
+						sc.ScriptError("Base translation '%s' not found in '%s'", sc.String, newtrans.GetChars());
+					}
+					base = translationtables[GetTranslationType(tnum)][GetTranslationIndex(tnum)];
+				}
+				else
+				{
+					// error out.
+					sc.TokenMustBe(TK_Identifier);
+				}
+			}
+			sc.MustGetToken('=');
+			FRemapTable NewTranslation;
+			if (base != nullptr)  NewTranslation = *base;
+			else NewTranslation.MakeIdentity();
+			do
+			{
+				sc.MustGetToken(TK_StringConst);
+				NewTranslation.AddToTranslation(sc.String);
+			} while (sc.CheckToken(','));
+
+			int trans = NewTranslation.StoreTranslation(TRANSLATION_Custom);
+			customTranslationMap[newtrans] = trans;
+		}
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+//
+//
+//----------------------------------------------------------------------------
+
+struct FTranslation
+{
+	PalEntry colors[256];
+};
+
+DEFINE_ACTION_FUNCTION(_Translation, AddTranslation)
+{
+	PARAM_SELF_STRUCT_PROLOGUE(FTranslation);
+
+	FRemapTable NewTranslation;
+	memcpy(&NewTranslation.Palette[0], self->colors, 256 * sizeof(PalEntry));
+	for (int i = 0; i < 256; i++)
+	{
+		NewTranslation.Remap[i] = ColorMatcher.Pick(self->colors[i]);
+	}
+	int trans = NewTranslation.StoreTranslation(TRANSLATION_Custom);
+	ACTION_RETURN_INT(trans);
+}
+

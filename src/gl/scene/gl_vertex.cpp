@@ -1,41 +1,24 @@
-/*
-** gl_vertex.cpp
-**
-**---------------------------------------------------------------------------
-** Copyright 2006 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-** 5. Full disclosure of the entire project's source code, except for third
-**    party libraries is mandatory. (NOTE: This clause is non-negotiable!)
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
-**
-*/
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2006-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 
 
 
@@ -61,14 +44,14 @@ EXTERN_CVAR(Bool, gl_seamless)
 //
 //==========================================================================
 
-void GLWall::SplitUpperEdge(texcoord * tcs, FFlatVertex *&ptr)
+void GLWall::SplitUpperEdge(FFlatVertex *&ptr)
 {
 	if (seg == NULL || seg->sidedef == NULL || (seg->sidedef->Flags & WALLF_POLYOBJ) || seg->sidedef->numsegs == 1) return;
 
 	side_t *sidedef = seg->sidedef;
 	float polyw = glseg.fracright - glseg.fracleft;
-	float facu = (tcs[2].u - tcs[1].u) / polyw;
-	float facv = (tcs[2].v - tcs[1].v) / polyw;
+	float facu = (tcs[UPRGT].u - tcs[UPLFT].u) / polyw;
+	float facv = (tcs[UPRGT].v - tcs[UPLFT].v) / polyw;
 	float fact = (ztop[1] - ztop[0]) / polyw;
 	float facc = (zceil[1] - zceil[0]) / polyw;
 	float facf = (zfloor[1] - zfloor[0]) / polyw;
@@ -82,11 +65,11 @@ void GLWall::SplitUpperEdge(texcoord * tcs, FFlatVertex *&ptr)
 
 		float fracfac = sidefrac - glseg.fracleft;
 
-		ptr->x = cseg->v2->fx;
-		ptr->y = cseg->v2->fy;
+		ptr->x = cseg->v2->fX();
+		ptr->y = cseg->v2->fY();
 		ptr->z = ztop[0] + fact * fracfac;
-		ptr->u = tcs[1].u + facu * fracfac;
-		ptr->v = tcs[1].v + facv * fracfac;
+		ptr->u = tcs[UPLFT].u + facu * fracfac;
+		ptr->v = tcs[UPLFT].v + facv * fracfac;
 		ptr++;
 	}
 }
@@ -97,14 +80,14 @@ void GLWall::SplitUpperEdge(texcoord * tcs, FFlatVertex *&ptr)
 //
 //==========================================================================
 
-void GLWall::SplitLowerEdge(texcoord * tcs, FFlatVertex *&ptr)
+void GLWall::SplitLowerEdge(FFlatVertex *&ptr)
 {
 	if (seg == NULL || seg->sidedef == NULL || (seg->sidedef->Flags & WALLF_POLYOBJ) || seg->sidedef->numsegs == 1) return;
 
 	side_t *sidedef = seg->sidedef;
 	float polyw = glseg.fracright - glseg.fracleft;
-	float facu = (tcs[3].u - tcs[0].u) / polyw;
-	float facv = (tcs[3].v - tcs[0].v) / polyw;
+	float facu = (tcs[LORGT].u - tcs[LOLFT].u) / polyw;
+	float facv = (tcs[LORGT].v - tcs[LOLFT].v) / polyw;
 	float facb = (zbottom[1] - zbottom[0]) / polyw;
 	float facc = (zceil[1] - zceil[0]) / polyw;
 	float facf = (zfloor[1] - zfloor[0]) / polyw;
@@ -118,11 +101,11 @@ void GLWall::SplitLowerEdge(texcoord * tcs, FFlatVertex *&ptr)
 
 		float fracfac = sidefrac - glseg.fracleft;
 
-		ptr->x = cseg->v2->fx;
-		ptr->y = cseg->v2->fy;
+		ptr->x = cseg->v2->fX();
+		ptr->y = cseg->v2->fY();
 		ptr->z = zbottom[0] + facb * fracfac;
-		ptr->u = tcs[0].u + facu * fracfac;
-		ptr->v = tcs[0].v + facv * fracfac;
+		ptr->u = tcs[LOLFT].u + facu * fracfac;
+		ptr->v = tcs[LOLFT].v + facv * fracfac;
 		ptr++;
 	}
 }
@@ -133,7 +116,7 @@ void GLWall::SplitLowerEdge(texcoord * tcs, FFlatVertex *&ptr)
 //
 //==========================================================================
 
-void GLWall::SplitLeftEdge(texcoord * tcs, FFlatVertex *&ptr)
+void GLWall::SplitLeftEdge(FFlatVertex *&ptr)
 {
 	if (vertexes[0] == NULL) return;
 
@@ -144,8 +127,8 @@ void GLWall::SplitLeftEdge(texcoord * tcs, FFlatVertex *&ptr)
 		int i = 0;
 
 		float polyh1 = ztop[0] - zbottom[0];
-		float factv1 = polyh1 ? (tcs[1].v - tcs[0].v) / polyh1 : 0;
-		float factu1 = polyh1 ? (tcs[1].u - tcs[0].u) / polyh1 : 0;
+		float factv1 = polyh1 ? (tcs[UPLFT].v - tcs[LOLFT].v) / polyh1 : 0;
+		float factu1 = polyh1 ? (tcs[UPLFT].u - tcs[LOLFT].u) / polyh1 : 0;
 
 		while (i<vi->numheights && vi->heightlist[i] <= zbottom[0]) i++;
 		while (i<vi->numheights && vi->heightlist[i] < ztop[0])
@@ -153,8 +136,8 @@ void GLWall::SplitLeftEdge(texcoord * tcs, FFlatVertex *&ptr)
 			ptr->x = glseg.x1;
 			ptr->y = glseg.y1;
 			ptr->z = vi->heightlist[i];
-			ptr->u = factu1*(vi->heightlist[i] - ztop[0]) + tcs[1].u;
-			ptr->v = factv1*(vi->heightlist[i] - ztop[0]) + tcs[1].v;
+			ptr->u = factu1*(vi->heightlist[i] - ztop[0]) + tcs[UPLFT].u;
+			ptr->v = factv1*(vi->heightlist[i] - ztop[0]) + tcs[UPLFT].v;
 			ptr++;
 			i++;
 		}
@@ -167,7 +150,7 @@ void GLWall::SplitLeftEdge(texcoord * tcs, FFlatVertex *&ptr)
 //
 //==========================================================================
 
-void GLWall::SplitRightEdge(texcoord * tcs, FFlatVertex *&ptr)
+void GLWall::SplitRightEdge(FFlatVertex *&ptr)
 {
 	if (vertexes[1] == NULL) return;
 
@@ -178,8 +161,8 @@ void GLWall::SplitRightEdge(texcoord * tcs, FFlatVertex *&ptr)
 		int i = vi->numheights - 1;
 
 		float polyh2 = ztop[1] - zbottom[1];
-		float factv2 = polyh2 ? (tcs[2].v - tcs[3].v) / polyh2 : 0;
-		float factu2 = polyh2 ? (tcs[2].u - tcs[3].u) / polyh2 : 0;
+		float factv2 = polyh2 ? (tcs[UPRGT].v - tcs[LORGT].v) / polyh2 : 0;
+		float factu2 = polyh2 ? (tcs[UPRGT].u - tcs[LORGT].u) / polyh2 : 0;
 
 		while (i>0 && vi->heightlist[i] >= ztop[1]) i--;
 		while (i>0 && vi->heightlist[i] > zbottom[1])
@@ -187,8 +170,8 @@ void GLWall::SplitRightEdge(texcoord * tcs, FFlatVertex *&ptr)
 			ptr->x = glseg.x2;
 			ptr->y = glseg.y2;
 			ptr->z = vi->heightlist[i];
-			ptr->u = factu2*(vi->heightlist[i] - ztop[1]) + tcs[2].u;
-			ptr->v = factv2*(vi->heightlist[i] - ztop[1]) + tcs[2].v;
+			ptr->u = factu2*(vi->heightlist[i] - ztop[1]) + tcs[UPRGT].u;
+			ptr->v = factv2*(vi->heightlist[i] - ztop[1]) + tcs[UPRGT].v;
 			ptr++;
 			i--;
 		}

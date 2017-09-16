@@ -62,6 +62,7 @@
 #include "r_data/colormaps.h"
 #include "r_data/sprites.h"
 #include "voxels.h"
+#include "info.h"
 
 void VOX_AddVoxel(int sprnum, int frame, FVoxelDef *def);
 
@@ -71,13 +72,13 @@ TDeletingArray<FVoxelDef *> VoxelDefs;
 struct VoxelOptions
 {
 	VoxelOptions()
-	: DroppedSpin(0), PlacedSpin(0), Scale(FRACUNIT), AngleOffset(ANGLE_90), OverridePalette(false)
+	: DroppedSpin(0), PlacedSpin(0), Scale(1.), AngleOffset(90.), OverridePalette(false)
 	{}
 
 	int			DroppedSpin;
 	int			PlacedSpin;
-	fixed_t		Scale;
-	angle_t		AngleOffset;
+	double		Scale;
+	DAngle		AngleOffset;
 	bool		OverridePalette;
 };
 
@@ -91,10 +92,10 @@ struct VoxelOptions
 //
 //==========================================================================
 
-static BYTE *GetVoxelRemap(const BYTE *pal)
+static uint8_t *GetVoxelRemap(const uint8_t *pal)
 {
-	static BYTE remap[256];
-	static BYTE oldpal[768];
+	static uint8_t remap[256];
+	static uint8_t oldpal[768];
 	static bool firsttime = true;
 
 	if (firsttime || memcmp(oldpal, pal, 768) != 0)
@@ -105,7 +106,7 @@ static BYTE *GetVoxelRemap(const BYTE *pal)
 		{
 			// The voxel palette uses VGA colors, so we have to expand it
 			// from 6 to 8 bits per component.
-			remap[i] = BestColor((uint32 *)GPalette.BaseColors,
+			remap[i] = BestColor((uint32_t *)GPalette.BaseColors,
 				(oldpal[i*3 + 0] << 2) | (oldpal[i*3 + 0] >> 4),
 				(oldpal[i*3 + 1] << 2) | (oldpal[i*3 + 1] >> 4),
 				(oldpal[i*3 + 2] << 2) | (oldpal[i*3 + 2] >> 4));
@@ -142,8 +143,8 @@ static bool CopyVoxelSlabs(kvxslab_t *dest, const kvxslab_t *src, int size)
 			dest->col[j] = src->col[j];
 		}
 		slabzleng += 3;
-		src = (kvxslab_t *)((BYTE *)src + slabzleng);
-		dest = (kvxslab_t *)((BYTE *)dest + slabzleng);
+		src = (kvxslab_t *)((uint8_t *)src + slabzleng);
+		dest = (kvxslab_t *)((uint8_t *)dest + slabzleng);
 		size -= slabzleng;
 	}
 	return true;
@@ -157,7 +158,7 @@ static bool CopyVoxelSlabs(kvxslab_t *dest, const kvxslab_t *src, int size)
 //
 //==========================================================================
 
-static void RemapVoxelSlabs(kvxslab_t *dest, int size, const BYTE *remap)
+static void RemapVoxelSlabs(kvxslab_t *dest, int size, const uint8_t *remap)
 {
 	while (size >= 3)
 	{
@@ -168,7 +169,7 @@ static void RemapVoxelSlabs(kvxslab_t *dest, int size, const BYTE *remap)
 			dest->col[j] = remap[dest->col[j]];
 		}
 		slabzleng += 3;
-		dest = (kvxslab_t *)((BYTE *)dest + slabzleng);
+		dest = (kvxslab_t *)((uint8_t *)dest + slabzleng);
 		size -= slabzleng;
 	}
 }
@@ -183,12 +184,12 @@ FVoxel *R_LoadKVX(int lumpnum)
 {
 	const kvxslab_t *slabs[MAXVOXMIPS];
 	FVoxel *voxel = new FVoxel;
-	const BYTE *rawmip;
+	const uint8_t *rawmip;
 	int mip, maxmipsize;
 	int i, j, n;
 
 	FMemLump lump = Wads.ReadLump(lumpnum);	// FMemLump adds an extra 0 byte to the end.
-	BYTE *rawvoxel = (BYTE *)lump.GetMem();
+	uint8_t *rawvoxel = (uint8_t *)lump.GetMem();
 	int voxelsize = (int)(lump.GetSize()-1);
 
 	// Oh, KVX, why couldn't you have a proper header? We'll just go through
@@ -213,9 +214,9 @@ FVoxel *R_LoadKVX(int lumpnum)
 		mipl->SizeX = GetInt(rawmip + 0);
 		mipl->SizeY = GetInt(rawmip + 4);
 		mipl->SizeZ = GetInt(rawmip + 8);
-		mipl->PivotX = GetInt(rawmip + 12);
-		mipl->PivotY = GetInt(rawmip + 16);
-		mipl->PivotZ = GetInt(rawmip + 20);
+		mipl->Pivot.X = GetInt(rawmip + 12) / 256.;
+		mipl->Pivot.Y = GetInt(rawmip + 16) / 256.;
+		mipl->Pivot.Z = GetInt(rawmip + 20) / 256.;
 
 		// How much space do we have for voxdata?
 		int offsetsize = (mipl->SizeX + 1) * 4 + mipl->SizeX * (mipl->SizeY + 1) * 2;
@@ -229,7 +230,7 @@ FVoxel *R_LoadKVX(int lumpnum)
 			// Allocate slab data space.
 			mipl->OffsetX = new int[(numbytes - 24 + 3) / 4];
 			mipl->OffsetXY = (short *)(mipl->OffsetX + mipl->SizeX + 1);
-			mipl->SlabData = (BYTE *)(mipl->OffsetXY + mipl->SizeX * (mipl->SizeY + 1));
+			mipl->SlabData = (uint8_t *)(mipl->OffsetXY + mipl->SizeX * (mipl->SizeY + 1));
 
 			// Load x offsets.
 			for (i = 0, n = mipl->SizeX; i <= n; ++i)
@@ -300,9 +301,7 @@ FVoxel *R_LoadKVX(int lumpnum)
 	// Fix pivot data for submips, since some tools seem to like to just center these.
 	for (i = 1; i < mip; ++i)
 	{
-		voxel->Mips[i].PivotX = voxel->Mips[0].PivotX >> i;
-		voxel->Mips[i].PivotY = voxel->Mips[0].PivotY >> i;
-		voxel->Mips[i].PivotZ = voxel->Mips[0].PivotZ >> i;
+		voxel->Mips[i].Pivot = voxel->Mips[i - 1].Pivot / 2;
 	}
 
 	for (i = 0; i < mip; ++i)
@@ -315,7 +314,7 @@ FVoxel *R_LoadKVX(int lumpnum)
 	}
 
 	voxel->LumpNum = lumpnum;
-	voxel->Palette = new BYTE[768];
+	voxel->Palette = new uint8_t[768];
 	memcpy(voxel->Palette, rawvoxel + voxelsize - 768, 768);
 
 	return voxel;
@@ -339,9 +338,9 @@ FVoxelDef *R_LoadVoxelDef(int lumpnum, int spin)
 	{
 		FVoxelDef *voxdef = new FVoxelDef;
 		voxdef->Voxel = vox;
-		voxdef->Scale = FRACUNIT;
+		voxdef->Scale = 1.;
 		voxdef->DroppedSpin = voxdef->PlacedSpin = spin;
-		voxdef->AngleOffset = ANGLE_90;
+		voxdef->AngleOffset = 90.;
 
 		Voxels.Push(vox);
 		VoxelDefs.Push(voxdef);
@@ -358,7 +357,7 @@ FVoxelDef *R_LoadVoxelDef(int lumpnum, int spin)
 FVoxelMipLevel::FVoxelMipLevel()
 {
 	SizeZ = SizeY = SizeX = 0;
-	PivotZ = PivotY = PivotX = 0;
+	Pivot.Zero();
 	OffsetX = NULL;
 	OffsetXY = NULL;
 	SlabData = NULL;
@@ -396,6 +395,60 @@ FVoxel::~FVoxel()
 
 //==========================================================================
 //
+// Create true color version of the slab data
+//
+//==========================================================================
+
+void FVoxel::CreateBgraSlabData()
+{
+	for (int i = 0; i < NumMips; ++i)
+	{
+		int size = Mips[i].OffsetX[Mips[i].SizeX];
+		if (size <= 0) continue;
+
+		Mips[i].SlabDataBgra.Resize(size);
+
+		kvxslab_t *src = (kvxslab_t*)Mips[i].SlabData;
+		kvxslab_bgra_t *dest = (kvxslab_bgra_t*)&Mips[i].SlabDataBgra[0];
+
+		while (size >= 3)
+		{
+			dest->backfacecull = src->backfacecull;
+			dest->ztop = src->ztop;
+			dest->zleng = src->zleng;
+
+			int slabzleng = src->zleng;
+			for (int j = 0; j < slabzleng; ++j)
+			{
+				int colorIndex = src->col[j];
+
+				uint32_t red, green, blue;
+				if (Palette)
+				{
+					red = (Palette[colorIndex * 3 + 0] << 2) | (Palette[colorIndex * 3 + 0] >> 4);
+					green = (Palette[colorIndex * 3 + 1] << 2) | (Palette[colorIndex * 3 + 1] >> 4);
+					blue = (Palette[colorIndex * 3 + 2] << 2) | (Palette[colorIndex * 3 + 2] >> 4);
+				}
+				else
+				{
+					red = GPalette.BaseColors[colorIndex].r;
+					green = GPalette.BaseColors[colorIndex].g;
+					blue = GPalette.BaseColors[colorIndex].b;
+				}
+
+				dest->col[j] = 0xff000000 | (red << 16) | (green << 8) | blue;
+			}
+			slabzleng += 3;
+
+			dest = (kvxslab_bgra_t *)((uint32_t *)dest + slabzleng);
+			src = (kvxslab_t *)((uint8_t *)src + slabzleng);
+			size -= slabzleng;
+		}
+	}
+}
+
+//==========================================================================
+//
 // Remap the voxel to the game palette
 //
 //==========================================================================
@@ -404,7 +457,7 @@ void FVoxel::Remap()
 {
 	if (Palette != NULL)
 	{
-		BYTE *remap = GetVoxelRemap(Palette);
+		uint8_t *remap = GetVoxelRemap(Palette);
 		for (int i = 0; i < NumMips; ++i)
 		{
 			RemapVoxelSlabs((kvxslab_t *)Mips[i].SlabData, Mips[i].OffsetX[Mips[i].SizeX], remap);
@@ -438,7 +491,7 @@ void FVoxel::RemovePalette()
 //
 //==========================================================================
 
-static bool VOX_ReadSpriteNames(FScanner &sc, TArray<DWORD> &vsprites)
+static bool VOX_ReadSpriteNames(FScanner &sc, TArray<uint32_t> &vsprites)
 {
 	vsprites.Clear();
 	while (sc.GetString())
@@ -458,7 +511,7 @@ static bool VOX_ReadSpriteNames(FScanner &sc, TArray<DWORD> &vsprites)
 		}
 		else if (sc.StringLen == 5 && (sc.String[4] = toupper(sc.String[4]), sc.String[4] < 'A' || sc.String[4] >= 'A' + MAX_SPRITE_FRAMES))
 		{
-			sc.ScriptMessage("Sprite frame %s is invalid.\n", sc.String[4]);
+			sc.ScriptMessage("Sprite frame %c is invalid.\n", sc.String[4]);
 		}
 		else
 		{
@@ -499,29 +552,37 @@ static void VOX_ReadOptions(FScanner &sc, VoxelOptions &opts)
 		{
 			sc.MustGetToken('=');
 			sc.MustGetToken(TK_FloatConst);
-			opts.Scale = FLOAT2FIXED(sc.Float);
+			opts.Scale = sc.Float;
 		}
 		else if (sc.Compare("spin"))
 		{
+			int mul = 1;
 			sc.MustGetToken('=');
+			if (sc.CheckToken('-')) mul = -1;
 			sc.MustGetToken(TK_IntConst);
-			opts.DroppedSpin = opts.PlacedSpin = sc.Number;
+			opts.DroppedSpin = opts.PlacedSpin = sc.Number*mul;
 		}
 		else if (sc.Compare("placedspin"))
 		{
+			int mul = 1;
 			sc.MustGetToken('=');
+			if (sc.CheckToken('-')) mul = -1;
 			sc.MustGetToken(TK_IntConst);
-			opts.PlacedSpin = sc.Number;
+			opts.PlacedSpin = sc.Number*mul;
 		}
 		else if (sc.Compare("droppedspin"))
 		{
+			int mul = 1;
 			sc.MustGetToken('=');
+			if (sc.CheckToken('-')) mul = -1;
 			sc.MustGetToken(TK_IntConst);
-			opts.DroppedSpin = sc.Number;
+			opts.DroppedSpin = sc.Number*mul;
 		}
 		else if (sc.Compare("angleoffset"))
 		{
+			int mul = 1;
 			sc.MustGetToken('=');
+			if (sc.CheckToken('-')) mul = -1;
 			sc.MustGetAnyToken();
 			if (sc.TokenType == TK_IntConst)
 			{
@@ -531,7 +592,7 @@ static void VOX_ReadOptions(FScanner &sc, VoxelOptions &opts)
 			{
 				sc.TokenMustBe(TK_FloatConst);
 			}
-			opts.AngleOffset = ANGLE_90 + FLOAT2ANGLE(sc.Float);
+			opts.AngleOffset = mul * sc.Float + 90.;
 		}
 		else if (sc.Compare("overridepalette"))
 		{
@@ -592,7 +653,7 @@ void R_InitVoxels()
 	while ((lump = Wads.FindLump("VOXELDEF", &lastlump)) != -1)
 	{
 		FScanner sc(lump);
-		TArray<DWORD> vsprites;
+		TArray<uint32_t> vsprites;
 
 		while (VOX_ReadSpriteNames(sc, vsprites))
 		{

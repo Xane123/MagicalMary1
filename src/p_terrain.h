@@ -39,24 +39,24 @@
 
 class PClass;
 
-extern WORD DefaultTerrainType;
+extern uint16_t DefaultTerrainType;
 
 
 class FTerrainTypeArray
 {
 public:
-	TArray<WORD> Types;
+	TArray<uint16_t> Types;
 
-	WORD operator [](FTextureID tex) const
+	uint16_t operator [](FTextureID tex) const
 	{
 		if ((unsigned)tex.GetIndex() >= Types.Size()) return DefaultTerrainType;
-		WORD type = Types[tex.GetIndex()];
+		uint16_t type = Types[tex.GetIndex()];
 		return type == 0xffff? DefaultTerrainType : type;
 	}
-	WORD operator [](int texnum) const
+	uint16_t operator [](int texnum) const
 	{
 		if ((unsigned)texnum >= Types.Size()) return DefaultTerrainType;
-		WORD type = Types[texnum];
+		uint16_t type = Types[texnum];
 		return type == 0xffff? DefaultTerrainType : type;
 	}
 	void Resize(unsigned newsize)
@@ -65,7 +65,7 @@ public:
 	}
 	void Clear()
 	{
-		memset (&Types[0], 0xff, Types.Size()*sizeof(WORD));
+		memset (&Types[0], 0xff, Types.Size()*sizeof(uint16_t));
 	}
 	void Set(int index, int value)
 	{
@@ -73,7 +73,7 @@ public:
 		{
 			int oldsize = Types.Size();
 			Resize(index + 1);
-			memset(&Types[oldsize], 0xff, (index + 1 - oldsize)*sizeof(WORD));
+			memset(&Types[oldsize], 0xff, (index + 1 - oldsize)*sizeof(uint16_t));
 		}
 		Types[index] = value;
 	}
@@ -92,12 +92,12 @@ struct FSplashDef
 	PClassActor *SmallSplash;
 	PClassActor *SplashBase;
 	PClassActor *SplashChunk;
-	BYTE ChunkXVelShift;
-	BYTE ChunkYVelShift;
-	BYTE ChunkZVelShift;
-	fixed_t ChunkBaseZVel;
-	fixed_t SmallSplashClip;
+	uint8_t ChunkXVelShift;
+	uint8_t ChunkYVelShift;
+	uint8_t ChunkZVelShift;
 	bool NoAlert;
+	double ChunkBaseZVel;
+	double SmallSplashClip;
 };
 
 struct FTerrainDef
@@ -107,7 +107,7 @@ struct FTerrainDef
 	int DamageAmount;
 	FName DamageMOD;
 	int DamageTimeMask;
-	fixed_t FootClip;
+	double FootClip;
 	float StepVolume;
 	int WalkStepTics;
 	int RunStepTics;
@@ -115,15 +115,14 @@ struct FTerrainDef
 	FSoundID RightStepSound;
 	bool IsLiquid;
 	bool AllowProtection;
-	fixed_t Friction;
-	fixed_t MoveFactor;
+	double Friction;
+	double MoveFactor;
 };
 
 extern TArray<FSplashDef> Splashes;
 extern TArray<FTerrainDef> Terrains;
 
-class FArchive;
 int P_FindTerrain(FName name);
-void P_SerializeTerrain(FArchive &arc, int &terrainnum);
+FName P_GetTerrainName(int terrainnum);
 
 #endif //__P_TERRAIN_H__

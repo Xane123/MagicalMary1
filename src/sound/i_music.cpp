@@ -32,22 +32,14 @@
 **
 */
 
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <mmsystem.h>
-#else
+#ifndef _WIN32
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
-#include <wordexp.h>
-#include <stdio.h>
 #include "mus2midi.h"
-#define FALSE 0
-#define TRUE 1
 extern void ChildSigHandler (int signum);
 #endif
 
@@ -71,6 +63,7 @@ extern void ChildSigHandler (int signum);
 #include "templates.h"
 #include "stats.h"
 #include "timidity/timidity.h"
+#include "vm.h"
 
 #define GZIP_ID1		31
 #define GZIP_ID2		139
@@ -92,14 +85,14 @@ enum EMIDIType
 	MIDI_MUS
 };
 
-extern int MUSHeaderSearch(const BYTE *head, int len);
+extern int MUSHeaderSearch(const uint8_t *head, int len);
 
 EXTERN_CVAR (Int, snd_samplerate)
 EXTERN_CVAR (Int, snd_mididevice)
 
 static bool MusicDown = true;
 
-static bool ungzip(BYTE *data, int size, TArray<BYTE> &newdata);
+static bool ungzip(uint8_t *data, int size, TArray<uint8_t> &newdata);
 
 MusInfo *currSong;
 int		nomusic = 0;
@@ -190,9 +183,6 @@ void I_ShutdownMusic(bool onexit)
 	}
 	Timidity::FreeAll();
 	if (onexit) WildMidi_Shutdown();
-#ifdef _WIN32
-	I_ShutdownMusicWin32();
-#endif // _WIN32
 }
 
 void I_ShutdownMusicExit()
@@ -227,7 +217,12 @@ void MusInfo::Start(bool loop, float rel_vol, int subsong)
 {
 	if (nomusic) return;
 
-	if (rel_vol > 0.f) saved_relative_volume = relative_volume = rel_vol;
+	if (rel_vol > 0.f)
+	{
+		float factor = relative_volume / saved_relative_volume;
+		saved_relative_volume = rel_vol;
+		relative_volume = saved_relative_volume * factor;
+	}
 	Stop ();
 	Play (loop, subsong);
 	m_NotStartedYet = false;
@@ -274,6 +269,10 @@ void MusInfo::TimidityVolumeChanged()
 {
 }
 
+void MusInfo::GMEDepthChanged(float val)
+{
+}
+
 void MusInfo::FluidSettingInt(const char *, int)
 {
 }
@@ -293,6 +292,11 @@ void MusInfo::WildMidiSetOption(int opt, int set)
 FString MusInfo::GetStats()
 {
 	return "No stats available for this song";
+}
+
+MusInfo *MusInfo::GetOPLDumper(const char *filename)
+{
+	return NULL;
 }
 
 MusInfo *MusInfo::GetWaveDumper(const char *filename, int rate)
@@ -333,11 +337,11 @@ static MIDIStreamer *CreateMIDIStreamer(FileReader &reader, EMidiDevice devtype,
 //
 //==========================================================================
 
-static EMIDIType IdentifyMIDIType(DWORD *id, int size)
+static EMIDIType IdentifyMIDIType(uint32_t *id, int size)
 {
 	// Check for MUS format
 	// Tolerate sloppy wads by searching up to 32 bytes for the header
-	if (MUSHeaderSearch((BYTE*)id, size) >= 0)
+	if (MUSHeaderSearch((uint8_t*)id, size) >= 0)
 	{
 		return MIDI_MUS;
 	}
@@ -386,7 +390,7 @@ MusInfo *I_RegisterSong (FileReader *reader, MidiDeviceSetting *device)
 {
 	MusInfo *info = NULL;
 	const char *fmt;
-	DWORD id[32/4];
+	uint32_t id[32/4];
 
 	if (nomusic)
 	{
@@ -406,7 +410,7 @@ MusInfo *I_RegisterSong (FileReader *reader, MidiDeviceSetting *device)
 	if ((id[0] & MAKE_ID(255, 255, 255, 0)) == GZIP_ID)
 	{
 		int len = reader->GetLength();
-		BYTE *gzipped = new BYTE[len];
+		uint8_t *gzipped = new uint8_t[len];
 		if (reader->Read(gzipped, len) != len)
 		{
 			delete[] gzipped;
@@ -467,11 +471,9 @@ retry_as_sndsys:
 	else if (
 		(id[0] == MAKE_ID('R','A','W','A') && id[1] == MAKE_ID('D','A','T','A')) ||		// Rdos Raw OPL
 		(id[0] == MAKE_ID('D','B','R','A') && id[1] == MAKE_ID('W','O','P','L')) ||		// DosBox Raw OPL
-		(id[0] == MAKE_ID('A','D','L','I') && *((BYTE *)id + 4) == 'B'))		// Martin Fernandez's modified IMF
+		(id[0] == MAKE_ID('A','D','L','I') && *((uint8_t *)id + 4) == 'B'))		// Martin Fernandez's modified IMF
 	{
-		//These are no longer supported by Mary's Magical Adventure.
-		delete reader;
-		return 0;
+		info = new OPLMUSSong (*reader, device != NULL? device->args.GetChars() : "");
 	}
 	// Check for game music
 	else if ((fmt = GME_CheckFormat(id[0])) != NULL && fmt[0] != '\0')
@@ -483,13 +485,18 @@ retry_as_sndsys:
 	{
 		info = MOD_OpenSong(*reader);
 	}
+	if (info == nullptr)
+	{
+		info = SndFile_OpenSong(*reader);
+		if (info != nullptr) reader = nullptr;
+	}
 
     if (info == NULL)
     {
         // Check for CDDA "format"
         if (id[0] == (('R')|(('I')<<8)|(('F')<<16)|(('F')<<24)))
         {
-            DWORD subid;
+            uint32_t subid;
 
             reader->Seek(8, SEEK_CUR);
             if (reader->Read (&subid, 4) != 4)
@@ -552,25 +559,6 @@ MusInfo *I_RegisterCDSong (int track, int id)
 
 //==========================================================================
 //
-//
-//
-//==========================================================================
-
-MusInfo *I_RegisterURLSong (const char *url)
-{
-	StreamSong *song;
-
-	song = new StreamSong(url);
-	if (song->IsValid())
-	{
-		return song;
-	}
-	delete song;
-	return NULL;
-}
-
-//==========================================================================
-//
 // ungzip
 //
 // VGZ files are compressed with gzip, so we need to uncompress them before
@@ -578,11 +566,11 @@ MusInfo *I_RegisterURLSong (const char *url)
 //
 //==========================================================================
 
-static bool ungzip(BYTE *data, int complen, TArray<BYTE> &newdata)
+static bool ungzip(uint8_t *data, int complen, TArray<uint8_t> &newdata)
 {
-	const BYTE *max = data + complen - 8;
-	const BYTE *compstart = data + 10;
-	BYTE flags = data[3];
+	const uint8_t *max = data + complen - 8;
+	const uint8_t *compstart = data + 10;
+	uint8_t flags = data[3];
 	unsigned isize;
 	z_stream stream;
 	int err;
@@ -590,7 +578,7 @@ static bool ungzip(BYTE *data, int complen, TArray<BYTE> &newdata)
 	// Find start of compressed data stream
 	if (flags & GZIP_FEXTRA)
 	{
-		compstart += 2 + LittleShort(*(WORD *)(data + 10));
+		compstart += 2 + LittleShort(*(uint16_t *)(data + 10));
 	}
 	if (flags & GZIP_FNAME)
 	{
@@ -616,7 +604,7 @@ static bool ungzip(BYTE *data, int complen, TArray<BYTE> &newdata)
 	}
 
 	// Decompress
-	isize = LittleLong(*(DWORD *)(data + complen - 4));
+	isize = LittleLong(*(uint32_t *)(data + complen - 4));
     newdata.Resize(isize);
 
 	stream.next_in = (Bytef *)compstart;
@@ -672,6 +660,14 @@ void I_SetMusicVolume (float factor)
 	snd_musicvolume.Callback();
 }
 
+DEFINE_ACTION_FUNCTION(DObject, SetMusicVolume)
+{
+	PARAM_PROLOGUE;
+	PARAM_FLOAT(vol);
+	I_SetMusicVolume((float)vol);
+	return 0;
+}
+
 //==========================================================================
 //
 // test a relative music volume
@@ -706,6 +702,43 @@ ADD_STAT(music)
 
 //==========================================================================
 //
+// CCMD writeopl
+//
+// If the current song can be played with OPL instruments, dump it to
+// the specified file on disk.
+//
+//==========================================================================
+
+CCMD (writeopl)
+{
+	if (argv.argc() == 2)
+	{
+		if (currSong == NULL)
+		{
+			Printf ("No song is currently playing.\n");
+		}
+		else
+		{
+			MusInfo *dumper = currSong->GetOPLDumper(argv[1]);
+			if (dumper == NULL)
+			{
+				Printf ("Current song cannot be saved as OPL data.\n");
+			}
+			else
+			{
+				dumper->Play(false, 0);		// FIXME: Remember subsong.
+				delete dumper;
+			}
+		}
+	}
+	else
+	{
+		Printf ("Usage: writeopl <filename>\n");
+	}
+}
+
+//==========================================================================
+//
 // CCMD writewave
 //
 // If the current song can be represented as a waveform, dump it to
@@ -727,7 +760,7 @@ CCMD (writewave)
 			MusInfo *dumper = currSong->GetWaveDumper(argv[1], argv.argc() == 3 ? atoi(argv[2]) : 0);
 			if (dumper == NULL)
 			{
-				Printf ("Sorry, but this song can't be saved as a WAV file. You can extract it from mma_extra.pk3, though! Music is sequenced in this game, the opposite of what modern games do, so render with Foobar2000 (foo_dumb) or OpenMPT.\n");
+				Printf ("Current song cannot be saved as wave data.\n");
 			}
 			else
 			{
@@ -770,7 +803,7 @@ CCMD (writemidi)
 		return;
 	}
 
-	TArray<BYTE> midi;
+	TArray<uint8_t> midi;
 	FILE *f;
 	bool success;
 

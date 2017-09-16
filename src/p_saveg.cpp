@@ -3,7 +3,8 @@
 ** Code for serializing the world state in an archive
 **
 **---------------------------------------------------------------------------
-** Copyright 1998-2006 Randy Heit
+** Copyright 1998-2016 Randy Heit
+** Copyright 2005-2016 Christoph Oelckers
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
@@ -51,28 +52,536 @@
 #include "po_man.h"
 #include "p_setup.h"
 #include "r_data/colormaps.h"
-#include "farchive.h"
 #include "p_lnspec.h"
 #include "p_acs.h"
 #include "p_terrain.h"
+#include "am_map.h"
+#include "r_data/r_translate.h"
+#include "sbar.h"
+#include "r_utility.h"
+#include "r_sky.h"
+#include "r_renderer.h"
+#include "serializer.h"
+#include "g_levellocals.h"
+#include "events.h"
 
-static void CopyPlayer (player_t *dst, player_t *src, const char *name);
-static void ReadOnePlayer (FArchive &arc, bool skipload);
-static void ReadMultiplePlayers (FArchive &arc, int numPlayers, int numPlayersNow, bool skipload);
-static void SpawnExtraPlayers ();
+//==========================================================================
+//
+//
+//
+//==========================================================================
 
-inline FArchive &operator<< (FArchive &arc, FLinkedSector &link)
+FSerializer &Serialize(FSerializer &arc, const char *key, line_t &line, line_t *def)
 {
-	arc << link.Sector << link.Type;
+	if (arc.BeginObject(key))
+	{
+		arc("flags", line.flags, def->flags)
+			("activation", line.activation, def->activation)
+			("special", line.special, def->special)
+			("alpha", line.alpha, def->alpha)
+			.Args("args", line.args, def->args, line.special)
+			("portalindex", line.portalindex, def->portalindex)
+			// Unless the map loader is changed the sidedef references will not change between map loads so there's no need to save them.
+			//.Array("sides", line.sidedef, 2)
+			.EndObject();
+	}
+	return arc;
+
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, side_t::part &part, side_t::part *def)
+{
+	if (arc.canSkip() && def != nullptr && !memcmp(&part, def, sizeof(part)))
+	{
+		return arc;
+	}
+
+	if (arc.BeginObject(key))
+	{
+		arc("xoffset", part.xOffset, def->xOffset)
+			("yoffset", part.yOffset, def->yOffset)
+			("xscale", part.xScale, def->xScale)
+			("yscale", part.yScale, def->yScale)
+			("texture", part.texture, def->texture)
+			("interpolation", part.interpolation)
+			.EndObject();
+	}
 	return arc;
 }
 
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, side_t &side, side_t *def)
+{
+	if (arc.BeginObject(key))
+	{
+		arc.Array("textures", side.textures, def->textures, 3, true)
+			("light", side.Light, def->Light)
+			("flags", side.Flags, def->Flags)
+			// These also remain identical across map loads
+			//("leftside", side.LeftSide)
+			//("rightside", side.RightSide)
+			//("index", side.Index)
+			("attacheddecals", side.AttachedDecals)
+			.EndObject();
+	}
+	return arc;
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, FLinkedSector &ls, FLinkedSector *def)
+{
+	if (arc.BeginObject(key))
+	{
+		arc("sector", ls.Sector)
+			("type", ls.Type)
+			.EndObject();
+	}
+	return arc;
+}
+
+//============================================================================
+//
+// Save a sector portal for savegames.
+//
+//============================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, FColormap &port, FColormap *def)
+{
+	if (arc.canSkip() && def != nullptr && port == *def)
+	{
+		return arc;
+	}
+
+	if (arc.BeginObject(key))
+	{
+		arc("lightcolor", port.LightColor)
+			("fadecolor", port.FadeColor)
+			("desaturation", port.Desaturation)
+			("fogdensity", port.FogDensity)
+			.EndObject();
+	}
+	return arc;
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, sector_t::splane &p, sector_t::splane *def)
+{
+	if (arc.canSkip() && def != nullptr && !memcmp(&p, def, sizeof(p)))
+	{
+		return arc;
+	}
+
+	if (arc.BeginObject(key))
+	{
+		arc("xoffs", p.xform.xOffs, def->xform.xOffs)
+			("yoffs", p.xform.yOffs, def->xform.yOffs)
+			("xscale", p.xform.xScale, def->xform.xScale)
+			("yscale", p.xform.yScale, def->xform.yScale)
+			("angle", p.xform.Angle, def->xform.Angle)
+			("baseyoffs", p.xform.baseyOffs, def->xform.baseyOffs)
+			("baseangle", p.xform.baseAngle, def->xform.baseAngle)
+			("flags", p.Flags, def->Flags)
+			("light", p.Light, def->Light)
+			("texture", p.Texture, def->Texture)
+			("texz", p.TexZ, def->TexZ)
+			("alpha", p.alpha, def->alpha)
+			("glowcolor", p.GlowColor, def->GlowColor)
+			("glowheight", p.GlowHeight, def->GlowHeight)
+			.EndObject();
+	}
+	return arc;
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, secplane_t &p, secplane_t *def)
+{
+	if (arc.canSkip() && def != nullptr && !memcmp(&p, def, sizeof(p)))
+	{
+		return arc;
+	}
+
+	if (arc.BeginObject(key))
+	{
+		Serialize(arc, "normal", p.normal, def ? &def->normal : nullptr);
+		Serialize(arc, "d", p.D, def ? &def->D : nullptr);
+		arc.EndObject();
+
+		if (arc.isReading() && p.normal.Z != 0)
+		{
+			p.negiC = -1 / p.normal.Z;
+		}
+	}
+	return arc;
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, sector_t &p, sector_t *def)
+{
+	// save the Scroll data here because it's a lot easier to handle a default.
+	// Just writing out the full array can massively inflate the archive for no gain.
+	DVector2 scroll = { 0,0 }, nul = { 0,0 };
+	if (arc.isWriting() && level.Scrolls.Size() > 0) scroll = level.Scrolls[p.sectornum];
+
+	if (arc.BeginObject(key))
+	{
+		arc("floorplane", p.floorplane, def->floorplane)
+			("ceilingplane", p.ceilingplane, def->ceilingplane)
+			("lightlevel", p.lightlevel, def->lightlevel)
+			("special", p.special, def->special)
+			("seqtype", p.seqType, def->seqType)
+			("seqname", p.SeqName, def->SeqName)
+			("friction", p.friction, def->friction)
+			("movefactor", p.movefactor, def->movefactor)
+			("stairlock", p.stairlock, def->stairlock)
+			("prevsec", p.prevsec, def->prevsec)
+			("nextsec", p.nextsec, def->nextsec)
+			.Array("planes", p.planes, def->planes, 2, true)
+			// These cannot change during play.
+			//("heightsec", p.heightsec)
+			//("bottommap", p.bottommap)
+			//("midmap", p.midmap)
+			//("topmap", p.topmap)
+			("damageamount", p.damageamount, def->damageamount)
+			("damageinterval", p.damageinterval, def->damageinterval)
+			("leakydamage", p.leakydamage, def->leakydamage)
+			("damagetype", p.damagetype, def->damagetype)
+			("sky", p.sky, def->sky)
+			("moreflags", p.MoreFlags, def->MoreFlags)
+			("flags", p.Flags, def->Flags)
+			.Array("portals", p.Portals, def->Portals, 2, true)
+			("zonenumber", p.ZoneNumber, def->ZoneNumber)
+			.Array("interpolations", p.interpolations, 4, true)
+			("soundtarget", p.SoundTarget)
+			("secacttarget", p.SecActTarget)
+			("floordata", p.floordata)
+			("ceilingdata", p.ceilingdata)
+			("lightingdata", p.lightingdata)
+			("fakefloor_sectors", p.e->FakeFloor.Sectors)
+			("midtexf_lines", p.e->Midtex.Floor.AttachedLines)
+			("midtexf_sectors", p.e->Midtex.Floor.AttachedSectors)
+			("midtexc_lines", p.e->Midtex.Ceiling.AttachedLines)
+			("midtexc_sectors", p.e->Midtex.Ceiling.AttachedSectors)
+			("linked_floor", p.e->Linked.Floor.Sectors)
+			("linked_ceiling", p.e->Linked.Ceiling.Sectors)
+			("colormap", p.Colormap, def->Colormap)
+			.Array("specialcolors", p.SpecialColors, def->SpecialColors, 5, true)
+			("gravity", p.gravity, def->gravity)
+			.Terrain("floorterrain", p.terrainnum[0], &def->terrainnum[0])
+			.Terrain("ceilingterrain", p.terrainnum[1], &def->terrainnum[1])
+			("scrolls", scroll, nul)
+			// GZDoom exclusive:
+			.Array("reflect", p.reflect, def->reflect, 2, true)
+			.EndObject();
+
+		if (arc.isReading() && !scroll.isZero())
+		{
+			if (level.Scrolls.Size() == 0)
+			{
+				level.Scrolls.Resize(level.sectors.Size());
+				memset(&level.Scrolls[0], 0, sizeof(level.Scrolls[0])*level.Scrolls.Size());
+				level.Scrolls[p.sectornum] = scroll;
+			}
+		}
+	}
+	return arc;
+}
+
+//==========================================================================
+//
+// RecalculateDrawnSubsectors
+//
+// In case the subsector data is unusable this function tries to reconstruct
+// if from the linedefs' ML_MAPPED info.
+//
+//==========================================================================
+
+void RecalculateDrawnSubsectors()
+{
+	for (auto &sub : level.subsectors)
+	{
+		for (unsigned int j = 0; j<sub.numlines; j++)
+		{
+			if (sub.firstline[j].linedef != NULL &&
+				(sub.firstline[j].linedef->flags & ML_MAPPED))
+			{
+				sub.flags |= SSECF_DRAWN;
+			}
+		}
+	}
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &SerializeSubsectors(FSerializer &arc, const char *key)
+{
+	uint8_t by;
+	const char *str;
+
+	auto numsubsectors = level.subsectors.Size();
+	if (arc.isWriting())
+	{
+		if (hasglnodes)
+		{
+			TArray<char> encoded(1 + (numsubsectors + 5) / 6);
+			int p = 0;
+			for (unsigned i = 0; i < numsubsectors; i += 6)
+			{
+				by = 0;
+				for (unsigned j = 0; j < 6; j++)
+				{
+					if (i + j < numsubsectors && (level.subsectors[i + j].flags & SSECF_DRAWN))
+					{
+						by |= (1 << j);
+					}
+				}
+				if (by < 10) by += '0';
+				else if (by < 36) by += 'A' - 10;
+				else if (by < 62) by += 'a' - 36;
+				else if (by == 62) by = '-';
+				else if (by == 63) by = '+';
+				encoded[p++] = by;
+			}
+			encoded[p] = 0;
+			str = &encoded[0];
+			if (arc.BeginArray(key))
+			{
+				auto numvertexes = level.vertexes.Size();
+				arc(nullptr, numvertexes)
+					(nullptr, numsubsectors)
+					.StringPtr(nullptr, str)
+					.EndArray();
+			}
+		}
+	}
+	else
+	{
+		int num_verts, num_subs;
+		bool success = false;
+		if (arc.BeginArray(key))
+		{
+			arc(nullptr, num_verts)
+				(nullptr, num_subs)
+				.StringPtr(nullptr, str)
+				.EndArray();
+
+			if (num_verts == (int)level.vertexes.Size() && num_subs == (int)numsubsectors && hasglnodes)
+			{
+				success = true;
+				int sub = 0;
+				for (int i = 0; str[i] != 0; i++)
+				{
+					by = str[i];
+					if (by >= '0' && by <= '9') by -= '0';
+					else if (by >= 'A' && by <= 'Z') by -= 'A' - 10;
+					else if (by >= 'a' && by <= 'z') by -= 'a' - 36;
+					else if (by == '-') by = 62;
+					else if (by == '+') by = 63;
+					else
+					{
+						success = false;
+						break;
+					}
+					for (int s = 0; s < 6; s++)
+					{
+						if (sub + s < (int)numsubsectors && (by & (1 << s)))
+						{
+							level.subsectors[sub + s].flags |= SSECF_DRAWN;
+						}
+					}
+					sub += 6;
+				}
+			}
+			if (hasglnodes && !success)
+			{
+				RecalculateDrawnSubsectors();
+			}
+		}
+
+	}
+	return arc;
+}
+
+//============================================================================
+//
+// Save a line portal for savegames.
+//
+//============================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, FLinePortal &port, FLinePortal *def)
+{
+	if (arc.BeginObject(key))
+	{
+		arc("origin", port.mOrigin)
+			("destination", port.mDestination)
+			("displacement", port.mDisplacement)
+			("type", port.mType)
+			("flags", port.mFlags)
+			("defflags", port.mDefFlags)
+			("align", port.mAlign)
+			.EndObject();
+	}
+	return arc;
+}
+
+//============================================================================
+//
+// Save a sector portal for savegames.
+//
+//============================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, FSectorPortal &port, FSectorPortal *def)
+{
+	if (arc.BeginObject(key))
+	{
+		arc("type", port.mType)
+			("flags", port.mFlags)
+			("partner", port.mPartner)
+			("plane", port.mPlane)
+			("origin", port.mOrigin)
+			("destination", port.mDestination)
+			("displacement", port.mDisplacement)
+			("planez", port.mPlaneZ)
+			("skybox", port.mSkybox)
+			.EndObject();
+	}
+	return arc;
+}
+
+//============================================================================
+//
+// one polyobject.
+//
+//============================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, FPolyObj &poly, FPolyObj *def)
+{
+	if (arc.BeginObject(key))
+	{
+		DAngle angle = poly.Angle;
+		DVector2 delta = poly.StartSpot.pos;
+		arc("angle", angle)
+			("pos", delta)
+			("interpolation", poly.interpolation)
+			("blocked", poly.bBlocked)
+			("hasportals", poly.bHasPortals)
+			("specialdata", poly.specialdata)
+			.EndObject();
+
+		if (arc.isReading())
+		{
+			poly.RotatePolyobj(angle, true);
+			delta -= poly.StartSpot.pos;
+			poly.MovePolyobj(delta, true);
+		}
+	}
+	return arc;
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+FSerializer &Serialize(FSerializer &arc, const char *key, ReverbContainer *&c, ReverbContainer **def)
+{
+	int id = (arc.isReading() || c == nullptr) ? 0 : c->ID;
+	Serialize(arc, key, id, nullptr);
+	if (arc.isReading())
+	{
+		c = S_FindEnvironment(id);
+	}
+	return arc;
+}
+
+FSerializer &Serialize(FSerializer &arc, const char *key, zone_t &z, zone_t *def)
+{
+	return Serialize(arc, key, z.Environment, nullptr);
+}
+
+//==========================================================================
+//
+// ArchiveSounds
+//
+//==========================================================================
+
+void P_SerializeSounds(FSerializer &arc)
+{
+	S_SerializeSounds(arc);
+	DSeqNode::SerializeSequences (arc);
+	const char *name = NULL;
+	uint8_t order;
+
+	if (arc.isWriting())
+	{
+		order = S_GetMusic(&name);
+	}
+	arc.StringPtr("musicname", name)
+		("musicorder", order);
+
+	if (arc.isReading())
+	{
+		if (!S_ChangeMusic(name, order))
+			if (level.cdtrack == 0 || !S_ChangeCDMusic(level.cdtrack, level.cdid))
+				S_ChangeMusic(level.Music, level.musicorder);
+	}
+}
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+void CopyPlayer(player_t *dst, player_t *src, const char *name);
+static void ReadOnePlayer(FSerializer &arc, bool skipload);
+static void ReadMultiplePlayers(FSerializer &arc, int numPlayers, int numPlayersNow, bool skipload);
+static void SpawnExtraPlayers();
+
+//==========================================================================
 //
 // P_ArchivePlayers
 //
-void P_SerializePlayers (FArchive &arc, bool skipload)
+//==========================================================================
+
+void P_SerializePlayers(FSerializer &arc, bool skipload)
 {
-	BYTE numPlayers, numPlayersNow;
+	int numPlayers, numPlayersNow;
 	int i;
 
 	// Count the number of players present right now.
@@ -84,93 +593,135 @@ void P_SerializePlayers (FArchive &arc, bool skipload)
 		}
 	}
 
-	if (arc.IsStoring())
+	if (arc.isWriting())
 	{
 		// Record the number of players in this save.
-		arc << numPlayersNow;
-
-		// Record each player's name, followed by their data.
-		for (i = 0; i < MAXPLAYERS; ++i)
+		arc("numplayers", numPlayersNow);
+		if (arc.BeginArray("players"))
 		{
-			if (playeringame[i])
+			// Record each player's name, followed by their data.
+			for (i = 0; i < MAXPLAYERS; ++i)
 			{
-				arc.WriteString (players[i].userinfo.GetName());
-				players[i].Serialize (arc);
+				if (playeringame[i])
+				{
+					if (arc.BeginObject(nullptr))
+					{
+						const char *n = players[i].userinfo.GetName();
+						arc.StringPtr("playername", n);
+						players[i].Serialize(arc);
+						arc.EndObject();
+					}
+				}
 			}
+			arc.EndArray();
 		}
 	}
 	else
 	{
-		arc << numPlayers;
+		arc("numplayers", numPlayers);
 
-		// If there is only one player in the game, they go to the
-		// first player present, no matter what their name.
-		if (numPlayers == 1)
+		if (arc.BeginArray("players"))
 		{
-			ReadOnePlayer (arc, skipload);
-		}
-		else
-		{
-			ReadMultiplePlayers (arc, numPlayers, numPlayersNow, skipload);
+			// If there is only one player in the game, they go to the
+			// first player present, no matter what their name.
+			if (numPlayers == 1)
+			{
+				ReadOnePlayer(arc, skipload);
+			}
+			else
+			{
+				ReadMultiplePlayers(arc, numPlayers, numPlayersNow, skipload);
+			}
+			arc.EndArray();
 		}
 		if (!skipload && numPlayersNow > numPlayers)
 		{
-			SpawnExtraPlayers ();
+			SpawnExtraPlayers();
 		}
 		// Redo pitch limits, since the spawned player has them at 0.
 		players[consoleplayer].SendPitchLimits();
 	}
 }
 
-static void ReadOnePlayer (FArchive &arc, bool skipload)
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+static void ReadOnePlayer(FSerializer &arc, bool skipload)
 {
 	int i;
-	char *name = NULL;
+	const char *name = NULL;
 	bool didIt = false;
 
-	arc << name;
-
-	for (i = 0; i < MAXPLAYERS; ++i)
+	if (arc.BeginObject(nullptr))
 	{
-		if (playeringame[i])
+		arc.StringPtr("playername", name);
+
+		for (i = 0; i < MAXPLAYERS; ++i)
 		{
-			if (!didIt)
+			if (playeringame[i])
 			{
-				didIt = true;
-				player_t playerTemp;
-				playerTemp.Serialize (arc);
-				if (!skipload)
+				if (!didIt)
 				{
-					CopyPlayer (&players[i], &playerTemp, name);
+					didIt = true;
+					player_t playerTemp;
+					playerTemp.Serialize(arc);
+					if (!skipload)
+					{
+						// This temp player has undefined pitch limits, so set them to something
+						// that should leave the pitch stored in the savegame intact when
+						// rendering. The real pitch limits will be set by P_SerializePlayers()
+						// via a net command, but that won't be processed in time for a screen
+						// wipe, so we need something here.
+						playerTemp.MaxPitch = playerTemp.MinPitch = playerTemp.mo->Angles.Pitch;
+						CopyPlayer(&players[i], &playerTemp, name);
+					}
+					else
+					{
+						// we need the player actor, so that G_FinishTravel can destroy it later.
+						players[i].mo = playerTemp.mo;
+					}
 				}
-			}
-			else
-			{
-				if (players[i].mo != NULL)
+				else
 				{
-					players[i].mo->Destroy();
-					players[i].mo = NULL;
+					if (players[i].mo != NULL)
+					{
+						players[i].mo->Destroy();
+						players[i].mo = NULL;
+					}
 				}
 			}
 		}
+		arc.EndObject();
 	}
-	delete[] name;
 }
 
-static void ReadMultiplePlayers (FArchive &arc, int numPlayers, int numPlayersNow, bool skipload)
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+static void ReadMultiplePlayers(FSerializer &arc, int numPlayers, int numPlayersNow, bool skipload)
 {
 	// For two or more players, read each player into a temporary array.
 	int i, j;
-	char **nametemp = new char *[numPlayers];
+	const char **nametemp = new const char *[numPlayers];
 	player_t *playertemp = new player_t[numPlayers];
-	BYTE *tempPlayerUsed = new BYTE[numPlayers];
-	BYTE playerUsed[MAXPLAYERS];
+	uint8_t *tempPlayerUsed = new uint8_t[numPlayers];
+	uint8_t playerUsed[MAXPLAYERS];
 
 	for (i = 0; i < numPlayers; ++i)
 	{
 		nametemp[i] = NULL;
-		arc << nametemp[i];
-		playertemp[i].Serialize (arc);
+		if (arc.BeginObject(nullptr))
+		{
+			arc.StringPtr("playername", nametemp[i]);
+			playertemp[i].Serialize(arc);
+			arc.EndObject();
+		}
 		tempPlayerUsed[i] = 0;
 	}
 	for (i = 0; i < MAXPLAYERS; ++i)
@@ -190,8 +741,8 @@ static void ReadMultiplePlayers (FArchive &arc, int numPlayers, int numPlayersNo
 			{
 				if (playerUsed[j] == 0 && stricmp(players[j].userinfo.GetName(), nametemp[i]) == 0)
 				{ // Found a match, so copy our temp player to the real player
-					Printf ("Found player %d (%s) at %d\n", i, nametemp[i], j);
-					CopyPlayer (&players[j], &playertemp[i], nametemp[i]);
+					Printf("Found player %d (%s) at %d\n", i, nametemp[i], j);
+					CopyPlayer(&players[j], &playertemp[i], nametemp[i]);
 					playerUsed[j] = 1;
 					tempPlayerUsed[i] = 1;
 					break;
@@ -209,8 +760,8 @@ static void ReadMultiplePlayers (FArchive &arc, int numPlayers, int numPlayersNo
 				{
 					if (playerUsed[j] == 0)
 					{
-						Printf ("Assigned player %d (%s) to %d (%s)\n", i, nametemp[i], j, players[j].userinfo.GetName());
-						CopyPlayer (&players[j], &playertemp[i], nametemp[i]);
+						Printf("Assigned player %d (%s) to %d (%s)\n", i, nametemp[i], j, players[j].userinfo.GetName());
+						CopyPlayer(&players[j], &playertemp[i], nametemp[i]);
 						playerUsed[j] = 1;
 						tempPlayerUsed[i] = 1;
 						break;
@@ -245,17 +796,26 @@ static void ReadMultiplePlayers (FArchive &arc, int numPlayers, int numPlayersNo
 			}
 		}
 	}
+	else
+	{
+		for (i = 0; i < MAXPLAYERS; ++i)
+		{
+			players[i].mo = playertemp[i].mo;
+		}
+	}
 
 	delete[] tempPlayerUsed;
 	delete[] playertemp;
-	for (i = 0; i < numPlayers; ++i)
-	{
-		delete[] nametemp[i];
-	}
 	delete[] nametemp;
 }
 
-static void CopyPlayer (player_t *dst, player_t *src, const char *name)
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+void CopyPlayer(player_t *dst, player_t *src, const char *name)
 {
 	// The userinfo needs to be saved for real players, but it
 	// needs to come from the save for bots.
@@ -269,15 +829,15 @@ static void CopyPlayer (player_t *dst, player_t *src, const char *name)
 	bool attackdown = dst->attackdown;
 	bool usedown = dst->usedown;
 
-	
+
 	*dst = *src;		// To avoid memory leaks at this point the userinfo in src must be empty which is taken care of by the TransferFrom call above.
 
 	dst->cheats |= chasecam;
 
-	if (dst->Bot != NULL)
+	if (dst->Bot != nullptr)
 	{
 		botinfo_t *thebot = bglobal.botinfo;
-		while (thebot && stricmp (name, thebot->name))
+		while (thebot && stricmp(name, thebot->name))
 		{
 			thebot = thebot->next;
 		}
@@ -291,21 +851,43 @@ static void CopyPlayer (player_t *dst, player_t *src, const char *name)
 	else
 	{
 		dst->userinfo.TransferFrom(uibackup);
+		// The player class must come from the save, so that the menu reflects the currently playing one.
+		dst->userinfo.PlayerClassChanged(src->mo->GetInfo()->DisplayName); 
 	}
+
 	// Validate the skin
-	dst->userinfo.SkinNumChanged(R_FindSkin(skins[dst->userinfo.GetSkin()].name, dst->CurrentPlayerClass));
+	dst->userinfo.SkinNumChanged(R_FindSkin(Skins[dst->userinfo.GetSkin()].Name, dst->CurrentPlayerClass));
 
 	// Make sure the player pawn points to the proper player struct.
-	if (dst->mo != NULL)
+	if (dst->mo != nullptr)
 	{
 		dst->mo->player = dst;
 	}
+
+	// Same for the psprites.
+	DPSprite *pspr = dst->psprites;
+	while (pspr)
+	{
+		pspr->Owner = dst;
+
+		pspr = pspr->Next;
+	}
+
+	// Don't let the psprites be destroyed when src is destroyed.
+	src->psprites = nullptr;
+
 	// These 2 variables may not be overwritten.
 	dst->attackdown = attackdown;
 	dst->usedown = usedown;
 }
 
-static void SpawnExtraPlayers ()
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+static void SpawnExtraPlayers()
 {
 	// If there are more players now than there were in the savegame,
 	// be sure to spawn the extra players.
@@ -321,435 +903,124 @@ static void SpawnExtraPlayers ()
 		if (playeringame[i] && players[i].mo == NULL)
 		{
 			players[i].playerstate = PST_ENTER;
-			P_SpawnPlayer(&playerstarts[i], i, (level.flags2 & LEVEL2_PRERAISEWEAPON) ? SPF_WEAPONFULLYUP : 0);
+			P_SpawnPlayer(&level.playerstarts[i], i, (level.flags2 & LEVEL2_PRERAISEWEAPON) ? SPF_WEAPONFULLYUP : 0);
 		}
 	}
 }
 
+//============================================================================
 //
-// P_ArchiveWorld
 //
-void P_SerializeWorld (FArchive &arc)
+//
+//============================================================================
+
+void G_SerializeLevel(FSerializer &arc, bool hubload)
 {
-	int i, j;
-	sector_t *sec;
-	line_t *li;
-	zone_t *zn;
+	int i = level.totaltime;
 
-	// do sectors
-	for (i = 0, sec = sectors; i < numsectors; i++, sec++)
+	if (arc.isWriting())
 	{
-		arc << sec->floorplane
-			<< sec->ceilingplane;
-		if (SaveVersion < 3223)
-		{
-			BYTE bytelight;
-			arc << bytelight;
-			sec->lightlevel = bytelight;
-		}
-		else
-		{
-			arc << sec->lightlevel;
-		}
-		arc << sec->special;
-		if (SaveVersion < 4523)
-		{
-			short tag;
-			arc << tag;
-		}
-		arc << sec->soundtraversed
-			<< sec->seqType
-			<< sec->friction
-			<< sec->movefactor
-			<< sec->floordata
-			<< sec->ceilingdata
-			<< sec->lightingdata
-			<< sec->stairlock
-			<< sec->prevsec
-			<< sec->nextsec
-			<< sec->planes[sector_t::floor]
-			<< sec->planes[sector_t::ceiling]
-			<< sec->heightsec
-			<< sec->bottommap << sec->midmap << sec->topmap
-			<< sec->gravity;
-		if (SaveVersion >= 4530)
-		{
-			P_SerializeTerrain(arc, sec->terrainnum[0]);
-			P_SerializeTerrain(arc, sec->terrainnum[1]);
-		}
-		if (SaveVersion >= 4529)
-		{
-			arc << sec->damageamount;
-		}
-		else
-		{
-			short dmg;
-			arc << dmg;
-			sec->damageamount = dmg;
-		}
-		if (SaveVersion >= 4528)
-		{
-			arc << sec->damageinterval
-				<< sec->leakydamage
-				<< sec->damagetype;
-		}
-		else
-		{
-			short damagemod;
-			arc << damagemod;
-			sec->damagetype = MODtoDamageType(damagemod);
-			if (sec->damageamount < 20)
-			{
-				sec->leakydamage = 0;
-				sec->damageinterval = 32;
-			}
-			else if (sec->damageamount < 50)
-			{
-				sec->leakydamage = 5;
-				sec->damageinterval = 32;
-			}
-			else
-			{
-				sec->leakydamage = 256;
-				sec->damageinterval = 1;
-			}
-		}
-
-		arc << sec->SoundTarget
-			<< sec->SecActTarget
-			<< sec->sky
-			<< sec->MoreFlags
-			<< sec->Flags
-			<< sec->SkyBoxes[sector_t::floor] << sec->SkyBoxes[sector_t::ceiling]
-			<< sec->ZoneNumber;
-		if (SaveVersion < 4529)
-		{
-			short secretsector;
-			arc << secretsector;
-			if (secretsector) sec->Flags |= SECF_WASSECRET;
-			P_InitSectorSpecial(sec, sec->special, true);
-		}
-		arc	<< sec->interpolations[0]
-			<< sec->interpolations[1]
-			<< sec->interpolations[2]
-			<< sec->interpolations[3]
-			<< sec->SeqName;
-
-		sec->e->Serialize(arc);
-		if (arc.IsStoring ())
-		{
-			arc << sec->ColorMap->Color
-				<< sec->ColorMap->Fade;
-			BYTE sat = sec->ColorMap->Desaturate;
-			arc << sat;
-		}
-		else
-		{
-			PalEntry color, fade;
-			BYTE desaturate;
-			arc << color << fade
-				<< desaturate;
-			sec->ColorMap = GetSpecialLights (color, fade, desaturate);
-		}
-		// begin of GZDoom additions
-		arc << sec->reflect[sector_t::ceiling] << sec->reflect[sector_t::floor];
-		// end of GZDoom additions
-	}
-
-	// do lines
-	for (i = 0, li = lines; i < numlines; i++, li++)
-	{
-		arc << li->flags
-			<< li->activation
-			<< li->special
-			<< li->Alpha;
-
-		if (SaveVersion < 4523)
-		{
-			int id;
-			arc << id;
-		}
-		if (P_IsACSSpecial(li->special))
-		{
-			P_SerializeACSScriptNumber(arc, li->args[0], false);
-		}
-		else
-		{
-			arc << li->args[0];
-		}
-		arc << li->args[1] << li->args[2] << li->args[3] << li->args[4];
-
-		if (SaveVersion >= 4532)
-		{
-			arc << li->portalindex;
-		}
-		else li->portalindex = UINT_MAX;
-
-		if (SaveVersion >= 4531)
-		{
-			arc << li->skybox;
-		}
-
-		for (j = 0; j < 2; j++)
-		{
-			if (li->sidedef[j] == NULL)
-				continue;
-
-			side_t *si = li->sidedef[j];
-			arc << si->textures[side_t::top]
-				<< si->textures[side_t::mid]
-				<< si->textures[side_t::bottom]
-				<< si->Light
-				<< si->Flags
-				<< si->LeftSide
-				<< si->RightSide
-				<< si->Index;
-			DBaseDecal::SerializeChain (arc, &si->AttachedDecals);
-		}
-	}
-
-	// do zones
-	arc << numzones;
-
-	if (arc.IsLoading())
-	{
-		if (zones != NULL)
-		{
-			delete[] zones;
-		}
-		zones = new zone_t[numzones];
-	}
-
-	for (i = 0, zn = zones; i < numzones; ++i, ++zn)
-	{
-		arc << zn->Environment;
-	}
-
-	if (SaveVersion >= 4532)
-	{
-		arc << linePortals;
+		arc.Array("checksum", level.md5, 16);
 	}
 	else
 	{
-		linePortals.Clear();
-	}
-	P_CollectLinkedPortals();
-}
-
-void extsector_t::Serialize(FArchive &arc)
-{
-	arc << FakeFloor.Sectors
-		<< Midtex.Floor.AttachedLines 
-		<< Midtex.Floor.AttachedSectors
-		<< Midtex.Ceiling.AttachedLines
-		<< Midtex.Ceiling.AttachedSectors
-		<< Linked.Floor.Sectors
-		<< Linked.Ceiling.Sectors;
-}
-
-FArchive &operator<< (FArchive &arc, side_t::part &p)
-{
-	arc << p.xoffset << p.yoffset << p.interpolation << p.texture 
-		<< p.xscale << p.yscale;// << p.Light;
-	return arc;
-}
-
-FArchive &operator<< (FArchive &arc, sector_t::splane &p)
-{
-	arc << p.xform.xoffs << p.xform.yoffs << p.xform.xscale << p.xform.yscale 
-		<< p.xform.angle << p.xform.base_yoffs << p.xform.base_angle
-		<< p.Flags << p.Light << p.Texture << p.TexZ << p.alpha << p.GlowColor << p.GlowHeight;
-	return arc;
-}
-
-
-//
-// Thinkers
-//
-
-//
-// P_ArchiveThinkers
-//
-
-void P_SerializeThinkers (FArchive &arc, bool hubLoad)
-{
-	DImpactDecal::SerializeTime (arc);
-	DThinker::SerializeAll (arc, hubLoad);
-}
-
-//==========================================================================
-//
-// ArchiveSounds
-//
-//==========================================================================
-
-void P_SerializeSounds (FArchive &arc)
-{
-	S_SerializeSounds (arc);
-	DSeqNode::SerializeSequences (arc);
-	char *name = NULL;
-	BYTE order;
-
-	if (arc.IsStoring ())
-	{
-		order = S_GetMusic (&name);
-	}
-	arc << name << order;
-	if (arc.IsLoading ())
-	{
-		if (!S_ChangeMusic (name, order))
-			if (level.cdtrack == 0 || !S_ChangeCDMusic (level.cdtrack, level.cdid))
-				S_ChangeMusic (level.Music, level.musicorder);
-	}
-	delete[] name;
-}
-
-//==========================================================================
-//
-// ArchivePolyobjs
-//
-//==========================================================================
-#define ASEG_POLYOBJS	104
-
-void P_SerializePolyobjs (FArchive &arc)
-{
-	int i;
-	FPolyObj *po;
-
-	if (arc.IsStoring ())
-	{
-		int seg = ASEG_POLYOBJS;
-		arc << seg << po_NumPolyobjs;
-		for(i = 0, po = polyobjs; i < po_NumPolyobjs; i++, po++)
+		// prevent bad things from happening by doing a check on the size of level arrays and the map's entire checksum.
+		// The old code happily tried to load savegames with any mismatch here, often causing meaningless errors
+		// deep down in the deserializer or just a crash if the few insufficient safeguards were not triggered.
+		uint8_t chk[16] = { 0 };
+		arc.Array("checksum", chk, 16);
+		if (arc.GetSize("linedefs") != level.lines.Size() ||
+			arc.GetSize("sidedefs") != level.sides.Size() ||
+			arc.GetSize("sectors") != level.sectors.Size() ||
+			arc.GetSize("polyobjs") != (unsigned)po_NumPolyobjs ||
+			memcmp(chk, level.md5, 16))
 		{
-			arc << po->tag << po->angle << po->StartSpot.x <<
-				po->StartSpot.y << po->interpolation;
-  		}
-	}
-	else
-	{
-		int data;
-		angle_t angle;
-		fixed_t deltaX, deltaY;
-
-		arc << data;
-		if (data != ASEG_POLYOBJS)
-			I_Error ("A PolyObject's missing its 'marker' in this save file!");
-
-		arc << data;
-		if (data != po_NumPolyobjs)
-		{
-			I_Error ("This save file's number of PolyObjects doesn't match the amount in this level!");
-		}
-		for (i = 0, po = polyobjs; i < po_NumPolyobjs; i++, po++)
-		{
-			arc << data;
-			if (data != po->tag)
-			{
-				I_Error ("There's an invalid PolyObject inside this save file!");
-			}
-			arc << angle;
-			po->RotatePolyobj (angle, true);
-			arc << deltaX << deltaY << po->interpolation;
-			deltaX -= po->StartSpot.x;
-			deltaY -= po->StartSpot.y;
-			po->MovePolyobj (deltaX, deltaY, true);
+			I_Error("Savegame is from a different level");
 		}
 	}
-}
+	arc("saveversion", SaveVersion);
 
-//==========================================================================
-//
-// RecalculateDrawnSubsectors
-//
-// In case the subsector data is unusable this function tries to reconstruct
-// if from the linedefs' ML_MAPPED info.
-//
-//==========================================================================
-
-void RecalculateDrawnSubsectors()
-{
-	for(int i=0;i<numsubsectors;i++)
+	Renderer->StartSerialize(arc);
+	if (arc.isReading())
 	{
-		subsector_t *sub = &subsectors[i];
-		for(unsigned int j=0;j<sub->numlines;j++)
+		DThinker::DestroyAllThinkers();
+		interpolator.ClearInterpolations();
+		arc.ReadObjects(hubload);
+	}
+
+	arc("level.flags", level.flags)
+		("level.flags2", level.flags2)
+		("level.fadeto", level.fadeto)
+		("level.found_secrets", level.found_secrets)
+		("level.found_items", level.found_items)
+		("level.killed_monsters", level.killed_monsters)
+		("level.total_secrets", level.total_secrets)
+		("level.total_items", level.total_items)
+		("level.total_monsters", level.total_monsters)
+		("level.gravity", level.gravity)
+		("level.aircontrol", level.aircontrol)
+		("level.teamdamage", level.teamdamage)
+		("level.maptime", level.maptime)
+		("level.totaltime", i)
+		("level.skytexture1", level.skytexture1)
+		("level.skytexture2", level.skytexture2)
+		("level.fogdensity", level.fogdensity)
+		("level.outsidefogdensity", level.outsidefogdensity)
+		("level.skyfog", level.skyfog);
+
+	// Hub transitions must keep the current total time
+	if (!hubload)
+		level.totaltime = i;
+
+	if (arc.isReading())
+	{
+		sky1texture = level.skytexture1;
+		sky2texture = level.skytexture2;
+		R_InitSkyMap();
+		G_AirControlChanged();
+	}
+
+
+
+	// fixme: This needs to ensure it reads from the correct place. Should be one once there's enough of this code converted to JSON
+
+	FBehavior::StaticSerializeModuleStates(arc);
+	// The order here is important: First world state, then portal state, then thinkers, and last polyobjects.
+	arc("linedefs", level.lines, level.loadlines);
+	arc("sidedefs", level.sides, level.loadsides);
+	arc("sectors", level.sectors, level.loadsectors);
+	arc("zones", level.Zones);
+	arc("lineportals", linePortals);
+	arc("sectorportals", level.sectorPortals);
+	if (arc.isReading()) P_CollectLinkedPortals();
+
+	// [ZZ] serialize events
+	E_SerializeEvents(arc);
+	DThinker::SerializeThinkers(arc, hubload);
+	arc.Array("polyobjs", polyobjs, po_NumPolyobjs);
+	SerializeSubsectors(arc, "subsectors");
+	StatusBar->SerializeMessages(arc);
+	AM_SerializeMarkers(arc);
+	FRemapTable::StaticSerializeTranslations(arc);
+	FCanvasTextureInfo::Serialize(arc);
+	P_SerializePlayers(arc, hubload);
+	P_SerializeSounds(arc);
+
+	if (arc.isReading())
+	{
+		for (auto &sec : level.sectors)
 		{
-			if (sub->firstline[j].linedef != NULL && 
-				(sub->firstline[j].linedef->flags & ML_MAPPED))
+			P_Recalculate3DFloors(&sec);
+		}
+		for (int i = 0; i < MAXPLAYERS; ++i)
+		{
+			if (playeringame[i] && players[i].mo != NULL)
 			{
-				sub->flags |= SSECF_DRAWN;
+				players[i].mo->SetupWeaponSlots();
 			}
 		}
 	}
-}
+	AActor::RecreateAllAttachedLights();
+	Renderer->EndSerialize(arc);
 
-//==========================================================================
-//
-// ArchiveSubsectors
-//
-//==========================================================================
-
-void P_SerializeSubsectors(FArchive &arc)
-{
-	int num_verts, num_subs, num_nodes;	
-	BYTE by;
-
-	if (arc.IsStoring())
-	{
-		if (hasglnodes)
-		{
-			arc << numvertexes << numsubsectors << numnodes;	// These are only for verification
-			for(int i=0;i<numsubsectors;i+=8)
-			{
-				by = 0;
-				for(int j=0;j<8;j++)
-				{
-					if (i+j<numsubsectors && (subsectors[i+j].flags & SSECF_DRAWN))
-					{
-						by |= (1<<j);
-					}
-				}
-				arc << by;
-			}
-		}
-		else
-		{
-			int v = 0;
-			arc << v << v << v;
-		}
-	}
-	else
-	{
-		arc << num_verts << num_subs << num_nodes;
-		if (num_verts != numvertexes ||
-			num_subs != numsubsectors ||
-			num_nodes != numnodes)
-		{
-			// Nodes don't match - we can't use this info
-			for(int i=0;i<num_subs;i+=8)
-			{
-				// Skip the subsector info.
-				arc << by;
-			}
-			if (hasglnodes)
-			{
-				RecalculateDrawnSubsectors();
-			}
-			return;
-		}
-		else
-		{
-			for(int i=0;i<numsubsectors;i+=8)
-			{
-				arc << by;
-				for(int j=0;j<8;j++)
-				{
-					if ((by & (1<<j)) && i+j<numsubsectors)
-					{
-						subsectors[i+j].flags |= SSECF_DRAWN;
-					}
-				}
-			}
-		}
-	}
 }

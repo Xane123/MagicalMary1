@@ -49,9 +49,11 @@
 #include "m_argv.h"
 #include "sdlglvideo.h"
 #include "r_renderer.h"
+#include "swrenderer/r_swrenderer.h"
 
 EXTERN_CVAR (Bool, ticker)
 EXTERN_CVAR (Bool, fullscreen)
+EXTERN_CVAR (Bool, swtruecolor)
 EXTERN_CVAR (Float, vid_winscale)
 
 IVideo *Video;
@@ -63,20 +65,27 @@ void I_RestartRenderer();
 int currentrenderer;
 
 // [ZDoomGL]
-CUSTOM_CVAR (Int, vid_renderer, 1, CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
+CUSTOM_CVAR (Int, vid_renderer, 1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
+	// 0: Software renderer
+	// 1: OpenGL renderer
+
 	if (self != currentrenderer)
 	{
 		switch (self)
 		{
+		case 0:
+			Printf("Switching to software renderer...\n");
+			break;
+		case 1:
+			Printf("Switching to OpenGL renderer...\n");
+			break;
 		default:
-			Printf("Unknown renderer (%d).  Falling back to True 3D (OpenGL) renderer...\n", (int)vid_renderer);
-			self = 1; // make sure to actually switch to the software renderer
-		case 1:	//Intentional fall-through.
-			Printf("Switching to true 3D (OpenGL) renderer...\n");
+			Printf("Unknown renderer (%d).  Falling back to software renderer...\n", (int) vid_renderer);
+			self = 0; // make sure to actually switch to the software renderer
 			break;
 		}
-		Printf(GAMENAME "doesn't have the fake 3D (software) renderer anymore; Check Xane's website to find an outdated release with it included.\n");
+		Printf("You must restart " GAMENAME " to switch the renderer\n");
 	}
 }
 
@@ -86,7 +95,6 @@ void I_ShutdownGraphics ()
 	{
 		DFrameBuffer *s = screen;
 		screen = NULL;
-		s->ObjectFlags |= OF_YesReallyDelete;
 		delete s;
 	}
 	if (Video)
@@ -111,11 +119,10 @@ void I_InitGraphics ()
 	ticker.SetGenericRepDefault (val, CVAR_Bool);
 	
 	//currentrenderer = vid_renderer;
-	if (currentrenderer==1) Video = new SDLGLVideo(0);
-	else Video = new SDLVideo (0);
+	Video = new SDLGLVideo(0);
 	
 	if (Video == NULL)
-		I_FatalError ("Failed to initialize the renderer.");
+		I_FatalError ("Failed to initialize display");
 
 	atterm (I_ShutdownGraphics);
 
@@ -129,11 +136,11 @@ static void I_DeleteRenderer()
 
 void I_CreateRenderer()
 {
-	//currentrenderer = vid_renderer;
+	currentrenderer = vid_renderer;
 	if (Renderer == NULL)
 	{
 		if (currentrenderer==1) Renderer = gl_CreateInterface();
-		else Renderer = gl_CreateInterface();
+		else Renderer = new FSoftwareRenderer;
 		atterm(I_DeleteRenderer);
 	}
 }
@@ -158,7 +165,7 @@ DFrameBuffer *I_SetMode (int &width, int &height, DFrameBuffer *old)
 		fs = fullscreen;
 		break;
 	}
-	DFrameBuffer *res = Video->CreateFrameBuffer (width, height, fs, old);
+	DFrameBuffer *res = Video->CreateFrameBuffer (width, height, swtruecolor, fs, old);
 
 	/* Right now, CreateFrameBuffer cannot return NULL
 	if (res == NULL)
@@ -187,7 +194,7 @@ void I_ClosestResolution (int *width, int *height, int bits)
 	int twidth, theight;
 	int cwidth = 0, cheight = 0;
 	int iteration;
-	DWORD closest = 4294967295u;
+	uint32_t closest = 4294967295u;
 
 	for (iteration = 0; iteration < 2; iteration++)
 	{
@@ -200,7 +207,7 @@ void I_ClosestResolution (int *width, int *height, int bits)
 			if (iteration == 0 && (twidth < *width || theight < *height))
 				continue;
 
-			DWORD dist = (twidth - *width) * (twidth - *width)
+			uint32_t dist = (twidth - *width) * (twidth - *width)
 				+ (theight - *height) * (theight - *height);
 
 			if (dist < closest)
@@ -234,7 +241,7 @@ void I_ClosestResolution (int *width, int *height, int bits)
 EXTERN_CVAR(Int, vid_maxfps);
 EXTERN_CVAR(Bool, cl_capfps);
 
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__OpenBSD__)
 Semaphore FPSLimitSemaphore;
 
 static void FPSLimitNotify(sigval val)
@@ -272,18 +279,18 @@ void I_SetFPSLimit(int limit)
 	}
 	if (limit == 0)
 	{ // no limit
-		DPrintf("FPS timer disabled\n");
+		DPrintf(DMSG_NOTIFY, "FPS timer disabled\n");
 	}
 	else
 	{
 		FPSLimitTimerEnabled = true;
 		if(timer_create(CLOCK_REALTIME, &FPSLimitEvent, &FPSLimitTimer) == -1)
-			Printf("Failed to create FPS limitter event\n");
+			Printf(DMSG_WARNING, "Failed to create FPS limitter event\n");
 		itimerspec period = { {0, 0}, {0, 0} };
 		period.it_value.tv_nsec = period.it_interval.tv_nsec = 1000000000 / limit;
 		if(timer_settime(FPSLimitTimer, 0, &period, NULL) == -1)
-			Printf("Failed to set FPS limitter timer\n");
-		DPrintf("FPS timer set to %u ms\n", (unsigned int) period.it_interval.tv_nsec / 1000000);
+			Printf(DMSG_WARNING, "Failed to set FPS limitter timer\n");
+		DPrintf(DMSG_NOTIFY, "FPS timer set to %u ms\n", (unsigned int) period.it_interval.tv_nsec / 1000000);
 	}
 }
 #else
@@ -312,10 +319,23 @@ CUSTOM_CVAR (Int, vid_maxfps, 200, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
 extern int NewWidth, NewHeight, NewBits, DisplayBits;
 
-CUSTOM_CVAR (Bool, fullscreen, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Bool, swtruecolor, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
 {
-	NewWidth = screen->GetWidth();
-	NewHeight = screen->GetHeight();
+	// Strictly speaking this doesn't require a mode switch, but it is the easiest
+	// way to force a CreateFramebuffer call without a lot of refactoring.
+	if (currentrenderer == 0)
+	{
+		NewWidth = screen->VideoWidth;
+		NewHeight = screen->VideoHeight;
+		NewBits = DisplayBits;
+		setmodeneeded = true;
+	}
+}
+
+CUSTOM_CVAR (Bool, fullscreen, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
+{
+	NewWidth = screen->VideoWidth;
+	NewHeight = screen->VideoHeight;
 	NewBits = DisplayBits;
 	setmodeneeded = true;
 }
@@ -329,8 +349,8 @@ CUSTOM_CVAR (Float, vid_winscale, 1.f, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 	else if (Video)
 	{
 		Video->SetWindowedScale (self);
-		NewWidth = screen->GetWidth();
-		NewHeight = screen->GetHeight();
+		NewWidth = screen->VideoWidth;
+		NewHeight = screen->VideoHeight;
 		NewBits = DisplayBits;
 		setmodeneeded = true;
 	}

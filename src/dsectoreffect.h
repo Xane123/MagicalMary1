@@ -10,67 +10,51 @@ class DSectorEffect : public DThinker
 public:
 	DSectorEffect (sector_t *sector);
 
-	void Serialize (FArchive &arc);
-	void Destroy();
+	
+	void Serialize(FSerializer &arc);
+	void OnDestroy() override;
 
 	sector_t *GetSector() const { return m_Sector; }
 
-protected:
-	DSectorEffect ();
 	sector_t *m_Sector;
+
+protected:
+	DSectorEffect();
+
 };
 
 class DMover : public DSectorEffect
 {
-	DECLARE_CLASS (DMover, DSectorEffect)
+	DECLARE_ABSTRACT_CLASS (DMover, DSectorEffect)
 	HAS_OBJECT_POINTERS
-public:
+protected:
 	DMover (sector_t *sector);
-protected:
-	enum EResult { ok, crushed, pastdest };
-	TObjPtr<DInterpolation> interpolation;
-private:
-	bool MoveAttached(int crush, fixed_t move, int floorOrCeiling, bool resetfailed);
-	EResult MovePlane (fixed_t speed, fixed_t dest, int crush, int floorOrCeiling, int direction, bool hexencrush);
-protected:
-	DMover ();
-	void Serialize (FArchive &arc);
-	void Destroy();
+
+	TObjPtr<DInterpolation*> interpolation;
+public:
 	void StopInterpolation(bool force = false);
-	inline EResult MoveFloor (fixed_t speed, fixed_t dest, int crush, int direction, bool hexencrush)
-	{
-		return MovePlane (speed, dest, crush, 0, direction, hexencrush);
-	}
-	inline EResult MoveFloor (fixed_t speed, fixed_t dest, int direction)
-	{
-		return MovePlane (speed, dest, -1, 0, direction, false);
-	}
-	inline EResult MoveCeiling (fixed_t speed, fixed_t dest, int crush, int direction, bool hexencrush)
-	{
-		return MovePlane (speed, dest, crush, 1, direction, hexencrush);
-	}
-	inline EResult MoveCeiling (fixed_t speed, fixed_t dest, int direction)
-	{
-		return MovePlane (speed, dest, -1, 1, direction, false);
-	}
+
+protected:
+	DMover () {}
+	
+	void Serialize(FSerializer &arc);
+	void OnDestroy() override;
 };
 
 class DMovingFloor : public DMover
 {
-	DECLARE_CLASS (DMovingFloor, DMover)
-public:
-	DMovingFloor (sector_t *sector);
+	DECLARE_ABSTRACT_CLASS (DMovingFloor, DMover)
 protected:
-	DMovingFloor ();
+	DMovingFloor (sector_t *sector);
+	DMovingFloor() {}
 };
 
 class DMovingCeiling : public DMover
 {
-	DECLARE_CLASS (DMovingCeiling, DMover)
-public:
-	DMovingCeiling (sector_t *sector);
+	DECLARE_ABSTRACT_CLASS (DMovingCeiling, DMover)
 protected:
-	DMovingCeiling ();
+	DMovingCeiling (sector_t *sector, bool interpolate = true);
+	DMovingCeiling () {}
 };
 
 #endif //__DSECTOREFFECT_H__

@@ -37,26 +37,13 @@
 //
 //---------------------------------------------------------------------------
 //
-// FraggleScript is from SMMU which is under the GPL. Technically, 
-// therefore, combining the FraggleScript code with the non-free 
-// ZDoom code is a violation of the GPL.
-//
-// As this may be a problem for you, I hereby grant an exception to my 
-// copyright on the SMMU source (including FraggleScript). You may use 
-// any code from SMMU in (G)ZDoom, provided that:
-//
-//    * For any binary release of the port, the source code is also made 
-//      available.
-//    * The copyright notice is kept on any file containing my code.
-//
-//
 
 /* includes ************************/
 
 #include "t_script.h"
 #include "i_system.h"
 #include "w_wad.h"
-#include "farchive.h"
+#include "serializer.h"
 
 
 //==========================================================================
@@ -71,9 +58,11 @@
 //
 //==========================================================================
 
-IMPLEMENT_POINTY_CLASS(DFsSection)
- DECLARE_POINTER(next)
-END_POINTERS
+IMPLEMENT_CLASS(DFsSection, false, true)
+
+IMPLEMENT_POINTERS_START(DFsSection)
+	IMPLEMENT_POINTER(next)
+IMPLEMENT_POINTERS_END
 
 //==========================================================================
 //
@@ -81,10 +70,14 @@ END_POINTERS
 //
 //==========================================================================
 
-void DFsSection::Serialize(FArchive &ar)
+void DFsSection::Serialize(FSerializer &arc)
 {
-	Super::Serialize(ar);
-	ar << type << start_index << end_index << loop_index << next;
+	Super::Serialize(arc);
+	arc("type", type)
+		("start_index", start_index)
+		("end_index", end_index)
+		("loop_index", loop_index)
+		("next", next);
 }
 
 //==========================================================================
@@ -150,7 +143,7 @@ void DFsScript::ClearSections()
 DFsSection *DFsScript::NewSection(const char *brace)
 {
 	int n = section_hash(brace);
-	DFsSection *newsec = new DFsSection;
+	DFsSection *newsec = Create<DFsSection>();
 	
 	newsec->start_index = MakeIndex(brace);
 	newsec->next = sections[n];

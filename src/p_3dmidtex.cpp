@@ -36,10 +36,13 @@
 
 
 #include "templates.h"
+#include "p_3dmidtex.h"
 #include "p_local.h"
 #include "p_terrain.h"
 #include "p_maputl.h"
 #include "p_spec.h"
+#include "g_levellocals.h"
+#include "actor.h"
 
 
 //============================================================================
@@ -50,7 +53,7 @@
 //
 //============================================================================
 
-bool P_Scroll3dMidtex(sector_t *sector, int crush, fixed_t move, bool ceiling)
+bool P_Scroll3dMidtex(sector_t *sector, int crush, double move, bool ceiling, bool instant)
 {
 	extsector_t::midtex::plane &scrollplane = ceiling? sector->e->Midtex.Ceiling : sector->e->Midtex.Floor;
 
@@ -68,7 +71,7 @@ bool P_Scroll3dMidtex(sector_t *sector, int crush, fixed_t move, bool ceiling)
 
 	for(unsigned i = 0; i < scrollplane.AttachedSectors.Size(); i++)
 	{
-		res |= P_ChangeSector(scrollplane.AttachedSectors[i], crush, move, 2, true);
+		res |= P_ChangeSector(scrollplane.AttachedSectors[i], crush, move, 2, true, instant);
 	}
 	return !res;
 }
@@ -120,24 +123,24 @@ void P_Attach3dMidtexLinesToSector(sector_t *sector, int lineid, int tag, bool c
 	extsector_t::midtex::plane &scrollplane = ceiling? sector->e->Midtex.Ceiling : sector->e->Midtex.Floor;
 
 	// Bit arrays that mark whether a line or sector is to be attached.
-	BYTE *found_lines = new BYTE[(numlines+7)/8];
-	BYTE *found_sectors = new BYTE[(numsectors+7)/8];
+	uint8_t *found_lines = new uint8_t[(level.lines.Size()+7)/8];
+	uint8_t *found_sectors = new uint8_t[(level.sectors.Size()+7)/8];
 
-	memset(found_lines, 0, sizeof (BYTE) * ((numlines+7)/8));
-	memset(found_sectors, 0, sizeof (BYTE) * ((numsectors+7)/8));
+	memset(found_lines, 0, sizeof (uint8_t) * ((level.lines.Size()+7)/8));
+	memset(found_sectors, 0, sizeof (uint8_t) * ((level.sectors.Size()+7)/8));
 
 	// mark all lines and sectors that are already attached to this one
 	// and clear the arrays. The old data will be re-added automatically
 	// from the marker arrays.
 	for (unsigned i=0; i < scrollplane.AttachedLines.Size(); i++)
 	{
-		int line = int(scrollplane.AttachedLines[i] - lines);
+		int line = scrollplane.AttachedLines[i]->Index();
 		found_lines[line>>3] |= 1 << (line&7);
 	}
 
 	for (unsigned i=0; i < scrollplane.AttachedSectors.Size(); i++)
 	{
-		int sec = int(scrollplane.AttachedSectors[i] - sectors);
+		int sec = scrollplane.AttachedSectors[i]->Index();
 		found_sectors[sec>>3] |= 1 << (sec&7);
 	}
 
@@ -150,7 +153,7 @@ void P_Attach3dMidtexLinesToSector(sector_t *sector, int lineid, int tag, bool c
 		int line;
 		while ((line = itr.Next()) >= 0)
 		{
-			line_t *ln = &lines[line];
+			line_t *ln = &level.lines[line];
 
 			if (ln->frontsector == NULL || ln->backsector == NULL || !(ln->flags & ML_3DMIDTEX))
 			{
@@ -166,10 +169,8 @@ void P_Attach3dMidtexLinesToSector(sector_t *sector, int lineid, int tag, bool c
 		int sec;
 		while ((sec = it.Next()) >= 0)
 		{
-			for (int line = 0; line < sectors[sec].linecount; line ++)
+			for (auto ln : level.sectors[sec].Lines)
 			{
-				line_t *ln = sectors[sec].lines[line];
-
 				if (lineid != 0 && !tagManager.LineHasID(ln, lineid)) continue;
 
 				if (ln->frontsector == NULL || ln->backsector == NULL || !(ln->flags & ML_3DMIDTEX))
@@ -177,34 +178,35 @@ void P_Attach3dMidtexLinesToSector(sector_t *sector, int lineid, int tag, bool c
 					// Only consider two-sided lines with the 3DMIDTEX flag
 					continue;
 				}
-				int lineno = int(ln-lines);
-				found_lines[lineno>>3] |= 1 << (lineno&7);
+				int lineno = ln->Index();
+				found_lines[lineno >> 3] |= 1 << (lineno & 7);
 			}
 		}
 	}
 
 
-	for(int i=0; i < numlines; i++)
+	for(unsigned i=0; i < level.lines.Size(); i++)
 	{
 		if (found_lines[i>>3] & (1 << (i&7)))
 		{
-			scrollplane.AttachedLines.Push(&lines[i]);
+			auto &line = level.lines[i];
+			scrollplane.AttachedLines.Push(&line);
 
-			v = int(lines[i].frontsector - sectors);
-			assert(v < numsectors);
+			v = line.frontsector->Index();
+			assert(v < (int)level.sectors.Size());
 			found_sectors[v>>3] |= 1 << (v&7);
 
-			v = int(lines[i].backsector - sectors);
-			assert(v < numsectors);
+			v = line.backsector->Index();
+			assert(v < (int)level.sectors.Size());
 			found_sectors[v>>3] |= 1 << (v&7);
 		}
 	}
 
-	for (int i=0; i < numsectors; i++)
+	for (unsigned i=0; i < level.sectors.Size(); i++)
 	{
 		if (found_sectors[i>>3] & (1 << (i&7)))
 		{
-			scrollplane.AttachedSectors.Push(&sectors[i]);
+			scrollplane.AttachedSectors.Push(&level.sectors[i]);
 		}
 	}
 
@@ -220,7 +222,7 @@ void P_Attach3dMidtexLinesToSector(sector_t *sector, int lineid, int tag, bool c
 // Retrieves top and bottom of the current line's mid texture.
 //
 //============================================================================
-bool P_GetMidTexturePosition(const line_t *line, int sideno, fixed_t *ptextop, fixed_t *ptexbot)
+bool P_GetMidTexturePosition(const line_t *line, int sideno, double *ptextop, double *ptexbot)
 {
 	if (line->sidedef[0]==NULL || line->sidedef[1]==NULL) return false;
 	
@@ -230,31 +232,30 @@ bool P_GetMidTexturePosition(const line_t *line, int sideno, fixed_t *ptextop, f
 	FTexture * tex= TexMan(texnum);
 	if (!tex) return false;
 
-	fixed_t totalscale = abs(FixedMul(side->GetTextureYScale(side_t::mid), tex->yScale));
-	fixed_t y_offset = side->GetTextureYOffset(side_t::mid);
-	fixed_t textureheight = tex->GetScaledHeight(totalscale) << FRACBITS;
-	if (totalscale != FRACUNIT && !tex->bWorldPanning)
+	double totalscale = fabs(side->GetTextureYScale(side_t::mid)) * tex->GetScaleY();
+	double y_offset = side->GetTextureYOffset(side_t::mid);
+	double textureheight = tex->GetHeight() / totalscale;
+	if (totalscale != 1. && !tex->bWorldPanning)
 	{ 
-		y_offset = FixedDiv(y_offset, totalscale);
+		y_offset /= totalscale;
 	}
 
 	if(line->flags & ML_DONTPEGBOTTOM)
 	{
 		*ptexbot = y_offset +
-			MAX<fixed_t>(line->frontsector->GetPlaneTexZ(sector_t::floor), line->backsector->GetPlaneTexZ(sector_t::floor));
+			MAX(line->frontsector->GetPlaneTexZ(sector_t::floor), line->backsector->GetPlaneTexZ(sector_t::floor));
 
 		*ptextop = *ptexbot + textureheight;
 	}
 	else
 	{
 		*ptextop = y_offset +
-		   MIN<fixed_t>(line->frontsector->GetPlaneTexZ(sector_t::ceiling), line->backsector->GetPlaneTexZ(sector_t::ceiling));
+		   MIN(line->frontsector->GetPlaneTexZ(sector_t::ceiling), line->backsector->GetPlaneTexZ(sector_t::ceiling));
 		
 		*ptexbot = *ptextop - textureheight;
 	}
 	return true;
 }
-
 
 //============================================================================
 //
@@ -273,12 +274,12 @@ bool P_LineOpening_3dMidtex(AActor *thing, const line_t *linedef, FLineOpening &
 		return false;
 	}
 
-	fixed_t tt, tb;
+	double tt, tb;
 
 	open.abovemidtex = false;
 	if (P_GetMidTexturePosition(linedef, 0, &tt, &tb))
 	{
-		if (thing->Z() + (thing->height/2) < (tt + tb)/2)
+		if (thing->Center() < (tt + tb)/2)
 		{
 			if (tb < open.top)
 			{
@@ -299,7 +300,7 @@ bool P_LineOpening_3dMidtex(AActor *thing, const line_t *linedef, FLineOpening &
 
 			}
 			// returns true if it touches the midtexture
-			return (abs(thing->Z() - tt) <= thing->MaxStepHeight);
+			return (fabs(thing->Z() - tt) <= thing->MaxStepHeight);
 		}
 	}
 	return false;
@@ -307,7 +308,7 @@ bool P_LineOpening_3dMidtex(AActor *thing, const line_t *linedef, FLineOpening &
 	/* still have to figure out what this code from Eternity means...
 	if((linedef->flags & ML_BLOCKMONSTERS) && 
 		!(mo->flags & (MF_FLOAT | MF_DROPOFF)) &&
-		D_abs(mo->z - textop) <= 24*FRACUNIT)
+		fabs(mo->Z() - tt) <= 24)
 	{
 		opentop = openbottom;
 		openrange = 0;

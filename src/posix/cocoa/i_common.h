@@ -60,6 +60,8 @@ extern RenderBufferOptions rbOpts;
 #define AppKit10_5  949
 #define AppKit10_6 1038
 #define AppKit10_7 1138
+#define AppKit10_8 1187
+#define AppKit10_9 1265
 
 
 @interface NSWindow(ExitAppOnClose)
@@ -149,6 +151,8 @@ static const NSOpenGLPixelFormatAttribute NSOpenGLPFAAllowOfflineRenderers = NSO
 - (void)setCollectionBehavior:(NSUInteger)collectionBehavior;
 @end
 
+typedef NSUInteger NSWindowCollectionBehavior;
+
 #endif // prior to 10.5
 
 
@@ -182,11 +186,19 @@ typedef NSInteger NSApplicationActivationPolicy;
 - (void)setWantsBestResolutionOpenGLSurface:(BOOL)flag;
 @end
 
+@interface NSView(Compatibility)
+- (NSRect)convertRectToBacking:(NSRect)aRect;
+@end
+
 @interface NSScreen(HiDPIStubs)
 - (NSRect)convertRectToBacking:(NSRect)aRect;
 @end
 
 static const NSWindowCollectionBehavior NSWindowCollectionBehaviorFullScreenAuxiliary = NSWindowCollectionBehavior(1 << 8);
+
+static const auto NSOpenGLPFAOpenGLProfile = NSOpenGLPixelFormatAttribute(96);
+static const auto NSOpenGLProfileVersionLegacy = NSOpenGLPixelFormatAttribute(0x1000);
+static const auto NSOpenGLProfileVersion3_2Core = NSOpenGLPixelFormatAttribute(0x3200);
 
 #endif // prior to 10.7
 

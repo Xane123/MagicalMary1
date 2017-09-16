@@ -1,55 +1,45 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2002-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 /*
 ** gl_drawinfo.cpp
 ** Implements the draw info structure which contains most of the
 ** data in a scene and the draw lists - including a very thorough BSP 
 ** style sorting algorithm for translucent objects.
 **
-**---------------------------------------------------------------------------
-** Copyright 2002-2005 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-** 5. Full disclosure of the entire project's source code, except for third
-**    party libraries is mandatory. (NOTE: This clause is non-negotiable!)
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
-**
 */
+
 #include "gl/system/gl_system.h"
 #include "r_sky.h"
 #include "r_utility.h"
 #include "r_state.h"
 #include "doomstat.h"
+#include "g_levellocals.h"
 
 #include "gl/system/gl_cvars.h"
 #include "gl/data/gl_data.h"
 #include "gl/data/gl_vertexbuffer.h"
 #include "gl/scene/gl_drawinfo.h"
 #include "gl/scene/gl_portal.h"
+#include "gl/scene/gl_scenedrawer.h"
 #include "gl/renderer/gl_lightdata.h"
 #include "gl/renderer/gl_renderstate.h"
 #include "gl/textures/gl_material.h"
@@ -57,6 +47,7 @@
 #include "gl/utility/gl_templates.h"
 #include "gl/shaders/gl_shader.h"
 #include "gl/stereo3d/scoped_color_mask.h"
+#include "gl/renderer/gl_quaddrawer.h"
 
 FDrawInfo * gl_drawinfo;
 
@@ -243,39 +234,39 @@ SortNode * GLDrawList::FindSortPlane(SortNode * head)
 //==========================================================================
 SortNode * GLDrawList::FindSortWall(SortNode * head)
 {
-	fixed_t farthest=INT_MIN;
-	fixed_t nearest=INT_MAX;
-	SortNode * best=NULL;
-	SortNode * node=head;
-	fixed_t bestdist=INT_MAX;
+	float farthest = -FLT_MAX;
+	float nearest = FLT_MAX;
+	SortNode * best = NULL;
+	SortNode * node = head;
+	float bestdist = FLT_MAX;
 
 	while (node)
 	{
-		GLDrawItem * it=&drawitems[node->itemindex];
-		if (it->rendertype==GLDIT_WALL)
+		GLDrawItem * it = &drawitems[node->itemindex];
+		if (it->rendertype == GLDIT_WALL)
 		{
-			fixed_t d=walls[it->index].viewdistance;
-			if (d>farthest) farthest=d;
-			if (d<nearest) nearest=d;
+			float d = walls[it->index].ViewDistance;
+			if (d > farthest) farthest = d;
+			if (d < nearest) nearest = d;
 		}
-		node=node->next;
+		node = node->next;
 	}
-	if (farthest==INT_MIN) return NULL;
-	node=head;
-	farthest=(farthest+nearest)>>1;
+	if (farthest == INT_MIN) return NULL;
+	node = head;
+	farthest = (farthest + nearest) / 2;
 	while (node)
 	{
-		GLDrawItem * it=&drawitems[node->itemindex];
-		if (it->rendertype==GLDIT_WALL)
+		GLDrawItem * it = &drawitems[node->itemindex];
+		if (it->rendertype == GLDIT_WALL)
 		{
-			fixed_t di=abs(walls[it->index].viewdistance-farthest);
-			if (!best || di<bestdist)
+			float di = fabsf(walls[it->index].ViewDistance - farthest);
+			if (!best || di < bestdist)
 			{
-				best=node;
-				bestdist=di;
+				best = node;
+				bestdist = di;
 			}
 		}
-		node=node->next;
+		node = node->next;
 	}
 	return best;
 }
@@ -309,7 +300,7 @@ void GLDrawList::SortWallIntoPlane(SortNode * head,SortNode * sort)
 	GLFlat * fh=&flats[drawitems[head->itemindex].index];
 	GLWall * ws=&walls[drawitems[sort->itemindex].index];
 
-	bool ceiling = fh->z > FIXED2FLOAT(viewz);
+	bool ceiling = fh->z > r_viewpoint.Pos.Z;
 
 	if ((ws->ztop[0] > fh->z || ws->ztop[1] > fh->z) && (ws->zbottom[0] < fh->z || ws->zbottom[1] < fh->z))
 	{
@@ -319,8 +310,30 @@ void GLDrawList::SortWallIntoPlane(SortNode * head,SortNode * sort)
 		// Bad things will happen if the memory must be reallocated!
 		GLWall w = *ws;
 		AddWall(&w);
+	
+		// Splitting is done in the shader with clip planes, if available
+		if (gl.flags & RFL_NO_CLIP_PLANES)
+		{
+			GLWall * ws1;
+			ws->vertcount = 0;	// invalidate current vertices.
+			ws1=&walls[walls.Size()-1];
+			ws=&walls[drawitems[sort->itemindex].index];	// may have been reallocated!
+			float newtexv = ws->tcs[GLWall::UPLFT].v + ((ws->tcs[GLWall::LOLFT].v - ws->tcs[GLWall::UPLFT].v) / (ws->zbottom[0] - ws->ztop[0])) * (fh->z - ws->ztop[0]);
 
-		// Splitting is done in the shader with clip planes.
+			// I make the very big assumption here that translucent walls in sloped sectors
+			// and 3D-floors never coexist in the same level. If that were the case this
+			// code would become extremely more complicated.
+			if (!ceiling)
+			{
+				ws->ztop[1] = ws1->zbottom[1] = ws->ztop[0] = ws1->zbottom[0] = fh->z;
+				ws->tcs[GLWall::UPRGT].v = ws1->tcs[GLWall::LORGT].v = ws->tcs[GLWall::UPLFT].v = ws1->tcs[GLWall::LOLFT].v = newtexv;
+			}
+			else
+			{
+				ws1->ztop[1] = ws->zbottom[1] = ws1->ztop[0] = ws->zbottom[0] = fh->z;
+				ws1->tcs[GLWall::UPLFT].v = ws->tcs[GLWall::LOLFT].v = ws1->tcs[GLWall::UPRGT].v = ws->tcs[GLWall::LORGT].v=newtexv;
+			}
+		}
 
 		SortNode * sort2 = SortNodes.GetNew();
 		memset(sort2, 0, sizeof(SortNode));
@@ -350,15 +363,33 @@ void GLDrawList::SortSpriteIntoPlane(SortNode * head,SortNode * sort)
 	GLFlat * fh=&flats[drawitems[head->itemindex].index];
 	GLSprite * ss=&sprites[drawitems[sort->itemindex].index];
 
-	bool ceiling = fh->z > FIXED2FLOAT(viewz);
+	bool ceiling = fh->z > r_viewpoint.Pos.Z;
 
 	if ((ss->z1>fh->z && ss->z2<fh->z) || ss->modelframe)
 	{
 		// We have to split this sprite
 		GLSprite s=*ss;
 		AddSprite(&s);	// add a copy to avoid reallocation issues.
+	
+		// Splitting is done in the shader with clip planes, if available
+		if (gl.flags & RFL_NO_CLIP_PLANES)
+		{
+			GLSprite * ss1;
+			ss1=&sprites[sprites.Size()-1];
+			ss=&sprites[drawitems[sort->itemindex].index];	// may have been reallocated!
+			float newtexv=ss->vt + ((ss->vb-ss->vt)/(ss->z2-ss->z1))*(fh->z-ss->z1);
 
-		// Splitting is done in the shader with clip planes.
+			if (!ceiling)
+			{
+				ss->z1=ss1->z2=fh->z;
+				ss->vt=ss1->vb=newtexv;
+			}
+			else
+			{
+				ss1->z1=ss->z2=fh->z;
+				ss1->vt=ss->vb=newtexv;
+			}
+		}
 
 		SortNode * sort2=SortNodes.GetNew();
 		memset(sort2,0,sizeof(SortNode));
@@ -423,10 +454,11 @@ void GLDrawList::SortWallIntoWall(SortNode * head,SortNode * sort)
 
 		float ix=(float)(ws->glseg.x1+r*(ws->glseg.x2-ws->glseg.x1));
 		float iy=(float)(ws->glseg.y1+r*(ws->glseg.y2-ws->glseg.y1));
-		float iu=(float)(ws->uplft.u + r * (ws->uprgt.u - ws->uplft.u));
+		float iu=(float)(ws->tcs[GLWall::UPLFT].u + r * (ws->tcs[GLWall::UPRGT].u - ws->tcs[GLWall::UPLFT].u));
 		float izt=(float)(ws->ztop[0]+r*(ws->ztop[1]-ws->ztop[0]));
 		float izb=(float)(ws->zbottom[0]+r*(ws->zbottom[1]-ws->zbottom[0]));
 
+		ws->vertcount = 0;	// invalidate current vertices.
 		GLWall w=*ws;
 		AddWall(&w);
 		ws1=&walls[walls.Size()-1];
@@ -434,9 +466,15 @@ void GLDrawList::SortWallIntoWall(SortNode * head,SortNode * sort)
 
 		ws1->glseg.x1=ws->glseg.x2=ix;
 		ws1->glseg.y1=ws->glseg.y2=iy;
+		ws1->glseg.fracleft = ws->glseg.fracright = ws->glseg.fracleft + r*(ws->glseg.fracright - ws->glseg.fracleft);
 		ws1->ztop[0]=ws->ztop[1]=izt;
 		ws1->zbottom[0]=ws->zbottom[1]=izb;
-		ws1->lolft.u = ws1->uplft.u = ws->lorgt.u = ws->uprgt.u = iu;
+		ws1->tcs[GLWall::LOLFT].u = ws1->tcs[GLWall::UPLFT].u = ws->tcs[GLWall::LORGT].u = ws->tcs[GLWall::UPRGT].u = iu;
+		if (gl.buffermethod == BM_DEFERRED)
+		{
+			ws->MakeVertices(false);
+			ws1->MakeVertices(false);
+		}
 
 		SortNode * sort2=SortNodes.GetNew();
 		memset(sort2,0,sizeof(SortNode));
@@ -461,6 +499,10 @@ void GLDrawList::SortWallIntoWall(SortNode * head,SortNode * sort)
 // 
 //
 //==========================================================================
+EXTERN_CVAR(Int, gl_billboard_mode)
+EXTERN_CVAR(Bool, gl_billboard_faces_camera)
+EXTERN_CVAR(Bool, gl_billboard_particles)
+
 void GLDrawList::SortSpriteIntoWall(SortNode * head,SortNode * sort)
 {
 	GLWall * wh=&walls[drawitems[head->itemindex].index];
@@ -491,6 +533,27 @@ void GLDrawList::SortSpriteIntoWall(SortNode * head,SortNode * sort)
 	}
 	else
 	{
+		const bool drawWithXYBillboard = ((ss->particle && gl_billboard_particles) || (!(ss->actor && ss->actor->renderflags & RF_FORCEYBILLBOARD)
+			&& (gl_billboard_mode == 1 || (ss->actor && ss->actor->renderflags & RF_FORCEXYBILLBOARD))));
+
+		const bool drawBillboardFacingCamera = gl_billboard_faces_camera;
+		// [Nash] has +ROLLSPRITE
+		const bool rotated = (ss->actor != nullptr && ss->actor->renderflags & (RF_ROLLSPRITE | RF_WALLSPRITE | RF_FLATSPRITE));
+
+		// cannot sort them at the moment. This requires more complex splitting.
+		if (drawWithXYBillboard || drawBillboardFacingCamera || rotated)
+		{
+			float v1 = wh->PointOnSide(ss->x, ss->y);
+			if (v1 < 0)
+			{
+				head->AddToLeft(sort);
+			}
+			else
+			{
+				head->AddToRight(sort);
+			}
+			return;
+		}
 		double r=ss->CalcIntersectionVertex(wh);
 
 		float ix=(float)(ss->x1 + r * (ss->x2-ss->x1));
@@ -547,7 +610,7 @@ inline int GLDrawList::CompareSprites(SortNode * a,SortNode * b)
 //
 //==========================================================================
 static GLDrawList * gd;
-int __cdecl CompareSprite(const void * a,const void * b)
+int CompareSprite(const void * a,const void * b)
 {
 	return gd->CompareSprites(*(SortNode**)a,*(SortNode**)b);
 }
@@ -708,7 +771,7 @@ void GLDrawList::DoDrawSorted(SortNode * head)
 	if (drawitems[head->itemindex].rendertype == GLDIT_FLAT)
 	{
 		z = flats[drawitems[head->itemindex].index].z;
-		relation = z > FIXED2FLOAT(viewz)? 1 : -1;
+		relation = z > r_viewpoint.Pos.Z ? 1 : -1;
 	}
 
 
@@ -763,15 +826,23 @@ void GLDrawList::DrawSorted()
 
 	if (!sorted)
 	{
+		GLRenderer->mVBO->Map();
 		MakeSortList();
 		sorted=DoSort(SortNodes[SortNodeStart]);
+		GLRenderer->mVBO->Unmap();
 	}
 	gl_RenderState.ClearClipSplit();
-	glEnable(GL_CLIP_DISTANCE1);
-	glEnable(GL_CLIP_DISTANCE2);
+	if (!(gl.flags & RFL_NO_CLIP_PLANES))
+	{
+		glEnable(GL_CLIP_DISTANCE1);
+		glEnable(GL_CLIP_DISTANCE2);
+	}
 	DoDrawSorted(sorted);
-	glDisable(GL_CLIP_DISTANCE1);
-	glDisable(GL_CLIP_DISTANCE2);
+	if (!(gl.flags & RFL_NO_CLIP_PLANES))
+	{
+		glDisable(GL_CLIP_DISTANCE1);
+		glDisable(GL_CLIP_DISTANCE2);
+	}
 	gl_RenderState.ClearClipSplit();
 }
 
@@ -838,7 +909,7 @@ void GLDrawList::DrawDecals()
 //==========================================================================
 static GLDrawList * sortinfo;
 
-static int __cdecl diwcmp (const void *a, const void *b)
+static int diwcmp (const void *a, const void *b)
 {
 	const GLDrawItem * di1 = (const GLDrawItem *)a;
 	GLWall * w1=&sortinfo->walls[di1->index];
@@ -850,7 +921,7 @@ static int __cdecl diwcmp (const void *a, const void *b)
 	return ((w1->flags & 3) - (w2->flags & 3));
 }
 
-static int __cdecl difcmp (const void *a, const void *b)
+static int difcmp (const void *a, const void *b)
 {
 	const GLDrawItem * di1 = (const GLDrawItem *)a;
 	GLFlat * w1=&sortinfo->flats[di1->index];
@@ -946,10 +1017,15 @@ static FDrawInfoList di_list;
 FDrawInfo::FDrawInfo()
 {
 	next = NULL;
+	if (gl.legacyMode)
+	{
+		dldrawlists = new GLDrawList[GLLDL_TYPES];
+	}
 }
 
 FDrawInfo::~FDrawInfo()
 {
+	if (dldrawlists != NULL) delete[] dldrawlists;
 	ClearBuffers();
 }
 
@@ -959,9 +1035,10 @@ FDrawInfo::~FDrawInfo()
 // Sets up a new drawinfo struct
 //
 //==========================================================================
-void FDrawInfo::StartDrawInfo()
+void FDrawInfo::StartDrawInfo(GLSceneDrawer *drawer)
 {
 	FDrawInfo *di=di_list.GetNew();
+	di->mDrawer = drawer;
 	di->StartScene();
 }
 
@@ -969,17 +1046,21 @@ void FDrawInfo::StartScene()
 {
 	ClearBuffers();
 
-	sectorrenderflags.Resize(numsectors);
-	ss_renderflags.Resize(numsubsectors);
-	no_renderflags.Resize(numsubsectors);
+	sectorrenderflags.Resize(level.sectors.Size());
+	ss_renderflags.Resize(level.subsectors.Size());
+	no_renderflags.Resize(level.subsectors.Size());
 
-	memset(&sectorrenderflags[0], 0, numsectors*sizeof(sectorrenderflags[0]));
-	memset(&ss_renderflags[0], 0, numsubsectors*sizeof(ss_renderflags[0]));
-	memset(&no_renderflags[0], 0, numnodes*sizeof(no_renderflags[0]));
+	memset(&sectorrenderflags[0], 0, level.sectors.Size() * sizeof(sectorrenderflags[0]));
+	memset(&ss_renderflags[0], 0, level.subsectors.Size() * sizeof(ss_renderflags[0]));
+	memset(&no_renderflags[0], 0, level.nodes.Size() * sizeof(no_renderflags[0]));
 
-	next=gl_drawinfo;
-	gl_drawinfo=this;
-	for(int i=0;i<GLDL_TYPES;i++) drawlists[i].Reset();
+	next = gl_drawinfo;
+	gl_drawinfo = this;
+	for (int i = 0; i < GLDL_TYPES; i++) drawlists[i].Reset();
+	if (dldrawlists != NULL)
+	{
+		for (int i = 0; i < GLLDL_TYPES; i++) dldrawlists[i].Reset();
+	}
 }
 
 //==========================================================================
@@ -992,6 +1073,10 @@ void FDrawInfo::EndDrawInfo()
 	FDrawInfo * di = gl_drawinfo;
 
 	for(int i=0;i<GLDL_TYPES;i++) di->drawlists[i].Reset();
+	if (di->dldrawlists != NULL)
+	{
+		for (int i = 0; i < GLLDL_TYPES; i++) di->dldrawlists[i].Reset();
+	}
 	gl_drawinfo=di->next;
 	di_list.Release(di);
 }
@@ -1021,17 +1106,12 @@ void FDrawInfo::SetupFloodStencil(wallseg * ws)
 		glDepthMask(true);
 
 		gl_RenderState.Apply();
-		FFlatVertex *ptr = GLRenderer->mVBO->GetBuffer();
-		ptr->Set(ws->x1, ws->z1, ws->y1, 0, 0);
-		ptr++;
-		ptr->Set(ws->x1, ws->z2, ws->y1, 0, 0);
-		ptr++;
-		ptr->Set(ws->x2, ws->z2, ws->y2, 0, 0);
-		ptr++;
-		ptr->Set(ws->x2, ws->z1, ws->y2, 0, 0);
-		ptr++;
-		GLRenderer->mVBO->RenderCurrent(ptr, GL_TRIANGLE_FAN);
-
+		FQuadDrawer qd;
+		qd.Set(0, ws->x1, ws->z1, ws->y1, 0, 0);
+		qd.Set(1, ws->x1, ws->z2, ws->y1, 0, 0);
+		qd.Set(2, ws->x2, ws->z2, ws->y2, 0, 0);
+		qd.Set(3, ws->x2, ws->z1, ws->y2, 0, 0);
+		qd.Render(GL_TRIANGLE_FAN);
 
 		glStencilFunc(GL_EQUAL, recursion + 1, ~0);		// draw sky into stencil
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);		// this stage doesn't modify the stencil
@@ -1054,16 +1134,12 @@ void FDrawInfo::ClearFloodStencil(wallseg * ws)
 		gl_RenderState.ResetColor();
 
 		gl_RenderState.Apply();
-		FFlatVertex *ptr = GLRenderer->mVBO->GetBuffer();
-		ptr->Set(ws->x1, ws->z1, ws->y1, 0, 0);
-		ptr++;
-		ptr->Set(ws->x1, ws->z2, ws->y1, 0, 0);
-		ptr++;
-		ptr->Set(ws->x2, ws->z2, ws->y2, 0, 0);
-		ptr++;
-		ptr->Set(ws->x2, ws->z1, ws->y2, 0, 0);
-		ptr++;
-		GLRenderer->mVBO->RenderCurrent(ptr, GL_TRIANGLE_FAN);
+		FQuadDrawer qd;
+		qd.Set(0, ws->x1, ws->z1, ws->y1, 0, 0);
+		qd.Set(1, ws->x1, ws->z2, ws->y1, 0, 0);
+		qd.Set(2, ws->x2, ws->z2, ws->y2, 0, 0);
+		qd.Set(3, ws->x2, ws->z1, ws->y2, 0, 0);
+		qd.Render(GL_TRIANGLE_FAN);
 
 		// restore old stencil op.
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
@@ -1091,30 +1167,30 @@ void FDrawInfo::DrawFloodedPlane(wallseg * ws, float planez, sector_t * sec, boo
 	gltexture=FMaterial::ValidateTexture(plane.texture, false, true);
 	if (!gltexture) return;
 
-	if (gl_fixedcolormap) 
+	if (mDrawer->FixedColormap) 
 	{
 		Colormap.Clear();
 		lightlevel=255;
 	}
 	else
 	{
-		Colormap=sec->ColorMap;
+		Colormap = sec->Colormap;
 		if (gltexture->tex->isFullbright())
 		{
-			Colormap.LightColor.r = Colormap.LightColor.g = Colormap.LightColor.b = 0xff;
+			Colormap.MakeWhite();
 			lightlevel=255;
 		}
 		else lightlevel=abs(ceiling? sec->GetCeilingLight() : sec->GetFloorLight());
 	}
 
 	int rel = getExtraLight();
-	gl_SetColor(lightlevel, rel, Colormap, 1.0f);
-	gl_SetFog(lightlevel, rel, &Colormap, false);
+	mDrawer->SetColor(lightlevel, rel, Colormap, 1.0f);
+	mDrawer->SetFog(lightlevel, rel, &Colormap, false);
 	gl_RenderState.SetMaterial(gltexture, CLAMP_NONE, 0, -1, false);
 
-	float fviewx = FIXED2FLOAT(viewx);
-	float fviewy = FIXED2FLOAT(viewy);
-	float fviewz = FIXED2FLOAT(viewz);
+	float fviewx = r_viewpoint.Pos.X;
+	float fviewy = r_viewpoint.Pos.Y;
+	float fviewz = r_viewpoint.Pos.Z;
 
 	gl_SetPlaneTextureRotation(&plane, gltexture);
 	gl_RenderState.Apply();
@@ -1134,16 +1210,12 @@ void FDrawInfo::DrawFloodedPlane(wallseg * ws, float planez, sector_t * sec, boo
 	float px4 = fviewx + prj_fac1 * (ws->x2-fviewx);
 	float py4 = fviewy + prj_fac1 * (ws->y2-fviewy);
 
-	FFlatVertex *ptr = GLRenderer->mVBO->GetBuffer();
-	ptr->Set(px1, planez, py1, px1 / 64, -py1 / 64);
-	ptr++;
-	ptr->Set(px2, planez, py2, px2 / 64, -py2 / 64);
-	ptr++;
-	ptr->Set(px3, planez, py3, px3 / 64, -py3 / 64);
-	ptr++;
-	ptr->Set(px4, planez, py4, px4 / 64, -py4 / 64);
-	ptr++;
-	GLRenderer->mVBO->RenderCurrent(ptr, GL_TRIANGLE_FAN);
+	FQuadDrawer qd;
+	qd.Set(0, px1, planez, py1, px1 / 64, -py1 / 64);
+	qd.Set(1, px2, planez, py2, px2 / 64, -py2 / 64);
+	qd.Set(2, px3, planez, py3, px3 / 64, -py3 / 64);
+	qd.Set(3, px4, planez, py4, px4 / 64, -py4 / 64);
+	qd.Render(GL_TRIANGLE_FAN);
 
 	gl_RenderState.EnableTextureMatrix(false);
 }
@@ -1158,18 +1230,18 @@ void FDrawInfo::FloodUpperGap(seg_t * seg)
 {
 	wallseg ws;
 	sector_t ffake, bfake;
-	sector_t * fakefsector = gl_FakeFlat(seg->frontsector, &ffake, true);
-	sector_t * fakebsector = gl_FakeFlat(seg->backsector, &bfake, false);
+	sector_t * fakefsector = gl_FakeFlat(seg->frontsector, &ffake, mDrawer->in_area, true);
+	sector_t * fakebsector = gl_FakeFlat(seg->backsector, &bfake, mDrawer->in_area, false);
 
 	vertex_t * v1, * v2;
 
 	// Although the plane can be sloped this code will only be called
 	// when the edge itself is not.
-	fixed_t backz = fakebsector->ceilingplane.ZatPoint(seg->v1);
-	fixed_t frontz = fakefsector->ceilingplane.ZatPoint(seg->v1);
+	double backz = fakebsector->ceilingplane.ZatPoint(seg->v1);
+	double frontz = fakefsector->ceilingplane.ZatPoint(seg->v1);
 
 	if (fakebsector->GetTexture(sector_t::ceiling)==skyflatnum) return;
-	if (backz < viewz) return;
+	if (backz < r_viewpoint.Pos.Z) return;
 
 	if (seg->sidedef == seg->linedef->sidedef[0])
 	{
@@ -1182,13 +1254,13 @@ void FDrawInfo::FloodUpperGap(seg_t * seg)
 		v2=seg->linedef->v1;
 	}
 
-	ws.x1= FIXED2FLOAT(v1->x);
-	ws.y1= FIXED2FLOAT(v1->y);
-	ws.x2= FIXED2FLOAT(v2->x);
-	ws.y2= FIXED2FLOAT(v2->y);
+	ws.x1 = v1->fX();
+	ws.y1 = v1->fY();
+	ws.x2 = v2->fX();
+	ws.y2 = v2->fY();
 
-	ws.z1= FIXED2FLOAT(frontz);
-	ws.z2= FIXED2FLOAT(backz);
+	ws.z1= frontz;
+	ws.z2= backz;
 
 	// Step1: Draw a stencil into the gap
 	SetupFloodStencil(&ws);
@@ -1210,19 +1282,19 @@ void FDrawInfo::FloodLowerGap(seg_t * seg)
 {
 	wallseg ws;
 	sector_t ffake, bfake;
-	sector_t * fakefsector = gl_FakeFlat(seg->frontsector, &ffake, true);
-	sector_t * fakebsector = gl_FakeFlat(seg->backsector, &bfake, false);
+	sector_t * fakefsector = gl_FakeFlat(seg->frontsector, &ffake, mDrawer->in_area, true);
+	sector_t * fakebsector = gl_FakeFlat(seg->backsector, &bfake, mDrawer->in_area, false);
 
 	vertex_t * v1, * v2;
 
 	// Although the plane can be sloped this code will only be called
 	// when the edge itself is not.
-	fixed_t backz = fakebsector->floorplane.ZatPoint(seg->v1);
-	fixed_t frontz = fakefsector->floorplane.ZatPoint(seg->v1);
+	double backz = fakebsector->floorplane.ZatPoint(seg->v1);
+	double frontz = fakefsector->floorplane.ZatPoint(seg->v1);
 
 
 	if (fakebsector->GetTexture(sector_t::floor) == skyflatnum) return;
-	if (fakebsector->GetPlaneTexZ(sector_t::floor) > viewz) return;
+	if (fakebsector->GetPlaneTexZ(sector_t::floor) > r_viewpoint.Pos.Z) return;
 
 	if (seg->sidedef == seg->linedef->sidedef[0])
 	{
@@ -1235,13 +1307,13 @@ void FDrawInfo::FloodLowerGap(seg_t * seg)
 		v2=seg->linedef->v1;
 	}
 
-	ws.x1= FIXED2FLOAT(v1->x);
-	ws.y1= FIXED2FLOAT(v1->y);
-	ws.x2= FIXED2FLOAT(v2->x);
-	ws.y2= FIXED2FLOAT(v2->y);
+	ws.x1 = v1->fX();
+	ws.y1 = v1->fY();
+	ws.x2 = v2->fX();
+	ws.y2 = v2->fY();
 
-	ws.z2= FIXED2FLOAT(frontz);
-	ws.z1= FIXED2FLOAT(backz);
+	ws.z2= frontz;
+	ws.z1= backz;
 
 	// Step1: Draw a stencil into the gap
 	SetupFloodStencil(&ws);

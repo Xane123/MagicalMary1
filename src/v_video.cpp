@@ -1,20 +1,37 @@
-// Emacs style mode select	 -*- C++ -*- 
+/*
+**
+**
+**---------------------------------------------------------------------------
+** Copyright 1999-2016 Randy Heit
+** Copyright 2005-2016 Christoph Oelckers
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions
+** are met:
+**
+** 1. Redistributions of source code must retain the above copyright
+**    notice, this list of conditions and the following disclaimer.
+** 2. Redistributions in binary form must reproduce the above copyright
+**    notice, this list of conditions and the following disclaimer in the
+**    documentation and/or other materials provided with the distribution.
+** 3. The name of the author may not be used to endorse or promote products
+**    derived from this software without specific prior written permission.
+**
+** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**---------------------------------------------------------------------------
+**
+*/
 //-----------------------------------------------------------------------------
-//
-// $Id:$
-//
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// $Log:$
 //
 // DESCRIPTION:
 //		Functions to draw patches (by post) directly to screen->
@@ -44,6 +61,7 @@
 #include "i_video.h"
 #include "v_video.h"
 #include "v_text.h"
+#include "sc_man.h"
 
 #include "w_wad.h"
 
@@ -64,14 +82,19 @@
 #include "r_renderer.h"
 #include "menu/menu.h"
 #include "r_data/voxels.h"
+#include "vm.h"
+#include "r_videoscale.h"
 
+EXTERN_CVAR(Bool, r_blendmethod)
+
+int active_con_scale();
 
 FRenderer *Renderer;
 
-IMPLEMENT_ABSTRACT_CLASS (DCanvas)
-IMPLEMENT_ABSTRACT_CLASS (DFrameBuffer)
+EXTERN_CVAR (Bool, swtruecolor)
+EXTERN_CVAR (Bool, fullscreen)
 
-#if defined(_DEBUG) && defined(_M_IX86)
+#if defined(_DEBUG) && defined(_M_IX86) && !defined(__MINGW32__)
 #define DBGBREAK	{ __asm int 3 }
 #else
 #define DBGBREAK
@@ -79,10 +102,10 @@ IMPLEMENT_ABSTRACT_CLASS (DFrameBuffer)
 
 class DDummyFrameBuffer : public DFrameBuffer
 {
-	DECLARE_CLASS (DDummyFrameBuffer, DFrameBuffer);
+	typedef DFrameBuffer Super;
 public:
 	DDummyFrameBuffer (int width, int height)
-		: DFrameBuffer (0, 0)
+		: DFrameBuffer (0, 0, false)
 	{
 		Width = width;
 		Height = height;
@@ -105,25 +128,19 @@ public:
 
 	float Gamma;
 };
-IMPLEMENT_ABSTRACT_CLASS (DDummyFrameBuffer)
-
-// SimpleCanvas is not really abstract, but this macro does not
-// try to generate a CreateNew() function.
-IMPLEMENT_ABSTRACT_CLASS (DSimpleCanvas)
 
 class FPaletteTester : public FTexture
 {
 public:
 	FPaletteTester ();
 
-	const BYTE *GetColumn(unsigned int column, const Span **spans_out);
-	const BYTE *GetPixels();
-	void Unload();
+	const uint8_t *GetColumn(unsigned int column, const Span **spans_out);
+	const uint8_t *GetPixels();
 	bool CheckModified();
 	void SetTranslation(int num);
 
 protected:
-	BYTE Pixels[16*16];
+	uint8_t Pixels[16*16];
 	int CurTranslation;
 	int WantTranslation;
 	static const Span DummySpan[2];
@@ -137,23 +154,23 @@ int DisplayWidth, DisplayHeight, DisplayBits;
 
 FFont *SmallFont, *SmallFont2, *BigFont, *ConFont, *IntermissionFont;
 
-extern "C" {
-DWORD Col2RGB8[65][256];
-DWORD *Col2RGB8_LessPrecision[65];
-DWORD Col2RGB8_Inverse[65][256];
+uint32_t Col2RGB8[65][256];
+uint32_t *Col2RGB8_LessPrecision[65];
+uint32_t Col2RGB8_Inverse[65][256];
 ColorTable32k RGB32k;
-}
+ColorTable256k RGB256k;
 
-static DWORD Col2RGB8_2[63][256];
+
+static uint32_t Col2RGB8_2[63][256];
 
 // [RH] The framebuffer is no longer a mere byte array.
 // There's also only one, not four.
 DFrameBuffer *screen;
 
-CVAR (Int, vid_defwidth, 1152, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Int, vid_defheight, 648, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defwidth, 640, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defheight, 480, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Int, vid_defbits, 8, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Int, vid_fps, false, 0)
+CVAR (Bool, vid_fps, false, 0)
 CVAR (Bool, ticker, false, 0)
 CVAR (Int, vid_showpalette, 0, 0)
 
@@ -192,32 +209,20 @@ bool	setmodeneeded = false;
 int		NewWidth, NewHeight, NewBits;
 
 
-//
-// V_MarkRect 
-// 
-void V_MarkRect (int x, int y, int width, int height)
-{
-}
-
-DCanvas *DCanvas::CanvasChain = NULL;
-
 //==========================================================================
 //
 // DCanvas Constructor
 //
 //==========================================================================
 
-DCanvas::DCanvas (int _width, int _height)
+DCanvas::DCanvas (int _width, int _height, bool _bgra)
 {
 	// Init member vars
 	Buffer = NULL;
 	LockCount = 0;
 	Width = _width;
 	Height = _height;
-
-	// Add to list of active canvases
-	Next = CanvasChain;
-	CanvasChain = this;
+	Bgra = _bgra;
 }
 
 //==========================================================================
@@ -228,22 +233,6 @@ DCanvas::DCanvas (int _width, int _height)
 
 DCanvas::~DCanvas ()
 {
-	// Remove from list of active canvases
-	DCanvas *probe = CanvasChain, **prev;
-
-	prev = &CanvasChain;
-	probe = CanvasChain;
-
-	while (probe != NULL)
-	{
-		if (probe == this)
-		{
-			*prev = probe->Next;
-			break;
-		}
-		prev = &probe->Next;
-		probe = probe->Next;
-	}
 }
 
 //==========================================================================
@@ -324,74 +313,10 @@ void DCanvas::Dim (PalEntry color)
 	{
 		float dim[4] = { color.r/255.f, color.g/255.f, color.b/255.f, color.a/255.f };
 		V_AddBlend (dimmer.r/255.f, dimmer.g/255.f, dimmer.b/255.f, amount, dim);
-		dimmer = PalEntry (BYTE(dim[0]*255), BYTE(dim[1]*255), BYTE(dim[2]*255));
+		dimmer = PalEntry (uint8_t(dim[0]*255), uint8_t(dim[1]*255), uint8_t(dim[2]*255));
 		amount = dim[3];
 	}
 	Dim (dimmer, amount, 0, 0, Width, Height);
-}
-
-//==========================================================================
-//
-// DCanvas :: Dim
-//
-// Applies a colored overlay to an area of the screen.
-//
-//==========================================================================
-
-void DCanvas::Dim (PalEntry color, float damount, int x1, int y1, int w, int h)
-{
-	if (damount == 0.f)
-		return;
-
-	DWORD *bg2rgb;
-	DWORD fg;
-	int gap;
-	BYTE *spot;
-	int x, y;
-
-	if (x1 >= Width || y1 >= Height)
-	{
-		return;
-	}
-	if (x1 + w > Width)
-	{
-		w = Width - x1;
-	}
-	if (y1 + h > Height)
-	{
-		h = Height - y1;
-	}
-	if (w <= 0 || h <= 0)
-	{
-		return;
-	}
-
-	{
-		int amount;
-
-		amount = (int)(damount * 64);
-		bg2rgb = Col2RGB8[64-amount];
-
-		fg = (((color.r * amount) >> 4) << 20) |
-			  ((color.g * amount) >> 4) |
-			 (((color.b * amount) >> 4) << 10);
-	}
-
-	spot = Buffer + x1 + y1*Pitch;
-	gap = Pitch - w;
-	for (y = h; y != 0; y--)
-	{
-		for (x = w; x != 0; x--)
-		{
-			DWORD bg;
-
-			bg = bg2rgb[(*spot)&0xff];
-			bg = (fg+bg) | 0x1f07c1f;
-			*spot = RGB32k.All[bg&(bg>>15)];
-			spot++;
-		}
-		spot += gap;
-	}
 }
 
 //==========================================================================
@@ -403,12 +328,12 @@ void DCanvas::Dim (PalEntry color, float damount, int x1, int y1, int w, int h)
 //
 //==========================================================================
 
-void DCanvas::GetScreenshotBuffer(const BYTE *&buffer, int &pitch, ESSType &color_type)
+void DCanvas::GetScreenshotBuffer(const uint8_t *&buffer, int &pitch, ESSType &color_type)
 {
 	Lock(true);
 	buffer = GetBuffer();
-	pitch = GetPitch();
-	color_type = SS_PAL;
+	pitch = IsBgra() ? GetPitch() * 4 : GetPitch();
+	color_type = IsBgra() ? SS_BGRA : SS_PAL;
 }
 
 //==========================================================================
@@ -436,7 +361,7 @@ void DCanvas::ReleaseScreenshotBuffer()
 //
 //==========================================================================
 
-int V_GetColorFromString (const DWORD *palette, const char *cstr)
+int V_GetColorFromString (const uint32_t *palette, const char *cstr, FScriptPosition *sc)
 {
 	int c[3], i, p;
 	char val[3];
@@ -455,7 +380,7 @@ int V_GetColorFromString (const DWORD *palette, const char *cstr)
 			{
 				val[0] = cstr[1 + i*2];
 				val[1] = cstr[2 + i*2];
-				c[i] = ParseHex (val);
+				c[i] = ParseHex (val, sc);
 			}
 		}
 		else if (len == 4)
@@ -464,7 +389,7 @@ int V_GetColorFromString (const DWORD *palette, const char *cstr)
 			for (i = 0; i < 3; ++i)
 			{
 				val[1] = val[0] = cstr[1 + i];
-				c[i] = ParseHex (val);
+				c[i] = ParseHex (val, sc);
 			}
 		}
 		else
@@ -517,7 +442,7 @@ normal:
 					{
 						val[1] = val[0];
 					}
-					c[i] = ParseHex (val);
+					c[i] = ParseHex (val, sc);
 				}
 			}
 		}
@@ -537,7 +462,7 @@ normal:
 //
 //==========================================================================
 
-FString V_GetColorStringByName (const char *name)
+FString V_GetColorStringByName (const char *name, FScriptPosition *sc)
 {
 	FMemLump rgbNames;
 	char *rgbEnd;
@@ -551,7 +476,8 @@ FString V_GetColorStringByName (const char *name)
 	rgblump = Wads.CheckNumForName ("X11R6RGB");
 	if (rgblump == -1)
 	{
-		Printf ("X11R6RGB lump not found\n");
+		if (!sc) Printf ("X11R6RGB lump not found\n");
+		else sc->Message(MSG_WARNING, "X11R6RGB lump not found");
 		return FString();
 	}
 
@@ -613,7 +539,8 @@ FString V_GetColorStringByName (const char *name)
 	}
 	if (rgb < rgbEnd)
 	{
-		Printf ("X11R6RGB lump is corrupt\n");
+		if (!sc) Printf ("X11R6RGB lump is corrupt\n");
+		else sc->Message(MSG_WARNING, "X11R6RGB lump is corrupt");
 	}
 	return FString();
 }
@@ -626,20 +553,26 @@ FString V_GetColorStringByName (const char *name)
 //
 //==========================================================================
 
-int V_GetColor (const DWORD *palette, const char *str)
+int V_GetColor (const uint32_t *palette, const char *str, FScriptPosition *sc)
 {
-	FString string = V_GetColorStringByName (str);
+	FString string = V_GetColorStringByName (str, sc);
 	int res;
 
 	if (!string.IsEmpty())
 	{
-		res = V_GetColorFromString (palette, string);
+		res = V_GetColorFromString (palette, string, sc);
 	}
 	else
 	{
-		res = V_GetColorFromString (palette, str);
+		res = V_GetColorFromString (palette, str, sc);
 	}
 	return res;
+}
+
+int V_GetColor(const uint32_t *palette, FScanner &sc)
+{
+	FScriptPosition scc = sc;
+	return V_GetColor(palette, sc.String, &scc);
 }
 
 //==========================================================================
@@ -659,6 +592,11 @@ static void BuildTransTable (const PalEntry *palette)
 		for (g = 0; g < 32; g++)
 			for (b = 0; b < 32; b++)
 				RGB32k.RGB[r][g][b] = ColorMatcher.Pick ((r<<3)|(r>>2), (g<<3)|(g>>2), (b<<3)|(b>>2));
+	// create the RGB666 lookup table
+	for (r = 0; r < 64; r++)
+		for (g = 0; g < 64; g++)
+			for (b = 0; b < 64; b++)
+				RGB256k.RGB[r][g][b] = ColorMatcher.Pick ((r<<2)|(r>>4), (g<<2)|(g>>4), (b<<2)|(b>>4));
 
 	int x, y;
 
@@ -698,18 +636,17 @@ static void BuildTransTable (const PalEntry *palette)
 //
 //==========================================================================
 
-void DCanvas::CalcGamma (float gamma, BYTE gammalookup[256])
+void DCanvas::CalcGamma (float gamma, uint8_t gammalookup[256])
 {
 	// I found this formula on the web at
 	// <http://panda.mostang.com/sane/sane-gamma.html>,
 	// but that page no longer exits.
-
 	double invgamma = 1.f / gamma;
 	int i;
 
 	for (i = 0; i < 256; i++)
 	{
-		gammalookup[i] = (BYTE)(255.0 * pow (i / 255.0, invgamma));
+		gammalookup[i] = (uint8_t)(255.0 * pow (i / 255.0, invgamma) + 0.5);
 	}
 }
 
@@ -721,9 +658,24 @@ void DCanvas::CalcGamma (float gamma, BYTE gammalookup[256])
 //
 //==========================================================================
 
-DSimpleCanvas::DSimpleCanvas (int width, int height)
-	: DCanvas (width, height)
+DSimpleCanvas::DSimpleCanvas (int width, int height, bool bgra)
+	: DCanvas (width, height, bgra)
 {
+	MemBuffer = nullptr;
+	Resize(width, height);
+}
+
+void DSimpleCanvas::Resize(int width, int height)
+{
+	Width = width;
+	Height = height;
+
+	if (MemBuffer != NULL)
+	{
+		delete[] MemBuffer;
+		MemBuffer = NULL;
+	}
+
 	// Making the pitch a power of 2 is very bad for performance
 	// Try to maximize the number of cache lines that can be filled
 	// for each column drawing operation by making the pitch slightly
@@ -759,8 +711,9 @@ DSimpleCanvas::DSimpleCanvas (int width, int height)
 			Pitch = width + MAX(0, CPU.DataL1LineSize - 8);
 		}
 	}
-	MemBuffer = new BYTE[Pitch * height];
-	memset (MemBuffer, 0, Pitch * height);
+	int bytes_per_pixel = Bgra ? 4 : 1;
+	MemBuffer = new uint8_t[Pitch * height * bytes_per_pixel];
+	memset (MemBuffer, 0, Pitch * height * bytes_per_pixel);
 }
 
 //==========================================================================
@@ -829,12 +782,79 @@ void DSimpleCanvas::Unlock ()
 //
 //==========================================================================
 
-DFrameBuffer::DFrameBuffer (int width, int height)
-	: DSimpleCanvas (width, height)
+DFrameBuffer::DFrameBuffer (int width, int height, bool bgra)
+	: DSimpleCanvas (ViewportScaledWidth(width), ViewportScaledHeight(height), bgra)
 {
 	LastMS = LastSec = FrameCount = LastCount = LastTic = 0;
 	Accel2D = false;
+
+	VideoWidth = width;
+	VideoHeight = height;
 }
+
+//==========================================================================
+//
+// DFrameBuffer :: PostprocessBgra
+//
+// Copies data to destination buffer while performing gamma and flash.
+// This is only needed if a target cannot do this with shaders.
+//
+//==========================================================================
+
+void DFrameBuffer::CopyWithGammaBgra(void *output, int pitch, const uint8_t *gammared, const uint8_t *gammagreen, const uint8_t *gammablue, PalEntry flash, int flash_amount)
+{
+	const uint8_t *gammatables[3] = { gammared, gammagreen, gammablue };
+
+	if (flash_amount > 0)
+	{
+		uint16_t inv_flash_amount = 256 - flash_amount;
+		uint16_t flash_red = flash.r * flash_amount;
+		uint16_t flash_green = flash.g * flash_amount;
+		uint16_t flash_blue = flash.b * flash_amount;
+		
+		for (int y = 0; y < Height; y++)
+		{
+			uint8_t *dest = (uint8_t*)output + y * pitch;
+			uint8_t *src = MemBuffer + y * Pitch * 4;
+			for (int x = 0;  x < Width; x++)
+			{
+				uint16_t fg_red = src[2];
+				uint16_t fg_green = src[1];
+				uint16_t fg_blue = src[0];
+				uint16_t red = (fg_red * inv_flash_amount + flash_red) >> 8;
+				uint16_t green = (fg_green * inv_flash_amount + flash_green) >> 8;
+				uint16_t blue = (fg_blue * inv_flash_amount + flash_blue) >> 8;
+
+				dest[0] = gammatables[2][blue];
+				dest[1] = gammatables[1][green];
+				dest[2] = gammatables[0][red];
+				dest[3] = 0xff;
+
+				dest += 4;
+				src += 4;
+			}
+		}
+	}
+	else
+	{
+		for (int y = 0; y < Height; y++)
+		{
+			uint8_t *dest = (uint8_t*)output + y * pitch;
+			uint8_t *src = MemBuffer + y * Pitch * 4;
+			for (int x = 0;  x < Width; x++)
+			{
+				dest[0] = gammatables[2][src[0]];
+				dest[1] = gammatables[1][src[1]];
+				dest[2] = gammatables[0][src[2]];
+				dest[3] = 0xff;
+
+				dest += 4;
+				src += 4;
+			}
+		}
+	}
+}
+
 
 //==========================================================================
 //
@@ -849,20 +869,25 @@ void DFrameBuffer::DrawRateStuff ()
 	// Draws frame time and cumulative fps
 	if (vid_fps)
 	{
-		DWORD ms = I_FPSTime();
-		DWORD howlong = ms - LastMS;
+		uint32_t ms = I_FPSTime();
+		uint32_t howlong = ms - LastMS;
 		if ((signed)howlong >= 0)
 		{
 			char fpsbuff[40];
 			int chars;
 			int rate_x;
 
-			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%2u ms (%3u fps)", howlong, LastCount);
-			rate_x = Width - ConFont->StringWidth(&fpsbuff[0]);
-			Clear (rate_x, 0, Width, ConFont->GetHeight(), GPalette.BlackIndex, 0);
-			DrawText (ConFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0], TAG_DONE);
+			int textScale = active_con_scale();
 
-			DWORD thisSec = ms/1000;
+			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%2u ms (%3u fps)", howlong, LastCount);
+			rate_x = Width / textScale - ConFont->StringWidth(&fpsbuff[0]);
+			Clear (rate_x * textScale, 0, Width, ConFont->GetHeight() * textScale, GPalette.BlackIndex, 0);
+			DrawText (ConFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0],
+				DTA_VirtualWidth, screen->GetWidth() / textScale,
+				DTA_VirtualHeight, screen->GetHeight() / textScale,
+				DTA_KeepRatio, true, TAG_DONE);
+
+			uint32_t thisSec = ms/1000;
 			if (LastSec < thisSec)
 			{
 				LastCount = FrameCount / (thisSec - LastSec);
@@ -879,7 +904,7 @@ void DFrameBuffer::DrawRateStuff ()
 	{
 		int i = I_GetTime(false);
 		int tics = i - LastTic;
-		BYTE *buffer = GetBuffer();
+		uint8_t *buffer = GetBuffer();
 
 		LastTic = i;
 		if (tics > 20) tics = 20;
@@ -887,10 +912,21 @@ void DFrameBuffer::DrawRateStuff ()
 		// Buffer can be NULL if we're doing hardware accelerated 2D
 		if (buffer != NULL)
 		{
-			buffer += (GetHeight()-1) * GetPitch();
-			
-			for (i = 0; i < tics*2; i += 2)		buffer[i] = 0xff;
-			for ( ; i < 20*2; i += 2)			buffer[i] = 0x00;
+			if (IsBgra())
+			{
+				uint32_t *buffer32 = (uint32_t*)buffer;
+				buffer32 += (GetHeight() - 1) * GetPitch();
+
+				for (i = 0; i < tics * 2; i += 2)	buffer32[i] = 0xffffffff;
+				for (; i < 20 * 2; i += 2)			buffer32[i] = 0xff000000;
+			}
+			else
+			{
+				buffer += (GetHeight() - 1) * GetPitch();
+
+				for (i = 0; i < tics * 2; i += 2)	buffer[i] = 0xff;
+				for (; i < 20 * 2; i += 2)			buffer[i] = 0x00;
+			}
 		}
 		else
 		{
@@ -907,11 +943,12 @@ void DFrameBuffer::DrawRateStuff ()
 		// Drawing it as a texture does and continues to show how
 		// well the PalTex shader is working.
 		static FPaletteTester palette;
+		int size = screen->GetHeight() < 800 ? 16 * 7 : 16 * 7 * 2;
 
 		palette.SetTranslation(vid_showpalette);
-		DrawTexture(&palette, 0, 8,
-			DTA_DestWidth, 16*14,
-			DTA_DestHeight, 16*14,
+		DrawTexture(&palette, 0, 0,
+			DTA_DestWidth, size,
+			DTA_DestHeight, size,
 			DTA_Masked, false,
 			TAG_DONE);
 	}
@@ -964,21 +1001,11 @@ void FPaletteTester::SetTranslation(int num)
 
 //==========================================================================
 //
-// FPaletteTester :: Unload
-//
-//==========================================================================
-
-void FPaletteTester::Unload()
-{
-}
-
-//==========================================================================
-//
 // FPaletteTester :: GetColumn
 //
 //==========================================================================
 
-const BYTE *FPaletteTester::GetColumn (unsigned int column, const Span **spans_out)
+const uint8_t *FPaletteTester::GetColumn (unsigned int column, const Span **spans_out)
 {
 	if (CurTranslation != WantTranslation)
 	{
@@ -998,7 +1025,7 @@ const BYTE *FPaletteTester::GetColumn (unsigned int column, const Span **spans_o
 //
 //==========================================================================
 
-const BYTE *FPaletteTester::GetPixels ()
+const uint8_t *FPaletteTester::GetPixels ()
 {
 	if (CurTranslation != WantTranslation)
 	{
@@ -1016,7 +1043,7 @@ const BYTE *FPaletteTester::GetPixels ()
 void FPaletteTester::MakeTexture()
 {
 	int i, j, k, t;
-	BYTE *p;
+	uint8_t *p;
 
 	t = WantTranslation;
 	p = Pixels;
@@ -1042,7 +1069,7 @@ void FPaletteTester::MakeTexture()
 //
 //==========================================================================
 
-void DFrameBuffer::CopyFromBuff (BYTE *src, int srcPitch, int width, int height, BYTE *dest)
+void DFrameBuffer::CopyFromBuff (uint8_t *src, int srcPitch, int width, int height, uint8_t *dest)
 {
 	if (Pitch == width && Pitch == Width && srcPitch == width)
 	{
@@ -1107,6 +1134,8 @@ void DFrameBuffer::SetBlendingRect (int x1, int y1, int x2, int y2)
 
 bool DFrameBuffer::Begin2D (bool copy3d)
 {
+	isIn2D = true;
+	ClearClipRect();
 	return false;
 }
 
@@ -1207,83 +1236,6 @@ void DFrameBuffer::WipeCleanup()
 	wipe_Cleanup();
 }
 
-//===========================================================================
-//
-// Create texture hitlist
-//
-//===========================================================================
-
-void DFrameBuffer::GetHitlist(BYTE *hitlist)
-{
-	BYTE *spritelist;
-	int i;
-
-	spritelist = new BYTE[sprites.Size()];
-	
-	// Precache textures (and sprites).
-	memset (spritelist, 0, sprites.Size());
-
-	{
-		AActor *actor;
-		TThinkerIterator<AActor> iterator;
-
-		while ( (actor = iterator.Next ()) )
-			spritelist[actor->sprite] = 1;
-	}
-
-	for (i = (int)(sprites.Size () - 1); i >= 0; i--)
-	{
-		if (spritelist[i])
-		{
-			int j, k;
-			for (j = 0; j < sprites[i].numframes; j++)
-			{
-				const spriteframe_t *frame = &SpriteFrames[sprites[i].spriteframes + j];
-
-				for (k = 0; k < 16; k++)
-				{
-					FTextureID pic = frame->Texture[k];
-					if (pic.isValid())
-					{
-						hitlist[pic.GetIndex()] = FTextureManager::HIT_Sprite;
-					}
-				}
-			}
-		}
-	}
-
-	delete[] spritelist;
-
-	for (i = numsectors - 1; i >= 0; i--)
-	{
-		hitlist[sectors[i].GetTexture(sector_t::floor).GetIndex()] = 
-			hitlist[sectors[i].GetTexture(sector_t::ceiling).GetIndex()] |= FTextureManager::HIT_Flat;
-	}
-
-	for (i = numsides - 1; i >= 0; i--)
-	{
-		hitlist[sides[i].GetTexture(side_t::top).GetIndex()] =
-		hitlist[sides[i].GetTexture(side_t::mid).GetIndex()] =
-		hitlist[sides[i].GetTexture(side_t::bottom).GetIndex()] |= FTextureManager::HIT_Wall;
-	}
-
-	// Sky texture is always present.
-	// Note that F_SKY1 is the name used to
-	//	indicate a sky floor/ceiling as a flat,
-	//	while the sky texture is stored like
-	//	a wall texture, with an episode dependant
-	//	name.
-
-	if (sky1texture.isValid())
-	{
-		hitlist[sky1texture.GetIndex()] |= FTextureManager::HIT_Sky;
-	}
-	if (sky2texture.isValid())
-	{
-		hitlist[sky2texture.GetIndex()] |= FTextureManager::HIT_Sky;
-	}
-}
-
 //==========================================================================
 //
 // DFrameBuffer :: GameRestart
@@ -1324,7 +1276,6 @@ CCMD(clean)
 bool V_DoModeSetup (int width, int height, int bits)
 {
 	DFrameBuffer *buff = I_SetMode (width, height, screen);
-	int cx1, cx2;
 
 	if (buff == NULL)
 	{
@@ -1332,13 +1283,23 @@ bool V_DoModeSetup (int width, int height, int bits)
 	}
 
 	screen = buff;
-	GC::WriteBarrier(screen);
 	screen->SetGamma (Gamma);
 
 	// Load fonts now so they can be packed into textures straight away,
 	// if D3DFB is being used for the display.
 	FFont::StaticPreloadFonts();
 
+	DisplayBits = bits;
+	V_UpdateModeSize(screen->GetWidth(), screen->GetHeight());
+
+	M_RefreshModesList ();
+
+	return true;
+}
+
+void V_UpdateModeSize (int width, int height)
+{
+	int cx1, cx2;
 	V_CalcCleanFacs(320, 200, width, height, &CleanXfac, &CleanYfac, &cx1, &cx2);
 
 	CleanWidth = width / CleanXfac;
@@ -1379,32 +1340,44 @@ bool V_DoModeSetup (int width, int height, int bits)
 
 	DisplayWidth = width;
 	DisplayHeight = height;
-	DisplayBits = bits;
 
 	R_OldBlend = ~0;
 	Renderer->OnModeSet();
-	
-	M_RefreshModesList ();
+}
 
-	return true;
+void V_OutputResized (int width, int height)
+{
+	V_UpdateModeSize(width, height);
+	setsizeneeded = true;
+	if (StatusBar != NULL)
+	{
+		StatusBar->CallScreenSizeChanged();
+	}
+	C_NewModeAdjust();
 }
 
 void V_CalcCleanFacs (int designwidth, int designheight, int realwidth, int realheight, int *cleanx, int *cleany, int *_cx1, int *_cx2)
 {
-	int ratio;
+	float ratio;
 	int cwidth;
 	int cheight;
 	int cx1, cy1, cx2, cy2;
 
-	ratio = CheckRatio(realwidth, realheight);
-	if (Is54Aspect(ratio))
+	// For larger screems always use at least a 16:9 ratio for clean factor calculation, even if the actual ratio is narrower.
+	if (realwidth > 1280 && (double)realwidth / realheight < 16./9)
+	{
+		realheight = realwidth * 9 / 16;
+	}
+
+	ratio = ActiveRatio(realwidth, realheight);
+	if (AspectTallerThanWide(ratio))
 	{
 		cwidth = realwidth;
-		cheight = realheight * BaseRatioSizes[ratio][3] / 48;
+		cheight = realheight * AspectMultiplier(ratio) / 48;
 	}
 	else
 	{
-		cwidth = realwidth * BaseRatioSizes[ratio][3] / 48;
+		cwidth = realwidth * AspectMultiplier(ratio) / 48;
 		cheight = realheight;
 	}
 	// Use whichever pair of cwidth/cheight or width/height that produces less difference
@@ -1413,7 +1386,7 @@ void V_CalcCleanFacs (int designwidth, int designheight, int realwidth, int real
 	cy1 = MAX(cheight / designheight, 1);
 	cx2 = MAX(realwidth / designwidth, 1);
 	cy2 = MAX(realheight / designheight, 1);
-	if (abs(cx1 - cy1) <= abs(cx2 - cy2))
+	if (abs(cx1 - cy1) <= abs(cx2 - cy2) || MAX(cx1, cx2) >= 4)
 	{ // e.g. 640x360 looks better with this.
 		*cleanx = cx1;
 		*cleany = cy1;
@@ -1491,6 +1464,9 @@ CCMD (vid_setmode)
 	{
 		goodmode = true;
 	}
+
+	if (!fullscreen)
+		goodmode = true;
 
 	if (goodmode)
 	{
@@ -1578,7 +1554,6 @@ void V_Init (bool restart)
 
 void V_Init2()
 {
-	assert (screen->IsKindOf(RUNTIME_CLASS(DDummyFrameBuffer)));
 	int width = screen->GetWidth();
 	int height = screen->GetHeight();
 	float gamma = static_cast<DDummyFrameBuffer *>(screen)->Gamma;
@@ -1586,7 +1561,6 @@ void V_Init2()
 	{
 		DFrameBuffer *s = screen;
 		screen = NULL;
-		s->ObjectFlags |= OF_YesReallyDelete;
 		delete s;
 	}
 
@@ -1613,7 +1587,6 @@ void V_Shutdown()
 	{
 		DFrameBuffer *s = screen;
 		screen = NULL;
-		s->ObjectFlags |= OF_YesReallyDelete;
 		delete s;
 	}
 	V_ClearFonts();
@@ -1625,7 +1598,7 @@ CUSTOM_CVAR (Bool, vid_nowidescreen, false, CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
 	setsizeneeded = true;
 	if (StatusBar != NULL)
 	{
-		StatusBar->ScreenSizeChanged();
+		StatusBar->CallScreenSizeChanged();
 	}
 }
 
@@ -1634,24 +1607,14 @@ CUSTOM_CVAR (Int, vid_aspect, 0, CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
 	setsizeneeded = true;
 	if (StatusBar != NULL)
 	{
-		StatusBar->ScreenSizeChanged();
+		StatusBar->CallScreenSizeChanged();
 	}
 }
 
-// Tries to guess the physical dimensions of the screen based on the
-// screen's pixel dimensions. Can return:
-// 0: 4:3
-// 1: 16:9
-// 2: 16:10
-// 3: 17:10
-// 4: 5:4
-// 5: 17:10 (redundant)
-// 6: 21:9
-int CheckRatio (int width, int height, int *trueratio)
+// Helper for ActiveRatio and CheckRatio. Returns the forced ratio type, or -1 if none.
+int ActiveFakeRatio(int width, int height)
 {
 	int fakeratio = -1;
-	int ratio;
-
 	if ((vid_aspect >= 1) && (vid_aspect <= 6))
 	{
 		// [SP] User wants to force aspect ratio; let them.
@@ -1663,7 +1626,11 @@ int CheckRatio (int width, int height, int *trueratio)
 		else if (fakeratio == 5)
 		{
 			fakeratio = 3;
-		}        
+		}
+	}
+	else if (vid_aspect == 0 && ViewportIsScaled43())
+	{
+		fakeratio = 0;
 	}
 	if (vid_nowidescreen)
 	{
@@ -1673,74 +1640,143 @@ int CheckRatio (int width, int height, int *trueratio)
 		}
 		else
 		{
-			fakeratio = (height * 5/4 == width) ? 4 : 0;
+			fakeratio = (height * 5 / 4 == width) ? 4 : 0;
 		}
 	}
-	// If the size is approximately 16:9, consider it so.
-	if (abs (height * 16/9 - width) < 10)
-	{
-		ratio = 1;
-	}
-	// Consider 17:10 as well.
-	else if (abs (height * 17/10 - width) < 10)
-	{
-		ratio = 3;
-	}
-	// 16:10 has more variance in the pixel dimensions. Grr.
-	else if (abs (height * 16/10 - width) < 60)
-	{
-		// 320x200 and 640x400 are always 4:3, not 16:10
-		if ((width == 320 && height == 200) || (width == 640 && height == 400))
-		{
-			ratio = 0;
-		}
-		else
-		{
-			ratio = 2;
-		}
-	}
-	// Unless vid_tft is set, 1280x1024 is 4:3, not 5:4.
-	else if (height * 5/4 == width && vid_tft)
-	{
-		ratio = 4;
-	}
-    // test for 21:9 (actually 64:27, 21:9 is a semi-accurate ratio used in marketing)
-    else if (abs (height * 64/27 - width) < 30)
-    {
-        ratio = 6;
-    }
-	// Assume anything else is 4:3. (Which is probably wrong these days...)
-	else
-	{
-		ratio = 0;
-	}
-
-	if (trueratio != NULL)
-	{
-		*trueratio = ratio;
-	}
-	return (fakeratio >= 0) ? fakeratio : ratio;
+	return fakeratio;
 }
 
-// First column: Base width
-// Second column: Base height (used for wall visibility multiplier)
-// Third column: Psprite offset (needed for "tallscreen" modes)
-// Fourth column: Width or height multiplier
-
-// For widescreen aspect ratio x:y ...
-//     base_width = 240 * x / y
-//     multiplier = 320 / base_width
-//     base_height = 200 * multiplier
-const int BaseRatioSizes[7][4] =
+// Active screen ratio based on cvars and size
+float ActiveRatio(int width, int height, float *trueratio)
 {
-	{  960, 600, 0,                   48 },			//  4:3   320,      200,      multiplied by three
-	{ 1280, 450, 0,                   48*3/4 },		// 16:9   426.6667, 150,      multiplied by three
-	{ 1152, 500, 0,                   48*5/6 },		// 16:10  386,      166.6667, multiplied by three
-	{ 1224, 471, 0,                   48*40/51 },	// 17:10  408,		156.8627, multiplied by three
-	{  960, 640, (int)(6.5*FRACUNIT), 48*15/16 },   //  5:4   320,      213.3333, multiplied by three
-	{ 1224, 471, 0,                   48*40/51 },	// 17:10  408,		156.8627, multiplied by three (REDUNDANT)
-	{ 1707, 338, 0,                   48*9/16 }     	// 21:9   568.8889, 337.5,    multiplied by three
-};
+	static float forcedRatioTypes[] =
+	{
+		4 / 3.0f,
+		16 / 9.0f,
+		16 / 10.0f,
+		17 / 10.0f,
+		5 / 4.0f,
+		17 / 10.0f,
+		21 / 9.0f
+	};
+
+	float ratio = width / (float)height;
+	int fakeratio = ActiveFakeRatio(width, height);
+
+	if (trueratio)
+		*trueratio = ratio;
+	return (fakeratio != -1) ? forcedRatioTypes[fakeratio] : ratio;
+}
+
+DEFINE_ACTION_FUNCTION(_Screen, GetAspectRatio)
+{
+	ACTION_RETURN_FLOAT(ActiveRatio(screen->GetWidth(), screen->GetHeight(), nullptr));
+}
+
+// Tries to guess the physical dimensions of the screen based on the
+// screen's pixel dimensions. Can return:
+// 0: 4:3
+// 1: 16:9
+// 2: 16:10
+// 3: 17:10
+// 4: 5:4
+// 5: 17:10 (redundant, never returned)
+// 6: 21:9
+int CheckRatio (int width, int height, int *trueratio)
+{
+	float aspect = width / (float)height;
+
+	static std::pair<float, int> ratioTypes[] =
+	{
+		{ 21 / 9.0f , 6 },
+		{ 16 / 9.0f , 1 },
+		{ 17 / 10.0f , 3 },
+		{ 16 / 10.0f , 2 },
+		{ 4 / 3.0f , 0 },
+		{ 5 / 4.0f , 4 },
+		{ 0.0f, 0 }
+	};
+
+	int ratio = ratioTypes[0].second;
+	float distance = fabs(ratioTypes[0].first - aspect);
+	for (int i = 1; ratioTypes[i].first != 0.0f; i++)
+	{
+		float d = fabs(ratioTypes[i].first - aspect);
+		if (d < distance)
+		{
+			ratio = ratioTypes[i].second;
+			distance = d;
+		}
+	}
+
+	int fakeratio = ActiveFakeRatio(width, height);
+	if (fakeratio == -1)
+		fakeratio = ratio;
+
+	if (trueratio)
+		*trueratio = ratio;
+	return fakeratio;
+}
+
+int AspectBaseWidth(float aspect)
+{
+	return (int)round(240.0f * aspect * 3.0f);
+}
+
+int AspectBaseHeight(float aspect)
+{
+	if (!AspectTallerThanWide(aspect))
+		return (int)round(200.0f * (320.0f / (AspectBaseWidth(aspect) / 3.0f)) * 3.0f);
+	else
+		return (int)round((200.0f * (4.0f / 3.0f)) / aspect * 3.0f);
+}
+
+double AspectPspriteOffset(float aspect)
+{
+	if (!AspectTallerThanWide(aspect))
+		return 0.0;
+	else
+		return ((4.0 / 3.0) / aspect - 1.0) * 97.5;
+}
+
+int AspectMultiplier(float aspect)
+{
+	if (!AspectTallerThanWide(aspect))
+		return (int)round(320.0f / (AspectBaseWidth(aspect) / 3.0f) * 48.0f);
+	else
+		return (int)round(200.0f / (AspectBaseHeight(aspect) / 3.0f) * 48.0f);
+}
+
+bool AspectTallerThanWide(float aspect)
+{
+	return aspect < 1.333f;
+}
+
+void ScaleWithAspect (int &w, int &h, int Width, int Height)
+{
+	int resRatio = CheckRatio (Width, Height);
+	int screenRatio;
+	CheckRatio (w, h, &screenRatio);
+	if (resRatio == screenRatio)
+		return;
+
+	double yratio;
+	switch(resRatio)
+	{
+		case 0: yratio = 4./3.; break;
+		case 1: yratio = 16./9.; break;
+		case 2: yratio = 16./10.; break;
+		case 3: yratio = 17./10.; break;
+		case 4: yratio = 5./4.; break;
+		case 6: yratio = 21./9.; break;
+		default: return;
+	}
+	double y = w/yratio;
+	if (y > h)
+		w = static_cast<int>(h * yratio);
+	else
+		h = static_cast<int>(y);
+}
 
 void IVideo::DumpAdapters ()
 {
@@ -1752,3 +1788,17 @@ CCMD(vid_listadapters)
 	if (Video != NULL)
 		Video->DumpAdapters();
 }
+
+DEFINE_GLOBAL(SmallFont)
+DEFINE_GLOBAL(SmallFont2)
+DEFINE_GLOBAL(BigFont)
+DEFINE_GLOBAL(ConFont)
+DEFINE_GLOBAL(IntermissionFont)
+DEFINE_GLOBAL(CleanXfac)
+DEFINE_GLOBAL(CleanYfac)
+DEFINE_GLOBAL(CleanWidth)
+DEFINE_GLOBAL(CleanHeight)
+DEFINE_GLOBAL(CleanXfac_1)
+DEFINE_GLOBAL(CleanYfac_1)
+DEFINE_GLOBAL(CleanWidth_1)
+DEFINE_GLOBAL(CleanHeight_1)

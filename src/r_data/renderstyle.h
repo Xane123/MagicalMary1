@@ -1,6 +1,4 @@
-#ifndef __R_BLEND_H
-#define __R_BLEND_H
-
+#pragma once
 /*
 ** r_blend.h
 ** Constants and types for specifying texture blending.
@@ -34,6 +32,17 @@
 **---------------------------------------------------------------------------
 **
 */
+#include <stdint.h>
+
+// <wingdi.h> also #defines OPAQUE
+#ifdef OPAQUE
+#undef OPAQUE
+#endif
+
+enum
+{
+	OPAQUE = 65536,
+};
 
 // Legacy render styles
 enum ERenderStyle
@@ -116,18 +125,18 @@ union FRenderStyle
 {
 	struct
 	{
-		BYTE BlendOp;	// Of ERenderOp type
-		BYTE SrcAlpha;	// Of ERenderAlpha type
-		BYTE DestAlpha;	// Of ERenderAlpha type
-		BYTE Flags;
+		uint8_t BlendOp;	// Of ERenderOp type
+		uint8_t SrcAlpha;	// Of ERenderAlpha type
+		uint8_t DestAlpha;	// Of ERenderAlpha type
+		uint8_t Flags;
 	};
-	uint32 AsDWORD;
+	uint32_t AsDWORD;
 
 	inline FRenderStyle &operator= (ERenderStyle legacy);
-	operator uint32() const { return AsDWORD; }
+	operator uint32_t() const { return AsDWORD; }
 	bool operator==(const FRenderStyle &o) const { return AsDWORD == o.AsDWORD; }
 	void CheckFuzz();
-	bool IsVisible(fixed_t alpha) const throw();
+	bool IsVisible(double alpha) const throw();
 private:
 	// Code that compares an actor's render style with a legacy render
 	// style value should be updated. Making these conversion operators
@@ -148,9 +157,3 @@ inline FRenderStyle &FRenderStyle::operator= (ERenderStyle legacy)
 	return *this;
 }
 
-class FArchive;
-
-FArchive &operator<< (FArchive &arc, FRenderStyle &style);
-fixed_t GetAlpha(int type, fixed_t alpha);
-
-#endif

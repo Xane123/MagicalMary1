@@ -1,18 +1,23 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //	Internally used data structures for virtually everything,
@@ -56,15 +61,15 @@ typedef enum
 #define MAXPLAYERS		8
 
 // State updates, number of tics / second.
-#define TICRATE 		35	//If only changing this didn't break physics or I'd change it to 30 or 60 then FMVs would be 30FPS/60FPS!
+#define TICRATE 		35
 
 // Amount of damage done by a telefrag.
-#define TELEFRAG_DAMAGE	200
+#define TELEFRAG_DAMAGE	1000000
 
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,
 // the game final animation, or a demo. 
-typedef enum
+enum gamestate_t : int
 {
 	GS_LEVEL,
 	GS_INTERMISSION,
@@ -79,7 +84,7 @@ typedef enum
 	GS_FORCEWIPEFADE = -2,
 	GS_FORCEWIPEBURN = -3,
 	GS_FORCEWIPEMELT = -4
-} gamestate_t;
+};
 
 extern	gamestate_t 	gamestate;
 
@@ -340,8 +345,10 @@ enum : unsigned int
 	COMPATF2_BADANGLES		= 1 << 0,	// It is impossible to face directly NSEW.
 	COMPATF2_FLOORMOVE		= 1 << 1,	// Use the same floor motion behavior as Doom.
 	COMPATF2_SOUNDCUTOFF	= 1 << 2,	// Cut off sounds when an actor vanishes instead of making it owner-less
-	COMPATF2_POINTONLINE	= 1 << 3,	// Use original but buggy P_PointOnLineSide() and P_PointOnDivlineSide()
+	COMPATF2_POINTONLINE	= 1 << 3,	// Use original but buggy P_PointOnLineSide() and P_PointOnDivlineSideCompat()
 	COMPATF2_MULTIEXIT		= 1 << 4,	// Level exit can be triggered multiple times (required by Daedalus's travel tubes, thanks to a faulty script)
+	COMPATF2_TELEPORT		= 1 << 5,	// Don't let indirect teleports trigger sector actions
+	COMPATF2_PUSHWINDOW		= 1 << 6,	// Disable the window check in CheckForPushSpecial()
 };
 
 // Emulate old bugs for select maps. These are not exposed by a cvar
@@ -355,8 +362,9 @@ enum
 	BCOMPATF_BADPORTALS			= 1 << 4,	// Restores the old unstable portal behavior
 	BCOMPATF_REBUILDNODES		= 1 << 5,	// Force node rebuild
 	BCOMPATF_LINKFROZENPROPS	= 1 << 6,	// Clearing PROP_TOTALLYFROZEN or PROP_FROZEN also clears the other
-	BCOMPATF_NOWINDOWCHECK		= 1 << 7,	// Disable the window check in CheckForPushSpecial()
 	BCOMPATF_FLOATBOB			= 1 << 8,	// Use Hexen's original method of preventing floatbobbing items from falling down
+	BCOMPATF_NOSLOPEID			= 1 << 9,	// disable line IDs on slopes.
+	BCOMPATF_CLIPMIDTEX		= 1 << 10,	// Always Clip midtex's in the software renderer (required to run certain GZDoom maps)
 };
 
 // phares 3/20/98:
@@ -365,19 +373,19 @@ enum
 // linedefs. More friction can create mud, sludge,
 // magnetized floors, etc. Less friction can create ice.
 
-#define MORE_FRICTION_VELOCITY	15000	// mud factor based on velocity
-#define ORIG_FRICTION			0xE800	// original value
-#define ORIG_FRICTION_FACTOR	2048	// original value
-#define FRICTION_LOW			0xf900
-#define FRICTION_FLY			0xeb00
+#define MORE_FRICTION_VELOCITY	(15000/65536.)	// mud factor based on velocity
+#define ORIG_FRICTION			(0xE800/65536.)	// original value
+#define ORIG_FRICTION_FACTOR	(2048/65536.)	// original value
+#define FRICTION_LOW			(0xf900/65536.)
+#define FRICTION_FLY			(0xeb00/65536.)
 
 
 #define BLINKTHRESHOLD (4*32)
 
 #ifndef __BIG_ENDIAN__
-#define MAKE_ID(a,b,c,d)	((DWORD)((a)|((b)<<8)|((c)<<16)|((d)<<24)))
+#define MAKE_ID(a,b,c,d)	((uint32_t)((a)|((b)<<8)|((c)<<16)|((d)<<24)))
 #else
-#define MAKE_ID(a,b,c,d)	((DWORD)((d)|((c)<<8)|((b)<<16)|((a)<<24)))
+#define MAKE_ID(a,b,c,d)	((uint32_t)((d)|((c)<<8)|((b)<<16)|((a)<<24)))
 #endif
 
 #endif	// __DOOMDEF_H__

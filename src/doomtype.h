@@ -1,18 +1,4 @@
-// Emacs style mode select       -*- C++ -*- 
 //-----------------------------------------------------------------------------
-//
-// $Id: doomtype.h,v 1.2 1997/12/29 19:50:48 pekangas Exp $
-//
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
 //
 // DESCRIPTION:
 //              Simple basic typedefs, isolated here to make it easier
@@ -41,71 +27,15 @@
 #endif
 
 #include <limits.h>
+#include <tuple>
+#include <algorithm>
 #include "tarray.h"
 #include "name.h"
 #include "zstring.h"
-#include "vectors.h"
 
 class PClassActor;
 typedef TMap<int, PClassActor *> FClassMap;
 
-// Since this file is included by everything, it seems an appropriate place
-// to check the NOASM/USEASM macros.
-
-// There are three assembly-related macros:
-//
-//		NOASM	- Assembly code is disabled
-//		X86_ASM	- Using ia32 assembly code
-//		X64_ASM	- Using amd64 assembly code
-//
-// Note that these relate only to using the pure assembly code. Inline
-// assembly may still be used without respect to these macros, as
-// deemed appropriate.
-
-#ifndef NOASM
-// Select the appropriate type of assembly code to use.
-
-#if defined(_M_IX86) || defined(__i386__)
-
-#define X86_ASM
-#ifdef X64_ASM
-#undef X64_ASM
-#endif
-
-#elif defined(_M_X64) || defined(__amd64__)
-
-#define X64_ASM
-#ifdef X86_ASM
-#undef X86_ASM
-#endif
-
-#else
-
-#define NOASM
-
-#endif
-
-#endif
-
-#ifdef NOASM
-// Ensure no assembly macros are defined if NOASM is defined.
-
-#ifdef X86_ASM
-#undef X86_ASM
-#endif
-
-#ifdef X64_ASM
-#undef X64_ASM
-#endif
-
-#endif
-
-
-#if defined(_MSC_VER) || defined(__WATCOMC__)
-#define STACK_ARGS __cdecl
-#else
-#define STACK_ARGS
-#endif
 
 #if defined(_MSC_VER)
 #define NOVTABLE __declspec(novtable)
@@ -113,14 +43,16 @@ typedef TMap<int, PClassActor *> FClassMap;
 #define NOVTABLE
 #endif
 
-#if defined(__clang__)
-#if defined(__has_feature) && __has_feature(address_sanitizer)
-#define NO_SANITIZE __attribute__((no_sanitize("address")))
+#if defined(__GNUC__)
+// With versions of GCC newer than 4.2, it appears it was determined that the
+// cost of an unaligned pointer on PPC was high enough to add padding to the
+// end of packed structs.  For whatever reason __packed__ and pragma pack are
+// handled differently in this regard. Note that this only needs to be applied
+// to types which are used in arrays or sizeof is needed. This also prevents
+// code from taking references to the struct members.
+#define FORCE_PACKED __attribute__((__packed__))
 #else
-#define NO_SANITIZE
-#endif
-#else
-#define NO_SANITIZE
+#define FORCE_PACKED
 #endif
 
 #include "basictypes.h"
@@ -138,11 +70,11 @@ enum
 
 
 // [RH] This gets used all over; define it here:
-int STACK_ARGS Printf (int printlevel, const char *, ...) GCCPRINTF(2,3);
-int STACK_ARGS Printf (const char *, ...) GCCPRINTF(1,2);
+int Printf (int printlevel, const char *, ...) GCCPRINTF(2,3);
+int Printf (const char *, ...) GCCPRINTF(1,2);
 
 // [RH] Same here:
-int STACK_ARGS DPrintf (const char *, ...) GCCPRINTF(1,2);
+int DPrintf (int level, const char *, ...) GCCPRINTF(2,3);
 
 extern "C" int mysnprintf(char *buffer, size_t count, const char *format, ...) GCCPRINTF(3,4);
 extern "C" int myvsnprintf(char *buffer, size_t count, const char *format, va_list argptr) GCCFORMAT(3);
@@ -155,56 +87,90 @@ enum
 	PRINT_MEDIUM,	// death messages
 	PRINT_HIGH,		// critical messages
 	PRINT_CHAT,		// chat messages
-	PRINT_TEAMCHAT	// chat messages from a teammate
+	PRINT_TEAMCHAT,	// chat messages from a teammate
+	PRINT_LOG,		// only to logfile
+	PRINT_BOLD = 200				// What Printf_Bold used
 };
-#define PRINT_LOW				0				// pickup messages
-#define PRINT_MEDIUM			1				// death messages
-#define PRINT_HIGH				2				// critical messages
-#define PRINT_CHAT				3				// chat messages
-#define PRINT_TEAMCHAT			4				// chat messages from a teammate
-#define PRINT_LOG				5				// only to logfile
-#define PRINT_BOLD				200				// What Printf_Bold used
+
+enum
+{
+	DMSG_OFF,		// no developer messages.
+	DMSG_ERROR,		// general notification messages
+	DMSG_WARNING,	// warnings
+	DMSG_NOTIFY,	// general notification messages
+	DMSG_SPAMMY,	// for those who want to see everything, regardless of its usefulness.
+};
 
 struct PalEntry
 {
 	PalEntry () {}
-	PalEntry (uint32 argb) { d = argb; }
-	operator uint32 () const { return d; }
-	PalEntry &operator= (uint32 other) { d = other; return *this; }
+	PalEntry (uint32_t argb) { d = argb; }
+	operator uint32_t () const { return d; }
+	void SetRGB(PalEntry other)
+	{
+		d = other.d & 0xffffff;
+	}
+	PalEntry Modulate(PalEntry other) const
+	{
+		if (isWhite())
+		{
+			return other;
+		}
+		else if (other.isWhite())
+		{
+			return *this;
+		}
+		else
+		{
+			other.r = (r * other.r) / 255;
+			other.g = (g * other.g) / 255;
+			other.b = (b * other.b) / 255;
+			return other;
+		}
+	}
+	void Decolorize()	// this for 'nocoloredspritelighting' and not the same as desaturation. The normal formula results in a value that's too dark.
+	{
+		int v = (r + g + b);
+		r = g = b = ((255*3) + v + v) / 9;
+	}
+	bool isBlack() const
+	{
+		return (d & 0xffffff) == 0;
+	}
+	bool isWhite() const
+	{
+		return (d & 0xffffff) == 0xffffff;
+	}
+	PalEntry &operator= (uint32_t other) { d = other; return *this; }
 	PalEntry InverseColor() const { PalEntry nc; nc.a = a; nc.r = 255 - r; nc.g = 255 - g; nc.b = 255 - b; return nc; }
 #ifdef __BIG_ENDIAN__
-	PalEntry (BYTE ir, BYTE ig, BYTE ib) : a(0), r(ir), g(ig), b(ib) {}
-	PalEntry (BYTE ia, BYTE ir, BYTE ig, BYTE ib) : a(ia), r(ir), g(ig), b(ib) {}
+	PalEntry (uint8_t ir, uint8_t ig, uint8_t ib) : a(0), r(ir), g(ig), b(ib) {}
+	PalEntry (uint8_t ia, uint8_t ir, uint8_t ig, uint8_t ib) : a(ia), r(ir), g(ig), b(ib) {}
 	union
 	{
 		struct
 		{
-			BYTE a,r,g,b;
+			uint8_t a,r,g,b;
 		};
-		uint32 d;
+		uint32_t d;
 	};
 #else
-	PalEntry (BYTE ir, BYTE ig, BYTE ib) : b(ib), g(ig), r(ir), a(0) {}
-	PalEntry (BYTE ia, BYTE ir, BYTE ig, BYTE ib) : b(ib), g(ig), r(ir), a(ia) {}
+	PalEntry (uint8_t ir, uint8_t ig, uint8_t ib) : b(ib), g(ig), r(ir), a(0) {}
+	PalEntry (uint8_t ia, uint8_t ir, uint8_t ig, uint8_t ib) : b(ib), g(ig), r(ir), a(ia) {}
 	union
 	{
 		struct
 		{
-			BYTE b,g,r,a;
+			uint8_t b,g,r,a;
 		};
-		uint32 d;
+		uint32_t d;
 	};
 #endif
 };
 
-class FArchive;
-class PClassInventory;
-
 class FTextureID
 {
 	friend class FTextureManager;
-	friend FArchive &operator<< (FArchive &arc, FTextureID &tex);
-	friend FTextureID GetHUDIcon(PClassInventory *cls);
 	friend void R_InitSpriteDefs();
 
 public:
@@ -230,6 +196,45 @@ private:
 	int texnum;
 };
 
+// This is for the script interface which needs to do casts from int to texture.
+class FSetTextureID : public FTextureID
+{
+public:
+	FSetTextureID(int v) : FTextureID(v) {}
+};
+
+
+struct VersionInfo
+{
+	uint16_t major;
+	uint16_t minor;
+	uint32_t revision;
+
+	bool operator <=(const VersionInfo &o) const
+	{
+		return o.major > this->major || (o.major == this->major && o.minor > this->minor) || (o.major == this->major && o.minor == this->minor && o.revision >= this->revision);
+	}
+	bool operator >=(const VersionInfo &o) const
+	{
+		return o.major < this->major || (o.major == this->major && o.minor < this->minor) || (o.major == this->major && o.minor == this->minor && o.revision <= this->revision);
+	}
+	bool operator > (const VersionInfo &o) const
+	{
+		return o.major < this->major || (o.major == this->major && o.minor < this->minor) || (o.major == this->major && o.minor == this->minor && o.revision < this->revision);
+	}
+	bool operator < (const VersionInfo &o) const
+	{
+		return o.major > this->major || (o.major == this->major && o.minor > this->minor) || (o.major == this->major && o.minor == this->minor && o.revision > this->revision);
+	}
+	void operator=(const char *string);
+};
+
+// Cannot be a constructor because Lemon would puke on it.
+inline VersionInfo MakeVersion(unsigned int ma, unsigned int mi, unsigned int re = 0)
+{
+	return{ (uint16_t)ma, (uint16_t)mi, (uint32_t)re };
+}
+
 
 
 // Screenshot buffer image data types
@@ -240,9 +245,12 @@ enum ESSType
 	SS_BGRA
 };
 
-#ifndef M_PI
-#define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
+// always use our own definition for consistency.
+#ifdef M_PI
+#undef M_PI
 #endif
+
+const double M_PI = 3.14159265358979323846;	// matches value in gcc v2 math.h
 
 template <typename T, size_t N>
 char ( &_ArraySizeHelper( T (&array)[N] ))[N];
@@ -254,12 +262,14 @@ char ( &_ArraySizeHelper( T (&array)[N] ))[N];
 #ifdef __MACH__
 #define SECTION_AREG "__DATA,areg"
 #define SECTION_CREG "__DATA,creg"
+#define SECTION_FREG "__DATA,freg"
 #define SECTION_GREG "__DATA,greg"
 #define SECTION_MREG "__DATA,mreg"
 #define SECTION_YREG "__DATA,yreg"
 #else
 #define SECTION_AREG "areg"
 #define SECTION_CREG "creg"
+#define SECTION_FREG "freg"
 #define SECTION_GREG "greg"
 #define SECTION_MREG "mreg"
 #define SECTION_YREG "yreg"

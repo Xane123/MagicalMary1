@@ -40,7 +40,7 @@
 #include "version.h"
 
 
-static NSColor* RGB(const BYTE red, const BYTE green, const BYTE blue)
+static NSColor* RGB(const uint8_t red, const uint8_t green, const uint8_t blue)
 {
 	return [NSColor colorWithCalibratedRed:red   / 255.0f
 									 green:green / 255.0f
@@ -53,7 +53,7 @@ static NSColor* RGB(const PalEntry& color)
 	return RGB(color.r, color.g, color.b);
 }
 
-static NSColor* RGB(const DWORD color)
+static NSColor* RGB(const uint32_t color)
 {
 	return RGB(PalEntry(color));
 }
@@ -248,12 +248,9 @@ void FConsoleWindow::AddText(const char* message)
 			AddText(color, buffer);
 		}
 
-#define CHECK_BUFFER_SPACE \
-	if (pos >= sizeof buffer - 3) { reset = true; continue; }
-
 		if (TEXTCOLOR_ESCAPE == *message)
 		{
-			const BYTE* colorID = reinterpret_cast<const BYTE*>(message) + 1;
+			const uint8_t* colorID = reinterpret_cast<const uint8_t*>(message) + 1;
 			if ('\0' == *colorID)
 			{
 				break;
@@ -268,42 +265,20 @@ void FConsoleWindow::AddText(const char* message)
 
 			message += 2;
 		}
-		else if (0x1d == *message) // Opening bar character
+		else if (0x1d == *message || 0x1f == *message) // Opening and closing bar characters
 		{
-			CHECK_BUFFER_SPACE;
-
-			// Insert BOX DRAWINGS LIGHT LEFT AND HEAVY RIGHT
-			buffer[pos++] = '\xe2';
-			buffer[pos++] = '\x95';
-			buffer[pos++] = '\xbc';
+			buffer[pos++] = '-';
 			++message;
 		}
 		else if (0x1e == *message) // Middle bar character
 		{
-			CHECK_BUFFER_SPACE;
-
-			// Insert BOX DRAWINGS HEAVY HORIZONTAL
-			buffer[pos++] = '\xe2';
-			buffer[pos++] = '\x94';
-			buffer[pos++] = '\x81';
-			++message;
-		}
-		else if (0x1f == *message) // Closing bar character
-		{
-			CHECK_BUFFER_SPACE;
-
-			// Insert BOX DRAWINGS HEAVY LEFT AND LIGHT RIGHT
-			buffer[pos++] = '\xe2';
-			buffer[pos++] = '\x95';
-			buffer[pos++] = '\xbe';
+			buffer[pos++] = '=';
 			++message;
 		}
 		else
 		{
 			buffer[pos++] = *message++;
 		}
-
-#undef CHECK_BUFFER_SPACE
 	}
 
 	if (0 != pos)
@@ -363,8 +338,18 @@ void FConsoleWindow::SetTitleText()
 		textViewFrame.size.width,
 		TITLE_TEXT_HEIGHT);
 
+	// Temporary solution for the same foreground and background colors
+	// It's used in graphical startup screen, with Hexen style in particular
+	// Native OS X backend doesn't implement this yet
+
+	if (DoomStartupInfo.FgColor == DoomStartupInfo.BkColor)
+	{
+		DoomStartupInfo.FgColor = ~DoomStartupInfo.FgColor;
+	}
+
 	NSTextField* titleText = [[NSTextField alloc] initWithFrame:titleTextRect];
-	[titleText setStringValue:[NSString stringWithUTF8String:DoomStartupInfo.Name]];
+	[titleText setStringValue:[NSString stringWithCString:DoomStartupInfo.Name
+												 encoding:NSISOLatin1StringEncoding]];
 	[titleText setAlignment:NSCenterTextAlignment];
 	[titleText setTextColor:RGB(DoomStartupInfo.FgColor)];
 	[titleText setBackgroundColor:RGB(DoomStartupInfo.BkColor)];

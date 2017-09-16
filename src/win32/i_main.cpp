@@ -61,13 +61,13 @@
 #include <stdarg.h>
 #include <math.h>
 
-#define USE_WINDOWS_DWORD
 #include "doomerrors.h"
 #include "hardware.h"
 
 #include "doomtype.h"
 #include "m_argv.h"
 #include "d_main.h"
+#include "i_module.h"
 #include "i_system.h"
 #include "c_console.h"
 #include "version.h"
@@ -80,9 +80,13 @@
 #include "g_level.h"
 #include "doomstat.h"
 #include "r_utility.h"
+#include "g_levellocals.h"
+#include "s_sound.h"
 
 #include "stats.h"
 #include "st_start.h"
+
+#include "optwin32.h"
 
 #include <assert.h>
 
@@ -105,7 +109,7 @@
 LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
 void CreateCrashLog (char *custominfo, DWORD customsize, HWND richedit);
 void DisplayCrashLog ();
-extern BYTE *ST_Util_BitsForBitmap (BITMAPINFO *bitmap_info);
+extern uint8_t *ST_Util_BitsForBitmap (BITMAPINFO *bitmap_info);
 void I_FlushBufferedConsoleStuff();
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
@@ -121,7 +125,7 @@ extern UINT TimerPeriod;
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 // The command line arguments.
-DArgs *Args;
+FArgs *Args;
 
 HINSTANCE		g_hInst;
 DWORD			SessionID;
@@ -142,6 +146,21 @@ HFONT			GameTitleFont;
 LONG			GameTitleFontHeight;
 LONG			DefaultGUIFontHeight;
 LONG			ErrorIconChar;
+
+FModule Kernel32Module{"Kernel32"};
+FModule Shell32Module{"Shell32"};
+FModule User32Module{"User32"};
+
+namespace OptWin32 {
+#define DYN_WIN32_SYM(x) decltype(x) x{#x}
+
+DYN_WIN32_SYM(SHGetFolderPathA);
+DYN_WIN32_SYM(SHGetKnownFolderPath);
+DYN_WIN32_SYM(GetLongPathNameA);
+DYN_WIN32_SYM(GetMonitorInfoA);
+
+#undef DYN_WIN32_SYM
+} // namespace OptWin32
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
@@ -199,7 +218,7 @@ void popterm ()
 //
 //==========================================================================
 
-static void STACK_ARGS call_terms (void)
+static void call_terms (void)
 {
 	while (NumTerms > 0)
 	{
@@ -208,7 +227,7 @@ static void STACK_ARGS call_terms (void)
 }
 
 #ifdef _MSC_VER
-static int STACK_ARGS NewFailure (size_t size)
+static int NewFailure (size_t size)
 {
 	I_FatalError ("Failed to allocate %d bytes from process heap", size);
 	return 0;
@@ -432,7 +451,7 @@ LRESULT CALLBACK LConProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		lf.lfCharSet = ANSI_CHARSET;
 		lf.lfWeight = FW_BOLD;
 		lf.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
-		strcpy (lf.lfFaceName, "XPinball");
+		strcpy (lf.lfFaceName, "Trebuchet MS");
 		GameTitleFont = CreateFontIndirect (&lf);
 
 		oldfont = SelectObject (hdc, GetStockObject (DEFAULT_GUI_FONT));
@@ -475,7 +494,7 @@ LRESULT CALLBACK LConProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		format.crTextColor = RGB(223,223,223);
 		format.bCharSet = ANSI_CHARSET;
 		format.bPitchAndFamily = FF_SWISS | VARIABLE_PITCH;
-		wcscpy(format.szFaceName, L"XPinball");	// At least I have it. :p
+		wcscpy(format.szFaceName, L"DejaVu Sans");	// At least I have it. :p
 		SendMessageW(view, EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&format);
 
 		ConWindow = view;
@@ -662,17 +681,23 @@ void I_SetWndProc()
 
 void RestoreConView()
 {
+	HDC screenDC = GetDC(0);
+	int dpi = GetDeviceCaps(screenDC, LOGPIXELSX);
+	ReleaseDC(0, screenDC);
+	int width = (512 * dpi + 96 / 2) / 96;
+	int height = (384 * dpi + 96 / 2) / 96;
+
 	// Make sure the window has a frame in case it was fullscreened.
 	SetWindowLongPtr (Window, GWL_STYLE, WS_VISIBLE|WS_OVERLAPPEDWINDOW);
 	if (GetWindowLong (Window, GWL_EXSTYLE) & WS_EX_TOPMOST)
 	{
-		SetWindowPos (Window, HWND_BOTTOM, 0, 0, 512, 384,
+		SetWindowPos (Window, HWND_BOTTOM, 0, 0, width, height,
 			SWP_DRAWFRAME | SWP_NOCOPYBITS | SWP_NOMOVE);
 		SetWindowPos (Window, HWND_TOP, 0, 0, 0, 0, SWP_NOCOPYBITS | SWP_NOMOVE | SWP_NOSIZE);
 	}
 	else
 	{
-		SetWindowPos (Window, NULL, 0, 0, 512, 384,
+		SetWindowPos (Window, NULL, 0, 0, width, height,
 			SWP_DRAWFRAME | SWP_NOCOPYBITS | SWP_NOMOVE | SWP_NOZORDER);
 	}
 
@@ -681,7 +706,6 @@ void RestoreConView()
 	ConWindowHidden = false;
 	ShowWindow (GameTitleWindow, SW_SHOW);
 	I_ShutdownInput ();		// Make sure the mouse pointer is available.
-	I_FlushBufferedConsoleStuff();
 	// Make sure the progress bar isn't visible.
 	if (StartScreen != NULL)
 	{
@@ -797,6 +821,13 @@ void ShowErrorPane(const char *text)
 	}
 }
 
+void PeekThreadedErrorPane()
+{
+	// Allow SendMessage from another thread to call its message handler so that it can display the crash dialog
+	MSG msg;
+	PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE);
+}
+
 //==========================================================================
 //
 // DoMain
@@ -817,7 +848,12 @@ void DoMain (HINSTANCE hInstance)
 		_set_new_handler (NewFailure);
 #endif
 
-		Args = new DArgs(__argc, __argv);
+		Args = new FArgs(__argc, __argv);
+
+		// Load Win32 modules
+		Kernel32Module.Load({"kernel32.dll"});
+		Shell32Module.Load({"shell32.dll"});
+		User32Module.Load({"user32.dll"});
 
 		// Under XP, get our session ID so we can know when the user changes/locks sessions.
 		// Since we need to remain binary compatible with older versions of Windows, we
@@ -913,8 +949,11 @@ void DoMain (HINSTANCE hInstance)
 		progdir.Truncate((long)strlen(program));
 		progdir.UnlockBuffer();
 
-		width = 512;
-		height = 384;
+		HDC screenDC = GetDC(0);
+		int dpi = GetDeviceCaps(screenDC, LOGPIXELSX);
+		ReleaseDC(0, screenDC);
+		width = (512 * dpi + 96 / 2) / 96;
+		height = (384 * dpi + 96 / 2) / 96;
 
 		// Many Windows structures that specify their size do so with the first
 		// element. DEVMODE is not one of those structures.
@@ -947,7 +986,7 @@ void DoMain (HINSTANCE hInstance)
 		
 		/* create window */
 		char caption[100];
-		mysnprintf(caption, countof(caption), GAMENAME VERSIONSTR X64);
+		mysnprintf(caption, countof(caption), "" GAMESIG " %s " X64 " (%s)", GetVersionString(), GetGitTime());
 		Window = CreateWindowEx(
 				WS_EX_APPWINDOW,
 				(LPCTSTR)WinClassName,
@@ -1029,6 +1068,8 @@ void DoMain (HINSTANCE hInstance)
 	{
 		I_ShutdownGraphics ();
 		RestoreConView ();
+		S_StopMusic(true);
+		I_FlushBufferedConsoleStuff();
 		if (error.GetMessage ())
 		{
 			if (!batchrun)
@@ -1080,10 +1121,10 @@ void DoomSpecificInfo (char *buffer, size_t bufflen)
 		}
 		else
 		{
-			buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nviewx = %d", viewx);
-			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewy = %d", viewy);
-			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewz = %d", viewz);
-			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewangle = %x", viewangle);
+			buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nviewx = %f", r_viewpoint.Pos.X);
+			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewy = %f", r_viewpoint.Pos.Y);
+			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewz = %f", r_viewpoint.Pos.Z);
+			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewangle = %f", r_viewpoint.Angles.Yaw);
 		}
 	}
 	*buffer++ = '\r';
@@ -1161,6 +1202,11 @@ void CALLBACK ExitFatally (ULONG_PTR dummy)
 //
 //==========================================================================
 
+namespace
+{
+	CONTEXT MainThreadContext;
+}
+
 LONG WINAPI CatchAllExceptions (LPEXCEPTION_POINTERS info)
 {
 #ifdef _DEBUG
@@ -1185,11 +1231,11 @@ LONG WINAPI CatchAllExceptions (LPEXCEPTION_POINTERS info)
 	// Otherwise, put the crashing thread to sleep and signal the main thread to clean up.
 	if (GetCurrentThreadId() == MainThreadID)
 	{
-#ifndef _M_X64
-		info->ContextRecord->Eip = (DWORD_PTR)ExitFatally;
+#ifdef _M_X64
+		*info->ContextRecord = MainThreadContext;
 #else
-		info->ContextRecord->Rip = (DWORD_PTR)ExitFatally;
-#endif
+		info->ContextRecord->Eip = (DWORD_PTR)ExitFatally;
+#endif // _M_X64
 	}
 	else
 	{
@@ -1281,6 +1327,17 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE nothing, LPSTR cmdline, int n
 	if (MainThread != INVALID_HANDLE_VALUE)
 	{
 		SetUnhandledExceptionFilter (CatchAllExceptions);
+
+#ifdef _M_X64
+		static bool setJumpResult = false;
+		RtlCaptureContext(&MainThreadContext);
+		if (setJumpResult)
+		{
+			ExitFatally(0);
+			return 0;
+		}
+		setJumpResult = true;
+#endif // _M_X64
 	}
 #endif
 

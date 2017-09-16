@@ -46,9 +46,12 @@
 #include "w_wad.h"
 #include "tarray.h"
 #include "cmdlib.h"
-#include "farchive.h"
+#include "serializer.h"
 #include "p_maputl.h"
 #include "p_spec.h"
+#include "textures.h"
+#include "actor.h"
+#include "actorinlines.h"
 
 #include "gi.h"
 
@@ -59,19 +62,19 @@ class DActiveButton : public DThinker
 	DECLARE_CLASS (DActiveButton, DThinker)
 public:
 	DActiveButton ();
-	DActiveButton (side_t *, int, FSwitchDef *, fixed_t x, fixed_t y, bool flippable);
+	DActiveButton (side_t *, int, FSwitchDef *, const DVector2 &pos, bool flippable);
 
-	void Serialize (FArchive &arc);
+	void Serialize(FSerializer &arc);
 	void Tick ();
 
 	side_t			*m_Side;
-	SBYTE			m_Part;
+	int8_t			m_Part;
 	bool			bFlippable;
 	bool			bReturning;
 	FSwitchDef		*m_SwitchDef;
-	SDWORD			m_Frame;
-	DWORD			m_Timer;
-	fixed_t			m_X, m_Y;	// Location of timer sound
+	int32_t			m_Frame;
+	uint32_t			m_Timer;
+	DVector2		m_Pos;
 
 protected:
 	bool AdvanceFrame ();
@@ -85,7 +88,7 @@ protected:
 //
 //==========================================================================
 
-static bool P_StartButton (side_t *side, int Where, FSwitchDef *Switch, fixed_t x, fixed_t y, bool useagain)
+static bool P_StartButton (side_t *side, int Where, FSwitchDef *Switch, const DVector2 &pos, bool useagain)
 {
 	DActiveButton *button;
 	TThinkerIterator<DActiveButton> iterator;
@@ -100,7 +103,7 @@ static bool P_StartButton (side_t *side, int Where, FSwitchDef *Switch, fixed_t 
 		}
 	}
 
-	new DActiveButton (side, Where, Switch, x, y, useagain);
+	Create<DActiveButton> (side, Where, Switch, pos, useagain);
 	return true;
 }
 
@@ -112,15 +115,15 @@ static bool P_StartButton (side_t *side, int Where, FSwitchDef *Switch, fixed_t 
 //
 //==========================================================================
 
-bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpos)
+bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, const DVector3 *optpos)
 {
 	// Activated from an empty side -> always succeed
 	side_t *side = line->sidedef[sideno];
 	if (side == NULL)
 		return true;
 
-	fixed_t checktop;
-	fixed_t checkbot;
+	double checktop;
+	double checkbot;
 	sector_t *front = side->sector;
 	FLineOpening open;
 	int flags = line->flags;
@@ -136,15 +139,16 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 
 	// calculate the point where the user would touch the wall.
 	divline_t dll, dlu;
-	fixed_t inter, checkx, checky;
+	double inter;
+	DVector2 check;
 
 	P_MakeDivline (line, &dll);
 
-	fixedvec3 pos = optpos? *optpos : user->PosRelative(line);
-	dlu.x = pos.x;
-	dlu.y = pos.y;
-	dlu.dx = finecosine[user->angle >> ANGLETOFINESHIFT];
-	dlu.dy = finesine[user->angle >> ANGLETOFINESHIFT];
+	DVector3 pos = optpos? *optpos : user->PosRelative(line);
+	dlu.x = pos.X;
+	dlu.y = pos.Y;
+	dlu.dx = user->Angles.Yaw.Cos();
+	dlu.dy = user->Angles.Yaw.Sin();
 	inter = P_InterceptVector(&dll, &dlu);
 
 
@@ -153,14 +157,14 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 	{
 		// Get a check point slightly inside the polyobject so that this still works
 		// if the polyobject lies directly on a sector boundary
-		checkx = dll.x + FixedMul(dll.dx, inter + (FRACUNIT/100));
-		checky = dll.y + FixedMul(dll.dy, inter + (FRACUNIT/100));
-		front = P_PointInSector(checkx, checky);
+		check.X = dll.x + dll.dx * (inter + 0.01);
+		check.Y = dll.y + dll.dy * (inter + 0.01);
+		front = P_PointInSector(check);
 	}
 	else
 	{
-		checkx = dll.x + FixedMul(dll.dx, inter);
-		checky = dll.y + FixedMul(dll.dy, inter);
+		check.X = dll.x + dll.dx * inter;
+		check.Y = dll.y + dll.dy * inter;
 	}
 
 
@@ -168,13 +172,13 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 	if (line->sidedef[1] == NULL || (line->sidedef[0]->Flags & WALLF_POLYOBJ))
 	{
 	onesided:
-		fixed_t sectorc = front->ceilingplane.ZatPoint(checkx, checky);
-		fixed_t sectorf = front->floorplane.ZatPoint(checkx, checky);
+		double sectorc = front->ceilingplane.ZatPoint(check);
+		double sectorf = front->floorplane.ZatPoint(check);
 		return (user->Top() >= sectorf && user->Z() <= sectorc);
 	}
 
 	// Now get the information from the line.
-	P_LineOpening(open, NULL, line, checkx, checky, pos.x, pos.y);
+	P_LineOpening(open, NULL, line, check, &pos);
 	if (open.range <= 0)
 		goto onesided;
 
@@ -184,14 +188,13 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 		// Check 3D floors on back side
 		{
 			sector_t * back = line->sidedef[1 - sideno]->sector;
-			for (unsigned i = 0; i < back->e->XFloor.ffloors.Size(); i++)
+			for (auto rover : back->e->XFloor.ffloors)
 			{
-				F3DFloor *rover = back->e->XFloor.ffloors[i];
 				if (!(rover->flags & FF_EXISTS)) continue;
 				if (!(rover->flags & FF_UPPERTEXTURE)) continue;
 
-				if (user->Z() > rover->top.plane->ZatPoint(checkx, checky) ||
-					user->Top() < rover->bottom.plane->ZatPoint(checkx, checky))
+				if (user->isAbove(rover->top.plane->ZatPoint(check)) ||
+					user->Top() < rover->bottom.plane->ZatPoint(check))
 					continue;
 
 				// This 3D floor depicts a switch texture in front of the player's eyes
@@ -212,8 +215,8 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 				if (!(rover->flags & FF_EXISTS)) continue;
 				if (!(rover->flags & FF_LOWERTEXTURE)) continue;
 
-				if (user->Z() > rover->top.plane->ZatPoint(checkx, checky) ||
-					user->Top() < rover->bottom.plane->ZatPoint(checkx, checky))
+				if (user->isAbove(rover->top.plane->ZatPoint(check)) ||
+					user->Top() < rover->bottom.plane->ZatPoint(check))
 					continue;
 
 				// This 3D floor depicts a switch texture in front of the player's eyes
@@ -229,12 +232,12 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 		// to keep compatibility with Eternity's implementation.
 		if (!P_GetMidTexturePosition(line, sideno, &checktop, &checkbot))
 			return false;
-		return user->Z() < checktop && user->Top() > checkbot;
+		return user->isBelow(checktop) && user->Top() > checkbot;
 	}
 	else
 	{
 		// no switch found. Check whether the player can touch either top or bottom texture
-		return (user->Top() > open.top) || (user->Z() < open.bottom);
+		return (user->Top() > open.top) || (user->isBelow(open.bottom));
 	}
 }
 
@@ -245,7 +248,7 @@ bool P_CheckSwitchRange(AActor *user, line_t *line, int sideno, fixedvec3 *optpo
 //
 //==========================================================================
 
-bool P_ChangeSwitchTexture (side_t *side, int useAgain, BYTE special, bool *quest)
+bool P_ChangeSwitchTexture (side_t *side, int useAgain, uint8_t special, bool *quest)
 {
 	int texture;
 	int sound;
@@ -291,16 +294,13 @@ bool P_ChangeSwitchTexture (side_t *side, int useAgain, BYTE special, bool *ques
 	//		which wasn't necessarily anywhere near the switch if it was
 	//		facing a big sector (and which wasn't necessarily for the
 	//		button just activated, either).
-	fixed_t pt[2];
-	line_t *line = side->linedef;
+	DVector2 pt(side->linedef->v1->fPos() + side->linedef->Delta() / 2);
 	bool playsound;
 
-	pt[0] = line->v1->x + (line->dx >> 1);
-	pt[1] = line->v1->y + (line->dy >> 1);
 	side->SetTexture(texture, Switch->frames[0].Texture);
 	if (useAgain || Switch->NumFrames > 1)
 	{
-		playsound = P_StartButton (side, texture, Switch, pt[0], pt[1], !!useAgain);
+		playsound = P_StartButton (side, texture, Switch, pt, !!useAgain);
 	}
 	else 
 	{
@@ -308,7 +308,7 @@ bool P_ChangeSwitchTexture (side_t *side, int useAgain, BYTE special, bool *ques
 	}
 	if (playsound)
 	{
-		S_Sound (pt[0], pt[1], 0, CHAN_VOICE|CHAN_LISTENERZ, sound, 1, ATTN_STATIC);
+		S_Sound (DVector3(pt, 0), CHAN_VOICE|CHAN_LISTENERZ, sound, 1, ATTN_STATIC);
 	}
 	if (quest != NULL)
 	{
@@ -323,7 +323,7 @@ bool P_ChangeSwitchTexture (side_t *side, int useAgain, BYTE special, bool *ques
 //
 //==========================================================================
 
-IMPLEMENT_CLASS (DActiveButton)
+IMPLEMENT_CLASS(DActiveButton, false, false)
 
 DActiveButton::DActiveButton ()
 {
@@ -331,20 +331,18 @@ DActiveButton::DActiveButton ()
 	m_Part = -1;
 	m_SwitchDef = 0;
 	m_Timer = 0;
-	m_X = 0;
-	m_Y = 0;
+	m_Pos = { 0,0 };
 	bFlippable = false;
 	bReturning = false;
 	m_Frame = 0;
 }
 
 DActiveButton::DActiveButton (side_t *side, int Where, FSwitchDef *Switch,
-							  fixed_t x, fixed_t y, bool useagain)
+							  const DVector2 &pos, bool useagain)
 {
 	m_Side = side;
-	m_Part = SBYTE(Where);
-	m_X = x;
-	m_Y = y;
+	m_Part = int8_t(Where);
+	m_Pos = pos;
 	bFlippable = useagain;
 	bReturning = false;
 
@@ -355,14 +353,43 @@ DActiveButton::DActiveButton (side_t *side, int Where, FSwitchDef *Switch,
 
 //==========================================================================
 //
+// operator<<
+//
+//==========================================================================
+
+template<> FSerializer &Serialize (FSerializer &arc, const char *key, FSwitchDef* &Switch, FSwitchDef **def)
+{
+	if (arc.isWriting())
+	{
+		Serialize(arc, key, Switch->PreTexture, nullptr);
+	}
+	else
+	{
+		FTextureID tex;
+		tex.SetInvalid();
+		Serialize(arc, key, tex, nullptr);
+		Switch = TexMan.FindSwitch(tex);
+	}
+	return arc;
+}
+
+//==========================================================================
+//
 //
 //
 //==========================================================================
 
-void DActiveButton::Serialize (FArchive &arc)
+void DActiveButton::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
-	arc << m_Side << m_Part << m_SwitchDef << m_Frame << m_Timer << bFlippable << m_X << m_Y << bReturning;
+	arc("side", m_Side)
+		("part", m_Part)
+		("switchdef", m_SwitchDef)
+		("frame", m_Frame)
+		("timer", m_Timer)
+		("fippable", bFlippable)
+		("pos", m_Pos)
+		("returning", bReturning);
 }
 
 //==========================================================================
@@ -390,7 +417,7 @@ void DActiveButton::Tick ()
 			if (def != NULL)
 			{
 				m_Frame = -1;
-				S_Sound (m_X, m_Y, 0, CHAN_VOICE|CHAN_LISTENERZ,
+				S_Sound (DVector3(m_Pos, 0), CHAN_VOICE|CHAN_LISTENERZ,
 					def->Sound != 0 ? FSoundID(def->Sound) : FSoundID("switches/normbutn"),
 					1, ATTN_STATIC);
 				bFlippable = false;

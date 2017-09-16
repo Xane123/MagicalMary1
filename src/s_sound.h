@@ -1,16 +1,23 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //		The not so system specific sound interface.
@@ -23,10 +30,10 @@
 
 #include "doomtype.h"
 #include "i_soundinternal.h"
-#include "dobject.h"
 
 class AActor;
 class FScanner;
+class FSerializer;
 
 //
 // SoundFX struct.
@@ -36,6 +43,9 @@ struct sfxinfo_t
 	// Next field is for use by the system sound interface.
 	// A non-null data means the sound has been loaded.
 	SoundHandle	data;
+    // Also for the sound interface. Used for 3D positional
+    // sounds, may be the same as data.
+    SoundHandle data3d;
 
 	FString		name;					// [RH] Sound name defined in SNDINFO
 	int 		lumpnum;				// lump number of sfx
@@ -43,21 +53,21 @@ struct sfxinfo_t
 	unsigned int next, index;			// [RH] For hashing
 	float		Volume;
 
-	BYTE		PitchMask;
-	SWORD		NearLimit;				// 0 means unlimited
+	uint8_t		PitchMask;
+	int16_t		NearLimit;				// 0 means unlimited
 	float		LimitRange;				// Range for sound limiting (squared for faster computations)
 
-	WORD		bRandomHeader:1;
-	WORD		bPlayerReserve:1;
-	WORD		bLoadRAW:1;
-	WORD		bPlayerCompat:1;
-	WORD		b16bit:1;
-	WORD		bUsed:1;
-	WORD		bSingular:1;
-	WORD		bTentative:1;
-	WORD		bPlayerSilent:1;		// This player sound is intentionally silent.
+	unsigned		bRandomHeader:1;
+	unsigned		bPlayerReserve:1;
+	unsigned		bLoadRAW:1;
+	unsigned		bPlayerCompat:1;
+	unsigned		b16bit:1;
+	unsigned		bUsed:1;
+	unsigned		bSingular:1;
+	unsigned		bTentative:1;
+	unsigned		bPlayerSilent:1;		// This player sound is intentionally silent.
 
-	WORD		RawRate;				// Sample rate to use when bLoadRAW is true
+	int		RawRate;				// Sample rate to use when bLoadRAW is true
 
 	int			LoopStart;				// -1 means no specific loop defined
 
@@ -123,6 +133,14 @@ public:
 		ID = S_FindSound(name.GetChars());
 		return *this;
 	}
+	bool operator !=(FSoundID other) const
+	{
+		return ID != other.ID;
+	}
+	bool operator !=(int other) const
+	{
+		return ID != other;
+	}
 	operator int() const
 	{
 		return ID;
@@ -165,10 +183,8 @@ public:
 	}
 };
 
-FArchive &operator<<(FArchive &arc, FSoundID &sid);
-
 extern FRolloffInfo S_Rolloff;
-extern BYTE *S_SoundCurve;
+extern uint8_t *S_SoundCurve;
 extern int S_SoundCurveSize;
 
 // Information about one playing sound.
@@ -182,11 +198,11 @@ struct FSoundChan : public FISoundChannel
 	FSoundID	OrgID;		// Sound ID of sound used to start this channel.
 	float		Volume;
 	int			ChanFlags;
-	SWORD		Pitch;		// Pitch variation.
-	BYTE		EntChannel;	// Actor's sound channel.
-	SBYTE		Priority;
-	SWORD		NearLimit;
-	BYTE		SourceType;
+	int16_t		Pitch;		// Pitch variation.
+	uint8_t		EntChannel;	// Actor's sound channel.
+	int8_t		Priority;
+	int16_t		NearLimit;
+	uint8_t		SourceType;
 	float		LimitRange;
 	union
 	{
@@ -196,6 +212,7 @@ struct FSoundChan : public FISoundChannel
 		float			 Point[3];	// Sound is not attached to any source.
 	};
 };
+
 extern FSoundChan *Channels;
 
 void S_ReturnChannel(FSoundChan *chan);
@@ -230,7 +247,10 @@ void S_Sound (AActor *ent, int channel, FSoundID sfxid, float volume, float atte
 void S_SoundMinMaxDist (AActor *ent, int channel, FSoundID sfxid, float volume, float mindist, float maxdist);
 void S_Sound (const FPolyObj *poly, int channel, FSoundID sfxid, float volume, float attenuation);
 void S_Sound (const sector_t *sec, int channel, FSoundID sfxid, float volume, float attenuation);
-void S_Sound (fixed_t x, fixed_t y, fixed_t z, int channel, FSoundID sfxid, float volume, float attenuation);
+void S_Sound(const DVector3 &pos, int channel, FSoundID sfxid, float volume, float attenuation);
+
+// [Nash] Used by ACS and DECORATE
+void S_PlaySound(AActor *a, int chan, FSoundID sid, float vol, float atten, bool local);
 
 // sound channels
 // channel 0 never willingly overrides
@@ -272,6 +292,7 @@ void S_Sound (fixed_t x, fixed_t y, fixed_t z, int channel, FSoundID sfxid, floa
 #define CHAN_JUSTSTARTED		512	// internal: Sound has not been updated yet.
 #define CHAN_ABSTIME			1024// internal: Start time is absolute and does not depend on current time.
 #define CHAN_VIRTUAL			2048// internal: Channel is currently virtual
+#define CHAN_NOSTOP				4096// only for A_PlaySound. Does not start if channel is playing something.
 
 // sound attenuation values
 #define ATTN_NONE				0.f	// full volume the entire level
@@ -279,6 +300,7 @@ void S_Sound (fixed_t x, fixed_t y, fixed_t z, int channel, FSoundID sfxid, floa
 #define ATTN_IDLE				1.001f
 #define ATTN_STATIC				3.f	// diminish very rapidly with distance
 
+struct FSoundLoadBuffer;
 int S_PickReplacement (int refid);
 void S_CacheRandomSound (sfxinfo_t *sfx);
 
@@ -310,7 +332,7 @@ bool S_ChangeSoundVolume(AActor *actor, int channel, float volume);
 void S_RelinkSound (AActor *from, AActor *to);
 
 // Stores/retrieves playing channel information in an archive.
-void S_SerializeSounds(FArchive &arc);
+void S_SerializeSounds(FSerializer &arc);
 
 // Start music using <music_name>
 bool S_StartMusic (const char *music_name);
@@ -325,11 +347,10 @@ void S_RestartMusic ();
 
 void S_MIDIDeviceChanged();
 
-int S_GetMusic (char **name);
+int S_GetMusic (const char **name);
 
 // Stops the music for sure.
 void S_StopMusic (bool force);
-void S_UpdateMusic();
 
 // Stop and resume music, during game PAUSE.
 void S_PauseSound (bool notmusic, bool notsfx);
@@ -365,7 +386,7 @@ int S_AddPlayerSoundExisting (const char *playerclass, const int gender, int ref
 void S_MarkPlayerSounds (const char *playerclass);
 void S_ShrinkPlayerSoundLists ();
 void S_UnloadSound (sfxinfo_t *sfx);
-sfxinfo_t *S_LoadSound(sfxinfo_t *sfx);
+sfxinfo_t *S_LoadSound(sfxinfo_t *sfx, FSoundLoadBuffer *pBuffer = nullptr);
 unsigned int S_GetMSLength(FSoundID sound);
 void S_ParseMusInfo();
 bool S_ParseTimeTag(const char *tag, bool *as_samples, unsigned int *time);
@@ -377,25 +398,10 @@ void S_NoiseDebug ();
 extern ReverbContainer *Environments;
 extern ReverbContainer *DefaultEnvironments[26];
 
-class FArchive;
-FArchive &operator<< (FArchive &arc, ReverbContainer *&env);
-
 void S_SetEnvironment (const ReverbContainer *settings);
 ReverbContainer *S_FindEnvironment (const char *name);
 ReverbContainer *S_FindEnvironment (int id);
 void S_AddEnvironment (ReverbContainer *settings);
-
-enum EMidiDevice
-{
-	MDEV_DEFAULT = -1,
-	MDEV_MMAPI = 0,
-	MDEV_OPL = 1,	//Unused, hopefully for REAL this time!
-	MDEV_SNDSYS = 2,
-	MDEV_TIMIDITY = 3,
-	MDEV_FLUIDSYNTH = 4,
-	MDEV_GUS = 5,
-	MDEV_WILDMIDI = 6,
-};
 
 struct MidiDeviceSetting
 {

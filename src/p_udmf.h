@@ -3,7 +3,6 @@
 
 #include "sc_man.h"
 #include "m_fixed.h"
-#include "tables.h"
 
 class UDMFParserBase
 {
@@ -12,13 +11,14 @@ protected:
 	FName namespc;
 	int namespace_bits;
 	FString parsedString;
+	bool BadCoordinates = false;
 
 	void Skip();
 	FName ParseKey(bool checkblock = false, bool *isblock = NULL);
 	int CheckInt(const char *key);
 	double CheckFloat(const char *key);
-	fixed_t CheckFixed(const char *key);
-	angle_t CheckAngle(const char *key);
+	double CheckCoordinate(const char *key);
+	DAngle CheckAngle(const char *key);
 	bool CheckBool(const char *key);
 	const char *CheckString(const char *key);
 

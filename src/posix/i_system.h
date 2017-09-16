@@ -1,18 +1,22 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //		System specific interface stuff.
@@ -25,6 +29,8 @@
 
 #include <dirent.h>
 #include <ctype.h>
+
+#define __solaris__ (defined(__sun) || defined(__sun__) || defined(__SRV4) || defined(__srv4__))
 
 #include "doomtype.h"
 
@@ -43,7 +49,7 @@ enum
 	LANGIDX_SysPreferred,
 	LANGIDX_SysDefault
 };
-extern DWORD LanguageIDs[4];
+extern uint32_t LanguageIDs[4];
 extern void SetLanguageIDs ();
 
 // Called by DoomMain.
@@ -62,7 +68,8 @@ extern int (*I_WaitForTic) (int);
 // tic will never arrive (unless it's the current one).
 extern void (*I_FreezeTime) (bool frozen);
 
-fixed_t I_GetTimeFrac (uint32 *ms);
+double I_GetTimeFrac (uint32_t *ms);
+void I_SetFrameTime();
 
 // Return a seed value for the RNG.
 unsigned int I_MakeRNGSeed();
@@ -104,12 +111,14 @@ void I_Quit (void);
 
 void I_Tactile (int on, int off, int total);
 
-void STACK_ARGS I_Error (const char *error, ...) GCCPRINTF(1,2);
-void STACK_ARGS I_FatalError (const char *error, ...) GCCPRINTF(1,2);
+void I_Error (const char *error, ...) GCCPRINTF(1,2);
+void I_FatalError (const char *error, ...) GCCPRINTF(1,2);
 
 void addterm (void (*func)(void), const char *name);
 #define atterm(t) addterm (t, #t)
 void popterm ();
+
+void I_DebugPrint (const char *cp);
 
 // Print a console string
 void I_PrintStr (const char *str);
@@ -140,9 +149,16 @@ bool I_SetCursor(FTexture *);
 
 struct findstate_t
 {
+private:
     int count;
     struct dirent **namelist;
     int current;
+
+	friend void *I_FindFirst(const char *filespec, findstate_t *fileinfo);
+	friend int I_FindNext(void *handle, findstate_t *fileinfo);
+	friend const char *I_FindName(findstate_t *fileinfo);
+	friend int I_FindAttr(findstate_t *fileinfo);
+	friend int I_FindClose(void *handle);
 };
 
 void *I_FindFirst (const char *filespec, findstate_t *fileinfo);
@@ -150,7 +166,10 @@ int I_FindNext (void *handle, findstate_t *fileinfo);
 int I_FindClose (void *handle);
 int I_FindAttr (findstate_t *fileinfo); 
 
-#define I_FindName(a)	((a)->namelist[(a)->current]->d_name)
+inline const char *I_FindName(findstate_t *fileinfo)
+{
+	return (fileinfo->namelist[fileinfo->current]->d_name);
+}
 
 #define FA_RDONLY	1
 #define FA_HIDDEN	2

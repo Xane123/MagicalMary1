@@ -10,9 +10,11 @@
 #define DIRECT_PALETTE -2
 
 #include "tarray.h"
+#include "gl/system/gl_interface.h"
 
 class FCanvasTexture;
 class AActor;
+typedef TMap<int, bool> SpriteHits;
 
 // For error catching while changing parameters.
 enum EInvalid
@@ -47,10 +49,14 @@ private:
 public:
 
 	static unsigned int lastbound[MAX_TEXTURES];
-	static int lastactivetexture;
-	static int max_texturesize;
 
-	static int GetTexDimension(int value);
+	static int GetTexDimension(int value)
+	{
+		if (value > gl.max_texturesize) return gl.max_texturesize;
+		return value;
+	}
+
+	static void InitGlobalState() { for (int i = 0; i < MAX_TEXTURES; i++) lastbound[i] = 0; }
 
 private:
 
@@ -76,9 +82,11 @@ public:
 	void BindToFrameBuffer();
 
 	unsigned int Bind(int texunit, int translation, bool needmipmap);
-	unsigned int CreateTexture(unsigned char * buffer, int w, int h, int texunit, bool mipmap, int translation);
+	unsigned int CreateTexture(unsigned char * buffer, int w, int h, int texunit, bool mipmap, int translation, const FString &name);
+	unsigned int GetTextureHandle(int translation);
 
 	void Clean(bool all);
+	void CleanUnused(SpriteHits &usedtranslations);
 };
 
 #endif

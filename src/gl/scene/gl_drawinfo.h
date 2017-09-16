@@ -25,6 +25,26 @@ enum DrawListType
 	GLDL_TYPES,
 };
 
+// more lists for handling of dynamic lights
+enum DLDrawListType
+{
+	// These are organized so that the various multipass rendering modes have to be set as few times as possible
+	GLLDL_WALLS_PLAIN,			// dynamic lights on normal walls
+	GLLDL_WALLS_MASKED,			// dynamic lights on masked midtextures
+
+	GLLDL_FLATS_PLAIN,			// dynamic lights on normal flats
+	GLLDL_FLATS_MASKED,			// dynamic lights on masked flats
+
+	GLLDL_WALLS_FOG,			// lights on fogged walls
+	GLLDL_WALLS_FOGMASKED,		// lights on fogged masked midtextures
+
+	GLLDL_FLATS_FOG,			// lights on fogged walls
+	GLLDL_FLATS_FOGMASKED,		// lights on fogged masked midtextures
+
+	GLLDL_TYPES,
+};
+
+
 enum Drawpasses
 {
 	GLPASS_ALL,			// Main pass with dynamic lights
@@ -32,6 +52,15 @@ enum Drawpasses
 	GLPASS_PLAIN,		// Main pass without dynamic lights
 	GLPASS_DECALS,		// Draws a decal
 	GLPASS_TRANSLUCENT,	// Draws translucent objects
+
+	// these are only used with texture based dynamic lights
+	GLPASS_BASE,		// untextured base for dynamic lights
+	GLPASS_BASE_MASKED,	// same but with active texture
+	GLPASS_LIGHTTEX,	// lighttexture pass
+	GLPASS_TEXONLY,		// finishing texture pass
+	GLPASS_LIGHTTEX_ADDITIVE,	// lighttexture pass (additive)
+	GLPASS_LIGHTTEX_FOGGY,	// lighttexture pass on foggy surfaces (forces all lights to be additive)
+
 };
 
 //==========================================================================
@@ -161,8 +190,8 @@ struct FDrawInfo
 	{
 		seg_t * seg;
 		subsector_t * sub;
-		fixed_t planez;
-		fixed_t planezfront;
+		float Planez;
+		float Planezfront;
 	};
 
 	struct MissingSegInfo
@@ -174,12 +203,14 @@ struct FDrawInfo
 	struct SubsectorHackInfo
 	{
 		subsector_t * sub;
-		BYTE flags;
+		uint8_t flags;
 	};
 
-	TArray<BYTE> sectorrenderflags;
-	TArray<BYTE> ss_renderflags;
-	TArray<BYTE> no_renderflags;
+	GLSceneDrawer *mDrawer;
+
+	TArray<uint8_t> sectorrenderflags;
+	TArray<uint8_t> ss_renderflags;
+	TArray<uint8_t> no_renderflags;
 
 	TArray<MissingTextureInfo> MissingUpperTextures;
 	TArray<MissingTextureInfo> MissingLowerTextures;
@@ -199,15 +230,16 @@ struct FDrawInfo
 
 	FDrawInfo * next;
 	GLDrawList drawlists[GLDL_TYPES];
+	GLDrawList *dldrawlists = NULL;	// only gets allocated when needed.
 
 	FDrawInfo();
 	~FDrawInfo();
 	void ClearBuffers();
 
-	bool DoOneSectorUpper(subsector_t * subsec, fixed_t planez);
-	bool DoOneSectorLower(subsector_t * subsec, fixed_t planez);
-	bool DoFakeBridge(subsector_t * subsec, fixed_t planez);
-	bool DoFakeCeilingBridge(subsector_t * subsec, fixed_t planez);
+	bool DoOneSectorUpper(subsector_t * subsec, float planez);
+	bool DoOneSectorLower(subsector_t * subsec, float planez);
+	bool DoFakeBridge(subsector_t * subsec, float planez);
+	bool DoFakeCeilingBridge(subsector_t * subsec, float planez);
 
 	bool CheckAnchorFloor(subsector_t * sub);
 	bool CollectSubsectorsFloor(subsector_t * sub, sector_t * anchor);
@@ -216,8 +248,8 @@ struct FDrawInfo
 	void CollectSectorStacksCeiling(subsector_t * sub, sector_t * anchor);
 	void CollectSectorStacksFloor(subsector_t * sub, sector_t * anchor);
 
-	void AddUpperMissingTexture(side_t * side, subsector_t *sub, fixed_t backheight);
-	void AddLowerMissingTexture(side_t * side, subsector_t *sub, fixed_t backheight);
+	void AddUpperMissingTexture(side_t * side, subsector_t *sub, float backheight);
+	void AddLowerMissingTexture(side_t * side, subsector_t *sub, float backheight);
 	void HandleMissingTextures();
 	void DrawUnhandledMissingTextures();
 	void AddHackedSubsector(subsector_t * sub);
@@ -236,7 +268,7 @@ struct FDrawInfo
 	void FloodUpperGap(seg_t * seg);
 	void FloodLowerGap(seg_t * seg);
 
-	static void StartDrawInfo();
+	static void StartDrawInfo(GLSceneDrawer *drawer);
 	static void EndDrawInfo();
 
 	gl_subsectorrendernode * GetOtherFloorPlanes(unsigned int sector)

@@ -6,6 +6,7 @@
 #include "m_bbox.h"
 
 struct FPortalGroupArray;
+struct portnode_t;
 //============================================================================
 //
 // This table holds the offsets for the different parts of a map
@@ -26,9 +27,9 @@ struct FPortalGroupArray;
 
 struct FDisplacement
 {
-	fixedvec2 pos;
+	DVector2 pos;
 	bool isSet;
-	BYTE indirect;	// just for illustration.
+	uint8_t indirect;	// just for illustration.
 
 };
 
@@ -54,14 +55,23 @@ struct FDisplacementTable
 		return data[x + size*y];
 	}
 
-	fixedvec2 getOffset(int x, int y) const
+	DVector2 getOffset(int x, int y) const
 	{
 		if (x == y)
 		{
-			fixedvec2 nulvec = { 0,0 };
+			DVector2 nulvec = { 0,0 };
 			return nulvec;	// shortcut for the most common case
 		}
 		return data[x + size*y].pos;
+	}
+
+	void MoveGroup(int grp, DVector2 delta)
+	{
+		for (int i = 1; i < size; i++)
+		{
+			data[grp + size*i].pos -= delta;
+			data[i + grp*size].pos += delta;
+		}
 	}
 };
 
@@ -134,6 +144,7 @@ enum
 	PORTF_PASSABLE = 2,
 	PORTF_SOUNDTRAVERSE = 4,
 	PORTF_INTERACTIVE = 8,
+	PORTF_POLYOBJ = 16,
 
 	PORTF_TYPETELEPORT = PORTF_VISIBLE | PORTF_PASSABLE | PORTF_SOUNDTRAVERSE,
 	PORTF_TYPEINTERACTIVE = PORTF_VISIBLE | PORTF_PASSABLE | PORTF_SOUNDTRAVERSE | PORTF_INTERACTIVE,
@@ -164,8 +175,6 @@ enum
 //============================================================================
 //
 // All information about a line-to-line portal (all types)
-// There is no structure for sector plane portals because for historic
-// reasons those use actors to connect.
 //
 //============================================================================
 
@@ -173,40 +182,89 @@ struct FLinePortal
 {
 	line_t *mOrigin;
 	line_t *mDestination;
-	fixed_t mXDisplacement;
-	fixed_t mYDisplacement;
-	BYTE mType;
-	BYTE mFlags;
-	BYTE mDefFlags;
-	BYTE mAlign;
-	angle_t mAngleDiff;
-	fixed_t mSinRot;
-	fixed_t mCosRot;
+	DVector2 mDisplacement;
+	uint8_t mType;
+	uint8_t mFlags;
+	uint8_t mDefFlags;
+	uint8_t mAlign;
+	DAngle mAngleDiff;
+	double mSinRot;
+	double mCosRot;
+	portnode_t *lineportal_thinglist;
 };
 
 extern TArray<FLinePortal> linePortals;
+
+//============================================================================
+//
+// All information about a sector plane portal
+//
+//============================================================================
+
+enum
+{
+	PORTS_SKYVIEWPOINT = 0,		// a regular skybox
+	PORTS_STACKEDSECTORTHING,	// stacked sectors with the thing method
+	PORTS_PORTAL,				// stacked sectors with Sector_SetPortal
+	PORTS_LINKEDPORTAL,			// linked portal (interactive)
+	PORTS_PLANE,				// EE-style plane portal (not implemented in SW renderer)
+	PORTS_HORIZON,				// EE-style horizon portal (not implemented in SW renderer)
+};
+
+enum
+{
+	PORTSF_SKYFLATONLY = 1,				// portal is only active on skyflatnum
+	PORTSF_INSKYBOX = 2,				// to avoid recursion
+};
+
+struct FSectorPortal
+{
+	int mType;
+	int mFlags;
+	unsigned mPartner;
+	int mPlane;
+	sector_t *mOrigin;
+	sector_t *mDestination;
+	DVector2 mDisplacement;
+	double mPlaneZ;
+	TObjPtr<AActor*> mSkybox;
+
+	bool MergeAllowed() const
+	{
+		// For thing based stack sectors and regular skies the portal has no relevance for merging visplanes.
+		return (mType == PORTS_STACKEDSECTORTHING || (mType == PORTS_SKYVIEWPOINT && (mFlags & PORTSF_SKYFLATONLY)));
+	}
+};
+
+//============================================================================
+//
+// Functions
+//
+//============================================================================
 
 void P_ClearPortals();
 void P_SpawnLinePortal(line_t* line);
 void P_FinalizePortals();
 bool P_ChangePortal(line_t *ln, int thisid, int destid);
 void P_CreateLinkedPortals();
-bool P_CollectConnectedGroups(int startgroup, const fixedvec3 &position, fixed_t upperz, fixed_t checkradius, FPortalGroupArray &out);
+bool P_CollectConnectedGroups(int startgroup, const DVector3 &position, double upperz, double checkradius, FPortalGroupArray &out);
 void P_CollectLinkedPortals();
 inline int P_NumPortalGroups()
 {
 	return Displacements.size;
 }
+unsigned P_GetSkyboxPortal(AActor *actor);
+unsigned P_GetPortal(int type, int plane, sector_t *orgsec, sector_t *destsec, const DVector2 &displacement);
+unsigned P_GetStackPortal(AActor *point, int plane);
 
 
 /* code ported from prototype */
-bool P_ClipLineToPortal(line_t* line, line_t* portal, fixed_t viewx, fixed_t viewy, bool partial = true, bool samebehind = true);
-void P_TranslatePortalXY(line_t* src, fixed_t& x, fixed_t& y);
-void P_TranslatePortalVXVY(line_t* src, fixed_t& vx, fixed_t& vy);
-void P_TranslatePortalAngle(line_t* src, angle_t& angle);
-void P_TranslatePortalZ(line_t* src, fixed_t& z);
-void P_NormalizeVXVY(fixed_t& vx, fixed_t& vy);
-fixed_t P_PointLineDistance(line_t* line, fixed_t x, fixed_t y);
-fixedvec2 P_GetOffsetPosition(fixed_t x, fixed_t y, fixed_t dx, fixed_t dy);
+bool P_ClipLineToPortal(line_t* line, line_t* portal, DVector2 view, bool partial = true, bool samebehind = true);
+void P_TranslatePortalXY(line_t* src, double& vx, double& vy);
+void P_TranslatePortalVXVY(line_t* src, double &velx, double &vely);
+void P_TranslatePortalAngle(line_t* src, DAngle& angle);
+void P_TranslatePortalZ(line_t* src, double& vz);
+DVector2 P_GetOffsetPosition(double x, double y, double dx, double dy);
+
 
 #endif

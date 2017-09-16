@@ -1,18 +1,22 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id: i_net.c,v 1.2 1997/12/29 19:50:54 pekangas Exp $
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //		Low-level networking code. Uses BSD sockets for UDP networking.
@@ -37,7 +41,6 @@
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
 #	include <winsock.h>
-#define USE_WINDOWS_DWORD
 #else
 #	include <sys/socket.h>
 #	include <netinet/in.h>
@@ -99,7 +102,7 @@ typedef int socklen_t;
 static u_short DOOMPORT = (IPPORT_USERRESERVED + 29);
 static SOCKET mysocket = INVALID_SOCKET;
 static sockaddr_in sendaddress[MAXNETNODES];
-static BYTE sendplayer[MAXNETNODES];
+static uint8_t sendplayer[MAXNETNODES];
 
 #ifdef __WIN32__
 const char *neterror (void);
@@ -125,24 +128,24 @@ enum
 
 struct PreGamePacket
 {
-	BYTE Fake;
-	BYTE Message;
-	BYTE NumNodes;
+	uint8_t Fake;
+	uint8_t Message;
+	uint8_t NumNodes;
 	union
 	{
-		BYTE ConsoleNum;
-		BYTE NumPresent;
+		uint8_t ConsoleNum;
+		uint8_t NumPresent;
 	};
 	struct
 	{
-		DWORD	address;
-		WORD	port;
-		BYTE	player;
-		BYTE	pad;
+		uint32_t address;
+		uint16_t port;
+		uint8_t	player;
+		uint8_t	pad;
 	} machines[MAXNETNODES];
 };
 
-BYTE TransmitBuffer[TRANSMIT_SIZE];
+uint8_t TransmitBuffer[TRANSMIT_SIZE];
 
 //
 // UDPsocket
@@ -174,7 +177,7 @@ void BindToLocalPort (SOCKET s, u_short port)
 						
 	v = bind (s, (sockaddr *)&address, sizeof(address));
 	if (v == SOCKET_ERROR)
-		I_FatalError ("There was a network error named '%s'.", neterror ());
+		I_FatalError ("BindToPort: %s", neterror ());
 }
 
 int FindNode (const sockaddr_in *address)
@@ -322,7 +325,7 @@ void PacketGet (void)
 		// Don't show the message for disconnect notifications.
 		if (c != 2 || TransmitBuffer[0] != PRE_FAKE || TransmitBuffer[1] != PRE_DISCONNECT)
 		{
-			DPrintf("Dropped packet: Unknown host (%s:%d)\n", inet_ntoa(fromaddress.sin_addr), fromaddress.sin_port);
+			DPrintf(DMSG_WARNING, "Dropped packet: Unknown host (%s:%d)\n", inet_ntoa(fromaddress.sin_addr), fromaddress.sin_port);
 		}
 		doomcom.remotenode = -1;
 		return;
@@ -452,7 +455,7 @@ void StartNetwork (bool autoPort)
 
 void SendAbort (void)
 {
-	BYTE dis[2] = { PRE_FAKE, PRE_DISCONNECT };
+	uint8_t dis[2] = { PRE_FAKE, PRE_DISCONNECT };
 	int i, j;
 
 	if (doomcom.numnodes > 1)
@@ -515,7 +518,7 @@ bool Host_CheckForConnects (void *userdata)
 			{
 				if (node == -1)
 				{
-					const BYTE *s_addr_bytes = (const BYTE *)&from->sin_addr;
+					const uint8_t *s_addr_bytes = (const uint8_t *)&from->sin_addr;
 					StartScreen->NetMessage ("Got extra connect from %d.%d.%d.%d:%d",
 						s_addr_bytes[0], s_addr_bytes[1], s_addr_bytes[2], s_addr_bytes[3],
 						from->sin_port);
@@ -691,7 +694,7 @@ void HostGame (int i)
 
 	atterm (SendAbort);
 
-	StartScreen->NetInit ("Awaiting friends...", numplayers);
+	StartScreen->NetInit ("Waiting for players", numplayers);
 
 	// Wait for numplayers-1 different connections
 	if (!StartScreen->NetLoop (Host_CheckForConnects, (void *)(intptr_t)numplayers))
@@ -701,7 +704,7 @@ void HostGame (int i)
 
 	// Now inform everyone of all machines involved in the game
 	memset (gotack, 0, sizeof(gotack));
-	StartScreen->NetMessage ("All little girls, go to the level instructed!");
+	StartScreen->NetMessage ("Sending all here.");
 	StartScreen->NetInit ("Done waiting", 1);
 
 	if (!StartScreen->NetLoop (Host_SendAllHere, (void *)gotack))
@@ -712,7 +715,7 @@ void HostGame (int i)
 	popterm ();
 
 	// Now go
-	StartScreen->NetMessage ("Okay, get ready to play together!");
+	StartScreen->NetMessage ("Go");
 	packet.Fake = PRE_FAKE;
 	packet.Message = PRE_GO;
 	for (node = 1; node < doomcom.numnodes; node++)
@@ -725,7 +728,7 @@ void HostGame (int i)
 		}
 	}
 
-	StartScreen->NetMessage ("%d/8 players are in the game now.", doomcom.numnodes);
+	StartScreen->NetMessage ("Total players: %d", doomcom.numnodes);
 
 	doomcom.id = DOOMCOM_ID;
 	doomcom.numplayers = doomcom.numnodes;
@@ -807,7 +810,7 @@ bool Guest_WaitForOthers (void *userdata)
 				doomcom.numnodes = packet.NumNodes + 2;
 				sendplayer[0] = packet.ConsoleNum;	// My player number
 				doomcom.consoleplayer = packet.ConsoleNum;
-				StartScreen->NetMessage ("You are player %d.", doomcom.consoleplayer);
+				StartScreen->NetMessage ("Console player number: %d", doomcom.consoleplayer);
 				for (node = 0; node < packet.NumNodes; node++)
 				{
 					sendaddress[node+2].sin_addr.s_addr = packet.machines[node].address;
@@ -821,14 +824,14 @@ bool Guest_WaitForOthers (void *userdata)
 				}
 			}
 
-			StartScreen->NetMessage ("All right, I'll tell the other players you're ready to play!.");
+			StartScreen->NetMessage ("Received All Here, sending ACK.");
 			packet.Fake = PRE_FAKE;
 			packet.Message = PRE_ALLHEREACK;
 			PreSend (&packet, 2, &sendaddress[1]);
 			break;
 
 		case PRE_GO:
-			StartScreen->NetMessage ("The host said they're ready to play!");
+			StartScreen->NetMessage ("Received \"Go.\"");
 			return true;
 
 		case PRE_DISCONNECT:
@@ -849,7 +852,7 @@ void JoinGame (int i)
 	if ((i == Args->NumArgs() - 1) ||
 		(Args->GetArg(i+1)[0] == '-') ||
 		(Args->GetArg(i+1)[0] == '+'))
-		I_FatalError ("Don't forget to get the host's local IP address! If playing with yourself, use 'localhost'.");
+		I_FatalError ("You need to specify the host machine's address");
 
 	StartNetwork (true);
 
@@ -876,7 +879,7 @@ void JoinGame (int i)
 
 	popterm ();
 
-	StartScreen->NetMessage ("%d players are ready to play!", doomcom.numnodes);
+	StartScreen->NetMessage ("Total players: %d", doomcom.numnodes);
 
 	doomcom.id = DOOMCOM_ID;
 	doomcom.numplayers = doomcom.numnodes;

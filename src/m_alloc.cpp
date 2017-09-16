@@ -38,6 +38,8 @@
 #elif defined(__APPLE__)
 #include <stdlib.h>
 #include <malloc/malloc.h>
+#elif defined(__OpenBSD__)
+#include <stdlib.h>
 #else
 #include <malloc.h>
 #endif
@@ -52,14 +54,14 @@
 #endif
 #if defined(__APPLE__)
 #define _msize(p)				malloc_size(p)
-#elif defined(__sun)
+#elif __solaris__ || defined(__OpenBSD__)
 #define _msize(p)				(*((size_t*)(p)-1))
 #elif !defined(_WIN32)
 #define _msize(p)				malloc_usable_size(p)	// from glibc/FreeBSD
 #endif
 
 #ifndef _DEBUG
-#if !defined(__sun)
+#if !__solaris__ && !defined(__OpenBSD__)
 void *M_Malloc(size_t size)
 {
 	void *block = malloc(size);
@@ -80,7 +82,7 @@ void *M_Realloc(void *memblock, size_t size)
 	void *block = realloc(memblock, size);
 	if (block == NULL)
 	{
-		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
+		I_FatalError("Could not realloc %zu bytes", size);
 	}
 	GC::AllocBytes += _msize(block);
 	return block;
@@ -113,7 +115,7 @@ void *M_Realloc(void *memblock, size_t size)
 	void *block = realloc(((size_t*) memblock)-1, size+sizeof(size_t));
 	if (block == NULL)
 	{
-		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
+		I_FatalError("Could not realloc %zu bytes", size);
 	}
 
 	size_t *sizeStore = (size_t *) block;
@@ -129,7 +131,7 @@ void *M_Realloc(void *memblock, size_t size)
 #include <crtdbg.h>
 #endif
 
-#if !defined(__sun)
+#if !__solaris__ && !defined(__OpenBSD__)
 void *M_Malloc_Dbg(size_t size, const char *file, int lineno)
 {
 	void *block = _malloc_dbg(size, _NORMAL_BLOCK, file, lineno);
@@ -150,7 +152,7 @@ void *M_Realloc_Dbg(void *memblock, size_t size, const char *file, int lineno)
 	void *block = _realloc_dbg(memblock, size, _NORMAL_BLOCK, file, lineno);
 	if (block == NULL)
 	{
-		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
+		I_FatalError("Could not realloc %zu bytes", size);
 	}
 	GC::AllocBytes += _msize(block);
 	return block;
@@ -184,7 +186,7 @@ void *M_Realloc_Dbg(void *memblock, size_t size, const char *file, int lineno)
 
 	if (block == NULL)
 	{
-		I_FatalError("Your computer is strange, as it couldn't store %zu bytes in memory.", size);
+		I_FatalError("Could not realloc %zu bytes", size);
 	}
 
 	size_t *sizeStore = (size_t *) block;
@@ -197,7 +199,7 @@ void *M_Realloc_Dbg(void *memblock, size_t size, const char *file, int lineno)
 #endif
 #endif
 
-#if !defined(__sun)
+#if !__solaris__ && !defined(__OpenBSD__)
 void M_Free (void *block)
 {
 	if (block != NULL)

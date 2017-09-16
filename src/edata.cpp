@@ -49,6 +49,7 @@
 #include "v_palette.h"
 #include "p_acs.h"
 #include "r_data/colormaps.h"
+#include "g_levellocals.h"
 
 
 struct FEDOptions : public FOptionalMapinfoData
@@ -92,10 +93,10 @@ struct EDMapthing
 	int recordnum;
 	int tid;
 	int type;
-	fixed_t height;
+	double height;
 	int args[5];
-	WORD skillfilter;
-	DWORD flags;
+	uint16_t skillfilter;
+	uint32_t flags;
 };
 
 struct EDLinedef
@@ -105,9 +106,9 @@ struct EDLinedef
 	int tag;
 	int id;
 	int args[5];
-	fixed_t alpha;
-	DWORD flags;
-	DWORD activation;
+	double alpha;
+	uint32_t flags;
+	uint32_t activation;
 };
 
 
@@ -116,34 +117,34 @@ struct EDSector
 {
 	int recordnum;
 
-	DWORD flags;
-	DWORD flagsRemove;
-	DWORD flagsAdd;
+	uint32_t flags;
+	uint32_t flagsRemove;
+	uint32_t flagsAdd;
 
 	int damageamount;
 	int damageinterval;
 	FNameNoInit damagetype;
-	BYTE leaky;
-	BYTE leakyadd;
-	BYTE leakyremove;
+	uint8_t leaky;
+	uint8_t leakyadd;
+	uint8_t leakyremove;
 	int floorterrain;
 	int ceilingterrain;
 
-	DWORD color;
+	uint32_t color;
 
-	DWORD damageflags;
-	DWORD damageflagsAdd;
-	DWORD damageflagsRemove;
+	uint32_t damageflags;
+	uint32_t damageflagsAdd;
+	uint32_t damageflagsRemove;
 
 	bool flagsSet;
 	bool damageflagsSet;
 	bool colorSet;
 
 	// colormaptop//bottom cannot be used because ZDoom has no corresponding properties.
-
-	FTransform planexform[2];
-	DWORD portalflags[2];
-	fixed_t overlayalpha[2];
+	double xoffs[2], yoffs[2];
+	DAngle angle[2];
+	uint32_t portalflags[2];
+	double Overlayalpha[2];
 };
 
 static FString EDMap;
@@ -158,7 +159,7 @@ static void parseLinedef(FScanner &sc)
 	bool argsset = false;
 
 	memset(&ld, 0, sizeof(ld));
-	ld.alpha = FRACUNIT;
+	ld.alpha = 1.;
 
 	sc.MustGetStringName("{");
 	while (!sc.CheckString("}"))
@@ -216,13 +217,13 @@ static void parseLinedef(FScanner &sc)
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			ld.alpha = FLOAT2FIXED(sc.Float);
+			ld.alpha = sc.Float;
 		}
 		else if (sc.Compare("extflags"))
 		{
 			// these are needed to build the proper activation mask out of the possible flags which do not match ZDoom 1:1.
-			DWORD actmethod = 0;
-			DWORD acttype = 0;
+			uint32_t actmethod = 0;
+			uint32_t acttype = 0;
 			do
 			{
 				sc.CheckString("=");
@@ -275,7 +276,7 @@ static void parseSector(FScanner &sc)
 	EDSector sec;
 
 	memset(&sec, 0, sizeof(sec));
-	sec.overlayalpha[sector_t::floor] = sec.overlayalpha[sector_t::ceiling] = FRACUNIT;
+	sec.Overlayalpha[sector_t::floor] = sec.Overlayalpha[sector_t::ceiling] = 1.;
 	sec.floorterrain = sec.ceilingterrain = -1;
 
 	sc.MustGetStringName("{");
@@ -290,7 +291,7 @@ static void parseSector(FScanner &sc)
 		}
 		else if (sc.Compare("flags"))
 		{
-			DWORD *flagvar = NULL;
+			uint32_t *flagvar = NULL;
 			if (sc.CheckString("."))
 			{
 				sc.MustGetString();
@@ -347,8 +348,8 @@ static void parseSector(FScanner &sc)
 		}
 		else if (sc.Compare("damageflags"))
 		{
-			DWORD *flagvar = NULL;
-			BYTE *leakvar = NULL;
+			uint32_t *flagvar = NULL;
+			uint8_t *leakvar = NULL;
 			if (sc.CheckString("."))
 			{
 				sc.MustGetString();
@@ -398,19 +399,19 @@ static void parseSector(FScanner &sc)
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			sec.planexform[sector_t::floor].angle = FLOAT2ANGLE(sc.Float);
+			sec.angle[sector_t::floor] = sc.Float;
 		}
 		else if (sc.Compare("flooroffsetx"))
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			sec.planexform[sector_t::floor].xoffs = FLOAT2FIXED(sc.Float);
+			sec.xoffs[sector_t::floor] = sc.Float;
 		}
 		else if (sc.Compare("flooroffsety"))
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			sec.planexform[sector_t::floor].yoffs = FLOAT2FIXED(sc.Float);
+			sec.yoffs[sector_t::floor] = sc.Float;
 		}
 		else if (sc.Compare("ceilingterrain"))
 		{
@@ -422,19 +423,19 @@ static void parseSector(FScanner &sc)
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			sec.planexform[sector_t::ceiling].angle = FLOAT2ANGLE(sc.Float);
+			sec.angle[sector_t::ceiling] = sc.Float;
 		}
 		else if (sc.Compare("ceilingoffsetx"))
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			sec.planexform[sector_t::ceiling].xoffs = FLOAT2FIXED(sc.Float);
+			sec.xoffs[sector_t::ceiling] = sc.Float;
 		}
 		else if (sc.Compare("ceilingoffsety"))
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();
-			sec.planexform[sector_t::ceiling].yoffs = FLOAT2FIXED(sc.Float);
+			sec.yoffs[sector_t::ceiling] = sc.Float;
 		}
 		else if (sc.Compare("colormaptop") || sc.Compare("colormapbottom"))
 		{
@@ -448,7 +449,7 @@ static void parseSector(FScanner &sc)
 			sc.MustGetString();
 			// Eternity is based on SMMU and uses colormaps differently than all other ports.
 			// The only solution here is to convert the colormap to an RGB value and set it as the sector's color.
-			DWORD cmap = R_ColormapNumForName(sc.String);
+			uint32_t cmap = R_ColormapNumForName(sc.String);
 			if (cmap != 0)
 			{
 				sec.color = R_BlendForColormap(cmap) & 0xff000000;
@@ -464,14 +465,14 @@ static void parseSector(FScanner &sc)
 				sc.MustGetNumber();
 				if (sc.CheckString("%")) sc.Float = sc.Number / 100.f;
 				else sc.Float = sc.Number / 255.f;
-				sec.overlayalpha[sector_t::floor] = FLOAT2FIXED(sc.Float);
+				sec.Overlayalpha[sector_t::floor] = sc.Float;
 			}
 			else if (sc.Compare("ceiling"))
 			{
 				sc.MustGetFloat();
 				if (sc.CheckString("%")) sc.Float = sc.Number / 100.f;
 				else sc.Float = sc.Number / 255.f;
-				sec.overlayalpha[sector_t::floor] = FLOAT2FIXED(sc.Float);
+				sec.Overlayalpha[sector_t::floor] = sc.Float;
 			}
 		}
 		else if (sc.Compare("portalflags"))
@@ -585,7 +586,7 @@ static void parseMapthing(FScanner &sc)
 		{
 			sc.CheckString("=");
 			sc.MustGetFloat();	// no idea if Eternity allows fractional numbers. Better be safe and do it anyway.
-			mt.height = FLOAT2FIXED(sc.Float);
+			mt.height = sc.Float;
 		}
 		else if (sc.Compare("options"))
 		{
@@ -682,7 +683,7 @@ void ProcessEDMapthing(FMapThing *mt, int recordnum)
 	mt->thingid = emt->tid;
 	mt->EdNum = emt->type;
 	mt->info = DoomEdMap.CheckKey(mt->EdNum);
-	mt->z = emt->height;
+	mt->pos.Z = emt->height;
 	memcpy(mt->args, emt->args, sizeof(mt->args));
 	mt->SkillFilter = emt->skillfilter;
 	mt->flags = emt->flags;
@@ -699,13 +700,13 @@ void ProcessEDLinedef(line_t *ld, int recordnum)
 		ld->special = 0;
 		return;
 	}
-	const DWORD fmask = ML_REPEAT_SPECIAL | ML_FIRSTSIDEONLY | ML_ADDTRANS | ML_BLOCKEVERYTHING | ML_ZONEBOUNDARY | ML_CLIP_MIDTEX;
+	const uint32_t fmask = ML_REPEAT_SPECIAL | ML_FIRSTSIDEONLY | ML_ADDTRANS | ML_BLOCKEVERYTHING | ML_ZONEBOUNDARY | ML_CLIP_MIDTEX;
 	ld->special = eld->special;
 	ld->activation = eld->activation;
 	ld->flags = (ld->flags&~fmask) | eld->flags;
-	ld->Alpha = eld->alpha;
+	ld->setAlpha(eld->alpha);
 	memcpy(ld->args, eld->args, sizeof(ld->args));
-	tagManager.AddLineID(int(ld - lines), eld->tag);
+	tagManager.AddLineID(ld->Index(), eld->tag);
 }
 
 void ProcessEDSector(sector_t *sec, int recordnum)
@@ -718,11 +719,11 @@ void ProcessEDSector(sector_t *sec, int recordnum)
 	}
 
 	// In ZDoom the regular and the damage flags are part of the same flag word so we need to do some masking.
-	const DWORD flagmask = SECF_SECRET | SECF_WASSECRET | SECF_FRICTION | SECF_PUSH | SECF_SILENT | SECF_SILENTMOVE;
+	const uint32_t flagmask = SECF_SECRET | SECF_WASSECRET | SECF_FRICTION | SECF_PUSH | SECF_SILENT | SECF_SILENTMOVE;
 	if (esec->flagsSet) sec->Flags = (sec->Flags & ~flagmask);
 	sec->Flags = (sec->Flags | esec->flags | esec->flagsAdd) & ~esec->flagsRemove;
 
-	BYTE leak = 0;
+	uint8_t leak = 0;
 	if (esec->damageflagsSet) sec->Flags = (sec->Flags & ~SECF_DAMAGEFLAGS);
 	else leak = sec->leakydamage >= 256 ? 2 : sec->leakydamage >= 5 ? 1 : 0;
 	sec->Flags = (sec->Flags | esec->damageflags | esec->damageflagsAdd) & ~esec->damageflagsRemove;
@@ -739,13 +740,13 @@ void ProcessEDSector(sector_t *sec, int recordnum)
 
 	if (esec->colorSet) sec->SetColor(RPART(esec->color), GPART(esec->color), BPART(esec->color), 0);
 
-	const DWORD pflagmask = PLANEF_DISABLED | PLANEF_NORENDER | PLANEF_NOPASS | PLANEF_BLOCKSOUND | PLANEF_ADDITIVE;
+	const uint32_t pflagmask = PLANEF_DISABLED | PLANEF_NORENDER | PLANEF_NOPASS | PLANEF_BLOCKSOUND | PLANEF_ADDITIVE;
 	for (int i = 0; i < 2; i++)
 	{
-		sec->planes[i].xform.xoffs = esec->planexform[i].xoffs;
-		sec->planes[i].xform.yoffs = esec->planexform[i].yoffs;
-		sec->planes[i].xform.angle = esec->planexform[i].angle;
-		sec->planes[i].alpha = esec->overlayalpha[i];
+		sec->SetXOffset(i, esec->xoffs[i]);
+		sec->SetYOffset(i, esec->yoffs[i]);
+		sec->SetAngle(i, esec->angle[i]);
+		sec->SetAlpha(i, esec->Overlayalpha[i]);
 		sec->planes[i].Flags = (sec->planes[i].Flags & ~pflagmask) | esec->portalflags[i];
 	}
 }
@@ -753,27 +754,26 @@ void ProcessEDSector(sector_t *sec, int recordnum)
 
 void ProcessEDSectors()
 {
-	int i;
-
 	InitED();
 	if (EDSectors.CountUsed() == 0) return;	// don't waste time if there's no records.
 
 	// collect all Extradata sector records up front so we do not need to search the complete line array for each sector separately.
+	auto numsectors = level.sectors.Size();
 	int *sectorrecord = new int[numsectors];
 	memset(sectorrecord, -1, numsectors * sizeof(int));
-	for (i = 0; i < numlines; i++)
+	for (auto &line : level.lines)
 	{
-		if (lines[i].special == Static_Init && lines[i].args[1] == Init_EDSector)
+		if (line.special == Static_Init && line.args[1] == Init_EDSector)
 		{
-			sectorrecord[lines[i].frontsector - sectors] = lines[i].args[0];
-			lines[i].special = 0;
+			sectorrecord[line.frontsector->Index()] = line.args[0];
+			line.special = 0;
 		}
 	}
-	for (i = 0; i < numsectors; i++)
+	for (unsigned i = 0; i < numsectors; i++)
 	{
 		if (sectorrecord[i] >= 0)
 		{
-			ProcessEDSector(&sectors[i], sectorrecord[i]);
+			ProcessEDSector(&level.sectors[i], sectorrecord[i]);
 		}
 	}
 	delete[] sectorrecord;

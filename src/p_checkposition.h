@@ -13,15 +13,13 @@ struct FCheckPosition
 {
 	// in
 	AActor			*thing;
-	fixed_t			x;
-	fixed_t			y;
-	fixed_t			z;
+	DVector3		pos;
 
 	// out
 	sector_t		*sector;
-	fixed_t			floorz;
-	fixed_t			ceilingz;
-	fixed_t			dropoffz;
+	double			floorz;
+	double			ceilingz;
+	double			dropoffz;
 	FTextureID		floorpic;
 	int				floorterrain;
 	sector_t		*floorsector;
@@ -35,8 +33,10 @@ struct FCheckPosition
 	AActor			*stepthing;
 	// [RH] These are used by PIT_CheckThing and P_XYMovement to apply
 	// ripping damage once per tic instead of once per move.
-	bool			DoRipping;
 	TMap<AActor*, bool> LastRipped;
+	bool			DoRipping;
+	bool			portalstep;
+	int				portalgroup;
 
 	int				PushTime;
 

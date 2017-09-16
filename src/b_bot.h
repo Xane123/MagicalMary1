@@ -8,10 +8,9 @@
 #define __B_BOT_H__
 
 #include "c_cvars.h"
-#include "tables.h"
 #include "info.h"
 #include "doomdef.h"
-#include "d_ticcmd.h"
+#include "d_protocol.h"
 #include "r_defs.h"
 #include "a_pickups.h"
 #include "stats.h"
@@ -31,18 +30,18 @@
 
 #define BOTFILENAME "bots.cfg"
 
-#define MAX_TRAVERSE_DIST 100000000 //10 meters, used within b_func.c
-#define AVOID_DIST   45000000 //Try avoid incoming missiles once they reached this close
-#define SAFE_SELF_MISDIST (140*FRACUNIT)    //Distance from self to target where it's safe to pull a rocket.
-#define FRIEND_DIST  15000000 //To friend.
-#define DARK_DIST  5000000 //Distance that bot can see enemies in the dark from.
+#define MAX_TRAVERSE_DIST (100000000/65536.) //10 meters, used within b_func.c
+#define AVOID_DIST   (45000000/65536.) //Try avoid incoming missiles once they reached this close
+#define SAFE_SELF_MISDIST (140.)    //Distance from self to target where it's safe to pull a rocket.
+#define FRIEND_DIST  (15000000/65536.) //To friend.
+#define DARK_DIST  (5000000/65536.) //Distance that bot can see enemies in the dark from.
 #define WHATS_DARK  50 //light value thats classed as dark.
-#define MAX_MONSTER_TARGET_DIST  50000000 //Too high can slow down the performance, see P_mobj.c
-#define ENEMY_SCAN_FOV (120*ANGLE_1)
+#define MAX_MONSTER_TARGET_DIST  (50000000/65536.) //Too high can slow down the performance, see P_mobj.c
+#define ENEMY_SCAN_FOV (120.)
 #define THINGTRYTICK 1000
-#define MAXMOVEHEIGHT (32*FRACUNIT) //MAXSTEPMOVE but with jumping counted in.
-#define GETINCOMBAT 35000000 //Max distance to item. if it's due to be icked up in a combat situation.
-#define SHOOTFOV	(60*ANGLE_1)
+#define MAXMOVEHEIGHT (32) //MAXSTEPMOVE but with jumping counted in.
+#define GETINCOMBAT (35000000/65536.) //Max distance to item. if it's due to be icked up in a combat situation.
+#define SHOOTFOV	(60.)
 #define AFTERTICS   (2*TICRATE) //Seconds that bot will be alert on an recent enemy. Ie not looking the other way
 #define MAXROAM		(4*TICRATE) //When this time is elapsed the bot will roam after something else.
 //monster mod
@@ -58,8 +57,6 @@ struct botskill_t
 	int reaction;   //How fast the bot will fire after seeing the player.
 	int isp;        //Instincts of Self Preservation. Personality
 };
-
-FArchive &operator<< (FArchive &arc, botskill_t &skill);
 
 enum
 {
@@ -94,7 +91,7 @@ public:
 	void Init ();
 	void End();
 	bool SpawnBot (const char *name, int color = NOCOLOR);
-	void TryAddBot (BYTE **stream, int player);
+	void TryAddBot (uint8_t **stream, int player);
 	void RemoveAllBots (bool fromlist);
 	bool LoadBots ();
 	void ForgetBots ();
@@ -103,30 +100,31 @@ public:
 	void StartTravel ();
 	void FinishTravel ();
 	bool IsLeader (player_t *player);
-	void SetBodyAt (fixed_t x, fixed_t y, fixed_t z, int hostnum);
-	fixed_t FakeFire (AActor *source, AActor *dest, ticcmd_t *cmd);
-	bool SafeCheckPosition (AActor *actor, fixed_t x, fixed_t y, FCheckPosition &tm);
+	void SetBodyAt (const DVector3 &pos, int hostnum);
+	double FakeFire (AActor *source, AActor *dest, ticcmd_t *cmd);
+	bool SafeCheckPosition (AActor *actor, double x, double y, FCheckPosition &tm);
+	void BotTick(AActor *mo);
 
 	//(b_move.cpp)
-	bool CleanAhead (AActor *thing, fixed_t x, fixed_t y, ticcmd_t *cmd);
+	bool CleanAhead (AActor *thing, double x, double y, ticcmd_t *cmd);
 	bool IsDangerous (sector_t *sec);
 
 	TArray<FString> getspawned; //Array of bots (their names) which should be spawned when starting a game.
-	BYTE freeze:1;			//Game in freeze mode.
-	BYTE changefreeze:1;	//Game wants to change freeze mode.
+	uint8_t freeze;			//Game in freeze mode.
+	uint8_t changefreeze;	//Game wants to change freeze mode.
 	int botnum;
 	botinfo_t *botinfo;
 	int spawn_tries;
 	int wanted_botnum;
-	TObjPtr<AActor> firstthing;
-	TObjPtr<AActor>	body1;
-	TObjPtr<AActor> body2;
+	TObjPtr<AActor*> firstthing;
+	TObjPtr<AActor*>	body1;
+	TObjPtr<AActor*> body2;
 
 	bool	 m_Thinking;
 
 private:
 	//(b_game.cpp)
-	bool DoAddBot (BYTE *info, botskill_t skill);
+	bool DoAddBot (uint8_t *info, botskill_t skill);
 
 protected:
 	bool	 ctf;
@@ -142,24 +140,24 @@ public:
 	DBot ();
 
 	void Clear ();
-	void Serialize (FArchive &arc);
+	void Serialize(FSerializer &arc);
 	void Tick ();
 
 	//(b_think.cpp)
 	void WhatToGet (AActor *item);
 
 	//(b_func.cpp)
-	bool Check_LOS (AActor *to, angle_t vangle);
+	bool Check_LOS (AActor *to, DAngle vangle);
 
 	player_t	*player;
-	angle_t		angle;		// The wanted angle that the bot try to get every tic.
+	DAngle		Angle;		// The wanted angle that the bot try to get every tic.
 							//  (used to get a smooth view movement)
-	TObjPtr<AActor>		dest;		// Move Destination.
-	TObjPtr<AActor>		prev;		// Previous move destination.
-	TObjPtr<AActor>		enemy;		// The dead meat.
-	TObjPtr<AActor>		missile;	// A threatening missile that needs to be avoided.
-	TObjPtr<AActor>		mate;		// Friend (used for grouping in teamplay or coop).
-	TObjPtr<AActor>		last_mate;	// If bots mate disappeared (not if died) that mate is
+	TObjPtr<AActor*>		dest;		// Move Destination.
+	TObjPtr<AActor*>		prev;		// Previous move destination.
+	TObjPtr<AActor*>		enemy;		// The dead meat.
+	TObjPtr<AActor*>		missile;	// A threatening missile that needs to be avoided.
+	TObjPtr<AActor*>		mate;		// Friend (used for grouping in teamplay or coop).
+	TObjPtr<AActor*>		last_mate;	// If bots mate disappeared (not if died) that mate is
 							// pointed to by this. Allows bot to roam to it if
 							// necessary.
 
@@ -183,8 +181,7 @@ public:
 	bool		allround;
 	bool		increase;
 
-	fixed_t		oldx;
-	fixed_t		oldy;
+	DVector2	old;
 
 private:
 	//(b_think.cpp)
@@ -197,7 +194,7 @@ private:
 	void Dofire (ticcmd_t *cmd);
 	AActor *Choose_Mate ();
 	AActor *Find_enemy ();
-	angle_t FireRox (AActor *enemy, ticcmd_t *cmd);
+	DAngle FireRox (AActor *enemy, ticcmd_t *cmd);
 
 	//(b_move.cpp)
 	void Roam (ticcmd_t *cmd);

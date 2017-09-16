@@ -30,28 +30,36 @@
 ** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **---------------------------------------------------------------------------
 **
-** This file is useless as the version is updated in version.h instead.
+** This file is just here so that when gitinfo.h changes, only one source
+** file needs to be recompiled.
 */
 
-//#include "gitinfo.h"
+#include "gitinfo.h"
 #include "version.h"
 
 const char *GetGitDescription()
 {
-	return 0;// GIT_DESCRIPTION;
+	return GIT_DESCRIPTION;
 }
 
 const char *GetGitHash()
 {
-	return 0;// GIT_HASH;
+	return GIT_HASH;
 }
 
 const char *GetGitTime()
 {
-	return 0;// GIT_TIME;
+	return GIT_TIME;
 }
 
 const char *GetVersionString()
 {
-	return VERSIONSTR;
+	if (GetGitDescription()[0] == '\0')
+	{
+		return VERSIONSTR;
+	}
+	else
+	{
+		return GIT_DESCRIPTION;
+	}
 }

@@ -1,42 +1,29 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2005-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
 /*
 ** gl_data.cpp
 ** Maintenance data for GL renderer (mostly to handle rendering hacks)
 **
-**---------------------------------------------------------------------------
-** Copyright 2005 Christoph Oelckers
-** All rights reserved.
-**
-** Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions
-** are met:
-**
-** 1. Redistributions of source code must retain the above copyright
-**    notice, this list of conditions and the following disclaimer.
-** 2. Redistributions in binary form must reproduce the above copyright
-**    notice, this list of conditions and the following disclaimer in the
-**    documentation and/or other materials provided with the distribution.
-** 3. The name of the author may not be used to endorse or promote products
-**    derived from this software without specific prior written permission.
-** 4. When not used as part of GZDoom or a GZDoom derivative, this code will be
-**    covered by the terms of the GNU Lesser General Public License as published
-**    by the Free Software Foundation; either version 2.1 of the License, or (at
-**    your option) any later version.
-** 5. Full disclosure of the entire project's source code, except for third
-**    party libraries is mandatory. (NOTE: This clause is non-negotiable!)
-**
-** THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-** IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-** OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-** IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-** INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-** NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-** THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**---------------------------------------------------------------------------
-**
-*/
+**/
 
 #include "gl/system/gl_system.h"
 
@@ -52,6 +39,9 @@
 #include "w_wad.h"
 #include "gi.h"
 #include "g_level.h"
+#include "doomstat.h"
+#include "d_player.h"
+#include "g_levellocals.h"
 
 #include "gl/system/gl_interface.h"
 #include "gl/renderer/gl_renderer.h"
@@ -66,16 +56,11 @@
 
 GLRenderSettings glset;
 long gl_frameMS;
-long gl_frameCount;
 
 EXTERN_CVAR(Int, gl_lightmode)
 EXTERN_CVAR(Bool, gl_brightfog)
+EXTERN_CVAR(Bool, gl_lightadditivesurfaces)
 
-CUSTOM_CVAR(Float, maxviewpitch, 90.f, CVAR_ARCHIVE|CVAR_SERVERINFO)
-{
-	if (self>90.f) self=90.f;
-	else if (self<-90.f) self=-90.f;
-}
 
 CUSTOM_CVAR(Bool, gl_notexturefill, false, 0)
 {
@@ -83,12 +68,8 @@ CUSTOM_CVAR(Bool, gl_notexturefill, false, 0)
 }
 
 
-CUSTOM_CVAR(Bool, gl_nocoloredspritelighting, false, 0)
-{
-	glset.nocoloredspritelighting = self;
-}
-
 void gl_CreateSections();
+void AddAutoBrightmaps();
 
 //-----------------------------------------------------------------------------
 //
@@ -98,29 +79,55 @@ void gl_CreateSections();
 
 void AdjustSpriteOffsets()
 {
-	static bool done=false;
-	char name[30];
+	int lump, lastlump = 0;
+	int sprid;
+	TMap<int, bool> donotprocess;
 
-	if (done) return;
-	done=true;
+	int numtex = Wads.GetNumLumps();
 
-	mysnprintf(name, countof(name), "sprofs/%s.sprofs", GameNames[gameinfo.gametype]);
-	int lump = Wads.CheckNumForFullName(name);
-	if (lump>=0)
+	for (int i = 0; i < numtex; i++)
+	{
+		if (Wads.GetLumpFile(i) > 1) break; // we are past the IWAD
+		if (Wads.GetLumpNamespace(i) == ns_sprites && Wads.GetLumpFile(i) == Wads.GetIwadNum())
+		{
+			char str[9];
+			Wads.GetLumpName(str, i);
+			str[8] = 0;
+			FTextureID texid = TexMan.CheckForTexture(str, FTexture::TEX_Sprite, 0);
+			if (texid.isValid() && Wads.GetLumpFile(TexMan[texid]->SourceLump) > Wads.GetIwadNum())
+			{
+				// This texture has been replaced by some PWAD.
+				memcpy(&sprid, str, 4);
+				donotprocess[sprid] = true;
+			}
+		}
+	}
+
+	while ((lump = Wads.FindLump("SPROFS", &lastlump, false)) != -1)
 	{
 		FScanner sc;
 		sc.OpenLumpNum(lump);
+		sc.SetCMode(true);
 		GLRenderer->FlushTextures();
 		int ofslumpno = Wads.GetLumpFile(lump);
 		while (sc.GetString())
 		{
 			int x,y;
+			bool iwadonly = false;
+			bool forced = false;
 			FTextureID texno = TexMan.CheckForTexture(sc.String, FTexture::TEX_Sprite);
-			sc.GetNumber();
+			sc.MustGetStringName(",");
+			sc.MustGetNumber();
 			x=sc.Number;
-			sc.GetNumber();
+			sc.MustGetStringName(",");
+			sc.MustGetNumber();
 			y=sc.Number;
-
+			if (sc.CheckString(","))
+			{
+				sc.MustGetString();
+				if (sc.Compare("iwad")) iwadonly = true;
+				if (sc.Compare("iwadforced")) forced = iwadonly = true;
+			}
 			if (texno.isValid())
 			{
 				FTexture * tex = TexMan[texno];
@@ -130,8 +137,13 @@ void AdjustSpriteOffsets()
 				if (lumpnum >= 0 && lumpnum < Wads.GetNumLumps())
 				{
 					int wadno = Wads.GetLumpFile(lumpnum);
-					if (wadno==FWadCollection::IWAD_FILENUM || wadno == ofslumpno)
+					if ((iwadonly && wadno==Wads.GetIwadNum()) || (!iwadonly && wadno == ofslumpno))
 					{
+						if (wadno == Wads.GetIwadNum() && !forced && iwadonly)
+						{
+							memcpy(&sprid, &tex->Name[0], 4);
+							if (donotprocess.CheckKey(sprid)) continue;	// do not alter sprites that only get partially replaced.
+						}
 						tex->LeftOffset=x;
 						tex->TopOffset=y;
 						tex->KillNative();
@@ -142,50 +154,6 @@ void AdjustSpriteOffsets()
 	}
 }
 
-
-
-// Normally this would be better placed in p_lnspec.cpp.
-// But I have accidentally overwritten that file several times
-// so I'd rather place it here.
-int LS_Sector_SetPlaneReflection (line_t *ln, AActor *it, bool backSide,
-	int arg0, int arg1, int arg2, int arg3, int arg4)
-{
-// Sector_SetPlaneReflection (tag, floor, ceiling)
-	int secnum;
-	FSectorTagIterator itr(arg0);
-
-	while ((secnum = itr.Next()) >= 0)
-	{
-		sector_t * s = &sectors[secnum];
-		if (s->floorplane.a==0 && s->floorplane.b==0) s->reflect[sector_t::floor] = arg1/255.f;
-		if (s->ceilingplane.a==0 && s->ceilingplane.b==0) sectors[secnum].reflect[sector_t::ceiling] = arg2/255.f;
-	}
-
-	return true;
-}
-
-int LS_SetGlobalFogParameter (line_t *ln, AActor *it, bool backSide,
-	int arg0, int arg1, int arg2, int arg3, int arg4)
-{
-// SetGlobalFogParameter (type, value)
-	switch(arg0)
-	{
-	case 0:
-		fogdensity = arg1>>1;
-		return true;
-
-	case 1:
-		outsidefogdensity = arg1>>1;
-		return true;
-
-	case 2:
-		skyfog = arg1;
-		return true;
-
-	default:
-		return false;
-	}
-}
 
 
 //==========================================================================
@@ -206,51 +174,31 @@ struct FGLROptions : public FOptionalMapinfoData
 	FGLROptions()
 	{
 		identifier = "gl_renderer";
-		fogdensity = 0;
-		outsidefogdensity = 0;
-		skyfog = 0;
 		brightfog = false;
 		lightmode = -1;
-		nocoloredspritelighting = -1;
 		notexturefill = -1;
 		skyrotatevector = FVector3(0,0,1);
 		skyrotatevector2 = FVector3(0,0,1);
-		pixelstretch = 1.2f;
+		lightadditivesurfaces = false;
 	}
 	virtual FOptionalMapinfoData *Clone() const
 	{
 		FGLROptions *newopt = new FGLROptions;
 		newopt->identifier = identifier;
-		newopt->fogdensity = fogdensity;
-		newopt->outsidefogdensity = outsidefogdensity;
-		newopt->skyfog = skyfog;
 		newopt->lightmode = lightmode;
-		newopt->nocoloredspritelighting = nocoloredspritelighting;
 		newopt->notexturefill = notexturefill;
 		newopt->skyrotatevector = skyrotatevector;
 		newopt->skyrotatevector2 = skyrotatevector2;
-		newopt->pixelstretch = pixelstretch;
+		newopt->lightadditivesurfaces = lightadditivesurfaces;
 		return newopt;
 	}
-	int			fogdensity;
-	int			outsidefogdensity;
-	int			skyfog;
 	int			lightmode;
 	int			brightfog;
-	SBYTE		nocoloredspritelighting;
-	SBYTE		notexturefill;
+	int8_t		lightadditivesurfaces;
+	int8_t		notexturefill;
 	FVector3	skyrotatevector;
 	FVector3	skyrotatevector2;
-	float		pixelstretch;
 };
-
-DEFINE_MAP_OPTION(fogdensity, false)
-{
-	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	opt->fogdensity = parse.sc.Number;
-}
 
 DEFINE_MAP_OPTION(brightfog, false)
 {
@@ -260,42 +208,12 @@ DEFINE_MAP_OPTION(brightfog, false)
 	opt->brightfog = parse.sc.Number;
 }
 
-DEFINE_MAP_OPTION(outsidefogdensity, false)
-{
-	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	opt->outsidefogdensity = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(skyfog, false)
-{
-	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	opt->skyfog = parse.sc.Number;
-}
-
 DEFINE_MAP_OPTION(lightmode, false)
 {
 	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
-	opt->lightmode = BYTE(parse.sc.Number);
-}
-
-DEFINE_MAP_OPTION(nocoloredspritelighting, false)
-{
-	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
-	if (parse.CheckAssign())
-	{
-		parse.sc.MustGetNumber();
-		opt->nocoloredspritelighting = !!parse.sc.Number;
-	}
-	else
-	{
-		opt->nocoloredspritelighting = true;
-	}
+	opt->lightmode = uint8_t(parse.sc.Number);
 }
 
 DEFINE_MAP_OPTION(notexturefill, false)
@@ -309,6 +227,20 @@ DEFINE_MAP_OPTION(notexturefill, false)
 	else
 	{
 		opt->notexturefill = true;
+	}
+}
+
+DEFINE_MAP_OPTION(lightadditivesurfaces, false)
+{
+	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
+	if (parse.CheckAssign())
+	{
+		parse.sc.MustGetNumber();
+		opt->lightadditivesurfaces = !!parse.sc.Number;
+	}
+	else
+	{
+		opt->lightadditivesurfaces = true;
 	}
 }
 
@@ -344,18 +276,21 @@ DEFINE_MAP_OPTION(skyrotate2, false)
 	opt->skyrotatevector2.MakeUnit();
 }
 
-DEFINE_MAP_OPTION(pixelratio, false)
-{
-	FGLROptions *opt = info->GetOptData<FGLROptions>("gl_renderer");
-
-	parse.ParseAssign();
-	parse.sc.MustGetFloat();
-	opt->pixelstretch = (float)parse.sc.Float;
-}
-
 bool IsLightmodeValid()
 {
 	return (glset.map_lightmode >= 0 && glset.map_lightmode <= 4) || glset.map_lightmode == 8;
+}
+
+static void ResetOpts()
+{
+	if (!IsLightmodeValid()) glset.lightmode = gl_lightmode;
+	else glset.lightmode = glset.map_lightmode;
+	if (glset.map_notexturefill == -1) glset.notexturefill = gl_notexturefill;
+	else glset.notexturefill = !!glset.map_notexturefill;
+	if (glset.map_brightfog == -1) glset.brightfog = gl_brightfog;
+	else glset.brightfog = !!glset.map_brightfog;
+	if (glset.map_lightadditivesurfaces == -1) glset.lightadditivesurfaces = gl_lightadditivesurfaces;
+	else glset.lightadditivesurfaces = !!glset.map_lightadditivesurfaces;
 }
 
 void InitGLRMapinfoData()
@@ -364,89 +299,33 @@ void InitGLRMapinfoData()
 
 	if (opt != NULL)
 	{
-		gl_SetFogParams(opt->fogdensity, level.info->outsidefog, opt->outsidefogdensity, opt->skyfog);
 		glset.map_lightmode = opt->lightmode;
+		glset.map_lightadditivesurfaces = opt->lightadditivesurfaces;
 		glset.map_brightfog = opt->brightfog;
-		glset.map_nocoloredspritelighting = opt->nocoloredspritelighting;
 		glset.map_notexturefill = opt->notexturefill;
 		glset.skyrotatevector = opt->skyrotatevector;
 		glset.skyrotatevector2 = opt->skyrotatevector2;
-		glset.pixelstretch = opt->pixelstretch;
 	}
 	else
 	{
-		gl_SetFogParams(0, level.info->outsidefog, 0, 0);
 		glset.map_lightmode = -1;
+		glset.map_lightadditivesurfaces = -1;
 		glset.map_brightfog = -1;
-		glset.map_nocoloredspritelighting = -1;
 		glset.map_notexturefill = -1;
-		glset.skyrotatevector = FVector3(0,0,1);
-		glset.skyrotatevector2 = FVector3(0,0,1);
-		glset.pixelstretch = 1.2f;
+		glset.skyrotatevector = FVector3(0, 0, 1);
+		glset.skyrotatevector2 = FVector3(0, 0, 1);
 	}
-
-	if (!IsLightmodeValid()) glset.lightmode = gl_lightmode;
-	else glset.lightmode = glset.map_lightmode;
-	if (glset.map_nocoloredspritelighting == -1) glset.nocoloredspritelighting = gl_nocoloredspritelighting;
-	else glset.nocoloredspritelighting = !!glset.map_nocoloredspritelighting;
-	if (glset.map_notexturefill == -1) glset.notexturefill = gl_notexturefill;
-	else glset.notexturefill = !!glset.map_notexturefill;
-	if (glset.map_brightfog == -1) glset.brightfog = gl_brightfog;
-	else glset.brightfog = !!glset.map_brightfog;
+	ResetOpts();
 }
-
 CCMD(gl_resetmap)
 {
-	if (!IsLightmodeValid()) glset.lightmode = gl_lightmode;
-	else glset.lightmode = glset.map_lightmode;
-	if (glset.map_nocoloredspritelighting == -1) glset.nocoloredspritelighting = gl_nocoloredspritelighting;
-	else glset.nocoloredspritelighting = !!glset.map_nocoloredspritelighting;
-	if (glset.map_notexturefill == -1) glset.notexturefill = gl_notexturefill;
-	else glset.notexturefill = !!glset.map_notexturefill;
-	if (glset.map_brightfog == -1) glset.brightfog = gl_brightfog;
-	else glset.brightfog = !!glset.map_brightfog;
-}
-
-
-//===========================================================================
-//
-//  Gets the texture index for a sprite frame
-//
-//===========================================================================
-
-FTextureID gl_GetSpriteFrame(unsigned sprite, int frame, int rot, angle_t ang, bool *mirror)
-{
-	spritedef_t *sprdef = &sprites[sprite];
-	if (frame >= sprdef->numframes)
-	{
-		// If there are no frames at all for this sprite, don't draw it.
-		return FNullTextureID();
-	}
-	else
-	{
-		//picnum = SpriteFrames[sprdef->spriteframes + thing->frame].Texture[0];
-		// choose a different rotation based on player view
-		spriteframe_t *sprframe = &SpriteFrames[sprdef->spriteframes + frame];
-		if (rot==-1)
-		{
-			if (sprframe->Texture[0] == sprframe->Texture[1])
-			{
-				rot = (ang + (angle_t)(ANGLE_45/2)*9) >> 28;
-			}
-			else
-			{
-				rot = (ang + (angle_t)(ANGLE_45/2)*9-(angle_t)(ANGLE_180/16)) >> 28;
-			}
-		}
-		if (mirror) *mirror = !!(sprframe->Flip&(1<<rot));
-		return sprframe->Texture[rot];
-	}
+	ResetOpts();
 }
 
 
 //==========================================================================
 //
-// Recalculate all heights affectting this vertex.
+// Recalculate all heights affecting this vertex.
 //
 //==========================================================================
 void gl_RecalcVertexHeights(vertex_t * v)
@@ -459,8 +338,8 @@ void gl_RecalcVertexHeights(vertex_t * v)
 	{
 		for(j=0;j<2;j++)
 		{
-			if (j==0) height=FIXED2FLOAT(v->sectors[i]->ceilingplane.ZatPoint(v));
-			else height=FIXED2FLOAT(v->sectors[i]->floorplane.ZatPoint(v));
+			if (j==0) height=v->sectors[i]->ceilingplane.ZatPoint(v);
+			else height=v->sectors[i]->floorplane.ZatPoint(v);
 
 			for(k=0;k<v->numheights;k++)
 			{
@@ -486,6 +365,7 @@ void gl_RecalcVertexHeights(vertex_t * v)
 void gl_InitData()
 {
 	AdjustSpriteOffsets();
+	AddAutoBrightmaps();
 }
 
 //==========================================================================
@@ -496,30 +376,27 @@ void gl_InitData()
 
 CCMD(dumpgeometry)
 {
-	for(int i=0;i<numsectors;i++)
+	for(auto &sector : level.sectors)
 	{
-		sector_t * sector = &sectors[i];
-
-		Printf(PRINT_LOG, "Sector %d\n",i);
-		for(int j=0;j<sector->subsectorcount;j++)
+		Printf(PRINT_LOG, "Sector %d\n", sector.sectornum);
+		for(int j=0;j<sector.subsectorcount;j++)
 		{
-			subsector_t * sub = sector->subsectors[j];
+			subsector_t * sub = sector.subsectors[j];
 
-			Printf(PRINT_LOG, "    Subsector %d - real sector = %d - %s\n", int(sub-subsectors), sub->sector->sectornum, sub->hacked&1? "hacked":"");
-			for(DWORD k=0;k<sub->numlines;k++)
+			Printf(PRINT_LOG, "    Subsector %d - real sector = %d - %s\n", int(sub->Index()), sub->sector->sectornum, sub->hacked&1? "hacked":"");
+			for(uint32_t k=0;k<sub->numlines;k++)
 			{
 				seg_t * seg = sub->firstline + k;
 				if (seg->linedef)
 				{
 				Printf(PRINT_LOG, "      (%4.4f, %4.4f), (%4.4f, %4.4f) - seg %d, linedef %d, side %d", 
-					FIXED2FLOAT(seg->v1->x), FIXED2FLOAT(seg->v1->y), FIXED2FLOAT(seg->v2->x), FIXED2FLOAT(seg->v2->y),
-					int(seg-segs), int(seg->linedef-lines), seg->sidedef != seg->linedef->sidedef[0]);
+					seg->v1->fX(), seg->v1->fY(), seg->v2->fX(), seg->v2->fY(),
+					seg->Index(), seg->linedef->Index(), seg->sidedef != seg->linedef->sidedef[0]);
 				}
 				else
 				{
 					Printf(PRINT_LOG, "      (%4.4f, %4.4f), (%4.4f, %4.4f) - seg %d, miniseg", 
-						FIXED2FLOAT(seg->v1->x), FIXED2FLOAT(seg->v1->y), FIXED2FLOAT(seg->v2->x), FIXED2FLOAT(seg->v2->y),
-						int(seg-segs));
+						seg->v1->fX(), seg->v1->fY(), seg->v2->fX(), seg->v2->fY(), seg->Index());
 				}
 				if (seg->PartnerSeg) 
 				{
@@ -527,7 +404,7 @@ CCMD(dumpgeometry)
 					Printf(PRINT_LOG, ", back sector = %d, real back sector = %d", sub2->render_sector->sectornum, seg->PartnerSeg->frontsector->sectornum);
 				}
 				else if (seg->backsector)
-				{
+			{
 					Printf(PRINT_LOG, ", back sector = %d (no partnerseg)", seg->backsector->sectornum);
 				}
 

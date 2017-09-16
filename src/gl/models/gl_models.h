@@ -1,6 +1,29 @@
+// 
+//---------------------------------------------------------------------------
+//
+// Copyright(C) 2005-2016 Christoph Oelckers
+// All rights reserved.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//--------------------------------------------------------------------------
+//
+
 #ifndef __GL_MODELS_H_
 #define __GL_MODELS_H_
 
+#include "tarray.h"
 #include "gl/utility/gl_geometric.h"
 #include "gl/data/gl_vertexbuffer.h"
 #include "p_pspr.h"
@@ -15,9 +38,12 @@ enum { VX, VZ, VY };
 #define DMD_MAGIC			0x4D444D44
 #define MD3_MAGIC			0x33504449
 #define NUMVERTEXNORMALS	162
+#define MD3_MAX_SURFACES	32
 
-FTexture * LoadSkin(const char * path, const char * fn);
+FTextureID LoadSkin(const char * path, const char * fn);
 
+// [JM] Necessary forward declaration
+typedef struct FSpriteModelFrame FSpriteModelFrame;
 
 class FModel
 {
@@ -33,12 +59,17 @@ public:
 	virtual int FindFrame(const char * name) = 0;
 	virtual void RenderFrame(FTexture * skin, int frame, int frame2, double inter, int translation=0) = 0;
 	virtual void BuildVertexBuffer() = 0;
+	virtual void AddSkins(uint8_t *hitlist) = 0;
 	void DestroyVertexBuffer()
 	{
 		delete mVBuf;
 		mVBuf = NULL;
 	}
 	virtual float getAspectFactor() { return 1.f; }
+
+	const FSpriteModelFrame *curSpriteMDLFrame;
+	int curMDLIndex;
+	void PushSpriteMDLFrame(const FSpriteModelFrame *smf, int index) { curSpriteMDLFrame = smf; curMDLIndex = index; };
 
 	FModelVertexBuffer *mVBuf;
 	FString mFileName;
@@ -124,7 +155,7 @@ protected:
 	int				mLumpNum;
 	DMDHeader	    header;
 	DMDInfo			info;
-	FTexture **		skins;
+	FTextureID *	skins;
 	ModelFrame  *	frames;
 	bool			allowTexComp;  // Allow texture compression with this.
 
@@ -154,6 +185,8 @@ public:
 	virtual int FindFrame(const char * name);
 	virtual void RenderFrame(FTexture * skin, int frame, int frame2, double inter, int translation=0);
 	virtual void LoadGeometry();
+	virtual void AddSkins(uint8_t *hitlist);
+
 	void UnloadGeometry();
 	void BuildVertexBuffer();
 
@@ -201,7 +234,7 @@ class FMD3Model : public FModel
 		int numTriangles;
 		int numSkins;
 
-		FTexture ** skins;
+		FTextureID * skins;
 		MD3Triangle * tris;
 		MD3TexCoord * texcoords;
 		MD3Vertex * vertices;
@@ -259,6 +292,7 @@ public:
 	virtual void RenderFrame(FTexture * skin, int frame, int frame2, double inter, int translation=0);
 	void LoadGeometry();
 	void BuildVertexBuffer();
+	virtual void AddSkins(uint8_t *hitlist);
 };
 
 struct FVoxelVertexHash
@@ -295,13 +329,13 @@ class FVoxelModel : public FModel
 protected:
 	FVoxel *mVoxel;
 	bool mOwningVoxel;	// if created through MODELDEF deleting this object must also delete the voxel object
-	FTexture *mPalette;
+	FTextureID mPalette;
 	unsigned int mNumIndices;
 	TArray<FModelVertex> mVertices;
 	TArray<unsigned int> mIndices;
 	
 	void MakeSlabPolys(int x, int y, kvxslab_t *voxptr, FVoxelMap &check);
-	void AddFace(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4, BYTE color, FVoxelMap &check);
+	void AddFace(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, int x4, int y4, int z4, uint8_t color, FVoxelMap &check);
 	unsigned int AddVertex(FModelVertex &vert, FVoxelMap &check);
 
 public:
@@ -311,7 +345,8 @@ public:
 	void Initialize();
 	virtual int FindFrame(const char * name);
 	virtual void RenderFrame(FTexture * skin, int frame, int frame2, double inter, int translation=0);
-	FTexture *GetPaletteTexture() const { return mPalette; }
+	virtual void AddSkins(uint8_t *hitlist);
+	FTextureID GetPaletteTexture() const { return mPalette; }
 	void BuildVertexBuffer();
 	float getAspectFactor();
 };
@@ -332,14 +367,17 @@ enum
 	MDL_ROTATING					= 4,
 	MDL_INTERPOLATEDOUBLEDFRAMES	= 8,
 	MDL_NOINTERPOLATION				= 16,
-	MDL_INHERITACTORPITCH			= 32,
-	MDL_INHERITACTORROLL			= 64, // useless for now
+	MDL_USEACTORPITCH				= 32,
+	MDL_USEACTORROLL				= 64,
+	MDL_BADROTATION					= 128,
+	MDL_DONTCULLBACKFACES			= 256,
 };
 
 struct FSpriteModelFrame
 {
-	FModel * models[MAX_MODELS_PER_FRAME];
-	FTexture * skins[MAX_MODELS_PER_FRAME];
+	int modelIDs[MAX_MODELS_PER_FRAME];
+	FTextureID skinIDs[MAX_MODELS_PER_FRAME];
+	FTextureID surfaceskinIDs[MAX_MODELS_PER_FRAME][MD3_MAX_SURFACES];
 	int modelframes[MAX_MODELS_PER_FRAME];
 	float xscale, yscale, zscale;
 	// [BB] Added zoffset, rotation parameters and flags.
@@ -354,7 +392,7 @@ struct FSpriteModelFrame
 	short frame;
 	FState * state;	// for later!
 	int hashnext;
-	angle_t angleoffset;
+	float angleoffset;
 	// added pithoffset, rolloffset.
 	float pitchoffset, rolloffset; // I don't want to bother with type transformations, so I made this variables float.
 };
@@ -365,7 +403,24 @@ FSpriteModelFrame * gl_FindModelFrame(const PClass * ti, int sprite, int frame, 
 
 void gl_RenderModel(GLSprite * spr);
 // [BB] HUD weapon model rendering functions.
-void gl_RenderHUDModel(pspdef_t *psp, fixed_t ofsx, fixed_t ofsy);
+void gl_RenderHUDModel(DPSprite *psp, float ofsx, float ofsy);
 bool gl_IsHUDModelForPlayerAvailable (player_t * player);
+
+
+class DeletingModelArray : public TArray<FModel *>
+{
+public:
+
+	~DeletingModelArray()
+	{
+		for (unsigned i = 0; i<Size(); i++)
+		{
+			delete (*this)[i];
+		}
+
+	}
+};
+
+extern DeletingModelArray Models;
 
 #endif

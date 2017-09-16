@@ -5,7 +5,7 @@
 #include "tarray.h"
 
 class FNativePalette;
-class FArchive;
+class FSerializer;
 
 enum
 {
@@ -19,6 +19,7 @@ enum
 	TRANSLATION_Decorate,
 	TRANSLATION_Blood,
 	TRANSLATION_RainPillar,
+	TRANSLATION_Custom,
 
 	NUM_TRANSLATION_TABLES
 };
@@ -36,14 +37,17 @@ struct FRemapTable
 	void UpdateNative();
 	FNativePalette *GetNative();
 	bool IsIdentity() const;
-	void Serialize(FArchive &ar);
+	void Serialize(FSerializer &arc);
+	static void StaticSerializeTranslations(FSerializer &arc);
 	void AddIndexRange(int start, int end, int pal1, int pal2);
 	void AddColorRange(int start, int end, int r1,int g1, int b1, int r2, int g2, int b2);
 	void AddDesaturation(int start, int end, double r1, double g1, double b1, double r2, double g2, double b2);
+	void AddColourisation(int start, int end, int r, int g, int b);
+	void AddTint(int start, int end, int r, int g, int b, int amount);
 	void AddToTranslation(const char * range);
-	int StoreTranslation();
+	int StoreTranslation(int slot);
 
-	BYTE *Remap;				// For the software renderer
+	uint8_t *Remap;				// For the software renderer
 	PalEntry *Palette;			// The ideal palette this maps to
 	FNativePalette *Native;		// The Palette stored in a HW texture
 	int NumEntries;				// # of elements in this table (usually 256)
@@ -77,15 +81,15 @@ extern TAutoGrowArray<FRemapTablePtr, FRemapTable *> translationtables[NUM_TRANS
 #define TRANSLATION_MASK ((1<<TRANSLATION_SHIFT)-1)
 #define TRANSLATIONTYPE_MASK (255<<TRANSLATION_SHIFT)
 
-inline DWORD TRANSLATION(BYTE a, DWORD b)
+inline uint32_t TRANSLATION(uint8_t a, uint32_t b)
 {
 	return (a<<TRANSLATION_SHIFT) | b;
 }
-inline int GetTranslationType(DWORD trans)
+inline int GetTranslationType(uint32_t trans)
 {
 	return (trans&TRANSLATIONTYPE_MASK) >> TRANSLATION_SHIFT;
 }
-inline int GetTranslationIndex(DWORD trans)
+inline int GetTranslationIndex(uint32_t trans)
 {
 	return (trans&TRANSLATION_MASK);
 }
@@ -102,11 +106,12 @@ void R_DeinitTranslationTables();
 void R_BuildPlayerTranslation (int player);		// [RH] Actually create a player's translation table.
 void R_GetPlayerTranslation (int color, const struct FPlayerColorSet *colorset, class FPlayerSkin *skin, struct FRemapTable *table);
 
-extern const BYTE IcePalette[16][3];
-
-extern TArray<PalEntry> BloodTranslationColors;
+extern const uint8_t IcePalette[16][3];
 
 int CreateBloodTranslation(PalEntry color);
+
+int R_FindCustomTranslation(FName name);
+void R_ParseTrnslate();
 
 
 

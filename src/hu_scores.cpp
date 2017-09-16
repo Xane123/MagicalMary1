@@ -50,6 +50,8 @@
 #include "gstrings.h"
 #include "d_net.h"
 #include "c_dispatch.h"
+#include "g_levellocals.h"
+#include "sbar.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -84,7 +86,7 @@ CVAR (Int,	sb_deathmatch_otherplayercolor,		CR_GREY,	CVAR_ARCHIVE)
 CVAR (Bool,	sb_teamdeathmatch_enable,			true,		CVAR_ARCHIVE)
 CVAR (Int,	sb_teamdeathmatch_headingcolor,		CR_RED,		CVAR_ARCHIVE)
 
-int STACK_ARGS comparepoints (const void *arg1, const void *arg2)
+int comparepoints (const void *arg1, const void *arg2)
 {
 	// Compare first be frags/kills, then by name.
 	player_t *p1 = *(player_t **)arg1;
@@ -99,7 +101,7 @@ int STACK_ARGS comparepoints (const void *arg1, const void *arg2)
 	return diff;
 }
 
-int STACK_ARGS compareteams (const void *arg1, const void *arg2)
+int compareteams (const void *arg1, const void *arg2)
 {
 	// Compare first by teams, then by frags, then by name.
 	player_t *p1 = *(player_t **)arg1;
@@ -117,6 +119,16 @@ int STACK_ARGS compareteams (const void *arg1, const void *arg2)
 	}
 	return diff;
 }
+
+/*
+void HU_SortPlayers
+{
+	if (teamplay)
+	qsort(sortedplayers, MAXPLAYERS, sizeof(player_t *), compareteams);
+	else
+		qsort(sortedplayers, MAXPLAYERS, sizeof(player_t *), comparepoints);
+}
+*/
 
 bool SB_ForceActive = false;
 
@@ -251,7 +263,7 @@ static void HU_DoDrawScores (player_t *player, player_t *sortedplayers[MAXPLAYER
 	lineheight = MAX(height, maxiconheight * CleanYfac);
 	ypadding = (lineheight - height + 1) / 2;
 
-	bottom = ST_Y;
+	bottom = StatusBar->GetTopOfStatusbar();
 	y = MAX(48*CleanYfac, (bottom - MAXPLAYERS * (height + CleanYfac + 1)) / 2);
 
 	HU_DrawTimeRemaining (bottom - height);

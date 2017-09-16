@@ -1,3 +1,4 @@
+#pragma once
 /*
 ** tarray.h
 ** Templated, automatically resizing array
@@ -32,24 +33,20 @@
 **
 */
 
-#ifndef __TARRAY_H__
-#define __TARRAY_H__
 
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include <new>
+#include <utility>
 
 #if !defined(_WIN32)
 #include <inttypes.h>		// for intptr_t
-#elif !defined(_MSC_VER)
+#else
 #include <stdint.h>			// for mingw
 #endif
 
 #include "m_alloc.h"
-
-class FArchive;
-
 
 template<typename T> class TIterator
 {
@@ -73,8 +70,8 @@ protected:
 struct FArray
 {
 	void *Array;
-	unsigned int Most;
 	unsigned int Count;
+	unsigned int Most;
 };
 
 // T is the type stored in the array.
@@ -82,8 +79,6 @@ struct FArray
 template <class T, class TT=T>
 class TArray
 {
-	template<class U, class UU> friend FArchive &operator<< (FArchive &arc, TArray<U,UU> &self);
-
 public:
 
     typedef TIterator<T>                       iterator;
@@ -93,17 +88,23 @@ public:
 	{
 		return &Array[0];
 	}
+	const_iterator begin() const
+	{
+		return &Array[0];
+	}
+	const_iterator cbegin() const
+	{
+		return &Array[0];
+	}
 
 	iterator end()
 	{
 		return &Array[Count];
 	}
-	
-	const_iterator cbegin() const
+	const_iterator end() const
 	{
-		return &Array[0];
+		return &Array[Count];
 	}
-	
 	const_iterator cend() const
 	{
 		return &Array[Count];
@@ -137,11 +138,17 @@ public:
 		Count = 0;
 		Array = (T *)M_Malloc (sizeof(T)*max);
 	}
-	TArray (const TArray<T> &other)
+	TArray (const TArray<T,TT> &other)
 	{
 		DoCopy (other);
 	}
-	TArray<T> &operator= (const TArray<T> &other)
+	TArray (TArray<T,TT> &&other)
+	{
+		Array = other.Array; other.Array = NULL;
+		Most = other.Most; other.Most = 0;
+		Count = other.Count; other.Count = 0;
+	}
+	TArray<T,TT> &operator= (const TArray<T,TT> &other)
 	{
 		if (&other != this)
 		{
@@ -155,6 +162,21 @@ public:
 			}
 			DoCopy (other);
 		}
+		return *this;
+	}
+	TArray<T,TT> &operator= (TArray<T,TT> &&other)
+	{
+		if (Array)
+		{
+			if (Count > 0)
+			{
+				DoDelete (0, Count-1);
+			}
+			M_Free (Array);
+		}
+		Array = other.Array; other.Array = NULL;
+		Most = other.Most; other.Most = 0;
+		Count = other.Count; other.Count = 0;
 		return *this;
 	}
 	~TArray ()
@@ -220,6 +242,15 @@ public:
 		::new((void*)&Array[Count]) T(item);
 		return Count++;
 	}
+	void Append(const TArray<T> &item)
+	{
+		unsigned start = Reserve(item.Size());
+		for (unsigned i = 0; i < item.Size(); i++)
+		{
+			Array[start + i] = item[i];
+		}
+	}
+
 	bool Pop ()
 	{
 		if (Count > 0)
@@ -344,6 +375,14 @@ public:
 		}
 		Count = amount;
 	}
+	void Alloc(unsigned int amount)
+	{
+		// first destroys all content and then rebuilds the array.
+		if (Count > 0) DoDelete(0, Count - 1);
+		Count = 0;
+		Resize(amount);
+		ShrinkToFit();
+	}
 	// Reserves amount entries at the end of the array, but does nothing
 	// with them.
 	unsigned int Reserve (unsigned int amount)
@@ -373,10 +412,15 @@ public:
 			Count = 0;
 		}
 	}
+	void Reset()
+	{
+		Clear();
+		ShrinkToFit();
+	}
 private:
 	T *Array;
-	unsigned int Most;
 	unsigned int Count;
+	unsigned int Most;
 
 	void DoCopy (const TArray<T> &other)
 	{
@@ -417,6 +461,14 @@ template<class T, class TT=T>
 class TDeletingArray : public TArray<T, TT>
 {
 public:
+	TDeletingArray() : TArray<T,TT>() {}
+	TDeletingArray(TDeletingArray<T,TT> &&other) : TArray<T,TT>(std::move(other)) {}
+	TDeletingArray<T,TT> &operator=(TDeletingArray<T,TT> &&other)
+	{
+		TArray<T,TT>::operator=(std::move(other));
+		return *this;
+	}
+
 	~TDeletingArray<T, TT> ()
 	{
 		for (unsigned int i = 0; i < TArray<T,TT>::Size(); ++i)
@@ -434,6 +486,62 @@ public:
 		}
 		this->Clear();
 	}
+};
+
+// This is not a real dynamic array but just a wrapper around a pointer reference.
+// Used for wrapping some memory allocated elsewhere into a VM compatible data structure.
+
+template <class T>
+class TStaticPointedArray
+{
+public:
+
+	typedef TIterator<T>                       iterator;
+	typedef TIterator<const T>                 const_iterator;
+
+	iterator begin()
+	{
+		return &Array[0];
+	}
+	const_iterator begin() const
+	{
+		return &Array[0];
+	}
+	const_iterator cbegin() const
+	{
+		return &Array[0];
+	}
+
+	iterator end()
+	{
+		return &Array[Count];
+	}
+	const_iterator end() const
+	{
+		return &Array[Count];
+	}
+	const_iterator cend() const
+	{
+		return &Array[Count];
+	}
+
+	void Init(T *ptr, unsigned cnt)
+	{
+		Array = ptr;
+		Count = cnt;
+	}
+	// Return a reference to an element
+	T &operator[] (size_t index) const
+	{
+		return Array[index];
+	}
+	unsigned int Size() const
+	{
+		return Count;
+	}
+	// Some code needs to access these directly so they cannot be private.
+	T *Array;
+	unsigned int Count;
 };
 
 // TAutoGrowArray -----------------------------------------------------------
@@ -1088,4 +1196,3 @@ protected:
 	hash_t Position;
 };
 
-#endif //__TARRAY_H__

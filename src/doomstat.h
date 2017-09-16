@@ -1,18 +1,23 @@
-// Emacs style mode select	 -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright 1993-1996 id Software
+// Copyright 1999-2016 Randy Heit
+// Copyright 2002-2016 Christoph Oelckers
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+//-----------------------------------------------------------------------------
 //
 // DESCRIPTION:
 //	 All the global variables that store the internal state.
@@ -71,6 +76,9 @@ extern	bool			netgame;
 // Bot game? Like netgame, but doesn't involve network communication.
 extern	bool			multiplayer;
 
+// [SP] Map dm/coop implementation - invokes fake multiplayer without bots
+extern	bool			multiplayernext;
+
 // Flag: true only if started as net deathmatch.
 EXTERN_CVAR (Int, deathmatch)
 
@@ -98,7 +106,7 @@ EXTERN_CVAR (Float, snd_musicvolume)	// maximum volume for music
 // Status flags for refresh.
 //
 
-enum EMenuState
+enum EMenuState : int
 {
 	MENU_Off,			// Menu is closed
 	MENU_On,			// Menu is opened
@@ -119,9 +127,8 @@ extern	bool	 		noblit;
 
 extern	int 			viewwindowx;
 extern	int 			viewwindowy;
-extern	"C" int 		viewheight;
-extern	"C" int 		viewwidth;
-extern	"C"	int			halfviewwidth;		// [RH] Half view width, for plane drawing
+extern	int 			viewheight;
+extern	int		 		viewwidth;
 
 
 
@@ -205,14 +212,13 @@ extern	int 			bodyqueslot;
 
 
 // ---- [RH] ----
-EXTERN_CVAR (Bool, developer)
+EXTERN_CVAR (Int, developer)
 
 extern bool ToggleFullscreen;
 
 extern int Net_Arbitrator;
 
 EXTERN_CVAR (Bool, var_friction)
-EXTERN_CVAR (Bool, var_pushers)
 
 
 // [RH] Miscellaneous info for DeHackEd support
@@ -233,8 +239,8 @@ struct DehInfo
 	int KFAArmor;
 	int KFAAC;
 	char PlayerSprite[5];
-	BYTE ExplosionStyle;
-	fixed_t ExplosionAlpha;
+	uint8_t ExplosionStyle;
+	double ExplosionAlpha;
 	int NoAutofreeze;
 	int BFGCells;
 };

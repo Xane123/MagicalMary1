@@ -1,17 +1,23 @@
 in vec4 pixelpos;
-in vec2 glowdist;
+in vec3 glowdist;
 
+in vec4 vWorldNormal;
+in vec4 vEyeNormal;
 in vec4 vTexCoord;
 in vec4 vColor;
 
 out vec4 FragColor;
+#ifdef GBUFFER_PASS
+out vec4 FragFog;
+out vec4 FragNormal;
+#endif
 
 #ifdef SHADER_STORAGE_LIGHTS
 	layout(std430, binding = 1) buffer LightBufferSSO
 	{
 		vec4 lights[];
 	};
-#else
+#elif defined NUM_UBO_LIGHTS
 	/*layout(std140)*/ uniform LightBufferUBO
 	{
 		vec4 lights[NUM_UBO_LIGHTS];
@@ -20,6 +26,7 @@ out vec4 FragColor;
 
 
 uniform sampler2D tex;
+uniform sampler2D ShadowMap;
 
 vec4 Process(vec4 color);
 vec4 ProcessTexel();
@@ -83,41 +90,192 @@ vec4 getTexel(vec2 st)
 			}
 			break;
 	}
-	texel *= uObjectColor;
+	if (uObjectColor2.a == 0.0) texel *= uObjectColor;
+	else texel *= mix(uObjectColor, uObjectColor2, glowdist.z);
 
 	return desaturate(texel);
 }
 
 //===========================================================================
 //
-// Doom lighting equation ripped from EDGE.
-// Big thanks to EDGE developers for making the only port
-// that actually replicates software renderer's lighting in OpenGL.
-// Float version.
-// Basically replace int with float and divide all constants by 31.
+// Doom lighting equation exactly as calculated by zdoom.
+//
+//===========================================================================
+float R_DoomLightingEquation(float light)
+{
+	// L is the integer light level used in the game
+	float L = light * 255.0;
+
+	// z is the depth in view/eye space, positive going into the screen
+	float z;
+	if ((uPalLightLevels >> 8) == 2)
+	{
+		z = distance(pixelpos.xyz, uCameraPos.xyz);
+	}
+	else 
+	{
+		z = pixelpos.w;
+	}
+
+	// The zdoom light equation
+	float vis = min(uGlobVis / z, 24.0 / 32.0);
+	float shade = 2.0 - (L + 12.0) / 128.0;
+	float lightscale;
+	if ((uPalLightLevels & 0xff) != 0)
+		lightscale = float(-floor(-(shade - vis) * 31.0) - 0.5) / 31.0;
+	else
+		lightscale = shade - vis;
+
+	// Result is the normalized colormap index (0 bright .. 1 dark)
+	return clamp(lightscale, 0.0, 31.0 / 32.0);
+}
+
+//===========================================================================
+//
+// Check if light is in shadow according to its 1D shadow map
 //
 //===========================================================================
 
-float R_DoomLightingEquation(float light, float dist)
+#ifdef SUPPORTS_SHADOWMAPS
+
+float shadowDirToU(vec2 dir)
 {
-	// Changing this constant gives results very similar to changing r_visibility.
-	// Default is 232, it seems to give exactly the same light bands as software renderer.
-	#define DOOMLIGHTFACTOR 232.0
+	if (abs(dir.x) > abs(dir.y))
+	{
+		if (dir.x >= 0.0)
+			return dir.y / dir.x * 0.125 + (0.25 + 0.125);
+		else
+			return dir.y / dir.x * 0.125 + (0.75 + 0.125);
+	}
+	else
+	{
+		if (dir.y >= 0.0)
+			return dir.x / dir.y * 0.125 + 0.125;
+		else
+			return dir.x / dir.y * 0.125 + (0.50 + 0.125);
+	}
+}
 
-	/* L in the range 0 to 63 */
-	float L = light * 63.0/31.0;
+float sampleShadowmap(vec2 dir, float v)
+{
+	float u = shadowDirToU(dir);
+	float dist2 = dot(dir, dir);
+	return texture(ShadowMap, vec2(u, v)).x > dist2 ? 1.0 : 0.0;
+}
 
-	float min_L = clamp(36.0/31.0 - L, 0.0, 1.0);
+float sampleShadowmapLinear(vec2 dir, float v)
+{
+	float u = shadowDirToU(dir);
+	float dist2 = dot(dir, dir);
 
-	// Fix objects getting totally black when close.
-	if (dist < 0.0001)
-		dist = 0.0001;
+	vec2 isize = textureSize(ShadowMap, 0);
+	vec2 size = vec2(isize);
 
-	float scale = 1.0 / dist;
-	float index = (59.0/31.0 - L) - (scale * DOOMLIGHTFACTOR/31.0 - DOOMLIGHTFACTOR/31.0);
+	vec2 fetchPos = vec2(u, v) * size - vec2(0.5, 0.0);
+	if (fetchPos.x < 0.0)
+		fetchPos.x += size.x;
 
-	/* result is colormap index (0 bright .. 31 dark) */
-	return clamp(index, min_L, 1.0);
+	ivec2 ifetchPos = ivec2(fetchPos);
+	int y = ifetchPos.y;
+
+	float t = fract(fetchPos.x);
+	int x0 = ifetchPos.x;
+	int x1 = ifetchPos.x + 1;
+	if (x1 == isize.x)
+		x1 = 0;
+
+	float depth0 = texelFetch(ShadowMap, ivec2(x0, y), 0).x;
+	float depth1 = texelFetch(ShadowMap, ivec2(x1, y), 0).x;
+	return mix(step(dist2, depth0), step(dist2, depth1), t);
+}
+
+//===========================================================================
+//
+// Check if light is in shadow using Percentage Closer Filtering (PCF)
+//
+//===========================================================================
+
+#define PCF_FILTER_STEP_COUNT 3
+#define PCF_COUNT (PCF_FILTER_STEP_COUNT * 2 + 1)
+
+// #define USE_LINEAR_SHADOW_FILTER
+#define USE_PCF_SHADOW_FILTER 1
+
+float shadowmapAttenuation(vec4 lightpos, float shadowIndex)
+{
+	if (shadowIndex >= 1024.0)
+		return 1.0; // No shadowmap available for this light
+
+	float v = (shadowIndex + 0.5) / 1024.0;
+
+	vec2 ray = pixelpos.xz - lightpos.xz;
+	float length = length(ray);
+	if (length < 3.0)
+		return 1.0;
+
+	vec2 dir = ray / length;
+
+#if defined(USE_LINEAR_SHADOW_FILTER)
+	ray -= dir * 6.0; // Shadow acne margin
+	return sampleShadowmapLinear(ray, v);
+#elif defined(USE_PCF_SHADOW_FILTER)
+	ray -= dir * 2.0; // Shadow acne margin
+	dir = dir * min(length / 50.0, 1.0); // avoid sampling behind light
+
+	vec2 normal = vec2(-dir.y, dir.x);
+	vec2 bias = dir * 10.0;
+
+	float sum = 0.0;
+	for (float x = -PCF_FILTER_STEP_COUNT; x <= PCF_FILTER_STEP_COUNT; x++)
+	{
+		sum += sampleShadowmap(ray + normal * x - bias * abs(x), v);
+	}
+	return sum / PCF_COUNT;
+#else // nearest shadow filter
+	ray -= dir * 6.0; // Shadow acne margin
+	return sampleShadowmap(ray, v);
+#endif
+}
+
+#endif
+
+//===========================================================================
+//
+// Standard lambertian diffuse light calculation
+//
+//===========================================================================
+
+float diffuseContribution(vec3 lightDirection, vec3 normal)
+{
+	return max(dot(normal, lightDirection), 0.0f);
+}
+
+//===========================================================================
+//
+// Calculates the brightness of a dynamic point light
+// Todo: Find a better way to define which lighting model to use.
+// (Specular mode has been removed for now.)
+//
+//===========================================================================
+
+float pointLightAttenuation(vec4 lightpos, float lightcolorA)
+{
+	float attenuation = max(lightpos.w - distance(pixelpos.xyz, lightpos.xyz),0.0) / lightpos.w;
+	if (attenuation == 0.0) return 0.0;
+#ifdef SUPPORTS_SHADOWMAPS
+	float shadowIndex = abs(lightcolorA) - 1.0;
+	attenuation *= shadowmapAttenuation(lightpos, shadowIndex);
+#endif
+	if (lightcolorA >= 0.0) // Sign bit is the attenuated light flag
+	{
+		return attenuation;
+	}
+	else
+	{
+		vec3 lightDirection = normalize(lightpos.xyz - pixelpos.xyz);
+		float diffuseAmount = diffuseContribution(lightDirection, normalize(vWorldNormal.xyz));
+		return attenuation * diffuseAmount;
+	}
 }
 
 //===========================================================================
@@ -140,10 +298,10 @@ vec4 getLightColor(float fogdist, float fogfactor)
 	
 	if (uLightLevel >= 0.0)
 	{
-		float newlightlevel = 1.0 - R_DoomLightingEquation(uLightLevel, gl_FragCoord.z);
+		float newlightlevel = 1.0 - R_DoomLightingEquation(uLightLevel);
 		color.rgb *= newlightlevel;
 	}
-	else if (uFogEnabled > 0.0)
+	else if (uFogEnabled > 0)
 	{
 		// brightening around the player for light mode 2
 		if (fogdist < uLightDist)
@@ -181,6 +339,7 @@ vec4 getLightColor(float fogdist, float fogfactor)
 	
 	vec4 dynlight = uDynLightColor;
 
+#if defined NUM_UBO_LIGHTS || defined SHADER_STORAGE_LIGHTS
 	if (uLightIndex >= 0)
 	{
 		ivec4 lightRange = ivec4(lights[uLightIndex]) + ivec4(uLightIndex + 1);
@@ -194,7 +353,7 @@ vec4 getLightColor(float fogdist, float fogfactor)
 				vec4 lightpos = lights[i];
 				vec4 lightcolor = lights[i+1];
 				
-				lightcolor.rgb *= max(lightpos.w - distance(pixelpos.xyz, lightpos.xyz),0.0) / lightpos.w;
+				lightcolor.rgb *= pointLightAttenuation(lightpos, lightcolor.a);
 				dynlight.rgb += lightcolor.rgb;
 			}
 			//
@@ -205,11 +364,12 @@ vec4 getLightColor(float fogdist, float fogfactor)
 				vec4 lightpos = lights[i];
 				vec4 lightcolor = lights[i+1];
 				
-				lightcolor.rgb *= max(lightpos.w - distance(pixelpos.xyz, lightpos.xyz),0.0) / lightpos.w;
+				lightcolor.rgb *= pointLightAttenuation(lightpos, lightcolor.a);
 				dynlight.rgb -= lightcolor.rgb;
 			}
 		}
 	}
+#endif
 	color.rgb = clamp(color.rgb + desaturate(dynlight).rgb, 0.0, 1.4);
 	
 	// prevent any unintentional messing around with the alpha.
@@ -227,6 +387,32 @@ vec4 applyFog(vec4 frag, float fogfactor)
 	return vec4(mix(uFogColor.rgb, frag.rgb, fogfactor), frag.a);
 }
 
+//===========================================================================
+//
+// The color of the fragment if it is fully occluded by ambient lighting
+//
+//===========================================================================
+
+vec3 AmbientOcclusionColor()
+{
+	float fogdist;
+	float fogfactor;
+			
+	//
+	// calculate fog factor
+	//
+	if (uFogEnabled == -1) 
+	{
+		fogdist = pixelpos.w;
+	}
+	else 
+	{
+		fogdist = max(16.0, distance(pixelpos.xyz, uCameraPos.xyz));
+	}
+	fogfactor = exp2 (uFogDensity * fogdist);
+			
+	return mix(uFogColor.rgb, vec3(0.0), fogfactor);
+}
 
 //===========================================================================
 //
@@ -270,6 +456,7 @@ void main()
 			
 			frag *= getLightColor(fogdist, fogfactor);
 			
+#if defined NUM_UBO_LIGHTS || defined SHADER_STORAGE_LIGHTS
 			if (uLightIndex >= 0)
 			{
 				ivec4 lightRange = ivec4(lights[uLightIndex]) + ivec4(uLightIndex + 1);
@@ -285,12 +472,13 @@ void main()
 						vec4 lightpos = lights[i];
 						vec4 lightcolor = lights[i+1];
 						
-						lightcolor.rgb *= max(lightpos.w - distance(pixelpos.xyz, lightpos.xyz),0.0) / lightpos.w;
+						lightcolor.rgb *= pointLightAttenuation(lightpos, lightcolor.a);
 						addlight.rgb += lightcolor.rgb;
 					}
 					frag.rgb = clamp(frag.rgb + desaturate(addlight).rgb, 0.0, 1.0);
 				}
 			}
+#endif
 
 			//
 			// colored fog
@@ -340,5 +528,9 @@ void main()
 		}
 	}
 	FragColor = frag;
+#ifdef GBUFFER_PASS
+	FragFog = vec4(AmbientOcclusionColor(), 1.0);
+	FragNormal = vec4(vEyeNormal.xyz * 0.5 + 0.5, 1.0);
+#endif
 }
 
