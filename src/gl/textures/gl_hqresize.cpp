@@ -48,7 +48,7 @@
 
 #include "parallel_for.h"
 
-CUSTOM_CVAR(Int, gl_texture_hqresize, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, gl_texture_hqresize, 1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)	//[XANE]Enable 2x resizing; It doesn't look bad with MMA's resources.
 {
 	if (self < 0 || self > 16)
 	{

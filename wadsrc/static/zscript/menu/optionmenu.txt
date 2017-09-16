@@ -234,7 +234,7 @@ class OptionMenu : Menu
 						}
 					}
 					y *= CleanYfac_1;
-					int	rowheight = OptionMenuSettings.mLinespacing * CleanYfac_1;
+					int	rowheight = (OptionMenuSettings.mLinespacing * 2) * CleanYfac_1;
 					int maxitems = (screen.GetHeight() - rowheight - y) / rowheight + 1;
 
 					mDesc.mScrollPos = MAX (0, mDesc.mItems.Size() - maxitems + mDesc.mScrollTop);

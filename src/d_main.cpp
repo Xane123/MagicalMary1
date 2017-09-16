@@ -2229,7 +2229,7 @@ static void CheckCmdLine()
 	{
 		if (!P_CheckMapData(mapvalue))
 		{
-			Printf ("Can't find map %s\n", mapvalue.GetChars());
+			Printf ("The area you requested, %s, can't be found. Make sure it was typed correctly.\n", mapvalue.GetChars());
 		}
 		else
 		{
@@ -2271,7 +2271,7 @@ static void CheckCmdLine()
 	//  Build status bar line!
 	//
 	if (deathmatch)
-		StartScreen->AppendStatusLine("DeathMatch...");
+		StartScreen->AppendStatusLine("Match...");
 	if (dmflags & DF_NO_MONSTERS)
 		StartScreen->AppendStatusLine("No Monsters...");
 	if (dmflags & DF_MONSTERS_RESPAWN)
@@ -2394,7 +2394,7 @@ void D_DoomMain (void)
 
 		if ((gameinfo.flags & GI_SHAREWARE) && pwads.Size() > 0)
 		{
-			I_FatalError ("You cannot -file with the shareware version. Register!");
+			I_FatalError ("This is a shareware version of Doom. Not only is it not allowed to use PWADs with it, stupid as that is, but you shouldn't even be using Mary's Magical Adventure to play a shareware game!");
 		}
 
 		FBaseCVar::DisableCallbacks();
@@ -2474,10 +2474,10 @@ void D_DoomMain (void)
 		// Base systems have been inited; enable cvar callbacks
 		FBaseCVar::EnableCallbacks ();
 
-		if (!batchrun) Printf ("S_Init: Setting up sound.\n");
+		if (!batchrun) Printf ("Setting up sound.\n");
 		S_Init ();
 
-		if (!batchrun) Printf ("ST_Init: Init startup screen.\n");
+		if (!batchrun) Printf ("Initializing startup screen.\n");
 		if (!restart)
 		{
 			StartScreen = FStartupScreen::CreateInstance (TexMan.GuesstimateNumTextures() + 5);
@@ -2495,18 +2495,18 @@ void D_DoomMain (void)
 		S_ParseReverbDef ();
 
 		// [RH] Parse any SNDINFO lumps
-		if (!batchrun) Printf ("S_InitData: Load sound definitions.\n");
+		if (!batchrun) Printf ("Loading sound definitions.\n");
 		S_InitData ();
 
 		// [RH] Parse through all loaded mapinfo lumps
-		if (!batchrun) Printf ("G_ParseMapInfo: Load map definitions.\n");
+		if (!batchrun) Printf ("Parsing MAPINFO for areas to visit.\n");
 		G_ParseMapInfo (iwad_info->MapInfo);
 		ReadStatistics();
 
 		// MUSINFO must be parsed after MAPINFO
 		S_ParseMusInfo();
 
-		if (!batchrun) Printf ("Texman.Init: Init texture manager.\n");
+		if (!batchrun) Printf ("Initializing texture manager.\n");
 		TexMan.Init();
 		C_InitConback();
 
@@ -2514,7 +2514,7 @@ void D_DoomMain (void)
 		V_InitFonts();
 
 		// [CW] Parse any TEAMINFO lumps.
-		if (!batchrun) Printf ("ParseTeamInfo: Load team definitions.\n");
+		if (!batchrun) Printf ("Loading team definitions.\n");
 		TeamLibrary.ParseTeamInfo ();
 
 		R_ParseTrnslate();
@@ -2536,11 +2536,11 @@ void D_DoomMain (void)
 
 		ParseGLDefs();
 
-		if (!batchrun) Printf ("R_Init: Init %s refresh subsystem.\n", gameinfo.ConfigName.GetChars());
-		StartScreen->LoadingStatus ("Loading graphics", 0x3f);
+		if (!batchrun) Printf ("Initializing the %s refresh subsystem.\n", gameinfo.ConfigName.GetChars());
+		StartScreen->LoadingStatus ("Loading graphics.", 0x3f);
 		R_Init ();
 
-		if (!batchrun) Printf ("DecalLibrary: Load decals.\n");
+		if (!batchrun) Printf ("Loading decals.\n");
 		DecalLibrary.ReadAllDecals ();
 
 		// Load embedded Dehacked patches

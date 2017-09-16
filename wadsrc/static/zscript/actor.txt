@@ -1167,8 +1167,12 @@ class Actor : Thinker native
 		---- A 1 A_FreezeDeathChunks;
 		Wait;
 	GenericCrush:
-		POL5 A -1;
-		Stop;
+		TNT1 A 0;
+		TNT1 A 1 A_GiveInventory("CoinSP",1,AAPTR_PLAYER1);
+		Goto FadeLoopZ;
+	FadeLoopZ:
+		TNT1 A 1 A_FadeOut(0.5,1);
+		Loop;
 	}
 
 	// Internal functions
