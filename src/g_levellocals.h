@@ -59,6 +59,13 @@ struct FLevelLocals
 	int			cluster;
 	int			clusterflags;
 	int			levelnum;
+
+	int skyboxmovement1;	//[XANE]My custom variables.
+	int world_number;
+	int world_level;
+	int xanemusic;
+	int skyboxmovement2;
+
 	int			lumpnum;
 	FString		LevelName;
 	FString		MapName;			// the lump name (E1M1, MAP01, etc)

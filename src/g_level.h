@@ -312,6 +312,12 @@ struct FExitText
 struct level_info_t
 {
 	int			levelnum;
+
+	int skyboxmovement1;	//[XANE]My custom variables.
+	int world_number;
+	int world_level;
+	int xanemusic;
+	int skyboxmovement2;
 	
 	FString		MapName;
 	FString		NextMap;
