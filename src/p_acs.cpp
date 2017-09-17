@@ -502,7 +502,10 @@
 		GAME_SINGLE_PLAYER =	0,
 		GAME_NET_COOPERATIVE =	1,
 		GAME_NET_DEATHMATCH =	2,
-		GAME_TITLE_MAP =		3
+		GAME_TITLE_MAP =		3,
+		GAME_DEMOREPLAY =		4,	//[XANE]Extra "game modes" for variable checking.
+		GAME_DEMORECORD =		5,
+		GAME_AUTOMAP_ON =		6
 	};
 	enum {
 		CLASS_FIGHTER =			0,
@@ -8916,6 +8919,12 @@ scriptwait:
 				PushToStack (GAME_NET_DEATHMATCH);
 			else if (multiplayer)
 				PushToStack (GAME_NET_COOPERATIVE);
+			else if (demoplayback)
+				PushToStack(GAME_DEMOREPLAY);	//[XANE]Added demo playback checking.
+			else if (demorecording)
+				PushToStack(GAME_DEMORECORD);	//[XANE]Same for recording.
+			else if (automapactive && !multiplayer && !deathmatch)	//This "game type" check will not return TRUE in multiplayer to avoid potential problems.
+				PushToStack(GAME_AUTOMAP_ON);	//[XANE]This is used to limit time staring at the area map.
 			else
 				PushToStack (GAME_SINGLE_PLAYER);
 			break;
