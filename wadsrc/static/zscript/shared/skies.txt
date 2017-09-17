@@ -76,6 +76,13 @@ class SkyViewpoint : Actor
 		Super.OnDestroy();
 	}
 	
+	States
+	{
+		Spawn:
+			TNT1 A -1 NoDelay ACS_NamedExecute("MoveSkybox",0,0,0,0);
+			Stop;
+	}
+	
 }
 
 //---------------------------------------------------------------------------
