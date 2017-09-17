@@ -84,6 +84,10 @@ void cht_DoMDK(player_t *player, const char *mod)
 			P_AimLineAttack(player->mo, player->mo->Angles.Yaw, PLAYERMISSILERANGE), TELEFRAG_DAMAGE,
 			mod, NAME_BulletPuff);
 	}
+	else
+	{
+		Printf("That would be too cheap! Use the weapons you have on your enemies!");
+	}
 }
 
 void cht_DoCheat (player_t *player, int cheat)
@@ -476,6 +480,10 @@ void cht_DoCheat (player_t *player, int cheat)
 			P_LineAttack (player->mo, player->mo->Angles.Yaw, PLAYERMISSILERANGE,
 				P_AimLineAttack (player->mo, player->mo->Angles.Yaw, PLAYERMISSILERANGE), TELEFRAG_DAMAGE,
 				NAME_MDK, NAME_BulletPuff);
+		}
+		else
+		{
+			Printf("That would be too cheap! Use the weapons you have on your enemies!");
 		}
 		break;
 

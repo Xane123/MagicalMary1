@@ -931,7 +931,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	int fakeDamage = 0;
 	int holdDamage = 0;
 	const int rawdamage = damage;
-	const bool telefragDamage = (rawdamage >= TELEFRAG_DAMAGE);
+	const bool telefragDamage = 0; //(rawdamage >= TELEFRAG_DAMAGE);
 	
 	if (damage < 0) damage = 0;
 
@@ -1368,8 +1368,8 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 		if (player->health <= 0)
 		{
 			// [SP] Buddha cheat: if the player is about to die, rescue him to 1 health.
-			// This does not save the player if damage >= TELEFRAG_DAMAGE, still need to
-			// telefrag him right? ;) (Unfortunately the damage is "absorbed" by armor,
+			// This should save the player as ignoring their invulnerability is very cheap,
+			// right, GZDoom? ;) (Unfortunately the damage is "absorbed" by armor,
 			// but telefragging should still do enough damage to kill the player)
 			// Ignore players that are already dead.
 			// [MC]Buddha2 absorbs telefrag damage, and anything else thrown their way.
@@ -1872,7 +1872,7 @@ void P_PoisonDamage (player_t *player, AActor *source, int damage, bool playPain
 	{
 		return;
 	}
-	if ((damage < TELEFRAG_DAMAGE && ((target->flags2 & MF2_INVULNERABLE) ||
+	if ((/*damage < TELEFRAG_DAMAGE &&*/ ((target->flags2 & MF2_INVULNERABLE) ||
 		(player->cheats & CF_GODMODE))) || (player->cheats & CF_GODMODE2))
 	{ // target is invulnerable
 		return;
