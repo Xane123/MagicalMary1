@@ -582,7 +582,7 @@ static bool ReplaceMenu(FScanner &sc, DMenuDescriptor *desc)
 			// Otherwise bail out because for list menus it's not that simple.
 			if (desc->IsKindOf(RUNTIME_CLASS(DListMenuDescriptor)) || (*pOld)->IsKindOf(RUNTIME_CLASS(DListMenuDescriptor)))
 			{
-				sc.ScriptMessage("Cannot replace protected menu %s.", desc->mMenuName.GetChars());
+				sc.ScriptMessage("%s is a protected menu. It can't be replaced bwith your menu, sorry.", desc->mMenuName.GetChars());
 				return true;
 			}
 			for (int i = desc->mItems.Size()-1; i >= 0; i--)
@@ -610,7 +610,7 @@ static bool ReplaceMenu(FScanner &sc, DMenuDescriptor *desc)
 
 		if (!CheckCompatible(desc, *pOld))
 		{
-			sc.ScriptMessage("Tried to replace menu '%s' with a menu of different type", desc->mMenuName.GetChars());
+			sc.ScriptMessage("Tried to replace menu '%s' with a menu of different type.", desc->mMenuName.GetChars());
 			return true;
 		}
 	}
