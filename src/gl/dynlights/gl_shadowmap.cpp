@@ -85,7 +85,8 @@ ADD_STAT(shadowmap)
 CUSTOM_CVAR(Int, gl_shadowmap_quality, 64, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	switch (self)
-	{
+	{	//[XANE]Below 4, shadow maps stop working entirely.
+	case 4:
 	case 8:
 	case 16:
 	case 32:
@@ -94,6 +95,7 @@ CUSTOM_CVAR(Int, gl_shadowmap_quality, 64, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 	case 256:
 	case 512:
 	case 1024:
+	case 2048:
 		break;
 	default:
 		self = 512;
