@@ -139,7 +139,7 @@ CVAR(Color, am_ovfdwallcolor, 0xc9c9c9, CVAR_ARCHIVE);
 CVAR(Color, am_ovcdwallcolor, 0xf2f2f2, CVAR_ARCHIVE);
 CVAR(Color, am_ovunseencolor, 0xff2020, CVAR_ARCHIVE);
 CVAR(Color, am_ovtelecolor, 0xffa0ff, CVAR_ARCHIVE);
-CVAR(Color, am_ovportalcolor, 0xffa0ff, CVAR_ARCHIVE);
+CVAR(Color, am_ovportalcolor, 0xffffa0, CVAR_ARCHIVE);
 CVAR(Color, am_ovinterlevelcolor, 0xc0ffff, CVAR_ARCHIVE);
 CVAR(Color, am_ovsecretsectorcolor, 0xe6e690, CVAR_ARCHIVE);
 CVAR(Color, am_ovthingcolor, 0xc0ffff, CVAR_ARCHIVE);
