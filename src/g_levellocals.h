@@ -65,6 +65,7 @@ struct FLevelLocals
 	int world_level;
 	int xanemusic;
 	int skyboxmovement2;
+	int xanestartpoint;
 
 	int			lumpnum;
 	FString		LevelName;

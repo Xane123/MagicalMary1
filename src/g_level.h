@@ -318,6 +318,7 @@ struct level_info_t
 	int world_level;
 	int xanemusic;
 	int skyboxmovement2;
+	int xanestartpoint;	//[XANE]Determines whether Xane starts at a different start point than Mary.
 	
 	FString		MapName;
 	FString		NextMap;

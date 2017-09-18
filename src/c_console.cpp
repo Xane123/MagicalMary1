@@ -1146,7 +1146,7 @@ void C_DrawConsole (bool hw2d)
 			TAG_DONE);
 		if (conline && visheight < screen->GetHeight())
 		{
-			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 82, 0);
+			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 83, 0);
 		}
 
 		if (ConBottom >= 12)

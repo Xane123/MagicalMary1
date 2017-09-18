@@ -1462,6 +1462,7 @@ void G_InitLevelLocals ()
 	level.world_level = info->world_level;
 	level.xanemusic = info->xanemusic;
 	level.skyboxmovement2 = info->skyboxmovement2;
+	level.xanestartpoint = info->xanestartpoint;	//[XANE] Determines whether Xane will start at a different starting point in the level if in single-player.
 
 	level.Music = info->Music;
 	level.musicorder = info->musicorder;

@@ -541,7 +541,8 @@
 		LEVELINFO_WORLDNUMBER,
 		LEVELINFO_WORLDLEVEL,
 		LEVELINFO_MUSICID,
-		LEVELINFO_SKYMOVE_VERTICAL
+		LEVELINFO_SKYMOVE_VERTICAL,
+		LEVELINFO_UNIQUESPAWNPOINTS
 	};
 	enum {
 		PLAYERINFO_TEAM,
@@ -10013,6 +10014,7 @@ scriptwait:
 			case LEVELINFO_WORLDLEVEL:	STACK(1) = level.world_level;	break;
 			case LEVELINFO_MUSICID:	STACK(1) = level.xanemusic;	break;
 			case LEVELINFO_SKYMOVE_VERTICAL:	STACK(1) = level.skyboxmovement2;	break;
+			case LEVELINFO_UNIQUESPAWNPOINTS:	STACK(1) = level.xanestartpoint;	break;
 			default:						STACK(1) = 0;						break;
 			}
 			break;

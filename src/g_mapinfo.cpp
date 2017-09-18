@@ -235,6 +235,7 @@ void level_info_t::Reset()
 	world_level = 0;
 	xanemusic = 0;
 	skyboxmovement2 = 0;
+	xanestartpoint = 0;
 
 	PName = "";
 	NextMap = "";
@@ -910,6 +911,13 @@ DEFINE_MAP_OPTION(movesky_vertical, true)
 	info->skyboxmovement2 = parse.sc.Number;
 }
 
+DEFINE_MAP_OPTION(uniquespawnpoints, true)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->xanestartpoint = parse.sc.Number;
+}
+
 DEFINE_MAP_OPTION(next, true)
 {
 	parse.ParseAssign();
@@ -1175,7 +1183,7 @@ DEFINE_MAP_OPTION(PrecacheSounds, true)
 		FSoundID snd = parse.sc.String;
 		if (snd == 0)
 		{
-			parse.sc.ScriptMessage("Unknown sound \"%s\"", parse.sc.String);
+			parse.sc.ScriptMessage("Unknown sound \"%s\".", parse.sc.String);
 		}
 		else
 		{
