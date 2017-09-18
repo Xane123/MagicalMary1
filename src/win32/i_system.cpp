@@ -1118,9 +1118,9 @@ static void SetQueryIWad(HWND dialog)
 	if (!query && queryiwad)
 	{
 		MessageBox(dialog,
-			"You have chosen not to show this dialog box in the future.\n"
-			"If you wish to see it again, hold down SHIFT while starting " GAMENAME ".",
-			"Don't ask me this again",
+			"You've saved your startup settings permanently. If you want to change\n"
+			"them in the future, hold down SHIFT while starting " GAMENAME ".",
+			"Settings Permanently Saved.",
 			MB_OK | MB_ICONINFORMATION);
 	}
 
@@ -1527,9 +1527,9 @@ bool I_WriteIniFailed()
 		0,
 		NULL 
 	);
-	errortext.Format ("The config file %s could not be written:\n%s", GameConfig->GetPathName(), lpMsgBuf);
+	errortext.Format ("The config file %s could not be written for the reason:\n%s", GameConfig->GetPathName(), lpMsgBuf);
 	LocalFree (lpMsgBuf);
-	return MessageBox(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
+	return MessageBox(Window, errortext.GetChars(), GAMENAME "'s configuration wasn't saved!", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
 }
 
 //==========================================================================

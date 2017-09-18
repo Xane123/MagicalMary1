@@ -276,7 +276,7 @@ static NSArray* GetKnownExtensions()
 	[window setTitle:windowTitle];
 
 	NSTextField *description = [[NSTextField alloc] initWithFrame:NSMakeRect(18, 384, 402, 50)];
-	[self makeLabel:description withString:GAMENAME " found more than one IWAD\nSelect from the list below to determine which one to use:"];
+	[self makeLabel:description withString:GAMENAME " found more than one Base Game Data!\nSelect from the list below to determine which one to use.\nIf multiple choices are the same thing, it doesn't matter which is chosen."];
 	[[window contentView] addSubview:description];
 	[description release];
 
