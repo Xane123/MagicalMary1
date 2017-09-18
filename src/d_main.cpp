@@ -1100,7 +1100,7 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
+	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, GPalette.BlackIndex, 0);
 	if (Page != NULL)
 	{
 		screen->DrawTexture (Page, 0, 0,
@@ -1113,7 +1113,7 @@ void D_PageDrawer (void)
 	{
 		if (!PageBlank)
 		{
-			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Page graphic goes here", TAG_DONE);
+			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Mary's Magical Adventure is loading...", TAG_DONE);
 		}
 	}
 	if (Advisory != NULL)
