@@ -985,15 +985,15 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 			FxExpression *x = new FxConstant(constval.GetInt(), ScriptPosition);
 			if (constval.GetInt() != constval.GetFloat())
 			{
-				ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
+				//ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
 			}
 
 			delete this;
 			return x;
 		}
-		else if (!NoWarn)
+		else if (!NoWarn)	//[XANE]My game has a ton of these errors so I've edited them out!
 		{
-			ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
+			//ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
 		}
 
 		return this;
