@@ -930,8 +930,8 @@ void C_AdjustBottom ()
 {
 	if (gamestate == GS_FULLCONSOLE || gamestate == GS_STARTUP)
 		ConBottom = SCREENHEIGHT;
-	else if (ConBottom > SCREENHEIGHT / 2 || ConsoleState == c_down)
-		ConBottom = SCREENHEIGHT / 2;
+	else if (ConBottom > SCREENHEIGHT / 3 || ConsoleState == c_down)
+		ConBottom = SCREENHEIGHT / 3;
 }
 
 void C_NewModeAdjust ()
@@ -960,9 +960,9 @@ void C_Ticker()
 		if (ConsoleState == c_falling)
 		{
 			ConBottom += (consoletic - lasttic) * (SCREENHEIGHT * 2 / 25);
-			if (ConBottom >= SCREENHEIGHT / 2)
+			if (ConBottom >= SCREENHEIGHT / 3)
 			{
-				ConBottom = SCREENHEIGHT / 2;
+				ConBottom = SCREENHEIGHT / 3;
 				ConsoleState = c_down;
 			}
 		}
@@ -1146,7 +1146,7 @@ void C_DrawConsole (bool hw2d)
 			TAG_DONE);
 		if (conline && visheight < screen->GetHeight())
 		{
-			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 0, 0);
+			screen->Clear (0, visheight, screen->GetWidth(), visheight+1, 82, 0);
 		}
 
 		if (ConBottom >= 12)
