@@ -45,7 +45,7 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.8"	//Based on g3.2, https://github.com/coelckers/gzdoom/commit/ae4dad64f7fd24043e9e0181258a9e766293bec5
+#define VERSIONSTR "v1.8"	//Based on g3.2, https://github.com/coelckers/gzdoom/commit/dd8a114bb821ccc5e3a15e34151de71a3d907ffd
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 1,8,9999,0
@@ -80,7 +80,7 @@ const char *GetVersionString();
 // SAVESIG should match SAVEVER.
 
 // extension for savegames
-#define SAVEGAME_EXT "png"//"zds"
+#define SAVEGAME_EXT "xsav"//"zds"
 
 // MINSAVEVER is the minimum level snapshot version that can be loaded.
 #define MINSAVEVER	4551
@@ -90,7 +90,7 @@ const char *GetVersionString();
 #define SAVEVER 4552
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "MMA"
+#define GAMESIG "Mary's Magical Adventure"
 #define BASEWAD "data.pk3"
 #define OPTIONALWAD "zd_extra.pk3"
 #define BASESF "soundfont.sf2"

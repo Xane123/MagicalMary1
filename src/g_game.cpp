@@ -1970,25 +1970,25 @@ void G_DoLoadGame ()
 		// have this information.
 		if (engine.IsEmpty())
 		{
-			Printf("Savegame is from an incompatible version\n");
+			Printf("Savegame is from an incompatible version!\n");
 		}
 		else
 		{
-			Printf("Savegame is from another ZDoom-based engine: %s\n", engine.GetChars());
+			Printf("Savegame is from another ZDoom-based engine, %s.\n", engine.GetChars());
 		}
 		return;
 	}
 
 	if (SaveVersion < MINSAVEVER || SaveVersion > SAVEVER)
 	{
-		Printf("Savegame is from an incompatible version");
+		Printf("Savegame is from an incompatible version.");
 		if (SaveVersion < MINSAVEVER)
 		{
-			Printf(": %d (%d is the oldest supported)", SaveVersion, MINSAVEVER);
+			Printf(" To be precise, %d (%d is the oldest supported.)", SaveVersion, MINSAVEVER);
 		}
 		else
 		{
-			Printf(": %d (%d is the highest supported)", SaveVersion, SAVEVER);
+			Printf(" To be precise, %d (%d is the highest supported.)", SaveVersion, SAVEVER);
 		}
 		Printf("\n");
 		return;
@@ -2001,7 +2001,7 @@ void G_DoLoadGame ()
 
 	if (map.IsEmpty())
 	{
-		Printf("Savegame is missing the current map\n");
+		Printf("Savegame is missing the current map! How did this happen?\n");
 		return;
 	}
 
@@ -2017,14 +2017,14 @@ void G_DoLoadGame ()
 	info = resfile->FindLump("globals.json");
 	if (info == nullptr)
 	{
-		Printf("'%s' is not a valid savegame: Missing 'globals.json'.\n", savename.GetChars());
+		Printf("'%s' is not a valid savegame! It doesn't have its JSON file.\n", savename.GetChars());
 		return;
 	}
 
 	data = info->CacheLump();
 	if (!arc.OpenReader((const char *)data, info->LumpSize))
 	{
-		Printf("Failed to access savegame info\n");
+		Printf("Failed to access savegame info...\n");
 		return;
 	}
 
@@ -2094,15 +2094,15 @@ void G_SaveGame (const char *filename, const char *description)
 	}
     else if (!usergame)
 	{
-        Printf ("not in a saveable game\n");
+        Printf ("You're not currently in a saveable game.\n");
     }
     else if (gamestate != GS_LEVEL)
 	{
-        Printf ("not in a level\n");
+        Printf ("You aren't in an area! You can't save here.\n");
     }
     else if (players[consoleplayer].health <= 0 && !multiplayer)
     {
-        Printf ("player is dead in a single-player game\n");
+        Printf ("No, dude, you can't save your dead life!\n");
     }
 	else
 	{
@@ -2267,7 +2267,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (demoplayback)
 	{
-		filename = G_BuildSaveName ("demosave." SAVEGAME_EXT, -1);
+		filename = G_BuildSaveName ("demo_delete_me." SAVEGAME_EXT, -1);
 	}
 
 	if (cl_waitforsave)
@@ -2283,7 +2283,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		// delete the snapshot. Since the save failed it is broken.
 		insave = false;
 		level.info->Snapshot.Clean();
-		Printf(PRINT_HIGH, "Save failed\n");
+		Printf(PRINT_HIGH, "Save failed...\n");
 		Printf(PRINT_HIGH, "%s\n", err.GetMessage());
 		// The time freeze must be reset if the save fails.
 		if (cl_waitforsave)
@@ -2382,7 +2382,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
 		else Printf ("%s\n", GStrings("GGSAVED"));
 	}
-	else Printf(PRINT_HIGH, "Save failed\n");
+	else Printf(PRINT_HIGH, "Save failed...\n");
 
 
 	BackupSaveName = filename;
