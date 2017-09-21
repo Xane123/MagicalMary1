@@ -74,3 +74,4 @@ CMakeCache.txt
 /build_vc2015-64
 /build
 *.pch
+src/zdoom.dir/MinSizeRel/play.pch
