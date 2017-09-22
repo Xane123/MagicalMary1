@@ -69,15 +69,15 @@ BEGIN
     "    BEGIN\r\n"
     "        BLOCK ""040904b0""\r\n"
     "        BEGIN\r\n"
-    "            VALUE ""Comments"", ""Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg.""\r\n"
-    "            VALUE ""CompanyName"", "" ""\r\n"
-    "            VALUE ""FileDescription"", ""GZDoom""\r\n"
+    "            VALUE ""Comments"", ""Thanks to id Software, Team TNT, Randy Heit, Christoph Oelckers, _mental_, et al.""\r\n"
+    "            VALUE ""CompanyName"", ""Xane Corp.""\r\n"
+    "            VALUE ""FileDescription"", ""Play as a deceivingly cute girl or the returning kirby named Xane!""\r\n"
     "            VALUE ""FileVersion"", RC_FILEVERSION2\r\n"
-    "            VALUE ""InternalName"", ""GZDoom""\r\n"
-    "            VALUE ""LegalCopyright"", ""Copyright \\u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
-    "            VALUE ""LegalTrademarks"", ""DoomR is a Registered Trademark of id Software, Inc.""\r\n"
-    "            VALUE ""OriginalFilename"", ""gzdoom.exe""\r\n"
-    "            VALUE ""ProductName"", ""GZDoom""\r\n"
+    "            VALUE ""InternalName"", ""Mary's Magical Adventure""\r\n"
+    "            VALUE ""LegalCopyright"", ""Original engine is  (C)1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
+    "            VALUE ""LegalTrademarks"", ""Mary's Magical Adventure is (C)2017 Xane Myers. Some graphics in the game are copyright their respective owners.""\r\n"
+    "            VALUE ""OriginalFilename"", ""play.exe""\r\n"
+    "            VALUE ""ProductName"", ""Mary's Magical Adventure""\r\n"
     "            VALUE ""ProductVersion"", RC_PRODUCTVERSION2\r\n"
     "        END\r\n"
     "    END\r\n"
@@ -221,8 +221,8 @@ BEGIN
     CONTROL         "Fullscreen",IDC_WELCOME_FULLSCREEN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,190,48,10
     GROUPBOX        "Other settings",IDC_STATIC,123,155,95,58
     CONTROL         "Disable autoload",IDC_WELCOME_NOAUTOLOAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,170,65,10
-    CONTROL         "Load lights",IDC_WELCOME_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,180,51,10
-    CONTROL         "Load brightmaps",IDC_WELCOME_BRIGHTMAPS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,190,65,10
+    CONTROL         "Load lights",IDC_WELCOME_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,130,180,51,10
+    CONTROL         "Load brightmaps",IDC_WELCOME_BRIGHTMAPS,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,130,190,65,10
     CONTROL         "Save these settings permanently",IDC_DONTASKIWAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,60,216,118,10
     DEFPUSHBUTTON   "Start Game",IDOK,8,228,90,14
     PUSHBUTTON      "Exit",IDCANCEL,166,228,50,14
@@ -499,15 +499,15 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
-            VALUE "CompanyName", " "
-            VALUE "FileDescription", "GZDoom"
+            VALUE "Comments", "Thanks to id Software, Team TNT, Randy Heit, Christoph Oelckers, _mental_, et al."
+            VALUE "CompanyName", "Xane Corp."
+            VALUE "FileDescription", "Play as a deceivingly cute girl or the returing kirby named Xane!"
             VALUE "FileVersion", RC_FILEVERSION2
-            VALUE "InternalName", "GZDoom"
-            VALUE "LegalCopyright", "Copyright \u00A9 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
-            VALUE "LegalTrademarks", "DoomR is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "gzdoom.exe"
-            VALUE "ProductName", "GZDoom"
+            VALUE "InternalName", "Mary's Magical Adventure"
+            VALUE "LegalCopyright", "Original engine is (C)1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
+            VALUE "LegalTrademarks", "Mary's Magical Adventure is (C)2017 Xane Myers. Some graphics in this game are copyright their respective owners."
+            VALUE "OriginalFilename", "play.exe"
+            VALUE "ProductName", "Mary's Magical Adventure"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
     END
