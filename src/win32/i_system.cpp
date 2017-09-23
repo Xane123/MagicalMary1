@@ -143,6 +143,16 @@ EXTERN_CVAR (Bool, fullscreen)
 EXTERN_CVAR (Bool, disableautoload)
 EXTERN_CVAR (Bool, autoloadlights)
 EXTERN_CVAR (Bool, autoloadbrightmaps)
+//[XANE]Used for the debug dialog. I know it sucks but I don't know C++ but want to have my own cool lil' dialog even if I regret it down the line.
+EXTERN_CVAR(Bool, xane_debug)
+EXTERN_CVAR(Bool, debug_spawn)
+EXTERN_CVAR(Bool, debug_super)
+EXTERN_CVAR(Bool, debug_wind)
+EXTERN_CVAR(Bool, debug_floor)
+EXTERN_CVAR(Bool, debug_speed)
+EXTERN_CVAR(Bool, debug_water)
+EXTERN_CVAR(Bool, debug_hammer)
+EXTERN_CVAR(Bool, debug_umbrella)
 
 extern HWND Window, ConWindow, GameTitleWindow;
 extern HANDLE StdOut;
@@ -1217,7 +1227,51 @@ BOOL CALLBACK IWADBoxCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	}
 	return FALSE;
 }
+	//[XANE]Risky!
+BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	HWND ctrl;
 
+	switch (message)
+	{
+	case WM_INITDIALOG:
+	// [XANE] Check the checkbox if debug spawn points are enabled.
+		SendDlgItemMessage(hDlg, IDC_DEBUGSPAWN, BM_SETCHECK, debug_spawn ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGSUPER, BM_SETCHECK, debug_super ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGWIND, BM_SETCHECK, debug_wind ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGFLOOR, BM_SETCHECK, debug_floor ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGSPEED, BM_SETCHECK, debug_speed ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGWATER, BM_SETCHECK, debug_water ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGHAMMER, BM_SETCHECK, debug_hammer ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_SETCHECK, debug_umbrella ? BST_CHECKED : BST_UNCHECKED, 0);
+
+	SetFocus(ctrl);
+	// Make sure the dialog is in front. If SHIFT was pressed to force it visible,
+	// then the other window will normally be on top.
+	SetForegroundWindow(hDlg);
+	break;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, -1);
+		}
+		else if (LOWORD(wParam) == IDOK)
+		{	//[XANE]Let's see if this works...
+			debug_spawn = SendDlgItemMessage(hDlg, IDC_DEBUGSPAWN, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_super = SendDlgItemMessage(hDlg, IDC_DEBUGSUPER, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_wind = SendDlgItemMessage(hDlg, IDC_DEBUGWIND, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_floor = SendDlgItemMessage(hDlg, IDC_DEBUGFLOOR, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_speed = SendDlgItemMessage(hDlg, IDC_DEBUGSPEED, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_water = SendDlgItemMessage(hDlg, IDC_DEBUGWATER, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_hammer = SendDlgItemMessage(hDlg, IDC_DEBUGHAMMER, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_umbrella = SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			EndDialog(hDlg, SendMessage(ctrl, LB_GETCURSEL, 0, 0));
+		}
+		break;
+	}
+	return FALSE;
+}
 //==========================================================================
 //
 // I_PickIWad
@@ -1250,6 +1304,12 @@ int I_PickIWad(WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 
 		return (int)DialogBox(g_hInst, MAKEINTRESOURCE(IDD_IWADDIALOG),
 			(HWND)Window, (DLGPROC)IWADBoxCallback);
+	}
+	//[XANE]Potentially bad code coming up! "Risky!"
+	else if(xane_debug)
+	{
+		return (int)DialogBox(g_hInst, MAKEINTRESOURCE(IDD_XANEDEBUG),
+			(HWND)Window, (DLGPROC)XaneDebugCallback);
 	}
 	return defaultiwad;
 }

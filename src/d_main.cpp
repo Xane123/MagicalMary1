@@ -219,6 +219,16 @@ CVAR (Bool, disableautoload, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBAL
 CVAR (Bool, autoloadbrightmaps, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)
 CVAR (Bool, autoloadlights, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)
 CVAR (Bool, r_debug_disable_vis_filter, false, 0)
+CVAR (Bool, xane_debug, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Should the small dialog for debug placement appear on startup?
+CVAR(Bool, debug_spawn, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Spawn at the debug spawn point?
+CVAR(Bool, debug_hammer, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Fully upgrade Mary's Hammer
+CVAR(Bool, debug_umbrella, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Fully upgrade Mary's Umbrella
+CVAR(Bool, debug_super, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Infinite super transformation
+CVAR(Bool, debug_wind, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Display wind debug info
+CVAR(Bool, debug_floor, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Show floor detection
+CVAR(Bool, debug_speed, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Display player speed
+CVAR(Bool, debug_water, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Show the player's water level
+
 
 bool wantToRestart;
 bool DrawFSHUD;				// [RH] Draw fullscreen HUD?

@@ -23,6 +23,7 @@
 #define IDD_CRASHOVERVIEW               147
 #define IDD_ERRORPANE                   148
 #define IDD_NETSTARTPANE                149
+#define IDD_XANEDEBUG                   156
 #define IDC_ERRORMESSAGE                1004
 #define IDQUIT                          1005
 #define IDC_IWADLIST                    1006
@@ -89,13 +90,23 @@
 #define IDC_NETSTARTCOUNT               1081
 #define IDC_STATIC_TITLE                1082
 #define IDC_STATIC_STARTUP              1083
+#define IDC_CHECK1                      1084
+#define IDC_YES_DEBUG                   1084
+#define IDC_DEBUGSPAWN                  1084
 #define IDCE_ENVIRONMENTDIFFUSION       1085
+#define IDC_DEBUGHAMMER                 1085
 #define IDCS_ENVIRONMENTDIFFUSION       1086
+#define IDC_DEBUGUMBRELLA               1086
 #define IDCE_ROOM                       1087
+#define IDC_DEBUGSUPER                  1087
 #define IDCS_ROOM                       1088
+#define IDC_DEBUGWIND                   1088
 #define IDCE_ROOMHF                     1089
+#define IDC_DEBUGFLOOR                  1089
 #define IDCS_ROOMHF                     1090
+#define IDC_DEBUGSPEED                  1090
 #define IDCE_ROOMLF                     1091
+#define IDC_DEBUGWATER                  1091
 #define IDCS_ROOMLF                     1092
 #define IDCE_DECAYTIME                  1093
 #define IDCS_DECAYTIME                  1094
@@ -153,9 +164,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        156
+#define _APS_NEXT_RESOURCE_VALUE        158
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1084
+#define _APS_NEXT_CONTROL_VALUE         1085
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

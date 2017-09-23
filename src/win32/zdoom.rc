@@ -8,10 +8,8 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
-#include "../version.h"
-
-#include "../gitinfo.h"
-
+#include "../version.h"
+#include "../gitinfo.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -195,6 +193,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 48
     END
+
+    IDD_XANEDEBUG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 214
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 141
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -205,7 +211,7 @@ END
 //
 
 IDD_IWADDIALOG DIALOGEX 0, 0, 224, 249
-STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Welcome"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -428,6 +434,27 @@ BEGIN
     CONTROL         "",IDC_NETSTARTPROGRESS,"msctls_progress32",WS_BORDER,7,18,175,10,WS_EX_STATICEDGE
 END
 
+IDD_XANEDEBUG DIALOGEX 0, 0, 221, 148
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW | WS_EX_STATICEDGE | WS_EX_APPWINDOW
+CAPTION "Debug Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,109,127,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,164,127,50,14
+    LTEXT           "Welcome to the debug options dialog! Choose what you'd like to use for testing. These are not intended for normal play.",IDC_STATIC,7,7,201,17
+    GROUPBOX        "Debug options",IDC_STATIC,7,23,207,71,0,WS_EX_STATICEDGE
+    CONTROL         "Spawn at debug spawn point",IDC_DEBUGSPAWN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,32,193,10
+    CONTROL         "Mary's Hammer",IDC_DEBUGHAMMER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,104,193,10
+    CONTROL         "Mary's Umbrella",IDC_DEBUGUMBRELLA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,114,193,10
+    GROUPBOX        "Fully upgrade...",IDC_STATIC,7,94,207,32,0,WS_EX_STATICEDGE
+    CONTROL         "Infinite super transformation",IDC_DEBUGSUPER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,42,193,10
+    CONTROL         "Display wind information",IDC_DEBUGWIND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,52,193,10
+    CONTROL         "Show ground detection",IDC_DEBUGFLOOR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,62,193,10
+    CONTROL         "Display player X/Y speed",IDC_DEBUGSPEED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,72,193,10
+    CONTROL         "Display water level",IDC_DEBUGWATER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,82,193,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -458,6 +485,11 @@ BEGIN
 END
 
 IDD_ERRORPANE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_XANEDEBUG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
@@ -501,11 +533,11 @@ BEGIN
         BEGIN
             VALUE "Comments", "Thanks to id Software, Team TNT, Randy Heit, Christoph Oelckers, _mental_, et al."
             VALUE "CompanyName", "Xane Corp."
-            VALUE "FileDescription", "Play as a deceivingly cute girl or the returing kirby named Xane!"
+            VALUE "FileDescription", "Play as a deceivingly cute girl or the returning kirby named Xane!"
             VALUE "FileVersion", RC_FILEVERSION2
             VALUE "InternalName", "Mary's Magical Adventure"
-            VALUE "LegalCopyright", "Original engine is (C)1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
-            VALUE "LegalTrademarks", "Mary's Magical Adventure is (C)2017 Xane Myers. Some graphics in this game are copyright their respective owners."
+            VALUE "LegalCopyright", "Original engine is  (C)1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
+            VALUE "LegalTrademarks", "Mary's Magical Adventure is (C)2017 Xane Myers. Some graphics in the game are copyright their respective owners."
             VALUE "OriginalFilename", "play.exe"
             VALUE "ProductName", "Mary's Magical Adventure"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
@@ -515,8 +547,7 @@ BEGIN
     BEGIN
         VALUE "Translation", 0x409, 1200
     END
-END
-
+END
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 
