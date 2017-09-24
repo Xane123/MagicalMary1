@@ -444,16 +444,16 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,164,147,50,14
     LTEXT           "Welcome to the debug options dialog! Choose what you'd like to use for testing. These are not intended for normal play.",IDC_STATIC,7,7,207,17
     GROUPBOX        "Main options...",IDC_STATIC,7,23,207,71
-    CONTROL         "Spawn at debug spawn point",IDC_DEBUGSPAWN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,32,193,10
-    CONTROL         "Mary's Hammer",IDC_DEBUGHAMMER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,104,193,10
-    CONTROL         "Mary's Umbrella",IDC_DEBUGUMBRELLA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,114,193,10
+    CONTROL         "Spawn at debug spawn point",IDC_DEBUGSPAWN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,32,193,10
+    CONTROL         "Mary's Hammer",IDC_DEBUGHAMMER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,104,193,10
+    CONTROL         "Mary's Umbrella",IDC_DEBUGUMBRELLA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,114,193,10
     GROUPBOX        "Fully upgrade...",IDC_STATIC,7,95,207,41
-    CONTROL         "Infinite super transformation",IDC_DEBUGSUPER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,42,193,10
-    CONTROL         "Display wind information",IDC_DEBUGWIND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,52,193,10
-    CONTROL         "Show ground detection",IDC_DEBUGFLOOR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,62,193,10
-    CONTROL         "Display player X/Y speed",IDC_DEBUGSPEED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,72,193,10
-    CONTROL         "Display water level",IDC_DEBUGWATER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,82,193,10
-    CONTROL         "Arthas' Sword",IDC_DEBUGSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,21,124,193,10
+    CONTROL         "Infinite super transformation",IDC_DEBUGSUPER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,42,193,10
+    CONTROL         "Display wind information",IDC_DEBUGWIND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,52,193,10
+    CONTROL         "Show ground detection",IDC_DEBUGFLOOR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,62,193,10
+    CONTROL         "Display player X/Y speed",IDC_DEBUGSPEED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,72,193,10
+    CONTROL         "Display water level",IDC_DEBUGWATER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,82,193,10
+    CONTROL         "Arthas' Sword",IDC_DEBUGSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,124,193,10
 END
 
 

@@ -488,7 +488,7 @@ void FIWadManager::ValidateIWADs()
 
 static bool havepicked = false;
 
-int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad, const char *optional_wad)
+int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad)
 {
 	const char *iwadparm = Args->CheckValue ("-iwad");
 	FString custwad;
@@ -687,10 +687,10 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	wadfiles.Clear();
 	D_AddFile (wadfiles, zdoom_wad);
 
-	// [SP] Load non-free assets if available. This must be done before the IWAD.
-	if (D_AddFile(wadfiles, optional_wad))
-		Wads.SetIwadNum(2);
-	else
+	//[XANE]Non-free assets? Eh, good, but MMA will use all of its own assets!
+	//if (D_AddFile(wadfiles, optional_wad))
+		//Wads.SetIwadNum(2);
+	//else
 		Wads.SetIwadNum(1);
 
 	if (picks[pick].mRequiredPath.IsNotEmpty())
@@ -728,9 +728,9 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 //
 //==========================================================================
 
-const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad, const char *optionalwad)
+const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad)
 {
-	int iwadType = IdentifyVersion(wadfiles, iwad, basewad, optionalwad);
+	int iwadType = IdentifyVersion(wadfiles, iwad, basewad);
 	//gameiwad = iwadType;
 	const FIWADInfo *iwad_info = &mIWadInfos[iwadType];
 	if (DoomStartupInfo.Name.IsEmpty()) DoomStartupInfo.Name = iwad_info->Name;
