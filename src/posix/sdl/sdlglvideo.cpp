@@ -180,7 +180,7 @@ SDLGLVideo::SDLGLVideo (int parm)
 {
 	IteratorBits = 0;
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-        fprintf( stderr, "Video initialization failed: %s\n",
+		fprintf( stderr, "Video initialization failed with the SDL error '%s'!\n",
              SDL_GetError( ) );
     }
 }
@@ -296,9 +296,9 @@ DFrameBuffer *SDLGLVideo::CreateFrameBuffer (int width, int height, bool bgra, b
 
 		default:
 			// I give up!
-			I_FatalError ("Could not create new screen (%d x %d)", owidth, oheight);
+			I_FatalError ("Could not create new screen with size %d x %d...", owidth, oheight);
 
-			fprintf( stderr, "!!! [SDLGLVideo::CreateFrameBuffer] Got beyond I_FatalError !!!" );
+			fprintf( stderr, "[SDLGLVideo::CreateFrameBuffer] Got beyond I_FatalError!" );
 			return NULL;	//[C] actually this shouldn't be reached; probably should be replaced with an ASSERT
 		}
 
@@ -324,7 +324,7 @@ bool SDLGLVideo::SetResolution (int width, int height, int bits)
 	I_ShutdownGraphics();
 
 	Video = new SDLGLVideo(0);
-	if (Video == NULL) I_FatalError ("Failed to initialize display");
+	if (Video == NULL) I_FatalError ("The display couldn't be initialized!");
 
 #if (defined(WINDOWS)) || defined(WIN32)
 	bits=32;
@@ -379,7 +379,7 @@ bool SDLGLVideo::InitHardware (bool allowsoftware, int multisample)
 {
 	if (!SetupPixelFormat(allowsoftware, multisample))
 	{
-		Printf ("R_OPENGL: Reverting to software mode...\n");
+		Printf ("Attempting fake 3D (software) renderer...\n");
 		return false;
 	}
 	return true;

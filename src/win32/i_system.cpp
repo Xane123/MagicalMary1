@@ -1329,11 +1329,11 @@ bool I_SetCursor(FTexture *cursorpic)
 	if (cursorpic != NULL && cursorpic->UseType != FTexture::TEX_Null &&
 		(screen == NULL || !screen->Is8BitMode()))
 	{
-		// Must be no larger than 32x32.
-		if (cursorpic->GetWidth() > 32 || cursorpic->GetHeight() > 32)
+		//[XANE]Who says cursors can't be huge?
+		/*if (cursorpic->GetWidth() > 32 || cursorpic->GetHeight() > 32)
 		{
 			return false;
-		}
+		}*/
 
 		cursor = CreateAlphaCursor(cursorpic);
 		if (cursor == NULL)

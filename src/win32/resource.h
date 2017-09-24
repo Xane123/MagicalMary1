@@ -108,6 +108,8 @@
 #define IDCE_ROOMLF                     1091
 #define IDC_DEBUGWATER                  1091
 #define IDCS_ROOMLF                     1092
+#define IDC_DEBUGUMBRELLA2              1092
+#define IDC_DEBUGSWORD                  1092
 #define IDCE_DECAYTIME                  1093
 #define IDCS_DECAYTIME                  1094
 #define IDCE_DECAYHFRATIO               1095

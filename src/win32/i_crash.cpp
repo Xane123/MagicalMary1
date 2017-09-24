@@ -974,7 +974,7 @@ static void AddStackInfo (HANDLE file, void *dumpaddress, DWORD code, CONTEXT *c
 		if (scan == jump)
 		{
 			scan = topOfStack - 16384/4;
-			Writef (file, "\r\n . . . Snip . . .\r\n\r\n");
+			Writef (file, "\r\n...too lazy to show the rest; A part of this stack dump was snipped...\r\n\r\n");
 		}
 
 		Writef (file, "%p:", scan);
