@@ -73,6 +73,7 @@
 #define IDC_PLEASETELLUS                1061
 #define IDC_BUTTON2                     1062
 #define IDC_CRASHDETAILS                1062
+#define IDC_GITCOMMITINFO               1062
 #define IDC_DEADGUYVIEWER               1063
 #define IDC_BOING                       1065
 #define IDC_CRASHFILESIZE               1066

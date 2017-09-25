@@ -1130,11 +1130,19 @@ static void SetQueryIWad(HWND dialog)
 		MessageBox(dialog,
 			"You've saved your startup settings permanently. If you want to change\n"
 			"them in the future, hold down SHIFT while starting " GAMENAME ".",
-			"Settings Permanently Saved.",
+			"Settings Permanently Saved",
 			MB_OK | MB_ICONINFORMATION);
 	}
 
 	queryiwad = query;
+}
+
+static void DisplayInfoDialogXane(HWND dialog)
+{
+			MessageBox(dialog,
+			"To disable Debug Options, set the CVAR xane_debug to 0.",
+			"Information",
+			MB_OK | MB_ICONINFORMATION);
 }
 
 //==========================================================================
@@ -1254,10 +1262,12 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDCANCEL)
 		{
+			DisplayInfoDialogXane(hDlg);
 			EndDialog(hDlg, -1);
 		}
 		else if (LOWORD(wParam) == IDOK)
-		{	//[XANE]Let's see if this works...
+		{	//[XANE]Enable any of the checkboxes that were enabled.
+			//TODO: Change these to variables in the source that can be retrieved using GameType() but not set directly.
 			debug_spawn = SendDlgItemMessage(hDlg, IDC_DEBUGSPAWN, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			debug_super = SendDlgItemMessage(hDlg, IDC_DEBUGSUPER, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			debug_wind = SendDlgItemMessage(hDlg, IDC_DEBUGWIND, BM_GETCHECK, 0, 0) == BST_CHECKED;

@@ -45,7 +45,8 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.8"	//Based on g3.2, https://github.com/coelckers/gzdoom/commit/dd8a114bb821ccc5e3a15e34151de71a3d907ffd
+#define VERSIONSTR "v1.8"	
+#define GIT_COMMIT "48f9e535804f46c55f4499ba534d0ca6fdb49f5f"	//This is the GZDoom Git commit that Mary's Magical Adventure is based on.
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 1,8,9999,0
