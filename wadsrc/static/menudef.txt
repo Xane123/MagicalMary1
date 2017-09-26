@@ -424,7 +424,7 @@ ListMenu "PlayerMenu"
 OptionMenu "CustomizeControls" protected
 {
 Title "CONTROLS"
-ScrollTop 2
+ScrollTop 10
 StaticText "To bind to more than two keys"
 StaticText "or do more advanced binds, see"
 StaticText "the console (~)'s bind commands."
@@ -432,7 +432,7 @@ StaticText "For example, doublebind (key) +mc_run"
 StaticText "to run when pushing something twice."
 StaticText " "
 StaticText "Also, if using Reshade, rebind its shortcut"
-StaticText "or you may become unable to stop running!
+StaticText "or you may become unable to stop running!"
 StaticText " "
 StaticText "MOVEMENT"
 Control "Forward", "+forward"
