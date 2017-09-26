@@ -14,8 +14,8 @@ doublebind w +mc_run
 8 "slot 8"
 9 "slot 9"
 0 "slot 0"
-[ sizedown
-] sizeup
+[ screenblocks 10
+] sceenblocks 12
 q +attack
 e +altattack
 shift +speed
@@ -40,13 +40,14 @@ f10 menu_quit
 tab togglemap
 pause pause
 sysrq screenshot
-t messagemode
-\ +showscores
+enter messagemode
 f12 spynext
 mwheeldown weapnext
 mwheelup weapprev
-num5 +user1
-/ +user2
+num5 +user1			//Transform into Magical Cutie Mary
+\ +user1			//Alternate key for laptop users without a numpad.
+/ +user2			//Teleport to Small Hut
+. +user3			//Restart run
 
 pgup +moveup
 ins +movedown
