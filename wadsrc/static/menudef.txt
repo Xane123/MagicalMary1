@@ -1573,7 +1573,7 @@ OptionMenu SoundOptions protected
 	Slider "$SNDMNU_MUSICVOLUME",		"snd_musicvolume", 0, 1, 0.05, 2
 	Option "$SNDMNU_MIDIDEVICE",		"snd_mididevice", "MidiDevices"
 	StaticText " "
-	Option "$SNDMNU_SOUNDTRACK",		"xane_soundtrack",	"SoundSoundtracks
+	Option "$SNDMNU_SOUNDTRACK",		"xane_soundtrack",	"SoundSoundtracks"
 	Option "$SNDMNU_RANDOMIZEPITCHES",	"snd_pitched", "OnOff"
 	Slider "$SNDMNU_CHANNELS",			"snd_channels", 64, 256, 8, 0
 	StaticText " "
