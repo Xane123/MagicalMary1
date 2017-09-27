@@ -71,7 +71,7 @@ static uint8_t CheatAmmo[] =		{ 'm','m','a','m','a','g','i','c',255 };	//MMAMAGI
 static uint8_t CheatMypos[] =		{ 'm','m','a','p','o','s',255 };	//MMAPOS
 static uint8_t CheatAmap[] =		{ 'x','a','n','e',255 };
 
-static cheatseq_t DoomCheats[] =
+static cheatseq_t MMACheats[] =
 {
 	{ CheatMus,				0, 1, 0, {0,0},				Cht_Music },
 	{ CheatMypos,			0, 1, 0, {0,0},				Cht_MyPos },
@@ -86,7 +86,7 @@ static cheatseq_t DoomCheats[] =
 bool ST_Responder (event_t *ev)
 {
 	bool eat = false;
-	return CheatCheckList(ev, DoomCheats, countof(DoomCheats));
+	return CheatCheckList(ev, MMACheats, countof(MMACheats));
 	return false;
 }
 
@@ -172,10 +172,17 @@ static bool Cht_Generic (cheatseq_t *cheat)
 
 static bool Cht_Music (cheatseq_t *cheat)
 {
-	char buf[9] = "idmus xx";
+	char buf[20] = "runoldscript 254 x ";
 
-	buf[6] = cheat->Args[0];
-	buf[7] = cheat->Args[1];
+	if (cheat->Args[0] == '0')
+	{
+		buf[17] = cheat->Args[1];
+	}
+	else
+	{
+		buf[17] = cheat->Args[0];
+		buf[18] = cheat->Args[1];
+	}
 	C_DoCommand (buf);
 	return true;
 }
