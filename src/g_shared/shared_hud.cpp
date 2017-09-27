@@ -63,7 +63,7 @@
 
 EXTERN_CVAR(Bool,am_follow)
 EXTERN_CVAR (Int, con_scaletext)
-EXTERN_CVAR (Bool, idmypos)
+EXTERN_CVAR (Bool, mmapos)
 EXTERN_CVAR (Int, screenblocks)
 EXTERN_CVAR(Bool, hud_aspectscale)
 
@@ -1156,7 +1156,7 @@ void DrawHUD()
 		i=DrawAmmo(CPlayer, hudwidth-5, i);
 		if (hud_showweapons) DrawWeapons(CPlayer, hudwidth - 5, i);
 		DrawInventory(CPlayer, 144, hudheight-28);
-		if (idmypos) DrawCoordinates(CPlayer);
+		if (mmapos) DrawCoordinates(CPlayer);
 
 		DrawTime();
 		DrawLatency();

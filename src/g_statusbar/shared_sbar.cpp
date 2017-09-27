@@ -139,7 +139,7 @@ CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 	if (self < 0 || self > 2) self = 2;
 }
 
-CVAR (Bool, idmypos, false, 0);
+CVAR (Bool, mmapos, false, 0);
 CVAR(Float, underwater_fade_scalar, 1.0f, CVAR_ARCHIVE) // [Nash] user-settable underwater blend intensity
 
 //---------------------------------------------------------------------------
@@ -976,7 +976,7 @@ void DBaseStatusBar::Draw (EHudState state)
 		RefreshBackground ();
 	}
 
-	if (idmypos)
+	if (mmapos)
 	{ 
 		// Draw current coordinates
 		IFVIRTUAL(DBaseStatusBar, DrawMyPos)
