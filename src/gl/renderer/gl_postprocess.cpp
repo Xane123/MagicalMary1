@@ -72,7 +72,7 @@
 // CVARs
 //
 //==========================================================================
-CVAR(Bool, gl_bloom, false, CVAR_ARCHIVE);
+CVAR(Bool, gl_bloom, true, CVAR_ARCHIVE);
 CUSTOM_CVAR(Float, gl_bloom_amount, 1.4f, CVAR_ARCHIVE)
 {
 	if (self < 0.1f) self = 0.1f;
@@ -101,7 +101,7 @@ CVAR(Float, gl_lens_k, -0.12f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 CVAR(Float, gl_lens_kcube, 0.1f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 CVAR(Float, gl_lens_chromatic, 1.12f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
-CUSTOM_CVAR(Int, gl_fxaa, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Int, gl_fxaa, 1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (self < 0 || self >= FFXAAShader::Count)
 	{
@@ -109,7 +109,7 @@ CUSTOM_CVAR(Int, gl_fxaa, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 	}
 }
 
-CUSTOM_CVAR(Int, gl_ssao, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Int, gl_ssao, 3, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (self < 0 || self > 3)
 		self = 0;
@@ -147,7 +147,7 @@ CUSTOM_CVAR(Bool, gl_paltonemap_reverselookup, true, CVAR_ARCHIVE | CVAR_NOINITC
 		GLRenderer->ClearTonemapPalette();
 }
 
-CVAR(Float, gl_menu_blur, -1.0f, CVAR_ARCHIVE)
+CVAR(Float, gl_menu_blur, 0.5f, CVAR_ARCHIVE)
 
 EXTERN_CVAR(Float, vid_brightness)
 EXTERN_CVAR(Float, vid_contrast)
@@ -485,7 +485,7 @@ void FGLRenderer::BlurScene(float gameinfobluramount)
 	float blurAmount = gl_menu_blur;
 
 	// if CVar is negative, use the gameinfo entry
-	if (gl_menu_blur < 0)
+	if (gl_menu_blur < 0)	//[XANE]TODO: Find out what the "gameinfo blur amount entry" is!
 		blurAmount = gameinfobluramount;
 
 	// if blurAmount == 0 or somehow still returns negative, exit to prevent a crash, clearly we don't want this

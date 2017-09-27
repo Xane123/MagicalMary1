@@ -54,7 +54,7 @@
 CVAR (Bool, gl_lights_checkside, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 CVAR (Bool, gl_light_sprites, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 CVAR (Bool, gl_light_particles, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
-CVAR (Bool, gl_light_shadowmap, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
+CVAR (Bool, gl_light_shadowmap, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);	//[XANE]Shadowmaps are a great addition to GZDoom, so they're on by default.
 
 CVAR(Int, gl_attenuate, -1, 0);	// This is mainly a debug option.
 
