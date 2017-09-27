@@ -2136,8 +2136,6 @@ OptionMenu "GLLightOptions" protected
 	Option "$GLLIGHTMNU_CLIPLIGHTS",			gl_lights_checkside,	"YesNo"
 	Option "$GLLIGHTMNU_LIGHTSPRITES",			gl_light_sprites,		"YesNo"
 	Option "$GLLIGHTMNU_LIGHTPARTICLES",		gl_light_particles,		"YesNo"
-	Option "$GLLIGHTMNU_LIGHTSHADOWMAP",		gl_light_shadowmap,		"YesNo"
-	Option "$GLLIGHTMNU_LIGHTSHADOWMAPQUALITY", gl_shadowmap_quality,	"ShadowMapQuality"
 }
 
 OptionMenu "OpenGLOptions" protected
@@ -2177,4 +2175,6 @@ OptionMenu "OpenGLOptions" protected
 	StaticText " "
 	Slider "$GLPREFMNU_PALTONEMAPPOWER",		gl_paltonemap_powtable,			0.2, 3.0, 0.1, 1
 	Option "$GLPREFMNU_PALTONEMAPORDER",		gl_paltonemap_reverselookup,	"LookupOrder"
+	Option "$GLLIGHTMNU_LIGHTSHADOWMAP",		gl_light_shadowmap,		"YesNo"
+	Option "$GLLIGHTMNU_LIGHTSHADOWMAPQUALITY", gl_shadowmap_quality,	"ShadowMapQuality"
 }
