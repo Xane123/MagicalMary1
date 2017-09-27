@@ -2118,14 +2118,14 @@ void P_FakeZMovement(AActor *mo)
 	//
 	mo->AddZ(mo->Vel.Z);
 	if ((mo->flags&MF_FLOAT) && mo->target)
-	{ // float down towards target if too close
+	{ // float down towards target [XANE] but "too close" was a stupid design choice by ZDoom's developers... :P
 		if (!(mo->flags & MF_SKULLFLY) && !(mo->flags & MF_INFLOAT))
 		{
 			double dist = mo->Distance2D(mo->target);
 			double delta = mo->target->Center() - mo->Z();
-			if (delta < 0 && dist < -(delta * 3))
+			if (delta < -4 /*&& dist < -(delta * 3)*/)
 				mo->AddZ(-mo->FloatSpeed);
-			else if (delta > 0 && dist < (delta * 3))
+			else if (delta > 4 /*&& dist < (delta * 3)*/)
 				mo->AddZ(mo->FloatSpeed);
 		}
 	}
