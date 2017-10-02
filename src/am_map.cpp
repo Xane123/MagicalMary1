@@ -508,7 +508,7 @@ void FMapInfoParser::ParseAMColors(bool overlay)
 
 		if (nextKey.CompareNoCase("base") == 0)
 		{
-			if (colorset) sc.ScriptError("'base' must be specified before the first color");
+			if (colorset) sc.ScriptError("'base' must be specified before the first color.");
 			sc.MustGetToken(TK_StringConst);
 			if (sc.Compare("doom"))
 			{

@@ -4,8 +4,8 @@ IWad
 {
 	Name = "Mary's Magical Adventure (Alpha)"
 	Autoname = "mma.base"
-	Game = "Doom"
-	Config = "Doom"
+	Game = "MMA"
+	Config = "MMA"
 	Mapinfo = "mapinfo/mma.txt"
 	MustContain = "MGAMEPAL", "XANE_MMA"
 	BannerColors = "c0 40 c0", "40 20 40"
