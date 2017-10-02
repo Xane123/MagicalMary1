@@ -489,13 +489,9 @@ OptionValue "MenuMouse"
 
 OptionString "Cursors"
 {
-	"None", "$OPTVAL_DEFAULT"
-	"cursor", "$OPTSTR_SIMPLEARROW"
-	"doomcurs", "$OPTVAL_DOOM"
-	"herecurs", "$OPTSTR_HERETIC"
-	"hexncurs", "$OPTVAL_HEXEN"
-	"strfcurs", "$OPTVAL_STRIFE"
-	"chexcurs", "$OPTSTR_CHEX"
+	"curs_def", "$OPTSTR_CURSORDEFAULT"
+	"curs_cup", "$OPTSTR_CURSORMARYCUP"
+	"curs_kit", "$OPTSTR_CURSORKITTY"
 	"-", "$OPTSTR_SYSTEMCURSOR"
 }
 

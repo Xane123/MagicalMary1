@@ -13,43 +13,6 @@ QUITMSG = "are you sure you want to\nquit this great game?";
 TXT_YES = "Yes";
 TXT_NO = "No";
 
-// Quit Doom 1 messages
-QUITMSG1 = "please don't leave, there's more\ndemons to toast!";
-QUITMSG2 = "let's beat it -- this is turning\ninto a bloodbath!";
-QUITMSG3 = "i wouldn't leave if i were you.\ndos is much worse.";
-QUITMSG4 = "you're trying to say you like dos\nbetter than me, right?";
-QUITMSG5 = "don't leave yet -- there's a\ndemon around that corner!";
-QUITMSG6 = "ya know, next time you come in here\ni'm gonna toast ya.";
-QUITMSG7 = "go ahead and leave. see if i care.";
-
-// Quit Doom II messages
-QUITMSG8 = "you want to quit?\nthen, thou hast lost an eighth!";
-QUITMSG9 = "don't go now, there's a \ndimensional shambler waiting\nat the dos prompt!";
-QUITMSG10 = "get outta here and go back\nto your boring programs.";
-QUITMSG11 = "if i were your boss, i'd \n deathmatch ya in a minute!";
-QUITMSG12 = "look, bud. you leave now\nand you forfeit your body count!";
-QUITMSG13 = "just leave. when you come\nback, i'll be waiting with a bat.";
-QUITMSG14 = "you're lucky i don't smack\nyou for thinking about leaving.";
-
-// Quit Strife messages
-QUITMSG15 = "where are you going?!\nwhat about the rebellion?";
-QUITMSG16 = "carnage interruptus...\nwhat a tease!";
-QUITMSG17 = "but you're the hope\n-- my only chance!!";
-QUITMSG18 = "nobody walks out on blackbird.";
-QUITMSG19 = "i thought you were different...";
-QUITMSG20 = "fine! just kill and run!";
-QUITMSG21 = "you can quit...\nbut you can't hide...";
-QUITMSG22 = "whaaa, what's the matter?\nmommy says dinnertime?";
-
-// Quit Chex messages
-QUITMSG23 = "Don't quit now, there are still\nflemoids on the loose!";
-QUITMSG24 = "Don't give up -- the flemoids will\nget the upper hand!";
-QUITMSG25 = "Don't leave now.\nWe need your help!";
-QUITMSG26 = "I hope you're just taking a\nbreak for Chex(R) party mix.";
-QUITMSG27 = "Don't quit now!\nWe need your help!";
-QUITMSG28 = "Don't abandon the\nIntergalactic Federation of Cereals!";
-QUITMSG29 = "The real Chex(R) Warrior\nwouldn't give up so fast!";
-
 LOADNET = "you can't do load while in a net game!\n\npress a key.";
 QLOADNET = "you can't quickload during a netgame!\n\npress a key.";
 QSAVESPOT = "you haven't picked a quicksave slot yet!\n\npress a key.";
@@ -2364,9 +2327,9 @@ C_FIRE					= "\cxfire";
 C_SAPPHIRE				= "\cysapphire";
 C_TEAL					= "\czteal";
 // Option Strings
-OPTSTR_SIMPLEARROW			= "Simple arrow";
-OPTSTR_HERETIC				= "Heretic";
-OPTSTR_CHEX					= "Chex";
+OPTSTR_CURSORDEFAULT		= "Yellow arrow";
+OPTSTR_CURSORMARYCUP		= "Mary's cup";
+OPTSTR_CURSORKITTY			= "Kitty's computer";
 OPTSTR_SYSTEMCURSOR			= "System cursor";
 OPTSTR_DIRECTSOUND			= "DirectSound";
 OPTSTR_WASAPI				= "Vista WASAPI";
@@ -2396,8 +2359,6 @@ OPTSTR_NOINTERPOLATION		= "No interpolation";
 OPTSTR_SPLINE				= "Spline";
 OPTSTR_OPENAL				= "OpenAL";
 
-
-
 SAFEMESSAGE			= "Do you really want to do this?";
 MNU_COLORPICKER		= "SELECT COLOR";
 
@@ -2408,139 +2369,6 @@ WI_ENTERING			= "Now entering:";
 AM_MONSTERS			= "Monsters:";
 AM_SECRETS			= "Secrets:";
 AM_ITEMS			= "Items:";
-
-// Bloodbath announcer
-
-BBA_BONED = "%k boned %o like a fish";
-BBA_CASTRA = "%k castrated %o";
-BBA_CREAMED = "%k creamed %o";
-BBA_DECIMAT = "%k decimated %o";
-BBA_DESTRO = "%k destroyed %o";
-BBA_DICED = "%k diced %o";
-BBA_DISEMBO = "%k disembowled %o";
-BBA_FLATTE = "%k flattened %o";
-BBA_JUSTICE = "%k gave %o Anal Justice";
-BBA_MADNESS = "%k gave AnAl MaDnEsS to %o";
-BBA_KILLED = "%k killed %o";
-BBA_MINCMEAT = "%k made mincemeat out of %o";
-BBA_MASSACR = "%k massacred %o";
-BBA_MUTILA = "%k mutilated %o";
-BBA_REAMED = "%k reamed %o";
-BBA_RIPPED = "%k ripped %o a new orifice";
-BBA_SLAUGHT = "%k slaughtered %o";
-BBA_SMASHED = "%k smashed %o";
-BBA_SODOMIZ = "%k sodomized %o";
-BBA_SPLATT = "%k splattered %o";
-BBA_SQUASH = "%k squashed %o";
-BBA_THROTTL = "%k throttled %o";
-BBA_WASTED = "%k wasted %o";
-BBA_BODYBAG = "%k body bagged %o";
-BBA_HELL = "%k sent %o to Hell";
-BBA_TOAST = "%k toasted %o";
-BBA_SNUFF = "%k snuffed %o";
-BBA_HOSED = "%k hosed %o";
-BBA_SPRAYED = "%k sprayed %o";
-BBA_DOGMEAT = "%k made dog meat out of %o";
-BBA_BEATEN = "%k beat %o like a cur";
-
-BBA_EXCREMENT = "%o is excrement";
-BBA_HAMBURGER = "%o is hamburger";
-BBA_SCROTUM = "%o suffered scrotum separation";
-BBA_POPULATION = "%o volunteered for population control";
-BBA_SUICIDE = "%o has suicided";
-BBA_DARWIN = "%o received the Darwin Award";
-
-// Chex Quest Strings
-CHUSTR_E1M1 = "E1M1: Landing Zone";
-CHUSTR_E1M2 = "E1M2: Storage Facility";
-CHUSTR_E1M3 = "E1M3: Experimental Lab";
-CHUSTR_E1M4 = "E1M4: Arboretum";
-CHUSTR_E1M5 = "E1M5: Caverns of Bazoik";
-
-CE1TEXT =
-		"Mission accomplished.\n"
-		"\n"
-		"Are you prepared for the next mission?\n"
-		"\n"
-		"\n"
-		"\n"
-		"\n"
-		"\n"
-		"\n"
-		"Press the escape key to continue...";
-
-CE2TEXT = "You've done it!";
-CE3TEXT = "Wonderful Job!";
-CE4TEXT = "Fantastic";
-
-CLOADNET = "you can't do load while in a net quest!\n\npress a key.";
-$ifgame(chex) QSPROMPT = "quicksave over your quest named\n\n'%s'?\n\npress y or n.";
-$ifgame(chex) QLOADNET = "you can't quickload during a netquest!\n\npress a key.";
-$ifgame(chex) QLPROMPT = "do you want to quickload the quest named\n\n'%s'?\n\npress y or n.";
-CNEWGAME = "you can't start a new quest\nwhile in a network quest.\n\npress a key.";
-
-CNIGHTMARE = "Careful, this will be tough.\nDo you wish to continue?\n\npress y or n.";
-
-CSWSTRING = "this is Chex(R) Quest. look for\n\nfuture levels at www.chexquest.com.\n\npress a key.";
-
-$ifgame(chex) NETEND = "you can't end a netquest!\n\npress a key.";
-$ifgame(chex) ENDGAME = "are you sure you want to end the quest?\n\npress y or n.";
-
-GOTCHEXARMOR = "Picked up the Chex(R) Armor.";
-GOTSUPERCHEXARMOR = "Picked up the Super Chex(R) Armor!";
-GOTWATER = "Picked up a glass of water.";
-GOTREPELLENT = "Picked up slime repellent.";
-GOTBREAKFAST = "Supercharge Breakfast!";
-GOTCBLUEKEY = "Picked up a blue key.";
-GOTCYELLOWKEY = "Picked up a yellow key.";
-GOTCREDKEY = "Picked up a red key.";
-GOTFRUIT = "Picked up a bowl of fruit.";
-GOTVEGETABLESNEED = "Vegetables are REALLY good for you!";
-GOTVEGETABLES = "Picked up a bowl of vegetables.";
-GOTSLIMESUIT = "Found a Slime-Proof Suit";
-GOTCHEXMAP = "Found a Computer Area Map";
-
-GOTZORCHRECHARGE = "Picked up a mini zorch recharge.";
-GOTMINIZORCHPACK = "Picked up a mini zorch pack.";
-GOTPROPULSORRECHARGE = "Picked up a zorch propulsor recharge.";
-GOTPROPULSORPACK = "Picked up a zorch propulsor pack.";
-GOTPHASINGZORCHERRECHARGE = "Picked up a phasing zorcher recharge";
-GOTPHASINGZORCHERPACK = "Picked up a phasing zorcher pack.";
-GOTLARGEZORCHERRECHARGE = "Picked up a large zorcher recharge.";
-GOTLARGEZORCHERPACK = "Picked up a large zorcher pack.";
-GOTZORCHPACK = "Picked up a Zorchpak!";
-
-GOTLAZDEVICE = "You got the LAZ Device! Woot!";
-GOTRAPIDZORCHER = "You got the Rapid Zorcher!";
-GOTSUPERBOOTSPORK = "You got the Super Bootspork!";
-GOTZORCHPROPULSOR = "You got the Zorch Propulsor!";
-GOTPHASINGZORCHER = "You got the Phasing Zorcher!";
-GOTLARGEZORCHER = "You got the Large Zorcher!";
-GOTSUPERLARGEZORCHER = "You got the Mega Zorcher!";
-GOTMINIZORCHER = "Picked up a Mini Zorcher.";
-
-$ifgame(chex) STSTR_DQDON = "Invincible Mode ON";
-$ifgame(chex) STSTR_DQDOFF = "Invincible Mode OFF";
-$ifgame(chex) STSTR_FAADDED = "Zorch Added";
-$ifgame(chex) STSTR_KFAADDED = "Super Zorch Added";
-$ifgame(chex) STSTR_CHOPPERS = "... Eat Chex(R)!";
-
-OB_COMMONUS = "%o was slimed by a flemoid.";
-OB_BIPEDICUS = "%o was slimed by a bipedicus.";
-OB_BIPEDICUS2 = "%o was slimed by an armored bipedicus.";
-OB_CYCLOPTIS = "%o was slimed by a cycloptis.";
-OB_FLEMBRANE = "%o was defeated by the Flembrane.";
-
-OB_MPSPOON = "%o was spoon fed by %k.";
-OB_MPBOOTSPORK = "%o was thouroughly mixed with %k's bootspork.";
-OB_MPZORCH = "%o was zorched by %k.";
-OB_MPMEGAZORCH = "%o was hit by %k's mega-zorcher.";
-OB_MPRAPIDZORCH = "%o was rapid zorched by %k.";
-OB_MPPROPULSOR = "%o was zorched by %k's propulsor.";
-OB_MPP_SPLASH = "%o was hit by %k's propulsor.";
-OB_MPPHASEZORCH = "%o was phase zorched by %k.";
-OB_MPLAZ_BOOM = "%o fell prey to %k's LAZ device.";
-OB_MPLAZ_SPLASH = "%o was lazzed by %k.";
 
 // Music names for Doom. These are needed in the string table only so that they can
 // be replaced by Dehacked. 

@@ -137,7 +137,7 @@ class ConversationMenu : Menu
 			let ReplyText = Stringtable.Localize(reply.Reply);
 			if (reply.NeedsGold) ReplyText.AppendFormat(" for %u", reply.PrintAmount);
 
-			let ReplyLines = SmallFont.BreakLines (ReplyText, ReplyWidth);
+			let ReplyLines = ConFont.BreakLines (ReplyText, ReplyWidth);
 
 			mResponses.Push(mResponseLines.Size());
 			for (j = 0; j < ReplyLines.Count(); ++j)
@@ -206,7 +206,7 @@ class ConversationMenu : Menu
 		{
 			toSay = ".";
 		}
-		mDialogueLines = SmallFont.BreakLines(toSay, SpeechWidth);
+		mDialogueLines = ConFont.BreakLines(toSay, SpeechWidth);
 	}
 	
 	//=============================================================================
@@ -405,13 +405,13 @@ class ConversationMenu : Menu
 
 		if (speakerName.Length() > 0)
 		{
-			screen.DrawText(SmallFont, Font.CR_WHITE, x, y, speakerName, DTA_CleanNoMove, true);
+			screen.DrawText(ConFont, Font.CR_WHITE, x, y, speakerName, DTA_CleanNoMove, true);
 			y += linesize * 3 / 2;
 		}
 		x = 24 * screen.GetWidth() / 320;
 		for (int i = 0; i < cnt; ++i)
 		{
-			screen.DrawText(SmallFont, Font.CR_UNTRANSLATED, x, y, mDialogueLines.StringAt(i), DTA_CleanNoMove, true);
+			screen.DrawText(ConFont, Font.CR_UNTRANSLATED, x, y, mDialogueLines.StringAt(i), DTA_CleanNoMove, true);
 			y += linesize;
 		}
 	}
@@ -435,10 +435,10 @@ class ConversationMenu : Menu
 		int response = 0;
 		for (int i = 0; i < mResponseLines.Size(); i++)
 		{
-			int width = SmallFont.StringWidth(mResponseLines[i]);
+			int width = ConFont.StringWidth(mResponseLines[i]);
 			int x = 64;
 
-			screen.DrawText(SmallFont, Font.CR_GREEN, x, y, mResponseLines[i], DTA_Clean, true);
+			screen.DrawText(ConFont, Font.CR_GREEN, x, y, mResponseLines[i], DTA_Clean, true);
 
 			if (i == mResponses[response])
 			{
@@ -446,8 +446,8 @@ class ConversationMenu : Menu
 
 				response++;
 				tbuf = String.Format("%d.", response);
-				x = 50 - SmallFont.StringWidth(tbuf);
-				screen.DrawText(SmallFont, Font.CR_GREY, x, y, tbuf, DTA_Clean, true);
+				x = 50 - ConFont.StringWidth(tbuf);
+				screen.DrawText(ConFont, Font.CR_GREY, x, y, tbuf, DTA_Clean, true);
 
 				if (response == mSelection + 1)
 				{
@@ -469,9 +469,9 @@ class ConversationMenu : Menu
 			let coin = players[consoleplayer].ConversationPC.FindInventory("Coin");
 			let icon = GetDefaultByType("Coin").Icon;
 			let goldstr = String.Format("%d", coin != NULL ? coin.Amount : 0);
-			screen.DrawText(SmallFont, Font.CR_GRAY, 21, 191, goldstr, DTA_320x200, true, DTA_FillColor, 0, DTA_Alpha, HR_SHADOW);
+			screen.DrawText(ConFont, Font.CR_GRAY, 21, 191, goldstr, DTA_320x200, true, DTA_FillColor, 0, DTA_Alpha, HR_SHADOW);
 			screen.DrawTexture(icon, false, 3, 190, DTA_320x200, true, DTA_FillColor, 0, DTA_Alpha, HR_SHADOW);
-			screen.DrawText(SmallFont, Font.CR_GRAY, 20, 190, goldstr, DTA_320x200, true);
+			screen.DrawText(ConFont, Font.CR_GRAY, 20, 190, goldstr, DTA_320x200, true);
 			screen.DrawTexture(icon, false, 2, 189, DTA_320x200, true);
 		}
 

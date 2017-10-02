@@ -57,11 +57,11 @@ class MessageBoxMenu : Menu
 		messageSelection = 0;
 		mMouseLeft = 140;
 		mMouseY = 0x80000000;
-		int mr1 = 170 + SmallFont.StringWidth(Stringtable.Localize("$TXT_YES"));
-		int mr2 = 170 + SmallFont.StringWidth(Stringtable.Localize("$TXT_NO"));
+		int mr1 = 170 + ConFont.StringWidth(Stringtable.Localize("$TXT_YES"));
+		int mr2 = 170 + ConFont.StringWidth(Stringtable.Localize("$TXT_NO"));
 		mMouseRight = MAX(mr1, mr2);
 		mParentMenu = parent;
-		mMessage = SmallFont.BreakLines(Stringtable.Localize(message), 300);
+		mMessage = ConFont.BreakLines(Stringtable.Localize(message), 300);
 		mMessageMode = messagemode;
 		if (playsound)
 		{
@@ -80,17 +80,17 @@ class MessageBoxMenu : Menu
 	{
 		int i, y;
 
-		int fontheight = SmallFont.GetHeight();
+		int fontheight = ConFont.GetHeight();
 
 		y = 100;
 
 		int c = mMessage.Count();
 		for (i = 0; i < c; i++)
-			y -= SmallFont.GetHeight () / 2;
+			y -= ConFont.GetHeight () / 2;
 
 		for (i = 0; i < c; i++)
 		{
-			screen.DrawText (SmallFont, Font.CR_UNTRANSLATED, 160 - mMessage.StringWidth(i)/2, y, mMessage.StringAt(i), DTA_Clean, true);
+			screen.DrawText (ConFont, Font.CR_UNTRANSLATED, 160 - mMessage.StringWidth(i)/2, y, mMessage.StringAt(i), DTA_Clean, true);
 			y += fontheight;
 		}
 
@@ -98,8 +98,8 @@ class MessageBoxMenu : Menu
 		{
 			y += fontheight;
 			mMouseY = y;
-			screen.DrawText(SmallFont, messageSelection == 0? OptionMenuSettings.mFontColorSelection : OptionMenuSettings.mFontColor, 160, y, Stringtable.Localize("$TXT_YES"), DTA_Clean, true);
-			screen.DrawText(SmallFont, messageSelection == 1? OptionMenuSettings.mFontColorSelection : OptionMenuSettings.mFontColor, 160, y + fontheight + 1, Stringtable.Localize("$TXT_NO"), DTA_Clean, true);
+			screen.DrawText(ConFont, messageSelection == 0? OptionMenuSettings.mFontColorSelection : OptionMenuSettings.mFontColor, 160, y, Stringtable.Localize("$TXT_YES"), DTA_Clean, true);
+			screen.DrawText(ConFont, messageSelection == 1? OptionMenuSettings.mFontColorSelection : OptionMenuSettings.mFontColor, 160, y + fontheight + 1, Stringtable.Localize("$TXT_NO"), DTA_Clean, true);
 
 			if (messageSelection >= 0)
 			{
@@ -268,7 +268,7 @@ class MessageBoxMenu : Menu
 		else
 		{
 			int sel = -1;
-			int fh = SmallFont.GetHeight() + 1;
+			int fh = ConFont.GetHeight() + 1;
 
 			// convert x/y from screen to virtual coordinates, according to CleanX/Yfac use in DrawTexture
 			x = ((x - (screen.GetWidth() / 2)) / CleanXfac) + 160;
