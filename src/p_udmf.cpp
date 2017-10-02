@@ -2067,7 +2067,7 @@ public:
 				switch (gameinfo.gametype)
 				{
 				default:			// Shh, GCC
-				case GAME_Doom:
+				case GAME_MMA:
 				case GAME_Chex:
 					namespace_bits = Dm;
 					P_LoadTranslator("xlat/doom_base.txt");

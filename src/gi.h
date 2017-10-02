@@ -205,7 +205,7 @@ inline const char *GameTypeName()
 inline bool CheckGame(const char *string, bool chexisdoom)
 {
 	int test = gameinfo.gametype;
-	if (test == GAME_Chex && chexisdoom) test = GAME_Doom;
+	if (test == GAME_Chex && chexisdoom) test = GAME_MMA;
 	return !stricmp(string, GameNames[test]);
 }
 

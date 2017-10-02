@@ -1351,7 +1351,7 @@ void ParseGLDefs()
 	case GAME_Strife:
 		defsLump = "STRFDEFS";
 		break;
-	case GAME_Doom:
+	case GAME_MMA:
 		defsLump = "DOOMDEFS";
 		break;
 	case GAME_Chex:

@@ -116,7 +116,7 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 				{
 					sc.MustGetStringName("=");
 					sc.MustGetString();
-					if (sc.Compare("Doom")) iwad->gametype = GAME_Doom;
+					if (sc.Compare("Doom")) iwad->gametype = GAME_MMA;
 					else if (sc.Compare("Heretic")) iwad->gametype = GAME_Heretic;
 					else if (sc.Compare("Hexen")) iwad->gametype = GAME_Hexen;
 					else if (sc.Compare("Strife")) iwad->gametype = GAME_Strife;

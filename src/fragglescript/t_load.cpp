@@ -351,7 +351,7 @@ void T_LoadScripts(MapData *map)
 	// This code then then swaps 270 and 272 - but only if this is either Doom or Heretic and 
 	// the default translator is being used.
 	// Custom translators will not be patched.
-	if ((gameinfo.gametype == GAME_Doom || gameinfo.gametype == GAME_Heretic) && level.info->Translator.IsEmpty() &&
+	if ((gameinfo.gametype == GAME_MMA || gameinfo.gametype == GAME_Heretic) && level.info->Translator.IsEmpty() &&
 		level.maptype == MAPTYPE_DOOM && SimpleLineTranslations.Size() > 272 && SimpleLineTranslations[272 - 2*HasScripts].special == FS_Execute)
 	{
 		FLineTrans t = SimpleLineTranslations[270];

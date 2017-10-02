@@ -816,7 +816,7 @@ void FWadCollection::RenameSprites ()
 
 	switch (gameinfo.gametype)
 	{
-	case GAME_Doom:
+	case GAME_MMA:
 	default:
 		// Doom's sprites don't get renamed.
 		return;
@@ -913,7 +913,7 @@ void FWadCollection::RenameSprites ()
 //==========================================================================
 void FWadCollection::RenameNerve ()
 {
-	if (gameinfo.gametype != GAME_Doom)
+	if (gameinfo.gametype != GAME_MMA)
 		return;
 
 	bool found = false;

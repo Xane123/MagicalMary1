@@ -2561,7 +2561,7 @@ void D_DoomMain (void)
 		// Note that the command line overrides defaults from the config.
 
 		if ((ConsiderPatches("-deh") | ConsiderPatches("-bex")) == 0 &&
-			gameinfo.gametype == GAME_Doom && GameConfig->SetSection ("Doom.DefaultDehacked"))
+			gameinfo.gametype == GAME_MMA && GameConfig->SetSection ("Doom.DefaultDehacked"))
 		{
 			const char *key;
 			const char *value;

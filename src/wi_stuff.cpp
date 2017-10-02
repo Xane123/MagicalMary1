@@ -293,7 +293,7 @@ bool DInterBackground::LoadBackground(bool isenterpic)
 		switch (gameinfo.gametype)
 		{
 		case GAME_Chex:
-		case GAME_Doom:
+		case GAME_MMA:
 			if (!(gameinfo.flags & GI_MAPxx))
 			{
 				const char *level = isenterpic ? wbs->next : wbs->current;
