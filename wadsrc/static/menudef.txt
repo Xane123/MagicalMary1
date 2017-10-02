@@ -11,7 +11,7 @@
 DEFAULTLISTMENU
 {
 	Font "BigFont", "Untranslated"
-	IfGame(Doom, Chex)
+	IfGame(MMA, Chex)
 	{
 		Selector "M_SKULL1", -32, -5
 		Linespacing 16
@@ -37,7 +37,7 @@ DEFAULTLISTMENU
 
 LISTMENU "MainMenu"
 {
-	IfGame(Doom, Chex)
+	IfGame(MMA, Chex)
 	{
 		StaticPatch 94, 2, "M_DOOM"
 		Position 97, 72
@@ -66,7 +66,7 @@ LISTMENU "MainMenu"
 		Position 110, 56
 	}
 	
-	IfGame(Doom, Strife, Chex)
+	IfGame(MMA, Strife, Chex)
 	{
 		PatchItem "M_NGAME", "n", "PlayerclassMenu"
 		ifOption(SwapMenu)
@@ -115,7 +115,7 @@ LISTMENU "MainMenu"
 
 ListMenu "PlayerclassMenu"
 {
-	IfGame(Doom, Heretic, Hexen, Strife)
+	IfGame(MMA, Heretic, Hexen, Strife)
 	{
 		NetgameMessage "$NEWGAME"
 	}
@@ -124,7 +124,7 @@ ListMenu "PlayerclassMenu"
 		NetgameMessage "$CNEWGAME"
 	}
 
-	IfGame(Doom, Strife, Chex)
+	IfGame(MMA, Strife, Chex)
 	{
 		StaticTextCentered 160, 15, "$MNU_CHOOSECLASS"
 		Position 48, 63
@@ -157,7 +157,7 @@ ListMenu "PlayerclassMenu"
 
 ListMenu "EpisodeMenu"
 {
-	IfGame(Doom, Heretic, Hexen, Strife)
+	IfGame(MMA, Heretic, Hexen, Strife)
 	{
 		NetgameMessage "$NEWGAME"
 	}
@@ -166,7 +166,7 @@ ListMenu "EpisodeMenu"
 		NetgameMessage "$CNEWGAME"
 	}
 
-	IfGame(Doom, Chex)
+	IfGame(MMA, Chex)
 	{
 		Position 48, 63
 		StaticPatch 54, 38, "M_EPISOD"
@@ -193,7 +193,7 @@ ListMenu "EpisodeMenu"
 ListMenu "SkillMenu"
 {
 
-	IfGame(Doom, Chex)
+	IfGame(MMA, Chex)
 	{
 		StaticPatch 96, 14, "M_NEWG"
 	}
@@ -201,7 +201,7 @@ ListMenu "SkillMenu"
 	{
 		StaticPatch 96, 14, "M_NGAME"
 	}
-	IfGame(Doom, Strife, Chex)
+	IfGame(MMA, Strife, Chex)
 	{
 		StaticPatch 54, 38, "M_SKILL"
 		Position 48, 63
@@ -239,7 +239,7 @@ ListMenu "GameFilesMenu"
 
 ListMenu "LoadGameMenu"
 {
-	IfGame(Doom, Heretic, Hexen, Strife)
+	IfGame(MMA, Heretic, Hexen, Strife)
 	{
 		NetgameMessage "$LOADNET"
 	}
@@ -247,7 +247,7 @@ ListMenu "LoadGameMenu"
 	{
 		NetgameMessage "$CLOADNET"
 	}
-	IfGame(Doom, Strife, Chex)
+	IfGame(MMA, Strife, Chex)
 	{
 		StaticPatchCentered 160, -20, "M_LOADG"
 	}
@@ -267,7 +267,7 @@ ListMenu "LoadGameMenu"
 
 ListMenu "SaveGameMenu"
 {
-	IfGame(Doom, Strife, Chex)
+	IfGame(MMA, Strife, Chex)
 	{
 		StaticPatchCentered 160, -20, "M_SAVEG"
 	}
@@ -378,7 +378,7 @@ ListMenu "PlayerMenu"
 	Linespacing 14
 	Position 48, 36
 
-	IfGame (Doom, Strife, Chex)
+	IfGame (MMA, Strife, Chex)
 	{
 		PlayerNameBox "$PLYRMNU_NAME", 0, "Playerbox"
 		Selector "-", -16, -1
@@ -388,7 +388,7 @@ ListMenu "PlayerMenu"
 		PlayerNameBox "$PLYRMNU_NAME", 5, "Playerbox"
 		Selector "-", -16, 1
 	}
-	IfGame(Doom, Heretic, Strife, Chex)
+	IfGame(MMA, Heretic, Strife, Chex)
 	{
 		MouseWindow 0, 220
 		PlayerDisplay 220, 80, "20 00 00", "80 00 40", 1, "PlayerDisplay"

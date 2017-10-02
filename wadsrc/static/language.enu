@@ -2327,9 +2327,6 @@ C_FIRE					= "\cxfire";
 C_SAPPHIRE				= "\cysapphire";
 C_TEAL					= "\czteal";
 // Option Strings
-OPTSTR_CURSORDEFAULT		= "Yellow arrow";
-OPTSTR_CURSORMARYCUP		= "Mary's cup";
-OPTSTR_CURSORKITTY			= "Kitty's computer";
 OPTSTR_SYSTEMCURSOR			= "System cursor";
 OPTSTR_DIRECTSOUND			= "DirectSound";
 OPTSTR_WASAPI				= "Vista WASAPI";
