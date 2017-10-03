@@ -83,7 +83,7 @@ FGameConfigFile *GameConfig;
 
 CVAR(Bool, screenshot_quiet, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(String, screenshot_type, "png", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR(String, screenshot_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(String, screenshot_dir, "./shots/", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 EXTERN_CVAR(Bool, longsavemessages);
 
 static long ParseCommandLine (const char *args, int *argc, char **argv);
@@ -631,30 +631,30 @@ static bool FindFreeName (FString &fullname, const char *extension)
 	{
 		const char *gamename = gameinfo.ConfigName;
 
-		time_t now;
+		/*time_t now;
 		tm *tm;
 
 		time(&now);
 		tm = localtime(&now);
 
 		if (tm == NULL)
-		{
-			lbmname.Format ("%sScreenshot_%s_%04d.%s", fullname.GetChars(), gamename, i, extension);
-		}
+		{*/
+			lbmname.Format ("%s%sPicture-%04d.%s", fullname.GetChars(), gamename, i, extension);
+		/*}
 		else if (i == 0)
 		{
-			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
+			lbmname.Format ("%s%sPicture-%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				extension);
 		}
 		else
 		{
-			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
+			lbmname.Format ("%s%sPicture-%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				i, extension);
-		}
+		}*/
 
 		if (!FileExists (lbmname.GetChars()))
 		{
