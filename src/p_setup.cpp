@@ -85,7 +85,6 @@
 #include "c_console.h"
 #include "c_cvars.h"
 #include "p_acs.h"
-#include "announcer.h"
 #include "wi_stuff.h"
 #include "stats.h"
 #include "doomerrors.h"
@@ -4172,11 +4171,6 @@ void P_SetupLevel (const char *lumpname, int position)
 	}
 	times[17].Unclock();
 
-	if (deathmatch)
-	{
-		AnnounceGameStart ();
-	}
-
 	P_ResetSightCounters (true);
 	//Printf ("free memory: 0x%x\n", Z_FreeMemory());
 
@@ -4187,24 +4181,24 @@ void P_SetupLevel (const char *lumpname, int position)
 		{
 			static const char *timenames[] =
 			{
-				"load vertexes",
-				"load sectors",
-				"load sides",
-				"load lines",
-				"load sides 2",
-				"load lines 2",
-				"loop sides",
-				"load subsectors",
-				"load nodes",
-				"load segs",
-				"load blockmap",
-				"load reject",
-				"group lines",
-				"flood zones",
-				"load things",
-				"translate teleports",
-				"init polys",
-				"precache"
+				"Vertices",
+				"Sectors",
+				"Sidedefs #1",
+				"Linedefs #1",
+				"Sidedefs #2",
+				"Linedefs #2",
+				"Sidedef loop",
+				"Subsectors",
+				"Nodes",
+				"Segments",
+				"Blockmap",
+				"Reject map",
+				"Grouped lines",
+				"Flooded zones",
+				"Things",
+				"Teleport translations",
+				"Polyobject initialization",
+				"Pre-cached resources"
 			};
 			Printf ("Time%3d:%9.4f ms (%s)\n", i, times[i].TimeMS(), timenames[i]);
 		}
