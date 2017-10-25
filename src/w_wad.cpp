@@ -758,10 +758,7 @@ void FWadCollection::InitHashChains (void)
 //
 // RenameSprites
 //
-// Renames sprites in IWADs so that unique actors can have unique sprites,
-// making it possible to import any actor from any game into any other
-// game without jumping through hoops to resolve duplicate sprite names.
-// You just need to know what the sprite's new name is.
+// This is unnecessary in Mary's Magical Adventure.
 //
 //==========================================================================
 
@@ -771,44 +768,15 @@ void FWadCollection::RenameSprites ()
 	bool MNTRZfound = false;
 
 	static const uint32_t HereticRenames[] =
-	{ MAKE_ID('H','E','A','D'), MAKE_ID('L','I','C','H'),		// Ironlich
+	{ MAKE_ID('P','Q','R','S'), MAKE_ID('S','R','Q','P'),
 	};
 
 	static const uint32_t HexenRenames[] =
-	{ MAKE_ID('B','A','R','L'), MAKE_ID('Z','B','A','R'),		// ZBarrel
-	  MAKE_ID('A','R','M','1'), MAKE_ID('A','R','_','1'),		// MeshArmor
-	  MAKE_ID('A','R','M','2'), MAKE_ID('A','R','_','2'),		// FalconShield
-	  MAKE_ID('A','R','M','3'), MAKE_ID('A','R','_','3'),		// PlatinumHelm
-	  MAKE_ID('A','R','M','4'), MAKE_ID('A','R','_','4'),		// AmuletOfWarding
-	  MAKE_ID('S','U','I','T'), MAKE_ID('Z','S','U','I'),		// ZSuitOfArmor and ZArmorChunk
-	  MAKE_ID('T','R','E','1'), MAKE_ID('Z','T','R','E'),		// ZTree and ZTreeDead
-	  MAKE_ID('T','R','E','2'), MAKE_ID('T','R','E','S'),		// ZTreeSwamp150
-	  MAKE_ID('C','A','N','D'), MAKE_ID('B','C','A','N'),		// ZBlueCandle
-	  MAKE_ID('R','O','C','K'), MAKE_ID('R','O','K','K'),		// rocks and dirt in a_debris.cpp
-	  MAKE_ID('W','A','T','R'), MAKE_ID('H','W','A','T'),		// Strife also has WATR
-	  MAKE_ID('G','I','B','S'), MAKE_ID('P','O','L','5'),		// RealGibs
-	  MAKE_ID('E','G','G','M'), MAKE_ID('P','R','K','M'),		// PorkFX
-	  MAKE_ID('I','N','V','U'), MAKE_ID('D','E','F','N'),		// Icon of the Defender
+	{ MAKE_ID('P','Q','R','S'), MAKE_ID('S','R','Q','P'),
 	};
 
 	static const uint32_t StrifeRenames[] =
-	{ MAKE_ID('M','I','S','L'), MAKE_ID('S','M','I','S'),		// lots of places
-	  MAKE_ID('A','R','M','1'), MAKE_ID('A','R','M','3'),		// MetalArmor
-	  MAKE_ID('A','R','M','2'), MAKE_ID('A','R','M','4'),		// LeatherArmor
-	  MAKE_ID('P','M','A','P'), MAKE_ID('S','M','A','P'),		// StrifeMap
-	  MAKE_ID('T','L','M','P'), MAKE_ID('T','E','C','H'),		// TechLampSilver and TechLampBrass
-	  MAKE_ID('T','R','E','1'), MAKE_ID('T','R','E','T'),		// TreeStub
-	  MAKE_ID('B','A','R','1'), MAKE_ID('B','A','R','C'),		// BarricadeColumn
-	  MAKE_ID('S','H','T','2'), MAKE_ID('M','P','U','F'),		// MaulerPuff
-	  MAKE_ID('B','A','R','L'), MAKE_ID('B','B','A','R'),		// StrifeBurningBarrel
-	  MAKE_ID('T','R','C','H'), MAKE_ID('T','R','H','L'),		// SmallTorchLit
-	  MAKE_ID('S','H','R','D'), MAKE_ID('S','H','A','R'),		// glass shards
-	  MAKE_ID('B','L','S','T'), MAKE_ID('M','A','U','L'),		// Mauler
-	  MAKE_ID('L','O','G','G'), MAKE_ID('L','O','G','W'),		// StickInWater
-	  MAKE_ID('V','A','S','E'), MAKE_ID('V','A','Z','E'),		// Pot and Pitcher
-	  MAKE_ID('C','N','D','L'), MAKE_ID('K','N','D','L'),		// Candle
-	  MAKE_ID('P','O','T','1'), MAKE_ID('M','P','O','T'),		// MetalPot
-	  MAKE_ID('S','P','I','D'), MAKE_ID('S','T','L','K'),		// Stalker
+	{ MAKE_ID('P','Q','R','S'), MAKE_ID('S','R','Q','P'),
 	};
 
 	const uint32_t *renames;
