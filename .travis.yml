@@ -74,5 +74,6 @@ deploy:
   skip_cleanup: true
   github_token: $githubtoken # Set in travis-ci.org dashboard
   target_branch: travis-build
+  local_dir: ./$TRAVIS_OS_NAME
   on:
     branch: master
