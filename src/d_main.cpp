@@ -229,7 +229,6 @@ CVAR(Bool, debug_floor, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFI
 CVAR(Bool, debug_speed, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Display player speed
 CVAR(Bool, debug_water, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Show the player's water level
 
-
 bool wantToRestart;
 bool DrawFSHUD;				// [RH] Draw fullscreen HUD?
 TArray<FString> allwads;

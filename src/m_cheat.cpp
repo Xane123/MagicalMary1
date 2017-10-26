@@ -66,6 +66,8 @@
 #include "events.h"
 #include "p_acs.h"
 
+CVAR(Bool, z_disabledrowning, false, CVAR_GLOBALCONFIG)
+
 // [RH] Actually handle the cheat. The cheat code in st_stuff.c now just
 // writes some bytes to the network data stream, and the network code
 // later calls us.
@@ -124,9 +126,15 @@ void cht_DoCheat (player_t *player, int cheat)
 	case CHT_GOD:
 		player->cheats ^= CF_GODMODE;
 		if (player->cheats & CF_GODMODE)
+		{
+			if (multiplayer == false) { z_disabledrowning = true; }
 			msg = GStrings("STSTR_DQDON");
+		}
 		else
+		{
+			if (multiplayer == false) { z_disabledrowning = false; }
 			msg = GStrings("STSTR_DQDOFF");
+		}
 		break;
 
 	case CHT_BUDDHA:
@@ -167,11 +175,13 @@ void cht_DoCheat (player_t *player, int cheat)
 		{
 			player->cheats |= CF_NOCLIP;
 			msg = GStrings("STSTR_NC2ON");
+			if (multiplayer == false) { z_disabledrowning = true; }
 		}
 		else
 		{
 			player->cheats &= ~CF_NOCLIP;
 			msg = GStrings("STSTR_NCOFF");
+			if (multiplayer == false) { z_disabledrowning = false; }
 		}
 		if (player->mo->Vel.X == 0) player->mo->Vel.X = MinVel;	// force some lateral movement so that internal variables are up to date
 		break;
