@@ -156,8 +156,9 @@ FGameConfigFile::FGameConfigFile ()
 
 	// Add some self-documentation.
 	SetSectionNote("IWADSearch.Directories",
-		"# These are the directories to automatically search for IWADs.\n"
-		"# Each directory should be on a separate line, preceded by Path=\n");
+		"# These are the directories to automatically search for data files.\n"
+		"# Each directory should be on a separate line, preceded by Path=\n"
+		"# This game has no use for base game data, so it doesn't matter.\n");
 	SetSectionNote("FileSearch.Directories",
 		"# These are the directories to search for wads added with the -file\n"
 		"# command line parameter, if they cannot be found with the path\n"

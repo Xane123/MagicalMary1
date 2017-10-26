@@ -132,7 +132,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		}
 		else
 		{
-			if (multiplayer == false) { z_disabledrowning = false; }
+			if (multiplayer == false && !(player->cheats & CF_NOCLIP2)) { z_disabledrowning = false; }
 			msg = GStrings("STSTR_DQDOFF");
 		}
 		break;
@@ -181,7 +181,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		{
 			player->cheats &= ~CF_NOCLIP;
 			msg = GStrings("STSTR_NCOFF");
-			if (multiplayer == false) { z_disabledrowning = false; }
+			if (multiplayer == false && !(player->cheats & CF_GODMODE)) { z_disabledrowning = false; }
 		}
 		if (player->mo->Vel.X == 0) player->mo->Vel.X = MinVel;	// force some lateral movement so that internal variables are up to date
 		break;

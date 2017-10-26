@@ -156,7 +156,6 @@ if( ZD_CMAKE_COMPILER_IS_GNUCXX_COMPATIBLE )
 endif()
 
 option( NO_OPENAL "Disable OpenAL sound support" OFF )
-option( ZDOOM_GENERATE_PK3 "Generate data.pk3. Disable this and use Xane's PK3 if strange errors appear on game startup." ON )
 
 find_package( BZip2 )
 find_package( JPEG )
@@ -337,3 +336,6 @@ add_subdirectory( src )
 if( NOT CMAKE_CROSSCOMPILING )
 	export(TARGETS ${CROSS_EXPORTS} FILE "${CMAKE_BINARY_DIR}/ImportExecutables.cmake" )
 endif()
+
+# Options added by Xane for Mary's Magical Adventure
+option( ZDOOM_GENERATE_PK3 "Generate data.pk3. Disable this and use the official data.pk3 if strange errors appear on game startup." ON )

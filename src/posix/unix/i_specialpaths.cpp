@@ -108,9 +108,8 @@ FString GetUserFile (const char *file)
 
 FString M_GetCachePath(bool create)
 {
-	// Don't use GAME_DIR and such so that ZDoom and its child ports can
-	// share the node cache.
-	FString path = NicePath("~/.config/zdoom/cache");
+	// Don't use GAME_DIR even though this is only intended for a single game!
+	FString path = NicePath("~/.config/MaryMagicalAdventure/cache");
 	if (create)
 	{
 		CreatePath(path);
@@ -128,7 +127,7 @@ FString M_GetCachePath(bool create)
 
 FString M_GetAutoexecPath()
 {
-	return GetUserFile("autoexec.cfg");
+	return GetUserFile("StartupCMDs.cfg");
 }
 
 //===========================================================================
@@ -183,7 +182,7 @@ FString M_GetConfigPath(bool for_reading)
 
 FString M_GetScreenshotsPath()
 {
-	return NicePath("~/" GAME_DIR "/screenshots/");
+	return NicePath("~/" GAME_DIR "/shots/");
 }
 
 //===========================================================================
