@@ -75,3 +75,4 @@ deploy:
   github_token: $githubtoken # Set in travis-ci.org dashboard
   on:
     branch: master
+    target_branch: travis-build
