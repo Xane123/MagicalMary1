@@ -25,10 +25,10 @@ build_script:
 
 after_build:
   - set OUTPUT_DIR=%APPVEYOR_BUILD_FOLDER%\build\%CONFIGURATION%\
-  - 7z a ..\mma_compiled.zip "%OUTPUT_DIR%gzdoom.exe" "%OUTPUT_DIR%*.pk3"
+  - 7z a ..\CompiledWindows.zip "%OUTPUT_DIR%play.exe" "%OUTPUT_DIR%*.pk3"
 
 artifacts:
-  - path: mma_compiled.zip
+  - path: CompiledWindows.zip
 
 notifications:
   - provider: Email
