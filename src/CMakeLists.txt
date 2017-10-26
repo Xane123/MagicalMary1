@@ -834,7 +834,6 @@ set (PCH_SOURCES
 	b_game.cpp
 	b_move.cpp
 	b_think.cpp
-	bbannouncer.cpp
 	c_bind.cpp
 	c_cmds.cpp
 	c_console.cpp
