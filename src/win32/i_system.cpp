@@ -1284,7 +1284,7 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	return FALSE;
 }
 
-#define DEBUG_DIALOG 0	//[XANE]Set this to 1 to allow displaying the debug dialog.
+#define DEBUG_DIALOG 1	//[XANE]Set this to 1 to allow displaying the debug dialog.
 
 //==========================================================================
 //

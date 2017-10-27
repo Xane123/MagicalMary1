@@ -512,13 +512,13 @@ CCMD (logfile)
 	}
 }
 
-CCMD (runoldscript)
+CCMD (puke)
 {
 	int argc = argv.argc();
 
 	if (argc < 2 || argc > 6)
 	{
-		Printf ("runoldscript [script] [arguments]\nThis allows any numbered script to be ran. For named scripts, use runscript.\n");
+		Printf ("puke [script] [arguments]\nThis allows any numbered script to be ran. For named scripts, use pukename.\n");
 	}
 	else
 	{
@@ -554,13 +554,13 @@ CCMD (runoldscript)
 	}
 }
 
-CCMD (runscript)
+CCMD (pukename)
 {
 	int argc = argv.argc();
 
 	if (argc < 2 || argc > 7)
 	{
-		Printf ("runscript [script name] [always] [arguments]\nThis runs any script regardless of if it should happen or not. For outdated, numbered scripts, use runoldscript.\n");
+		Printf ("pukename [script name] [always] [arguments]\nThis runs any script regardless of if it should happen or not. For outdated, numbered scripts, use puke.\n");
 	}
 	else
 	{
