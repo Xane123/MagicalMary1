@@ -120,11 +120,11 @@ enum ELumpNum
 class FString
 {
 public:
-	FString() { ResetToNull(); }
+	FString () { ResetToNull(); }
 
 	// Copy constructors
 	FString (const FString &other) { AttachToOther (other); }
-	FString(FString &&other) : Chars(other.Chars) { other.ResetToNull(); }
+	FString (FString &&other) : Chars(other.Chars) { other.ResetToNull(); }
 	FString (const char *copyStr);
 	FString (const char *copyStr, size_t copyLen);
 	FString (char oneChar);
@@ -311,6 +311,17 @@ public:
 	int CompareNoCase (const char *other) const { return stricmp (Chars, other); }
 	int CompareNoCase(const FString &other, int len) const { return strnicmp(Chars, other.Chars, len); }
 	int CompareNoCase(const char *other, int len) const { return strnicmp(Chars, other, len); }
+
+	enum EmptyTokenType
+	{
+		TOK_SKIPEMPTY = 0,
+		TOK_KEEPEMPTY = 1,
+	};
+
+	TArray<FString> Split(const FString &delimiter, EmptyTokenType keepEmpty = TOK_KEEPEMPTY) const;
+	TArray<FString> Split(const char *delimiter, EmptyTokenType keepEmpty = TOK_KEEPEMPTY) const;
+	void Split(TArray<FString>& tokens, const FString &delimiter, EmptyTokenType keepEmpty = TOK_KEEPEMPTY) const;
+	void Split(TArray<FString>& tokens, const char *delimiter, EmptyTokenType keepEmpty = TOK_KEEPEMPTY) const;
 
 protected:
 	const FStringData *Data() const { return (FStringData *)Chars - 1; }

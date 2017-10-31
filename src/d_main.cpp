@@ -1729,7 +1729,7 @@ const char *BaseFileSearch (const char *file, const char *ext, bool lookfirstinp
 	}
 	if (lookfirstinprogdir)
 	{
-		mysnprintf (wad, countof(wad), "%s%s%s", progdir.GetChars(), progdir[progdir.Len() - 1] != '/' ? "/" : "", file);
+		mysnprintf(wad, countof(wad), "%s%s%s", progdir.GetChars(), progdir.Back() == '/' ? "" : "/", file);
 		if (DirEntryExists (wad))
 		{
 			return wad;
@@ -1756,7 +1756,7 @@ const char *BaseFileSearch (const char *file, const char *ext, bool lookfirstinp
 				dir = NicePath(value);
 				if (dir.IsNotEmpty())
 				{
-					mysnprintf (wad, countof(wad), "%s%s%s", dir.GetChars(), dir[dir.Len() - 1] != '/' ? "/" : "", file);
+					mysnprintf(wad, countof(wad), "%s%s%s", dir.GetChars(), dir.Back() == '/' ? "" : "/", file);
 					if (DirEntryExists (wad))
 					{
 						return wad;
