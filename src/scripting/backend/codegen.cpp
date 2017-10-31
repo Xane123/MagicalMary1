@@ -6443,7 +6443,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 			{
 				if (sym->IsKindOf(RUNTIME_CLASS(PSymbolConst)))
 				{
-					ScriptPosition.Message(MSG_DEBUGLOG, "Resolving name '%s.%s' as constant\n", ccls->TypeName.GetChars(), Identifier.GetChars());
+					ScriptPosition.Message(MSG_DEBUGLOG, "Resolving name '%s.%s' as a constant.\n", ccls->TypeName.GetChars(), Identifier.GetChars());
 					delete this;
 					return FxConstant::MakeConstant(sym, ScriptPosition);
 				}
@@ -6458,7 +6458,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 					}
 					else
 					{
-						ScriptPosition.Message(MSG_ERROR, "Unable to access '%s.%s' in a static context\n", ccls->TypeName.GetChars(), Identifier.GetChars());
+						ScriptPosition.Message(MSG_ERROR, "Unable to access '%s.%s' in a static context!\n", ccls->TypeName.GetChars(), Identifier.GetChars());
 						delete this;
 						return nullptr;
 					}
@@ -6466,7 +6466,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 			}
 			else
 			{
-				ScriptPosition.Message(MSG_ERROR, "%s is not a member of %s", Identifier.GetChars(), ccls->TypeName.GetChars());
+				ScriptPosition.Message(MSG_ERROR, "%s is not a member of %s!", Identifier.GetChars(), ccls->TypeName.GetChars());
 				delete this;
 				return nullptr;
 			}
@@ -6495,7 +6495,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 		return ret;
 	}
 
-	ScriptPosition.Message(MSG_ERROR, "Left side of %s is not a struct or class", Identifier.GetChars());
+	ScriptPosition.Message(MSG_ERROR, "Left side of %s is not a struct or class, y'know...", Identifier.GetChars());
 	delete this;
 	return nullptr;
 }

@@ -553,6 +553,11 @@ CocoaVideo::CocoaVideo()
 		// There is no support for OpenGL 3.3 before Mavericks
 		defaultProfile = NSOpenGLProfileVersionLegacy;
 	}
+	else if (0 == vid_renderer && 0 == vid_glswfb)
+	{
+		// Software renderer uses OpenGL 2.1 for blitting
+		defaultProfile = NSOpenGLProfileVersionLegacy;
+	}
 	else if (0 == vid_renderer && vid_glswfb && NSAppKitVersionNumber < AppKit10_7)
 	{
 		// There is no support for OpenGL 3.x before Lion
