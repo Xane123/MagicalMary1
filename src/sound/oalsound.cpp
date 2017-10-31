@@ -72,6 +72,8 @@ CVAR (String, snd_alresampler, "Default", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 #define OPENALLIB "openal32.dll"
 #elif defined(__APPLE__)
 #define OPENALLIB "OpenAL.framework/OpenAL"
+#elif defined(__OpenBSD__)
+#define OPENALLIB "libopenal.so"
 #else
 #define OPENALLIB "libopenal.so.1"
 #endif
@@ -176,7 +178,7 @@ static ALenum checkALError(const char *fn, unsigned int ln)
 			fn = strrchr(fn, '/')+1;
 		else if(strchr(fn, '\\'))
 			fn = strrchr(fn, '\\')+1;
-		//Printf("A 'checkALError' OAL error was received: %s (%#x), %s:%u\n", alGetString(err), err, fn, ln);
+		Printf(">>>>>>>>>>>> Received AL error %s (%#x), %s:%u\n", alGetString(err), err, fn, ln);
 	}
 	return err;
 }
@@ -191,7 +193,7 @@ static ALCenum checkALCError(ALCdevice *device, const char *fn, unsigned int ln)
 			fn = strrchr(fn, '/')+1;
 		else if(strchr(fn, '\\'))
 			fn = strrchr(fn, '\\')+1;
-		//Printf("A 'checkALCError' OAL error was received: %s (%#x), %s:%u\n", alcGetString(device, err), err, fn, ln);
+		Printf(">>>>>>>>>>>> Received ALC error %s (%#x), %s:%u\n", alcGetString(device, err), err, fn, ln);
 	}
 	return err;
 }
@@ -828,9 +830,9 @@ OpenALSoundRenderer::OpenALSoundRenderer()
 	// reciprocal. It's important to set these correctly for both doppler
 	// effects and reverb.
 	alSpeedOfSound(343.3f * 32.0f);
-	if (ALC.EXT_EFX)
-		alListenerf(AL_METERS_PER_UNIT, 1.0f / 32.0f);
-	
+	if(ALC.EXT_EFX)
+		alListenerf(AL_METERS_PER_UNIT, 1.0f/32.0f);
+
 	alDistanceModel(AL_INVERSE_DISTANCE);
 	if(AL.EXT_source_distance_model)
 		alEnable(AL_SOURCE_DISTANCE_MODEL);
