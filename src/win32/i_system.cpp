@@ -1284,7 +1284,7 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	return FALSE;
 }
 
-#define DEBUG_DIALOG 0	//[XANE]Set this to 1 to allow displaying the debug dialog.
+#define DEBUG_DIALOG 1	//[XANE]Set this to 1 to allow displaying the debug dialog.
 
 //==========================================================================
 //
@@ -1321,11 +1321,11 @@ int I_PickIWad(WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 	}
 	//[XANE]Potentially bad code coming up! "Risky!"
 	#if DEBUG_DIALOG 1
-	else if(xane_debug)
-	{
-		return (int)DialogBox(g_hInst, MAKEINTRESOURCE(IDD_XANEDEBUG),
-			(HWND)Window, (DLGPROC)XaneDebugCallback);
-	}
+		else if(xane_debug)
+		{
+			return (int)DialogBox(g_hInst, MAKEINTRESOURCE(IDD_XANEDEBUG),
+				(HWND)Window, (DLGPROC)XaneDebugCallback);
+		}
 	#endif
 	return defaultiwad;
 }

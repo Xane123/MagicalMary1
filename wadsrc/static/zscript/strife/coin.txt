@@ -1,7 +1,7 @@
 
 // Coin ---------------------------------------------------------------------
 
-class Coin : Inventory
+/*class Coin : Inventory
 {
 	Default
 	{
@@ -19,7 +19,7 @@ class Coin : Inventory
 	Spawn:
 		COIN A -1;
 		Stop;
-	}
+	}*/
 	
 	// Coin ---------------------------------------------------------------------
 
