@@ -494,7 +494,7 @@ static void ParseListMenuBody(FScanner &sc, DListMenuDescriptor *desc)
 			}
 			if (!success)
 			{
-				sc.ScriptError("Unknown keyword '%s'", sc.String);
+				sc.ScriptError("Unknown keyword '%s'!", sc.String);
 			}
 		}
 	}
@@ -754,7 +754,7 @@ static void ParseOptionSettings(FScanner &sc)
 		}
 		else
 		{
-			sc.ScriptError("Unknown keyword '%s'", sc.String);
+			sc.ScriptError("Unknown keyword '%s'!", sc.String);
 		}
 	}
 }
@@ -933,7 +933,7 @@ static void ParseOptionMenuBody(FScanner &sc, DOptionMenuDescriptor *desc)
 			}
 			if (!success)
 			{
-				sc.ScriptError("Unknown keyword '%s'", sc.String);
+				sc.ScriptError("Unknown keyword '%s'!", sc.String);
 			}
 		}
 	}
@@ -1066,7 +1066,7 @@ void M_ParseMenuDefs()
 			}
 			else
 			{
-				sc.ScriptError("Unknown keyword '%s'", sc.String);
+				sc.ScriptError("Unknown keyword '%s'!", sc.String);
 			}
 		}
 		if (Args->CheckParm("-nocustommenu")) break;

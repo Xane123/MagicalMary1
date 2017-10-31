@@ -1277,7 +1277,7 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			debug_water = SendDlgItemMessage(hDlg, IDC_DEBUGWATER, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			debug_hammer = SendDlgItemMessage(hDlg, IDC_DEBUGHAMMER, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			debug_umbrella = SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_GETCHECK, 0, 0) == BST_CHECKED;
-			EndDialog(hDlg, SendMessage(ctrl, LB_GETCURSEL, 0, 0));
+			EndDialog(hDlg, 0/*SendMessage(ctrl, LB_GETCURSEL, 0, 0)*/);
 		}
 		break;
 	}
