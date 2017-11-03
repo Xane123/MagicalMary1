@@ -125,7 +125,7 @@ CUSTOM_CVAR(Bool, vid_glswfb, true, CVAR_NOINITCALL | CVAR_GLOBALCONFIG | CVAR_N
 
 EXTERN_CVAR(Bool, ticker   )
 EXTERN_CVAR(Bool, vid_vsync)
-EXTERN_CVAR(Bool, vid_hidpi)
+//EXTERN_CVAR(Bool, vid_hidpi)
 
 #if defined __ppc__ || defined __ppc64__
 static const bool TRUECOLOR_DEFAULT = false;
@@ -283,7 +283,7 @@ public:
 	virtual bool NextMode(int* width, int* height, bool* letterbox);
 
 	static bool IsFullscreen();
-	static void UseHiDPI(bool hiDPI);
+	//static void UseHiDPI(bool hiDPI);
 	static void SetCursor(NSCursor* cursor);
 	static void SetWindowVisible(bool visible);
 
@@ -649,7 +649,7 @@ DFrameBuffer* CocoaVideo::CreateFrameBuffer(const int width, const int height, c
 	{
 		if (width == m_width && height == m_height && bgra == old->IsBgra())
 		{
-			SetMode(width, height, fullscreen, vid_hidpi);
+			SetMode(width, height, fullscreen, 0/*vid_hidpi*/);
 			return old;
 		}
 
@@ -687,7 +687,7 @@ DFrameBuffer* CocoaVideo::CreateFrameBuffer(const int width, const int height, c
 
 	fb->SetFlash(flashColor, flashAmount);
 
-	SetMode(width, height, fullscreen, vid_hidpi);
+	SetMode(width, height, fullscreen, 0/*vid_hidpi*/);
 
 	return fb;
 }
@@ -768,9 +768,11 @@ void CocoaVideo::SetFullscreenMode(const int width, const int height)
 	NSScreen* screen = [m_window screen];
 
 	const NSRect screenFrame = [screen frame];
-	const NSRect displayRect = vid_hidpi
+	const NSRect displayRect = screenFrame;
+
+	/*const NSRect displayRect = vid_hidpi
 		? [screen convertRectToBacking:screenFrame]
-		: screenFrame;
+		: screenFrame;*/	//Original
 
 	const float  displayWidth  = displayRect.size.width;
 	const float  displayHeight = displayRect.size.height;
@@ -820,9 +822,11 @@ void CocoaVideo::SetWindowedMode(const int width, const int height)
 	rbOpts.shiftY = 0.0f;
 
 	const NSSize windowPixelSize = NSMakeSize(width, height);
-	const NSSize windowSize = vid_hidpi
+	const NSSize windowSize = windowPixelSize;
+
+		/*const NSSize windowSize = vid_hidpi
 		? [[m_window contentView] convertSizeFromBacking:windowPixelSize]
-		: windowPixelSize;
+		: windowPixelSize;*/	//Original
 
 	if (m_fullscreen)
 	{
@@ -856,11 +860,11 @@ void CocoaVideo::SetMode(const int width, const int height, const bool fullscree
 		return;
 	}
 
-	if (I_IsHiDPISupported())
+	/*if (I_IsHiDPISupported())
 	{
 		NSOpenGLView* const glView = [m_window contentView];
 		[glView setWantsBestResolutionOpenGLSurface:hiDPI];
-	}
+	}*/
 
 	if (fullscreen)
 	{
@@ -1476,7 +1480,7 @@ CUSTOM_CVAR(Int, vid_maxfps, 200, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 	}
 }
 
-CUSTOM_CVAR(Bool, vid_hidpi, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+/*CUSTOM_CVAR(Bool, vid_hidpi, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (I_IsHiDPISupported())
 	{
@@ -1486,7 +1490,7 @@ CUSTOM_CVAR(Bool, vid_hidpi, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 	{
 		self = 0;
 	}
-}
+}*/
 
 
 // ---------------------------------------------------------------------------
@@ -1593,9 +1597,12 @@ NSSize I_GetContentViewSize(const NSWindow* const window)
 	const NSView* const view = [window contentView];
 	const NSSize frameSize   = [view frame].size;
 
-	return (vid_hidpi)
+	return frameSize;
+
+	/*return (vid_hidpi)
 		? [view convertSizeToBacking:frameSize]
-		: frameSize;
+		: frameSize;*/	//Original
+
 }
 
 void I_SetMainWindowVisible(bool visible)
