@@ -1,6 +1,0 @@
-This file replaces Randy Heit's log file as it was outdated and the docs folder only includes the licenses nowadays.
-
-------\
-v1.8  |
-------/
-Version 1.8 (alpha) is the first version that is monitored here, marking the biggest engine update since the OpenGL renderer change months ago. It's now based on the latest GZDoom version rather than one from March 2016! There are some fancy effects I can use now and I'm taking advantage of them! Also, the repository should be a bit cleaner now. Not as clean as it could be starting over but that means reapplying my changes as I can't selectively import my modified files or it'd be very tedious with how many separate commits I make for each change
