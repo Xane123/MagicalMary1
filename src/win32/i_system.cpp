@@ -153,6 +153,7 @@ EXTERN_CVAR(Bool, debug_speed)
 EXTERN_CVAR(Bool, debug_water)
 EXTERN_CVAR(Bool, debug_hammer)
 EXTERN_CVAR(Bool, debug_umbrella)
+EXTERN_CVAR(Bool, debug_sword)
 
 extern HWND Window, ConWindow, GameTitleWindow;
 extern HANDLE StdOut;
@@ -1243,7 +1244,7 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	switch (message)
 	{
 	case WM_INITDIALOG:
-	// [XANE] Check the checkbox if debug spawn points are enabled.
+	// [XANE] Check the checkboxes if any of the debug options were activated previously.
 		SendDlgItemMessage(hDlg, IDC_DEBUGSPAWN, BM_SETCHECK, debug_spawn ? BST_CHECKED : BST_UNCHECKED, 0);
 		SendDlgItemMessage(hDlg, IDC_DEBUGSUPER, BM_SETCHECK, debug_super ? BST_CHECKED : BST_UNCHECKED, 0);
 		SendDlgItemMessage(hDlg, IDC_DEBUGWIND, BM_SETCHECK, debug_wind ? BST_CHECKED : BST_UNCHECKED, 0);
@@ -1252,7 +1253,8 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 		SendDlgItemMessage(hDlg, IDC_DEBUGWATER, BM_SETCHECK, debug_water ? BST_CHECKED : BST_UNCHECKED, 0);
 		SendDlgItemMessage(hDlg, IDC_DEBUGHAMMER, BM_SETCHECK, debug_hammer ? BST_CHECKED : BST_UNCHECKED, 0);
 		SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_SETCHECK, debug_umbrella ? BST_CHECKED : BST_UNCHECKED, 0);
-	
+		SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_SETCHECK, debug_sword ? BST_CHECKED : BST_UNCHECKED, 0);
+
 	ctrl = GetDlgItem(hDlg, IDOK);
 	SetFocus(ctrl);
 	// Make sure the dialog is in front. If SHIFT was pressed to force it visible,
@@ -1277,6 +1279,7 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			debug_water = SendDlgItemMessage(hDlg, IDC_DEBUGWATER, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			debug_hammer = SendDlgItemMessage(hDlg, IDC_DEBUGHAMMER, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			debug_umbrella = SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_GETCHECK, 0, 0) == BST_CHECKED;
+			debug_sword = SendDlgItemMessage(hDlg, IDC_DEBUGSWORD, BM_GETCHECK, 0, 0) == BST_CHECKED;
 			EndDialog(hDlg, 0/*SendMessage(ctrl, LB_GETCURSEL, 0, 0)*/);
 		}
 		break;
