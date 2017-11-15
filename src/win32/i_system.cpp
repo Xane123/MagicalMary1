@@ -1253,7 +1253,7 @@ BOOL CALLBACK XaneDebugCallback(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 		SendDlgItemMessage(hDlg, IDC_DEBUGWATER, BM_SETCHECK, debug_water ? BST_CHECKED : BST_UNCHECKED, 0);
 		SendDlgItemMessage(hDlg, IDC_DEBUGHAMMER, BM_SETCHECK, debug_hammer ? BST_CHECKED : BST_UNCHECKED, 0);
 		SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_SETCHECK, debug_umbrella ? BST_CHECKED : BST_UNCHECKED, 0);
-		SendDlgItemMessage(hDlg, IDC_DEBUGUMBRELLA, BM_SETCHECK, debug_sword ? BST_CHECKED : BST_UNCHECKED, 0);
+		SendDlgItemMessage(hDlg, IDC_DEBUGSWORD, BM_SETCHECK, debug_sword ? BST_CHECKED : BST_UNCHECKED, 0);
 
 	ctrl = GetDlgItem(hDlg, IDOK);
 	SetFocus(ctrl);
