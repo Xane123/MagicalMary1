@@ -124,9 +124,9 @@ CVAR(Bool, save_formatted, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	// use forma
 CVAR (Int, deathmatch, 0, CVAR_SERVERINFO|CVAR_LATCH);
 CVAR (Bool, chasedemo, false, 0);
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Bool, longsavemessages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (String, save_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR (Bool, cl_waitforsave, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
+CVAR (Bool, longsavemessages, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (String, save_dir, "./saves", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (Bool, cl_waitforsave, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 EXTERN_CVAR (Float, con_midtime);
 
 //==========================================================================
@@ -2256,17 +2256,14 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	// Do not even try, if we're not in a level. (Can happen after
 	// a demo finishes playback.)
-	if (level.lines.Size() == 0 || level.sectors.Size() == 0 || gamestate != GS_LEVEL)
+	if (level.lines.Size() == 0 || level.sectors.Size() == 0 || gamestate != GS_LEVEL || demoplayback)
 	{
 		return;
 	}
 
-	if (demoplayback)
-	{
-		filename = G_BuildSaveName ("demosave." SAVEGAME_EXT, -1);
-	}
+	if (demoplayback) { filename = G_BuildSaveName ("delete." SAVEGAME_EXT, -1); }
 
-	if (cl_waitforsave)
+	if (cl_waitforsave && !demoplayback)
 		I_FreezeTime(true);
 
 	insave = true;
@@ -2279,17 +2276,17 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		// delete the snapshot. Since the save failed it is broken.
 		insave = false;
 		level.info->Snapshot.Clean();
-		Printf(PRINT_HIGH, "Save failed\n");
+		Printf(PRINT_HIGH, "The save file failed to be created!\n");
 		Printf(PRINT_HIGH, "%s\n", err.GetMessage());
 		// The time freeze must be reset if the save fails.
-		if (cl_waitforsave)
+		if (cl_waitforsave && !demoplayback)
 			I_FreezeTime(false);
 		return;
 	}
 	catch (...)
 	{
 		insave = false;
-		if (cl_waitforsave)
+		if (cl_waitforsave && !demoplayback)
 			I_FreezeTime(false);
 		throw;
 	}
@@ -2375,10 +2372,10 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	if (test != nullptr)
 	{
 		delete test;
-		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
-		else Printf ("%s\n", GStrings("GGSAVED"));
+		/*if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
+		else Printf ("%s\n", GStrings("GGSAVED"));*/
 	}
-	else Printf(PRINT_HIGH, "Save failed\n");
+	else Printf(PRINT_HIGH, "The save file couldn't be written.\n");
 
 
 	BackupSaveName = filename;

@@ -51,8 +51,8 @@
 #include "doomerrors.h"
 #include "v_text.h"
 
-CVAR (Bool, queryiwad, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR (String, defaultiwad, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (Bool, queryiwad, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (String, defaultiwad, "Mary's Magical Adventure", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 
 //==========================================================================
 //

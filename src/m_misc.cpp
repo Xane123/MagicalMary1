@@ -81,9 +81,9 @@
 
 FGameConfigFile *GameConfig;
 
-CVAR(Bool, screenshot_quiet, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(Bool, screenshot_quiet, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(String, screenshot_type, "png", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR(String, screenshot_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(String, screenshot_dir, "./shots/", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 EXTERN_CVAR(Bool, longsavemessages);
 
 static long ParseCommandLine (const char *args, int *argc, char **argv);
