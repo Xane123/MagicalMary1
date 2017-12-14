@@ -18,6 +18,9 @@ doublebind w +mc_run
 ] sceenblocks 12
 q +attack
 e +altattack
+r +use
+t +use
+f +zoom	//Xane's Claw
 shift +speed
 space +jump
 w +forward
@@ -44,17 +47,10 @@ enter messagemode
 f12 spynext
 mwheeldown weapnext
 mwheelup weapprev
-num5 +user1			//Transform into Magical Cutie Mary
+num5 +user1			//Transform into Magical Cutie Mary/Super Xane.
 \ +user1			//Alternate key for laptop users without a numpad.
 / +user2			//Teleport to Small Hut
 . +user3			//Restart run
-
-pgup +moveup
-ins +movedown
-home land
-pgdn +lookup
-del +lookdown
-end centerview
 
 // Generic joystick buttons
 joy1 +attack
