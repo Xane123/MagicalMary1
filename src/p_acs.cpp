@@ -502,9 +502,7 @@
 		GAME_SINGLE_PLAYER =	0,
 		GAME_NET_COOPERATIVE =	1,
 		GAME_NET_DEATHMATCH =	2,
-		GAME_TITLE_MAP =		3,
-		GAME_DEMOREPLAY =	    4,	//[XANE]Extra "game modes" for variable checking.
-		GAME_DEMORECORD =		5
+		GAME_TITLE_MAP =		3
 	};
 	enum {
 		CLASS_FIGHTER =			0,
@@ -535,12 +533,7 @@
 		LEVELINFO_FOUND_ITEMS,
 		LEVELINFO_TOTAL_MONSTERS,
 		LEVELINFO_KILLED_MONSTERS,
-		LEVELINFO_SUCK_TIME,
-		LEVELINFO_SKYMOVE_HORIZONTAL,
-		LEVELINFO_DUMMY1,
-		LEVELINFO_DUMMY2,
-		LEVELINFO_DUMMY3,
-		LEVELINFO_SKYMOVE_VERTICAL
+		LEVELINFO_SUCK_TIME
 	};
 	enum {
 		PLAYERINFO_TEAM,
@@ -8921,17 +8914,13 @@ scriptwait:
 
 		case PCD_GAMETYPE:
 			if (gamestate == GS_TITLELEVEL)
-				PushToStack(GAME_TITLE_MAP);
+				PushToStack (GAME_TITLE_MAP);
 			else if (deathmatch)
-				PushToStack(GAME_NET_DEATHMATCH);
+				PushToStack (GAME_NET_DEATHMATCH);
 			else if (multiplayer)
-				PushToStack(GAME_NET_COOPERATIVE);
-			else if (demoplayback)
-				PushToStack(GAME_DEMOREPLAY);	//[XANE]Added demo playback checking.
-			else if (demorecording)
-				PushToStack(GAME_DEMORECORD);	//[XANE]Same for recording.
+				PushToStack (GAME_NET_COOPERATIVE);
 			else
-				PushToStack(GAME_SINGLE_PLAYER);
+				PushToStack (GAME_SINGLE_PLAYER);
 			break;
 
 		case PCD_GAMESKILL:
@@ -10013,8 +10002,6 @@ scriptwait:
 			case LEVELINFO_FOUND_ITEMS:		STACK(1) = level.found_items;		break;
 			case LEVELINFO_TOTAL_MONSTERS:	STACK(1) = level.total_monsters;	break;
 			case LEVELINFO_KILLED_MONSTERS:	STACK(1) = level.killed_monsters;	break;
-			case LEVELINFO_SKYMOVE_HORIZONTAL:	STACK(1) = level.skymovement1;	break;
-			case LEVELINFO_SKYMOVE_VERTICAL:	STACK(1) = level.skymovement2;	break;
 			default:						STACK(1) = 0;						break;
 			}
 			break;

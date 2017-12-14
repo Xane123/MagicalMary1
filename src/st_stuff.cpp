@@ -364,7 +364,7 @@ static bool CheatCheckList (event_t *ev, cheatseq_t *cheats, int numcheats)
 					eat |= cheats->Handler (cheats);
 				}
 			}
-			else if (cheats->Pos - cheats->Sequence > 1)
+			else if (cheats->Pos - cheats->Sequence > 2)
 			{ // If more than two characters into the sequence,
 			  // eat the keypress, just so that the Hexen cheats
 			  // with T in them will work without unbinding T.
@@ -427,22 +427,16 @@ static bool Cht_Generic (cheatseq_t *cheat)
 	return true;
 }
 
-static bool Cht_Music(cheatseq_t *cheat)
+static bool Cht_Music (cheatseq_t *cheat)
 {
-	char buf[20] = "puke 254 x ";
+	char buf[9] = "idmus xx";
 
-	if (cheat->Args[0] == '0')
-	{
-		buf[9] = cheat->Args[1];
-	}
-	else
-	{
-		buf[9] = cheat->Args[0];
-		buf[10] = cheat->Args[1];
-	}
-	C_DoCommand(buf);
+	buf[6] = cheat->Args[0];
+	buf[7] = cheat->Args[1];
+	C_DoCommand (buf);
 	return true;
 }
+
 static bool Cht_BeholdMenu (cheatseq_t *cheat)
 {
 	Printf ("%s\n", GStrings("STSTR_BEHOLD"));
