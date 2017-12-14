@@ -64,7 +64,7 @@
 #include "textures.h"
 #include "vm.h"
 
-CUSTOM_CVAR(Int, uiscale, 0, CVAR_ARCHIVE | CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, uiscale, 4, CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
 	if (self < 0)
 	{

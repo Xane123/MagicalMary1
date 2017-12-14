@@ -337,6 +337,8 @@ struct level_info_t
 	int32_t		flags;
 	uint32_t	flags2;
 	uint32_t	flags3;
+	int			skymovement1;
+	int			skymovement2;
 
 	FString		Music;
 	FString		LevelName;

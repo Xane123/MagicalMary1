@@ -109,6 +109,8 @@ struct FLevelLocals
 	uint32_t		hazardcolor;			// what color strife hazard blends the screen color as
 	uint32_t		hazardflash;			// what color strife hazard flashes the screen color as
 
+	int			skymovement1;
+	int			skymovement2;
 	FString		Music;
 	int			musicorder;
 	int			cdtrack;

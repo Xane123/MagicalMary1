@@ -101,16 +101,14 @@ uint8_t CheatPowerup2[8][10] =
 };
 
 // Smashing Pumpkins Into Small Piles Of Putrid Debris. 
-static uint8_t CheatNoclip[] =		{ 'i','d','s','p','i','s','p','o','p','d',255 };
-static uint8_t CheatNoclip2[] =	{ 'i','d','c','l','i','p',255 };
-static uint8_t CheatMus[] =		{ 'i','d','m','u','s',0,0,255 };
-static uint8_t CheatChoppers[] =	{ 'i','d','c','h','o','p','p','e','r','s',255 };
-static uint8_t CheatGod[] =		{ 'i','d','d','q','d',255 };
-static uint8_t CheatAmmo[] =		{ 'i','d','k','f','a',255 };
-static uint8_t CheatAmmoNoKey[] =	{ 'i','d','f','a',255 };
-static uint8_t CheatClev[] =		{ 'i','d','c','l','e','v',0,0,255 };
-static uint8_t CheatMypos[] =		{ 'i','d','m','y','p','o','s',255 };
-static uint8_t CheatAmap[] =		{ 'i','d','d','t',255 };
+static uint8_t CheatNoclip2[] =	{ 'x','g','h','o','s','t',255 };
+static uint8_t CheatMus[] =		{ 'x','p','l','a','y',0,0,255 };
+static uint8_t CheatKill[] =		{ 'x','k','i','l','l',0,0,255 };
+static uint8_t CheatGod[] =		{ 'x','h','o','n','o','r',255 };
+static uint8_t CheatAmmo[] =		{ 'x','g','i','v','e','a','l','l',255 };
+static uint8_t CheatAmmoNoKey[] =	{ 'x','t','o','o','l','s',255 };
+static uint8_t CheatMypos[] =		{ 'x','p','o','s','i','t','i','o','n',255 };
+static uint8_t CheatAmap[] =		{ 'x','a','n','e',255 };
 
 static uint8_t CheatQuicken[] =	{ 'q','u','i','c','k','e','n',255 };
 static uint8_t CheatKitty[] =		{ 'k','i','t','t','y',255 };
@@ -183,22 +181,13 @@ static uint8_t CheatTNTem[] =		{ 't','n','t','e','m',255 };
 static cheatseq_t DoomCheats[] =
 {
 	{ CheatMus,				0, 1, 0, {0,0},				Cht_Music },
-	{ CheatPowerup[6],		0, 1, 0, {0,0},				Cht_BeholdMenu },
+	{ CheatKill,				0, 1, 0, {CHT_MDK,0},				Cht_Generic },
 	{ CheatMypos,			0, 1, 0, {0,0},				Cht_MyPos },
 	{ CheatAmap,			0, 0, 0, {0,0},				Cht_AutoMap },
-	{ CheatGod,				0, 0, 0, {CHT_IDDQD,0},		Cht_Generic },
+	{ CheatGod,				0, 0, 0, {CHT_GOD,0},		Cht_Generic },
 	{ CheatAmmo,			0, 0, 0, {CHT_IDKFA,0},		Cht_Generic },
 	{ CheatAmmoNoKey,		0, 0, 0, {CHT_IDFA,0},		Cht_Generic },
-	{ CheatNoclip,			0, 0, 0, {CHT_NOCLIP,0},	Cht_Generic },
-	{ CheatNoclip2,			0, 0, 0, {CHT_NOCLIP,0},	Cht_Generic },
-	{ CheatPowerup[0],		0, 0, 0, {CHT_BEHOLDV,0},	Cht_Generic },
-	{ CheatPowerup[1],		0, 0, 0, {CHT_BEHOLDS,0},	Cht_Generic },
-	{ CheatPowerup[2],		0, 0, 0, {CHT_BEHOLDI,0},	Cht_Generic },
-	{ CheatPowerup[3],		0, 0, 0, {CHT_BEHOLDR,0},	Cht_Generic },
-	{ CheatPowerup[4],		0, 0, 0, {CHT_BEHOLDA,0},	Cht_Generic },
-	{ CheatPowerup[5],		0, 0, 0, {CHT_BEHOLDL,0},	Cht_Generic },
-	{ CheatChoppers,		0, 0, 0, {CHT_CHAINSAW,0},	Cht_Generic },
-	{ CheatClev,			0, 1, 0, {0,0},				Cht_ChangeLevel }
+	{ CheatNoclip2,			0, 0, 0, {CHT_NOCLIP2,0},	Cht_Generic },
 };
 
 static cheatseq_t HereticCheats[] =

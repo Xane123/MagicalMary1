@@ -271,7 +271,7 @@ IWad
 
 IWad
 {
-	Name = "Freedoom: Phase 2"
+	Name = "Mary's Magical Adventure"
 	Autoname = "doom.freedoom.phase2"
 	Game = "Doom"
 	Config = "Doom"

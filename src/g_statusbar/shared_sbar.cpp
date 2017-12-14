@@ -128,12 +128,12 @@ CUSTOM_CVAR(Bool, hud_aspectscale, false, CVAR_ARCHIVE)
 	}
 }
 
-CVAR (Int, crosshair, 0, CVAR_ARCHIVE)
+CVAR (Int, crosshair, -2, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
-CVAR (Color, crosshaircolor, 0xff0000, CVAR_ARCHIVE);
+CVAR (Color, crosshaircolor, 0xcc88ff, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
 CVAR (Float, crosshairscale, 1.0, CVAR_ARCHIVE);
-CVAR (Bool, crosshairgrow, false, CVAR_ARCHIVE);
+CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
