@@ -253,7 +253,6 @@ FString M_GetCajunPath(const char *botfilename)
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	HRESULT hr;
 
 	path.Format("%s" GAMENAME "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
