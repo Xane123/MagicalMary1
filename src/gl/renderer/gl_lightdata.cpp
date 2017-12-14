@@ -91,13 +91,13 @@ CUSTOM_CVAR (Int, gl_distfog, 70, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 	}
 }
 
-CUSTOM_CVAR(Int,gl_fogmode,1,CVAR_ARCHIVE|CVAR_NOINITCALL)
+CUSTOM_CVAR(Int,gl_fogmode,2,CVAR_ARCHIVE|CVAR_NOINITCALL)
 {
 	if (self>2) self=2;
 	if (self<0) self=0;
 }
 
-CUSTOM_CVAR(Int, gl_lightmode, 3 ,CVAR_ARCHIVE|CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, gl_lightmode, 1 ,CVAR_ARCHIVE|CVAR_NOINITCALL)
 {
 	int newself = self;
 	if (newself > 4) newself=8;	// use 8 for software lighting to avoid conflicts with the bit mask

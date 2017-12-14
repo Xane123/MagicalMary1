@@ -876,7 +876,7 @@ CCMD(linetarget)
 	if (t.linetarget)
 		C_PrintInfo(t.linetarget, argv.argc() > 1 && atoi(argv[1]) != 0);
 	else
-		Printf("No target found\n");
+		Printf("Sorry, Xane, couldn't find the target...\nTry again!\n");
 }
 
 // As linetarget, but also give info about non-shootable actors

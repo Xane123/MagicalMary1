@@ -75,7 +75,7 @@
 #include "files.h"
 
 CVAR(Int, savestatistics, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR(String, statfile, "zdoomstat.txt", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR(String, statfile, "stats.txt", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 
 //==========================================================================
 //

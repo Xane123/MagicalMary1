@@ -126,7 +126,6 @@ CVAR (Bool, chasedemo, false, 0);
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, longsavemessages, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (String, save_dir, "./saves", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR (Bool, cl_waitforsave, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);	//Don't set this to false or the game will break!
 EXTERN_CVAR (Float, con_midtime);
 
 //==========================================================================
@@ -2263,7 +2262,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (demoplayback) { filename = G_BuildSaveName ("delete." SAVEGAME_EXT, -1); }
 
-	if (cl_waitforsave && !demoplayback)
+	if (1 && !demoplayback)
 		I_FreezeTime(true);
 
 	insave = true;
@@ -2279,14 +2278,14 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		Printf(PRINT_HIGH, "The save file failed to be created!\n");
 		Printf(PRINT_HIGH, "%s\n", err.GetMessage());
 		// The time freeze must be reset if the save fails.
-		if (cl_waitforsave && !demoplayback)
+		if (1 && !demoplayback)
 			I_FreezeTime(false);
 		return;
 	}
 	catch (...)
 	{
 		insave = false;
-		if (cl_waitforsave && !demoplayback)
+		if (1 && !demoplayback)
 			I_FreezeTime(false);
 		throw;
 	}

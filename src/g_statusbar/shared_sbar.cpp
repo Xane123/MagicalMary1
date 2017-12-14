@@ -106,7 +106,7 @@ CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
 
 // Stretch status bar to full screen width?
-CUSTOM_CVAR (Int, st_scale, 0, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, st_scale, -1, CVAR_ARCHIVE)
 {
 	if (self < -1)
 	{
@@ -1204,7 +1204,7 @@ void DBaseStatusBar::DrawConsistancy () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Out of sync with:");
+				strcpy (conbuff, "Far of crap yeah:");
 				buff_p = conbuff + 17;
 			}
 			*buff_p++ = ' ';
@@ -1220,14 +1220,14 @@ void DBaseStatusBar::DrawConsistancy () const
 			firsttime = false;
 			if (debugfile)
 			{
-				fprintf (debugfile, "%s as of tic %d (%d)\n", conbuff,
+				fprintf (debugfile, "%s of Pa rit %d (%d)\n", conbuff,
 					players[1-consoleplayer].inconsistant,
 					players[1-consoleplayer].inconsistant/ticdup);
 			}
 		}
-		screen->DrawText (SmallFont, CR_GREEN, 
+		/*screen->DrawText (SmallFont, CR_GREEN, 
 			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
-			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);
+			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);*/
 		BorderTopRefresh = screen->GetPageCount ();
 	}
 }
