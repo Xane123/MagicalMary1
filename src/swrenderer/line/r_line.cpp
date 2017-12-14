@@ -60,7 +60,6 @@
 #include "swrenderer/things/r_decal.h"
 #include "swrenderer/r_renderthread.h"
 
-CVAR(Bool, r_fogboundary, true, 0)
 CVAR(Bool, r_drawmirrors, true, 0)
 EXTERN_CVAR(Bool, r_fullbrightignoresectorcolor);
 
@@ -979,7 +978,7 @@ namespace swrenderer
 
 	bool SWRenderLine::IsFogBoundary(sector_t *front, sector_t *back) const
 	{
-		return r_fogboundary && CameraLight::Instance()->FixedColormap() == nullptr && front->Colormap.FadeColor &&
+		return 0 && CameraLight::Instance()->FixedColormap() == nullptr && front->Colormap.FadeColor &&
 			front->Colormap.FadeColor != back->Colormap.FadeColor &&
 			(front->GetTexture(sector_t::ceiling) != skyflatnum || back->GetTexture(sector_t::ceiling) != skyflatnum);
 	}

@@ -38,7 +38,6 @@
 #include "a_dynlight.h"
 
 EXTERN_CVAR(Bool, r_drawmirrors)
-EXTERN_CVAR(Bool, r_fogboundary)
 
 bool RenderPolyWall::RenderLine(PolyRenderThread *thread, const TriMatrix &worldToClip, const PolyClipPlane &clipPlane, seg_t *line, sector_t *frontsector, uint32_t subsectorDepth, uint32_t stencilValue, std::vector<PolyTranslucentObject*> &translucentWallsOutput, std::vector<std::unique_ptr<PolyDrawLinePortal>> &linePortals, line_t *lastPortalLine)
 {
@@ -188,7 +187,7 @@ bool RenderPolyWall::RenderLine(PolyRenderThread *thread, const TriMatrix &world
 
 bool RenderPolyWall::IsFogBoundary(sector_t *front, sector_t *back)
 {
-	return r_fogboundary && PolyCameraLight::Instance()->FixedColormap() == nullptr && front->Colormap.FadeColor &&
+	return 0 && PolyCameraLight::Instance()->FixedColormap() == nullptr && front->Colormap.FadeColor &&
 		front->Colormap.FadeColor != back->Colormap.FadeColor &&
 		(front->GetTexture(sector_t::ceiling) != skyflatnum || back->GetTexture(sector_t::ceiling) != skyflatnum);
 }
