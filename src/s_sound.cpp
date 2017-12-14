@@ -184,7 +184,7 @@ void S_NoiseDebug (void)
 	int y, color;
 
 	y = 32 * CleanYfac;
-	screen->DrawText (ConFont, CR_YELLOW, 0, y, "*** SOUND DEBUG INFO ***", TAG_DONE);
+	screen->DrawText (ConFont, CR_YELLOW, 0, y, "ALL SOUNDS CURRENTLY PLAYING", TAG_DONE);
 	y += 8;
 
 	screen->DrawText (ConFont, CR_GOLD, 0, y, "name", TAG_DONE);
@@ -225,48 +225,48 @@ void S_NoiseDebug (void)
 
 		if (!(chan->ChanFlags & CHAN_IS3D))
 		{
-			screen->DrawText(ConFont, color, 70, y, "---", TAG_DONE);		// X
-			screen->DrawText(ConFont, color, 120, y, "---", TAG_DONE);	// Y
-			screen->DrawText(ConFont, color, 170, y, "---", TAG_DONE);	// Z
-			screen->DrawText(ConFont, color, 260, y, "---", TAG_DONE);	// Distance
+			screen->DrawText(SmallFont, color, 70, y, "---", TAG_DONE);		// X
+			screen->DrawText(SmallFont, color, 120, y, "---", TAG_DONE);	// Y
+			screen->DrawText(SmallFont, color, 170, y, "---", TAG_DONE);	// Z
+			screen->DrawText(SmallFont, color, 260, y, "---", TAG_DONE);	// Distance
 		}
 		else
 		{
 			// X coordinate
 			mysnprintf(temp, countof(temp), "%.0f", origin.X);
-			screen->DrawText(ConFont, color, 70, y, temp, TAG_DONE);
+			screen->DrawText(SmallFont, color, 70, y, temp, TAG_DONE);
 
 			// Y coordinate
 			mysnprintf(temp, countof(temp), "%.0f", origin.Z);
-			screen->DrawText(ConFont, color, 120, y, temp, TAG_DONE);
+			screen->DrawText(SmallFont, color, 120, y, temp, TAG_DONE);
 
 			// Z coordinate
 			mysnprintf(temp, countof(temp), "%.0f", origin.Y);
-			screen->DrawText(ConFont, color, 170, y, temp, TAG_DONE);
+			screen->DrawText(SmallFont, color, 170, y, temp, TAG_DONE);
 
 			// Distance
 			if (chan->DistanceScale > 0)
 			{
 				mysnprintf(temp, countof(temp), "%.0f", (origin - listener).Length());
-				screen->DrawText(ConFont, color, 260, y, temp, TAG_DONE);
+				screen->DrawText(SmallFont, color, 260, y, temp, TAG_DONE);
 			}
 			else
 			{
-				screen->DrawText(ConFont, color, 260, y, "---", TAG_DONE);
+				screen->DrawText(SmallFont, color, 260, y, "---", TAG_DONE);
 			}
 		}
 
 		// Volume
 		mysnprintf(temp, countof(temp), "%.2g", chan->Volume);
-		screen->DrawText(ConFont, color, 220, y, temp, TAG_DONE);
+		screen->DrawText(SmallFont, color, 220, y, temp, TAG_DONE);
 
 		// Channel
 		mysnprintf(temp, countof(temp), "%d", chan->EntChannel);
-		screen->DrawText(ConFont, color, 300, y, temp, TAG_DONE);
+		screen->DrawText(SmallFont, color, 300, y, temp, TAG_DONE);
 
 		// Priority
 		mysnprintf(temp, countof(temp), "%d", chan->Priority);
-		screen->DrawText(ConFont, color, 340, y, temp, TAG_DONE);
+		screen->DrawText(SmallFont, color, 340, y, temp, TAG_DONE);
 
 		// Flags
 		mysnprintf(temp, countof(temp), "%s3%sZ%sU%sM%sN%sA%sL%sE%sV",
@@ -279,15 +279,15 @@ void S_NoiseDebug (void)
 			(chan->ChanFlags & CHAN_LOOP)			? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
 			(chan->ChanFlags & CHAN_EVICTED)		? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
 			(chan->ChanFlags & CHAN_VIRTUAL)		? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK);
-		screen->DrawText(ConFont, color, 380, y, temp, TAG_DONE);
+		screen->DrawText(SmallFont, color, 380, y, temp, TAG_DONE);
 
 		// Audibility
 		mysnprintf(temp, countof(temp), "%.4f", GSnd->GetAudibility(chan));
-		screen->DrawText(ConFont, color, 460, y, temp, TAG_DONE);
+		screen->DrawText(SmallFont, color, 460, y, temp, TAG_DONE);
 
 		// Position
 		mysnprintf(temp, countof(temp), "%u", GSnd->GetPosition(chan));
-		screen->DrawText(ConFont, color, 520, y, temp, TAG_DONE);
+		screen->DrawText(SmallFont, color, 520, y, temp, TAG_DONE);
 
 
 		y += 8;
@@ -1761,6 +1761,12 @@ void S_RelinkSound (AActor *from, AActor *to)
 
 bool S_ChangeSoundVolume(AActor *actor, int channel, float volume)
 {
+	// don't let volume get out of bounds
+	if (volume < 0.0)
+		volume = 0.0;
+	else if (volume > 1.0)
+		volume = 1.0;
+
 	for (FSoundChan *chan = Channels; chan != NULL; chan = chan->NextChan)
 	{
 		if (chan->SourceType == SOURCE_Actor &&

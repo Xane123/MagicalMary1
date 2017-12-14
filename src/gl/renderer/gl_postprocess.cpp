@@ -485,7 +485,7 @@ void FGLRenderer::BlurScene(float gameinfobluramount)
 	float blurAmount = gl_menu_blur;
 
 	// if CVar is negative, use the gameinfo entry
-	if (gl_menu_blur < 0)	//[XANE]TODO: Find out what the "gameinfo blur amount entry" is!
+	if (gl_menu_blur < 0)
 		blurAmount = gameinfobluramount;
 
 	// if blurAmount == 0 or somehow still returns negative, exit to prevent a crash, clearly we don't want this
@@ -938,7 +938,7 @@ int FGLRenderer::PTM_BestColor (const uint32_t *pal_in, int r, int g, int b, int
 	static bool firstTime = true;
 	static float trackpowtable = 0.;
 
-	double fbestdist, fdist;
+	double fbestdist = DBL_MAX, fdist;
 	int bestcolor = 0;
 
 	if (firstTime || trackpowtable != gl_paltonemap_powtable)

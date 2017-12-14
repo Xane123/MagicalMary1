@@ -116,7 +116,7 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 				{
 					sc.MustGetStringName("=");
 					sc.MustGetString();
-					if (sc.Compare("MMA")) iwad->gametype = GAME_MMA;
+					if (sc.Compare("Doom")) iwad->gametype = GAME_Doom;
 					else if (sc.Compare("Heretic")) iwad->gametype = GAME_Heretic;
 					else if (sc.Compare("Hexen")) iwad->gametype = GAME_Hexen;
 					else if (sc.Compare("Strife")) iwad->gametype = GAME_Strife;
@@ -199,7 +199,7 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 				}
 				else
 				{
-					sc.ScriptError("Unknown keyword '%s'!", sc.String);
+					sc.ScriptError("Unknown keyword '%s'", sc.String);
 				}
 			}
 			if (iwad->MapInfo.IsEmpty())
@@ -230,7 +230,7 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 		}
 		else
 		{
-			sc.ScriptError("Unknown keyword '%s'!", sc.String);
+			sc.ScriptError("Unknown keyword '%s'", sc.String);
 		}
 	}
 }
@@ -503,7 +503,7 @@ void FIWadManager::ValidateIWADs()
 
 static bool havepicked = false;
 
-int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad)
+int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad, const char *optional_wad)
 {
 	const char *iwadparm = Args->CheckValue ("-iwad");
 	FString custwad;
@@ -583,7 +583,7 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 		// We have a -iwad parameter. Pick the first usable IWAD we found through that.
 		for (unsigned i = numFoundWads; i < mFoundWads.Size(); i++)
 		{
-			if (mFoundWads[i].mInfoIndex > 0)
+			if (mFoundWads[i].mInfoIndex >= 0)
 			{
 				picks.Push(mFoundWads[i]);
 				break;
@@ -702,10 +702,10 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	wadfiles.Clear();
 	D_AddFile (wadfiles, zdoom_wad);
 
-	//[XANE]Non-free assets? Eh, good, but MMA will use all of its own assets!
-	//if (D_AddFile(wadfiles, optional_wad))
-		//Wads.SetIwadNum(2);
-	//else
+	// [SP] Load non-free assets if available. This must be done before the IWAD.
+	if (D_AddFile(wadfiles, optional_wad))
+		Wads.SetIwadNum(2);
+	else
 		Wads.SetIwadNum(1);
 
 	if (picks[pick].mRequiredPath.IsNotEmpty())
@@ -743,9 +743,9 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 //
 //==========================================================================
 
-const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad)
+const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad, const char *optionalwad)
 {
-	int iwadType = IdentifyVersion(wadfiles, iwad, basewad);
+	int iwadType = IdentifyVersion(wadfiles, iwad, basewad, optionalwad);
 	//gameiwad = iwadType;
 	const FIWADInfo *iwad_info = &mIWadInfos[iwadType];
 	if (DoomStartupInfo.Name.IsEmpty()) DoomStartupInfo.Name = iwad_info->Name;

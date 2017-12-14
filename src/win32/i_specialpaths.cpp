@@ -155,6 +155,33 @@ bool GetKnownFolder(int shell_folder, REFKNOWNFOLDERID known_folder, bool create
 
 //===========================================================================
 //
+// M_GetAppDataPath													Windows
+//
+// Returns the path for the AppData folder.
+//
+//===========================================================================
+
+FString M_GetAppDataPath(bool create)
+{
+	FString path;
+
+	if (!GetKnownFolder(CSIDL_LOCAL_APPDATA, FOLDERID_LocalAppData, create, path))
+	{ // Failed (e.g. On Win9x): use program directory
+		path = progdir;
+	}
+	// Don't use GAME_DIR and such so that ZDoom and its child ports can
+	// share the node cache.
+	path += "/" GAMENAMELOWERCASE;
+	path.Substitute("//", "/");	// needed because progdir ends with a slash.
+	if (create)
+	{
+		CreatePath(path);
+	}
+	return path;
+}
+
+//===========================================================================
+//
 // M_GetCachePath													Windows
 //
 // Returns the path for cache GL nodes.
@@ -173,6 +200,10 @@ FString M_GetCachePath(bool create)
 	// share the node cache.
 	path += "/zdoom/cache";
 	path.Substitute("//", "/");	// needed because progdir ends with a slash.
+	if (create)
+	{
+		CreatePath(path);
+	}
 	return path;
 }
 
@@ -222,51 +253,19 @@ FString M_GetCajunPath(const char *botfilename)
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	/*HRESULT hr;
+	HRESULT hr;
 
 	path.Format("%s" GAMENAME "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
 	{
 		return path;
-	}*/
+	}
 
 	path = "";
 	path = progdir;
-	path += GAMENAMELOWERCASE ".ini";	//MMA only uses Settings.ini.
 
-	/*
-	// Construct a user-specific config name
-	if (UseKnownFolders() && GetKnownFolder(CSIDL_APPDATA, FOLDERID_RoamingAppData, true, path))
-	{
-		path += "/" GAME_DIR;
-		CreatePath(path);
-		path += "/" GAMENAMELOWERCASE ".ini";
-	}
-	else
-	{ // construct "$PROGDIR/zdoom-$USER.ini"
-		TCHAR uname[UNLEN+1];
-		DWORD unamelen = countof(uname);
-
-		path = progdir;
-		hr = GetUserName(uname, &unamelen);
-		if (0)//SUCCEEDED(hr) && uname[0] != 0)
-		{
-			// Is it valid for a user name to have slashes?
-			// Check for them and substitute just in case.
-			char *probe = uname;
-			while (*probe != 0)
-			{
-				if (*probe == '\\' || *probe == '/')
-					*probe = '_';
-				++probe;
-			}
-			path << GAMENAMELOWERCASE "-" << uname << ".ini";
-		}
-		else
-		{ // Couldn't get user name, so just use Settings.ini
-			path += GAMENAMELOWERCASE ".ini";
-		}
-	}*/
+	// Couldn't get user name, so just use zdoom.ini
+		path += GAMENAMELOWERCASE ".ini";
 
 	// If we are reading the config file, check if it exists. If not, fallback
 	// to $PROGDIR/zdoom.ini
@@ -298,22 +297,9 @@ FString M_GetScreenshotsPath()
 {
 	FString path;
 
-	if (!UseKnownFolders())
-	{
-		return progdir;
-	}
-	else if (GetKnownFolder(-1, MyFOLDERID_Screenshots, true, path))
-	{
-		path << "/" GAMENAME;
-	}
-	else if (GetKnownFolder(CSIDL_MYPICTURES, FOLDERID_Pictures, true, path))
-	{
-		path << "/MMA Screenshots/" GAMENAME;
-	}
-	else
-	{
-		return progdir;
-	}
+	path = progdir;
+	path << "/shots/";
+
 	CreatePath(path);
 	return path;
 }
@@ -330,14 +316,35 @@ FString M_GetSavegamesPath()
 {
 	FString path;
 
-	if (!UseKnownFolders())
+	path = progdir;
+	path << "/saves/";
+
+	CreatePath(path);
+	return path;
+}
+
+//===========================================================================
+//
+// M_GetDocumentsPath												Windows
+//
+// Returns the path to the default documents directory.
+//
+//===========================================================================
+
+FString M_GetDocumentsPath()
+{
+	FString path;
+
+	// A portable INI means that this storage location should also be portable.
+	path.Format("%s" GAMENAME "_portable.ini", progdir.GetChars());
+	if (FileExists(path))
 	{
 		return progdir;
 	}
-	// Try standard Saved Games folder
-	else if (GetKnownFolder(-1, FOLDERID_SavedGames, true, path))
+
+	if (!UseKnownFolders())
 	{
-		path << "/" GAMENAME;
+		return progdir;
 	}
 	// Try defacto My Documents/My Games folder
 	else if (GetKnownFolder(CSIDL_PERSONAL, FOLDERID_Documents, true, path))

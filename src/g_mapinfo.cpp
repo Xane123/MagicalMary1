@@ -229,14 +229,6 @@ void level_info_t::Reset()
 	MapName = "";
 	MapBackground = "";
 	levelnum = 0;
-
-	skyboxmovement1 = 0;	//[XANE] Let's reset my new variables as well!
-	world_number = 0;
-	world_level = 0;
-	xanemusic = 0;
-	skyboxmovement2 = 0;
-	xanestartpoint = 0;
-
 	PName = "";
 	NextMap = "";
 	NextSecretMap = "";
@@ -876,48 +868,6 @@ DEFINE_MAP_OPTION(levelnum, true)
 	info->levelnum = parse.sc.Number;
 }
 
-DEFINE_MAP_OPTION(movesky_horizontal, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->skyboxmovement1 = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(world, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->world_number = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(level, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->world_level = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(song, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->xanemusic = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(movesky_vertical, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->skyboxmovement2 = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(uniquespawnpoints, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->xanestartpoint = parse.sc.Number;
-}
-
 DEFINE_MAP_OPTION(next, true)
 {
 	parse.ParseAssign();
@@ -1183,7 +1133,7 @@ DEFINE_MAP_OPTION(PrecacheSounds, true)
 		FSoundID snd = parse.sc.String;
 		if (snd == 0)
 		{
-			parse.sc.ScriptMessage("Unknown sound \"%s\".", parse.sc.String);
+			parse.sc.ScriptMessage("Unknown sound \"%s\"", parse.sc.String);
 		}
 		else
 		{
@@ -2055,8 +2005,8 @@ void FMapInfoParser::ParseMapInfo (int lump, level_info_t &gamedefaults, level_i
 				// Do not allow overriding includes from the default MAPINFO
 				if (Wads.GetLumpFile(sc.LumpNum) == 0)
 				{
-					/*I_FatalError("File %s is overriding core lump %s.",
-						Wads.GetWadFullName(Wads.GetLumpFile(inclump)), sc.String);*/	//[XANE]Disabled "core lump" check.
+					I_FatalError("File %s is overriding core lump %s.",
+						Wads.GetWadFullName(Wads.GetLumpFile(inclump)), sc.String);
 				}
 			}
 			FScanner saved_sc = sc;
@@ -2250,13 +2200,13 @@ void G_ParseMapInfo (FString basemapinfo)
 		int baselump = Wads.GetNumForFullName(basemapinfo);
 		if (Wads.GetLumpFile(baselump) > 0)
 		{
-			/*I_FatalError("File %s is overriding core lump %s.", 
-				Wads.GetWadFullName(Wads.GetLumpFile(baselump)), basemapinfo.GetChars());*/	//[XANE]Disabled "core lump" check.
+			I_FatalError("File %s is overriding core lump %s.", 
+				Wads.GetWadFullName(Wads.GetLumpFile(baselump)), basemapinfo.GetChars());
 		}
 		parse.ParseMapInfo(baselump, gamedefaults, defaultinfo);
 	}
 
-	static const char *mapinfonames[] = { "MAPINFO", "ZMAPINFO", NULL };
+	static const char *mapinfonames[] = { "MAPINFO", "ZMAPINFO", "UMAPINFO", NULL };
 	int nindex;
 
 	// Parse any extra MAPINFOs.
@@ -2272,10 +2222,28 @@ void G_ParseMapInfo (FString basemapinfo)
 
 			if (altlump >= 0) continue;
 		}
-		FMapInfoParser parse(nindex == 1? FMapInfoParser::FMT_New : FMapInfoParser::FMT_Unknown);
-		level_info_t defaultinfo;
-		parse.ParseMapInfo(lump, gamedefaults, defaultinfo);
+		else if (nindex == 2)
+		{
+			// MAPINFO and ZMAPINFO will override UMAPINFO if in the same WAD.
+			int wad = Wads.GetLumpFile(lump);
+			int altlump = Wads.CheckNumForName("ZMAPINFO", ns_global, wad, true);
+			if (altlump >= 0) continue;
+			altlump = Wads.CheckNumForName("MAPINFO", ns_global, wad, true);
+			if (altlump >= 0) continue;
+		}
+		if (nindex != 2)
+		{
+			CommitUMapinfo(&gamedefaults);	// UMPAINFOs are collected until a regular MAPINFO is found so that they properly use the base settings.
+			FMapInfoParser parse(nindex == 1 ? FMapInfoParser::FMT_New : FMapInfoParser::FMT_Unknown);
+			level_info_t defaultinfo;
+			parse.ParseMapInfo(lump, gamedefaults, defaultinfo);
+		}
+		else
+		{
+			ParseUMapInfo(lump);
+		}
 	}
+	CommitUMapinfo(&gamedefaults);	// commit remaining UMPAINFOs.
 
 	if (AllEpisodes.Size() == 0)
 	{

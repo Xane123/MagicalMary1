@@ -1,5 +1,4 @@
 
-#include "tempfiles.h"
 #include "oplsynth/opl_mus_player.h"
 #include "c_cvars.h"
 #include "mus2midi.h"
@@ -240,7 +239,7 @@ public:
 	void Stop();
 
 protected:
-	FILE *File;
+	FileWriter *File;
 };
 
 // WildMidi implementation of a MIDI device ---------------------------------

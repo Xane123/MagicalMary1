@@ -59,14 +59,6 @@ struct FLevelLocals
 	int			cluster;
 	int			clusterflags;
 	int			levelnum;
-
-	int skyboxmovement1;	//[XANE]My custom variables.
-	int world_number;
-	int world_level;
-	int xanemusic;
-	int skyboxmovement2;
-	int xanestartpoint;
-
 	int			lumpnum;
 	FString		LevelName;
 	FString		MapName;			// the lump name (E1M1, MAP01, etc)
@@ -74,6 +66,8 @@ struct FLevelLocals
 	FString		NextSecretMap;		// map to go to when used secret exit
 	FString		F1Pic;
 	EMapType	maptype;
+
+	uint64_t	ShaderStartTime = 0;	// tell the shader system when we started the level (forces a timer restart)
 
 	TArray<vertex_t> vertexes;
 	TArray<sector_t> sectors;

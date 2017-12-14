@@ -83,91 +83,11 @@ FGameConfigFile *GameConfig;
 
 CVAR(Bool, screenshot_quiet, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(String, screenshot_type, "png", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR(String, screenshot_dir, "./shots/", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(String, screenshot_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 EXTERN_CVAR(Bool, longsavemessages);
 
 static long ParseCommandLine (const char *args, int *argc, char **argv);
 
-//
-// M_WriteFile
-//
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-bool M_WriteFile (char const *name, void *source, int length)
-{
-	int handle;
-	int count;
-
-	handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
-
-	if (handle == -1)
-		return false;
-
-	count = write (handle, source, length);
-	close (handle);
-
-	if (count < length)
-		return false;
-
-	return true;
-}
-
-
-//
-// M_ReadFile
-//
-int M_ReadFile (char const *name, uint8_t **buffer)
-{
-	int handle, count, length;
-	struct stat fileinfo;
-	uint8_t *buf;
-
-	handle = open (name, O_RDONLY | O_BINARY, 0666);
-	if (handle == -1)
-		I_Error ("Couldn't read file %s", name);
-	// [BL] Use stat instead of fstat for v140_xp hack
-	if (stat (name,&fileinfo) == -1)
-		I_Error ("Couldn't read file %s", name);
-	length = fileinfo.st_size;
-	buf = new uint8_t[length];
-	count = read (handle, buf, length);
-	close (handle);
-
-	if (count < length)
-		I_Error ("Couldn't read file %s", name);
-
-	*buffer = buf;
-	return length;
-}
-
-//
-// M_ReadFile (same as above but use malloc instead of new to allocate the buffer.)
-//
-int M_ReadFileMalloc (char const *name, uint8_t **buffer)
-{
-	int handle, count, length;
-	struct stat fileinfo;
-	uint8_t *buf;
-
-	handle = open (name, O_RDONLY | O_BINARY, 0666);
-	if (handle == -1)
-		I_Error ("Couldn't read file %s", name);
-	// [BL] Use stat instead of fstat for v140_xp hack
-	if (stat (name,&fileinfo) == -1)
-		I_Error ("Couldn't read file %s", name);
-	length = fileinfo.st_size;
-	buf = (uint8_t*)M_Malloc(length);
-	count = read (handle, buf, length);
-	close (handle);
-
-	if (count < length)
-		I_Error ("Couldn't read file %s", name);
-
-	*buffer = buf;
-	return length;
-}
 
 //---------------------------------------------------------------------------
 //
@@ -192,7 +112,6 @@ void M_FindResponseFile (void)
 			char	**argv;
 			char	*file = NULL;
 			int		argc = 0;
-			FILE	*handle;
 			int 	size;
 			long	argsize = 0;
 			int 	index;
@@ -202,22 +121,18 @@ void M_FindResponseFile (void)
 			if (added_stuff < limit)
 			{
 				// READ THE RESPONSE FILE INTO MEMORY
-				handle = fopen (Args->GetArg(i) + 1,"rb");
-				if (!handle)
+				FileReader fr;
+				if (!fr.Open(Args->GetArg(i) + 1))
 				{ // [RH] Make this a warning, not an error.
 					Printf ("No such response file (%s)!\n", Args->GetArg(i) + 1);
 				}
 				else
 				{
 					Printf ("Found response file %s!\n", Args->GetArg(i) + 1);
-					fseek (handle, 0, SEEK_END);
-					size = ftell (handle);
-					fseek (handle, 0, SEEK_SET);
+					size = fr.GetLength();
 					file = new char[size+1];
-					fread (file, size, 1, handle);
+					fr.Read (file, size);
 					file[size] = 0;
-					fclose (handle);
-
 					argsize = ParseCommandLine (file, &argc, NULL);
 				}
 			}
@@ -606,11 +521,11 @@ void WritePCXfile (FileWriter *file, const uint8_t *buffer, const PalEntry *pale
 // WritePNGfile
 //
 void WritePNGfile (FileWriter *file, const uint8_t *buffer, const PalEntry *palette,
-				   ESSType color_type, int width, int height, int pitch)
+				   ESSType color_type, int width, int height, int pitch, float gamma)
 {
 	char software[100];
 	mysnprintf(software, countof(software), GAMENAME " %s", GetVersionString());
-	if (!M_CreatePNG (file, buffer, palette, color_type, width, height, pitch) ||
+	if (!M_CreatePNG (file, buffer, palette, color_type, width, height, pitch, gamma) ||
 		!M_AppendPNGText (file, "Software", software) ||
 		!M_FinishPNG (file))
 	{
@@ -631,30 +546,30 @@ static bool FindFreeName (FString &fullname, const char *extension)
 	{
 		const char *gamename = gameinfo.ConfigName;
 
-		/*time_t now;
+		time_t now;
 		tm *tm;
 
 		time(&now);
 		tm = localtime(&now);
 
 		if (tm == NULL)
-		{*/
-			lbmname.Format ("%s%sPicture-%04d.%s", fullname.GetChars(), gamename, i, extension);
-		/*}
+		{
+			lbmname.Format ("%sScreenshot_%s_%04d.%s", fullname.GetChars(), gamename, i, extension);
+		}
 		else if (i == 0)
 		{
-			lbmname.Format ("%s%sPicture-%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
+			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				extension);
 		}
 		else
 		{
-			lbmname.Format ("%s%sPicture-%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
+			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d_%02d.%s", fullname.GetChars(), gamename,
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				i, extension);
-		}*/
+		}
 
 		if (!FileExists (lbmname.GetChars()))
 		{
@@ -711,8 +626,9 @@ void M_ScreenShot (const char *filename)
 	const uint8_t *buffer;
 	int pitch;
 	ESSType color_type;
+	float gamma;
 
-	screen->GetScreenshotBuffer(buffer, pitch, color_type);
+	screen->GetScreenshotBuffer(buffer, pitch, color_type, gamma);
 	if (buffer != NULL)
 	{
 		PalEntry palette[256];
@@ -736,7 +652,7 @@ void M_ScreenShot (const char *filename)
 		else
 		{
 			WritePNGfile(file, buffer, palette, color_type,
-				screen->GetWidth(), screen->GetHeight(), pitch);
+				screen->GetWidth(), screen->GetHeight(), pitch, gamma);
 		}
 		delete file;
 		screen->ReleaseScreenshotBuffer();

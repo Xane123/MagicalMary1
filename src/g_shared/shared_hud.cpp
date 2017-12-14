@@ -63,7 +63,7 @@
 
 EXTERN_CVAR(Bool,am_follow)
 EXTERN_CVAR (Int, con_scaletext)
-EXTERN_CVAR (Bool, mmapos)
+EXTERN_CVAR (Bool, idmypos)
 EXTERN_CVAR (Int, screenblocks)
 EXTERN_CVAR(Bool, hud_aspectscale)
 
@@ -215,12 +215,12 @@ static void DrawHudNumber(FFont *font, int color, int num, int x, int y, double 
 
 static void DrawStatLine(int x, int &y, const char *prefix, const char *string)
 {
-	y -= ConFont->GetHeight()-1;
-	screen->DrawText(ConFont, hudcolor_statnames, x, y, prefix, 
+	y -= SmallFont->GetHeight()-1;
+	screen->DrawText(SmallFont, hudcolor_statnames, x, y, prefix, 
 		DTA_KeepRatio, true,
 		DTA_VirtualWidth, hudwidth, DTA_VirtualHeight, hudheight, DTA_Alpha, 0.75, TAG_DONE);
 
-	screen->DrawText(ConFont, hudcolor_stats, x+statspace, y, string,
+	screen->DrawText(SmallFont, hudcolor_stats, x+statspace, y, string,
 		DTA_KeepRatio, true,
 		DTA_VirtualWidth, hudwidth, DTA_VirtualHeight, hudheight, DTA_Alpha, 0.75, TAG_DONE);
 }
@@ -882,7 +882,7 @@ static void DrawCoordinates(player_t * CPlayer)
 {
 	DVector3 pos;
 	char coordstr[18];
-	int h = ConFont->GetHeight() + 1; //SmallFont->GetHeight()+1;
+	int h = SmallFont->GetHeight()+1;
 
 	
 	if (!map_point_coordinates || !automapactive) 
@@ -1156,7 +1156,7 @@ void DrawHUD()
 		i=DrawAmmo(CPlayer, hudwidth-5, i);
 		if (hud_showweapons) DrawWeapons(CPlayer, hudwidth - 5, i);
 		DrawInventory(CPlayer, 144, hudheight-28);
-		if (mmapos) DrawCoordinates(CPlayer);
+		if (idmypos) DrawCoordinates(CPlayer);
 
 		DrawTime();
 		DrawLatency();

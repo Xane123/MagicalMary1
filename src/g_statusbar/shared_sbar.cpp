@@ -106,7 +106,7 @@ CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
 
 // Stretch status bar to full screen width?
-CUSTOM_CVAR (Int, st_scale, -1, CVAR_ARCHIVE)	//[XANE]This makes the status bar look as intended and how it looked in older versions.
+CUSTOM_CVAR (Int, st_scale, 0, CVAR_ARCHIVE)
 {
 	if (self < -1)
 	{
@@ -139,7 +139,7 @@ CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 	if (self < 0 || self > 2) self = 2;
 }
 
-CVAR (Bool, mmapos, false, 0);
+CVAR (Bool, idmypos, false, 0);
 CVAR(Float, underwater_fade_scalar, 1.0f, CVAR_ARCHIVE) // [Nash] user-settable underwater blend intensity
 
 //---------------------------------------------------------------------------
@@ -976,7 +976,7 @@ void DBaseStatusBar::Draw (EHudState state)
 		RefreshBackground ();
 	}
 
-	if (mmapos)
+	if (idmypos)
 	{ 
 		// Draw current coordinates
 		IFVIRTUAL(DBaseStatusBar, DrawMyPos)

@@ -65,6 +65,7 @@ extern RenderBufferOptions rbOpts;
 - (void)exitAppOnClose;
 @end
 
+
 void I_ProcessEvent(NSEvent* event);
 
 void I_ProcessJoysticks();

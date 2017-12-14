@@ -82,23 +82,17 @@ ADD_STAT(shadowmap)
 	return out;
 }
 
-CUSTOM_CVAR(Int, gl_shadowmap_quality, 128, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	//[XANE]Let's start the shadowmaps at 128, low quality but decent.
+CUSTOM_CVAR(Int, gl_shadowmap_quality, 512, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	switch (self)
-	{	//[XANE]Below 4, shadow maps stop working entirely.
-	case 4:
-	case 8:
-	case 16:
-	case 32:
-	case 64:
+	{
 	case 128:
 	case 256:
 	case 512:
 	case 1024:
-	case 2048:
 		break;
 	default:
-		self = 512;
+		self = 128;
 		break;
 	}
 }

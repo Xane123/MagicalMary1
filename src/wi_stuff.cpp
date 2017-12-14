@@ -293,7 +293,7 @@ bool DInterBackground::LoadBackground(bool isenterpic)
 		switch (gameinfo.gametype)
 		{
 		case GAME_Chex:
-		case GAME_MMA:
+		case GAME_Doom:
 			if (!(gameinfo.flags & GI_MAPxx))
 			{
 				const char *level = isenterpic ? wbs->next : wbs->current;
@@ -615,7 +615,7 @@ void DInterBackground::drawBackground(int state, bool drawsplat, bool snl_pointe
 	}
 	else
 	{
-		screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 74, 0);
+		screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
 	}
 
 	for (i = 0; i<anims.Size(); i++)
@@ -763,7 +763,7 @@ void WI_Start(wbstartstruct_t *wbstartstruct)
 		cls = PClass::FindClass(screenclass);
 		if (cls == nullptr)
 		{
-			I_FatalError("Cannot create the map/status screen. Stop using the old intermission screen!");
+			I_FatalError("Cannot create statis screen");
 		}
 	}
 	// Set up some global stuff that is always needed.

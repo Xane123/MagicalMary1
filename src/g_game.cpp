@@ -32,6 +32,7 @@
 #include <CoreServices/CoreServices.h>
 #endif
 
+#include "i_time.h"
 #include "templates.h"
 #include "version.h"
 #include "doomdef.h" 
@@ -92,6 +93,7 @@
 #include "g_hub.h"
 #include "g_levellocals.h"
 #include "events.h"
+#include "d_main.h"
 
 
 static FRandom pr_dmspawn ("DMSpawn");
@@ -788,7 +790,7 @@ void G_BuildTiccmd (ticcmd_t *cmd)
 //[Graf Zahl] This really helps if the mouse update rate can't be increased!
 CVAR (Bool,		smooth_mouse,	false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
 
-void G_AddViewPitch(int look, bool mouse)
+void G_AddViewPitch (int look, bool mouse)
 {
 	if (gamestate == GS_TITLELEVEL)
 	{
@@ -835,7 +837,7 @@ void G_AddViewPitch(int look, bool mouse)
 	}
 }
 
-void G_AddViewAngle(int yaw, bool mouse)
+void G_AddViewAngle (int yaw, bool mouse)
 {
 	if (gamestate == GS_TITLELEVEL)
 	{
@@ -1964,25 +1966,25 @@ void G_DoLoadGame ()
 		// have this information.
 		if (engine.IsEmpty())
 		{
-			Printf("Savegame is from an incompatible version!\n");
+			Printf("Savegame is from an incompatible version\n");
 		}
 		else
 		{
-			Printf("Savegame is from another ZDoom-based engine, %s.\n", engine.GetChars());
+			Printf("Savegame is from another ZDoom-based engine: %s\n", engine.GetChars());
 		}
 		return;
 	}
 
 	if (SaveVersion < MINSAVEVER || SaveVersion > SAVEVER)
 	{
-		Printf("Savegame is from an incompatible version.");
+		Printf("Savegame is from an incompatible version");
 		if (SaveVersion < MINSAVEVER)
 		{
-			Printf(" To be precise, %d (%d is the oldest supported.)", SaveVersion, MINSAVEVER);
+			Printf(": %d (%d is the oldest supported)", SaveVersion, MINSAVEVER);
 		}
 		else
 		{
-			Printf(" To be precise, %d (%d is the highest supported.)", SaveVersion, SAVEVER);
+			Printf(": %d (%d is the highest supported)", SaveVersion, SAVEVER);
 		}
 		Printf("\n");
 		return;
@@ -1995,7 +1997,7 @@ void G_DoLoadGame ()
 
 	if (map.IsEmpty())
 	{
-		Printf("Savegame is missing the current map! How did this happen?\n");
+		Printf("Savegame is missing the current map\n");
 		return;
 	}
 
@@ -2011,14 +2013,14 @@ void G_DoLoadGame ()
 	info = resfile->FindLump("globals.json");
 	if (info == nullptr)
 	{
-		Printf("'%s' is not a valid savegame! It doesn't have its JSON file.\n", savename.GetChars());
+		Printf("'%s' is not a valid savegame: Missing 'globals.json'.\n", savename.GetChars());
 		return;
 	}
 
 	data = info->CacheLump();
 	if (!arc.OpenReader((const char *)data, info->LumpSize))
 	{
-		Printf("Failed to access savegame info...\n");
+		Printf("Failed to access savegame info\n");
 		return;
 	}
 
@@ -2088,15 +2090,15 @@ void G_SaveGame (const char *filename, const char *description)
 	}
     else if (!usergame)
 	{
-        Printf ("You're not currently in a saveable game.\n");
+        Printf ("not in a saveable game\n");
     }
     else if (gamestate != GS_LEVEL)
 	{
-        Printf ("You aren't in an area! You can't save here.\n");
+        Printf ("not in a level\n");
     }
     else if (players[consoleplayer].health <= 0 && !multiplayer)
     {
-        Printf ("No, dude, you can't save your dead life!\n");
+        Printf ("player is dead in a single-player game\n");
     }
 	else
 	{
@@ -2193,7 +2195,7 @@ static void PutSaveWads (FSerializer &arc)
 	arc.AddString("Game WAD", name);
 
 	// Name of wad the map resides in
-	if (Wads.GetLumpFile(level.lumpnum) > Wads.GetIwadNum())
+	if (Wads.GetLumpFile (level.lumpnum) > Wads.GetIwadNum())
 	{
 		name = Wads.GetWadName (Wads.GetLumpFile (level.lumpnum));
 		arc.AddString("Map WAD", name);
@@ -2261,7 +2263,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	if (demoplayback)
 	{
-		filename = G_BuildSaveName ("demo_delete_me." SAVEGAME_EXT, -1);
+		filename = G_BuildSaveName ("demosave." SAVEGAME_EXT, -1);
 	}
 
 	if (cl_waitforsave)
@@ -2277,7 +2279,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		// delete the snapshot. Since the save failed it is broken.
 		insave = false;
 		level.info->Snapshot.Clean();
-		Printf(PRINT_HIGH, "Save failed...\n");
+		Printf(PRINT_HIGH, "Save failed\n");
 		Printf(PRINT_HIGH, "%s\n", err.GetMessage());
 		// The time freeze must be reset if the save fails.
 		if (cl_waitforsave)
@@ -2376,7 +2378,7 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
 		else Printf ("%s\n", GStrings("GGSAVED"));
 	}
-	else Printf(PRINT_HIGH, "Save failed...\n");
+	else Printf(PRINT_HIGH, "Save failed\n");
 
 
 	BackupSaveName = filename;
@@ -2796,7 +2798,17 @@ void G_DoPlayDemo (void)
 	{
 		FixPathSeperator (defdemoname);
 		DefaultExtension (defdemoname, ".lmp");
-		M_ReadFileMalloc (defdemoname, &demobuffer);
+		FileReader fr;
+		if (!fr.Open(defdemoname))
+		{
+			I_Error("Unable to open demo '%s'", defdemoname.GetChars());
+		}
+		auto len = fr.GetLength();
+		demobuffer = (uint8_t*)M_Malloc(len);
+		if (fr.Read(demobuffer, len) != len)
+		{
+			I_Error("Unable to read demo '%s'", defdemoname.GetChars());
+		}
 	}
 	demo_p = demobuffer;
 
@@ -2887,7 +2899,7 @@ bool G_CheckDemoStatus (void)
 		int endtime = 0;
 
 		if (timingdemo)
-			endtime = I_GetTime (false) - starttime;
+			endtime = I_GetTime () - starttime;
 
 		C_RestoreCVars ();		// [RH] Restore cvars demo might have changed
 		M_Free (demobuffer);
@@ -2962,7 +2974,15 @@ bool G_CheckDemoStatus (void)
 		formlen = demobuffer + 4;
 		WriteLong (int(demo_p - demobuffer - 8), &formlen);
 
-		bool saved = M_WriteFile (demoname, demobuffer, int(demo_p - demobuffer)); 
+		auto fw = FileWriter::Open(demoname);
+		bool saved = false;
+		if (fw != nullptr)
+		{
+			const size_t size = demo_p - demobuffer;
+			saved = fw->Write(demobuffer, size) == size;
+			delete fw;
+			if (!saved) remove(demoname);
+		}
 		M_Free (demobuffer); 
 		demorecording = false;
 		stoprecording = false;

@@ -233,14 +233,12 @@ void FWadCollection::AddFile (const char *filename, FileReader *wadinfo)
 	if (wadinfo == NULL)
 	{
 		// Does this exist? If so, is it a directory?
-		struct stat info;
-		if (stat(filename, &info) != 0)
+		if (!DirEntryExists(filename, &isdir))
 		{
-			Printf(TEXTCOLOR_RED "Could not stat %s\n", filename);
+			Printf(TEXTCOLOR_RED "%s: File or Directory not found\n", filename);
 			PrintLastError();
 			return;
 		}
-		isdir = (info.st_mode & S_IFDIR) != 0;
 
 		if (!isdir)
 		{
@@ -765,7 +763,10 @@ void FWadCollection::InitHashChains (void)
 //
 // RenameSprites
 //
-// This is unnecessary in Mary's Magical Adventure.
+// Renames sprites in IWADs so that unique actors can have unique sprites,
+// making it possible to import any actor from any game into any other
+// game without jumping through hoops to resolve duplicate sprite names.
+// You just need to know what the sprite's new name is.
 //
 //==========================================================================
 
@@ -775,15 +776,44 @@ void FWadCollection::RenameSprites ()
 	bool MNTRZfound = false;
 
 	static const uint32_t HereticRenames[] =
-	{ MAKE_ID('P','Q','R','S'), MAKE_ID('S','R','Q','P'),
+	{ MAKE_ID('H','E','A','D'), MAKE_ID('L','I','C','H'),		// Ironlich
 	};
 
 	static const uint32_t HexenRenames[] =
-	{ MAKE_ID('P','Q','R','S'), MAKE_ID('S','R','Q','P'),
+	{ MAKE_ID('B','A','R','L'), MAKE_ID('Z','B','A','R'),		// ZBarrel
+	  MAKE_ID('A','R','M','1'), MAKE_ID('A','R','_','1'),		// MeshArmor
+	  MAKE_ID('A','R','M','2'), MAKE_ID('A','R','_','2'),		// FalconShield
+	  MAKE_ID('A','R','M','3'), MAKE_ID('A','R','_','3'),		// PlatinumHelm
+	  MAKE_ID('A','R','M','4'), MAKE_ID('A','R','_','4'),		// AmuletOfWarding
+	  MAKE_ID('S','U','I','T'), MAKE_ID('Z','S','U','I'),		// ZSuitOfArmor and ZArmorChunk
+	  MAKE_ID('T','R','E','1'), MAKE_ID('Z','T','R','E'),		// ZTree and ZTreeDead
+	  MAKE_ID('T','R','E','2'), MAKE_ID('T','R','E','S'),		// ZTreeSwamp150
+	  MAKE_ID('C','A','N','D'), MAKE_ID('B','C','A','N'),		// ZBlueCandle
+	  MAKE_ID('R','O','C','K'), MAKE_ID('R','O','K','K'),		// rocks and dirt in a_debris.cpp
+	  MAKE_ID('W','A','T','R'), MAKE_ID('H','W','A','T'),		// Strife also has WATR
+	  MAKE_ID('G','I','B','S'), MAKE_ID('P','O','L','5'),		// RealGibs
+	  MAKE_ID('E','G','G','M'), MAKE_ID('P','R','K','M'),		// PorkFX
+	  MAKE_ID('I','N','V','U'), MAKE_ID('D','E','F','N'),		// Icon of the Defender
 	};
 
 	static const uint32_t StrifeRenames[] =
-	{ MAKE_ID('P','Q','R','S'), MAKE_ID('S','R','Q','P'),
+	{ MAKE_ID('M','I','S','L'), MAKE_ID('S','M','I','S'),		// lots of places
+	  MAKE_ID('A','R','M','1'), MAKE_ID('A','R','M','3'),		// MetalArmor
+	  MAKE_ID('A','R','M','2'), MAKE_ID('A','R','M','4'),		// LeatherArmor
+	  MAKE_ID('P','M','A','P'), MAKE_ID('S','M','A','P'),		// StrifeMap
+	  MAKE_ID('T','L','M','P'), MAKE_ID('T','E','C','H'),		// TechLampSilver and TechLampBrass
+	  MAKE_ID('T','R','E','1'), MAKE_ID('T','R','E','T'),		// TreeStub
+	  MAKE_ID('B','A','R','1'), MAKE_ID('B','A','R','C'),		// BarricadeColumn
+	  MAKE_ID('S','H','T','2'), MAKE_ID('M','P','U','F'),		// MaulerPuff
+	  MAKE_ID('B','A','R','L'), MAKE_ID('B','B','A','R'),		// StrifeBurningBarrel
+	  MAKE_ID('T','R','C','H'), MAKE_ID('T','R','H','L'),		// SmallTorchLit
+	  MAKE_ID('S','H','R','D'), MAKE_ID('S','H','A','R'),		// glass shards
+	  MAKE_ID('B','L','S','T'), MAKE_ID('M','A','U','L'),		// Mauler
+	  MAKE_ID('L','O','G','G'), MAKE_ID('L','O','G','W'),		// StickInWater
+	  MAKE_ID('V','A','S','E'), MAKE_ID('V','A','Z','E'),		// Pot and Pitcher
+	  MAKE_ID('C','N','D','L'), MAKE_ID('K','N','D','L'),		// Candle
+	  MAKE_ID('P','O','T','1'), MAKE_ID('M','P','O','T'),		// MetalPot
+	  MAKE_ID('S','P','I','D'), MAKE_ID('S','T','L','K'),		// Stalker
 	};
 
 	const uint32_t *renames;
@@ -791,7 +821,7 @@ void FWadCollection::RenameSprites ()
 
 	switch (gameinfo.gametype)
 	{
-	case GAME_MMA:
+	case GAME_Doom:
 	default:
 		// Doom's sprites don't get renamed.
 		return;
@@ -888,7 +918,7 @@ void FWadCollection::RenameSprites ()
 //==========================================================================
 void FWadCollection::RenameNerve ()
 {
-	if (gameinfo.gametype != GAME_MMA)
+	if (gameinfo.gametype != GAME_Doom)
 		return;
 
 	bool found = false;
@@ -1522,7 +1552,7 @@ FWadLump::FWadLump(int lumpnum, FResourceLump *lump)
 		// Uncompressed lump in a file. For this we will have to open a new FILE, since we need it for streaming
 		int fileno = Wads.GetLumpFile(lumpnum);
 		const char *filename = Wads.GetWadFullName(fileno);
-		File = fopen(filename, "rb");
+		File = openfd(filename);
 		if (File != NULL)
 		{
 			Length = lump->LumpSize;

@@ -143,7 +143,7 @@ class ListMenuItemPlayerNameBox : ListMenuItemSelectable
 			{
 				int xx = int(x - 160) * CleanXfac + screen.GetWidth()/2;
 				int yy = int(y - 100) * CleanXfac + screen.GetHeight()/2;
-				screen.Clear(xx, yy, xx + len*CleanXfac, yy + SmallFont.GetHeight() * CleanYfac * 3/2, 0);
+				screen.Clear(xx, yy, xx + len*CleanXfac, yy + ConFont.GetHeight() * CleanYfac * 3/2, 0);
 			}
 		}
 	}
@@ -167,12 +167,12 @@ class ListMenuItemPlayerNameBox : ListMenuItemSelectable
 		DrawBorder (x, mYpos - mFrameSize, MAXPLAYERNAME+1);
 		if (!mEnter)
 		{
-			screen.DrawText (SmallFont, Font.CR_UNTRANSLATED, x + mFrameSize, mYpos, mPlayerName, DTA_Clean, true);
+			screen.DrawText (ConFont, Font.CR_UNTRANSLATED, x + mFrameSize, mYpos, mPlayerName, DTA_Clean, true);
 		}
 		else
 		{
-			let printit = mEnter.GetText() .. SmallFont.GetCursor();
-			screen.DrawText (SmallFont, Font.CR_UNTRANSLATED, x + mFrameSize, mYpos, printit, DTA_Clean, true);
+			let printit = mEnter.GetText() .. ConFont.GetCursor();
+			screen.DrawText (ConFont, Font.CR_UNTRANSLATED, x + mFrameSize, mYpos, printit, DTA_Clean, true);
 		}
 	}
 
@@ -521,8 +521,8 @@ class ListMenuItemSlider : ListMenuItemSelectable
 
 		screen.DrawText(mFont, selected? OptionMenuSettings.mFontColorSelection : mFontColor, mXpos, mYpos, text, DTA_Clean, true);
 
-		double x = SmallFont.StringWidth ("Green") + 8 + mXpos;
-		double x2 = SmallFont.StringWidth (text) + 8 + mXpos;
+		double x = ConFont.StringWidth ("Green") + 8 + mXpos;
+		double x2 = ConFont.StringWidth (text) + 8 + mXpos;
 		mDrawX = int(MAX(x2, x));
 
 		DrawSlider (mDrawX, mYpos);

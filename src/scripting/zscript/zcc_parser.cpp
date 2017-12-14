@@ -211,6 +211,7 @@ static void InitTokenMap()
 	TOKENDEF2(TK_Color,			ZCC_COLOR,		NAME_Color);
 	TOKENDEF2(TK_Sound,			ZCC_SOUND,		NAME_Sound);
 	TOKENDEF2(TK_Let,			ZCC_LET,		NAME_let);
+	TOKENDEF2(TK_StaticConst,	ZCC_STATICCONST,NAME_Staticconst);
 
 	TOKENDEF (TK_Identifier,	ZCC_IDENTIFIER);
 	TOKENDEF (TK_StringConst,	ZCC_STRCONST);
@@ -424,8 +425,8 @@ static void DoParse(int lumpnum)
 			auto fileno2 = Wads.GetLumpFile(lumpnum);
 			if (fileno == 0 && fileno2 != 0)
 			{
-				/*I_FatalError("File %s is overriding core lump %s.",
-					Wads.GetWadFullName(Wads.GetLumpFile(baselump)), Includes[i].GetChars());*/	//[XANE]Disabled "core lump" check.
+				I_FatalError("File %s is overriding core lump %s.",
+					Wads.GetWadFullName(Wads.GetLumpFile(baselump)), Includes[i].GetChars());
 			}
 
 			ParseSingleFile(nullptr, nullptr, lumpnum, parser, state);
@@ -461,11 +462,11 @@ static void DoParse(int lumpnum)
 		FString filename = Wads.GetLumpFullPath(lumpnum);
 		filename.ReplaceChars(":\\/?|", '.');
 		filename << ".ast";
-		FILE *ff = fopen(filename, "w");
+		FileWriter *ff = FileWriter::Open(filename);
 		if (ff != NULL)
 		{
-			fputs(ast.GetChars(), ff);
-			fclose(ff);
+			ff->Write(ast.GetChars(), ast.Len());
+			delete ff;
 		}
 	}
 

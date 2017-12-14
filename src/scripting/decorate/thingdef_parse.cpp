@@ -1272,8 +1272,8 @@ void ParseDecorate (FScanner &sc, PNamespace *ns)
 				int includefile = Wads.GetLumpFile(Wads.CheckNumForFullName(sc.String, true));
 				if (includefile != 0)
 				{
-					/*I_FatalError("File %s is overriding core lump %s.",
-						Wads.GetWadFullName(includefile), sc.String);*/	//[XANE]Disabled "core lump" check.
+					I_FatalError("File %s is overriding core lump %s.",
+						Wads.GetWadFullName(includefile), sc.String);
 				}
 			}
 			FScanner newscanner;

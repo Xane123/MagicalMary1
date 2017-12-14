@@ -51,6 +51,7 @@
 
 #include "doomerrors.h"
 
+#include "i_time.h"
 #include "d_gui.h"
 #include "m_random.h"
 #include "doomdef.h"
@@ -127,6 +128,7 @@ void DrawHUD();
 
 // EXTERNAL FUNCTION PROTOTYPES --------------------------------------------
 
+extern void I_SetWindowTitle(const char* caption);
 extern void ReadStatistics();
 extern void M_RestoreMode ();
 extern void M_SetDefaultMode ();
@@ -163,6 +165,7 @@ EXTERN_CVAR (Bool, lookstrafe)
 EXTERN_CVAR (Int, screenblocks)
 EXTERN_CVAR (Bool, sv_cheats)
 EXTERN_CVAR (Bool, sv_unlimited_pickup)
+EXTERN_CVAR (Bool, I_FriendlyWindowTitle)
 
 extern int testingmode;
 extern bool setmodeneeded;
@@ -194,7 +197,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 }
 
 CVAR (Float, timelimit, 0.f, CVAR_SERVERINFO);
-CVAR (Int, wipetype, 0, CVAR_ARCHIVE);
+CVAR (Int, wipetype, 1, CVAR_ARCHIVE);
 CVAR (Int, snd_drawoutput, 0, 0);
 CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
@@ -219,16 +222,6 @@ CVAR (Bool, disableautoload, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBAL
 CVAR (Bool, autoloadbrightmaps, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)
 CVAR (Bool, autoloadlights, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)
 CVAR (Bool, r_debug_disable_vis_filter, false, 0)
-CVAR (Bool, xane_debug, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Should the small dialog for debug placement appear on startup?
-CVAR(Bool, debug_spawn, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Spawn at the debug spawn point?
-CVAR(Bool, debug_hammer, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Fully upgrade Mary's Hammer
-CVAR(Bool, debug_umbrella, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Fully upgrade Mary's Umbrella
-CVAR(Bool, debug_sword, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Fully upgrade Xane's sword
-CVAR(Bool, debug_super, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Infinite super transformation
-CVAR(Bool, debug_wind, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Display wind debug info
-CVAR(Bool, debug_floor, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Show floor detection
-CVAR(Bool, debug_speed, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Display player speed
-CVAR(Bool, debug_water, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)	//[XANE]Show the player's water level
 
 bool wantToRestart;
 bool DrawFSHUD;				// [RH] Draw fullscreen HUD?
@@ -290,7 +283,7 @@ void D_ProcessEvents (void)
 		{
 			M_SetDefaultMode ();
 		}
-		else if (testingmode <= I_GetTime(false))
+		else if (testingmode <= I_GetTime())
 		{
 			M_RestoreMode ();
 		}
@@ -338,12 +331,12 @@ void D_PostEvent (const event_t *ev)
 			int look = int(ev->y * m_pitch * mouse_sensitivity * 16.0);
 			if (invertmouse)
 				look = -look;
-			G_AddViewPitch(look, true);
+			G_AddViewPitch (look, true);
 			events[eventhead].y = 0;
 		}
 		if (!Button_Strafe.bDown && !lookstrafe)
 		{
-			G_AddViewAngle(int(ev->x * m_yaw * mouse_sensitivity * 8.0), true);
+			G_AddViewAngle (int(ev->x * m_yaw * mouse_sensitivity * 8.0), true);
 			events[eventhead].x = 0;
 		}
 		if ((events[eventhead].x | events[eventhead].y) == 0)
@@ -788,9 +781,9 @@ void D_Display ()
 
 
 	{
-		unsigned int nowtime = I_FPSTime();
-		TexMan.UpdateAnimations(nowtime);
-		R_UpdateSky(nowtime);
+		screen->FrameTime = I_msTimeFS();
+		TexMan.UpdateAnimations(screen->FrameTime);
+		R_UpdateSky(screen->FrameTime);
 		switch (gamestate)
 		{
 		case GS_FULLCONSOLE:
@@ -947,14 +940,14 @@ void D_Display ()
 	else
 	{
 		// wipe update
-		unsigned int wipestart, nowtime, diff;
+		uint64_t wipestart, nowtime, diff;
 		bool done;
 
 		GSnd->SetSfxPaused(true, 1);
 		I_FreezeTime(true);
 		screen->WipeEndScreen ();
 
-		wipestart = I_MSTime();
+		wipestart = I_msTime();
 		NetUpdate();		// send out any new accumulation
 
 		do
@@ -962,7 +955,7 @@ void D_Display ()
 			do
 			{
 				I_WaitVBL(2);
-				nowtime = I_MSTime();
+				nowtime = I_msTime();
 				diff = (nowtime - wipestart) * 40 / 1000;	// Using 35 here feels too slow.
 			} while (diff < 1);
 			wipestart = nowtime;
@@ -1110,7 +1103,7 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, GPalette.BlackIndex, 0);
+	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
 	if (Page != NULL)
 	{
 		screen->DrawTexture (Page, 0, 0,
@@ -1123,7 +1116,7 @@ void D_PageDrawer (void)
 	{
 		if (!PageBlank)
 		{
-			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Mary's Magical Adventure is loading...", TAG_DONE);
+			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Page graphic goes here", TAG_DONE);
 		}
 	}
 	if (Advisory != NULL)
@@ -1449,6 +1442,10 @@ void ParseCVarInfo()
 				{
 					cvarflags |= CVAR_CHEAT;
 				}
+				else if (stricmp(sc.String, "latch") == 0)
+				{
+					cvarflags |= CVAR_LATCH;
+				}
 				else
 				{
 					sc.ScriptError("Unknown cvar attribute '%s'", sc.String);
@@ -1730,7 +1727,7 @@ const char *BaseFileSearch (const char *file, const char *ext, bool lookfirstinp
 	}
 	if (lookfirstinprogdir)
 	{
-		mysnprintf(wad, countof(wad), "%s%s%s", progdir.GetChars(), progdir.Back() == '/' ? "" : "/", file);
+		mysnprintf (wad, countof(wad), "%s%s%s", progdir.GetChars(), progdir.Back() == '/' ? "" : "/", file);
 		if (DirEntryExists (wad))
 		{
 			return wad;
@@ -1757,7 +1754,7 @@ const char *BaseFileSearch (const char *file, const char *ext, bool lookfirstinp
 				dir = NicePath(value);
 				if (dir.IsNotEmpty())
 				{
-					mysnprintf(wad, countof(wad), "%s%s%s", dir.GetChars(), dir.Back() == '/' ? "" : "/", file);
+					mysnprintf (wad, countof(wad), "%s%s%s", dir.GetChars(), dir.Back() == '/' ? "" : "/", file);
 					if (DirEntryExists (wad))
 					{
 						return wad;
@@ -1949,13 +1946,11 @@ static FString CheckGameInfo(TArray<FString> & pwads)
 		const char *filename = pwads[i];
 
 		// Does this exist? If so, is it a directory?
-		struct stat info;
-		if (stat(pwads[i], &info) != 0)
+		if (!DirEntryExists(pwads[i], &isdir))
 		{
 			Printf(TEXTCOLOR_RED "Could not stat %s\n", filename);
 			continue;
 		}
-		isdir = (info.st_mode & S_IFDIR) != 0;
 
 		if (!isdir)
 		{
@@ -2239,7 +2234,7 @@ static void CheckCmdLine()
 	{
 		if (!P_CheckMapData(mapvalue))
 		{
-			Printf ("The area you requested, %s, can't be found. Make sure it was typed correctly.\n", mapvalue.GetChars());
+			Printf ("Can't find map %s\n", mapvalue.GetChars());
 		}
 		else
 		{
@@ -2281,7 +2276,7 @@ static void CheckCmdLine()
 	//  Build status bar line!
 	//
 	if (deathmatch)
-		StartScreen->AppendStatusLine("Match...");
+		StartScreen->AppendStatusLine("DeathMatch...");
 	if (dmflags & DF_NO_MONSTERS)
 		StartScreen->AppendStatusLine("No Monsters...");
 	if (dmflags & DF_MONSTERS_RESPAWN)
@@ -2362,7 +2357,7 @@ void D_DoomMain (void)
 	}
 	FString basewad = wad;
 
-	//FString optionalwad = BaseFileSearch(OPTIONALWAD, NULL, true);
+	FString optionalwad = BaseFileSearch(OPTIONALWAD, NULL, true);
 
 	iwad_man = new FIWadManager(basewad);
 
@@ -2396,7 +2391,7 @@ void D_DoomMain (void)
 		{
 			iwad_man = new FIWadManager(basewad);
 		}
-		const FIWADInfo *iwad_info = iwad_man->FindIWAD(allwads, iwad, basewad);
+		const FIWADInfo *iwad_info = iwad_man->FindIWAD(allwads, iwad, basewad, optionalwad);
 		gameinfo.gametype = iwad_info->gametype;
 		gameinfo.flags = iwad_info->flags;
 		gameinfo.ConfigName = iwad_info->Configname;
@@ -2404,7 +2399,7 @@ void D_DoomMain (void)
 
 		if ((gameinfo.flags & GI_SHAREWARE) && pwads.Size() > 0)
 		{
-			I_FatalError ("This is a shareware version of Doom. Not only is it not allowed to use PWADs with it, stupid as that is, but you shouldn't even be using Mary's Magical Adventure to play a shareware game!");
+			I_FatalError ("You cannot -file with the shareware version. Register!");
 		}
 
 		FBaseCVar::DisableCallbacks();
@@ -2484,10 +2479,10 @@ void D_DoomMain (void)
 		// Base systems have been inited; enable cvar callbacks
 		FBaseCVar::EnableCallbacks ();
 
-		if (!batchrun) Printf ("Setting up sound.\n");
+		if (!batchrun) Printf ("S_Init: Setting up sound.\n");
 		S_Init ();
 
-		if (!batchrun) Printf ("Initializing startup screen.\n");
+		if (!batchrun) Printf ("ST_Init: Init startup screen.\n");
 		if (!restart)
 		{
 			StartScreen = FStartupScreen::CreateInstance (TexMan.GuesstimateNumTextures() + 5);
@@ -2505,18 +2500,18 @@ void D_DoomMain (void)
 		S_ParseReverbDef ();
 
 		// [RH] Parse any SNDINFO lumps
-		if (!batchrun) Printf ("Loading sound definitions.\n");
+		if (!batchrun) Printf ("S_InitData: Load sound definitions.\n");
 		S_InitData ();
 
 		// [RH] Parse through all loaded mapinfo lumps
-		if (!batchrun) Printf ("Parsing MAPINFO for areas to visit.\n");
+		if (!batchrun) Printf ("G_ParseMapInfo: Load map definitions.\n");
 		G_ParseMapInfo (iwad_info->MapInfo);
 		ReadStatistics();
 
 		// MUSINFO must be parsed after MAPINFO
 		S_ParseMusInfo();
 
-		if (!batchrun) Printf ("Initializing texture manager.\n");
+		if (!batchrun) Printf ("Texman.Init: Init texture manager.\n");
 		TexMan.Init();
 		C_InitConback();
 
@@ -2524,7 +2519,7 @@ void D_DoomMain (void)
 		V_InitFonts();
 
 		// [CW] Parse any TEAMINFO lumps.
-		if (!batchrun) Printf ("Loading team definitions.\n");
+		if (!batchrun) Printf ("ParseTeamInfo: Load team definitions.\n");
 		TeamLibrary.ParseTeamInfo ();
 
 		R_ParseTrnslate();
@@ -2546,11 +2541,11 @@ void D_DoomMain (void)
 
 		ParseGLDefs();
 
-		if (!batchrun) Printf ("Initializing the %s refresh subsystem.\n", gameinfo.ConfigName.GetChars());
-		StartScreen->LoadingStatus ("Loading graphics.", 0x3f);
+		if (!batchrun) Printf ("R_Init: Init %s refresh subsystem.\n", gameinfo.ConfigName.GetChars());
+		StartScreen->LoadingStatus ("Loading graphics", 0x3f);
 		R_Init ();
 
-		if (!batchrun) Printf ("Loading decals.\n");
+		if (!batchrun) Printf ("DecalLibrary: Load decals.\n");
 		DecalLibrary.ReadAllDecals ();
 
 		// Load embedded Dehacked patches
@@ -2561,7 +2556,7 @@ void D_DoomMain (void)
 		// Note that the command line overrides defaults from the config.
 
 		if ((ConsiderPatches("-deh") | ConsiderPatches("-bex")) == 0 &&
-			gameinfo.gametype == GAME_MMA && GameConfig->SetSection ("Doom.DefaultDehacked"))
+			gameinfo.gametype == GAME_Doom && GameConfig->SetSection ("Doom.DefaultDehacked"))
 		{
 			const char *key;
 			const char *value;
@@ -2747,6 +2742,9 @@ void D_DoomMain (void)
 			setmodeneeded = false;			// This may be set to true here, but isn't needed for a restart
 		}
 
+		if (I_FriendlyWindowTitle)
+			I_SetWindowTitle(DoomStartupInfo.Name.GetChars());
+
 		D_DoomLoop ();		// this only returns if a 'restart' CCMD is given.
 		// 
 		// Clean up after a restart
@@ -2781,6 +2779,10 @@ void D_DoomMain (void)
 		DestroyCVarsFlagged(CVAR_MOD);	// Delete any cvar left by mods
 		FS_Close();						// destroy the global FraggleScript.
 		DeinitMenus();
+
+		// delete DoomStartupInfo data
+		DoomStartupInfo.Name = (const char*)0;
+		DoomStartupInfo.BkColor = DoomStartupInfo.FgColor = DoomStartupInfo.Type = 0;
 
 		GC::FullGC();					// clean up before taking down the object list.
 
@@ -2901,3 +2903,12 @@ DEFINE_FIELD_X(InputEventData, event_t, data2)
 DEFINE_FIELD_X(InputEventData, event_t, data3)
 DEFINE_FIELD_X(InputEventData, event_t, x)
 DEFINE_FIELD_X(InputEventData, event_t, y)
+
+
+CUSTOM_CVAR(Bool, I_FriendlyWindowTitle, true, CVAR_GLOBALCONFIG|CVAR_ARCHIVE|CVAR_NOINITCALL)
+{
+	if (self)
+		I_SetWindowTitle(DoomStartupInfo.Name.GetChars());
+	else
+		I_SetWindowTitle(NULL);
+}

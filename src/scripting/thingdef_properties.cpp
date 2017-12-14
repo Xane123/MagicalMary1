@@ -465,9 +465,9 @@ DEFINE_INFO_PROPERTY(game, S, Actor)
 {
 	PROP_STRING_PARM(str, 0);
 	auto & GameFilter = info->ActorInfo()->GameFilter;
-	if (!stricmp(str, "MMA"))
+	if (!stricmp(str, "Doom"))
 	{
-		GameFilter |= GAME_MMA;
+		GameFilter |= GAME_Doom;
 	}
 	else if (!stricmp(str, "Heretic"))
 	{

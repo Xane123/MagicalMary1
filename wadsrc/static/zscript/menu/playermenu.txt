@@ -586,9 +586,9 @@ class PlayerMenu : ListMenu
 	{
 		Super.Drawer();
 		String str = "PRESS " .. TEXTCOLOR_WHITE .. "SPACE";
-		screen.DrawText (SmallFont, Font.CR_GOLD, 320 - 32 - 32 - SmallFont.StringWidth (str)/2, 50 + 48 + 70, str, DTA_Clean, true);
+		screen.DrawText (ConFont, Font.CR_GOLD, 320 - 32 - 32 - ConFont.StringWidth (str)/2, 50 + 48 + 70, str, DTA_Clean, true);
 		str = mRotation ? "TO SEE FRONT" : "TO SEE BACK";
-		screen.DrawText (SmallFont, Font.CR_GOLD, 320 - 32 - 32 - SmallFont.StringWidth (str)/2, 50 + 48 + 70 + SmallFont.GetHeight (), str, DTA_Clean, true);
+		screen.DrawText (ConFont, Font.CR_GOLD, 320 - 32 - 32 - ConFont.StringWidth (str)/2, 50 + 48 + 70 + ConFont.GetHeight (), str, DTA_Clean, true);
 
 	}
 	

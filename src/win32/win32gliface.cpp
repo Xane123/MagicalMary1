@@ -801,7 +801,7 @@ bool Win32GLVideo::SetupPixelFormat(int multisample)
 	
 		if (!myWglChoosePixelFormatARB(m_hDC, attributes, attribsFloat, 1, &pixelFormat, &numFormats))
 		{
-			Printf("The pixel format couldn't be selected. Retrying in compatibility mode.\n");
+			Printf("R_OPENGL: Couldn't choose pixel format. Retrying in compatibility mode\n");
 			goto oldmethod;
 		}
 	
@@ -845,14 +845,14 @@ bool Win32GLVideo::SetupPixelFormat(int multisample)
 
 		if (pfd.dwFlags & PFD_GENERIC_FORMAT)
 		{
-			I_Error("Your graphics card sucks! Its driver isn't accelerated enough to run Mary's Magical Adventure.");
+			I_Error("R_OPENGL: OpenGL driver not accelerated!");
 			return false;
 		}
 	}
 
 	if (!::SetPixelFormat(m_hDC, pixelFormat, NULL))
 	{
-		I_Error("The pixel format couldn't be set.\n");
+		I_Error("R_OPENGL: Couldn't set pixel format.\n");
 		return false;
 	}
 	return true;
@@ -908,7 +908,7 @@ bool Win32GLVideo::InitHardware (HWND Window, int multisample)
 			m_hRC = wglCreateContext(m_hDC);
 			if (m_hRC == NULL)
 			{
-				I_Error("An OpenGL render context couldn't be created.\n");
+				I_Error("R_OPENGL: Unable to create an OpenGL render context.\n");
 				return false;
 			}
 		}

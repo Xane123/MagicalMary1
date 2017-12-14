@@ -94,7 +94,7 @@
 
 // The main window's title.
 #ifdef _M_X64
-#define X64 "(64-bit)"
+#define X64 " 64-bit"
 #else
 #define X64 ""
 #endif
@@ -742,7 +742,7 @@ void ShowErrorPane(const char *text)
 	if (text != NULL)
 	{
 		char caption[100];
-		mysnprintf(caption, countof(caption), "Fatal Error! " GAMESIG " %s " X64 " crashed!", GetVersionString());
+		mysnprintf(caption, countof(caption), "Fatal Error - " GAMESIG " %s " X64 " (%s)", GetVersionString(), GetGitTime());
 		SetWindowText (Window, caption);
 		ErrorIcon = CreateWindowEx (WS_EX_NOPARENTNOTIFY, "STATIC", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | SS_OWNERDRAW, 0, 0, 0, 0, Window, NULL, g_hInst, NULL);
 		if (ErrorIcon != NULL)
@@ -982,11 +982,11 @@ void DoMain (HINSTANCE hInstance)
 		
 		/* register this new class with Windows */
 		if (!RegisterClass((LPWNDCLASS)&WndClass))
-			I_FatalError ("Could not register window class!");
+			I_FatalError ("Could not register window class");
 		
 		/* create window */
 		char caption[100];
-		mysnprintf(caption, countof(caption), "" GAMESIG " %s" X64, GetVersionString());
+		mysnprintf(caption, countof(caption), "" GAMESIG " %s " X64 " (%s)", GetVersionString(), GetGitTime());
 		Window = CreateWindowEx(
 				WS_EX_APPWINDOW,
 				(LPCTSTR)WinClassName,
@@ -999,7 +999,7 @@ void DoMain (HINSTANCE hInstance)
 				NULL);
 
 		if (!Window)
-			I_FatalError ("Could not open window...");
+			I_FatalError ("Could not open window");
 
 		if (kernel != NULL)
 		{
@@ -1052,7 +1052,7 @@ void DoMain (HINSTANCE hInstance)
 				HANDLE stdinput = GetStdHandle(STD_INPUT_HANDLE);
 
 				ShowWindow(Window, SW_HIDE);
-				WriteFile(StdOut, "Push anything to quit...", 24, &bytes, NULL);
+				WriteFile(StdOut, "Press any key to exit...", 24, &bytes, NULL);
 				FlushConsoleInputBuffer(stdinput);
 				SetConsoleMode(stdinput, 0);
 				ReadConsole(stdinput, &bytes, 1, &bytes, NULL);
@@ -1359,4 +1359,17 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE nothing, LPSTR cmdline, int n
 	CloseHandle (MainThread);
 	MainThread = INVALID_HANDLE_VALUE;
 	return 0;
+}
+
+// each platform has its own specific version of this function.
+void I_SetWindowTitle(const char* caption)
+{
+	if (caption)
+		SetWindowText(Window, (LPCTSTR)caption);
+	else
+	{
+		char default_caption[100];
+		mysnprintf(default_caption, countof(default_caption), "" GAMESIG " %s " X64 " (%s)", GetVersionString(), GetGitTime());
+		SetWindowText(Window, default_caption);
+	}
 }

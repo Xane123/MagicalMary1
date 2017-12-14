@@ -531,8 +531,8 @@ void SBarInfo::ParseSBarInfo(int lump)
 					}
 					else if (Wads.GetLumpFile(baselump) > 0)
 					{
-						/*I_FatalError("File %s is overriding core lump sbarinfo/%s.txt.",
-							Wads.GetWadFullName(Wads.GetLumpFile(baselump)), sc.String);*/	//[XANE]Disabled "core lump" check.
+						I_FatalError("File %s is overriding core lump sbarinfo/%s.txt.",
+							Wads.GetWadFullName(Wads.GetLumpFile(baselump)), sc.String);
 					}
 					ParseSBarInfo(baselump);
 				}

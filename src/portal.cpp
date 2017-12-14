@@ -307,10 +307,9 @@ void P_SpawnLinePortal(line_t* line)
 				port->mType = PORTT_TELEPORT;
 			}
 		}
-		
-		port->mDefFlags = port->mType == PORTT_VISUAL ? PORTF_VISIBLE :
-			port->mType == PORTT_TELEPORT ? PORTF_TYPETELEPORT :
-			PORTF_TYPEINTERACTIVE;
+		port->mDefFlags = port->mType == PORTT_VISUAL   ? PORTF_VISIBLE :
+		                  port->mType == PORTT_TELEPORT ? PORTF_TYPETELEPORT :
+		                                                  PORTF_TYPEINTERACTIVE;
 	}
 	else if (line->args[2] == PORTT_LINKEDEE && line->args[0] == 0)
 	{

@@ -59,7 +59,6 @@ extern void ChildSigHandler (int signum);
 #include "s_sound.h"
 #include "m_swap.h"
 #include "i_cd.h"
-#include "tempfiles.h"
 #include "templates.h"
 #include "stats.h"
 #include "timidity/timidity.h"
@@ -804,18 +803,17 @@ CCMD (writemidi)
 	}
 
 	TArray<uint8_t> midi;
-	FILE *f;
 	bool success;
 
 	static_cast<MIDIStreamer *>(currSong)->CreateSMF(midi, 1);
-	f = fopen(argv[1], "wb");
+	auto f = FileWriter::Open(argv[1]);
 	if (f == NULL)
 	{
 		Printf("Could not open %s.\n", argv[1]);
 		return;
 	}
-	success = (fwrite(&midi[0], 1, midi.Size(), f) == (size_t)midi.Size());
-	fclose (f);
+	success = (f->Write(&midi[0], midi.Size()) == (size_t)midi.Size());
+	delete f;
 
 	if (!success)
 	{

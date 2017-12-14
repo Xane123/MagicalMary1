@@ -269,7 +269,7 @@ extern int ScriptDepth;
 
 inline float ParseFloat(FScanner &sc)
 {
-   sc.GetFloat();
+   sc.MustGetFloat();
 
    return float(sc.Float);
 }
@@ -277,7 +277,7 @@ inline float ParseFloat(FScanner &sc)
 
 inline int ParseInt(FScanner &sc)
 {
-   sc.GetNumber();
+   sc.MustGetNumber();
 
    return sc.Number;
 }
@@ -1351,7 +1351,7 @@ void ParseGLDefs()
 	case GAME_Strife:
 		defsLump = "STRFDEFS";
 		break;
-	case GAME_MMA:
+	case GAME_Doom:
 		defsLump = "DOOMDEFS";
 		break;
 	case GAME_Chex:

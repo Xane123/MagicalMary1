@@ -663,7 +663,7 @@ void InitED()
 			}
 			else
 			{
-				sc.ScriptError("Unknown keyword '%s'!", sc.String);
+				sc.ScriptError("Unknown keyword '%s'", sc.String);
 			}
 		}
 	}
@@ -676,7 +676,7 @@ void ProcessEDMapthing(FMapThing *mt, int recordnum)
 	EDMapthing *emt = EDThings.CheckKey(recordnum);
 	if (emt == NULL)
 	{
-		Printf("EDF Mapthing record %d not found...\n", recordnum);
+		Printf("EDF Mapthing record %d not found\n", recordnum);
 		mt->EdNum = 0;
 		return;
 	}

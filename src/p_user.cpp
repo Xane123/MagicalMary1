@@ -1516,8 +1516,8 @@ void APlayerPawn::PlayIdle ()
 {
 	IFVIRTUAL(APlayerPawn, PlayIdle)
 	{
-		/*VMValue params[1] = { (DObject*)this };
-		VMCall(func, params, 1, nullptr, 0);*/ //[XANE]This is risky. If it seems to cause crashes, try to leave it in, even if the sprite update becomes impossible.
+		VMValue params[1] = { (DObject*)this };
+		VMCall(func, params, 1, nullptr, 0);
 	}
 }
 
@@ -1602,7 +1602,7 @@ void APlayerPawn::GiveDefaultInventory ()
 						{
 							// Player was morphed. This is illegal at game start.
 							// This problem is only detectable when it's too late to do something about it...
-							I_Error("Cannot give morph items when starting a game!");
+							I_Error("Cannot give morph items when starting a game");
 						}
 						item->Destroy();
 						item = NULL;
@@ -2162,11 +2162,11 @@ void P_FallingDamage (AActor *actor)
 	{
 		S_Sound (actor, CHAN_AUTO, "*land", 1, ATTN_NORM);
 		P_NoiseAlert (actor, actor, true);
-		/*if (damage >= TELEFRAG_DAMAGE && ((actor->player->cheats & (CF_GODMODE | CF_BUDDHA) ||
+		if (damage >= TELEFRAG_DAMAGE && ((actor->player->cheats & (CF_GODMODE | CF_BUDDHA) ||
 			(actor->FindInventory(PClass::FindActor(NAME_PowerBuddha), true) != nullptr))))
 		{
 			damage = TELEFRAG_DAMAGE - 1;
-		}*/
+		}
 	}
 	P_DamageMobj (actor, NULL, NULL, damage, NAME_Falling);
 }

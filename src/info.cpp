@@ -322,18 +322,16 @@ bool PClassActor::SetReplacement(FName replaceName)
 
 void AActor::Finalize(FStateDefinitions &statedef)
 {
-	AActor *defaults = this;
-
 	try
 	{
-		statedef.FinishStates(GetClass(), defaults);
+		statedef.FinishStates(GetClass());
 	}
 	catch (CRecoverableError &)
 	{
 		statedef.MakeStateDefines(nullptr);
 		throw;
 	}
-	statedef.InstallStates(GetClass(), defaults);
+	statedef.InstallStates(GetClass(), this);
 	statedef.MakeStateDefines(nullptr);
 }
 
@@ -351,7 +349,7 @@ void PClassActor::RegisterIDs()
 
 	if (cls == nullptr)
 	{
-		Printf(TEXTCOLOR_RED"The actor '%s' has been hidden by a non-actor of the same name.\n", TypeName.GetChars());
+		Printf(TEXTCOLOR_RED"The actor '%s' has been hidden by a non-actor of the same name\n", TypeName.GetChars());
 		return;
 	}
 
@@ -370,7 +368,7 @@ void PClassActor::RegisterIDs()
 		StrifeTypes[ConversationID] = cls;
 		if (cls != this) 
 		{
-			Printf(TEXTCOLOR_RED"Conversation ID %d refers to hidden class type '%s'.\n", ConversationID, cls->TypeName.GetChars());
+			Printf(TEXTCOLOR_RED"Conversation ID %d refers to hidden class type '%s'\n", ConversationID, cls->TypeName.GetChars());
 		}
 	}
 	if (actorInfo->GameFilter == GAME_Any || (ActorInfo()->GameFilter & gameinfo.gametype))

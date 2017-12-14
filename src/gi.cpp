@@ -68,7 +68,7 @@ DEFINE_FIELD_X(GameInfoStruct, gameinfo_t, mSliderColor)
 
 const char *GameNames[17] =
 {
-	NULL, "MMA", "Heretic", NULL, "Hexen", NULL, NULL, NULL, "Strife", NULL, NULL, NULL, NULL, NULL, NULL, NULL, "Chex"
+	NULL, "Doom", "Heretic", NULL, "Hexen", NULL, NULL, NULL, "Strife", NULL, NULL, NULL, NULL, NULL, NULL, NULL, "Chex"
 };
 
 

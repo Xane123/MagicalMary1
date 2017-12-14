@@ -117,7 +117,7 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-/*CCMD (god)
+CCMD (god)
 {
 	if (CheckCheatmode ())
 		return;
@@ -133,9 +133,9 @@ CCMD(god2)
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_GOD2);
-}*/
+}
 
-CCMD (honor)
+CCMD (iddqd)
 {
 	if (CheckCheatmode ())
 		return;
@@ -144,7 +144,7 @@ CCMD (honor)
 	Net_WriteByte (CHT_IDDQD);
 }
 
-/*CCMD (buddha)
+CCMD (buddha)
 {
 	if (CheckCheatmode())
 		return;
@@ -160,7 +160,7 @@ CCMD(buddha2)
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_BUDDHA2);
-}*/
+}
 
 CCMD (notarget)
 {
@@ -171,14 +171,14 @@ CCMD (notarget)
 	Net_WriteByte (CHT_NOTARGET);
 }
 
-/*CCMD (fly)
+CCMD (fly)
 {
 	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
 	Net_WriteByte (CHT_FLY);
-}*/
+}
 
 /*
 ==================
@@ -187,14 +187,14 @@ Cmd_Noclip
 argv(0) noclip
 ==================
 */
-/*CCMD (noclip)
+CCMD (noclip)
 {
 	if (CheckCheatmode ())
 		return;
 
 	Net_WriteByte (DEM_GENERICCHEAT);
 	Net_WriteByte (CHT_NOCLIP);
-}*/
+}
 
 CCMD (noclip2)
 {
@@ -214,7 +214,7 @@ CCMD (powerup)
 	Net_WriteByte (CHT_POWER);
 }
 
-/*CCMD (morphme)
+CCMD (morphme)
 {
 	if (CheckCheatmode ())
 		return;
@@ -248,7 +248,7 @@ CCMD (resurrect)
 
 	Net_WriteByte (DEM_GENERICCHEAT);
 	Net_WriteByte (CHT_RESSURECT);
-}*/
+}
 
 EXTERN_CVAR (Bool, chasedemo)
 
@@ -283,7 +283,7 @@ CCMD (chase)
 	}
 }
 
-/*CCMD (idclev)
+CCMD (idclev)
 {
 	if (netgame)
 		return;
@@ -346,7 +346,7 @@ CCMD (hxvisit)
 		}
 		Printf ("No such map found\n");
 	}
-}*/
+}
 
 CCMD (changemap)
 {
@@ -395,7 +395,7 @@ CCMD (changemap)
 	}
 	else
 	{
-		Printf ("Type changemap then the map name to warp to a level.\nFor example, type changemap map1 to go to Hell City.\n");
+		Printf ("Usage: changemap <map name> [position]\n");
 	}
 }
 
@@ -476,7 +476,7 @@ CCMD (exec)
 	{
 		if (!C_ExecFile(argv[i]))
 		{
-			Printf ("Couldn't execute what you typed, \"%s\".\n", argv[i]);
+			Printf ("Could not exec \"%s\"\n", argv[i]);
 			break;
 		}
 	}
@@ -487,11 +487,11 @@ void execLogfile(const char *fn, bool append)
 	if ((Logfile = fopen(fn, append? "a" : "w")))
 	{
 		const char *timestr = myasctime();
-		Printf("Started logging to %s.\n", timestr);
+		Printf("Log started: %s\n", timestr);
 	}
 	else
 	{
-		Printf("Couldn't start logging to a file.\n");
+		Printf("Could not start log\n");
 	}
 }
 
@@ -501,7 +501,7 @@ CCMD (logfile)
 	if (Logfile)
 	{
 		const char *timestr = myasctime();
-		Printf("The logging stopped. %s can now be viewed.\n", timestr);
+		Printf("Log stopped: %s\n", timestr);
 		fclose (Logfile);
 		Logfile = NULL;
 	}
@@ -518,7 +518,7 @@ CCMD (puke)
 
 	if (argc < 2 || argc > 6)
 	{
-		Printf ("puke [script] [arguments]\nThis allows any numbered script to be ran. For named scripts, use pukename.\n");
+		Printf ("Usage: puke <script> [arg1] [arg2] [arg3] [arg4]\n");
 	}
 	else
 	{
@@ -560,7 +560,7 @@ CCMD (pukename)
 
 	if (argc < 2 || argc > 7)
 	{
-		Printf ("pukename [script name] [always] [arguments]\nThis runs any script regardless of if it should happen or not. For outdated, numbered scripts, use puke.\n");
+		Printf ("Usage: pukename \"<script>\" [\"always\"] [arg1] [arg2] [arg3] [arg4]\n");
 	}
 	else
 	{
@@ -598,7 +598,7 @@ CCMD (special)
 
 	if (argc < 2 || argc > 7)
 	{
-		Printf("special <special-name> [arg1] [arg2] [arg3] [arg4] [arg5]\nRuns an action on command. Don't use this if you don't know what anything is. Check the ZDoom Wiki for the list of specials.\n");
+		Printf("Usage: special <special-name> [arg1] [arg2] [arg3] [arg4] [arg5]\n");
 	}
 	else
 	{
@@ -609,7 +609,7 @@ CCMD (special)
 			specnum = atoi(argv[1]);
 			if (specnum < 0 || specnum > 255)
 			{
-				Printf("See? As said in the explanation, you need to check the ZDoom Wiki for a list of valid specials!\n");
+				Printf("Bad special number\n");
 				return;
 			}
 		}
@@ -959,7 +959,7 @@ static void PrintFilteredActorList(const ActorTypeChecker IsActorType, const cha
 				if (!countOnly)
 				{
 					Printf("%s at (%f,%f,%f)",
-					mo->GetClass()->TypeName.GetChars(), mo->X(), mo->Y(), mo->Z());
+						mo->GetClass()->TypeName.GetChars(), mo->X(), mo->Y(), mo->Z());
 					if (mo->tid)
 						Printf(" (TID:%d)", mo->tid);
 					Printf("\n");
@@ -1272,7 +1272,7 @@ CCMD(secret)
 	}
 }
 
-/*CCMD(angleconvtest)
+CCMD(angleconvtest)
 {
 	Printf("Testing degrees to angle conversion:\n");
 	for (double ang = -5 * 180.; ang < 5 * 180.; ang += 45.)
@@ -1303,4 +1303,4 @@ CCMD(r_showcaps)
 	PRINT_CAP("Uses Polygon rendering", RFF_POLYGONAL)
 	PRINT_CAP("Truecolor Enabled", RFF_TRUECOLOR)
 	PRINT_CAP("Voxels", RFF_VOXELS)
-}*/
+}

@@ -84,6 +84,7 @@
 #include "r_data/voxels.h"
 #include "vm.h"
 #include "r_videoscale.h"
+#include "i_time.h"
 
 EXTERN_CVAR(Bool, r_blendmethod)
 
@@ -328,12 +329,13 @@ void DCanvas::Dim (PalEntry color)
 //
 //==========================================================================
 
-void DCanvas::GetScreenshotBuffer(const uint8_t *&buffer, int &pitch, ESSType &color_type)
+void DCanvas::GetScreenshotBuffer(const uint8_t *&buffer, int &pitch, ESSType &color_type, float &gamma)
 {
 	Lock(true);
 	buffer = GetBuffer();
 	pitch = IsBgra() ? GetPitch() * 4 : GetPitch();
 	color_type = IsBgra() ? SS_BGRA : SS_PAL;
+	gamma = Gamma;
 }
 
 //==========================================================================
@@ -783,7 +785,7 @@ void DSimpleCanvas::Unlock ()
 //==========================================================================
 
 DFrameBuffer::DFrameBuffer (int width, int height, bool bgra)
-	: DSimpleCanvas(ViewportScaledWidth(width, height), ViewportScaledHeight(width, height), bgra)
+	: DSimpleCanvas (ViewportScaledWidth(width, height), ViewportScaledHeight(width, height), bgra)
 {
 	LastMS = LastSec = FrameCount = LastCount = LastTic = 0;
 	Accel2D = false;
@@ -869,8 +871,8 @@ void DFrameBuffer::DrawRateStuff ()
 	// Draws frame time and cumulative fps
 	if (vid_fps)
 	{
-		uint32_t ms = I_FPSTime();
-		uint32_t howlong = ms - LastMS;
+		uint64_t ms = screen->FrameTime;
+		uint64_t howlong = ms - LastMS;
 		if ((signed)howlong >= 0)
 		{
 			char fpsbuff[40];
@@ -879,7 +881,7 @@ void DFrameBuffer::DrawRateStuff ()
 
 			int textScale = active_con_scale();
 
-			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%3uFPS", LastCount);
+			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%2" PRIu64 " ms (%3" PRIu64 " fps)", howlong, LastCount);
 			rate_x = Width / textScale - ConFont->StringWidth(&fpsbuff[0]);
 			Clear (rate_x * textScale, 0, Width, ConFont->GetHeight() * textScale, GPalette.BlackIndex, 0);
 			DrawText (ConFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0],
@@ -887,7 +889,7 @@ void DFrameBuffer::DrawRateStuff ()
 				DTA_VirtualHeight, screen->GetHeight() / textScale,
 				DTA_KeepRatio, true, TAG_DONE);
 
-			uint32_t thisSec = ms/1000;
+			uint32_t thisSec = (uint32_t)(ms/1000);
 			if (LastSec < thisSec)
 			{
 				LastCount = FrameCount / (thisSec - LastSec);
@@ -902,8 +904,8 @@ void DFrameBuffer::DrawRateStuff ()
 	// draws little dots on the bottom of the screen
 	if (ticker)
 	{
-		int i = I_GetTime(false);
-		int tics = i - LastTic;
+		int64_t i = I_GetTime();
+		int64_t tics = i - LastTic;
 		uint8_t *buffer = GetBuffer();
 
 		LastTic = i;
@@ -930,6 +932,7 @@ void DFrameBuffer::DrawRateStuff ()
 		}
 		else
 		{
+			int i;
 			for (i = 0; i < tics*2; i += 2)		Clear(i, Height-1, i+1, Height, 255, 0);
 			for ( ; i < 20*2; i += 2)			Clear(i, Height-1, i+1, Height, 0, 0);
 		}
@@ -1759,7 +1762,7 @@ void ScaleWithAspect (int &w, int &h, int Width, int Height)
 
 void IVideo::DumpAdapters ()
 {
-	Printf("Multi-monitor support is unavailable.\n");
+	Printf("Multi-monitor support unavailable.\n");
 }
 
 CCMD(vid_listadapters)

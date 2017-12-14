@@ -84,7 +84,7 @@
 //=============================================================================
 
 CVAR (Int,   am_rotate,				0,			CVAR_ARCHIVE);
-CVAR (Int,   am_overlay,			1,			CVAR_ARCHIVE);
+CVAR (Int,   am_overlay,			0,			CVAR_ARCHIVE);
 CVAR (Bool,  am_showsecrets,		true,		CVAR_ARCHIVE);
 CVAR (Bool,  am_showmonsters,		true,		CVAR_ARCHIVE);
 CVAR (Bool,  am_showitems,			false,		CVAR_ARCHIVE);
@@ -97,6 +97,20 @@ CVAR (Int,	 am_drawmapback,		1,			CVAR_ARCHIVE);
 CVAR (Bool,  am_showkeys,			true,		CVAR_ARCHIVE);
 CVAR (Int,   am_showtriggerlines,	0,			CVAR_ARCHIVE);
 CVAR (Int,   am_showthingsprites,		0,		CVAR_ARCHIVE);
+
+CUSTOM_CVAR (Int, am_emptyspacemargin, 0, CVAR_ARCHIVE)
+{
+	if (self < 0)
+	{
+		self = 0;
+	}
+	else if (self > 50)
+	{
+		self = 50;
+	}
+
+	AM_NewResolution();
+}
 
 //=============================================================================
 //
@@ -128,26 +142,26 @@ CVAR (Color, am_thingcolor_item,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_thingcolor_citem,	0xfcfcfc,	CVAR_ARCHIVE);
 CVAR (Color, am_portalcolor,		0x404040,	CVAR_ARCHIVE);
 
-CVAR(Color, am_ovyourcolor, 0xcd80cd, CVAR_ARCHIVE);
-CVAR(Color, am_ovwallcolor, 0xffffff, CVAR_ARCHIVE);
-CVAR(Color, am_ovsecretwallcolor, 0xcae690, CVAR_ARCHIVE);
-CVAR(Color, am_ovspecialwallcolor, 0xbbffbb, CVAR_ARCHIVE);
-CVAR(Color, am_ovotherwallscolor, 0xffa0a0, CVAR_ARCHIVE);
-CVAR(Color, am_ovlockedcolor, 0xffa0a0, CVAR_ARCHIVE);
-CVAR(Color, am_ovefwallcolor, 0xe4e4e4, CVAR_ARCHIVE);
-CVAR(Color, am_ovfdwallcolor, 0xc9c9c9, CVAR_ARCHIVE);
-CVAR(Color, am_ovcdwallcolor, 0xf2f2f2, CVAR_ARCHIVE);
-CVAR(Color, am_ovunseencolor, 0xff2020, CVAR_ARCHIVE);
-CVAR(Color, am_ovtelecolor, 0xffa0ff, CVAR_ARCHIVE);
-CVAR(Color, am_ovportalcolor, 0xffffa0, CVAR_ARCHIVE);
-CVAR(Color, am_ovinterlevelcolor, 0xc0ffff, CVAR_ARCHIVE);
-CVAR(Color, am_ovsecretsectorcolor, 0xe6e690, CVAR_ARCHIVE);
-CVAR(Color, am_ovthingcolor, 0xc0ffff, CVAR_ARCHIVE);
-CVAR(Color, am_ovthingcolor_friend, 0xbbffbb, CVAR_ARCHIVE);
-CVAR(Color, am_ovthingcolor_monster, 0xffc0c0, CVAR_ARCHIVE);
-CVAR(Color, am_ovthingcolor_ncmonster, 0xffb995, CVAR_ARCHIVE);
-CVAR(Color, am_ovthingcolor_item, 0xbbbbff, CVAR_ARCHIVE);
-CVAR(Color, am_ovthingcolor_citem, 0xffffa0, CVAR_ARCHIVE);
+CVAR (Color, am_ovyourcolor,		0xfce8d8,	CVAR_ARCHIVE);
+CVAR (Color, am_ovwallcolor,		0x00ff00,	CVAR_ARCHIVE);
+CVAR (Color, am_ovsecretwallcolor,	0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovspecialwallcolor,	0xffffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovotherwallscolor,	0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovlockedcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovefwallcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovfdwallcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovcdwallcolor,		0x008844,	CVAR_ARCHIVE);
+CVAR (Color, am_ovunseencolor,		0x00226e,	CVAR_ARCHIVE);
+CVAR (Color, am_ovtelecolor,		0xffff00,	CVAR_ARCHIVE);
+CVAR (Color, am_ovinterlevelcolor,	0xffff00,	CVAR_ARCHIVE);
+CVAR (Color, am_ovsecretsectorcolor,0x00ffff,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor,		0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_friend,	0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_monster,	0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_ncmonster,	0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_item,		0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovthingcolor_citem,		0xe88800,	CVAR_ARCHIVE);
+CVAR (Color, am_ovportalcolor,			0x004022,	CVAR_ARCHIVE);
 
 //=============================================================================
 //
@@ -508,7 +522,7 @@ void FMapInfoParser::ParseAMColors(bool overlay)
 
 		if (nextKey.CompareNoCase("base") == 0)
 		{
-			if (colorset) sc.ScriptError("'base' must be specified before the first color.");
+			if (colorset) sc.ScriptError("'base' must be specified before the first color");
 			sc.MustGetToken(TK_StringConst);
 			if (sc.Compare("doom"))
 			{
@@ -1063,8 +1077,9 @@ static void AM_findMinMaxBoundaries ()
 
 static void AM_calcMinMaxMtoF()
 {
-	double a = SCREENWIDTH / max_w;
-	double b = StatusBar->GetTopOfStatusbar() / max_h;
+	const double safe_frame = 1.0 - am_emptyspacemargin / 100.0;
+	double a = safe_frame * (SCREENWIDTH / max_w);
+	double b = safe_frame * (StatusBar->GetTopOfStatusbar() / max_h);
 
 	min_scale_mtof = a < b ? a : b;
 	max_scale_mtof = SCREENHEIGHT / (2*PLAYERRADIUS);

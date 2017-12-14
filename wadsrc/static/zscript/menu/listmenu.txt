@@ -29,8 +29,8 @@ class ListMenuDescriptor : MenuDescriptor native
 		mLinespacing = 0;
 		mNetgameMessage = "";
 		mFont = NULL;
-		mFontColor = Font.CR_LIGHTBLUE;
-		mFontColor2 = Font.CR_LIGHTBLUE;
+		mFontColor = Font.CR_UNTRANSLATED;
+		mFontColor2 = Font.CR_UNTRANSLATED;
 	}
 }
 

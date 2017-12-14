@@ -11,7 +11,7 @@
 DEFAULTLISTMENU
 {
 	Font "BigFont", "Untranslated"
-	IfGame(MMA, Chex)
+	IfGame(Doom, Chex)
 	{
 		Selector "M_SKULL1", -32, -5
 		Linespacing 16
@@ -37,7 +37,7 @@ DEFAULTLISTMENU
 
 LISTMENU "MainMenu"
 {
-	IfGame(MMA, Chex)
+	IfGame(Doom, Chex)
 	{
 		StaticPatch 94, 2, "M_DOOM"
 		Position 97, 72
@@ -66,7 +66,7 @@ LISTMENU "MainMenu"
 		Position 110, 56
 	}
 	
-	IfGame(MMA, Strife, Chex)
+	IfGame(Doom, Strife, Chex)
 	{
 		PatchItem "M_NGAME", "n", "PlayerclassMenu"
 		ifOption(SwapMenu)
@@ -115,7 +115,7 @@ LISTMENU "MainMenu"
 
 ListMenu "PlayerclassMenu"
 {
-	IfGame(MMA, Heretic, Hexen, Strife)
+	IfGame(Doom, Heretic, Hexen, Strife)
 	{
 		NetgameMessage "$NEWGAME"
 	}
@@ -124,7 +124,7 @@ ListMenu "PlayerclassMenu"
 		NetgameMessage "$CNEWGAME"
 	}
 
-	IfGame(MMA, Strife, Chex)
+	IfGame(Doom, Strife, Chex)
 	{
 		StaticTextCentered 160, 15, "$MNU_CHOOSECLASS"
 		Position 48, 63
@@ -157,7 +157,7 @@ ListMenu "PlayerclassMenu"
 
 ListMenu "EpisodeMenu"
 {
-	IfGame(MMA, Heretic, Hexen, Strife)
+	IfGame(Doom, Heretic, Hexen, Strife)
 	{
 		NetgameMessage "$NEWGAME"
 	}
@@ -166,7 +166,7 @@ ListMenu "EpisodeMenu"
 		NetgameMessage "$CNEWGAME"
 	}
 
-	IfGame(MMA, Chex)
+	IfGame(Doom, Chex)
 	{
 		Position 48, 63
 		StaticPatch 54, 38, "M_EPISOD"
@@ -193,7 +193,7 @@ ListMenu "EpisodeMenu"
 ListMenu "SkillMenu"
 {
 
-	IfGame(MMA, Chex)
+	IfGame(Doom, Chex)
 	{
 		StaticPatch 96, 14, "M_NEWG"
 	}
@@ -201,7 +201,7 @@ ListMenu "SkillMenu"
 	{
 		StaticPatch 96, 14, "M_NGAME"
 	}
-	IfGame(MMA, Strife, Chex)
+	IfGame(Doom, Strife, Chex)
 	{
 		StaticPatch 54, 38, "M_SKILL"
 		Position 48, 63
@@ -239,7 +239,7 @@ ListMenu "GameFilesMenu"
 
 ListMenu "LoadGameMenu"
 {
-	IfGame(MMA, Heretic, Hexen, Strife)
+	IfGame(Doom, Heretic, Hexen, Strife)
 	{
 		NetgameMessage "$LOADNET"
 	}
@@ -247,7 +247,7 @@ ListMenu "LoadGameMenu"
 	{
 		NetgameMessage "$CLOADNET"
 	}
-	IfGame(MMA, Strife, Chex)
+	IfGame(Doom, Strife, Chex)
 	{
 		StaticPatchCentered 160, -20, "M_LOADG"
 	}
@@ -267,7 +267,7 @@ ListMenu "LoadGameMenu"
 
 ListMenu "SaveGameMenu"
 {
-	IfGame(MMA, Strife, Chex)
+	IfGame(Doom, Strife, Chex)
 	{
 		StaticPatchCentered 160, -20, "M_SAVEG"
 	}
@@ -344,6 +344,7 @@ OptionMenu "OptionsMenu" protected
 	StaticText " "
 	Submenu "$OPTMNU_PLAYER",			"PlayerMenu"
 	Submenu "$OPTMNU_GAMEPLAY",			"GameplayOptions"
+	Submenu "$OPTMNU_COMPATIBILITY",	"CompatibilityOptions"
 	Submenu "$OPTMNU_AUTOMAP",			"AutomapOptions"
 	Submenu "$OPTMNU_HUD",				"HUDOptions"
 	Submenu "$OPTMNU_MISCELLANEOUS",	"MiscOptions"
@@ -378,7 +379,7 @@ ListMenu "PlayerMenu"
 	Linespacing 14
 	Position 48, 36
 
-	IfGame (MMA, Strife, Chex)
+	IfGame (Doom, Strife, Chex)
 	{
 		PlayerNameBox "$PLYRMNU_NAME", 0, "Playerbox"
 		Selector "-", -16, -1
@@ -388,7 +389,7 @@ ListMenu "PlayerMenu"
 		PlayerNameBox "$PLYRMNU_NAME", 5, "Playerbox"
 		Selector "-", -16, 1
 	}
-	IfGame(MMA, Heretic, Strife, Chex)
+	IfGame(Doom, Heretic, Strife, Chex)
 	{
 		MouseWindow 0, 220
 		PlayerDisplay 220, 80, "20 00 00", "80 00 40", 1, "PlayerDisplay"
@@ -423,46 +424,82 @@ ListMenu "PlayerMenu"
 
 OptionMenu "CustomizeControls" protected
 {
-Title "CONTROLS"
-ScrollTop 10
-StaticText "To bind to more than two keys"
-StaticText "or do more advanced binds, see"
-StaticText "the console (~)'s bind commands."
-StaticText "For example, doublebind (key) +mc_run"
-StaticText "to run when pushing something twice."
-StaticText " "
-StaticText "Also, if using Reshade, rebind its shortcut"
-StaticText "or you may become unable to stop running!"
-StaticText " "
-StaticText "MOVEMENT"
-Control "Forward", "+forward"
-Control "Backward", "+back"
-Control "Strafe Left", "+moveleft"
-Control "Strafe Right", "+moveright"
-Control "Run", "+speed"
-StaticText " "
-Control "Jump/Ability", "+jump"
-Control "Use/Drop Dash (Xane)", "+use"
-Control "Transform", "+user1"
-Control "Warp to Small Hut", "+user2"
-StaticText "WEAPONS"
-Control "Main Attack", "+attack"
-Control "Other Attacks", "+altattack"
-Control "Claw (Xane)", "+reload"
-Control "Previous Weapon", "weapprev"
-Control "Next Weapon", "weapnext"
-StaticText " "
-StaticText "ITEMS"
-Control "Use Item", "invuse"
-Control "Previous Item", "invprev"
-Control "Next Item", "invnext"
-StaticText " "
-StaticText "MISCELLANEOUS"
-Control "View Area Map", "togglemap"
-Control "Take Screenshot", "screenshot"
-Control "Show Match Scores", "+showscores"
-Control "Open Pause Menu", "menu_main"
-Control "Restart run", "+user3"
+	Title "$CNTRLMNU_TITLE"
+	ScrollTop 2
+	StaticTextSwitchable 	"$CNTRLMNU_SWITCHTEXT1", "$CNTRLMNU_SWITCHTEXT2", "ControlMessage"
+	StaticText 	""
+	StaticText 	"$CNTRLMNU_CONTROLS", 1
+	Control 	"$CNTRLMNU_ATTACK",					"+attack"
+	Control 	"$CNTRLMNU_ALTATTACK",				"+altattack"
+	Control 	"$CNTRLMNU_RELOAD",					"+reload"
+	Control 	"$CNTRLMNU_ZOOM",					"+zoom"
+	Control		"$CNTRLMNU_USER1",					"+user1"
+	Control		"$CNTRLMNU_USER2",					"+user2"
+	Control		"$CNTRLMNU_USER3",					"+user3"
+	Control		"$CNTRLMNU_USER4",					"+user4"
+	Control 	"$CNTRLMNU_USE",					"+use"
+	Control 	"$CNTRLMNU_FORWARD",				"+forward"
+	Control 	"$CNTRLMNU_BACK",					"+back"
+	Control 	"$CNTRLMNU_MOVELEFT",				"+moveleft"
+	Control 	"$CNTRLMNU_MOVERIGHT",				"+moveright"
+	Control 	"$CNTRLMNU_TURNLEFT",				"+left"
+	Control 	"$CNTRLMNU_TURNRIGHT",				"+right"
+	Control		"$CNTRLMNU_TURN180",				"turn180"
+	Control 	"$CNTRLMNU_JUMP",					"+jump"
+	Control 	"$CNTRLMNU_CROUCH",					"+crouch"
+	Control 	"$CNTRLMNU_TOGGLECROUCH",			"crouch"
+	Control 	"$CNTRLMNU_MOVEUP",					"+moveup"
+	Control 	"$CNTRLMNU_MOVEDOWN",				"+movedown"
+	Control 	"$CNTRLMNU_LAND",					"land"
+	Control 	"$CNTRLMNU_MOUSELOOK",				"+mlook"
+	Control 	"$CNTRLMNU_KEYBOARDLOOK",			"+klook"
+	Control 	"$CNTRLMNU_LOOKUP",					"+lookup"
+	Control 	"$CNTRLMNU_LOOKDOWN",				"+lookdown"
+	Control 	"$CNTRLMNU_CENTERVIEW",				"centerview"
+	Control 	"$CNTRLMNU_RUN",					"+speed"
+	Control 	"$CNTRLMNU_TOGGLERUN",				"toggle cl_run"
+	Control 	"$CNTRLMNU_STRAFE",					"+strafe"
+	Control 	"$CNTRLMNU_SCOREBOARD",				"+showscores"
+	Control 	"$CNTRLMNU_TOGGLESCOREBOARD",		"togglescoreboard"
+	StaticText 	""
+	StaticText 	"$CNTRLMNU_CHAT", 1
+	Control 	"$CNTRLMNU_SAY",					"messagemode"
+	Control 	"$CNTRLMNU_TEAMSAY",				"messagemode2"
+	StaticText 	""
+	StaticText 	"$CNTRLMNU_WEAPONS", 1
+	Control 	"$CNTRLMNU_NEXTWEAPON",				"weapnext"
+	Control 	"$CNTRLMNU_PREVIOUSWEAPON",			"weapprev"
+	Control		"$CNTRLMNU_SLOT1",					"slot 1"
+	Control		"$CNTRLMNU_SLOT2",					"slot 2"
+	Control		"$CNTRLMNU_SLOT3",					"slot 3"
+	Control		"$CNTRLMNU_SLOT4",					"slot 4"
+	Control		"$CNTRLMNU_SLOT5",					"slot 5"
+	Control		"$CNTRLMNU_SLOT6",					"slot 6"
+	Control		"$CNTRLMNU_SLOT7",					"slot 7"
+	Control		"$CNTRLMNU_SLOT8",					"slot 8"
+	Control		"$CNTRLMNU_SLOT9",					"slot 9"
+	Control		"$CNTRLMNU_SLOT0",					"slot 0"
+	StaticText 	""
+	StaticText 	"$CNTRLMNU_INVENTORY", 1
+	Control 	"$CNTRLMNU_USEITEM",				"invuse"
+	Control 	"$CNTRLMNU_USEALLITEMS",			"invuseall"
+	Control 	"$CNTRLMNU_NEXTITEM",				"invnext"
+	Control 	"$CNTRLMNU_PREVIOUSITEM",			"invprev"
+	Control 	"$CNTRLMNU_DROPITEM",				"invdrop"
+	Control		"$CNTRLMNU_QUERYITEM",				"invquery"
+	Control 	"$CNTRLMNU_DROPWEAPON",				"weapdrop"
+	StaticText 	""
+	StaticText 	"$CNTRLMNU_OTHER", 1
+	Control 	"$CNTRLMNU_AUTOMAP",				"togglemap"
+	Control 	"$CNTRLMNU_CHASECAM",				"chase"
+	Control 	"$CNTRLMNU_COOPSPY",				"spynext"
+	Control 	"$CNTRLMNU_SCREENSHOT",				"screenshot"
+	Control  	"$CNTRLMNU_CONSOLE",				"toggleconsole"
+	StaticText 	""
+	StaticText 	"$CNTRLMNU_POPUPS", 1
+	Control 	"$CNTRLMNU_MISSION",				"showpop 1"
+	Control 	"$CNTRLMNU_KEYS",					"showpop 2"
+	Control 	"$CNTRLMNU_STATS",					"showpop 3"
 }
 
 //-------------------------------------------------------------------------------------------
@@ -489,9 +526,13 @@ OptionValue "MenuMouse"
 
 OptionString "Cursors"
 {
-	"curs_def", "$OPTSTR_CURSORDEFAULT"
-	"curs_cup", "$OPTSTR_CURSORMARYCUP"
-	"curs_kit", "$OPTSTR_CURSORKITTY"
+	"None", "$OPTVAL_DEFAULT"
+	"cursor", "$OPTSTR_SIMPLEARROW"
+	"doomcurs", "$OPTVAL_DOOM"
+	"herecurs", "$OPTSTR_HERETIC"
+	"hexncurs", "$OPTVAL_HEXEN"
+	"strfcurs", "$OPTVAL_STRIFE"
+	"chexcurs", "$OPTSTR_CHEX"
 	"-", "$OPTSTR_SYSTEMCURSOR"
 }
 
@@ -567,7 +608,7 @@ OptionValue "Inversion"
 
 OptionMenu "JoystickConfigMenu" protected
 {
-	Title "$JOY_CONFIG"
+	Title "$JOYMNU_TITLE"
 	Class "JoystickConfigMenu"
 	// Will be filled in by joystick code.
 }
@@ -783,9 +824,9 @@ OptionValue TextColors
 	20.0, "$C_DARKGRAY"
 	21.0, "$C_CYAN"
 	22.0, "$C_ICE"
- 	23.0, "$C_FIRE"
- 	24.0, "$C_SAPPHIRE"
- 	25.0, "$C_TEAL"
+	23.0, "$C_FIRE"
+	24.0, "$C_SAPPHIRE"
+	25.0, "$C_TEAL"
 }
 
 OptionValue Crosshairs
@@ -961,9 +1002,12 @@ OptionMenu "MiscOptions" protected
 	}
 	Option "$MISCMNU_QUERYIWAD",				"queryiwad", "OnOff"
 	StaticText " "
+	Option "$MISCMNU_ALLCHEATS",				"allcheats", "OnOff"
 	Option "$MISCMNU_ENABLEAUTOSAVES",			"disableautosave", "Autosave"
 	Option "$MISCMNU_SAVELOADCONFIRMATION",			"saveloadconfirmation", "OnOff"
 	Slider "$MISCMNU_AUTOSAVECOUNT",			"autosavecount", 1, 20, 1, 0
+	Option "$MISCMNU_DEHLOAD",					"dehload", "dehopt"
+	Option "$MISCMNU_INTERSCROLL",				"nointerscrollabort", "OffOn"
 	StaticText " "
 	Option "$MISCMNU_CACHENODES",				"gl_cachenodes", "OnOff"
 	Slider "$MISCMNU_CACHETIME",				"gl_cachetime", 0.0, 2.0, 0.1
@@ -1047,6 +1091,7 @@ OptionMenu AutomapOptions protected
 	Option "$AUTOMAPMNU_TEXTURED",				"am_textured", "OnOff"
 	Option "$AUTOMAPMNU_FOLLOW",				"am_followplayer", "OnOff"
 	Option "$AUTOMAPMNU_PTOVERLAY",				"am_portaloverlay", "OnOff"
+	Slider "$AUTOMAPMNU_EMPTYSPACEMARGIN",		"am_emptyspacemargin", 0, 50, 5, 0
 	StaticText " "
 	Option "$AUTOMAPMNU_SHOWITEMS",				"am_showitems", "OnOff"
 	Option "$AUTOMAPMNU_SHOWMONSTERS",			"am_showmonsters", "OnOff"
@@ -1567,7 +1612,7 @@ OptionMenu SoundOptions protected
 	Slider "$SNDMNU_MUSICVOLUME",		"snd_musicvolume", 0, 1, 0.05, 2
 	Option "$SNDMNU_MIDIDEVICE",		"snd_mididevice", "MidiDevices"
 	StaticText " "
-	Option "$SNDMNU_SOUNDTRACK",		"xane_soundtrack",	"SoundSoundtracks"
+	Option "$SNDMNU_UNDERWATERREVERB",	"snd_waterreverb", "OnOff"
 	Option "$SNDMNU_RANDOMIZEPITCHES",	"snd_pitched", "OnOff"
 	Slider "$SNDMNU_CHANNELS",			"snd_channels", 64, 256, 8, 0
 	StaticText " "
@@ -1590,13 +1635,6 @@ OptionMenu SoundOptions protected
  * Advanced Sound Options Menu
  *
  *=======================================*/
-
-OptionValue SoundSoundtracks
-{
-	0, "$OPTVAL_SOUNDTRACK0"
-	//1, "$OPTVAL_SOUNDTRACK1"
-	2, "$OPTVAL_SOUNDTRACK2"
-}
 
 OptionValue GusMemory
 {
@@ -1822,7 +1860,6 @@ OptionValue ScaleModes
 	3, "640x400"
 	4, "1280x800"
 }
-
 OptionValue CropAspect
 {
 	0, "$OPTVAL_STRETCH"
@@ -2093,12 +2130,10 @@ OptionValue VRMode
 
 OptionValue ShadowMapQuality
 {
-	64, "Very cheap"
-	128, "Baseline"
-	256, "Low"
-	512, "Medium"
-	1024, "High"
-	2048, "Ultra"
+	128, "128"
+	256, "256"
+	512, "512"
+	1024, "1024"
 }
 
 OptionMenu "GLTextureGLOptions" protected
@@ -2127,6 +2162,8 @@ OptionMenu "GLLightOptions" protected
 	Option "$GLLIGHTMNU_CLIPLIGHTS",			gl_lights_checkside,	"YesNo"
 	Option "$GLLIGHTMNU_LIGHTSPRITES",			gl_light_sprites,		"YesNo"
 	Option "$GLLIGHTMNU_LIGHTPARTICLES",		gl_light_particles,		"YesNo"
+	Option "$GLLIGHTMNU_LIGHTSHADOWMAP",		gl_light_shadowmap,		"YesNo"
+	Option "$GLLIGHTMNU_LIGHTSHADOWMAPQUALITY", gl_shadowmap_quality,	"ShadowMapQuality"
 }
 
 OptionMenu "OpenGLOptions" protected
@@ -2166,6 +2203,4 @@ OptionMenu "OpenGLOptions" protected
 	StaticText " "
 	Slider "$GLPREFMNU_PALTONEMAPPOWER",		gl_paltonemap_powtable,			0.2, 3.0, 0.1, 1
 	Option "$GLPREFMNU_PALTONEMAPORDER",		gl_paltonemap_reverselookup,	"LookupOrder"
-	Option "$GLLIGHTMNU_LIGHTSHADOWMAP",		gl_light_shadowmap,		"YesNo"
-	Option "$GLLIGHTMNU_LIGHTSHADOWMAPQUALITY", gl_shadowmap_quality,	"ShadowMapQuality"
 }

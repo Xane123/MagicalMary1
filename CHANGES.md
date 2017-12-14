@@ -6,5 +6,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Attempting to visit a Special Stage when you have all of the Chaos Bridges through forcing it using the "changemap" CCMD will instantly kick you back out to the last level you were on.
 * If the player tries to force themselves into a Special Stage they aren't currently on, they will be forced instantly onto the correct Special Stage. This isn't done if recording or playing back a demo, though.
 ## Miscellaneous
-* Jane's Shop's "random upgrade" item now works as intended and gives Mary hammer and umbrella upgrades. It doesn't tell you what you get, though, an d I'm unsure what to do to make the tutorials appear as if Mary picked up an upgrade item.
+* Jane's Shop's "random upgrade" item now works as intended and gives Mary hammer and umbrella upgrades. It doesn't tell you what you get, though, and I'm unsure what to do to make the tutorials appear as if Mary picked up an upgrade item.
 * Downgraded Mary's front door to not use a camera texture as you couldn't see anything special happen outside it anyways.

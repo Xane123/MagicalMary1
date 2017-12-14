@@ -700,7 +700,7 @@ void FMultiPatchTexture::CheckForHacks ()
 	}
 
 	// The Doom E1 sky has its patch's y offset at -8 instead of 0.
-	if (gameinfo.gametype == GAME_MMA &&
+	if (gameinfo.gametype == GAME_Doom &&
 		!(gameinfo.flags & GI_MAPxx) &&
 		NumParts == 1 &&
 		Height == 128 &&
@@ -716,7 +716,7 @@ void FMultiPatchTexture::CheckForHacks ()
 	}
 
 	// BIGDOOR7 in Doom also has patches at y offset -4 instead of 0.
-	if (gameinfo.gametype == GAME_MMA &&
+	if (gameinfo.gametype == GAME_Doom &&
 		!(gameinfo.flags & GI_MAPxx) &&
 		NumParts == 2 &&
 		Height == 128 &&

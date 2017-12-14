@@ -494,7 +494,7 @@ static void ParseListMenuBody(FScanner &sc, DListMenuDescriptor *desc)
 			}
 			if (!success)
 			{
-				sc.ScriptError("Unknown keyword '%s'!", sc.String);
+				sc.ScriptError("Unknown keyword '%s'", sc.String);
 			}
 		}
 	}
@@ -582,7 +582,7 @@ static bool ReplaceMenu(FScanner &sc, DMenuDescriptor *desc)
 			// Otherwise bail out because for list menus it's not that simple.
 			if (desc->IsKindOf(RUNTIME_CLASS(DListMenuDescriptor)) || (*pOld)->IsKindOf(RUNTIME_CLASS(DListMenuDescriptor)))
 			{
-				sc.ScriptMessage("%s is a protected menu. It can't be replaced bwith your menu, sorry.", desc->mMenuName.GetChars());
+				sc.ScriptMessage("Cannot replace protected menu %s.", desc->mMenuName.GetChars());
 				return true;
 			}
 			for (int i = desc->mItems.Size()-1; i >= 0; i--)
@@ -610,7 +610,7 @@ static bool ReplaceMenu(FScanner &sc, DMenuDescriptor *desc)
 
 		if (!CheckCompatible(desc, *pOld))
 		{
-			sc.ScriptMessage("Tried to replace menu '%s' with a menu of different type.", desc->mMenuName.GetChars());
+			sc.ScriptMessage("Tried to replace menu '%s' with a menu of different type", desc->mMenuName.GetChars());
 			return true;
 		}
 	}
@@ -754,7 +754,7 @@ static void ParseOptionSettings(FScanner &sc)
 		}
 		else
 		{
-			sc.ScriptError("Unknown keyword '%s'!", sc.String);
+			sc.ScriptError("Unknown keyword '%s'", sc.String);
 		}
 	}
 }
@@ -933,7 +933,7 @@ static void ParseOptionMenuBody(FScanner &sc, DOptionMenuDescriptor *desc)
 			}
 			if (!success)
 			{
-				sc.ScriptError("Unknown keyword '%s'!", sc.String);
+				sc.ScriptError("Unknown keyword '%s'", sc.String);
 			}
 		}
 	}
@@ -1066,7 +1066,7 @@ void M_ParseMenuDefs()
 			}
 			else
 			{
-				sc.ScriptError("Unknown keyword '%s'!", sc.String);
+				sc.ScriptError("Unknown keyword '%s'", sc.String);
 			}
 		}
 		if (Args->CheckParm("-nocustommenu")) break;

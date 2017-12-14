@@ -149,6 +149,11 @@ conversationids
 	165 = Scanner
 	166 = TeleporterBeacon
 	167 = Targeter
+	168 = Coin
+	169 = Gold10
+	170 = Gold25
+	171 = Gold50
+	172 = Gold300
 	173 = BeldinsRing
 	174 = OfferingChalice
 	175 = Ear

@@ -45,14 +45,13 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.85"	
-#define GIT_COMMIT "037bb1408b0fc8217ad3b11644d4998e1e720ae5"	//This is the GZDoom Git commit that Mary's Magical Adventure is based on.
+#define VERSIONSTR "v1.86"
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 1,8,9999,0
 #define RC_PRODUCTVERSION 1,8,9999,0
 #define RC_PRODUCTVERSION2 VERSIONSTR
-// These are for content versioning. The current state is '3.e'.
+// These are for content versioning. The current state is '3.3'.
 #define VER_MAJOR 3
 #define VER_MINOR 3
 #define VER_REVISION 0
@@ -81,7 +80,7 @@ const char *GetVersionString();
 // SAVESIG should match SAVEVER.
 
 // extension for savegames
-#define SAVEGAME_EXT "xsav"//"zds"
+#define SAVEGAME_EXT "zds"
 
 // MINSAVEVER is the minimum level snapshot version that can be loaded.
 #define MINSAVEVER	4551
@@ -93,6 +92,7 @@ const char *GetVersionString();
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "Mary's Magical Adventure"
 #define BASEWAD "data.pk3"
+#define OPTIONALWAD "zd_extra.pk3"
 #define BASESF "soundfont.sf2"
 
 // More stuff that needs to be different for derivatives.
@@ -104,7 +104,7 @@ const char *GetVersionString();
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME
 #else
-#define GAME_DIR ".config/" GAMENAMELOWERCASE
+#define GAME_DIR ".config/" GAMENAME
 #endif
 
 

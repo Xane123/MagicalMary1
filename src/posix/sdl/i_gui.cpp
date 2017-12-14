@@ -46,11 +46,11 @@ bool I_SetCursor(FTexture *cursorpic)
 
 	if (cursorpic != NULL && cursorpic->UseType != FTexture::TEX_Null)
 	{
-		//[XANE]Who says cursors can't be huge?
-		/*if (cursorpic->GetWidth() > 32 || cursorpic->GetHeight() > 32)
+		// Must be no larger than 32x32.
+		if (cursorpic->GetWidth() > 32 || cursorpic->GetHeight() > 32)
 		{
 			return false;
-		}*/
+		}
 
 		if (cursorSurface == NULL)
 			cursorSurface = SDL_CreateRGBSurface (0, 32, 32, 32, MAKEARGB(0,255,0,0), MAKEARGB(0,0,255,0), MAKEARGB(0,0,0,255), MAKEARGB(255,0,0,0));

@@ -38,6 +38,7 @@
 #include "st_console.h"
 #include "v_text.h"
 #include "version.h"
+#include "i_time.h"
 
 
 static NSColor* RGB(const uint8_t red, const uint8_t green, const uint8_t blue)
@@ -101,7 +102,7 @@ FConsoleWindow::FConsoleWindow()
 	[m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 	[m_scrollView setDocumentView:m_textView];
 
-	NSString* const title = [NSString stringWithFormat:@"%s - Console", GAMESIG];
+	NSString* const title = [NSString stringWithFormat:@"%s %s - Console", GAMESIG, GetVersionString()];
 
 	[m_window initWithContentRect:initialRect
 						styleMask:NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask
@@ -113,11 +114,8 @@ FConsoleWindow::FConsoleWindow()
 	[m_window center];
 	[m_window exitAppOnClose];
 
-	if (NSAppKitVersionNumber >= AppKit10_7)
-	{
-		// Do not allow fullscreen mode for this window
-		[m_window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenAuxiliary];
-	}
+	// Do not allow fullscreen mode for this window
+	[m_window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenAuxiliary];
 
 	[[m_window contentView] addSubview:m_scrollView];
 
@@ -202,7 +200,7 @@ struct TimedUpdater
 {
 	explicit TimedUpdater(const Function& function)
 	{
-		const unsigned int currentTime = I_MSTime();
+		const unsigned int currentTime = I_msTime();
 
 		if (currentTime - m_previousTime > interval)
 		{

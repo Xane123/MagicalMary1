@@ -101,7 +101,7 @@ struct FIWADInfo
 	FString Required;		// Requires another IWAD
 	uint32_t FgColor = 0;	// Foreground color for title banner
 	uint32_t BkColor = 0xc0c0c0;		// Background color for title banner
-	EGameType gametype = GAME_MMA;		// which game are we playing?
+	EGameType gametype = GAME_Doom;		// which game are we playing?
 	int StartupType = FStartupInfo::DefaultStartup;		// alternate startup type
 	FString MapInfo;		// Base mapinfo to load
 	TArray<FString> Load;	// Wads to be loaded with this one.
@@ -142,13 +142,13 @@ class FIWadManager
 	void ParseIWadInfo(const char *fn, const char *data, int datasize, FIWADInfo *result = nullptr);
 	int ScanIWAD (const char *iwad);
 	int CheckIWADInfo(const char *iwad);
-	int IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad);
+	int IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad, const char *optional_wad);
 	void CollectSearchPaths();
 	void AddIWADCandidates(const char *dir);
 	void ValidateIWADs();
 public:
 	FIWadManager(const char *fn);
-	const FIWADInfo *FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad);
+	const FIWADInfo *FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad, const char *optionalwad);
 	const FString *GetAutoname(unsigned int num) const
 	{
 		if (num < mIWadInfos.Size()) return &mIWadInfos[num].Autoname;
@@ -161,6 +161,5 @@ public:
 	}
 
 };
-
 
 #endif

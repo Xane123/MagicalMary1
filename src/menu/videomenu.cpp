@@ -55,6 +55,7 @@
 #include "hardware.h"
 #include "vm.h"
 #include "r_videoscale.h"
+#include "i_time.h"
 
 /*=======================================
  *
@@ -91,6 +92,7 @@ CUSTOM_CVAR (Int, menu_screenratios, -1, CVAR_ARCHIVE)
 		BuildModesList (screen->VideoWidth, screen->VideoHeight, DisplayBits);
 	}
 }
+
 
 //=============================================================================
 //
@@ -311,7 +313,7 @@ DEFINE_ACTION_FUNCTION(DVideoModeMenu, SetSelectedSize)
 		OldBits = DisplayBits;
 		NewBits = BitTranslate[DummyDepthCvar];
 		setmodeneeded = true;
-		testingmode = I_GetTime(false) + 5 * TICRATE;
+		testingmode = I_GetTime() + 5 * TICRATE;
 		SetModesMenu (NewWidth, NewHeight, NewBits);
 		ACTION_RETURN_BOOL(true);
 	}

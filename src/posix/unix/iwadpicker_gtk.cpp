@@ -277,7 +277,7 @@ static int PickIWad (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 	gtk_box_pack_end (GTK_BOX(vbox), hbox, false, false, 0);
 
 	// Create the "Don't ask" checkbox.
-	check = gtk_check_button_new_with_label ("Permanently use these settings");
+	check = gtk_check_button_new_with_label ("Don't ask me this again");
 	gtk_box_pack_start (GTK_BOX(hbox), check, false, false, 0);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(check), !showwin);
 

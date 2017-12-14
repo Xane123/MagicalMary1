@@ -67,7 +67,7 @@ void *M_Malloc(size_t size)
 	void *block = malloc(size);
 
 	if (block == NULL)
-		I_FatalError("Could not 'mallocate' %zu bytes!", size);
+		I_FatalError("Could not malloc %zu bytes", size);
 
 	GC::AllocBytes += _msize(block);
 	return block;
@@ -82,7 +82,7 @@ void *M_Realloc(void *memblock, size_t size)
 	void *block = realloc(memblock, size);
 	if (block == NULL)
 	{
-		I_FatalError("Could not reallocate %zu bytes!", size);
+		I_FatalError("Could not realloc %zu bytes", size);
 	}
 	GC::AllocBytes += _msize(block);
 	return block;

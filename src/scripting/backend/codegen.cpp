@@ -985,7 +985,7 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 			FxExpression *x = new FxConstant(constval.GetInt(), ScriptPosition);
 			if (constval.GetInt() != constval.GetFloat())
 			{
-				//ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
+				ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
 			}
 
 			delete this;
@@ -993,7 +993,7 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 		}
 		else if (!NoWarn)
 		{
-			//ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
+			ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
 		}
 
 		return this;
@@ -6445,7 +6445,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 			{
 				if (sym->IsKindOf(RUNTIME_CLASS(PSymbolConst)))
 				{
-					ScriptPosition.Message(MSG_DEBUGLOG, "Resolving name '%s.%s' as a constant.\n", ccls->TypeName.GetChars(), Identifier.GetChars());
+					ScriptPosition.Message(MSG_DEBUGLOG, "Resolving name '%s.%s' as constant\n", ccls->TypeName.GetChars(), Identifier.GetChars());
 					delete this;
 					return FxConstant::MakeConstant(sym, ScriptPosition);
 				}
@@ -6460,7 +6460,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 					}
 					else
 					{
-						ScriptPosition.Message(MSG_ERROR, "Unable to access '%s.%s' in a static context!\n", ccls->TypeName.GetChars(), Identifier.GetChars());
+						ScriptPosition.Message(MSG_ERROR, "Unable to access '%s.%s' in a static context\n", ccls->TypeName.GetChars(), Identifier.GetChars());
 						delete this;
 						return nullptr;
 					}
@@ -6468,7 +6468,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 			}
 			else
 			{
-				ScriptPosition.Message(MSG_ERROR, "%s is not a member of %s!", Identifier.GetChars(), ccls->TypeName.GetChars());
+				ScriptPosition.Message(MSG_ERROR, "%s is not a member of %s", Identifier.GetChars(), ccls->TypeName.GetChars());
 				delete this;
 				return nullptr;
 			}
@@ -6497,7 +6497,7 @@ FxExpression *FxMemberIdentifier::Resolve(FCompileContext& ctx)
 		return ret;
 	}
 
-	ScriptPosition.Message(MSG_ERROR, "Left side of %s is not a struct or class, y'know...", Identifier.GetChars());
+	ScriptPosition.Message(MSG_ERROR, "Left side of %s is not a struct or class", Identifier.GetChars());
 	delete this;
 	return nullptr;
 }

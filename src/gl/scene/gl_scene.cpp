@@ -26,6 +26,7 @@
 */
 
 #include "gl/system/gl_system.h"
+#include "i_time.h"
 #include "gi.h"
 #include "m_png.h"
 #include "m_random.h"
@@ -799,8 +800,8 @@ sector_t * GLSceneDrawer::RenderViewpoint (AActor * camera, GL_IRECT * bounds, f
 	GLRenderer->mAngles.Roll.Degrees = r_viewpoint.Angles.Roll.Degrees;
 
 	// Scroll the sky
-	GLRenderer->mSky1Pos = (float)fmod(gl_frameMS * level.skyspeed1, 1024.f) * 90.f/256.f;
-	GLRenderer->mSky2Pos = (float)fmod(gl_frameMS * level.skyspeed2, 1024.f) * 90.f/256.f;
+	GLRenderer->mSky1Pos = (double)fmod((double)screen->FrameTime * (double)level.skyspeed1, 1024.f) * 90./256.;
+	GLRenderer->mSky2Pos = (double)fmod((double)screen->FrameTime * (double)level.skyspeed2, 1024.f) * 90./256.;
 
 
 
@@ -889,8 +890,7 @@ void FGLRenderer::RenderView (player_t* player)
 
 	// Get this before everything else
 	if (cl_capfps || r_NoInterpolate) r_viewpoint.TicFrac = 1.;
-	else r_viewpoint.TicFrac = I_GetTimeFrac (&r_viewpoint.FrameTime);
-	gl_frameMS = I_MSTime();
+	else r_viewpoint.TicFrac = I_GetTimeFrac ();
 
 	P_FindParticleSubsectors ();
 
@@ -969,7 +969,7 @@ void GLSceneDrawer::WriteSavePic (player_t *player, FileWriter *file, int width,
 
 	uint8_t * scr = (uint8_t *)M_Malloc(width * height * 3);
 	glReadPixels(0,0,width, height,GL_RGB,GL_UNSIGNED_BYTE,scr);
-	M_CreatePNG (file, scr + ((height-1) * width * 3), NULL, SS_RGB, width, height, -width*3);
+	M_CreatePNG (file, scr + ((height-1) * width * 3), NULL, SS_RGB, width, height, -width * 3, Gamma);
 	M_Free(scr);
 }
 

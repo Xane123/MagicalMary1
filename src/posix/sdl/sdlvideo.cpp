@@ -137,7 +137,7 @@ SDLFB::SDLFB (int width, int height, bool bgra, bool fullscreen, SDL_Window *old
 	else
 	{
 		FString caption;
-		caption.Format(GAMESIG " %s", GetVersionString());
+		caption.Format(GAMESIG " %s (%s)", GetVersionString(), GetGitTime());
 
 		Screen = SDL_CreateWindow (caption,
 			SDL_WINDOWPOS_UNDEFINED_DISPLAY(vid_adapter), SDL_WINDOWPOS_UNDEFINED_DISPLAY(vid_adapter),
@@ -501,14 +501,6 @@ void SDLFB::SetVSync (bool vsync)
 	if (CGLContextObj context = CGLGetCurrentContext())
 	{
 		// Apply vsync for native backend only (where OpenGL context is set)
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1050
-		// Inconsistency between 10.4 and 10.5 SDKs:
-		// third argument of CGLSetParameter() is const long* on 10.4 and const GLint* on 10.5
-		// So, GLint typedef'ed to long instead of int to workaround this issue
-		typedef long GLint;
-#endif // prior to 10.5
-
 		const GLint value = vsync ? 1 : 0;
 		CGLSetParameter(context, kCGLCPSwapInterval, &value);
 	}
@@ -559,3 +551,18 @@ ADD_STAT (blit)
 		BlitCycles.TimeMS(), SDLFlipCycles.TimeMS());
 	return out;
 }
+
+// each platform has its own specific version of this function.
+void I_SetWindowTitle(const char* caption)
+{
+	auto Screen = static_cast<SDLFB *>(screen)->GetSDLWindow();
+	if (caption)
+		SDL_SetWindowTitle(static_cast<SDLFB *>(screen)->GetSDLWindow(), caption);
+	else
+	{
+		FString default_caption;
+		default_caption.Format(GAMESIG " %s (%s)", GetVersionString(), GetGitTime());
+		SDL_SetWindowTitle(static_cast<SDLFB *>(screen)->GetSDLWindow(), default_caption);
+	}
+}
+

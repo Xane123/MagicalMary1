@@ -37,9 +37,9 @@
 #include "gitinfo.h"
 #include "version.h"
 
-const char *GetGitDescription()	//[XANE]Changed this so only version.h has to be updated...and to prevent "unknown version" from appearing in the title bar.
+const char *GetGitDescription()
 {
-	return VERSIONSTR; //GIT_DESCRIPTION;
+	return GIT_DESCRIPTION;
 }
 
 const char *GetGitHash()
@@ -54,5 +54,12 @@ const char *GetGitTime()
 
 const char *GetVersionString()
 {
-	return VERSIONSTR;
+	if (GetGitDescription()[0] == '\0')
+	{
+		return VERSIONSTR;
+	}
+	else
+	{
+		return GIT_DESCRIPTION;
+	}
 }

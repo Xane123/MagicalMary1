@@ -12,7 +12,7 @@ struct UserCmd native
 
 class PlayerPawn : Actor native
 {
-	const CROUCHSPEED = 1;//(1./12);
+	const CROUCHSPEED = (1./12);
 	// [RH] # of ticks to complete a turn180
 	const TURN180_TICKS = ((TICRATE / 4) + 1);
 	
@@ -25,7 +25,7 @@ class PlayerPawn : Actor native
 	native clearscope Inventory	InvFirst;		// first inventory item displayed on inventory bar
 	native clearscope Inventory	InvSel;			// selected inventory item
 	native Name 		SoundClass;		// Sound class
-	native Name 		Face;			// Status bar face (when used)
+	native Name 		Face;			// Doom status bar face (when used)
 	native Name 		Portrait;
 	native Name 		Slot[10];
 	native double 		HexenArmor[5];
