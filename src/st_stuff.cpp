@@ -429,7 +429,7 @@ static bool Cht_Generic (cheatseq_t *cheat)
 
 static bool Cht_Music(cheatseq_t *cheat)
 {
-	char buf[20] = "puke 254 x ";
+	char buf[20] = "puke 254 x  0 1";	//This tells the music to change, not affect all players, and fade to the new song.
 
 	if (cheat->Args[0] == '0')
 	{

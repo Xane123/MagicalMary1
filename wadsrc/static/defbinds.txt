@@ -51,6 +51,10 @@ num5 +user1			//Transform into Magical Cutie Mary/Super Xane.
 \ +user1			//Alternate key for laptop users without a numpad.
 / +user2			//Teleport to Small Hut
 . +user3			//Restart run
+leftarrow invprev
+rightarrow invnext
+uparrow invuse
+downarrow invuse
 
 // Generic joystick buttons
 joy1 +attack
