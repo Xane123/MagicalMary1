@@ -1326,7 +1326,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 			// [MC]Buddha2 absorbs telefrag damage, and anything else thrown their way.
 			if (!(flags & DMG_FORCED) && (((player->cheats & CF_BUDDHA2) || (((player->cheats & CF_BUDDHA) ||
 				(player->mo->FindInventory (PClass::FindActor(NAME_PowerBuddha),true) != nullptr) ||
-				(player->mo->flags7 & MF7_BUDDHA)) /*&& !telefragDamage)*/) && (player->playerstate != PST_DEAD)))
+				(player->mo->flags7 & MF7_BUDDHA)) /*&& !telefragDamage*/)) && (player->playerstate != PST_DEAD)))
 			{
 				// If this is a voodoo doll we need to handle the real player as well.
 				player->mo->health = target->health = player->health = 1;
