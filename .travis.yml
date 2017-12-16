@@ -13,7 +13,7 @@ matrix:
     - os: osx
       osx_image: xcode9.2
       env:
-        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7"
+        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -ZDOOM_GENERATE_PK3=1"
 
 #    - os: linux
 #      compiler: gcc
@@ -36,7 +36,7 @@ matrix:
       compiler: clang
       env:
         - CLANG_VERSION=5.0
-        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=MinSizeRel -DDYN_OPENAL=NO -DDYN_SNDFILE=NO -DDYN_MPG123=NO -DDYN_FLUIDSYNTH=NO"
+        - CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE=MinSizeRel -DDYN_OPENAL=NO -DDYN_SNDFILE=NO -DDYN_MPG123=NO -DDYN_FLUIDSYNTH=NO -ZDOOM_GENERATE_PK3=1"
       addons:
         apt:
           sources:
