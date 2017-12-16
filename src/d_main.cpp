@@ -1103,7 +1103,7 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
+	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, GPalette.BlackIndex, 0);
 	if (Page != NULL)
 	{
 		screen->DrawTexture (Page, 0, 0,
@@ -1111,17 +1111,6 @@ void D_PageDrawer (void)
 			DTA_Masked, false,
 			DTA_BilinearFilter, true,
 			TAG_DONE);
-	}
-	else
-	{
-		if (!PageBlank)
-		{
-			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Page graphic goes here", TAG_DONE);
-		}
-	}
-	if (Advisory != NULL)
-	{
-		screen->DrawTexture (Advisory, 4, 160, DTA_320x200, true, TAG_DONE);
 	}
 }
 
