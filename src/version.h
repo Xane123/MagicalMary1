@@ -45,7 +45,7 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-	//Currently based on https://github.com/coelckers/gzdoom/commit/de12902d77642c65e56679201fa8c3b45054177f.
+	//Currently based on https://github.com/coelckers/gzdoom/commit/f452184d823a8c8ba6c020bb8ddfca4096a7d805
 
 #define VERSIONSTR "v1.86"
 

@@ -89,7 +89,7 @@ bool CheckCheatmode (bool printmsg)
 {
 	if ((G_SkillProperty(SKILLP_DisableCheats) || netgame || deathmatch) && (!sv_cheats))
 	{
-		if (printmsg) Printf ("sv_cheats must be true to enable this command.\n");
+		if (printmsg) Printf ("Enable cheats by changing sv_cheats to 1 first!\n");
 		return true;
 	}
 	else
@@ -117,49 +117,13 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-CCMD (god)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_GOD);
-}
-
-CCMD(god2)
+CCMD(honor)
 {
 	if (CheckCheatmode())
 		return;
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_GOD2);
-}
-
-CCMD (iddqd)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_IDDQD);
-}
-
-CCMD (buddha)
-{
-	if (CheckCheatmode())
-		return;
-
-	Net_WriteByte(DEM_GENERICCHEAT);
-	Net_WriteByte(CHT_BUDDHA);
-}
-
-CCMD(buddha2)
-{
-	if (CheckCheatmode())
-		return;
-
-	Net_WriteByte(DEM_GENERICCHEAT);
-	Net_WriteByte(CHT_BUDDHA2);
 }
 
 CCMD (notarget)
@@ -171,15 +135,6 @@ CCMD (notarget)
 	Net_WriteByte (CHT_NOTARGET);
 }
 
-CCMD (fly)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_FLY);
-}
-
 /*
 ==================
 Cmd_Noclip
@@ -187,15 +142,6 @@ Cmd_Noclip
 argv(0) noclip
 ==================
 */
-CCMD (noclip)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_NOCLIP);
-}
-
 CCMD (noclip2)
 {
 	if (CheckCheatmode())
@@ -212,23 +158,6 @@ CCMD (powerup)
 
 	Net_WriteByte (DEM_GENERICCHEAT);
 	Net_WriteByte (CHT_POWER);
-}
-
-CCMD (morphme)
-{
-	if (CheckCheatmode ())
-		return;
-
-	if (argv.argc() == 1)
-	{
-		Net_WriteByte (DEM_GENERICCHEAT);
-		Net_WriteByte (CHT_MORPH);
-	}
-	else
-	{
-		Net_WriteByte (DEM_MORPHEX);
-		Net_WriteString (argv[1]);
-	}
 }
 
 CCMD (anubis)
