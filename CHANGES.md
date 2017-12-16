@@ -6,7 +6,7 @@ Most importantly, this version is the first version to have compatibility with D
 * Choose Freedoom: Phase 2 as the IWAD and let it download it by pushing the play button.
 * Extract the game data to SD Card > OpenTouch > Delta > mods
 * Return to Delta Touch and tap the keyboard button and add all three files as mods.
-* Start the game by tapping the play button again. If done correctly, a picture of Mary drinking from a restaurant cup should appear then the Xane Corp. logo. From here you can start the game, but it's very laggy on weaker processors, including the Google Pixel 2!
+After this, start the game by tapping the play button again. If done correctly, the Xane Corp. logo then title screen should appear. From here you can start the game, but it's very laggy on weaker processors. Even the new Pixel 2 suffers a bit!
 This isn't near as user-friendly as playing on computers, but it's necessary as it isn't just a couple simple downloads and extractions. You should be familiar with Android and mobile game touch screen controls before trying this, anyways.
 ## Bug-fixes
 * The "Return to Hell City" and "Avoid Jail" glitches, which were in Mary's Magical Adventure for many versions, are now both fixed.
