@@ -17,9 +17,7 @@ This isn't near as user-friendly as playing on computers, but it's necessary as 
 * Jane's Shop's "random upgrade" item now works as intended and gives Mary hammer and umbrella upgrades. It doesn't tell you what you get, though, and I'm unsure what to do to make the tutorials appear as if Mary picked up an upgrade item.
 * 1-2 now has more complete level design, though not all of it is as polished as other areas.
 * The title screen video is now twice as long. As a result, "demos" that play these videos had to be re-recorded.
-* Friendly Turrets are no longer broken; They may still disappear, wasting your money you spent on them, but they no longer:
-** Stare at dead enemies' bodies after killing them...
-** Revert to facing towards the right on the map; They now face the direction they were placed facing.
+* Friendly Turrets are no longer broken; They may still disappear, wasting your money you spent on them, but they no longer stare at dead enemies' bodies after killing them and now properly revert to facing towards the direction they were placed facing.
 ## Minor
 * The coin and time requirements in Special Stage 4 were adjusted slightly.
 * Downgraded Mary's front door to not use a camera texture as you couldn't see anything special happen outside it anyways.
