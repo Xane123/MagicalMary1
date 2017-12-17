@@ -20,7 +20,7 @@ q +attack
 e +altattack
 r +use
 t +use
-f +zoom	//Xane's Claw
+f +reload	//Xane's Claw
 shift +speed
 space +jump
 w +forward

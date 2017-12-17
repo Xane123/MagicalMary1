@@ -93,7 +93,7 @@ const char *GetVersionString();
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "Mary's Magical Adventure"
-#define BASEWAD "data.pk3"
+#define BASEWAD "engine.pk3"
 #define OPTIONALWAD "zd_extra.pk3"
 #define BASESF "soundfont.sf2"
 

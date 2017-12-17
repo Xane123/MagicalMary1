@@ -8,8 +8,9 @@ IWad
 	Config = "Doom"
 	IWADName = "mma_data.pk3"
 	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "MGAMEPAL", "XANE_MMA", "ComputeX"
+	MustContain = "ComputeX"
 	BannerColors = "c0 40 c0", "40 20 40"
+	Load = "mma_resources.pk3", "mma_maps.wad", "mma_videos.pk3", "fmv_hires.pk3"
 }
 
 IWad
@@ -20,8 +21,9 @@ IWad
 	Config = "Doom"
 	IWADName = "mma_mobiledata.pk3"
 	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "MGAMEPAL", "XANE_MMA", "iAndroid"
+	MustContain = "iAndroid"
 	BannerColors = "c0 40 c0", "40 20 40"
+	Load = "mma_resources.pk3", "mma_mobilemaps.wad"
 }
 
 IWad
@@ -34,6 +36,7 @@ IWad
 	Mapinfo = "mapinfo/doom2.txt"
 	MustContain = "MAP01", "FREEDOOM"
 	BannerColors = "32 54 43", "c6 dc d1"
+	Load = "mma_data.pk3", "mma_resources.pk3", "mma_maps.wad", "mma_videos.pk3", "fmv_hires.pk3"
 }	
 
 Names
