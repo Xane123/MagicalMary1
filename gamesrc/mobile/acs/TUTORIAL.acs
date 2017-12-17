@@ -234,47 +234,47 @@ script "ShowSTutMessage" (int id)
 	Switch(id)
 	{
 		Case 1:
-		HUDMessageBold(s:"Hold ", k:"+altattack", s:" to glide using Mary's Umbrella.";
+		HUDMessageBold(s:"Hold ALT. ATTACK to glide using Mary's Umbrella.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 2:
-		HUDMessageBold(s:"Press ", k:"+use", s:" to open locked areas.";
+		HUDMessageBold(s:"Tap the USE button to open locked areas.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 3:
-		HUDMessageBold(s:"Briefly push ", k:"+altattack", s:" to perform the Hammer Jump.";
+		HUDMessageBold(s:"Briefly tap ALT. ATTACK to perform the Hammer Jump.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 4:
-		HUDMessageBold(s:"Press ", k:"+altattack", s:" in mid-air to do a Hammer Puff.";
+		HUDMessageBold(s:"Tap the ALT. ATTACK button in mid-air to do a Hammer Puff.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 5:
-		HUDMessageBold(s:"Hold ", k:"+altattack", s:" on the ground to perform Hammer Spin.";
+		HUDMessageBold(s:"Hold ALT. ATTACK on the ground to perform Hammer Spin.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 6:
-		HUDMessageBold(s:"In the air, push ", k:"+attack", s:" to do a Hammer Slam.";
+		HUDMessageBold(s:"In the air, tap the ATTACK button to do a Hammer Slam.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 7:
-		HUDMessageBold(s:"Press ", k:"+use", s:" to activate switches.";
+		HUDMessageBold(s:"Tap the USE button to activate switches.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 8:
-		HUDMessageBold(s:"Press ", k:"+jump", s:" in the air to use your special ability.";
+		HUDMessageBold(s:"Tap the JUMP button in the air to use your special ability.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 9:
-		HUDMessageBold(s:"Hold ", k:"+attack", s:" after your normal umbrella attack to do a flatten attack.";
+		HUDMessageBold(s:"Hold the ATTACK button after your normal umbrella attack to do a flatten attack.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 10:
-		HUDMessageBold(s:"Hold ", k:"+altattack", s:" on the ground and Mary will lift off!";
+		HUDMessageBold(s:"Hold ALT. ATTACK on the ground and Mary will lift off!";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 11:
-		HUDMessageBold(s:"Press ", k:"+reload", s:" on the ground to fire Xane's claw.";
+		HUDMessageBold(s:"Tap the RELOAD button on the ground to fire Xane's claw.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 

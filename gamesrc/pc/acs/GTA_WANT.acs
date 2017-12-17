@@ -16,7 +16,7 @@ script "GetWantedLevel" (int wlevel_stored) { SetResultValue(wlevel); }
 script "ForceWantedLevel" (int stars, int add)
 {
 
-	If(StrParam(n:PRINTNAME_LEVEL)!="MAP1"||GetCVAR("sv_nomonsters")) Terminate;
+	If(StrParam(n:PRINTNAME_LEVEL)!="AREA1"||GetCVAR("sv_nomonsters")) Terminate;
 
 	if(stars==0&&add==FALSE)
 	{
@@ -79,7 +79,7 @@ While(1)
 	{
 	Delay(1);
 	
-	if(lump_name!="MAP1") Terminate;
+	if(lump_name!="AREA1") Terminate;
 	
 	if(wanted>COPS_MAX_POINTS) wanted = COPS_MAX_POINTS;
 	
@@ -89,7 +89,7 @@ While(1)
 			wlevel++;
 			//ACS_NamedExecute("Flash",0,0,0,0);
 
-			if(lump_name=="MAP1"&&wlevel==3)
+			if(lump_name=="AREA1"&&wlevel==3)
 			{
 				//ACS_ExecuteAlways(254,0,4,1,0);
 				Delay(70);
@@ -102,7 +102,7 @@ While(1)
 		{
 			wlevel--;
 
-			if(lump_name=="MAP1"&&wlevel<3)
+			if(lump_name=="AREA1"&&wlevel<3)
 			{
 				If(wlevel==2)ACS_NamedExecute("RequestDispatcherMessage" ,0,2,0,0);
 			}

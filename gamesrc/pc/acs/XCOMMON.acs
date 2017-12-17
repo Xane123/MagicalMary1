@@ -2418,7 +2418,14 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 					Delay(1);
 					tics_death++;
 				}
-				force_death[PlayerNumber()] = FALSE;	//This must be set to "false" now or else the player will be kicked out of jail!
+				force_death[0] = FALSE;	//This must be set to "false" now or else the player will be kicked out of jail!
+				force_death[1] = FALSE;
+				force_death[2] = FALSE;
+				force_death[3] = FALSE;
+				force_death[4] = FALSE;
+				force_death[5] = FALSE;
+				force_death[6] = FALSE;
+				force_death[7] = FALSE;
 				Ceiling_LowerByValue(64,16,32);
 				SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
 				tics_death = 0;
