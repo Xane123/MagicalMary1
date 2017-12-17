@@ -1,0 +1,52 @@
+#library "DIALOG_X"
+#include "zcommon.acs"
+
+bool done_sent = FALSE;
+script "JaneMessage" (int id)	//Used for Jane in the Small Hut. Constantly execute to display text.
+{
+int tics = 0;
+    //Draw text box first.
+    SetHUDSize(320, 200, 0);
+    SetFont("MESG_BGM");
+    HUDMessage(s:"A";
+        HUDMSG_PLAIN, 3, CR_UNTRANSLATED, 157.0, 150.0, 0.5); 
+	
+	//Next, the message.
+	SetHUDSize(370, 300, 0);
+	SetFont("MESG_FNT");
+	HUDMessage(l:StrParam(s:"JANE_", d:id);
+		HUDMSG_PLAIN, 1, CR_YELLOW, 26.1, 180.1, 0.5);  //Message
+}
+
+//Old version
+/*script "JaneMessage" (int id)	//Used for Jane in the Small Hut.
+{
+int tics = 0;
+AmbientSound(StrParam(s:"jane/message", d:id), 127);
+    //Draw text box first.
+    SetHUDSize(320, 200, 0);
+    SetFont("MESG_BGM");
+    HUDMessage (s:"A";
+        HUDMSG_FADEOUT, 3, CR_UNTRANSLATED, 157.0, 150.0, 999.0, 1.0, 1.0); 
+	
+	//Next, the message.
+	SetHUDSize(370, 300, 0);
+	SetFont("MESG_FNT");
+	HUDMessage (l:text[id];
+		HUDMSG_TYPEON, 1, CR_YELLOW, 72.1, 180.1, 999.0, 0.05, 1.0, 1.0);  //Message
+    
+    Until(done_sent) Delay(1);
+	done_sent = FALSE;
+
+    SetHUDSize(320, 200, 0);
+    SetFont("MESG_BGM");
+    HUDMessage (s:"A";
+        HUDMSG_FADEOUT, 3, CR_UNTRANSLATED, 157.0, 150.0, 0.1, 0.1, 1.0); 
+	
+	SetHUDSize(370, 300, 0);    
+	SetFont("MESG_FNT");
+	HUDMessage (l:text[id];
+		HUDMSG_FADEOUT, 1, CR_YELLOW, 72.1, 180.1, 0.1, 0.1, 1.0);  //Message
+}*/
+
+//script "ClearMessage" (void)	{	done_sent = TRUE;	}

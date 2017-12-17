@@ -1,0 +1,407 @@
+#library "xglobal"
+#include "zcommon.acs"
+
+int wanted = 0;	//Wanted "points"; These increase when killing cops.
+int wlevel = 0;	//Wanted Level; This is a visual representation of all player's police attention.
+
+bool eflash = TRUE;
+
+int points[8] = { 0, 1, 12, 25, 48, 75, 102, 110 };
+#define	COPS_MAX_POINTS 105	//Maxinum "wanted points" players can have.
+
+script "WLStarFlashing" (int mode) { eflash = mode;}
+
+script "GetWantedLevel" (int wlevel_stored) { SetResultValue(wlevel); }
+
+script "ForceWantedLevel" (int stars, int add)
+{
+
+	If(StrParam(n:PRINTNAME_LEVEL)!="MAP1"||GetCVAR("sv_nomonsters")) Terminate;
+
+	if(stars==0&&add==FALSE)
+	{
+		wanted = 0;
+		wlevel = 0;
+		SetActivator(1000,AAPTR_PLAYER1);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1001,AAPTR_PLAYER2);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1002,AAPTR_PLAYER3);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1003,AAPTR_PLAYER4);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1004,AAPTR_PLAYER5);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1005,AAPTR_PLAYER6);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1006,AAPTR_PLAYER7);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		SetActivator(1007,AAPTR_PLAYER8);
+		ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+		Terminate;
+	}
+
+
+	If(add==FALSE) wanted = points[stars];
+	else
+	{
+		if((wlevel==4&&stars>2)||(wlevel==5&&stars>1))Terminate;
+		else wanted = points[wlevel+stars];
+	}
+	
+}
+
+bool giveWPoint = TRUE;	//Certain kill types will only give Wanted Points sometimes.
+script "AddWantedPoints" (int amount)
+{
+	int realamount = amount;
+	
+	if(GameSkill()==0) realamount *= 2;
+	else if(GameSkill()==2) realamount = 1;	//If in Hard Mode, every offense gives only a single point.
+	
+	If(amount==0)
+	{
+		If(GameSkill()==0) realamount = 1;
+		Else { giveWPoint = !giveWPoint; If(giveWPoint) realamount = 1; Else realamount = 0; }
+	}
+	
+	If(realamount>0) wanted += realamount;
+}
+
+int player;
+int coords[2];
+int flash = 0;
+script "TrackWL" OPEN
+{
+int lump_name = StrParam(n:PRINTNAME_LEVEL);
+	
+While(1)
+	{
+	Delay(1);
+	
+	if(lump_name!="MAP1") Terminate;
+	
+	if(wanted>COPS_MAX_POINTS) wanted = COPS_MAX_POINTS;
+	
+	if(wanted >= points[wlevel+1]&&wlevel<6)
+		{
+			ACS_NamedExecuteAlways("ShowTutorial",0,1,0,0);
+			wlevel++;
+			//ACS_NamedExecute("Flash",0,0,0,0);
+
+			if(lump_name=="MAP1"&&wlevel==3)
+			{
+				//ACS_ExecuteAlways(254,0,4,1,0);
+				Delay(70);
+				If(wlevel==3)ACS_NamedExecute("RequestDispatcherMessage" ,0,1,0,0);
+			}
+
+		}
+
+	if(wanted < points[wlevel]/*&&wlevel>0*/)
+		{
+			wlevel--;
+
+			if(lump_name=="MAP1"&&wlevel<3)
+			{
+				If(wlevel==2)ACS_NamedExecute("RequestDispatcherMessage" ,0,2,0,0);
+			}
+				
+			SetActivator(1000,AAPTR_PLAYER1);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1001,AAPTR_PLAYER2);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1002,AAPTR_PLAYER3);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1003,AAPTR_PLAYER4);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1004,AAPTR_PLAYER5);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1005,AAPTR_PLAYER6);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1006,AAPTR_PLAYER7);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			SetActivator(1007,AAPTR_PLAYER8);
+			ACS_ExecuteAlways(254,0,ACS_NamedExecuteWithResult("GetSoundTestSong",0,0,0,0),0,0);
+			
+		}
+	
+	}
+}
+
+script "RandomizePN" (void)
+{
+	player = 1000 + Random(0, PlayerCount()-1);
+	
+	coords[0] = Random(-384.1,384.1);
+	if((coords[0]>=0.01&&coords[0]<ACS_NamedExecuteWithResult("ColorCoin",4,0,0,0)+0.1)||(coords[0]<0.01&&coords[0]>-ACS_NamedExecuteWithResult("ColorCoin",4,0,0,0)+0.1)) coords[0] = FixedMul(coords[0], 1.5)	;
+	
+	coords[1] = Random(-384.1,384.1);
+	if((coords[1]>=0.01&&coords[1]<ACS_NamedExecuteWithResult("ColorCoin",4,0,0,0)+0.1)||(coords[1]<0.01&&coords[1]>-ACS_NamedExecuteWithResult("ColorCoin",4,0,0,0)+0.1)) coords[1] = FixedMul(coords[1], 1.5);
+}
+
+script "GetWLevel" (void) { SetResultValue(wlevel); }
+
+script "SpawnForcedCops" OPEN
+{
+	int xdelay;
+
+	While(1)
+	{
+		{
+			Delay(5);
+			If(ThingCount(T_NONE,1008)<3)
+			{
+			Switch(wlevel)
+				{
+					Case 1:
+						if(GameSkill()==2)
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						if(GameSkill()>0)
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+					Break;
+					Case 2:
+						if(GameSkill()==2)	//Hard-only
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+							Delay(3);
+						}
+						if(GameSkill()>0)	//Normal and Hard
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+					Break;
+					Case 3:
+						if(GameSkill()==2)	//Hard-only
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+							Delay(3);
+						}
+						if(GameSkill()>0)	//Normal and Hard
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+					Break;
+					Case 4:
+						if(GameSkill()==2)	//Hard-only
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+							Delay(3);
+						}
+						if(GameSkill()>0)	//Normal and Hard
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+					Break;
+					Case 5:
+						if(GameSkill()==2)	//Hard-only
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop4",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+							Delay(3);
+						}
+						if(GameSkill()>0)	//Normal and Hard
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						If(CheckActorInventory(1000,"Key3")==0) SpawnForced("Cop1_Key",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+						Else SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+					Break;
+					Case 6:
+						if(GameSkill()==2)	//Hard-only
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+							Delay(3);
+						}
+						if(GameSkill()>0)	//Normal and Hard
+						{
+							ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+							SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+							Delay(3);
+						}
+						If(CheckActorInventory(1000,"Key3")==0) SpawnForced("Cop1_Key",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+						Else SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop1",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1008);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop3",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1009);
+						Delay(3);
+						ACS_NamedExecuteAlways("RandomizePN",0,0,0,0);
+						SpawnForced("Cop4",GetActorX(player)+coords[0],GetActorY(player)+coords[1],GetActorFloorZ(player),1010);
+					Break;
+				}
+				
+				//Music switch was originally here.
+			}
+		}
+		//Wait until almost all cops are dead before sending more in.
+	Until(ThingCount(T_NONE,1008)<1 + GameSkill()) { xdelay = 119; While(xdelay>0&&ThingCount(T_NONE,1008)>0) { xdelay--; Delay(1); If(wlevel>=3) ACS_ExecuteAlways(254,0,4,1,0); } Delay(1); }	
+	
+	//PrintBold(s:"REMAINING:", d:xdelay);
+	}
+
+}
+
+script "DisplayWL" ENTER
+{
+
+If(GetCVAR("sv_nomonsters")==TRUE)
+{	//If the player has momnsters turned off, respect that!
+	GiveActorInventory(1000, "Key3", 1);	//It'd make the first level "unwinnable by design", so give all players the green key.
+	GiveActorInventory(1001, "Key3", 1);
+	GiveActorInventory(1002, "Key3", 1);
+	GiveActorInventory(1003, "Key3", 1);
+	GiveActorInventory(1004, "Key3", 1);
+	GiveActorInventory(1005, "Key3", 1);
+	GiveActorInventory(1006, "Key3", 1);
+	GiveActorInventory(1007, "Key3", 1);
+}
+
+int btimer = 0;
+SetHUDSize(572,480,TRUE);	//Set the initial HUD size, assuming the player's playing with the status bar.
+SetFont("GTA_WOFF");
+While(1)
+	{
+	//wlevel = 6;
+	//wanted++;
+	Delay(1);
+	SetFont("GTA_WSOF");	//First draw the "off" stars.
+
+	if(wlevel>0)	//However, only dsplay the wanted level if the player(s) have a wanted level.
+		{
+		HUDMessageBold (s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 0.1, 431.2, 0.5);
+		HUDMessageBold (s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 24.1, 431.2, 0.5);
+		HUDMessageBold (s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 48.1, 431.2, 0.5);
+		HUDMessageBold (s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 72.1, 431.2, 0.5);
+		HUDMessageBold (s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 96.1, 431.2, 0.5);
+		HUDMessageBold (s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 120.1, 431.2, 0.5);
+
+		SetFont("GTA_WSON");
+		if(flash==false||(flash==true&&btimer>=8))
+			{
+			switch(wlevel)	//Make certain stars light up depending on your wanted level.
+				{
+				Case 6:
+				HUDMessageBold (s:"A";
+					HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 120.1, 431.2, 0.1);
+				Case 5:
+				HUDMessageBold (s:"A";
+					HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 96.1, 431.2, 0.1);
+				Case 4:
+				HUDMessageBold (s:"A";
+					HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 72.1, 431.2, 0.1);
+				Case 3:
+				HUDMessageBold (s:"A";
+					HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 48.1, 431.2, 0.1);
+				Case 2:
+				HUDMessageBold (s:"A";
+					HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 24.1, 431.2, 0.1);
+				Case 1:
+				HUDMessageBold (s:"A";
+					HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 0.1, 431.2, 0.1);
+				Break;
+				}
+			}
+		}
+
+	}
+}
+
+script "CopSpawned" (void) { Thing_ChangeTID(0,1008); }
