@@ -47,7 +47,7 @@ const char *GetVersionString();
 
 	//Currently based on https://github.com/coelckers/gzdoom/commit/f452184d823a8c8ba6c020bb8ddfca4096a7d805
 
-#define VERSIONSTR "v1.86"
+#define VERSIONSTR "v1.87"
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 1,8,9999,0
@@ -100,8 +100,8 @@ const char *GetVersionString();
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "Mary's Magical Adventure"
 #define GAMENAMELOWERCASE "Settings"
-#define FORUM_URL "http://forum.zdoom.org/"
-#define BUGS_FORUM_URL	"http://forum.zdoom.org/viewforum.php?f=2"
+#define FORUM_URL "...well, for ZDoom problems, http://forum.zdoom.org"
+#define BUGS_FORUM_URL	"...if you're absolutely sure Xane can fix this, send it to mailto:xanem1@gmail.com. Xane doesn't know C++ enough to fix source problems or random memory addresses, but he may fix problems related to the game itself"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME

@@ -1,6 +1,7 @@
 *		text=auto
 
 *.h		text
+*.acs		text
 *.c		text
 *.cc		text
 *.cpp		text
