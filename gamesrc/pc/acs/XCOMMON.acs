@@ -5111,6 +5111,7 @@ script "DemoTimer" OPEN
 
 script "TitleOverlay" (void)
 {
+	AmbientSound("misc/title",256);
 	int tkeyprompt_times = 0;
 	SetHUDSize(256,160,TRUE);
 	SetFont("M_DOOM");
