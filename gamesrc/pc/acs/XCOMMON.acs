@@ -5331,7 +5331,7 @@ While(1)
 		
 		If(airsupply[PN()]<=0) { force_death[PlayerNumber()] = TRUE; }
 		
-		if((abs(GetActorVelX(1000+PN()))>19.1||abs(GetActorVelY(1000+PN())>19.1)) && CheckInventory("RequestAnimation")!=1) GiveInventory("SpeedTrailX",1);
+		if(abs(GetActorVelX(1000+PN()))>19.1||abs(GetActorVelY(1000+PN())>19.1)) GiveInventory("SpeedTrailX",1);
 		Else TakeInventory("PowerSpeed",1);
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==FALSE)

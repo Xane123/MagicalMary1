@@ -3522,39 +3522,6 @@ script "Wand_Special" (int which)
 	Break;
 	}
 }
-
-Script "XaneAntiCheat" ENTER //XAC (Xane Anti-Cheat)
-{
-	int floorHeight;
-	While(1)
-	{
-		Delay(1);
-		While(GetCVAR("xane_allowstraferun")==FALSE)
-		{
-			Delay(1);
-			If(no_scripts[PlayerNumber()]==FALSE)
-			{
-				If((forward[PlayerNumber()]==2&&(left[PlayerNumber()]>0||right[PlayerNumber()]>0)) || (backward[PlayerNumber()]==2&&(left[PlayerNumber()]>0||right[PlayerNumber()]>0)))
-				{
-					//Player is pushing all of the required buttons and therefore must be straferunning; "Punish" them.
-					
-					floorHeight = GetActorZ(0) - GetActorFloorZ(0);
-					
-					If(floorHeight==0.0&&WaterLevel(0)<2)
-					{
-						ThrustThing(GetActorAngle(GetCurrentPlayerTID())-0.5>>8,1,0,GetCurrentPlayerTID());
-					}
-					Else If(floorHeight==0.0&&WaterLevel(0)>=2)
-					{
-						ThrustThing(GetActorAngle(GetCurrentPlayerTID())-0.5>>8,1,0,GetCurrentPlayerTID());
-						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,1,0,GetCurrentPlayerTID());
-					}
-				}
-			//TODO: Add backward equivalents; Players can still straferun backwards!
-			}
-		}
-	}
-}
 	//SOUND CHANNELS:
 	
 	//ITEM: Wind/item pickup
@@ -5330,9 +5297,6 @@ While(1)
 		Else airsupply[PN()] = 1050;
 		
 		If(airsupply[PN()]<=0) { force_death[PlayerNumber()] = TRUE; }
-		
-		if((abs(GetActorVelX(1000+PN()))>19.1||abs(GetActorVelY(1000+PN())>19.1)) && CheckInventory("RequestAnimation")!=1) GiveInventory("SpeedTrailX",1);
-		Else TakeInventory("PowerSpeed",1);
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==FALSE)
 		{
