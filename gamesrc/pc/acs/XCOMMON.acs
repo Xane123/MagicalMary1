@@ -21,7 +21,8 @@ world int 3:initial_music;	//This is set by areas and determines what music it w
 world int 4:world_info[];	//This holds the world number ([0]) and level number within that world ([1]) to form things like "1-1".
 
 world int 5:ss_returnlevel;	//What level to return to on request by certain scripts.
-//World variables 6 and 7 is availiable!
+world int 6:movement[];	//Movement registering; They come in the order forward, backward, left, right. 1 = low amount, 2= big amount. Increase by MAX_PlAYERS+PlayerNumber as with other scripts.
+//World variable 7 is availiable!
 world int 8:framecount;	//Current frame; Use for waiting for certain frames to do something.
 //World variable 9 is availiable!
 world int 10:ss_return_id;	//The checkpoint ID that the player will respawn from upon returning from a special stage.
@@ -36,14 +37,12 @@ global int 4:ss_position;	//Return map position for special stages. The player w
 //Global variable #5 is available.
 global bool 6:fade;	//Requested fade upon level transition.
 global int 7:completed_levels[];  //[0] increases as a counter; Any other array index is each level's completed percentage. 100% = completed.
-#define MAX_LEVELS 3 	//Not to be confused with TRANSITION_LEVELS or whatever, this is the max number of levels that completed levels will include. This doesn't include the counter, so increase by 1 when storing.
+#define MAX_LEVELS 4 	//Not to be confused with TRANSITION_LEVELS or whatever, this is the max number of levels that completed levels will include. This doesn't include the counter, so increase by 1 when storing.
 global int 8:curscore[];
 
 global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Only increase or decrease this variable, never forcibly set it.
 
-global bool 12:plsbonus;	//Whether transitioning from a previous level that is giving you score.
-
-//Global variables #9, #13, and #14 are available.
+//Global variables #12-#14 are available.
 
 global int 15:combo[];	//Current combo (successive kills). First MAX_PLAYERS is current, while second are decrease amounts.
 global int 16:lives;
@@ -2260,9 +2259,7 @@ While(1)
 int amb_current[MAX_PLAYERS];
 
 int checkpoint_id[9];				//TID of checkpoint to respawn at. 9 (array index 8) is for monsters.
-int check_seconds[MAX_PLAYERS];		//Timer minutes/seconds upon activating the checkpoint
-int check_tics[MAX_PLAYERS];		//Same for tics.
-int death_behavior[MAX_PLAYERS];	//What happens when the player loses all of their health. (0 = dies)
+bool death_behavior[MAX_PLAYERS];	//What happens when the player loses all of their health. (0 = dies)
 int check_ambience[MAX_PLAYERS];	//Ambience at checkpoint.
 int check_weather[MAX_PLAYERS];		//The weather set at the checkpoint.
 int check_music[MAX_PLAYERS];		//Music that should play when respawning at the checkpoint.
@@ -2499,9 +2496,6 @@ script "SetCheckpoint" (int spawn_tid, int set_angle)
 	if(set_angle) check_angle[PN()] = GetActorAngle(GetCurrentPlayerTID());
 	else check_angle[PN()] = -1;
 	
-	check_seconds[PN()] = seconds[PN()];
-	check_tics[PN()] = timer_tics;
-
 	checkpoint_id[PN()] = spawn_tid;
 	
 	Autosave();
@@ -2560,11 +2554,6 @@ script "LoadCheckpointInfo" (int deathx)
 	
 	ACS_NamedExecuteAlways("RequestAmbience",0,check_ambience[PN()],0,0);
 	ACS_ExecuteAlways(311,0,check_weather[PN()],0,0);
-	if(gamemode==0)
-	{
-		timer_tics = check_tics[PN()];
-		seconds[PN()] = check_seconds[PN()];
-	}
 }
 
 //This script determines whether an enemy is touching a "special plane" like water, a bottomless pit, or lava.
@@ -2665,7 +2654,6 @@ script "GiveWeapons" (int mode)
 //Mary's hammer and umbrella//
 //////////////////////////////
 
-bool mhammer_spinning[MAX_PLAYERS];	//AltFire spin status. Checked by MaryHammer.
 bool mhammer_spin_spd[MAX_PLAYERS];	//Current spinning speed.
 int walldetected[MAX_PLAYERS];
 bool flight_mode[MAX_PLAYERS];/* The current mode of umbrella flight.
@@ -2685,11 +2673,8 @@ Switch(mode)
 	
 	If(set==0)
 	{
-		mhammer_spinning[PN()] = FALSE;
 		ACS_NamedExecuteAlways("MaryHammer_DetermineDirection",0,0,0,0);
 	}
-	
-	If(set==1) mhammer_spinning[PN()] = FALSE;
 	
 	if(set==5) { flight_mod[PN()] = 1; set = 2; }
 	
@@ -2706,7 +2691,6 @@ Switch(mode)
 	
 	Break;
 	Case 1:	//Return a value.
-	if(set==0)SetResultValue(mhammer_spinning[PN()]);	//No longer used?
 	if(set==1)
 		{
 		If(abs(GetActorVelX(GetCurrentPlayerTID()))>6.0||abs(GetActorVelY(GetCurrentPlayerTID()))>6.0) SetResultValue(TRUE);
@@ -2715,8 +2699,6 @@ Switch(mode)
 	Break;
 	}
 }
-
-int mhammer_input[MAX_PLAYERS];
 
 int umbvel_raised[2] = { -4.25, -3.5 };
 int umbvel_lowered[2] = { -12.5, -10.75 };
@@ -2807,59 +2789,29 @@ flight_script_running[PN()] = FALSE;	//Now we're done flying!
 
 script "MaryHammer_DetermineDirection" (void)
 {
-
-While(CheckActorInventory(GetCurrentPlayerTID(),"MHammer_Active")==1)
+	mhammer_spin_spd[PN()] = -0.03;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	Delay(1);
+	mhammer_spin_spd[PN()] = -0.07;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	Delay(1);
+	mhammer_spin_spd[PN()] = -0.12;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	Delay(1);
+	mhammer_spin_spd[PN()] = -0.15;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	Delay(1);
+	
+	Until(CheckInventory("MaryHammer_MidAirDone"))
 	{
+		mhammer_spin_spd[PN()] += 0.003;
+		SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+		Delay(1);
 		
-	Delay(1);
-	
-	mhammer_spinning[PN()] = TRUE;
-	Terminate;
-	
+		if(mhammer_spin_spd[PN()]>-0.025) GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_MidAirDone",1);
 	}
-}
-
-script "MaryHammer_AltFireBehavior" ENTER
-{
-If(PlayerClass(PlayerNumber())==CHAR_XANE) Terminate;	//If this player is Xane, they can't use Mary's Hammer.
-While(1)
-	{
 	
-	Delay(1);
-	
-	if(mhammer_spinning[PN()] == TRUE)
-		{
-			mhammer_spin_spd[PN()] = -0.03;
-			SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
-			Delay(1);
-			mhammer_spin_spd[PN()] = -0.07;
-			SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
-			Delay(1);
-			mhammer_spin_spd[PN()] = -0.12;
-			SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
-			Delay(1);
-			mhammer_spin_spd[PN()] = -0.15;
-			SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
-			Delay(1);
-			
-			Until(CheckInventory("MaryHammer_MidAirDone"))
-			{
-				mhammer_spin_spd[PN()] += 0.003;
-				SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
-				Delay(1);
-				
-				if(mhammer_spin_spd[PN()]>-0.025)
-				{
-					mhammer_spinning[PN()] = 0;
-					GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_MidAirDone",1);
-				}
-			}
-			
-			SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
-			
-		}
-	
-	}
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
 }
 
 ///////////////////
@@ -2871,7 +2823,7 @@ While(1)
 
 int parts_spawned[MAX_PLAYERS];
 bool clawGrabbingWall = FALSE;
-int forward[MAX_PLAYERS], backward[MAX_PLAYERS], left[MAX_PLAYERS], right[MAX_PLAYERS], wjtics[MAX_PLAYERS];
+int wjtics[MAX_PLAYERS];
 script "ClawGenerate" (int player_number)	//Called by the "claw" to spawn parts behind it that the player will use when moving towards the end.
 {
 	int old_gravity,  play_x, play_y, play_z;	//Gravity before the claw activated.
@@ -2964,7 +2916,7 @@ script "ClawGrabWall" (void)
 {
 	int cx = GetActorX(0), cy = GetActorY(0), cz = GetActorZ(0), i = 70;
 	clawGrabbingWall = TRUE;
-	While(i>0) { SetActorProperty(0, APROP_Gravity, 0.0); If(backward[PlayerNumber()]>0) i = 0; SetActorPosition(0, cx, cy, cz, FALSE); i--; Delay(1); }
+	While(i>0) { SetActorProperty(0, APROP_Gravity, 0.0); If(movement[MAX_PLAYERS+PlayerNumber()]>0) i = 0; SetActorPosition(0, cx, cy, cz, FALSE); i--; Delay(1); }
 	SetActorProperty(0, APROP_Gravity, 1.0);
 	SetActorVelocity(0,0.0,0.0,0.0,FALSE,FALSE);
 	clawGrabbingWall = FALSE;
@@ -2987,7 +2939,7 @@ script "WJ_Button" ENTER
 {
 While(1)
 	{	
-	if(forward[PN()]>0&&speed_tics[PlayerNumber()]==0&&wjtics[PN()]<2) wjtics[PN()] = 2;
+	if(movement[PlayerNumber()]>0&&speed_tics[PlayerNumber()]==0&&wjtics[PN()]<2) wjtics[PN()] = 2;
 	
 	if(openInput[PlayerNumber()] & BT_USE&&wjtics[PlayerNumber()]<35) wjtics[PN()] = 35;
 	
@@ -3046,7 +2998,7 @@ While(1)
 		prevy[PN()] = GetActorVelY(0);
 		Delay(1);
 		
-		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 && (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0) )
+		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 /*&& (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0)*/ )
 			{	//Do one quick test for a wall...
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);
@@ -3274,24 +3226,24 @@ script "UpdateMovementDetection" ENTER
 {
 	While(1)
 	{
-		forward[PlayerNumber()] = 0;
-		backward[PlayerNumber()] = 0;
-		left[PlayerNumber()] = 0;
-		right[PlayerNumber()] = 0;
+		movement[PlayerNumber()] = 0;
+		movement[MAX_PLAYERS+PlayerNumber()] = 0;
+		movement[(MAX_PLAYERS*2)+PlayerNumber()] = 0;
+		movement[(MAX_PLAYERS*3)+PlayerNumber()] = 0;
 		
 		//Keyboard checks
-		If(openInput[PN()] & BT_FORWARD) { forward[PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) forward[PlayerNumber()] = 2; }
-		If(openInput[PN()] & BT_BACK) { backward[PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) backward[PlayerNumber()] = 2; }
-		If(openInput[PN()] & BT_MOVELEFT) { left[PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) left[PlayerNumber()] = 2; }
-		If(openInput[PN()] & BT_MOVERIGHT) { right[PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) right[PlayerNumber()] = 2; }
+		If(openInput[PN()] & BT_FORWARD) { movement[PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[PlayerNumber()] = 2; }
+		If(openInput[PN()] & BT_BACK) { movement[MAX_PLAYERS+PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[MAX_PLAYERS+PlayerNumber()] = 2; }
+		If(openInput[PN()] & BT_MOVELEFT) { movement[(MAX_PLAYERS*2)+PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[(MAX_PLAYERS*2)+PlayerNumber()] = 2; }
+		If(openInput[PN()] & BT_MOVERIGHT) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
 		
 		//Controller checks
-		If(forward[PN()]==0&&backward[PN()]==0&&left[PN()]==0&&right[PN()]==0)
+		If(movement[PlayerNumber()]==0&&movement[MAX_PLAYERS+PlayerNumber()]==0&&movement[(MAX_PLAYERS*2)+PlayerNumber()]==0&&movement[(MAX_PLAYERS*3)+PlayerNumber()]==0)
 		{
-			If(openInput[MAX_PLAYERS*2+PN()]>CONTROLLER_DEADZONE) { forward[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PN()]>CONTROLLER_RUNZONE) forward[PlayerNumber()] = 2; }
-			If(openInput[MAX_PLAYERS*2+PN()]<-(CONTROLLER_DEADZONE)) { backward[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PN()]<-(CONTROLLER_RUNZONE)) backward[PlayerNumber()] = 2; }
-			If(openInput[MAX_PLAYERS*3+PN()]>CONTROLLER_DEADZONE) { left[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PN()]>CONTROLLER_RUNZONE) left[PlayerNumber()] = 2; }
-			If(openInput[MAX_PLAYERS*3+PN()]<-(CONTROLLER_DEADZONE)) { right[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PN()]<-(CONTROLLER_RUNZONE)) right[PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*2+PN()]>CONTROLLER_DEADZONE) { movement[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PN()]>CONTROLLER_RUNZONE) movement[PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*2+PN()]<-(CONTROLLER_DEADZONE)) { movement[MAX_PLAYERS+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PN()]<-(CONTROLLER_RUNZONE)) movement[MAX_PLAYERS+PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*3+PN()]>CONTROLLER_DEADZONE) { movement[(MAX_PLAYERS*2)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PN()]>CONTROLLER_RUNZONE) movement[(MAX_PLAYERS*2)+PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*3+PN()]<-(CONTROLLER_DEADZONE)) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PN()]<-(CONTROLLER_RUNZONE)) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
 		}
 		
 		//Print(s:"FWD: ", d:forward[0], s:"\nBACK: ", d:backward[0], s:"\nL: ", d:left[0], s:"\nR: ", d:right[0]);
@@ -3315,8 +3267,6 @@ script "AddCPowerupTics" (int which)
 script 66 (int value) { detected[PN()] = value; }
 
 bool kirbydeath = false;
-int input[MAX_PLAYERS];
-int input_prev[MAX_PLAYERS];
 
 int flightrem[MAX_PLAYERS];
 bool kjumped[MAX_PLAYERS];
@@ -3341,19 +3291,19 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
   Restart;
   }
 
-  input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+  openInput[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
 
-  While(input[PN()] & BT_JUMP)	//If the player's holding jump, don't count it!
+  While(openInput[PN()] & BT_JUMP)	//If the player's holding jump, don't count it!
   {
   
-  if(no_scripts[PlayerNumber()] == FALSE) input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+  //if(no_scripts[PlayerNumber()] == FALSE) input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
   Delay(1);
   }
   
   Until(esc_loop != 0)
   {
-  if(no_scripts[PlayerNumber()] == FALSE) input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
-  if(input[PN()] & BT_JUMP) esc_loop = 1;
+  //if(no_scripts[PlayerNumber()] == FALSE) input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+  if(openInput[PN()] & BT_JUMP) esc_loop = 1;
   if(GetActorZ(0)-GetActorFloorZ(0) < 4.0) esc_loop = 2;
   Delay(1);
   }
@@ -3406,9 +3356,8 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
             Delay(1);
             }
 		
-		While(input[PN()] & BT_JUMP)
+		While(openInput[PN()] & BT_JUMP)
 		{
-		input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
 		Delay(1);
 		}
 
@@ -3534,7 +3483,7 @@ Script "XaneAntiCheat" ENTER //XAC (Xane Anti-Cheat)
 			Delay(1);
 			If(no_scripts[PlayerNumber()]==FALSE)
 			{
-				If((forward[PlayerNumber()]==2&&(left[PlayerNumber()]>0||right[PlayerNumber()]>0)) || (backward[PlayerNumber()]==2&&(left[PlayerNumber()]>0||right[PlayerNumber()]>0)))
+				If((movement[PlayerNumber()]==2&&(movement[(MAX_PLAYERS*2)+PlayerNumber()]>0||movement[(MAX_PLAYERS*3)+PlayerNumber()]>0)) || (movement[MAX_PLAYERS+PlayerNumber()]==2&&(movement[(MAX_PLAYERS*2)+PlayerNumber()]>0||movement[(MAX_PLAYERS*3)+PlayerNumber()]>0)))
 				{
 					//Player is pushing all of the required buttons and therefore must be straferunning; "Punish" them.
 					
