@@ -51,7 +51,7 @@ script "TitleCard" (void)
 				HUDMSG_FADEOUT, 0, CR_CREAM, 0.257-md,0.65, 3.5, 1.0, 1.0);   //Text (eg, "1-1")
 			Else { HUDMessage (s:"BOSS ", d:world_info[0];
 				HUDMSG_FADEOUT, 0, CR_CREAM, 0.39-md,0.65, 3.5, 1.0, 1.0); }   //Text (eg, "BOSS 1")
-			SetFont("TUT_TEXT");
+			SetFont("BIG_TEXT");
 			
 			HUDMessage (l:StrParam(s:"LEVELNAME_", d:GetLevelInfo(LEVELINFO_LEVELNUM)+1);
 				HUDMSG_FADEINOUT, 0, CR_BRICK, 0.175-md+(StrLen(StrParam(l:StrParam(s:"LEVELNAME_", d:GetLevelInfo(LEVELINFO_LEVELNUM)+1)))*0.016),0.75, 3.0, 0.5, 1.0, 1.0);   //Level name (LANGUAGE.enu)

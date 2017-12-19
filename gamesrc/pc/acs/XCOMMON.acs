@@ -1501,7 +1501,7 @@ While(1)
 			if(levelinfo[4]==levelinfo[5]) fcolors[1] = CR_GREEN;
 			if(levelinfo[4]<levelinfo[5])fcolors[1] = CR_WHITE;
 			
-			SetFont("SMALLFNT");
+			SetFont("BIG_TEXT");
 			SetHUDSize(640,420,0);
 			
 			if(levelinfo[1]!=0) HudMessage(s:"M: ", d:levelinfo[0], s:"/", d:levelinfo[1], s:" (", d:levelinfo[0], s:"%", d:levelinfo[1], s:"%)";
@@ -1575,7 +1575,7 @@ While(ltime_control!=TIME_STOP)	//time_pause is temporary; Time_stop is used whe
 		Else If(GetCVAR("screenblocks")<11&&gamemode==0)	//Status Bar
 		{
 			SetHUDSize(320,200,TRUE);
-			SetFont("SMALLFNT");
+			SetFont("BIG_TEXT");
 			If(seconds[PN()] % 60 >= 10)
 			{
 					HUDMessage (d:seconds[PN()] / 60,s:":",d:seconds[PN()] % 60;
@@ -4593,7 +4593,7 @@ script "ChangePlayerTIDs" enter
 
 	if(completed_levels[level[1]+1]==TRUE)	//Test to confirm if this works when 1-2 is finished.
 	{
-	SetFont("SMALLFNT");
+	SetFont("BIG_TEXT");
 	HUDMessage (l:"TXT_LVLCOMPLETE";
 		HUDMSG_FADEINOUT, 0, CR_GREEN, 0.15, 0.999, 3.0, 0.75, 0.75);
 	}
@@ -5045,7 +5045,7 @@ script "DemoTimer" OPEN
 				HUDMSG_PLAIN, 101, CR_UNTRANSLATED, 586.2,5.1, 4.0);	//Is 585 or 586 more square? Verify in the future.
 		}
 		
-		If(GameType()==GAME_DEMORECORD) { SetFont("SMALLFNT"); PrintBold(d:demo_seconds); }
+		If(GameType()==GAME_DEMORECORD) { SetFont("BIG_TEXT"); PrintBold(d:demo_seconds); }
 		Delay(35);
 		demo_seconds--;
 	}
@@ -5648,7 +5648,7 @@ for (int ms2 = -0.5; ms2 < 0; ms2 += 0.034) {
 
 FadeTo(254,254,254,1.0,0.1);
 
-SetFont("SMALLFNT");
+SetFont("BIG_TEXT");
 		ACS_ExecuteAlways(70,0,ACS_NamedExecuteWithResult("GetSSScore",0,0,0,0),0,0);
       HUDMessage (s:"TIME BONUS: ", d:ACS_NamedExecuteWithResult("GetSSScore",0,0,0,0);
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 0.5,0.7, 4.5,0.75,1.00);   //Player number
