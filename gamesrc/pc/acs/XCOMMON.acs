@@ -19,7 +19,7 @@
 
 //WORLD variables are only valid until the next level. Special Stages and the Small Hut don't reset them. Use these to let level scripts interact with global script variables.
 world int 0:ltime_control;	//Whether the timer should move as normal, pause, or stop for the rest of the level.
-world int 2:ss_number;	//What number this Special Stage is. Try to replace with LEVELINFO_SPECSTGNO.
+world int 2:ss_number;	//Whsat number this Special Stage is. Try to replace with LEVELINFO_SPECSTGNO.
 world int 3:initial_music;	//This is set by areas and determines what music it will play initially.
 world int 4:world_info[];	//This holds the world number ([0]) and level number within that world ([1]) to form things like "1-1".
 
@@ -3001,7 +3001,7 @@ While(1)
 		prevy[PN()] = GetActorVelY(0);
 		Delay(1);
 		
-		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 /*&& (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0)*/ )
+		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 && (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0) )
 			{	//Do one quick test for a wall...
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);

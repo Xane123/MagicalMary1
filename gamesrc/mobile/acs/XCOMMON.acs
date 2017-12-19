@@ -3001,7 +3001,7 @@ While(1)
 		prevy[PN()] = GetActorVelY(0);
 		Delay(1);
 		
-		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 /*&& (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0)*/ )
+		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 && (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0) )
 			{	//Do one quick test for a wall...
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);
