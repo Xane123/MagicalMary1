@@ -79,7 +79,8 @@ class SkyViewpoint : Actor
 	States
 	{
 		Spawn:
-			TNT1 A -1 NoDelay ACS_NamedExecute("MoveSkybox",0,0,0,0);
+			TNT1 A 0;
+			TNT1 A 0 ACS_NamedExecuteAlways("MoveSkybox",0,0,0,0);
 			Stop;
 	}
 	
