@@ -2,6 +2,9 @@
 #library "xglobal"
 #include "zcommon.acs"
 
+//WARNING: There's a limit of 128 variables outside of script scope per file!
+//XCOMMON, due to how messy of a big file it is, has used 108/128 variables, with 20 left! Use them wisely!
+
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
 
 //User keys: USER1 = Transform into super form, USER2 = Warp to Small Hut, USER3 = Restart run in other modes, USER4 = Empty
@@ -3266,11 +3269,7 @@ script "AddCPowerupTics" (int which)
 
 script 66 (int value) { detected[PN()] = value; }
 
-bool kirbydeath = false;
-
-int flightrem[MAX_PLAYERS];
-bool kjumped[MAX_PLAYERS];
-bool watertics[MAX_PLAYERS];
+//bool kjumped[MAX_PLAYERS];
 
 script 67 ENTER
 {
@@ -3326,7 +3325,7 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 				{
 					SetActorVelocity(GetCurrentPlayerTID(),GetActorVelX(GetCurrentPlayerTID()),GetActorVelY(GetCurrentPlayerTID()),10.625,FALSE,FALSE);
 					//SetActorVelocity(GetCurrentPlayerTID(),FixedMul(GetActorVelX(GetCurrentPlayerTID()),1.15),FixedMul(GetActorVelY(GetCurrentPlayerTID()),1.15),10.625,FALSE,FALSE);
-					kjumped[PN()] = 30;
+					//kjumped[PN()] = 30;
 					remjumps[PN()]--;
 					//meter[PN()] -= 20;
 					jumps[PN()] = 0;
@@ -3339,7 +3338,7 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
             {
 				GiveInventory("RequestAnimation",1);	//Force Mary into her Air Dash pose/state.
 				LocalAmbientSound("sonic/thok",127);
-				kjumped[PN()] = 70;
+				//kjumped[PN()] = 70;
 				hammermove[PN()] = 3;
 				jumps[PN()] = 0;
 				SetActorVelocity(GetCurrentPlayerTID(),0,0,0,FALSE,TRUE);
@@ -4134,7 +4133,7 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 			
 			if(type>=4)
 				{
-				kjumped[PN()] = 45;
+				//kjumped[PN()] = 45;
 				
 				SetActorAngle(0,angle);
 				
@@ -5337,7 +5336,7 @@ While(1)
 			spring[PN()] = FALSE;
 		}
 
-		If(PlayerClass(PN())==0) If(kjumped[PN()]>0) kjumped[PN()]--;
+		//If(PlayerClass(PN())==0) If(kjumped[PN()]>0) kjumped[PN()]--;
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"Armor")!=meter[PlayerNumber()])
 		{
