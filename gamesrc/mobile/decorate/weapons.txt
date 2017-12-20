@@ -2094,41 +2094,96 @@ SWDA A 1
 SWDA A 0 A_JumpIf(CallACS("CheckClawUse",0,0,0,0)==TRUE,"FireClaw")
 Goto Ready
 FireClaw:
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",8,"Player8")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",7,"Player7")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",6,"Player6")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",5,"Player5")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",4,"Player4")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",3,"Player3")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",2,"Player2")
-MHM1 L 0 A_JumpIfInventory("PlayerNumberX",1,"Player1")
-SWDA A 5 A_Log("Unknown player number!")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",8,"Player8A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",7,"Player7A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",6,"Player6A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",5,"Player5A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",4,"Player4A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",3,"Player3A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",2,"Player2A")
+MHM1 L 0 A_JumpIfInventory("PlayerNumberX",1,"Player1A")
+SWDA A 5 A_Log("Error: Player number was erased!")
 Goto Ready
-Player1:
+Player1A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player1B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player2A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player2B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player3A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player3B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player4A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player4B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player5A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player5B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player6A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player6B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player7A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player7B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player8A:
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
+SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player8B")
+SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
+Goto Ready
+Player1B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1000")
 Goto Ready
-Player2:
+Player2B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1001")
 Goto Ready
-Player3:
+Player3B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1002")
 Goto Ready
-Player4:
+Player4B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1003")
 Goto Ready
-Player5:
+Player5B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1004")
 Goto Ready
-Player6:
+Player6B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1005")
 Goto Ready
-Player7:
+Player7B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1006")
 Goto Ready
-Player8:
+Player8B:
+//SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 SWDA A 35 A_FireCustomMissile("Claw1007")
 Goto Ready
-
 WaitX:
 SWDA A 3
 SWDA A 0 A_ReFire("WaitX")
@@ -2324,6 +2379,75 @@ States
 Spawn:
 LASR E 0
 Goto See
+}
+}
+
+//Claw objects
+actor ClawCheck
+{
+Radius 2
+Height 4
+Speed 0
+Scale 1
+PROJECTILE
++MISSILE
+-SOLID
+var int user_velx;
+var int user_vely;
+var int user_velz;
+States
+{
+Spawn:
+TNT1 A 0
+TNT1 B 0 A_SetUserVar("user_velx",velx)
+TNT1 B 0 A_SetUserVar("user_vely",vely)
+TNT1 B 0 A_SetUserVar("user_velz",velz)
+TNT1 A 0 ACS_NamedExecute("ClawVerify",0,2,0,0)	//2 = Lock player in place temporarily.
+TNT1 A 0 A_TakeInventory("Variable1",20)
+TNT1 A 0 A_GiveInventory("Variable1",1)
+
+TNT1 A 0 A_GiveInventory("Variable1",1)
+TNT1 A 1 A_ChangeVelocity(user_velx, user_vely, user_velz, CVF_REPLACE)
+TNT1 A 0 A_GiveInventory("Variable1",1)
+TNT1 A 1 A_ChangeVelocity(user_velx, user_vely, user_velz, CVF_REPLACE)
+TNT1 A 0 A_GiveInventory("Variable1",1)
+TNT1 A 1 A_ChangeVelocity(user_velx, user_vely, user_velz, CVF_REPLACE)
+
+TNT1 B 0 A_SetUserVar("user_velx",user_velx/3)
+TNT1 B 0 A_SetUserVar("user_vely",user_vely/3)
+TNT1 B 0 A_SetUserVar("user_velz",user_velz/3)
+See:
+TNT1 A 0 A_GiveInventory("Variable1",1)
+TNT1 A 0 A_ChangeVelocity(user_velx, user_vely, user_velz, CVF_REPLACE)
+TNT1 A 1 A_JumpIfInventory("NoWall",1,"GiveToken")	//Yes, NoWall = a point was nearby, not the other way around here!
+TNT1 A 0 A_ChangeVelocity(user_velx, user_vely, user_velz, CVF_REPLACE)
+TNT1 A 0 A_JumpIfInventory("Variable1",20,"Death")
+Loop
+Death:
+TNT1 A 1 A_FadeOut(0.5,1)
+Loop
+GiveToken:
+TNT1 A 2 ACS_NamedExecute("ClawVerify",0,0,0,0)	//0 = Temporarily report valid hook spot to the claw.
+Goto FadeOut	
+}
+}
+
+actor ClawSpot 2019
+{
+Radius 16
+Height 16
+Scale 1.13
+-SOLID
++NOGRAVITY
++NODAMAGETHRUST
++INVULNERABLE
++NOINTERACTION
+States
+{
+Spawn:
+TEND C 0
+TEND C 1 A_RadiusGive("NoWall",28,RGF_MISSILES)
+Loop
 }
 }
 

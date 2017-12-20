@@ -100,8 +100,6 @@ Stop
 }
 }
 
-//#2019 is available!
-
 Actor PlantA 2020
 {
 Radius 16

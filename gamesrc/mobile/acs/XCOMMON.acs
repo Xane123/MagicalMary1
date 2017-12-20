@@ -1460,29 +1460,6 @@ While(1)
 	}
 }*/
 
-bool moveskybox = TRUE;	//Set this to FALSE to make this script stop moving the skybox viewpoint based on player 1's movement.
-script "MoveSkybox" (void)
-{	
-	Thing_ChangeTID(0, 615);
-	
-	Delay(3);
-	
-	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||GetLevelInfo(LEVELINFO_SKYMOVE_HORIZONTAL)==0||GetLevelInfo(LEVELINFO_SKYMOVE_VERTICAL)==0) Terminate;
-	SetActivator(1000, AAPTR_PLAYER1);
-	
-	int skybox_x, skybox_y, skybox_z;
-	skybox_x = GetActorX(615);
-	skybox_y = GetActorY(615);
-	skybox_z = GetActorZ(615);
-	
-	While(moveskybox)
-	{
-		SetActorPosition(615, skybox_x+(GetActorX(1000)/GetLevelInfo(LEVELINFO_SKYMOVE_HORIZONTAL)), skybox_y+(GetActorY(1000)/GetLevelInfo(LEVELINFO_SKYMOVE_HORIZONTAL)), skybox_z+(GetActorZ(1000)/GetLevelInfo(LEVELINFO_SKYMOVE_VERTICAL)), FALSE);
-		
-		Delay(1);
-	}
-}
-
 script "ShowHUDLInfo" ENTER
 {
 If(GameType()==GAME_DEMOREPLAY||GameType()==GAME_DEMORECORD) Terminate;

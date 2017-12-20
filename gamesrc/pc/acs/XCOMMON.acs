@@ -25,7 +25,7 @@ world int 4:world_info[];	//This holds the world number ([0]) and level number w
 
 world int 5:ss_returnlevel;	//What level to return to on request by certain scripts.
 world int 6:movement[];	//Movement registering; They come in the order forward, backward, left, right. 1 = low amount, 2= big amount. Increase by MAX_PlAYERS+PlayerNumber as with other scripts.
-//World variable 7 is availiable!
+world int 7:movesky[];	//[0] is horizontal skybox movement while [1] is vertical.
 world int 8:framecount;	//Current frame; Use for waiting for certain frames to do something.
 //World variable 9 is availiable!
 world int 10:ss_return_id;	//The checkpoint ID that the player will respawn from upon returning from a special stage.
@@ -1467,7 +1467,7 @@ script "MoveSkybox" (void)
 	
 	Delay(3);
 	
-	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||GetLevelInfo(LEVELINFO_SKYMOVE_HORIZONTAL)==0||GetLevelInfo(LEVELINFO_SKYMOVE_VERTICAL)==0) Terminate;
+	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||movesky[0]<=0||movesky[1]<=0) Terminate;
 	SetActivator(1000, AAPTR_PLAYER1);
 	
 	int skybox_x, skybox_y, skybox_z;
@@ -1477,7 +1477,7 @@ script "MoveSkybox" (void)
 	
 	While(moveskybox)
 	{
-		SetActorPosition(615, skybox_x+(GetActorX(1000)/GetLevelInfo(LEVELINFO_SKYMOVE_HORIZONTAL)), skybox_y+(GetActorY(1000)/GetLevelInfo(LEVELINFO_SKYMOVE_HORIZONTAL)), skybox_z+(GetActorZ(1000)/GetLevelInfo(LEVELINFO_SKYMOVE_VERTICAL)), FALSE);
+		SetActorPosition(615, skybox_x+(GetActorX(1000)/movesky[0]), skybox_y+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
 		
 		Delay(1);
 	}
@@ -2896,7 +2896,7 @@ script "ClawGenerate" (int player_number)	//Called by the "claw" to spawn parts 
 		}
 		
 		Delay(1);
-		If(abs(GetActorZ(0)-GetActorFloorZ(0))>48.5) ACS_NamedExecute("ClawGrabWall",0,0,0,0);
+		//If(abs(GetActorZ(0)-GetActorFloorZ(0))>48.5) ACS_NamedExecute("ClawGrabWall",0,0,0,0);
 	}
 	
 	If(old_gravity>0) SetActorProperty(0, APROP_Gravity, old_gravity);	//Restore the player's gravity.
@@ -2904,6 +2904,12 @@ script "ClawGenerate" (int player_number)	//Called by the "claw" to spawn parts 
 	//SetActivator(claw_tid, AAPTR_DEFAULT);	//Change to detect based on claw in the final.
 	Thing_Remove(claw_tid);	//Also, remove the claw.
 	
+	If(continue_x==TRUE)
+	{
+		SetActorVelocity(0, 0.0, 0.0, 16, FALSE, FALSE);
+		Delay(5);
+		ThrustThing(GetActorAngle(0)>>8, 6, FALSE, 0);
+	}
 	ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);	//Unlock the player.
 	parts_spawned[PlayerNumber()] = 0;	//Reset this or the claw will never function again!
 }
@@ -2915,7 +2921,7 @@ script "ClawCancel" (int claw_tid)
 	For(int clawparts = 1500+(MAX_CHAINS*PlayerNumber()); clawparts < 1500+(MAX_CHAINS*(PlayerNumber()+1)); clawparts++) Thing_Remove(clawparts);
 }
 
-script "ClawGrabWall" (void)
+/*script "ClawGrabWall" (void)
 {
 	int cx = GetActorX(0), cy = GetActorY(0), cz = GetActorZ(0), i = 70;
 	clawGrabbingWall = TRUE;
@@ -2923,9 +2929,33 @@ script "ClawGrabWall" (void)
 	SetActorProperty(0, APROP_Gravity, 1.0);
 	SetActorVelocity(0,0.0,0.0,0.0,FALSE,FALSE);
 	clawGrabbingWall = FALSE;
+}*/
+
+script "CheckClawUse" (void)
+{
+	SetResultValue(TRUE);	//Initially allow the claw, but then check for problems.
+	If(GetActorZ(0)-GetActorFloorZ(0)>0.01) { Log(s:"\c[Brick]The claw can't be used in the air."); LocalAmbientSound("misc/buzzer",255); SetResultValue(FALSE); }
+	Else If(abs(GetActorVelX(0))>2.5||abs(GetActorVelY(0))>2.5) { Log(s:"\c[Brick]The claw can't be used while moving."); LocalAmbientSound("misc/buzzer",255); SetResultValue(FALSE); }
 }
 
-script "CheckClawUse" (void) { If(GetActorZ(0)-GetActorFloorZ(0)<4.5||clawGrabbingWall==TRUE) SetResultValue(TRUE); Else SetResultValue(FALSE); }
+int claw_verify_tics = 0;
+
+script "ClawVerify" (int mode)
+{
+	//0: Verify attachment to a valid "hook" point
+	//1: Check whether said verification occurred
+	//2: Temporarily stop the player.
+	
+	Switch(mode)
+	{
+		Case 0: claw_verify_tics = 25; Break;
+		Case 1: If(claw_verify_tics>0) { SetResultValue(TRUE); } Else SetResultValue(FALSE); Log(d:claw_verify_tics, s:" tics"); Break;
+		Case 2:
+			SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
+			ACS_NamedExecute("PlayerMovement",0,TRUE,FALSE,0);	//Temporarily stop the player from moving.
+		Break;
+	}
+}
 
 script "GiveUpgrade" (int which)
 {
@@ -4244,7 +4274,7 @@ script "XaneDropDash" ENTER
 			Else
 			{
 				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { ACS_NamedExecute("LandingBounce",0,1,0,0); }
-				Else { Log(s:"\c[Brick]Drop Dashes can only be started in the air."); LocalAmbientSound("misc/buzzer",255);}
+				Else { Log(s:"\c[Brick]Drop Dashes can only be started in the air."); LocalAmbientSound("misc/buzzer",255); }
 			}
 		}
 		
@@ -4580,9 +4610,13 @@ script "ChangePlayerTIDs" enter
 		
 	ltime_control = TIME_PLAY;
 	framecount = 0;	//I'm paranoid of this value getting too high!
-	initial_music = 0;
+	
+	//Reset these level-specific variables just in case the script doesnt define them.
+	initial_music = 0;	//Initial song ID that will play when this area loads.
 	world_info[0] = 0;	//World number
 	world_info[1] = 0;	//Level number within world
+	movesky[0] = 0;	//How much less the skybox will move relative to the player. Higher values make it slower.
+	movesky[1] = 0; //The above value is horizontal, but this is vertical.
 	
 	Delay(2);	//Give the level two tics to set up the music variable.
 	
@@ -5160,6 +5194,8 @@ While(1)
 		
 		If(sdelay>0) sdelay--;
 		If(sdelay<0) sdelay = 0;
+		
+		If(claw_verify_tics>0) claw_verify_tics--;
 		//If(GetActorCeilingZ(0)-GetActorZ(0)<56.5&&GetActorVelZ(0)>1.25) { SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), -(GetActorVelZ(0))/2, FALSE, TRUE); PlaySound(GetCurrentPlayerTID(), "misc/hit_ceiling", CHAN_WEAPON, 0.8, FALSE, 0.8); }	//If the player went too close to the ceiling, make them hit their head on it!
 		
 		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
