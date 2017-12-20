@@ -2106,49 +2106,49 @@ SWDA A 5 A_Log("Error: Player number was erased!")
 Goto Ready
 Player1A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player1B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player2A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player2B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player3A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player3B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player4A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player4B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player5A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player5B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player6A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player6B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player7A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player7B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
 Player8A:
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
-SWDA A 5 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1440)	//A_FireCustomMissile("ClawCheck")
+SWDA A 2 A_FireBullets(0, 0, 1, (0), "ClawCheck", !FBF_USEAMMO|FBF_NORANDOM|FBF_NORANDOMPUFFZ, 1500)	//A_FireCustomMissile("ClawCheck")
 SWDA A 0 A_JumpIf(CallACS("ClawVerify",1,0,0,0)==TRUE,"Player8B")
 SWDA A 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE)
 Goto Ready
