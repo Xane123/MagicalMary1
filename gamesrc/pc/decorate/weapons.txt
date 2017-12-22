@@ -25,14 +25,14 @@ Loop
 }
 }
 
-actor Wand_IntroDone : Inventory { Inventory.MaxAmount 1 }
+actor WeaponIntroDone : Inventory { Inventory.MaxAmount 1 }
 actor Wand_StarTics : Inventory { Inventory.MaxAmount 7 }
 actor Wand_CancelMG : Inventory { Inventory.MaxAmount 1 }
 ACTOR Wand_MGShots : Inventory { Inventory.MaxAmount 20 }
 actor Wand_Type : Inventory { Inventory.MaxAmount 3 }
-actor MaryUmbrella_Intro : Inventory { Inventory.MaxAmount 3 }
 actor Hammer_SlamDamage : Inventory { Inventory.MaxAmount 4 }
 
+//Give two RequestAnimation items to make Mary get locked into a crying animation and to make Xane fire his claw. 
 actor HammerUpgrades : Inventory { Inventory.MaxAmount 4 }
 actor UmbrellaUpgrades : Inventory { Inventory.MaxAmount 2 }
 actor SwordUpgrades : Inventory { Inventory.MaxAmount 2 }
@@ -52,11 +52,11 @@ TNT1 A 0
 TNT1 A 0 ACS_NamedExecute("GotWeapon",0,3,TRUE,0)	//Mark the wand as gotten.
 TNT1 A 0 A_JumpIfInventory("Wand_Type",1,"Shield")
 //Flower intro
-WNFI A 0 A_JumpIfInventory("Wand_IntroDone",1,"FlowerReady")
+WNFI A 0 A_JumpIfInventory("WeaponIntroDone",1,"FlowerReady")
 WNFI DEF 2
 WNFI GHI 3
 WNFI JKLMNOOPQQQP 2
-WNFI P 0 A_GiveInventory("Wand_IntroDone",1)
+WNFI P 0 A_GiveInventory("WeaponIntroDone",1)
 FlowerReady:
 UMBR U 0 A_JumpIfInventory("RequestBall3",1,"ThrowBall3")
 UMBR U 0 A_JumpIfInventory("RequestBall2",1,"ThrowBall2")
@@ -65,11 +65,11 @@ WNFI A 2 A_WeaponReady
 Loop
 
 Shield:
-TNT1 A 0 A_JumpIfInventory("Wand_IntroDone",1,"ShieldReady")
+TNT1 A 0 A_JumpIfInventory("WeaponIntroDone",1,"ShieldReady")
 WNPI DEF 2
 WNPI GHI 3
 WNPI JKLMNOOPQQQP 2
-WNPI P 0 A_GiveInventory("Wand_IntroDone",1)
+WNPI P 0 A_GiveInventory("WeaponIntroDone",1)
 ShieldReady:
 UMBR U 0 A_JumpIfInventory("RequestBall3",1,"ThrowBall3")
 UMBR U 0 A_JumpIfInventory("RequestBall2",1,"ThrowBall2")
@@ -334,11 +334,11 @@ Goto ShieldEnd2
 AltFire:
 TNT1 A 0 A_JumpIfInventory("Wand_Type",1,"ShieldChange")
 
-WNFI BC 2 A_TakeInventory("Wand_IntroDone",1)	//Flower change
+WNFI BC 2 A_TakeInventory("WeaponIntroDone",1)	//Flower change
 WNSI Z 6 A_GiveInventory("Wand_Type",1)
 Goto Ready
 ShieldChange:
-WNPI BC 2 A_TakeInventory("Wand_IntroDone",1)	//Flower change
+WNPI BC 2 A_TakeInventory("WeaponIntroDone",1)	//Flower change
 WNHI Z 6 A_TakeInventory("Wand_Type",1)
 Goto Ready
 Select:
@@ -346,7 +346,7 @@ TNT1 A 0
 Goto Raise
 Deselect:
 "####" BC 2
-TNT1 A 0 A_TakeInventory("Wand_IntroDone",1)
+TNT1 A 0 A_TakeInventory("WeaponIntroDone",1)
 Goto Lower
 //Common code
 ThrowBall1:
@@ -886,7 +886,7 @@ WNHI P 2 ACS_NamedExecuteAlways("MaryHammer_AltFire",0,0,3,0)
 Goto ReadyX
 Deselect:
 WNHI BC 2
-TNT1 A 0 A_TakeInventory("Wand_IntroDone",1)
+TNT1 A 0 A_TakeInventory("WeaponIntroDone",1)
 Goto Lower
 //Common code
 ThrowBall1:
@@ -938,6 +938,9 @@ Ready:
 MHM1 A 0
 MHM1 A 0 ACS_NamedExecute("GotWeapon",0,2,TRUE,0)	//Mark the hammer as gotten.
 ReadyX:
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"ReadyX_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+ReadyX_Skip:
 MHM1 A 0 A_JumpIfInventory("JuiceBoxA",1,"Drink")
 MHM1 A 0 A_JumpIfInventory("onWater",1,"FloorCheck")
 MHM1 A 0 A_JumpIfInventory("Mary_LookAtHammer",1,"Look")
@@ -947,7 +950,7 @@ UMBR U 0 A_JumpIfInventory("RequestBallThrow",2,"ThrowBall2")
 UMBR U 0 A_JumpIfInventory("RequestBallThrow",1,"ThrowBall1")
 MHM1 A 1 A_WeaponReady
 MHM1 A 0 A_TakeInventory("MaryHammer_MidAirDone",1)
-Loop
+Goto ReadyX
 CheckFloor:
 MHM1 A 0 A_JumpIfInventory("FloorDetected",1,"RemoveMidAir") 
 Goto ReadyX
@@ -1014,7 +1017,13 @@ MHM1 J 0 A_FireCustomMissile("TriggerProjectile_Hammer",0,0,0,4,0,0)
 MHM1 J 0 ACS_NamedExecuteAlways("SpawnShockwave",0,1024,0,0)
 Goto FinishBounce
 HammerAttack:	//Main hammer attack
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"HammerAttack1_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+HammerAttack1_Skip:
 MHM1 BBCCDDDEEE 1
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"HammerAttack2_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+HammerAttack2_Skip:
 MHM1 FFGGHIJ 1
 MHM1 L 0 A_PlaySound("hammer/jump",CHAN_AUTO)
 MHM1 L 0 A_FireCustomMissile("MaryHammer_Explosion1",0,0,0,4,0,-70)
@@ -1084,6 +1093,9 @@ HammerJump1B:
 MHM1 D 0 A_JumpIf(z-floorz==0,"HammerJump2")
 Goto ReadyX
 HammerJump2:
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"HammerJump2_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+HammerJump2_Skip:
 MHM1 BDFH 1
 MHM1 H 0 A_ReFire("HammerJumpCancel")
 DenySpin:
@@ -1123,6 +1135,9 @@ Goto Spin
 Spin:
 MHM2 J 0 A_ChangeVelocity(0.0,0.0,velz,CVF_REPLACE)
 MHM2 J 0 A_JumpIfInventory("MaryHammer_MidAirDone",1,"StopSpin")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"Spin_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+Spin_Skip:
 MHM2 J 3 A_FireCustomMissile("MaryHammer_Explosion3",0,0,0,4,0,-20)
 MHM2 J 0 A_FireCustomMissile("TriggerProjectile",0,0,0,4,0,0)
 MHM2 J 0 A_GiveInventory("Variable5",1)	//Increase the variable.
@@ -1143,10 +1158,19 @@ MHM1 A 1
 Goto ReadyX
 Look:
 MHM1 OPQRSTUV 1
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"Look1_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+Look1_Skip:
 MHM1 W 35
 MHM1 XYZ 2
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"Look2_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+Look2Skip:
 MHM2 AB 2
 MHM2 C 17
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",3,"Look3_Skip")
+MHM1 A 0 A_JumpIfInventory("RequestAnimation",2,"StartCrying")
+Look3_Skip:
 MHM2 C 0 A_PlaySound("hammer/kiss",CHAN_VOICE,1.0,FALSE)	
 MHM1 ZYXW 1
 MHM1 VUTSRQPO 1
@@ -1165,6 +1189,7 @@ Goto Lower
 Spawn:
 WCUP A -1
 Stop
+
 //Common code
 ThrowBall1:
 TNT1 A 0
@@ -1206,6 +1231,24 @@ EnemyBounce:
 TNT1 A 0 A_FireCustomMissile("MaryBounce_Explosion",0,0,0,4,0,-70)
 TNT1 A 0 A_TakeInventory("BounceRequested",1)
 Goto ReadyX
+//Crying code from v1.4.5
+StartCrying:
+CRYF ABC 2
+CryLoop:
+CRYF D 0 A_JumpIfInventory("JuiceBoxA",1,"CDrink1")
+CRYF DEFGH 2
+CRYF D 0 A_JumpIfInventory("RequestAnimation",3,"Ready")
+CRYF D 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
+CryEnd:
+CRYF CBA 2
+Goto Ready
+CDrink1:
+CRYF CBA 2
+Drink1:
+JBF1 A 0
+JBF1 A 0 A_TakeInventory("JuiceBoxA",1)
+JBF1 A 2
+Goto JuiceBox
 }
 }
 
@@ -1224,8 +1267,8 @@ Weapon.BobStyle Alpha
 States
 {
 Ready:
-TNT1 A 0 A_JumpIfInventory("MaryUmbrella_Intro",1,"ReadyX")
-TNT1 A 0 A_GiveInventory("MaryUmbrella_Intro",1)
+TNT1 A 0 A_JumpIfInventory("WeaponIntroDone",1,"ReadyX")
+TNT1 A 0 A_GiveInventory("WeaponIntroDone",1)
 TNT1 A 1
 UMBR AB 2
 ReadyX:
@@ -1307,7 +1350,7 @@ TNT1 AAAAAAAA 0 A_Raise
 Loop
 Deselect:
 Lower:
-UMBR BA 3 A_TakeInventory("MaryUmbrella_Intro",1)
+UMBR BA 3 A_TakeInventory("WeaponIntroDone",1)
 DeselectLoop:
 TNT1 AAAA 0 A_Lower
 TNT1 A 3 A_Lower
@@ -1689,7 +1732,10 @@ Inventory.Icon "WEAP_SWD"
 States
 {
 Ready:
-SWDA A 2 A_WeaponReady(WRF_ALLOWRELOAD)
+SWDA A 0 A_JumpIfInventory("RequestAnimation",3,"ReadySkipCeck")
+SWDA A 0 A_JumpIfInventory("RequestAnimation",2,"CheckClaw")
+ReadySkipCheck:	//This is done for future compatibility.
+SWDA A 1 A_WeaponReady
 Loop
 Fire:
 SWDA BC 1
@@ -1998,6 +2044,7 @@ SWDA B 0 A_ChangeFlag("REFLECTIVE",FALSE)
 SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
 SWDA G 7
 SWDA RS 3
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 Goto Ready
 Fail2:
 SWDA B 0 A_ChangeFlag("INVULNERABLE",FALSE)
@@ -2005,6 +2052,7 @@ SWDA B 0 A_ChangeFlag("REFLECTIVE",FALSE)
 SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
 SWDA J 7
 SWDA TU 3
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 Goto Ready
 Fail3:
 SWDA B 0 A_ChangeFlag("INVULNERABLE",FALSE)
@@ -2012,6 +2060,7 @@ SWDA B 0 A_ChangeFlag("REFLECTIVE",FALSE)
 SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
 SWDA O 7
 SWDA PQ 3
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 Goto Ready
 Fail4:
 SWDA B 0 A_ChangeFlag("INVULNERABLE",FALSE)
@@ -2020,6 +2069,7 @@ SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
 SWDA G 7
 SWDA F 1 A_FireCustomMissile("XaneSword_Explosion1")	//Normal Swing
 SWDA EDDCB 1
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 Goto Ready
 
 AltFire:
@@ -2063,11 +2113,16 @@ SWDA D 0 A_JumpIfInventory("DisableAirDash",1,"ChargeSword2")
 SWDA D 0 A_ReFire("ChargeSword2")
 SWDA D 3
 SWDA CB 2
+
 Goto Ready
 ChargeSword2:
 SWDA CBSR 2
 SWDA R 0 A_JumpIfInventory("DisableAirDash",1,"ChargeSword3")
 SWDA R 0 A_ReFire("ChargeSword3")
+SWDA R 3
+SWDA DCB 2
+
+Goto Ready
 ChargeSword3:
 SWDA G 1
 SWDA R 0 A_JumpIfInventory("DisableAirDash",1,"ChargeSword3")
@@ -2086,10 +2141,12 @@ SWDA B 0 A_ChangeFlag("REFLECTIVE",FALSE)
 SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
 SWDA D 7
 SWDA CB 2
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 Goto Ready
 
-Reload:	//Xane's Claw. Keep consistent over all of Xane's weapons.
-SWDA A 0
+//Xane's Claw. Keep consistent over all of Xane's weapons.
+CheckClaw:
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 SWDA A 0 A_JumpIf(CallACS("CheckClawUse",0,0,0,0)==TRUE,"FireClaw")
 SWDA A 17
 Goto Ready
@@ -2192,6 +2249,7 @@ Goto Ready
 EnemyBounce:
 TNT1 A 0 A_FireCustomMissile("MaryBounce_Explosion",0,0,0,4,0,-70)
 TNT1 A 0 A_TakeInventory("BounceRequested",1)
+SWDA A 0 A_TakeInventory("RequestAnimation",5)
 Goto Ready
 
 Select:

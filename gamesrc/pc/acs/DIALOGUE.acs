@@ -1,0 +1,167 @@
+
+#library "XGLOBAL"
+#include "zcommon.acs"
+
+global bool 22:no_scripts[];	//Tells most standard scripts like Air Dashes not to run.
+global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice, 4: Wave-based battle
+global bool 5:dialogue_completed[];	//Whether a specific mid-level dialogue has been heard before. This prevents returning to an area only to hear speech again.
+
+int dialogue_id[3] = { -1, -1, 0 };	//The requested (0) and current (1) dialogue ID's. (2) is the player number who triggered it.
+//0: Mary's crying (special, dialogue to keep other dialogue fro cutting off the cry).
+//1: 1-1, #1 (Becoming wanted)
+//2: 1-1, #2 (Flipping switch in the HCPD)
+script "CheckDialogue" OPEN
+{
+	int waittics = 0, input_check, exvertical = 100;
+	
+	If(gamemode>0) Terminate;	//If not in the campaign, don't show tutorials.
+	
+	int text_current;	//Current text ID.
+	While(GetCVAR("snd_dialogue")==FALSE) 	Delay(35); //If they don't need help, wait until they request it.
+
+	While(1)
+	{
+		Until(dialogue_id[0]!=-1) Delay(1);	//Wait until a tutorial's requested by the game.
+		
+		If(GetCVAR("snd_dialogue")==FALSE) { dialogue_id[0] = -1; Restart; }	//If scripts are disabled or mid=level dialogue is disabled, reject this request.
+		
+		If(dialogue_completed[dialogue_id[0]]==FALSE)	//If this dialogue hasn't been heard before, prepare to play the dialogue.
+		{
+			if(GetCVAR("snd_dialogue")==TRUE)
+			{
+				if(dialogue_id[0]!=0) dialogue_completed[dialogue_id[0]] = TRUE;	//If not crying, mark this dialogue as "heard".
+				dialogue_id[1] = dialogue_id[0];	//Set the current tutorial ID.
+				dialogue_id[0] = -1;
+				
+				Switch(dialogue_id[1])
+				{
+					Case 0:	//Mary crying
+						PlaySound(1000+dialogue_id[2],"mary/cry",CHAN_7,1.0,FALSE,1.5);
+						GiveActorInventory(1000+dialogue_id[2],"RequestAnimation",2);	//Make Mary do the crying animation.
+						Delay(50);
+						TakeActorInventory(1000+dialogue_id[2],"RequestAnimation",25);	//Take away the inventory item(s) once this is done.
+					Break;
+					Case 1:
+						//If(PlayerClass(dialogue_id[2])==CHAR_MARY) PlaySound(1000+dialogue_id[2],"dialogue/mary/1-1/1",CHAN_7);
+						If(PlayerClass(dialogue_id[2])==CHAR_XANE) PlaySound(1000+dialogue_id[2],"dialogue/xane/1-1/1",CHAN_7);
+						Delay(100);
+					Break;					
+					Case 2:
+						If(PlayerClass(dialogue_id[2])==CHAR_MARY) PlaySound(1000+dialogue_id[2],"dialogue/mary/1-1/2",CHAN_7);
+						If(PlayerClass(dialogue_id[2])==CHAR_XANE) PlaySound(1000+dialogue_id[2],"dialogue/xane/1-1/2",CHAN_7);
+						Delay(150);
+					Break;			
+				}
+				
+				dialogue_id[1] = -1;	//After talking, resret thi ariabl to avoid attepting to say it again.
+				If(dialogue_id[0]==0) dialogue_id[0] = -1;	//If crying is (somehow) queued, cancel the request.
+			}		
+		}
+		Else dialogue_id[0] = -1;
+	}
+}
+
+script "PlayDialogue" (int id)
+{
+	if(GetCVAR("snd_dialogue")==FALSE) Terminate;
+	
+	dialogue_id[2] = PlayerNumber();	//Grab the activator's player number to determine the character's voice.
+	dialogue_id[0] = id;
+}
+
+/*script "ORIGINALCheckDialogue" OPEN
+{
+	int waittics = 0, input_check, exvertical = 100;
+	
+	If(gamemode>0) Terminate;	//If not in the campaign, don't show tutorials.
+	
+	int text_current;	//Current text ID.
+	While(GetCVAR("snd_dialogue")==FALSE) 	Delay(35); //If they don't need help, wait until they request it.
+
+	While(1)
+	{
+		SetHUDSize(640,400,TRUE);
+		
+		Until(dialogue_id[0]!=-1) Delay(17);	//Wait until a tutorial's requested by the game.
+		
+		If(GetCVAR("snd_dialogue")==FALSE) { dialogue_id[0] = -1; Restart; }	//If scripts are disabled or mid=level dialogue is disabled, reject this request.
+		
+		If(dialogue_completed[dialogue_id[0]]==FALSE)	//If this dialogue hasn't been heard before, prepare to play the dialogue.
+		{
+			if(GetCVAR("snd_dialogue")==TRUE)
+			{
+				if(dialogue_id!=0) dialogue_completed[dialogue_id[0]] = TRUE;	//If not crying, mark this dialogue as "heard".
+				dialogue_id[1] = dialogue_id[0];	//Set the current tutorial ID.
+				dialogue_id[0] = -1;
+				text_current = tutorial_text[dialogue_id[1]];
+				If(GetCVAR("xane_tutorialpause")==TRUE) no_scripts[PlayerNumber()] = TRUE;	//Prevent other special screens from appearing.
+				
+				If(GetCVAR("xane_tutorialpause")==FALSE&&(dialogue_id[1]==13||dialogue_id[1]==14||dialogue_id[1]==15||dialogue_id[1]==16)) { UseInventory("MaryHammer"); GiveInventory("Mary_LookAtHammer", 1); }
+				If(GetCVAR("xane_tutorialpause")==FALSE&&(dialogue_id[1]==19||dialogue_id[1]==20)) UseInventory("MaryUmbrella");
+			}
+			
+			If(GetCVAR("xane_tutorialpause") && ( GetCVAR("snd_dialogue") || GetCVAR("xane_tutorialvoices") ) ) ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,TRUE,TRUE);
+			If(GetCVAR("xane_tutorialpause") && ( GetCVAR("snd_dialogue") || GetCVAR("xane_tutorialvoices") ) ) FadeTo(96, 72, 48, 0.5, 1.0);
+			If(GetCVAR("snd_dialogue")) SetFont("TUTO_BOX");
+			If(GetCVAR("snd_dialogue"))
+			{
+				If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(s:"A";
+					HUDMSG_FADEINOUT, 10, CR_UNTRANSLATED, 320.4, 200.0, 60.0, 1.0, 0.05); }
+				Else { HUDMessageBold(s:"A";
+					HUDMSG_FADEINOUT, 10, CR_UNTRANSLATED, 320.4, 275.0, 60.0, 1.0, 0.05); }
+			}
+				
+			While(text_current<tutorial_text[dialogue_id[1]]+tutorial_length[dialogue_id[1]])
+			{
+				If(GetCVAR("snd_dialogue")) SetFont("3DLETTER");
+				If(GetCVAR("snd_dialogue"))
+				{
+					If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(l:StrParam(s:"TUT", d:text_current);
+						HUDMSG_PLAIN|HUDMSG_LOG, 11, CR_YELLOW, 320.4, 200.0, 10.01); }
+					Else  { HUDMessageBold(l:StrParam(s:"TUT", d:text_current);
+						HUDMSG_PLAIN|HUDMSG_LOG, 11, CR_YELLOW, 320.4, 275.0, 10.01); }
+				}
+				
+				If(GetCVAR("snd_dialogue"))
+				{
+					Delay(17);
+					input_check = GetPlayerInput(0, INPUT_BUTTONS);
+					
+					Until(waittics>=333||input_check & BT_USE) { SetFont("UBUTTON1"); If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(l:StrParam(s:"A"); HUDMSG_PLAIN, 0, CR_YELLOW, 650.4, 225.0, 0.08); } Else { HUDMessageBold(l:StrParam(s:"A"); HUDMSG_PLAIN, 0, CR_YELLOW, 650.4, 300.0, 0.08); } input_check = GetPlayerInput(0, INPUT_BUTTONS); waittics++; Delay(1); }
+					
+					waittics = 0;
+				}
+				text_current++;
+				input_check = 0;
+			}
+				
+			If(GetCVAR("xane_tutorialpause") && ( GetCVAR("snd_dialogue") || GetCVAR("xane_tutorialvoices") ) ) ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
+			If(GetCVAR("xane_tutorialpause") && ( GetCVAR("snd_dialogue") || GetCVAR("xane_tutorialvoices") ) ) FadeTo(0, 0, 0, 0.0, 1.0);
+			If(GetCVAR("snd_dialogue")) SetFont("TUTO_BOX");
+			If(GetCVAR("snd_dialogue"))
+				{
+					If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(s:"A";
+						HUDMSG_FADEOUT, 10, CR_UNTRANSLATED, 320.4, 200.0, 0.0, 1.0); }
+					Else { HUDMessageBold(s:"A";
+						HUDMSG_FADEOUT, 10, CR_UNTRANSLATED, 320.4, 275.0, 0.0, 1.0); }
+				}
+			
+			If(GetCVAR("snd_dialogue")) text_current--;	//Go back to the previous message before fading out the text.
+			If(GetCVAR("snd_dialogue")) SetFont("3DLETTER");
+			If(GetCVAR("snd_dialogue"))
+				{
+					If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(l:StrParam(s:"TUT", d:text_current);
+						HUDMSG_FADEOUT, 11, CR_YELLOW, 320.4, 200.0, 0.01); }
+					Else { HUDMessageBold(l:StrParam(s:"TUT", d:text_current);
+						HUDMSG_FADEOUT, 11, CR_YELLOW, 320.4, 275.0, 0.01); }
+				}
+			If(GetCVAR("xane_tutorialpause")==FALSE) no_scripts[PlayerNumber()] = FALSE;	//Allow other screens.
+			ChangeCamera(0,1,0);	//If something changed the camera view for this tutorial, switch it back to the player's camera.
+			If(tutorial_showmsg[dialogue_id[1]]>0) { ACS_NamedExecuteAlways("ShowSTutMessage",0,tutorial_showmsg[dialogue_id[1]],0,0); }
+			
+			If(GetCVAR("xane_tutorialpause")==TRUE&&(dialogue_id[1]==13||dialogue_id[1]==14||dialogue_id[1]==15||dialogue_id[1]==16)) { UseInventory("MaryHammer"); GiveInventory("Mary_LookAtHammer", 1); }
+			If(GetCVAR("xane_tutorialpause")==TRUE&&(dialogue_id[1]==19||dialogue_id[1]==20)) UseInventory("MaryUmbrella");
+		}
+		Else dialogue_id[0] = -1;
+	}
+}*/

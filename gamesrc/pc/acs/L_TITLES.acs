@@ -63,6 +63,7 @@ script "TitleCard" (void)
 
 script "SmallTitle" (int number)
 {
+	SetFont("BIG_TEXT");	//This ensures both the comptuer and mobile versions of MMA will use the same big font.
 	int lvl_temp = level[1]+1;
 	if(lvl_temp>200) lvl_temp -= 200;
 	

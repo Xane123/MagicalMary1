@@ -13,10 +13,6 @@
 #define TIME_PAUSE 1
 #define TIME_STOP -1
 
-#define CHAR_MARY 0
-#define CHAR_XANE 1
-#define CHAR_SCALETEST 2
-
 //WORLD variables are only valid until the next level. Special Stages and the Small Hut don't reset them. Use these to let level scripts interact with global script variables.
 world int 0:ltime_control;	//Whether the timer should move as normal, pause, or stop for the rest of the level.
 world int 2:ss_number;	//Whsat number this Special Stage is. Try to replace with LEVELINFO_SPECSTGNO.
@@ -37,7 +33,7 @@ world int 13:last_ground_position[];	//The last XYZ coordinates each player was 
 global int 2:score[];
 global int 3:cgem_count;	//Chaos Bridges count
 global int 4:ss_position;	//Return map position for special stages. The player will be teleported to 1100 * (this + 1) + PlayerNumber().
-//Global variable #5 is available.
+//global bool 5:dialogue_completed[];	//See DIALOGUE.acs for this global variable.
 global bool 6:fade;	//Requested fade upon level transition.
 global int 7:completed_levels[];  //[0] increases as a counter; Any other array index is each level's completed percentage. 100% = completed.
 #define MAX_LEVELS 4 	//Not to be confused with TRANSITION_LEVELS or whatever, this is the max number of levels that completed levels will include. This doesn't include the counter, so increase by 1 when storing.
@@ -69,6 +65,7 @@ global bool 26:event_completed[];	//Whether the FMV with this ID has run. It wil
 global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane). This is synced between all players. Sword upgrades are planned.
 global bool 28:special_id[];	//An array determining whether a player picked up a special item or entered a certain special stage entrance. See the line below this one for the current highest ID.
 //The highest current special ID is 3.
+
 //global bool 29:tutorial_completed[];	//See TUTORIAL.acs for this global variable.
 global int 30:weapons[];	//What weapons any player has used, skipping slot 1's weapon. Use GotWeapon with arg0 (argument 1) set to the slot number of a weapon the player picks up.
 global int 31:total_coins;	//How many coins the player has collected to be spent.
@@ -4254,11 +4251,36 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 	}
 }
 
-int tics_boost;	//How many tics until Xane's current boost is cancelled. Push use two times to start one.
+int sadness;	//This increases each USE tap.
+script "MaryCry" ENTER	//Yep, Mary's crying will return...with way more control! Push/tap USE to build up sadness!
+{
+	If(PlayerClass(PlayerNumber())!=CHAR_MARY) Terminate;	//If not Mary, disable crying.
+	While(1)
+	{
+		If(sadness>-7 && framecount % 2 == 0) sadness--;
+		
+		Print(s:"Awaiting button use!", d:sadness);
+		If(OpenInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE && sadness > -42)
+		{	//Sadness being -42 disables crying.
+			sadness += 5;
+			If(sadness>=30) { sadness = -42; ACS_NamedExecute("PlayDialogue",0,0,0,0); Delay(50); sadness = -7; }
+			Else If(sadness>=24) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup4", CHAN_VOICE, 1.0, FALSE, 1.25);
+			Else If(sadness>=16) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup3", CHAN_VOICE, 1.0, FALSE, 1.2);
+			Else If(sadness>=8) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup2", CHAN_VOICE, 1.0, FALSE, 1.15);
+			Else If(sadness>=0) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup1", CHAN_VOICE, 1.0, FALSE, 1.1);
+		}
+		
+		While(openInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE) { Print(s:"Waitin' fer ya!", d:sadness); Delay(1); If(sadness>-7 && framecount % 2 == 0) sadness--; }
+
+		Delay(1);
+	}
+}
+
+int tics_boost;	//How many tics until Xane's current Drop Dash attempt is cancelled. Push use two times to start one.
 
 script "XaneDropDash" ENTER
 {
-	If(PlayerClass(PlayerNumber())!=CHAR_XANE) Terminate;	//If not Xane, get rid of boosting.
+	If(PlayerClass(PlayerNumber())!=CHAR_XANE) Terminate;	//If not Xane, get rid of the Drop Dash.
 	While(1)
 	{
 		//Don't allow Drop Dashes if scripts are disabled or stuck to a wall.
@@ -4274,7 +4296,7 @@ script "XaneDropDash" ENTER
 			Else
 			{
 				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { ACS_NamedExecute("LandingBounce",0,1,0,0); }
-				Else { Log(s:"\c[Brick]Drop Dashes can only be started in the air."); LocalAmbientSound("misc/buzzer",255); }
+				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { Log(s:"Shoulda worked!"); GiveInventory("RequestAnimation",2); }	//Crying item for Xane uses the claw.
 			}
 		}
 		
@@ -4313,7 +4335,7 @@ script "LandingBounce" (int mode)
 	{	//If doing a "Drop Dash", prevent another one from being queued up. The other script checks for one of these variables.
 		//no_scripts[PlayerNumber()] = TRUE;
 		no_movement[PlayerNumber()] = 140;
-		PlaySound(0,"wand/charge",CHAN_BODY,1.0,FALSE);
+		PlaySound(0,"xane/dropdash1",CHAN_VOICE,1.0,FALSE);
 		GiveInventory("DisableAirDash",1);	//Re-use Mary's inventory item Xane never uses to make the sword lock up.
 	}
 	
@@ -4362,7 +4384,7 @@ script "LandingBounce" (int mode)
 		If(temp_fspeed<-40) divide_by = 3;
 		//Print(s:"DIVIDE! ", d:divide_by, s:"\nFSPEED: ", d:temp_fspeed, s:"\nLOCK TIME: ", d:CONST_BOOST_TICS*2);
 		SetActorVelocity(0,0.0,0.0,0.0,FALSE,FALSE);	//Stop the player before boosting them!
-		PlaySound(0,"sonic/thok",CHAN_BODY,1.0,FALSE);
+		PlaySound(0,"xane/dropdash2",CHAN_VOICE,1.0,FALSE);	//PlaySound(0,"sonic/thok",CHAN_VOICE,1.0,FALSE);
 		SetPlayerProperty(FALSE,ON,PROP_TOTALLYFROZEN);
 		//hammermove[PN()] = 35;
 		ThrustThing(GetActorAngle(0)>> 8,15,0,0);	//Barely push the player then...
@@ -5093,7 +5115,7 @@ script "DemoTimer" OPEN
 
 script "TitleOverlay" (void)
 {
-	AmbientSound("misc/title",256);
+	PlaySound(1000,"misc/title_name", CHAN_BODY|CHAN_NOPAUSE);
 	int tkeyprompt_times = 0;
 	SetHUDSize(256,160,TRUE);
 	SetFont("M_DOOM");
@@ -5111,7 +5133,7 @@ script "TitleOverlay" (void)
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 256.0,200.0, 0.01, 1.0, 1.0);
 		Delay(70);
 		tkeyprompt_times++;
-		PrintBold(d:tkeyprompt_times);
+		If(tkeyprompt_times==1) PlaySound(1000,"misc/title_begin", CHAN_BODY|CHAN_NOPAUSE);
 	}
 }
 
