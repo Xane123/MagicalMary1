@@ -571,7 +571,7 @@ Stop
 }
 }
 
-actor SISL
+actor FloatingGround
 {
 +NOGRAVITY
 +SOLID
@@ -942,7 +942,7 @@ Stop
 }
 }
 
-actor SoapBoxFrameBottom	//Leftovers after soap box explodes, used to make glass disappear.
+actor SoapBoxFrameBottom	//Leftovers after soap box explodes, used to make its glass disappear.
 {
 Radius 16
 Height 16
@@ -982,6 +982,25 @@ SOAP HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 FadeOut:
 SOAP H 1 { A_SetScale(scalex-0.005); A_FadeOut(0.006); }
 Loop
+}
+}
+
+Actor DrillEnd 468
+{
+Radius 12
+Height 24
+Scale 2
++SOLID
++NOGRAVITY
++NODAMAGETHRUST
++NOBLOOD
+//$Title Drill End
+//$Category decoration/Hell City
+States
+{
+Spawn:
+JUNK C -1
+Stop
 }
 }
 

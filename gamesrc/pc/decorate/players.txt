@@ -13,7 +13,7 @@ actor SSRequiredCoins : Inventory { Inventory.MaxAmount 999 }	//How many coins a
 
 //THis inventory item makes the player character jump to a certain animation/state.
 //1 - Ability (Air Dash for Mary, nothing for Xane yet.)
-//2 - Crying
+//2 - Crying (Mary)/Claw (Xane)
 actor RequestAnimation : Inventory { Inventory.MaxAmount 5 }
 
 actor WallCheck
@@ -515,8 +515,8 @@ ACTOR LGirlPlayer : DoomPlayer
 	Loop
 	
   CryLoop:
-	GIRL P 1 A_SpawnItemEx("MaryTear",8,0,32,0,Random(-5,5),Random(2,4))
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
+	MARY P 1 A_SpawnItemEx("MaryTear",8,0,32,0,Random(-5,5),Random(2,4))
+	MARY M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
 	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
 	Goto See
 

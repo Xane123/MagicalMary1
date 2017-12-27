@@ -1736,7 +1736,7 @@ SWDA A 0 A_JumpIfInventory("RequestAnimation",3,"ReadySkipCeck")
 SWDA A 0 A_JumpIfInventory("RequestAnimation",2,"CheckClaw")
 ReadySkipCheck:	//This is done for future compatibility.
 SWDA A 1 A_WeaponReady
-Loop
+Goto Ready
 Fire:
 SWDA BC 1
 SWDA D 2

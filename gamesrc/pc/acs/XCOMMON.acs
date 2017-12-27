@@ -2537,7 +2537,7 @@ script "LoadCheckpointInfo" (int deathx)
 	If(deathx==TRUE) lives--;	//If dying, take away a life.
 	
 	if(checkpoint_id[PN()]==0) { checkpoint_id[PN()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
-	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) Teleport(checkpoint_id[PN()],0,FALSE);	//After teleporting, load all info saved at the checkpoint!
+	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PN()],0,FALSE); Log(s:"No proper detection!"); }	//After teleporting, load all info saved at the checkpoint!
 	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) Teleport(checkpoint_id[PN()],0,FALSE); SetActorAngle(0, last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]); }
 	
 	combo[PN()] = 0;
@@ -4259,7 +4259,6 @@ script "MaryCry" ENTER	//Yep, Mary's crying will return...with way more control!
 	{
 		If(sadness>-7 && framecount % 2 == 0) sadness--;
 		
-		Print(s:"Awaiting button use!", d:sadness);
 		If(OpenInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE && sadness > -42)
 		{	//Sadness being -42 disables crying.
 			sadness += 5;
@@ -4270,7 +4269,7 @@ script "MaryCry" ENTER	//Yep, Mary's crying will return...with way more control!
 			Else If(sadness>=0) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup1", CHAN_VOICE, 1.0, FALSE, 1.1);
 		}
 		
-		While(openInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE) { Print(s:"Waitin' fer ya!", d:sadness); Delay(1); If(sadness>-7 && framecount % 2 == 0) sadness--; }
+		While(openInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE) { Delay(1); If(sadness>-7 && framecount % 2 == 0) sadness--; }
 
 		Delay(1);
 	}
@@ -4296,7 +4295,7 @@ script "XaneDropDash" ENTER
 			Else
 			{
 				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { ACS_NamedExecute("LandingBounce",0,1,0,0); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { Log(s:"Shoulda worked!"); GiveInventory("RequestAnimation",2); }	//Crying item for Xane uses the claw.
+				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { TakeInventory("RequestAnimation",25); GiveInventory("RequestAnimation",2); }	//Crying item for Xane uses the claw.
 			}
 		}
 		
@@ -4850,7 +4849,7 @@ Else SetResultValue(FALSE);
 
 script "WarpToHut" (void)
 {
-	If(StrParam(n:PRINTNAME_LEVEL)=="MAP1"||ACS_NamedExecuteWithResult("CheckSpecialStage",FALSE,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE||GetActorZ(0)-GetActorFloorZ(0)>8.25||WaterLevel(0)>2||CheckActorFloorTexture(0, "SPEC_SKY")) { Log(s:"\c[Brick]You can't warp at the moment."); LocalAmbientSound("misc/buzzer",255); Terminate; }
+	If(StrParam(n:PRINTNAME_LEVEL)=="AREA1"||ACS_NamedExecuteWithResult("CheckSpecialStage",FALSE,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE||GetActorZ(0)-GetActorFloorZ(0)>8.25||WaterLevel(0)>2||CheckActorFloorTexture(0, "SPEC_SKY")) { Log(s:"\c[Brick]You can't warp at the moment."); LocalAmbientSound("misc/buzzer",255); Terminate; }
 	Else
 	{
 		PlaySound(0, "misc/teleport_fast", CHAN_AUTO|CHAN_NOPAUSE, 0.75, FALSE);

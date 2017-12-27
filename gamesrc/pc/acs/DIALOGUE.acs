@@ -10,6 +10,7 @@ int dialogue_id[3] = { -1, -1, 0 };	//The requested (0) and current (1) dialogue
 //0: Mary's crying (special, dialogue to keep other dialogue fro cutting off the cry).
 //1: 1-1, #1 (Becoming wanted)
 //2: 1-1, #2 (Flipping switch in the HCPD)
+//3: 1-2, #1 (Seeing it turned night)
 script "CheckDialogue" OPEN
 {
 	int waittics = 0, input_check, exvertical = 100;
@@ -41,7 +42,7 @@ script "CheckDialogue" OPEN
 						Delay(50);
 						TakeActorInventory(1000+dialogue_id[2],"RequestAnimation",25);	//Take away the inventory item(s) once this is done.
 					Break;
-					Case 1:
+					Case 1:	//1-1
 						//If(PlayerClass(dialogue_id[2])==CHAR_MARY) PlaySound(1000+dialogue_id[2],"dialogue/mary/1-1/1",CHAN_7);
 						If(PlayerClass(dialogue_id[2])==CHAR_XANE) PlaySound(1000+dialogue_id[2],"dialogue/xane/1-1/1",CHAN_7);
 						Delay(100);
@@ -49,6 +50,11 @@ script "CheckDialogue" OPEN
 					Case 2:
 						If(PlayerClass(dialogue_id[2])==CHAR_MARY) PlaySound(1000+dialogue_id[2],"dialogue/mary/1-1/2",CHAN_7);
 						If(PlayerClass(dialogue_id[2])==CHAR_XANE) PlaySound(1000+dialogue_id[2],"dialogue/xane/1-1/2",CHAN_7);
+						Delay(150);
+					Break;			
+					Case 3:	//1-2
+						If(PlayerClass(dialogue_id[2])==CHAR_MARY) PlaySound(1000+dialogue_id[2],"dialogue/mary/1-2/1",CHAN_7);
+						If(PlayerClass(dialogue_id[2])==CHAR_XANE) PlaySound(1000+dialogue_id[2],"dialogue/xane/1-2/1",CHAN_7);
 						Delay(150);
 					Break;			
 				}
