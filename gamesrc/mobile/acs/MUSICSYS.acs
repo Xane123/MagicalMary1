@@ -181,14 +181,13 @@ script "FadeMusic" (int speed, int fade_in_music, int id)	//arg3, id, is for for
 {
 	int volume;
 	
-	Log(s:"Got the request, ya!");
 	If(fade_in_music==FALSE)
 	{
-		volume = 0.99;
+		if(GetCVAR("snd_musicvolume")>0) volume = 0.99;
+		else volume = 0.01;	//If music volume is 0, it causes lag for unknown reasons. Let's make that only happen once.
 		
 		While(volume > 0)
 		{
-			PrintBold(f:volume, s:" is the volume.");
 			if(speed<=0) volume -= 0.03;
 			if(speed>0) volume -= 0.02;
 			SetMusicVolume(volume);
@@ -204,11 +203,12 @@ script "FadeMusic" (int speed, int fade_in_music, int id)	//arg3, id, is for for
 	}
 	Else
 	{
-		volume = 0.01;
+		if(GetCVAR("snd_musicvolume")>0) volume = 0.01;
+		else volume = 0.99;	//If music volume is 0, it causes lag for unknown reasons. Let's make that only happen once.
+		
 		
 		While(volume < 1.0)
 		{
-			PrintBold(s:"Fade in happens as well!\nCurrent volume: ", f:volume);
 			volume += 0.02;
 			SetMusicVolume(volume);
 			Delay(1);

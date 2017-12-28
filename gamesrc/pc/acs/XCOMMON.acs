@@ -27,7 +27,7 @@ world int 8:framecount;	//Current frame; Use for waiting for certain frames to d
 world int 10:ss_return_id;	//The checkpoint ID that the player will respawn from upon returning from a special stage.
 world int 11:OpenInput[];	//Curent player input; 0-7 = Current, 8-15 = Previous.
 //World variable 12 is availiable!
-world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PN()] = X, [MAX_PLAYERS+PN()] = Y, [MAX_PLAYERS*2+PN()] = Z.
+world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PN()] = X, [MAX_PLAYERS+PN()] = Y, [MAX_PLAYERS*2+PN()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PN()] is supposedly used for jump-through platforms.
 
 //GLOBAL variables are always valid, no matter how many levels the player goes through.
 global int 2:score[];
@@ -1474,6 +1474,8 @@ script "MoveSkybox" (void)
 	
 	While(moveskybox)
 	{
+		If(movesky[0]==0) movesky[0] = 16;	//Prevent division by zero by setting these to a slow-moving number like 16.
+		If(movesky[1]==0) movesky[1] = 16;
 		SetActorPosition(615, skybox_x+(GetActorX(1000)/movesky[0]), skybox_y+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
 		
 		Delay(1);
@@ -1482,7 +1484,7 @@ script "MoveSkybox" (void)
 
 script "ShowHUDLInfo" ENTER
 {
-If(GameType()==GAME_DEMOREPLAY||GameType()==GAME_DEMORECORD) Terminate;
+If(GetCVAR("cl_demo")==TRUE) Terminate;
 int fcolors[3] = { -1, -1, -1 };
 While(1)
 	{
@@ -1940,19 +1942,19 @@ if(reward_lives>0) ACS_NamedExecuteAlways("GiveExtraLife",0,reward_lives,0,0);
 	if(monsters==100&&secrets==100)
 	{
 		PlaySound(GetCurrentPlayerTID(),"announcer/rating3",CHAN_WEAPON|CHAN_UI|CHAN_NOPAUSE,1.0);
-		PrintBold(s:"AREA RESULTS:\n\nMONSTERS: ", d:monsters, s:"%\nSECRETS: ", d:secrets, s:"\n\nPERFECT!");
+		PrintBold(s:"AREA RESULTS:\n\nMONSTERS: ", d:monsters, s:"%\nSECRETS: ", d:secrets, s:"%\n\nPERFECT!");
 		completed_levels[0]++;
 		completed_levels[level[1]] = 300;
 	}
 	Else If(monsters+secrets>=100)
 	{
 		PlaySound(GetCurrentPlayerTID(),"announcer/rating2",CHAN_WEAPON|CHAN_UI|CHAN_NOPAUSE,1.0);
-		PrintBold(s:"AREA RESULTS:\n\nMONSTERS: ", d:monsters, s:"%\nSECRETS: ", d:secrets, s:"\n\nGOOD ENOUGH.");
+		PrintBold(s:"AREA RESULTS:\n\nMONSTERS: ", d:monsters, s:"%\nSECRETS: ", d:secrets, s:"%\n\nGOOD ENOUGH.");
 		completed_levels[0]++;
 		completed_levels[level[1]] = monsters+secrets;
 	}
 	
-	Else { PlaySound(GetCurrentPlayerTID(),"announcer/rating1",CHAN_WEAPON|CHAN_UI|CHAN_NOPAUSE); PrintBold(s:"AREA RESULTS:\n\nMONSTERS: ", d:monsters, s:"%\nSECRETS: ", d:secrets, s:"\n\nBETTER LUCK NEXT TIME..."); }
+	Else { PlaySound(GetCurrentPlayerTID(),"announcer/rating1",CHAN_WEAPON|CHAN_UI|CHAN_NOPAUSE); PrintBold(s:"AREA RESULTS:\n\nMONSTERS: ", d:monsters, s:"%\nSECRETS: ", d:secrets, s:"%\n\nBETTER LUCK NEXT TIME..."); }
 }
 
 Script "ExitTransition" (void)
@@ -2258,14 +2260,14 @@ While(1)
 
 int amb_current[MAX_PLAYERS];
 
-int checkpoint_id[9];				//TID of checkpoint to respawn at. 9 (array index 8) is for monsters.
+int checkpoint_id[MAX_PLAYERS+1];	//TID of checkpoint to respawn at. 9 (array index 8) is for monsters.
 bool death_behavior[MAX_PLAYERS];	//What happens when the player loses all of their health. (0 = dies)
 int check_ambience[MAX_PLAYERS];	//Ambience at checkpoint.
 int check_weather[MAX_PLAYERS];		//The weather set at the checkpoint.
 int check_music[MAX_PLAYERS];		//Music that should play when respawning at the checkpoint.
 int check_angle[MAX_PLAYERS];		//The angle a player faced when setting a checkpoint if that argument was set.
-int check_specbehav[MAX_PLAYERS];	//How the invisible special plane is treated. (0: Water, 1: Bottomless Pit, 2: Lava)
-int check_specheight[MAX_PLAYERS];	//The height of the invisible plane.
+int check_specbehav[MAX_PLAYERS+1] = { 1, 1, 1, 1, 1, 1, 1, 1, 1 };	//How the invisible special plane is treated. (0: Water, 1: Bottomless Pit, 2: Lava)
+int check_specheight[MAX_PLAYERS+1] = { -1024, -1024, -1024, -1024, -1024, -1024, -1024, -1024, -1024 };	//The height of the invisible plane.
 int check_deathbehav[MAX_PLAYERS];	//Each player's "death behavior" at the last checkpoint.
 int check_windspeed[MAX_PLAYERS];	//How powerful the wind is. Wind pulls players and precipitation around.
 int check_wind_dir[MAX_PLAYERS];	//Where the wind is blowing. By default, it moves through a list.
@@ -2466,9 +2468,12 @@ script "EnemyAutoJump" (int avoid, int dodges, int ticdelay)
 			If((CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4"))&&CheckInventory("Variable3")) { TakeInventory("Variable3",1); SetActorState(0, "Pain.Stun"); }
 			If(ACS_NamedExecuteWithResult("DetermineAutoJump",avoid,0,0,0)==TRUE&&dodged<dodges)
 			{
-				If(CheckInventory("Projectile1")) Log(s:"Weak projectile detected."); TakeInventory("Projectile1",1);
-				If(CheckInventory("Projectile2")) Log(s:"Strong projectile detected."); TakeInventory("Projectile2",1);
-				If(CheckInventory("ProjectilePlayers")) Log(s:"Player detected!"); TakeInventory("ProjectilePlayers",1);
+				If(CheckInventory("Projectile1"))		//Log(s:"Weak projectile detected.");
+				TakeInventory("Projectile1",1);
+				If(CheckInventory("Projectile2"))		//Log(s:"Strong projectile detected.");
+				TakeInventory("Projectile2",1);
+				If(CheckInventory("ProjectilePlayers"))	//Log(s:"Player detected!");
+				TakeInventory("ProjectilePlayers",1);
 				If(SetActorState(0, "Dodge")==0) { Delay(1); SetActorState(0, "Dodge"); }
 				dodged++;
 				just_dodged = TRUE;	//Mark this enemy as dodged.
@@ -2493,7 +2498,11 @@ script "DetermineAutoJump" (int avoid_carry, int dodges_carry)
 script "SetCheckpoint" (int spawn_tid, int set_angle)
 {
 	If(checkpoint_id[PN()]==spawn_tid) Terminate;
-	if(set_angle) check_angle[PN()] = GetActorAngle(GetCurrentPlayerTID());
+	if(set_angle) //check_angle[PN()] = GetActorAngle(GetCurrentPlayerTID());
+	{
+		If(LineSide()==LINE_FRONT) check_angle[PlayerNumber()] = -1;
+		Else check_angle[PlayerNumber()] = GetActorAngle(spawn_tid) + 0.5;
+	}
 	else check_angle[PN()] = -1;
 	
 	checkpoint_id[PN()] = spawn_tid;
@@ -2538,7 +2547,8 @@ script "LoadCheckpointInfo" (int deathx)
 	
 	if(checkpoint_id[PN()]==0) { checkpoint_id[PN()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
 	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PN()],0,FALSE); Log(s:"No proper detection!"); }	//After teleporting, load all info saved at the checkpoint!
-	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) Teleport(checkpoint_id[PN()],0,FALSE); SetActorAngle(0, last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]); }
+	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) { Teleport(checkpoint_id[PN()],0,FALSE); tp_to_last_ground_position[PlayerNumber()] = FALSE; } }
+	If(tp_to_last_ground_position[PlayerNumber()]==TRUE) SetActorAngle(0, last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]);	//If returning from a Special Stage or Small Hut, make the player face the correct position!
 	
 	combo[PN()] = 0;
 	meter[PN()] = 0;
@@ -2554,6 +2564,7 @@ script "LoadCheckpointInfo" (int deathx)
 	
 	ACS_NamedExecuteAlways("RequestAmbience",0,check_ambience[PN()],0,0);
 	ACS_ExecuteAlways(311,0,check_weather[PN()],0,0);
+	tp_to_last_ground_position[PlayerNumber()] = FALSE;	//Turn this of to prevent any glitches with later checkpoints.
 }
 
 //This script determines whether an enemy is touching a "special plane" like water, a bottomless pit, or lava.
@@ -2814,10 +2825,9 @@ script "MaryHammer_DetermineDirection" (void)
 	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
 }
 
-///////////////////
-//XANE'S "Q-CLAW"//
-///////////////////
-
+///////////////
+//XANE'S CLAW//
+///////////////
 
 #define MAX_CHAINS 50
 
@@ -2830,8 +2840,8 @@ script "ClawGenerate" (int player_number)	//Called by the "claw" to spawn parts 
 	play_x = GetActorX(1000+player_number);
 	play_y = GetActorY(1000+player_number);
 	play_z = GetActorZ(1000+player_number);
-	if(clawGrabbingWall) { ACS_NamedTerminate("ClawGrabWall",0); clawGrabbingWall = FALSE; }	//This script breaks claw functionality.
-	else old_gravity = GetActorProperty(0, APROP_Gravity);
+	//if(clawGrabbingWall) { ACS_NamedTerminate("ClawGrabWall",0); clawGrabbingWall = FALSE; }	//This script breaks claw functionality.
+	/*else*/ old_gravity = GetActorProperty(0, APROP_Gravity);
 	
 	SetActorPosition(1000+player_number, play_x, play_y, play_z, FALSE);
 	SetActorVelocity(1000+player_number, 0.001, 0.001, 0.001, FALSE, FALSE);
@@ -2887,7 +2897,7 @@ script "ClawGenerate" (int player_number)	//Called by the "claw" to spawn parts 
 		{
 			If(clawparts_follow<1500+(25*(player_number))+(parts_spawned[PlayerNumber()]-1)) { SetActorPosition(0, GetActorX(clawparts_follow), GetActorY(clawparts_follow), GetActorZ(clawparts_follow), FALSE); SetActorAngle(0, GetActorAngle(clawparts_follow)); }
 			Else If(enemy==TRUE) { GiveInventory("BounceRequested",1); }
-			If(clawparts_follow<1500+(25*(player_number))+(parts_spawned[PlayerNumber()])) ThrustThing(GetActorAngle(0) >> 8, 4, TRUE, 0);	//If on the last chain set, send the player towards the wall they SHOULD be facing.
+			//If(clawparts_follow<1500+(25*(player_number))+(parts_spawned[PlayerNumber()])) ThrustThing(GetActorAngle(0) >> 8, 4, TRUE, 0);	//If on the last chain set, send the player towards the wall they SHOULD be facing.
 			Thing_Remove(clawparts_follow);
 			Delay(1);
 		}
@@ -2903,11 +2913,21 @@ script "ClawGenerate" (int player_number)	//Called by the "claw" to spawn parts 
 	
 	If(continue_x==TRUE)
 	{
-		SetActorVelocity(0, 0.0, 0.0, 16, FALSE, FALSE);
-		Delay(5);
-		ThrustThing(GetActorAngle(0)>>8, 6, FALSE, 0);
+		SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
+		ThrustThingZ(0, 15, FALSE, TRUE);
+		Delay(1);
+		ThrustThingZ(0, 12, FALSE, TRUE);
+		Delay(1);
+		ThrustThingZ(0, 10, FALSE, TRUE);
+		Delay(1);
+		ThrustThingZ(0, 9, FALSE, TRUE);
+		Delay(1);
+		ThrustThingZ(0, 8, FALSE, TRUE);
+		Delay(2);
+		ThrustThing(GetActorAngle(0)>>8, 7, FALSE, 0);
 	}
 	ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);	//Unlock the player.
+	//hammermove[PlayerNumber()] = 35;
 	parts_spawned[PlayerNumber()] = 0;	//Reset this or the claw will never function again!
 }
 
@@ -3020,7 +3040,7 @@ While(1)
 		
 		walldetected[PN()] = FALSE;
 		
-		Until(GetActorZ(0)-GetActorFloorZ(0)>24.1)	{ If(walljumping[PN()]>0) walljumping[PN()]--; If(hammermove[PN()]>0) hammermove[PN()]--; Delay(1);	}
+		Until(GetActorZ(0)-GetActorFloorZ(0)>24.1&&hammermove[PlayerNumber()]==0) Delay(1);
 
 		Until(walldetected[PN()]==TRUE || GetActorZ(0)-GetActorFloorZ(0)<12.1 || GetActorProperty(0,APROP_Waterlevel)>0)
 		{
@@ -3033,7 +3053,7 @@ While(1)
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);
 			
-			If(walljumping[PN()]>0) walljumping[PN()]--; If(hammermove[PN()]>0) hammermove[PN()]--;
+			If(walljumping[PN()]>0) walljumping[PN()]--;
 			
 			Delay(2);	//Wait at least two tics; One tic is not enough to prevent two false positives.
 			
@@ -3363,7 +3383,7 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 		}
 		if(detected[PN()]==2 && (PlayerClass(PlayerNumber())==CHAR_MARY||PlayerClass(PlayerNumber())==CHAR_SCALETEST) )	//Air Dash
             {
-				GiveInventory("RequestAnimation",1);	//Force Mary into her Air Dash pose/state.
+				GiveInventory("Animation1",1);	//Force Mary into her Air Dash pose/state.
 				LocalAmbientSound("sonic/thok",127);
 				//kjumped[PN()] = 70;
 				hammermove[PN()] = 3;
@@ -4295,7 +4315,7 @@ script "XaneDropDash" ENTER
 			Else
 			{
 				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { ACS_NamedExecute("LandingBounce",0,1,0,0); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { TakeInventory("RequestAnimation",25); GiveInventory("RequestAnimation",2); }	//Crying item for Xane uses the claw.
+				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { TakeInventory("Animation2",1); GiveInventory("Animation2",1); }	//Animation #2 for Xane uses the claw.
 			}
 		}
 		
@@ -4975,7 +4995,7 @@ script "CheckSpecialStage" (int mode)
 			SetResultValue(ss_number-1);
 		Break;
 		Case 2:	//Whether this is a special area like the small hut
-			if(GetLevelInfo(LEVELINFO_WORLDNUMBER)==1&&GetLevelInfo(LEVELINFO_WORLDLEVEL)==1&&ss_position==3) SetResultValue(TRUE);
+			if(world_info[0]==1&&world_info[1]==1&&ss_position==3) SetResultValue(TRUE);
 			else SetResultValue(FALSE);
 		Break;
 
@@ -5046,7 +5066,7 @@ int democam_tics;	//How many tics until the current demo camera reverts to the f
 int democam_tid;	//The thing ID of the last camera activated, used to deactivate it later.
 script "DemoCamera" (int tid, int seconds_democam, int condition)
 {
-	If(GameType()!=GAME_DEMOREPLAY&&GetCVAR("xane_democameras")==FALSE) Terminate;
+	If(GetCVAR("cl_demo")==FALSE) Terminate;
 	
 	If(condition==0 ||
 	(condition==1 && GetActorZ(0)-GetActorFloorZ(0)<8.0) ||															//1: on ground
@@ -5061,34 +5081,15 @@ script "DemoCamera" (int tid, int seconds_democam, int condition)
 	}
 }
 
-/*script "RenderSmallCamTexture" OPEN
-{
-	//If(GetCVAR("xane_democameras")==FALSE) Terminate;
-	
-	Delay(2);
-	SpawnForced("UnknownInvisible",0,0,0,999,0);
-	
-	Delay(1);
-	SetCameraToTexture(999, "DUMMYTXT", 90);
-	
-	While(1)
-	{
-		SetActorPosition(999, GetActorX(1000), GetActorY(1000), GetActorZ(1000), FALSE);
-		SetActorAngle(999, GetActorAngle(1000));
-		SetActorPitch(999, GetActorPitch(1000));
-		Delay(1);
-	}
-}*/
-
 script "DemoTimer" OPEN
 {
-	If(GameType()!=GAME_DEMORECORD&&GameType()!=GAME_DEMOREPLAY) Terminate;
+	If(GetCVAR("cl_demo")==FALSE) Terminate;
 	int demo_seconds = 30;
 	int lump_name2 = StrParam(n:PRINTNAME_LEVEL);
 
 	While(demo_seconds>0)
 	{
-		If(GameType()==GAME_DEMOREPLAY&&demo_seconds % 2 == 0&&lump_name2 != "INTRO" && lump_name2 != "TITLE")
+		If(GetCVAR("cl_demo")==TRUE&&demo_seconds % 2 == 0&&lump_name2 != "INTRO" && lump_name2 != "TITLE")
 		{
 			SetHUDSize(1024,640,TRUE);
 			SetFont("TITLEFNT");
@@ -5100,16 +5101,16 @@ script "DemoTimer" OPEN
 				HUDMSG_PLAIN, 101, CR_UNTRANSLATED, 586.2,5.1, 4.0);	//Is 585 or 586 more square? Verify in the future.
 		}
 		
-		If(GameType()==GAME_DEMORECORD) { SetFont("BIG_TEXT"); PrintBold(d:demo_seconds); }
+		If(GetCVAR("cl_demo")==TRUE) { SetFont("BIG_TEXT"); PrintBold(d:demo_seconds); }
 		Delay(35);
 		demo_seconds--;
 	}
 	
-	If(GameType()==GAME_DEMORECORD) PrintBold(s:"Wait for fade...");
+	If(GetCVAR("cl_demo")==TRUE) PrintBold(s:"Wait for fade...");
 	important_fade[0] = TRUE;
 	FadeTo(0,0,0,1.0,1.0);
 	Delay(35);
-	If(GameType()==GAME_DEMORECORD) PrintBold(s:"NOW LAND IT!");
+	If(GetCVAR("cl_demo")==TRUE) PrintBold(s:"NOW LAND IT!");
 }
 
 script "TitleOverlay" (void)
@@ -5122,7 +5123,7 @@ script "TitleOverlay" (void)
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 128.0,40.0, 28.0, 1.0, 1.0);	
 	SetHUDSize(1024,640,FALSE);
 	SetFont("3DLETTER");
-	HUDMessageBold(s:"(C)2017 Xane Corp. Version 1.86";
+	HUDMessageBold(s:"(C)2017 Xane Corp. Version 1.88";
 		HUDMSG_FADEINOUT, 0, CR_WHITE, 1236.2,638.2, 28.0, 1.0, 1.0);
 
 	SetHUDSize(512,320,TRUE);
@@ -5132,7 +5133,7 @@ script "TitleOverlay" (void)
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 256.0,200.0, 0.01, 1.0, 1.0);
 		Delay(70);
 		tkeyprompt_times++;
-		If(tkeyprompt_times==1) PlaySound(1000,"misc/title_begin", CHAN_BODY|CHAN_NOPAUSE);
+		If(tkeyprompt_times==1) PlaySound(1000,"misc/title_begin", CHAN_VOICE|CHAN_NOPAUSE);
 	}
 }
 
@@ -5143,15 +5144,11 @@ script "UpdateMiscellaneous" ENTER  //Armor is the "combo meter". This script up
 bool wl;
 int wind_reduction;
 int pushvels[3];	//Calculated wind X/Y velocities based on the wind_reduction variable.
-int map_tics = 140;	//Four seconds of map time allowed.
-int max_map_tics[4] = { 350, 245, 105, 245 };	//10, 6, 3, 6 (last is other game modes, identical to normal)
 framecount = 0;
-
-If(GameType()==GAME_DEMOREPLAY||GameType()==GAME_DEMORECORD) Line_SetBlocking(615,BLOCKF_PLAYERS,0);	//If in a demo, lines tagged #615 will behave as force fields.
 
 While(1)
 	{
-		If(GameType()==GAME_DEMOREPLAY||GameType()==GAME_DEMORECORD)
+		If(GetCVAR("cl_demo")==TRUE)
 		{
 			if(framecount % 4 == 1) SetActorProperty(1000, APROP_Health, 100);
 			
@@ -5165,7 +5162,7 @@ While(1)
 			
 		}
 		
-		If((GameType()==GAME_DEMOREPLAY||GetCVAR("xane_democameras")==TRUE)&&democam_tics>0)
+		If(GetCVAR("cl_demo")==TRUE&&democam_tics>0)
 		{
 			democam_tics--;
 			if(democam_tics==0) { ChangeCamera(0, TRUE, FALSE); If(democam_tid>0) Thing_Deactivate(democam_tid); }	//Revert the demo player's camera to the first-person camera view.
@@ -5191,7 +5188,7 @@ While(1)
 		
 		If(pushvels[2]==FALSE) SetActorVelocity(0, pushvels[0]+boost_properties[MAX_PLAYERS+PlayerNumber()], pushvels[1]+boost_properties[(MAX_PLAYERS*2)+PlayerNumber()],0,TRUE,TRUE); //Move the player with the wind and boost panels.
 		Else SetActorVelocity(0, pushvels[0]+(boost_properties[MAX_PLAYERS+PlayerNumber()]/16), pushvels[1]+(boost_properties[(MAX_PLAYERS*2)+PlayerNumber()]/16),0,TRUE,TRUE);
-		
+			
 		if(boost_properties[PlayerNumber()]>0) boost_properties[PlayerNumber()]--;
 		Else { boost_properties[MAX_PLAYERS+PlayerNumber()] = 0; boost_properties[(MAX_PLAYERS*2)+PlayerNumber()] = 0; }
 		
@@ -5199,12 +5196,13 @@ While(1)
 		
 		if(PlayerNumber()==0) framecount++;
 		
-		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)<8.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE&&CheckActorFloorTexture(0, "SPECTS07")==FALSE&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
+		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)==0.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE/*&&CheckActorFloorTexture(0, "SPECTS07")==FALSE*/&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
 		{
 			last_ground_position[PlayerNumber()] = GetActorX(0);
 			last_ground_position[MAX_PLAYERS+PlayerNumber()] = GetActorY(0);
 			last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()] = GetActorZ(0)+8.0;
 			last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()] = GetActorAngle(0);
+			//Print(s:"X: ", d:last_ground_position[PlayerNumber()] >> 16, s:"\nY: ", d:last_ground_position[MAX_PLAYERS+PlayerNumber()] >> 16, s:"\nZ: ", d:last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()] >> 16, s:"\nA: ", f:last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]);
 		}
 		
 		last_ground_position[(MAX_PLAYERS*4)+PlayerNumber()] = 0.0;	//Clear this variable first.
@@ -5278,6 +5276,7 @@ While(1)
 			}
 		}
 		
+		If(walljumping[PN()]>0) walljumping[PN()]--;
 		If(spring_timer>0) spring_timer--;	//Spring timer is used to prevent the game from trying to use boosting objects too quickly.
 		
 		If(totalcointics>0)
@@ -5596,18 +5595,18 @@ If(freeze>0)
   {
 	If(all_players==TRUE)
 	{
-	  hammermove[0] = 0;
-	  hammermove[1] = 0;
-	  hammermove[2] = 0;
-	  hammermove[3] = 0;
-	  hammermove[4] = 0;
-	  hammermove[5] = 0;
-	  hammermove[6] = 0;
-	  hammermove[7] = 0;
+	  hammermove[0] = 35;
+	  hammermove[1] = 35;
+	  hammermove[2] = 35;
+	  hammermove[3] = 35;
+	  hammermove[4] = 35;
+	  hammermove[5] = 35;
+	  hammermove[6] = 35;
+	  hammermove[7] = 35;
 	}
 	Else
 	{
-	  hammermove[PN()] = 0;
+	  hammermove[PN()] = 35;
 	}
   }
 }
@@ -5815,7 +5814,7 @@ script "SeamlessHelper" ENTER
 	
 	If(IsTIDUsed(1100+(8*(ss_position))+PlayerNumber())==FALSE) { ss_position = 0; }	//If the place the player's being teleported to doesn't exist, send them to the standard starting position.
 	
-	If(stored_velocity[0]==616.5) { For(int temp_settpflag = 0; temp_settpflag<PlayerCount(); temp_settpflag++) { tp_to_last_ground_position[temp_settpflag] = TRUE; } stored_velocity[0] = 0; ss_position = 0; checkpoint_id[PN()] = abs(ss_return_id); ss_return_id = 0; ACS_NamedExecuteAlways("LoadCheckpointInfo",0,FALSE,0,0); }	//Hack that reloads the player's info in the level they were in.
+	If(stored_velocity[0]==616.5) { For(int temp_settpflag = 0; temp_settpflag<PlayerCount()+1; temp_settpflag++) { tp_to_last_ground_position[temp_settpflag] = TRUE; } stored_velocity[0] = 0; tp_to_last_ground_position[PlayerNumber()] = TRUE; ss_position = 0; checkpoint_id[PN()] = abs(ss_return_id); ss_return_id = 0; ACS_NamedExecuteAlways("LoadCheckpointInfo",0,FALSE,0,0); }	//Hack that reloads the player's info in the level they were in.
 	Else
 	{
 		SetActorPosition(1000+PlayerNumber(), GetActorX(1100+(8*(ss_position))+PlayerNumber()), GetActorY(1100+(8*(ss_position))+PlayerNumber()), GetActorZ(1100+(8*(ss_position))+PlayerNumber()), FALSE);
@@ -5846,8 +5845,8 @@ script "SuperFormCheck" (void)
 			If(PlayerClass(PlayerNumber())==CHAR_MARY) MorphActor(1000, "LGirlPlayer_Super", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary
 			Else If(PlayerClass(PlayerNumber())==CHAR_XANE) MorphActor(1000, "XanePlayer_Super", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary						
 		}
-		Log(d:GetLevelInfo(LEVELINFO_LEVELNUM), s:"/", d:gamemode);
-		If(GetLevelInfo(LEVELINFO_LEVELNUM)!=0) stored_velocity[0] = 0;
+		//Log(d:GetLevelInfo(LEVELINFO_LEVELNUM), s:"/", d:gamemode);
+		//If(GetLevelInfo(LEVELINFO_LEVELNUM)!=0) stored_velocity[0] = 0;
 		If(gamemode>0&&GetLevelInfo(LEVELINFO_LEVELNUM)==0) stored_velocity[0] = -616.5;
 	}
 }

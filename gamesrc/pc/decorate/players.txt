@@ -11,10 +11,11 @@ actor CoinLimit : Inventory { Inventory.MaxAmount 900 }			//Maximum coins holdab
 actor IncreaseCombo : Inventory { Inventory.MaxAmount 1 }		//Request to increase the player's combo. Given by enemies when killed usually.
 actor SSRequiredCoins : Inventory { Inventory.MaxAmount 999 }	//How many coins are required for the current Special Stage.
 
-//THis inventory item makes the player character jump to a certain animation/state.
+//These inventory items make the player character jump to a certain animation/state.
 //1 - Ability (Air Dash for Mary, nothing for Xane yet.)
 //2 - Crying (Mary)/Claw (Xane)
-actor RequestAnimation : Inventory { Inventory.MaxAmount 5 }
+actor Animation1 : Inventory { Inventory.MaxAmount 1 }
+actor Animation2 : Inventory { Inventory.MaxAmount 1 }
 
 actor WallCheck
 {
@@ -204,8 +205,8 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY A 0
 	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
     MARY A 7 //A_Jump(24,"Blink")
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<3,"Spawn")	//Slowest
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<11,"See5")	//Slow
@@ -214,8 +215,8 @@ ACTOR LGirlPlayer : DoomPlayer
 	//MARY A 0 A_CheckFloor("AllowJumpsIdle")
     Loop
   Blink:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY B 6 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY A 0 A_CheckFloor("AllowJumpsIdle")
 	Goto Spawn
@@ -224,8 +225,8 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY D 0 ACS_ExecuteAlways(66,0,0,0,0)
 	Goto Spawn
   See:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY A 0 A_GiveInventory("SpeedTrailX",1)
 	MARY A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
@@ -234,39 +235,39 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<11,"See5")	//Slow
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<19,"See3")	//Medium
   SeeFast:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
     MARY IJKJ 1 A_SpawnItemEx("MaryAirDash",4,0,2,-8,0,0,0,SXF_SETMASTER|SXF_NOCHECKPOSITION,0)	//Fastest
 	MARY H 0 A_CheckFloor("AllowJumps")
   See2:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY IMNM 1 A_SpawnItemEx("MaryAirDash",4,0,2,-8,0,0,0,SXF_SETMASTER|SXF_NOCHECKPOSITION,0)	//Fastest
 	MARY B 0 A_CheckFloor("AllowJumpsEnd")
 	Goto See
 	
   See3:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
     MARY IJKJ 2 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY H 0 A_CheckFloor("AllowJumps")
   See4:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY IMNM 2 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY B 0 A_CheckFloor("AllowJumpsEnd")
 	Goto See
 
   See5:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
     MARY CDED 4 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY H 0 A_CheckFloor("AllowJumps")
   See6:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY CGHG 4 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY B 0 A_CheckFloor("AllowJumpsEnd")
 	Goto See
@@ -278,7 +279,7 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY O 1 A_JumpIf(velz==0.0,"AirDashLand")
 	Loop
   AirDashLand:
-	MARY O 0 A_TakeInventory("RequestAnimation",5)
+	MARY O 0 A_TakeInventory("Animation1",1)
 	Goto See
 
   WallJump:
@@ -295,16 +296,16 @@ ACTOR LGirlPlayer : DoomPlayer
 	Goto See
   Melee:
   Missile:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY Q 2
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY R 4
     Goto Spawn
   Pain:
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY P 1
 	MARY P 0 //A_SpawnItem("HurtMonster",64,32)
     //MARY P 0 A_JumpIf(waterlevel==0,"Pain2")
@@ -497,8 +498,8 @@ ACTOR LGirlPlayer : DoomPlayer
   Pain2:
 	MARY P 0 A_Pain
 	MARY P 2 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
   	MARY PPPPPPPP 0 A_SpawnItemEx("MaryTear",8,0,46,0,Random(-5,5),Random(2,4))
 	MARY P 8
 	Goto Spawn
@@ -509,15 +510,15 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY ADEPED 1 A_CheckFloor("See")
 	MARY Q 0 A_TakeInventory("SpeedTrailX",10)
 	MARY Q 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
-	GIRL M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY AGHPHG 1 A_CheckFloor("See")
 	Loop
 	
   CryLoop:
 	MARY P 1 A_SpawnItemEx("MaryTear",8,0,32,0,Random(-5,5),Random(2,4))
-	MARY M 0 A_JumpIfInventory("RequestAnimation",2,"CryLoop")
-	MARY A 0 A_JumpIfInventory("RequestAnimation",1,"AirDash")
+	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
+	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	Goto See
 
   Death.Fire:

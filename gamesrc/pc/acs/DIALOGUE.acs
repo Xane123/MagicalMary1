@@ -28,19 +28,19 @@ script "CheckDialogue" OPEN
 		
 		If(dialogue_completed[dialogue_id[0]]==FALSE)	//If this dialogue hasn't been heard before, prepare to play the dialogue.
 		{
-			if(GetCVAR("snd_dialogue")==TRUE)
+			if(GetCVAR("snd_dialogue")==TRUE||dialogue_id[0]==0)	//If dialogue is enabled or Mary's requesting to cry, allow this.
 			{
 				if(dialogue_id[0]!=0) dialogue_completed[dialogue_id[0]] = TRUE;	//If not crying, mark this dialogue as "heard".
-				dialogue_id[1] = dialogue_id[0];	//Set the current tutorial ID.
+				dialogue_id[1] = dialogue_id[0];	//Set the current dialogue ID.
 				dialogue_id[0] = -1;
 				
 				Switch(dialogue_id[1])
 				{
 					Case 0:	//Mary crying
 						PlaySound(1000+dialogue_id[2],"mary/cry",CHAN_7,1.0,FALSE,1.5);
-						GiveActorInventory(1000+dialogue_id[2],"RequestAnimation",2);	//Make Mary do the crying animation.
+						GiveActorInventory(1000+dialogue_id[2],"Animation2",1);	//Make Mary do the crying animation.
 						Delay(50);
-						TakeActorInventory(1000+dialogue_id[2],"RequestAnimation",25);	//Take away the inventory item(s) once this is done.
+						TakeActorInventory(1000+dialogue_id[2],"Animation2",1);	//Take away the inventory item(s) once this is done.
 					Break;
 					Case 1:	//1-1
 						//If(PlayerClass(dialogue_id[2])==CHAR_MARY) PlaySound(1000+dialogue_id[2],"dialogue/mary/1-1/1",CHAN_7);
