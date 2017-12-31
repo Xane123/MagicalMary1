@@ -33,7 +33,7 @@ int tutorial_text[30] = {	//What text ID each tutorial ID should start at.
 48,	//21 (Xane's Claw)
 50,	//22 (Soap Boxes)
 53,	//23 (Special Stage water)
-0,	//24
+55,	//24 (Xane's Drop Dash)
 0,	//25
 0,	//26
 0,	//27
@@ -66,7 +66,7 @@ int tutorial_length[30] = {	//How many IDs of text should be shown in this tutor
 2,	//21
 3,	//22
 2,	//23
-0,	//24
+3,	//24
 0,	//25
 0,	//26
 0,	//27
@@ -99,7 +99,7 @@ int tutorial_showmsg[30] = {	//Which special message to briefly display after a 
 11,	//21
 0,	//22
 0,	//23
-0,	//24
+12,	//24
 0,	//25
 0,	//26
 0,	//27
@@ -274,10 +274,13 @@ script "ShowSTutMessage" (int id)
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 		Case 11:
-		HUDMessageBold(s:"Press ", k:"+reload", s:" on the ground to fire Xane's claw.";
+		HUDMessageBold(s:"Double-push ", k:"+use", s:" on the ground to fire Xane's claw.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
-
+		Case 11:
+		HUDMessageBold(s:"Double-push ", k:"+use", s:" in the air to start a Drop Dash.";
+			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
+		Break;
 	}
 }
 

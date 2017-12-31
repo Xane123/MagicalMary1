@@ -3048,7 +3048,7 @@ While(1)
 		prevy[PN()] = GetActorVelY(0);
 		Delay(1);
 		
-		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 && (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0) )
+		if(wjtics[PN()] && WaterLevel(0) == 0 && (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0) )
 			{	//Do one quick test for a wall...
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);
@@ -3098,7 +3098,7 @@ While(1)
 			
 			input_wd = 0;
 			
-			Until((walldetected[PN()] == TRUE || input_wd & BT_BACK || prevx[PN()] == -13.617) || CheckActorInventory(GetCurrentPlayerTID(),"NoWall")==TRUE || GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel)!=0 /*|| GetActorZ(0) - GetActorFloorZ(0) < 12.0*/)
+			Until((walldetected[PN()] == TRUE || ( movement[MAX_PLAYERS+PlayerNumber()]>0 && !(openInput[PlayerNumber()] & BT_USE) ) || prevx[PN()] == -13.617) || CheckActorInventory(GetCurrentPlayerTID(),"NoWall")==TRUE || WaterLevel(0) != 0 /*|| GetActorZ(0) - GetActorFloorZ(0) < 12.0*/)
 				{
 					Delay(1);
 					walljumping[PN()] = 5;
@@ -3109,16 +3109,16 @@ While(1)
 					
 					if(GetActorX(0)<prevx[PN()]-20.5||GetActorX(0)>prevx[PN()]+20.5||GetActorY(0)<prevy[PN()]-20.5||GetActorY(0)>prevy[PN()]+20.5) prevx[PN()] = -13.617;
 					
-					If(ninja_tics[PN()]>0 && input_wd & BT_FORWARD && (input_wd & BT_MOVELEFT || input_wd & BT_MOVERIGHT ) )
+					If(ninja_tics[PN()]>0 && movement[PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE )
 					{
 						if(vel < 1.8) vel += 0.1;
 						else vel = 1.8;
 						moved_up_wall[PN()] = 5;
 						ninja_tics[PN()] -= 2;
 					}
-					Else If( ( ninja_tics[PN()]==0 || (ninja_tics[PN()]>0 && (input_wd & BT_MOVELEFT || input_wd & BT_MOVERIGHT ) && ~(input_wd & BT_FORWARD) ) ) && vel > -3.75) vel -= 0.05;
+					Else If( ninja_tics[PN()]==0 || (ninja_tics[PN()]>0 && ( movement[MAX_PLAYERS+PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE ) ) && vel > -3.75) vel -= 0.05;
 
-					Else If(ninja_tics[PN()]>0 && ~(input_wd & BT_FORWARD))
+					Else If(ninja_tics[PN()]>0 && movement[PlayerNumber()]==0 && movement[MAX_PLAYERS+PlayerNumber()]==0)
 					{
 						vel = 0.001;
 					}
@@ -4394,6 +4394,7 @@ script "LandingBounce" (int mode)
 	Else If(mode==1)	//"Drop Dash"
 	{
 		temp_fspeed = temp_fspeed >> 16;	//Convert it into a whole number.
+		If(CheckInventory("SuperX")==TRUE) temp_fspeed -= 10;
 		int divide_by = 9;
 		If(temp_fspeed<-15) divide_by = 8;
 		If(temp_fspeed<-20) divide_by = 7;
@@ -4403,7 +4404,7 @@ script "LandingBounce" (int mode)
 		If(temp_fspeed<-40) divide_by = 3;
 		//Print(s:"DIVIDE! ", d:divide_by, s:"\nFSPEED: ", d:temp_fspeed, s:"\nLOCK TIME: ", d:CONST_BOOST_TICS*2);
 		SetActorVelocity(0,0.0,0.0,0.0,FALSE,FALSE);	//Stop the player before boosting them!
-		PlaySound(0,"xane/dropdash2",CHAN_VOICE,1.0,FALSE);	//PlaySound(0,"sonic/thok",CHAN_VOICE,1.0,FALSE);
+		PlaySound(0,"sonic/thok",CHAN_VOICE,1.0,FALSE);
 		SetPlayerProperty(FALSE,ON,PROP_TOTALLYFROZEN);
 		//hammermove[PN()] = 35;
 		ThrustThing(GetActorAngle(0)>> 8,15,0,0);	//Barely push the player then...
