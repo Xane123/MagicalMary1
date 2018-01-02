@@ -3745,7 +3745,7 @@ script 1 (void)	//EVENT ID #1: Game Over
 	If(gamemode==0)
 	{	//If the player has made it to 1-2, 1-3, or 1-4 then gets a game over...
 		if(GetLevelInfo(LEVELINFO_WORLDNUMBER)==1&&GetLevelInfo(LEVELINFO_WORLDLEVEL)>1) ChangeLevel("TMP2",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//...don't make them have to redo that first level again.
-		else ChangeLevel(StrParam(s:"TMP", d:level[2]),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
+		else ChangeLevel(StrParam(s:"TMP", d:level[2])+1,0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
 	}
 	Else
 	{
@@ -3969,26 +3969,6 @@ If(WaterLevel(0)>1) SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.5);
 else SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,1.0);
 
 SetAirControl(0.00390625);
-
-/*if(CheckActorInventory(GetCurrentPlayerTID(), "SuperX")==FALSE)
-	{
-		If(GetActorProperty(0, APROP_Waterlevel)==0)
-		{
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.0);
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.0);
-		}
-		Else
-		{
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.01);
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.01);
-		}
-	}
-else
-	{
-	SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.015);
-	SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.225);
-	}*/
-
 }
 
 script "ColorCoin" (int mode)
@@ -4008,8 +3988,6 @@ script "FlowerCount" (int mode) { If(mode == TRUE) flowers++; Else if(flowers>0)
 ////////////////////////////////////
 //SPRINGS, BOOST PANELS, AND RINGS//
 ////////////////////////////////////
-
-
 int spring_timer;	//How many tics before springs are allowed to be used again. Not sure if redundant with what is below but I never bothered to add a comment to it to indicate its purpose!
 int sdelay;
 int boost_properties[MAX_PLAYERS*3];	//First set: Remaining tics to boost player. Second-third: X and Y velocities.
@@ -4104,7 +4082,7 @@ script "ForceRotateToAngle" (int affected, int reference)
 
 script "SpringBounce" (int tid, int type, int power) //Bounces the player in the direction of the "linked" thing like a spring.
 {	//First make sure it's on the whitelist here. If it isn't, it's not allowed to use springs, boost panels, and mid-air rings.
-	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "LGirlPlayer_Super")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "XanePlayer_Super")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2"))
+	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "LGirlPlayer_Super")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "XanePlayer_Super")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
 	{
 	If(CheckActorClass(0, "FlowerProjectile3_1P")) SetActorState(0, "Launch");
 	bool extra_power = 0;	//This determines whether hitting this spring with Mary's hammer should increase its power.
@@ -6054,8 +6032,8 @@ script "DropCoins" (int number)
 			If(CheckInventory("CoinSP")) { TakeInventory("CoinSP",1); /*total_coins--; totalcointics = CONSTANT_TCOINDISPTICS;*/ }
 			Else Terminate;
 		}
-		Log(s:"Spaaaaa~!");
-		SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,Random(26,36),Random(35,40),1.0,0);
+		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,31,37/*Random(26,36),Random(35,40)*/,1.0,0);
+		else SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,24,33,1.0,0);
 	}
 
 }
