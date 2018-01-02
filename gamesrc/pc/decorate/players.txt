@@ -8,7 +8,7 @@ actor NoHammer : Inventory { Inventory.MaxAmount 1 }			//Unknown. Identify what 
 actor Health125 : Inventory { Inventory.MaxAmount 1 }			//For SBARINFO's status bar.
 actor ScoreX : Inventory { Inventory.MaxAmount 32767 }			//Points awarded from monsters; Combo-multiplied.
 actor CoinLimit : Inventory { Inventory.MaxAmount 900 }			//Maximum coins holdable
-actor IncreaseCombo : Inventory { Inventory.MaxAmount 1 }		//Request to increase the player's combo. Given by enemies when killed usually.
+actor IncreaseCombo : Inventory { Inventory.MaxAmount 3 }		//Request to increase the player's combo. Given by enemies when killed usually.
 actor SSRequiredCoins : Inventory { Inventory.MaxAmount 999 }	//How many coins are required for the current Special Stage.
 
 //These inventory items make the player character jump to a certain animation/state.

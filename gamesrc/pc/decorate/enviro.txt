@@ -776,6 +776,7 @@ actor CityBillboardLight 465
 Radius 1
 Height 2
 Scale 2
++BRIGHT
 +NOGRAVITY
 -SOLID
 +NOINTERACTION
