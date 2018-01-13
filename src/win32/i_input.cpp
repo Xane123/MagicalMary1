@@ -675,7 +675,7 @@ bool I_InitInput (void *hwnd)
 	Printf ("I_InitInput\n");
 	atterm (I_ShutdownInput);
 
-	noidle = !!Args->CheckParm ("-noidle");
+	noidle = 1;//!!Args->CheckParm ("-noidle");
 	g_pdi = NULL;
 	g_pdi3 = NULL;
 

@@ -1,4 +1,4 @@
-// Must be sorted in identification order (easiest to recognize first!)
+//Only one "IWAD" matters.
 
 IWad
 {
@@ -13,42 +13,12 @@ IWad
 	Load = "mma_resources.pk3", "mma_maps.wad", "mma_videos.pk3", "fmv_hires.pk3"
 }
 
-IWad
-{
-	Name = "Mary's Magical Adventure (Mobile)"
-	Autoname = "mma.base.mobile"
-	Game = "Doom"
-	Config = "Doom"
-	IWADName = "mma_mobiledata.pk3"
-	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "iAndroid"
-	BannerColors = "c0 40 c0", "40 20 40"
-	Load = "mma_resources.pk3", "mma_mobilemaps.wad"
-}
-
-IWad
-{
-	Name = "Freedoom: Phase 2 (testing only)"
-	Autoname = "doom.freedoom.phase2"
-	Game = "Doom"
-	Config = "Doom"
-	IWADName = "freedoom2.wad"
-	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "MAP01", "FREEDOOM"
-	BannerColors = "32 54 43", "c6 dc d1"
-	Load = "mma_data.pk3", "mma_resources.pk3", "mma_maps.wad", "mma_videos.pk3", "fmv_hires.pk3"
-}	
-
 Names
-{	
-	"freedoom2.wad"
-	"mma_mobiledata.pk3"
+{
 	"mma_data.pk3"
 }
 
 Order	// Order in the IWAD selection box
 {
 	"Mary's Magical Adventure (PC)"
-	"Mary's Magical Adventure (Mobile)"
-	"Freedoom: Phase 2 (testing only)"
 }
