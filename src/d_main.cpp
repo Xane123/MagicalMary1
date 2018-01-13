@@ -197,7 +197,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 }
 
 CVAR (Float, timelimit, 0.f, CVAR_SERVERINFO);
-CVAR (Int, wipetype, 0, CVAR_ARCHIVE);	//Wipes look bad with my game.
+CVAR (Int, wipetype, 1, CVAR_ARCHIVE);
 CVAR (Int, snd_drawoutput, 0, 0);
 CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
@@ -804,6 +804,7 @@ void D_Display ()
 				}
 				break;
 			}
+
 			if (StatusBar != NULL)
 			{
 				float blend[4] = { 0, 0, 0, 0 };
@@ -1108,7 +1109,7 @@ void D_PageTicker (void)
 
 void D_PageDrawer (void)
 {
-	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, GPalette.BlackIndex, 0);
+	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
 	if (Page != NULL)
 	{
 		screen->DrawTexture (Page, 0, 0,
@@ -1116,6 +1117,17 @@ void D_PageDrawer (void)
 			DTA_Masked, false,
 			DTA_BilinearFilter, true,
 			TAG_DONE);
+	}
+	else
+	{
+		if (!PageBlank)
+		{
+			screen->DrawText (SmallFont, CR_WHITE, 0, 0, "Page graphic goes here", TAG_DONE);
+		}
+	}
+	if (Advisory != NULL)
+	{
+		screen->DrawTexture (Advisory, 4, 160, DTA_320x200, true, TAG_DONE);
 	}
 }
 
@@ -1137,6 +1149,124 @@ void D_AdvanceDemo (void)
 // D_DoStrifeAdvanceDemo
 //
 //==========================================================================
+
+void D_DoStrifeAdvanceDemo ()
+{
+	static const char *const fullVoices[6] =
+	{
+		"svox/pro1", "svox/pro2", "svox/pro3", "svox/pro4", "svox/pro5", "svox/pro6"
+	};
+	static const char *const teaserVoices[6] =
+	{
+		"svox/voc91", "svox/voc92", "svox/voc93", "svox/voc94", "svox/voc95", "svox/voc96"
+	};
+	const char *const *voices = gameinfo.flags & GI_SHAREWARE ? teaserVoices : fullVoices;
+	const char *pagename = NULL;
+
+	gamestate = GS_DEMOSCREEN;
+	PageBlank = false;
+
+	switch (demosequence)
+	{
+	default:
+	case 0:
+		pagetic = 6 * TICRATE;
+		pagename = "TITLEPIC";
+		if (Wads.CheckNumForName ("d_logo", ns_music) < 0)
+		{ // strife0.wad does not have d_logo
+			S_StartMusic ("");
+		}
+		else
+		{
+			S_StartMusic ("d_logo");
+		}
+		C_HideConsole ();
+		break;
+
+	case 1:
+		// [RH] Strife fades to black and then to the Rogue logo, but
+		// I think it looks better if it doesn't fade.
+		pagetic = 10 * TICRATE/35;
+		pagename = "";	// PANEL0, but strife0.wad doesn't have it, so don't use it.
+		PageBlank = true;
+		S_Sound (CHAN_VOICE | CHAN_UI, "bishop/active", 1, ATTN_NORM);
+		break;
+
+	case 2:
+		pagetic = 4 * TICRATE;
+		pagename = "RGELOGO";
+		break;
+
+	case 3:
+		pagetic = 7 * TICRATE;
+		pagename = "PANEL1";
+		S_Sound (CHAN_VOICE | CHAN_UI, voices[0], 1, ATTN_NORM);
+		// The new Strife teaser has D_FMINTR.
+		// The full retail Strife has D_INTRO.
+		// And the old Strife teaser has both. (I do not know which one it actually uses, nor do I care.)
+		S_StartMusic (gameinfo.flags & GI_TEASER2 ? "d_fmintr" : "d_intro");
+		break;
+
+	case 4:
+		pagetic = 9 * TICRATE;
+		pagename = "PANEL2";
+		S_Sound (CHAN_VOICE | CHAN_UI, voices[1], 1, ATTN_NORM);
+		break;
+
+	case 5:
+		pagetic = 12 * TICRATE;
+		pagename = "PANEL3";
+		S_Sound (CHAN_VOICE | CHAN_UI, voices[2], 1, ATTN_NORM);
+		break;
+
+	case 6:
+		pagetic = 11 * TICRATE;
+		pagename = "PANEL4";
+		S_Sound (CHAN_VOICE | CHAN_UI, voices[3], 1, ATTN_NORM);
+		break;
+
+	case 7:
+		pagetic = 10 * TICRATE;
+		pagename = "PANEL5";
+		S_Sound (CHAN_VOICE | CHAN_UI, voices[4], 1, ATTN_NORM);
+		break;
+
+	case 8:
+		pagetic = 16 * TICRATE;
+		pagename = "PANEL6";
+		S_Sound (CHAN_VOICE | CHAN_UI, voices[5], 1, ATTN_NORM);
+		break;
+
+	case 9:
+		pagetic = 6 * TICRATE;
+		pagename = "vellogo";
+		wipegamestate = GS_FORCEWIPEFADE;
+		break;
+
+	case 10:
+		pagetic = 12 * TICRATE;
+		pagename = "CREDIT";
+		wipegamestate = GS_FORCEWIPEFADE;
+		break;
+	}
+	if (demosequence++ > 10)
+		demosequence = 0;
+	if (demosequence == 9 && !(gameinfo.flags & GI_SHAREWARE))
+		demosequence = 10;
+
+	if (pagename)
+	{
+		if (Page != NULL)
+		{
+			Page->Unload ();
+			Page = NULL;
+		}
+		if (pagename[0])
+		{
+			Page = TexMan[pagename];
+		}
+	}
+}
 
 //==========================================================================
 //
@@ -1169,6 +1299,12 @@ void D_DoAdvanceDemo (void)
 	if (P_CheckMapData("TITLEMAP"))
 	{
 		G_InitNew ("TITLEMAP", true);
+		return;
+	}
+
+	if (gameinfo.gametype == GAME_Strife)
+	{
+		D_DoStrifeAdvanceDemo ();
 		return;
 	}
 
@@ -1217,8 +1353,13 @@ void D_DoAdvanceDemo (void)
 		break;
 
 	case 2:
-		pagetic = (int)(1);
+		pagetic = (int)(gameinfo.pageTime * TICRATE);
 		gamestate = GS_DEMOSCREEN;
+		if (gameinfo.creditPages.Size() > 0)
+		{
+			pagename = gameinfo.creditPages[pagecount];
+			pagecount = (pagecount+1) % gameinfo.creditPages.Size();
+		}
 		demosequence = 1;
 		break;
 	}

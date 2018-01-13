@@ -36,6 +36,7 @@
 
 #include "m_random.h"
 #include "i_system.h"
+#include "announcer.h"
 
 #include "am_map.h"
 
@@ -205,6 +206,20 @@ void ClientObituary (AActor *self, AActor *inflictor, AActor *attacker, int dmgf
 	mod = MeansOfDeath;
 	message = NULL;
 	messagename = NULL;
+
+	if (attacker == NULL || attacker->player != NULL)
+	{
+		if (mod == NAME_Telefrag)
+		{
+			if (AnnounceTelefrag (attacker, self))
+				return;
+		}
+		else
+		{
+			if (AnnounceKill (attacker, self))
+				return;
+		}
+	}
 
 	FString obit = DamageTypeDefinition::GetObituary(mod);
 	if (attacker == nullptr && obit.IsNotEmpty()) messagename = obit;
@@ -450,6 +465,27 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags)
 						spreemsg = NULL;
 						break;
 					}
+
+					if (spreemsg == NULL && player->spreecount >= 5)
+					{
+						if (!AnnounceSpreeLoss (this))
+						{
+							SexMessage (GStrings("SPREEOVER"), buff, player->userinfo.GetGender(),
+								player->userinfo.GetName(), source->player->userinfo.GetName());
+							StatusBar->AttachMessage (Create<DHUDMessageFadeOut> (SmallFont, buff,
+								1.5f, 0.2f, 0, 0, CR_WHITE, 3.f, 0.5f), MAKE_ID('K','S','P','R'));
+						}
+					}
+					else if (spreemsg != NULL)
+					{
+						if (!AnnounceSpree (source))
+						{
+							SexMessage (spreemsg, buff, player->userinfo.GetGender(),
+								player->userinfo.GetName(), source->player->userinfo.GetName());
+							StatusBar->AttachMessage (Create<DHUDMessageFadeOut> (SmallFont, buff,
+								1.5f, 0.2f, 0, 0, CR_WHITE, 3.f, 0.5f), MAKE_ID('K','S','P','R'));
+						}
+					}
 				}
 			}
 
@@ -487,6 +523,18 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags)
 						default:
 							multimsg = GStrings("MULTI5");
 							break;
+						}
+						if (multimsg != NULL)
+						{
+							char buff[256];
+
+							if (!AnnounceMultikill (source))
+							{
+								SexMessage (multimsg, buff, player->userinfo.GetGender(),
+									player->userinfo.GetName(), source->player->userinfo.GetName());
+								StatusBar->AttachMessage (Create<DHUDMessageFadeOut> (SmallFont, buff,
+									1.5f, 0.8f, 0, 0, CR_RED, 3.f, 0.5f), MAKE_ID('M','K','I','L'));
+							}
 						}
 					}
 				}

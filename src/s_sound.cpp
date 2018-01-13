@@ -184,20 +184,20 @@ void S_NoiseDebug (void)
 	int y, color;
 
 	y = 32 * CleanYfac;
-	screen->DrawText (ConFont, CR_YELLOW, 0, y, "ALL SOUNDS CURRENTLY PLAYING", TAG_DONE);
+	screen->DrawText (SmallFont, CR_YELLOW, 0, y, "*** SOUND DEBUG INFO ***", TAG_DONE);
 	y += 8;
 
-	screen->DrawText (ConFont, CR_GOLD, 0, y, "name", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 70, y, "x", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 120, y, "y", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 170, y, "z", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 220, y, "vol", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 260, y, "dist", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 300, y, "chan", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 340, y, "pri", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 380, y, "flags", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 460, y, "aud", TAG_DONE);
-	screen->DrawText (ConFont, CR_GOLD, 520, y, "pos", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 0, y, "name", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 70, y, "x", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 120, y, "y", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 170, y, "z", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 220, y, "vol", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 260, y, "dist", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 300, y, "chan", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 340, y, "pri", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 380, y, "flags", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 460, y, "aud", TAG_DONE);
+	screen->DrawText (SmallFont, CR_GOLD, 520, y, "pos", TAG_DONE);
 	y += 8;
 
 	if (Channels == NULL)
@@ -221,7 +221,7 @@ void S_NoiseDebug (void)
 		// Name
 		Wads.GetLumpName (temp, S_sfx[chan->SoundID].lumpnum);
 		temp[8] = 0;
-		screen->DrawText (ConFont, color, 0, y, temp, TAG_DONE);
+		screen->DrawText (SmallFont, color, 0, y, temp, TAG_DONE);
 
 		if (!(chan->ChanFlags & CHAN_IS3D))
 		{

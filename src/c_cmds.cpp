@@ -117,13 +117,31 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-CCMD(honor)
+CCMD (honor)
+{
+	if (CheckCheatmode ())
+		return;
+
+	Net_WriteByte (DEM_GENERICCHEAT);
+	Net_WriteByte (CHT_GOD);
+}
+
+CCMD(paladin)
 {
 	if (CheckCheatmode())
 		return;
 
 	Net_WriteByte(DEM_GENERICCHEAT);
 	Net_WriteByte(CHT_GOD2);
+}
+
+CCMD (classic)
+{
+	if (CheckCheatmode ())
+		return;
+
+	Net_WriteByte (DEM_GENERICCHEAT);
+	Net_WriteByte (CHT_IDDQD);
 }
 
 CCMD (notarget)
@@ -142,6 +160,7 @@ Cmd_Noclip
 argv(0) noclip
 ==================
 */
+
 CCMD (noclip2)
 {
 	if (CheckCheatmode())
@@ -149,34 +168,6 @@ CCMD (noclip2)
 
 	Net_WriteByte (DEM_GENERICCHEAT);
 	Net_WriteByte (CHT_NOCLIP2);
-}
-
-CCMD (powerup)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_POWER);
-}
-
-CCMD (anubis)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_ANUBIS);
-}
-
-// [GRB]
-CCMD (resurrect)
-{
-	if (CheckCheatmode ())
-		return;
-
-	Net_WriteByte (DEM_GENERICCHEAT);
-	Net_WriteByte (CHT_RESSURECT);
 }
 
 EXTERN_CVAR (Bool, chasedemo)
@@ -212,70 +203,6 @@ CCMD (chase)
 	}
 }
 
-CCMD (idclev)
-{
-	if (netgame)
-		return;
-
-	if ((argv.argc() > 1) && (*(argv[1] + 2) == 0) && *(argv[1] + 1) && *argv[1])
-	{
-		int epsd, map;
-		char buf[2];
-		FString mapname;
-
-		buf[0] = argv[1][0] - '0';
-		buf[1] = argv[1][1] - '0';
-
-		if (gameinfo.flags & GI_MAPxx)
-		{
-			epsd = 1;
-			map = buf[0]*10 + buf[1];
-		}
-		else
-		{
-			epsd = buf[0];
-			map = buf[1];
-		}
-
-		// Catch invalid maps.
-		mapname = CalcMapName (epsd, map);
-
-		if (!P_CheckMapData(mapname))
-			return;
-
-		// So be it.
-		Printf ("%s\n", GStrings("STSTR_CLEV"));
-      	G_DeferedInitNew (mapname);
-		//players[0].health = 0;		// Force reset
-	}
-}
-
-CCMD (hxvisit)
-{
-	if (netgame)
-		return;
-
-	if ((argv.argc() > 1) && (*(argv[1] + 2) == 0) && *(argv[1] + 1) && *argv[1])
-	{
-		FString mapname("&wt@");
-
-		mapname << argv[1][0] << argv[1][1];
-
-		if (CheckWarpTransMap (mapname, false))
-		{
-			// Just because it's in MAPINFO doesn't mean it's in the wad.
-
-			if (P_CheckMapData(mapname))
-			{
-				// So be it.
-				Printf ("%s\n", GStrings("STSTR_CLEV"));
-      			G_DeferedInitNew (mapname);
-				return;
-			}
-		}
-		Printf ("No such map found\n");
-	}
-}
 
 CCMD (changemap)
 {
@@ -287,7 +214,7 @@ CCMD (changemap)
 
 	if (!players[who->player - players].settings_controller && netgame)
 	{
-		Printf ("Only setting controllers can change the map.\n");
+		Printf ("Only the host may change the map.\n");
 		return;
 	}
 
@@ -300,7 +227,7 @@ CCMD (changemap)
 		{
 			if (!P_CheckMapData(mapname))
 			{
-				Printf ("No map %s\n", mapname);
+				Printf ("%s doesn't exist.\n", mapname);
 			}
 			else
 			{
@@ -324,7 +251,7 @@ CCMD (changemap)
 	}
 	else
 	{
-		Printf ("Usage: changemap <map name> [position]\n");
+		Printf ("Usage: changemap <map name>\n");
 	}
 }
 
@@ -371,29 +298,6 @@ CCMD(setinv)
 	else
 		Net_WriteByte(0);
 
-}
-
-CCMD (gameversion)
-{
-	Printf ("%s @ %s\nCommit %s\n", GetVersionString(), GetGitTime(), GetGitHash());
-}
-
-CCMD (print)
-{
-	if (argv.argc() != 2)
-	{
-		Printf ("print <name>: Print a string from the string table\n");
-		return;
-	}
-	const char *str = GStrings[argv[1]];
-	if (str == NULL)
-	{
-		Printf ("%s unknown\n", argv[1]);
-	}
-	else
-	{
-		Printf ("%s\n", str);
-	}
 }
 
 CCMD (exec)
@@ -564,32 +468,6 @@ CCMD (special)
 		{
 			Net_WriteLong(atoi(argv[i]));
 		}
-	}
-}
-
-CCMD (error)
-{
-	if (argv.argc() > 1)
-	{
-		char *textcopy = copystring (argv[1]);
-		I_Error ("%s", textcopy);
-	}
-	else
-	{
-		Printf ("Usage: error <error text>\n");
-	}
-}
-
-CCMD (error_fatal)
-{
-	if (argv.argc() > 1)
-	{
-		char *textcopy = copystring (argv[1]);
-		I_FatalError ("%s", textcopy);
-	}
-	else
-	{
-		Printf ("Usage: error_fatal <error text>\n");
 	}
 }
 
@@ -805,7 +683,7 @@ CCMD(linetarget)
 	if (t.linetarget)
 		C_PrintInfo(t.linetarget, argv.argc() > 1 && atoi(argv[1]) != 0);
 	else
-		Printf("Sorry, Xane, couldn't find the target...\nTry again!\n");
+		Printf("No target found\n");
 }
 
 // As linetarget, but also give info about non-shootable actors

@@ -103,9 +103,9 @@ function( add_pk3 PK3_NAME PK3_DIR )
 	assort_pk3_source_folder("Source Files" ${PK3_DIR})
 	# Phase 4: Add the resulting PK3 to the install target.
 	if( WIN32 )
-		set( INSTALL_PK3_PATH . CACHE STRING "Directory where data.pk3 will be placed during install." )
+		set( INSTALL_PK3_PATH . CACHE STRING "Directory where zdoom.pk3 will be placed during install." )
 	else()
-		set( INSTALL_PK3_PATH share/games/doom CACHE STRING "Directory where data.pk3 will be placed during install." )
+		set( INSTALL_PK3_PATH share/games/doom CACHE STRING "Directory where zdoom.pk3 will be placed during install." )
 	endif()
 	install(FILES "${PROJECT_BINARY_DIR}/${PK3_NAME}"
 			DESTINATION ${INSTALL_PK3_PATH}
@@ -123,13 +123,13 @@ macro( make_release_only )
 endmacro()
 
 IF( NOT CMAKE_BUILD_TYPE )
-	SET( CMAKE_BUILD_TYPE MinSizeRel CACHE STRING
-		"Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel. MinSizeRel is recommended."
+	SET( CMAKE_BUILD_TYPE Debug CACHE STRING
+		"Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel."
 		FORCE )
 ENDIF()
 
-set( ZDOOM_OUTPUT_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Directory where data.pk3 and the executable will be created. (If generating data.pk3 yourself, uncomment the line in the source code!)" )
-set( ZDOOM_EXE_NAME "play" CACHE FILEPATH "Name of the executable to create" )
+set( ZDOOM_OUTPUT_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Directory where zdoom.pk3 and the executable will be created." )
+set( ZDOOM_EXE_NAME "gzdoom" CACHE FILEPATH "Name of the executable to create" )
 if( MSVC )
 	# Allow the user to use ZDOOM_OUTPUT_DIR as a single release point.
 	# Use zdoom, zdoomd, zdoom64, and zdoomd64 for the binary names
@@ -234,6 +234,12 @@ else()
 	if( APPLE AND "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
 		set( ALL_C_FLAGS "-static-libgcc" )
 	endif()
+	
+	if( NOT APPLE )
+		# Generic GCC/Clang requires position independent executable to be enabled explicitly
+		set( ALL_C_FLAGS "${ALL_C_FLAGS} -fPIE" )
+		set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie" )
+	endif()
 endif()
 
 set( CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${REL_LINKER_FLAGS}" )
@@ -252,10 +258,10 @@ set( CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL} ${REL_C_FLAGS}" )
 set( CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${REL_C_FLAGS}" )
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEB_C_FLAGS} -D_DEBUG" )
 
-option(FORCE_INTERNAL_ZLIB "Use internal ZLIB")
-option(FORCE_INTERNAL_JPEG "Use internal JPEG")
-option(FORCE_INTERNAL_BZIP2 "Use internal BZIP2")
-option(FORCE_INTERNAL_GME "Use internal GME")
+option(FORCE_INTERNAL_ZLIB "Use internal zlib")
+option(FORCE_INTERNAL_JPEG "Use internal jpeg")
+option(FORCE_INTERNAL_BZIP2 "Use internal bzip2")
+option(FORCE_INTERNAL_GME "Use internal gme")
 
 # Fast math flags, required by some subprojects
 set( ZD_FASTMATH_FLAG "" )
@@ -266,9 +272,9 @@ elseif( MSVC )
 endif()
 
 if( ZLIB_FOUND AND NOT FORCE_INTERNAL_ZLIB )
-	message( STATUS "Using system zlib, as includes were found at ${ZLIB_INCLUDE_DIR}" )
+	message( STATUS "Using system zlib, includes found at ${ZLIB_INCLUDE_DIR}" )
 else()
-	message( STATUS "Using internal ZLIB library." )
+	message( STATUS "Using internal zlib" )
 	set( SKIP_INSTALL_ALL TRUE ) # Avoid installing zlib alongside zdoom
 	add_subdirectory( zlib )
 	set( ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/zlib )
@@ -277,9 +283,9 @@ else()
 endif()
 
 if( JPEG_FOUND AND NOT FORCE_INTERNAL_JPEG )
-	message( STATUS "Using system jpeg library, as includes were found at ${JPEG_INCLUDE_DIR}!" )
+	message( STATUS "Using system jpeg library, includes found at ${JPEG_INCLUDE_DIR}" )
 else()
-	message( STATUS "Using internal JPEG library." )
+	message( STATUS "Using internal jpeg library" )
 	add_subdirectory( jpeg-6b )
 	set( JPEG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/jpeg-6b )
 	set( JPEG_LIBRARIES jpeg )
@@ -287,9 +293,9 @@ else()
 endif()
 
 if( BZIP2_FOUND AND NOT FORCE_INTERNAL_BZIP2 )
-	message( STATUS "Using system bzip2 library, as includes were found at ${BZIP2_INCLUDE_DIR}!" )
+	message( STATUS "Using system bzip2 library, includes found at ${BZIP2_INCLUDE_DIR}" )
 else()
-	message( STATUS "Using internal BZIP2 library." )
+	message( STATUS "Using internal bzip2 library" )
 	add_subdirectory( bzip2 )
 	set( BZIP2_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bzip2" )
 	set( BZIP2_LIBRARIES bz2 )
@@ -297,9 +303,9 @@ else()
 endif()
 
 if( GME_FOUND AND NOT FORCE_INTERNAL_GME )
-	message( STATUS "Using system gme library, as includes were found at ${GME_INCLUDE_DIR}!" )
+	message( STATUS "Using system gme library, includes found at ${GME_INCLUDE_DIR}" )
 else()
-	message( STATUS "Using internal GME library." )
+	message( STATUS "Using internal gme library" )
 	add_subdirectory( game-music-emu )
 	set( GME_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/game-music-emu" )
 	set( GME_LIBRARIES gme )
@@ -315,9 +321,9 @@ endif()
 
 # Install the entire docs directory in the distributed zip package
 if( WIN32 )
-	set( INSTALL_DOCS_PATH docs CACHE STRING "Directory where the documentation will be placed during install. A bit pointless." )
+	set( INSTALL_DOCS_PATH docs CACHE STRING "Directory where the documentation will be placed during install." )
 else()
-	set( INSTALL_DOCS_PATH share/doc/${ZDOOM_EXE_NAME} CACHE STRING "Directory where the pointless documentation will be placed during install." )
+	set( INSTALL_DOCS_PATH share/doc/${ZDOOM_EXE_NAME} CACHE STRING "Directory where the zdoom documentation will be placed during install." )
 endif()
 install(DIRECTORY docs/ 
 		DESTINATION ${INSTALL_DOCS_PATH} 
@@ -336,6 +342,3 @@ add_subdirectory( src )
 if( NOT CMAKE_CROSSCOMPILING )
 	export(TARGETS ${CROSS_EXPORTS} FILE "${CMAKE_BINARY_DIR}/ImportExecutables.cmake" )
 endif()
-
-# Options added by Xane for Mary's Magical Adventure
-option( ZDOOM_GENERATE_PK3 "Generate data.pk3. Disable this and use the official data.pk3 if strange errors appear on game startup." ON )

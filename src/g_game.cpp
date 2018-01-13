@@ -124,8 +124,9 @@ CVAR(Bool, save_formatted, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)	// use forma
 CVAR (Int, deathmatch, 0, CVAR_SERVERINFO|CVAR_LATCH);
 CVAR (Bool, chasedemo, false, 0);
 CVAR (Bool, storesavepic, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Bool, longsavemessages, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (String, save_dir, "./saves", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (Bool, longsavemessages, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (String, save_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (Bool, cl_waitforsave, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 EXTERN_CVAR (Float, con_midtime);
 
 //==========================================================================
@@ -214,7 +215,7 @@ int				lookspeed[2] = {450, 512};
 
 CVAR (Bool,		cl_run,			false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always run?
 CVAR (Bool,		invertmouse,	false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Invert mouse look down/up?
-CVAR (Bool,		freelook,		true,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
+CVAR (Bool,		freelook,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
 CVAR (Bool,		lookstrafe,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always strafe with mouse?
 CVAR (Float,	m_pitch,		1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Mouse speeds
 CVAR (Float,	m_yaw,			1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
@@ -1742,7 +1743,8 @@ static void G_QueueBody (AActor *body)
 EXTERN_CVAR(Bool, sv_singleplayerrespawn)
 void G_DoReborn (int playernum, bool freshbot)
 {
-	if (!multiplayer && !(level.flags2 & LEVEL2_ALLOWRESPAWN) && !sv_singleplayerrespawn)
+	if (!multiplayer && !(level.flags2 & LEVEL2_ALLOWRESPAWN) && !sv_singleplayerrespawn &&
+		!G_SkillProperty(SKILLP_PlayerRespawn))
 	{
 		if (BackupSaveName.Len() > 0 && FileExists (BackupSaveName.GetChars()))
 		{ // Load game from the last point it was saved
@@ -1771,7 +1773,7 @@ void G_DoReborn (int playernum, bool freshbot)
 		}
 
 		// spawn at random spot if in deathmatch
-		if (deathmatch || isUnfriendly)
+		if ((deathmatch || isUnfriendly) && (level.deathmatchstarts.Size () > 0))
 		{
 			G_DeathMatchSpawnPlayer (playernum);
 			return;
@@ -2255,14 +2257,17 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 
 	// Do not even try, if we're not in a level. (Can happen after
 	// a demo finishes playback.)
-	if (level.lines.Size() == 0 || level.sectors.Size() == 0 || gamestate != GS_LEVEL || demoplayback)
+	if (level.lines.Size() == 0 || level.sectors.Size() == 0 || gamestate != GS_LEVEL)
 	{
 		return;
 	}
 
-	if (demoplayback) { filename = G_BuildSaveName ("delete." SAVEGAME_EXT, -1); }
+	if (demoplayback)
+	{
+		filename = G_BuildSaveName ("demosave." SAVEGAME_EXT, -1);
+	}
 
-	if (1 && !demoplayback)
+	if (cl_waitforsave)
 		I_FreezeTime(true);
 
 	insave = true;
@@ -2275,17 +2280,17 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 		// delete the snapshot. Since the save failed it is broken.
 		insave = false;
 		level.info->Snapshot.Clean();
-		Printf(PRINT_HIGH, "The save file failed to be created!\n");
+		Printf(PRINT_HIGH, "Save failed\n");
 		Printf(PRINT_HIGH, "%s\n", err.GetMessage());
 		// The time freeze must be reset if the save fails.
-		if (1 && !demoplayback)
+		if (cl_waitforsave)
 			I_FreezeTime(false);
 		return;
 	}
 	catch (...)
 	{
 		insave = false;
-		if (1 && !demoplayback)
+		if (cl_waitforsave)
 			I_FreezeTime(false);
 		throw;
 	}
@@ -2371,10 +2376,10 @@ void G_DoSaveGame (bool okForQuicksave, FString filename, const char *descriptio
 	if (test != nullptr)
 	{
 		delete test;
-		/*if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
-		else Printf ("%s\n", GStrings("GGSAVED"));*/
+		if (longsavemessages) Printf ("%s (%s)\n", GStrings("GGSAVED"), filename.GetChars());
+		else Printf ("%s\n", GStrings("GGSAVED"));
 	}
-	else Printf(PRINT_HIGH, "The save file couldn't be written.\n");
+	else Printf(PRINT_HIGH, "Save failed\n");
 
 
 	BackupSaveName = filename;

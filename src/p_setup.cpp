@@ -85,6 +85,7 @@
 #include "c_console.h"
 #include "c_cvars.h"
 #include "p_acs.h"
+#include "announcer.h"
 #include "wi_stuff.h"
 #include "stats.h"
 #include "doomerrors.h"
@@ -115,6 +116,7 @@
 #include "events.h"
 #include "types.h"
 #include "i_time.h"
+#include "scripting/vm/vm.h"
 
 #include "fragglescript/t_fs.h"
 
@@ -551,6 +553,18 @@ void MapData::GetChecksum(uint8_t cksum[16])
 	md5.Final(cksum);
 }
 
+DEFINE_ACTION_FUNCTION(FLevelLocals, GetChecksum)
+{
+	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	char md5string[33];
+
+	for(int j = 0; j < 16; ++j)
+	{
+        	sprintf(md5string + j * 2, "%02x", level.md5[j]);
+	}
+
+	ACTION_RETURN_STRING((const char*)md5string);
+}
 
 //===========================================================================
 //
@@ -1817,6 +1831,7 @@ void P_LoadThings2 (MapData * map)
 		mti[i].Alpha = -1;
 		mti[i].Health = 1;
 		mti[i].FloatbobPhase = -1;
+		mti[i].friendlyseeblocks = -1;
 	}
 	delete[] mtp;
 }
@@ -3814,8 +3829,6 @@ void P_SetupLevel (const char *lumpname, int position)
 				P_LoadThings (map);
 			else
 				P_LoadThings2 (map);	// [RH] Load Hexen-style things
-
-			SetCompatibilityParams();
 		}
 		else
 		{
@@ -3823,6 +3836,8 @@ void P_SetupLevel (const char *lumpname, int position)
 			P_ParseTextMap(map, missingtex);
 			times[0].Unclock();
 		}
+
+		SetCompatibilityParams();
 
 		times[6].Clock();
 		P_LoopSidedefs (true);
@@ -4173,6 +4188,11 @@ void P_SetupLevel (const char *lumpname, int position)
 		S_PrecacheLevel ();
 	}
 	times[17].Unclock();
+
+	if (deathmatch)
+	{
+		AnnounceGameStart ();
+	}
 
 	P_ResetSightCounters (true);
 	//Printf ("free memory: 0x%x\n", Z_FreeMemory());

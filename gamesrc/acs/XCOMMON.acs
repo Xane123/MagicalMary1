@@ -4,6 +4,7 @@
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
 //XCOMMON, due to how messy of a big file it is, has used 108/128 variables, with 20 left! Use them wisely!
+//This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
 
@@ -27,7 +28,7 @@ world int 8:framecount;	//Current frame; Use for waiting for certain frames to d
 world int 10:ss_return_id;	//The checkpoint ID that the player will respawn from upon returning from a special stage.
 world int 11:OpenInput[];	//Curent player input; 0-7 = Current, 8-15 = Previous.
 //World variable 12 is availiable!
-world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PN()] = X, [MAX_PLAYERS+PN()] = Y, [MAX_PLAYERS*2+PN()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PN()] is supposedly used for jump-through platforms.
+world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PlayerNumber()] = X, [MAX_PLAYERS+PlayerNumber()] = Y, [MAX_PLAYERS*2+PlayerNumber()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PlayerNumber()] is supposedly used for jump-through platforms.
 
 //GLOBAL variables are always valid, no matter how many levels the player goes through.
 global int 2:score[];
@@ -51,11 +52,11 @@ global int 18:timer_tics;	//Used for the speedrunning timer's "milliseconds".
 
 //Global variable #0 is available!
 
-global bool 19:challenge_status[];	//The array of each challenge's status. Completed give less coins as a reward. There's two challenges per level, so 0 and 1 are for 1-2, etc.
+global bool 19:challenge_status[];	//Indicates if a challenge for a level is completed, marking it in the interface when selecting levels. There's only one per level, so each index is the level number - 1.
 
 global int 20:level[];	//Level number; [0] is highest level reached, [1] is last level played, and [2] is the last #-1 (start of world) level visited (used for Game Over script).
 
-global int 21:stored_velocity[];	//Stored velocity during normal level transitions.
+global int 21:stored_velocity[];	//Used for hackish teleporting to and from the Small Hut ([0]). Unknown about its other purposes.
 
 global bool 22:no_scripts[];	//Tells most standard scripts like special abilities not to run.
 global bool 23:important_fade[];		//If an important fade (like dying or a transition) is happening, set this to TRUE.
@@ -429,11 +430,11 @@ script "Rail" (int path_follower, int bpanel)
 		SetActorAngle(0, GetActorAngle(path_follower+whichslot));
 		Spawn("GrindSpark",GetActorX(0),GetActorY(0),GetActorZ(0));
 		
-		if( ( (openInput[MAX_PLAYERS*4+PN()] & BT_JUMP || openInput[MAX_PLAYERS*4+PN()] & BT_USE) && railtics>17 && no_jump==FALSE) || CheckInventory("ForceJump")==TRUE) { rt_x = GetActorX(0); rt_y = GetActorY(0); }
+		if( ( (openInput[MAX_PLAYERS*4+PlayerNumber()] & BT_JUMP || openInput[MAX_PLAYERS*4+PlayerNumber()] & BT_USE) && railtics>17 && no_jump==FALSE) || CheckInventory("ForceJump")==TRUE) { rt_x = GetActorX(0); rt_y = GetActorY(0); }
 	}
 	
 	ThrustThing(GetActorAngle(0)>>8,23,TRUE,0);
-	if((openInput[MAX_PLAYERS*4+PN()] & BT_JUMP || openInput[MAX_PLAYERS*4+PN()] & BT_USE) && no_jump==FALSE) ThrustThingZ(0, 28,FALSE,TRUE);
+	if((openInput[MAX_PLAYERS*4+PlayerNumber()] & BT_JUMP || openInput[MAX_PLAYERS*4+PlayerNumber()] & BT_USE) && no_jump==FALSE) ThrustThingZ(0, 28,FALSE,TRUE);
 	
  	if(CheckActorClass(0, "LGirlPlayer")==FALSE&&CheckActorClass(0, "XanePlayer")==FALSE&&CheckActorClass(0, "LGirlPlayer_Super")==FALSE&&CheckActorClass(0, "XanePlayer_Super")==FALSE) SetActorState(0, "GrindEnd", FALSE);	//If not Mary, make the monster appear to be "grinding".
 	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) { no_variable_jumping[PlayerNumber()] = TRUE; ACS_NamedExecuteAlways("DisableVarJumpHeightsUntilGroundHit",0,0,0,0); }
@@ -458,7 +459,7 @@ int airsupply[MAX_PLAYERS] = { 1050, 1050, 1050, 1050, 1050, 1050, 1050, 1050 };
 
 #define CONSTANT_LAVA_TICS 32
 
-int hammermove[MAX_PLAYERS];	//How many tics to prevent walljumping[PN()]; The opposite of "walljumping[PN()]".
+int hammermove[MAX_PLAYERS];	//How many tics to prevent walljumping[PlayerNumber()]; The opposite of "walljumping[PlayerNumber()]".
 int walljumping[MAX_PLAYERS];	//How many tics to not allow hammer abilities.
 int fspeed[MAX_PLAYERS];	//The player's current falling speed. It is set to 0 if they move upward.
 bool fscreamed[MAX_PLAYERS];	//Has Mary screamed yet?
@@ -486,15 +487,15 @@ script "SetSpecial" (int property, int front, int back)	//0/FALSE: behavior; 1/T
 {
 	if(property==1) { front = front << 16; back = back << 16; }
 	
-	If(LineSide()==LINE_FRONT) { if(property==0) { specialbehavior[PN()] = front; specialbehavior[MAX_PLAYERS] = front; } if(property==1) { specialheight[PN()] = front; specialheight[MAX_PLAYERS] = front; } }
-	Else { if(property==0) { specialbehavior[PN()] = back; specialbehavior[MAX_PLAYERS] = back; } if(property==1) { specialheight[PN()] = back; specialheight[MAX_PLAYERS] = back; } }
+	If(LineSide()==LINE_FRONT) { if(property==0) { specialbehavior[PlayerNumber()] = front; specialbehavior[MAX_PLAYERS] = front; } if(property==1) { specialheight[PlayerNumber()] = front; specialheight[MAX_PLAYERS] = front; } }
+	Else { if(property==0) { specialbehavior[PlayerNumber()] = back; specialbehavior[MAX_PLAYERS] = back; } if(property==1) { specialheight[PlayerNumber()] = back; specialheight[MAX_PLAYERS] = back; } }
 	If(GetCVAR("debug_water")==TRUE) print(s:"HEIGHT: ", f:specialheight[MAX_PLAYERS], s:"\nBEHAV: ", d:specialbehavior[MAX_PLAYERS]);
 }
 
 int no_movement[MAX_PLAYERS];	//Tics until the player can move with the movement keys.
 script "PreventMovement" (int tics, int all_players)
 {
-	If(all_players==FALSE) no_movement[PN()] = tics;
+	If(all_players==FALSE) no_movement[PlayerNumber()] = tics;
 	Else
 	{
 		For(int pm_playercount = 0; pm_playercount <= PlayerCount(); pm_playercount++) no_movement[pm_playercount] = tics;
@@ -504,35 +505,35 @@ script "PreventMovement" (int tics, int all_players)
 script "CheckWater" ENTER
 {
 int lasttid, input_water[MAX_PLAYERS];
-While(specialbehavior[PN()]==0)	//While water is enabled for the current player.
+While(specialbehavior[PlayerNumber()]==0)	//While water is enabled for the current player.
 	{
-	waterlevels[PN()] = WaterLevel(0);	//Get water levels
+	waterlevels[PlayerNumber()] = WaterLevel(0);	//Get water levels
 	Delay(1);
-	if(no_scripts[PN()]==FALSE && waterlevels[PN()] == 0 && WaterLevel(0) < 3 && (abs(GetActorVelX(GetCurrentPlayerTID())) > 13.0 || abs(GetActorVelY(GetCurrentPlayerTID())) > 13.0) && specialbehavior[PN()] == 0)//Compare to see if it changed.
+	if(no_scripts[PlayerNumber()]==FALSE && waterlevels[PlayerNumber()] == 0 && WaterLevel(0) < 3 && (abs(GetActorVelX(GetCurrentPlayerTID())) > 13.0 || abs(GetActorVelY(GetCurrentPlayerTID())) > 13.0) && specialbehavior[PlayerNumber()] == 0)//Compare to see if it changed.
 		{	//The water level changed now, and the player's going fast enough? Run on the water!
 		GiveActorInventory(GetCurrentPlayerTID(),"onWater",1);
 		lasttid = 0;
 		
 		While(WaterLevel(0)>0)
 			{			
-			hammermove[PN()] = 5;
-			If(WaterLevel(0)>0)	walljumping[PN()] = 5;
+			hammermove[PlayerNumber()] = 5;
+			If(WaterLevel(0)>0)	walljumping[PlayerNumber()] = 5;
 			ACS_ExecuteAlways(66,0,0,0,0);
-			fspeed[PN()] = 0.0;
-			fscreamed[PN()] = FALSE;
-			no_movement[PN()] = 5;	//Don't allow the player to control their movement on water (minus stopping and Air Dashes).
+			fspeed[PlayerNumber()] = 0.0;
+			fscreamed[PlayerNumber()] = FALSE;
+			no_movement[PlayerNumber()] = 5;	//Don't allow the player to control their movement on water (minus stopping and Air Dashes).
 			lasttid++;
-			input_water[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+			input_water[PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
 			
-			if(specialheight[PN()]+16.1>GetActorZ(0))
+			if(specialheight[PlayerNumber()]+16.1>GetActorZ(0))
 			{
-				If(input_water[PN()] & BT_JUMP)
+				If(input_water[PlayerNumber()] & BT_JUMP)
 				{
 					ACS_NamedExecuteAlways("PlaySoundX",0,1,0,0);
 					ThrustThingZ(GetCurrentPlayerTID(),48,FALSE,TRUE);
 					Delay(5);
 				}
-				Else if(input_water[PN()] & BT_BACK) SetActorVelocity(GetCurrentPlayerTID(),FixedDiv(GetActorVelX(GetCurrentPlayerTID()), 1.01),FixedDiv(GetActorVelY(GetCurrentPlayerTID()), 1.01),1.5,FALSE,FALSE);
+				Else if(input_water[PlayerNumber()] & BT_BACK) SetActorVelocity(GetCurrentPlayerTID(),FixedDiv(GetActorVelX(GetCurrentPlayerTID()), 1.01),FixedDiv(GetActorVelY(GetCurrentPlayerTID()), 1.01),1.5,FALSE,FALSE);
 				Else SetActorVelocity(GetCurrentPlayerTID(),FixedMul(GetActorVelX(GetCurrentPlayerTID()), 1.0),FixedMul(GetActorVelY(GetCurrentPlayerTID()), 1.0),1.5,FALSE,FALSE);
 			}
 			
@@ -550,14 +551,14 @@ While(specialbehavior[PN()]==0)	//While water is enabled for the current player.
 	ACS_NamedExecuteAlways("RunCheckScript",0,0,0,0);
 }
 
-script "GetSpecial" (int which) { If(which<0) which = 0; If(which>1) which = 1; If(which==0) SetResultValue(specialbehavior[PN()]); If(which==1)SetResultValue(specialheight[PN()]); }
+script "GetSpecial" (int which) { If(which<0) which = 0; If(which>1) which = 1; If(which==0) SetResultValue(specialbehavior[PlayerNumber()]); If(which==1)SetResultValue(specialheight[PlayerNumber()]); }
 
 function int WaterLevel (int x)	//This should recreate the built-in waterlevel variables.
 {
-	if(GetActorZ(0)<=specialheight[PN()]-abs(GetActorProperty(0, APROP_Height))) x = 4;	//Fully submerged
-	else if(GetActorZ(0)<=(specialheight[PN()]-abs(GetActorProperty(0, APROP_Height))/2)) x = 3;	//At least 1/2 in water.
-	else if(GetActorZ(0)<=(specialheight[PN()]-abs(GetActorProperty(0, APROP_Height))/4)) x = 2;	//At least 1/4 in water.
-	else if(GetActorZ(0)<=specialheight[PN()]) x = 1;	//At least this person's feet are in water.
+	if(GetActorZ(0)<=specialheight[PlayerNumber()]-abs(GetActorProperty(0, APROP_Height))) x = 4;	//Fully submerged
+	else if(GetActorZ(0)<=(specialheight[PlayerNumber()]-abs(GetActorProperty(0, APROP_Height))/2)) x = 3;	//At least 1/2 in water.
+	else if(GetActorZ(0)<=(specialheight[PlayerNumber()]-abs(GetActorProperty(0, APROP_Height))/4)) x = 2;	//At least 1/4 in water.
+	else if(GetActorZ(0)<=specialheight[PlayerNumber()]) x = 1;	//At least this person's feet are in water.
 	else x = 0;	//Not in water.
 	
 	If(GetCVAR("debug_water")) Log(s:"WaterLevel: ", d:x);
@@ -568,7 +569,7 @@ function int WaterLevel (int x)	//This should recreate the built-in waterlevel v
 
 script "CheckDeathPit" (void)
 {
-	While(specialbehavior[PN()]==1)
+	While(specialbehavior[PlayerNumber()]==1)
 	{
 		Delay(1);
 		//If the player ever falls below the special plane's height, kill them instantly.
@@ -586,16 +587,16 @@ script "CheckLava" (void)
 {
 	ACS_NamedExecuteAlways("ApplyLavaDamage",0,0,0,0);
 	
-	Until(specialbehavior[PN()]!=2&&lava_damage[PN()]==0)
+	Until(specialbehavior[PlayerNumber()]!=2&&lava_damage[PlayerNumber()]==0)
 	{
-		Until(WaterLevel(0)>0) { If(lava_damage[PN()]>0&&framecount % 8 == 7) lava_damage[PN()]--; Delay(1); }
+		Until(WaterLevel(0)>0) { If(lava_damage[PlayerNumber()]>0&&framecount % 8 == 7) lava_damage[PlayerNumber()]--; Delay(1); }
 		
-		If(lava_damage[PN()]<12)
+		If(lava_damage[PlayerNumber()]<12)
 		{
-			If(WaterLevel(0)==1) { If(lava_damage[PN()]<2) lava_damage[PN()] += 3; Else lava_damage[PN()]++; }
-			If(WaterLevel(0)==2) lava_damage[PN()] ++;
-			If(WaterLevel(0)==3) lava_damage[PN()] += 2;
-			If(WaterLevel(0)==4) lava_damage[PN()] += 3;
+			If(WaterLevel(0)==1) { If(lava_damage[PlayerNumber()]<2) lava_damage[PlayerNumber()] += 3; Else lava_damage[PlayerNumber()]++; }
+			If(WaterLevel(0)==2) lava_damage[PlayerNumber()] ++;
+			If(WaterLevel(0)==3) lava_damage[PlayerNumber()] += 2;
+			If(WaterLevel(0)==4) lava_damage[PlayerNumber()] += 3;
 		}
 		
 		Delay(23);
@@ -608,18 +609,18 @@ script "CheckLava" (void)
 
 script "ApplyLavaDamage" (void)
 {
-	While(specialbehavior[PN()]==2)
+	While(specialbehavior[PlayerNumber()]==2)
 	{
 		Delay(23);
-		If(lava_damage[PN()]>0) { If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PN()], 14); Else DamageThing(lava_damage[PN()]/2, 14); StopSound(0, CHAN_VOICE); PrintBold(d:lava_damage[0]); }
+		If(lava_damage[PlayerNumber()]>0) { If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PlayerNumber()], 14); Else DamageThing(lava_damage[PlayerNumber()]/2, 14); StopSound(0, CHAN_VOICE); PrintBold(d:lava_damage[0]); }
 	}
 }
 
 script "RunCheckScript" (void)
 {
-	if(specialbehavior[PN()]==0) ACS_NamedExecuteAlways("CheckWater",0,0,0,0);
-	if(specialbehavior[PN()]==1) ACS_NamedExecuteAlways("CheckDeathPit",0,0,0,0);
-	if(specialbehavior[PN()]==2) ACS_NamedExecuteAlways("CheckLava",0,0,0,0);	
+	if(specialbehavior[PlayerNumber()]==0) ACS_NamedExecuteAlways("CheckWater",0,0,0,0);
+	if(specialbehavior[PlayerNumber()]==1) ACS_NamedExecuteAlways("CheckDeathPit",0,0,0,0);
+	if(specialbehavior[PlayerNumber()]==2) ACS_NamedExecuteAlways("CheckLava",0,0,0,0);	
 }
 
 #define MAXRANDOMBUBBLEINDEXES 90
@@ -695,7 +696,8 @@ script "PlayFootstepSound" (void)	//This plays sounds depending on the surface t
 		CheckActorFloorTexture(0, "SPECORA2") ||
 		CheckActorFloorTexture(0, "EXDS_VNT")
 		) { fs_channel = !fs_channel; PlaySound(0, "step/metal", 4+fs_channel, 0.5, FALSE, 0.8); }
-		Else If(CheckActorFloorTexture(0, "CITYWIND")
+		Else If(CheckActorFloorTexture(0, "CITYWIND") ||
+		CheckActorFloorTexture(0, "T_SHAWNG")
 		) PlaySound(0, "step/glass", 4, 1.0, FALSE, 1.03);
 		Else If(CheckActorFloorTexture(0, "CARPET01") ||
 		CheckActorFloorTexture(0, "CARPET02") ||
@@ -769,6 +771,39 @@ Floor_RaiseToNearest(sid,32767);
 Delay(1);
 }
 
+//CHARACTER-SPECIFIC AREAS
+script "ForceField" (int character, int mode, int spawnid)
+//MODES:
+//0: Rejects if not the indicated player character ID.
+//1: Kills if not the selected player ID (used as last resort if the player glitches through the actual forcefield)
+//2: Bouncy walls
+{
+	If(mode<2&&PlayerClass(PlayerNumber())==2) Terminate;	//The scale tester is allowed to go anywhere!
+	If(mode!=1)
+	{
+		If(mode==0&&PlayerClass(PlayerNumber())==character)	//If you are the character, go through but do nothing for now.
+		{
+			/*If(spawns[spawnid]==FALSE)
+			{
+				ACS_Execute(spawnid+10,0,0,0,0);	//Execute a script based on the spawn ID; 0-9 = S10-19.
+				spawns[spawnid] = TRUE;
+			}*/
+		}
+		Else
+		{
+			Switch(mode)
+			{
+				Case 0: SetActorVelocity(0, -(FixedMul(GetActorVelX(0),2.25)), -(FixedMul(GetActorVelY(0),2.25)), FixedMul(GetActorVelZ(0),1.33), FALSE, FALSE); Break;
+				Case 2: SetActorVelocity(2, -(FixedMul(GetActorVelX(0),1.13)), -(FixedMul(GetActorVelY(0),1.13)), FixedMul(GetActorVelZ(0),1.13), FALSE, FALSE); Break;
+			}
+			If(mode==0)
+			{
+				If(character==CHAR_MARY) Log(s:"\c[Brick]This area is only for Mary."); If(character==CHAR_XANE) Log(s:"\c[Brick]This area is only for Xane.");
+			}
+		}
+	}
+	Else  If(PlayerClass(PlayerNumber())!=character) DamageThing(255,0);
+}
 
 /////////////////
 //PRECIPITATION//
@@ -956,7 +991,7 @@ While(1)
   }
 }
 
-script 311 (int mode) { rain_mode[PN()] = mode; }
+script 311 (int mode) { rain_mode[PlayerNumber()] = mode; }
 
 script "Snow_CheckSky" (void)	//Used by both rain and snow.
 {
@@ -980,11 +1015,11 @@ Script "ControlWPhase" ENTER
 {
 	While(1)
 	{
-		if(direction[PN()]<wind_phase[PN()]) wind_phase[PN()] -= 0.005;
-		if(direction[PN()]>wind_phase[PN()]) wind_phase[PN()] += 0.005;
+		if(direction[PlayerNumber()]<wind_phase[PlayerNumber()]) wind_phase[PlayerNumber()] -= 0.005;
+		if(direction[PlayerNumber()]>wind_phase[PlayerNumber()]) wind_phase[PlayerNumber()] += 0.005;
 		
-		wind_x[PN()] = FixedMul(sin(wind_phase[PN()]),FixedDiv(wind_power[PN()],2));
-		wind_y[PN()] = FixedMul(cos(wind_phase[PN()]),FixedDiv(wind_power[PN()],2));
+		wind_x[PlayerNumber()] = FixedMul(sin(wind_phase[PlayerNumber()]),FixedDiv(wind_power[PlayerNumber()],2));
+		wind_y[PlayerNumber()] = FixedMul(cos(wind_phase[PlayerNumber()]),FixedDiv(wind_power[PlayerNumber()],2));
 		
 		Delay(3);
 	}
@@ -993,7 +1028,7 @@ Script "ControlWPhase" ENTER
 Script "AutoWind" OPEN
 {
 	int bg_direction;	//Current "wind direction" when auto wind is overwritten.
-	int fake_direction;	//Imitation of wind_phase[PN()] to accurately imitate wind direction when in the "background".
+	int fake_direction;	//Imitation of wind_phase[PlayerNumber()] to accurately imitate wind direction when in the "background".
 	
 	direction[0] = 0.5;
 	direction[1] = 0.5;
@@ -1034,7 +1069,7 @@ script "SetWind" (int mode, int value, int all_players)
 		
 		if(value==0)
 		{
-			if(all_players==FALSE) { if(disablewind[PN()]>0&&wind_disabledelay[PN()]==0) { disablewind[PN()]--; wind_disabledelay[PN()] = CONST_WIND_DISABLETICS; } }
+			if(all_players==FALSE) { if(disablewind[PlayerNumber()]>0&&wind_disabledelay[PlayerNumber()]==0) { disablewind[PlayerNumber()]--; wind_disabledelay[PlayerNumber()] = CONST_WIND_DISABLETICS; } }
 			Else
 			{
 				if(disablewind[0]>0&&wind_disabledelay[0]==0) disablewind[0]--;
@@ -1058,7 +1093,7 @@ script "SetWind" (int mode, int value, int all_players)
 		}
 		if(value==1)
 		{
-			if(all_players==FALSE) { if(wind_disabledelay[PN()]==0) { disablewind[PN()]++; wind_disabledelay[PN()] = CONST_WIND_DISABLETICS; } }
+			if(all_players==FALSE) { if(wind_disabledelay[PlayerNumber()]==0) { disablewind[PlayerNumber()]++; wind_disabledelay[PlayerNumber()] = CONST_WIND_DISABLETICS; } }
 			Else
 			{
 				if(wind_disabledelay[0]==0)disablewind[0]++;
@@ -1087,7 +1122,7 @@ script "SetWind" (int mode, int value, int all_players)
 		if(value>CONST_WINDSPEED_MAX) value = CONST_WINDSPEED_MAX;
 		if(value<0) value = 0;
 		
-		if(all_playerS==FALSE) wind_power[PN()] = value;
+		if(all_playerS==FALSE) wind_power[PlayerNumber()] = value;
 		Else
 		{
 			wind_power[0] = value;
@@ -1106,7 +1141,7 @@ script "SetWind" (int mode, int value, int all_players)
 		If(value<0) value = 0;
 		If(value>8) value = 12;
 		
-		if(all_players==FALSE) override[PN()] = TRUE;
+		if(all_players==FALSE) override[PlayerNumber()] = TRUE;
 		Else
 		{
 			override[0] = TRUE;
@@ -1122,7 +1157,7 @@ script "SetWind" (int mode, int value, int all_players)
 		Switch(value)
 		{
 			Case 0:
-				if(all_players==FALSE)override[PN()] = FALSE;
+				if(all_players==FALSE)override[PlayerNumber()] = FALSE;
 				Else
 				{
 					override[0] = FALSE;
@@ -1161,7 +1196,7 @@ script "SetWind" (int mode, int value, int all_players)
 			Break;
 		}
 		
-		if(all_players==FALSE) direction[PN()] = value;	//Set this as the requested wind direction.
+		if(all_players==FALSE) direction[PlayerNumber()] = value;	//Set this as the requested wind direction.
 		Else
 		{
 			direction[0] = value;
@@ -1321,6 +1356,7 @@ Else If(GameType()==GAME_NET_COOPERATIVE)
             Else
                 {
                 PrintBold(s:" PLEASE WAIT!\n", d:ACS_NamedExecuteWithResult("ExitDetermineRequirement",0,0,0,0)-playersExit, s:" PLAYER(S) NEEDED TO EXIT THIS AREA.");
+                ACS_NamedExecute("ExitNag",0,0,0,0);
                 }
             }
         Else
@@ -1367,6 +1403,50 @@ Break;
 SetResultValue(value);
 }
 
+script "ExitNag"  (void)
+{
+/*If(playersExitArray[0]==false)
+    {
+    SetActivator(1000,AAPTR_PLAYER1);
+    Print(s:"Hurry up, Player 1!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[1]==false)
+    {
+    SetActivator(1001,AAPTR_PLAYER2);
+    Print(s:"Hurry up, Player 2!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[2]==false)
+    {
+    SetActivator(1002,AAPTR_PLAYER3);
+    Print(s:"Hurry up, Player 3!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[3]==false)
+    {
+    SetActivator(1003,AAPTR_PLAYER4);
+    Print(s:"Hurry up, Player 4!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[4]==false)
+    {
+    SetActivator(1004,AAPTR_PLAYER5);
+    Print(s:"Hurry up, Player 5!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[5]==false)
+    {
+    SetActivator(1005,AAPTR_PLAYER6);
+    Print(s:"Hurry up, Player 6!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[6]==false)
+    {
+    SetActivator(1006,AAPTR_PLAYER7);
+    Print(s:"Hurry up, Player 7!\nYour team is waiting for you\nat the end of this area!");
+    }
+If(playersExitArray[7]==false)
+    {
+    SetActivator(1007,AAPTR_PLAYER8);
+    Print(s:"Hurry up, Player 8!\nYour team is waiting for you\nat the end of this area!");
+    }*/
+}
+
 int levelinfo[6] = { 99, 99, 99, 99, 99, 99 };
 
 
@@ -1381,6 +1461,59 @@ While(1)
 		levelinfo[3] = GetLevelInfo(LEVELINFO_TOTAL_ITEMS);
 		levelinfo[4] = GetLevelInfo(LEVELINFO_FOUND_SECRETS);
 		levelinfo[5] = GetLevelInfo(LEVELINFO_TOTAL_SECRETS);
+	}
+}
+
+/*script "TestPointHUDHealth" ENTER
+{
+	int old_tid, new_tid;
+	While(1)
+	{			
+		// Get the existing TID, if there is one.
+		// A TID of 0 is the same as not having a TID, so "setting" it to 0 will not
+		// change anything's TID.
+		old_tid = PickActor(1000, GetActorAngle(0), GetActorPitch(0), 512, 0, MF_SOLID, 0, PICKAF_RETURNTID);
+		
+		// Find a TID that's not currently in use.
+		new_tid = UniqueTID();
+		
+		// Do the "real" call.  This will return true if an actor was actually found,
+		// and also forcibly set its TID.
+		if (PickActor(1000, GetActorAngle(0), GetActorPitch(0), 512, new_tid, MF_SOLID, 0, PICKAF_FORCETID))
+		{
+			// Do some stuff with the temporary TID.
+			PrintBold(d:GetActorProperty(new_tid, APROP_Health), s:"/", d:GetActorProperty(new_tid,APROP_SpawnHealth));
+			
+			// When you're done, restore the actor's TID to its original value.
+			Thing_ChangeTID(new_tid, old_tid);
+		}
+		
+		Delay(3);
+	}
+}*/
+
+bool moveskybox = TRUE;	//Set this to FALSE to make this script stop moving the skybox viewpoint based on player 1's movement.
+script "MoveSkybox" (void)
+{	
+	Thing_ChangeTID(0, 615);
+	
+	Delay(3);
+	
+	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||movesky[0]<=0||movesky[1]<=0) Terminate;
+	SetActivator(1000, AAPTR_PLAYER1);
+	
+	int skybox_x, skybox_y, skybox_z;
+	skybox_x = GetActorX(615);
+	skybox_y = GetActorY(615);
+	skybox_z = GetActorZ(615);
+	
+	While(moveskybox)
+	{
+		If(movesky[0]==0) movesky[0] = 16;	//Prevent division by zero by setting these to a slow-moving number like 16.
+		If(movesky[1]==0) movesky[1] = 16;
+		SetActorPosition(615, skybox_x+(GetActorX(1000)/movesky[0]), skybox_y+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
+		
+		Delay(1);
 	}
 }
 
@@ -1444,7 +1577,7 @@ script "LTimer" ENTER
 {
 //gamemode = 1;
 
-If(gamemode==0) { seconds[PN()] = 0; timer_tics = 0; }
+If(gamemode==0) { seconds[PlayerNumber()] = 0; timer_tics = 0; }
 
 int lump_name = StrParam(n:PRINTNAME_LEVEL);
 
@@ -1458,18 +1591,18 @@ While(ltime_control!=TIME_STOP)	//time_pause is temporary; Time_stop is used whe
 		{
 			SetHUDSize(0,0,FALSE);
 			SetFont("STIMEFNT");
-			If(seconds[PN()] % 60 >= 10)
+			If(seconds[PlayerNumber()] % 60 >= 10)
 			{
-					HUDMessage (d:seconds[PN()] / 60,s:":",d:seconds[PN()] % 60;
+					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":",d:seconds[PlayerNumber()] % 60;
 				HUDMSG_FADEOUT, 20, CR_WHITE, 0.98,0.01, 60.0, 0.0, 0.0);   //Text
-					HUDMessage (d:seconds[PN()] / 60,s:":",d:seconds[PN()] % 60;
+					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":",d:seconds[PlayerNumber()] % 60;
 				HUDMSG_FADEOUT, 20, CR_BLACK, 0.985,0.02, 60.0, 0.0, 0.0);//Shadow
 			}
 			Else
 			{
-					HUDMessage (d:seconds[PN()] / 60,s:":0",d:seconds[PN()] % 60;
+					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":0",d:seconds[PlayerNumber()] % 60;
 				HUDMSG_FADEOUT, 20, CR_WHITE, 0.98,0.01, 60.0, 0.05, 0.05);
-					HUDMessage (d:seconds[PN()] / 60,s:":0",d:seconds[PN()] % 60;
+					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":0",d:seconds[PlayerNumber()] % 60;
 				HUDMSG_FADEOUT, 20, CR_BLACK, 0.985,0.02, 60.0, 0.05, 0.05);//Shadow
 			}
 		}
@@ -1477,25 +1610,25 @@ While(ltime_control!=TIME_STOP)	//time_pause is temporary; Time_stop is used whe
 		{
 			SetHUDSize(320,200,TRUE);
 			SetFont("BIG_TEXT");
-			If(seconds[PN()] % 60 >= 10)
+			If(seconds[PlayerNumber()] % 60 >= 10)
 			{
-					HUDMessage (d:seconds[PN()] / 60,s:":",d:seconds[PN()] % 60;
+					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":",d:seconds[PlayerNumber()] % 60;
 				HUDMSG_FADEOUT, 20, CR_WHITE, 255.0,182.1, 60.0, 0.0, 0.0);   //Text
 			}
 			Else
 			{
-					HUDMessage (d:seconds[PN()] / 60,s:":0",d:seconds[PN()] % 60;
+					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":0",d:seconds[PlayerNumber()] % 60;
 				HUDMSG_FADEOUT, 20, CR_WHITE, 255.0,182.1, 60.0, 0.0, 0.0);
 			}
 		}
 		Delay(1);
 		
-		if(ltime_control==TIME_PLAY&&(gamemode>0||(gamemode==0&&seconds[PN()]<599))) timer_tics++;
+		if(ltime_control==TIME_PLAY&&(gamemode>0||(gamemode==0&&seconds[PlayerNumber()]<599))) timer_tics++;
 		ltime_control = TIME_PLAY;
-		if(timer_tics>=35&&((gamemode==0&&seconds[PN()]<599)||gamemode>0))	//Limit the timer to ten minutes (9:59).
+		if(timer_tics>=35&&((gamemode==0&&seconds[PlayerNumber()]<599)||gamemode>0))	//Limit the timer to ten minutes (9:59).
 		{
 				timer_tics = 0;
-				seconds[PN()]++;
+				seconds[PlayerNumber()]++;
 		}
 	}
 }
@@ -1544,7 +1677,7 @@ script "SpeedTimer" ENTER
 	
 	While(gamemode>0)
 	{
-		If(no_scripts[PN()]==FALSE)
+		If(no_scripts[PlayerNumber()]==FALSE)
 		{
 			If(OpenInput[0] & BT_USER3 && !(OpenInput[MAX_PLAYERS] & BT_USER3))	//USER3 = Restart Run
 			{
@@ -1553,10 +1686,10 @@ script "SpeedTimer" ENTER
 				{
 					AmbientSound("menu/backup",256);
 					Log(s:"Restarting run...");
-					important_fade[PN()] = TRUE;
+					important_fade[PlayerNumber()] = TRUE;
 					FadeTo(0,0,0,1.0,0.5);
 					Delay(16);
-					important_fade[PN()] = FALSE;
+					important_fade[PlayerNumber()] = FALSE;
 					Delay(1);
 					ChangeLevel("TMP2",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
 				}
@@ -1584,10 +1717,10 @@ script "SpeedTimer" ENTER
 			}
 		}
 		
-		If(no_scripts[PN()]==TRUE)
+		If(no_scripts[PlayerNumber()]==TRUE)
 		{
 			Delay(3);
-			If(no_scripts[PN()]==FALSE) { Delay(5); }
+			If(no_scripts[PlayerNumber()]==FALSE) { Delay(5); }
 		}
 		
 		Delay(1);
@@ -1602,104 +1735,104 @@ script "DisplayCoinTimers" ENTER
 
 	While(1)
 	{
-		If((ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE) && (ninja_tics[PN()]>0||water_tics[PN()]>0||damage_tics[PN()]>0||heal_tics[PN()]>0||speed_tics[PN()]>0||combo_tics[PN()]>0))
+		If((ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE) && (ninja_tics[PlayerNumber()]>0||water_tics[PlayerNumber()]>0||damage_tics[PlayerNumber()]>0||heal_tics[PlayerNumber()]>0||speed_tics[PlayerNumber()]>0||combo_tics[PlayerNumber()]>0))
 		{
 			HUDMessage (s:"COINS LOCKED";
 				HUDMSG_FADEOUT, 0, CR_RED, 64.1,155.1, 0.01, 0.0, 0.0);
 		}
 		
-		if(ninja_tics[PN()]>0)
+		if(ninja_tics[PlayerNumber()]>0)
 		{
-			If(water_tics[PN()]==0) vposition = TIMER_LOWER;
+			If(water_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
 			Else vposition =  TIMER_UPPER;
 			
 			HUDMessage (s:"NINJA:";
 				HUDMSG_FADEOUT, 0, CR_PURPLE, 254.2,vposition, 0.01, 0.0, 0.0);
 			
-			If((ninja_tics[PN()]/35) % 60 >= 10) {
-			HUDMessage (d:(ninja_tics[PN()]/35) / 60,s:":",d:(ninja_tics[PN()]/35) % 60;
+			If((ninja_tics[PlayerNumber()]/35) % 60 >= 10) {
+			HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":",d:(ninja_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
 			Else {
-			HUDMessage (d:(ninja_tics[PN()]/35) / 60,s:":0",d:(ninja_tics[PN()]/35) % 60;
+			HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":0",d:(ninja_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
 			
 		}
 
-		if(water_tics[PN()]>0)
+		if(water_tics[PlayerNumber()]>0)
 		{
 
 			HUDMessage (s:"WATER:";
 				HUDMSG_FADEOUT, 0, CR_BLUE, 254.2,TIMER_LOWER, 0.01, 0.0, 0.0);
 			
-			If((water_tics[PN()]/35) % 60 >= 10) {
-			HUDMessage (d:(water_tics[PN()]/35) / 60,s:":",d:(water_tics[PN()]/35) % 60;
+			If((water_tics[PlayerNumber()]/35) % 60 >= 10) {
+			HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":",d:(water_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
 			Else {
-			HUDMessage (d:(water_tics[PN()]/35) / 60,s:":0",d:(water_tics[PN()]/35) % 60;
+			HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":0",d:(water_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
 			
 		}
 		
-		if(damage_tics[PN()]>0)
+		if(damage_tics[PlayerNumber()]>0)
 		{
-			If(heal_tics[PN()]==0) vposition = TIMER_LOWER;
+			If(heal_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
 			Else vposition =  TIMER_UPPER;
 			
 			HUDMessage (s:"DAMAGE:";
 				HUDMSG_FADEOUT, 0, CR_ORANGE, 164.2,vposition, 0.01, 0.0, 0.0);
 			
-			If((damage_tics[PN()]/35) % 60 >= 10) {
-			HUDMessage (d:(damage_tics[PN()]/35) / 60,s:":",d:(damage_tics[PN()]/35) % 60;
+			If((damage_tics[PlayerNumber()]/35) % 60 >= 10) {
+			HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":",d:(damage_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
 			Else {
-			HUDMessage (d:(damage_tics[PN()]/35) / 60,s:":0",d:(damage_tics[PN()]/35) % 60;
+			HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":0",d:(damage_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
 			
 		}
 
-		if(heal_tics[PN()]>0)
+		if(heal_tics[PlayerNumber()]>0)
 		{
 		
 			HUDMessage (s:"HEAL:";
 				HUDMSG_FADEOUT, 0, CR_RED, 164.2,TIMER_LOWER, 0.01, 0.0, 0.0);
 			
-			If((heal_tics[PN()]/35) % 60 >= 10) {
-			HUDMessage (d:(heal_tics[PN()]/35) / 60,s:":",d:(heal_tics[PN()]/35) % 60;
+			If((heal_tics[PlayerNumber()]/35) % 60 >= 10) {
+			HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":",d:(heal_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
 			Else {
-			HUDMessage (d:(heal_tics[PN()]/35) / 60,s:":0",d:(heal_tics[PN()]/35) % 60;
+			HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":0",d:(heal_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
 			
 		}
 
-		if(speed_tics[PN()]>0)
+		if(speed_tics[PlayerNumber()]>0)
 		{
-			If(combo_tics[PN()]==0) vposition = TIMER_LOWER;
+			If(combo_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
 			Else vposition =  TIMER_UPPER;
 			
 			HUDMessage (s:"SPEED:";
 				HUDMSG_FADEOUT, 0, CR_GREEN, 64.2,vposition, 0.01, 0.0, 0.0);
 			
-			If((speed_tics[PN()]/35) % 60 >= 10) {
-			HUDMessage (d:(speed_tics[PN()]/35) / 60,s:":",d:(speed_tics[PN()]/35) % 60;
+			If((speed_tics[PlayerNumber()]/35) % 60 >= 10) {
+			HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":",d:(speed_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
 			Else {
-			HUDMessage (d:(speed_tics[PN()]/35) / 60,s:":0",d:(speed_tics[PN()]/35) % 60;
+			HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":0",d:(speed_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
 			
 		}
 		
-		if(combo_tics[PN()]>0)
+		if(combo_tics[PlayerNumber()]>0)
 		{
 		
 			HUDMessage (s:"COMBO:";
 				HUDMSG_FADEOUT, 0, CR_YELLOW, 64.2,TIMER_LOWER, 0.01, 0.0, 0.0);
 			
-			If((combo_tics[PN()]/35) % 60 >= 10) {
-			HUDMessage (d:(combo_tics[PN()]/35) / 60,s:":",d:(combo_tics[PN()]/35) % 60;
+			If((combo_tics[PlayerNumber()]/35) % 60 >= 10) {
+			HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":",d:(combo_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
 			Else {
-			HUDMessage (d:(combo_tics[PN()]/35) / 60,s:":0",d:(combo_tics[PN()]/35) % 60;
+			HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":0",d:(combo_tics[PlayerNumber()]/35) % 60;
 				HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
 			
 		}
@@ -1768,17 +1901,17 @@ script "Ramp" (int hpower, int vpower, int xspecial)
 /*If(abs(GetActorVelX(0))>abs(GetActorVelY(0))) { If(abs(GetActorVelX(0)<9.9)) Terminate; }
 Else { If(abs(GetActorVelY(0)<9.9)) Terminate; }*/
 
-ramph[PN()] = hpower;
-rampv[PN()] = vpower;
+ramph[PlayerNumber()] = hpower;
+rampv[PlayerNumber()] = vpower;
 if(xspecial==1) ActivatorSound("misc/ramplaunch",96);	//(1) Play ramp boost sound.
 
-jumps[PN()] = 0;	//Prevent double/triple jumps from happening if a player lands shortly before this jump...
+jumps[PlayerNumber()] = 0;	//Prevent double/triple jumps from happening if a player lands shortly before this jump...
 
 	Delay(3);
 	
-	jumps[PN()] = 0;	//Prevent double/triple jump detection after landing from this jump.
-	//ramph[PN()] = 0;
-	//rampv[PN()] = 0;
+	jumps[PlayerNumber()] = 0;	//Prevent double/triple jump detection after landing from this jump.
+	//ramph[PlayerNumber()] = 0;
+	//rampv[PlayerNumber()] = 0;
 }
 
 script "PresetRamp" (int which)
@@ -1968,33 +2101,22 @@ script "UpdatePlayerShadows" ENTER
 	}
 }
 
-script 63 (void)
-{
-While(1)
-{
-ActivatorSound("*bossdialogue",127);
-Delay(Random(350,700));
-}
-}
-
 global int 1:remjumps[];
 
 script "TurnSuper" ENTER
 {
-int superinput[MAX_PLAYERS];
 While(1)
 	{
 	Delay(1);
-	superinput[PN()] = GetPlayerInput(PN(),INPUT_BUTTONS);
-	if(superinput[PN()] & BT_USER1)
+	if(openInput[PlayerNumber()] & BT_USER1)
 		{
 		  If(1)
 		  {
-			If(cgem_count>=7||GetCVAR("debug__super")==TRUE)
+			If(cgem_count>=7||GetCVAR("debug_super")==TRUE)
 			{
 				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0)
 				  {
-					If(CheckActorInventory(GetCurrentPlayerTID(),"CoinSP")>=CONSTANT_SCOIN_REQ||GetCVAR("debug__super")==TRUE)
+					If(CheckActorInventory(GetCurrentPlayerTID(),"CoinSP")>=CONSTANT_SCOIN_REQ||GetCVAR("debug_super")==TRUE)
 						{
 						If(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>0)
 							{
@@ -2189,14 +2311,14 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 		
 		If(GetActorProperty(0, APROP_Health)<=1||force_death[PlayerNumber()]==TRUE)
 		{
-			important_fade[PN()] = TRUE;	//Tell flashing scripts to stop changing colors.
+			important_fade[PlayerNumber()] = TRUE;	//Tell flashing scripts to stop changing colors.
 			force_death[PlayerNumber()] = FALSE;	//Prevent additional forced deaths after this.
 			force_detransform[PlayerNumber()] = TRUE;	//Force a detransformation.
 			Delay(3);
 			
 			//SetPlayerProperty(FALSE,ON,PROP_INVULNERABILITY);
 			
-			Switch(death_behavior[PN()])
+			Switch(death_behavior[PlayerNumber()])
 			{
 			Case 0:
 				StopSound(GetCurrentPlayerTID(),CHAN_5);
@@ -2234,7 +2356,7 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 				}  
 				tics_death = 0;
 				
-				death_behavior[PN()] = check_deathbehav[PN()];	//Restore the player's death behavior last to prevent glitches.
+				death_behavior[PlayerNumber()] = check_deathbehav[PlayerNumber()];	//Restore the player's death behavior last to prevent glitches.
 				
 				Autosave();
 			Break;
@@ -2335,7 +2457,7 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 			Break;
 			}
 			SetActivator(1000, AAPTR_PLAYER1); SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
-			important_fade[PN()] = FALSE;	//Tell flashing scripts to stop changing colors.
+			important_fade[PlayerNumber()] = FALSE;	//Tell flashing scripts to stop changing colors.
 			
 		}
 	
@@ -2399,15 +2521,15 @@ script "DetermineAutoJump" (int avoid_carry, int dodges_carry)
 
 script "SetCheckpoint" (int spawn_tid, int set_angle)
 {
-	If(checkpoint_id[PN()]==spawn_tid) Terminate;
-	if(set_angle) //check_angle[PN()] = GetActorAngle(GetCurrentPlayerTID());
+	If(checkpoint_id[PlayerNumber()]==spawn_tid) Terminate;
+	if(set_angle) //check_angle[PlayerNumber()] = GetActorAngle(GetCurrentPlayerTID());
 	{
 		If(LineSide()==LINE_FRONT) check_angle[PlayerNumber()] = -1;
 		Else check_angle[PlayerNumber()] = GetActorAngle(spawn_tid) + 0.5;
 	}
-	else check_angle[PN()] = -1;
+	else check_angle[PlayerNumber()] = -1;
 	
-	checkpoint_id[PN()] = spawn_tid;
+	checkpoint_id[PlayerNumber()] = spawn_tid;
 	
 	Autosave();
 	Delay(5);
@@ -2422,50 +2544,51 @@ script "SetCheckpoint" (int spawn_tid, int set_angle)
 	
 	checkpoint_id[MAX_PLAYERS] = spawn_tid;	//Set array index 8 for enemies to respawn from when falling in pits.
 
-	check_weather[PN()] = rain_mode[PN()];
-	check_ambience[PN()] = amb_current[PN()];
+	check_weather[PlayerNumber()] = rain_mode[PlayerNumber()];
+	check_ambience[PlayerNumber()] = amb_current[PlayerNumber()];
 	wind_disabledelay[PlayerNumber()] = 0;
 	check_wind_dir[PlayerNumber()] = direction[PlayerNumber()];
 	check_windspeed[PlayerNumber()] = wind_power[PlayerNumber()];
 	check_disablewind[PlayerNumber()] = disablewind[PlayerNumber()];
 	
-	check_specbehav[PN()] = specialbehavior[PN()];	//Store the player's current special plane behavior and its height.
-	check_specheight[PN()] = specialheight[PN()];
+	check_specbehav[PlayerNumber()] = specialbehavior[PlayerNumber()];	//Store the player's current special plane behavior and its height.
+	check_specheight[PlayerNumber()] = specialheight[PlayerNumber()];
 	
 	//Only store the current music if the player isn't drowning.
-	If(ACS_ExecuteWithResult(256,0,0,0,0)!=11) check_music[PN()] = ACS_ExecuteWithResult(256,0,0,0,0);
+	If(ACS_ExecuteWithResult(256,0,0,0,0)!=11) check_music[PlayerNumber()] = ACS_ExecuteWithResult(256,0,0,0,0);
 
 }
 
 script "LoadCheckpointInfo" (int deathx)
 {
-	ACS_ExecuteAlways(254,0,check_music[PN()],FALSE,TRUE);
-	specialbehavior[PN()] = check_specbehav[PN()];	//Restore the player's special plane behavior and height before teleporting them!
-	specialheight[PN()] = check_specheight[PN()];
-	specialbehavior[MAX_PLAYERS] = check_specbehav[PN()];	//Also restore it for monsters.
-	specialheight[PN()] = check_specheight[PN()];
+	ACS_ExecuteAlways(254,0,check_music[PlayerNumber()],FALSE,TRUE);
+	specialbehavior[PlayerNumber()] = check_specbehav[PlayerNumber()];	//Restore the player's special plane behavior and height before teleporting them!
+	specialheight[PlayerNumber()] = check_specheight[PlayerNumber()];
+	specialbehavior[MAX_PLAYERS] = check_specbehav[PlayerNumber()];	//Also restore it for monsters.
+	specialheight[PlayerNumber()] = check_specheight[PlayerNumber()];
 	
 	If(deathx==TRUE) lives--;	//If dying, take away a life.
+	SetActorPitch(0, 0);	//Force the player to look directly ahead.
 	
-	if(checkpoint_id[PN()]==0) { checkpoint_id[PN()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
-	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PN()],0,FALSE); Log(s:"No proper detection!"); }	//After teleporting, load all info saved at the checkpoint!
-	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) { Teleport(checkpoint_id[PN()],0,FALSE); tp_to_last_ground_position[PlayerNumber()] = FALSE; } }
+	if(checkpoint_id[PlayerNumber()]==0) { checkpoint_id[PlayerNumber()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
+	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); Log(s:"No proper detection!"); }	//After teleporting, load all info saved at the checkpoint!
+	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); tp_to_last_ground_position[PlayerNumber()] = FALSE; } }
 	If(tp_to_last_ground_position[PlayerNumber()]==TRUE) SetActorAngle(0, last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]);	//If returning from a Special Stage or Small Hut, make the player face the correct position!
 	
-	combo[PN()] = 0;
-	meter[PN()] = 0;
-	meter[PN()+MAX_PLAYERS] = 0;
-	meter[PN()+(MAX_PLAYERS*2)] = 0;
+	combo[PlayerNumber()] = 0;
+	meter[PlayerNumber()] = 0;
+	meter[PlayerNumber()+MAX_PLAYERS] = 0;
+	meter[PlayerNumber()+(MAX_PLAYERS*2)] = 0;
 	
 	ACS_NamedExecuteAlways("SetWind",0,0,check_wind_dir[PlayerNumber()],0);	//Wind direction
 	ACS_NamedExecuteAlways("SetWind",0,1,check_windspeed[PlayerNumber()],0);	//Wind speed/power
 	disablewind[PlayerNumber()] = check_disablewind[PlayerNumber()];	//Disabled wind state
 	If(deathx==TRUE)SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
 	
-	if(check_angle[PN()]!=-1&&tp_to_last_ground_position[PlayerNumber()]==FALSE) SetActorAngle(GetCurrentPlayerTID(), check_angle[PN()]);	//Including stored angle, if set.
+	if(check_angle[PlayerNumber()]!=-1&&tp_to_last_ground_position[PlayerNumber()]==FALSE) SetActorAngle(GetCurrentPlayerTID(), check_angle[PlayerNumber()]);	//Including stored angle, if set.
 	
-	ACS_NamedExecuteAlways("RequestAmbience",0,check_ambience[PN()],0,0);
-	ACS_ExecuteAlways(311,0,check_weather[PN()],0,0);
+	ACS_NamedExecuteAlways("RequestAmbience",0,check_ambience[PlayerNumber()],0,0);
+	ACS_ExecuteAlways(311,0,check_weather[PlayerNumber()],0,0);
 	tp_to_last_ground_position[PlayerNumber()] = FALSE;	//Turn this of to prevent any glitches with later checkpoints.
 }
 
@@ -2530,7 +2653,7 @@ int mod_type = 9;
 	}
 }
 
-script "SetDeathBehavior" (int behavior) { death_behavior[PN()] = behavior; }
+script "SetDeathBehavior" (int behavior) { death_behavior[PlayerNumber()] = behavior; }
 
 script "GotWeapon" (int which, int got) { if(which<2) { Log(s:"Enter the slot number of the weapon instead of 0 or 1."); Terminate; } weapons[which-2] = got; }	//This script is called by weapons to mark them as "obtained".
 
@@ -2589,18 +2712,18 @@ Switch(mode)
 		ACS_NamedExecuteAlways("MaryHammer_DetermineDirection",0,0,0,0);
 	}
 	
-	if(set==5) { flight_mod[PN()] = 1; set = 2; }
+	if(set==5) { flight_mod[PlayerNumber()] = 1; set = 2; }
 	
 	If(set==2)
 	{ 
 		
-		If(flight_mode[PN()]==TRUE&&flight_script_running[PN()]==TRUE) { flight_mode[PN()] = FALSE; updateUmbrellaFlightVelocity[PN()] = TRUE; }	//Indicate Mary's umbrella is up.
-		Else { flight_mode[PN()] = FALSE; ACS_NamedExecuteAlways("MaryHammer_HandleMidAir",0,0,0,0); }	//Execute the script if needed.
+		If(flight_mode[PlayerNumber()]==TRUE&&flight_script_running[PlayerNumber()]==TRUE) { flight_mode[PlayerNumber()] = FALSE; updateUmbrellaFlightVelocity[PlayerNumber()] = TRUE; }	//Indicate Mary's umbrella is up.
+		Else { flight_mode[PlayerNumber()] = FALSE; ACS_NamedExecuteAlways("MaryHammer_HandleMidAir",0,0,0,0); }	//Execute the script if needed.
 	}
 	
-	If(set==3) { flight_mode[PN()] = TRUE; updateUmbrellaFlightVelocity[PN()] = TRUE; }
+	If(set==3) { flight_mode[PlayerNumber()] = TRUE; updateUmbrellaFlightVelocity[PlayerNumber()] = TRUE; }
 	
-	If(set==4) hammermove[PN()] = 13; spring[PN()] = TRUE;
+	If(set==4) hammermove[PlayerNumber()] = 13; spring[PlayerNumber()] = TRUE;
 	
 	Break;
 	Case 1:	//Return a value.
@@ -2619,13 +2742,13 @@ int umbvel_change[2] = { 0.25, 0.23 };
 
 script "MaryHammer_HandleMidAir" (void)	//This script is used by the umbrella, contrary to its name.
 {
-updateUmbrellaFlightVelocity[PN()] = FALSE;
+updateUmbrellaFlightVelocity[PlayerNumber()] = FALSE;
 bool bounced = FALSE;	//If Mary has hit a ceiling during her current flight.
 bool up_or_down = TRUE;	//Whether the player is going up (TRUE) or down (FALSE).
-if(walljumping[PN()]>0) { GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_MidAirDone",1); flight_script_running[PN()] = FALSE; Terminate; }
-hammermove[PN()] = 5;
-detected[PN()] = 2;	//Disable Mary's Air Dash as it makes no sense when using her umbrella.
-flight_script_running[PN()] = TRUE;	//Let the calling script above know we're now flying.
+if(walljumping[PlayerNumber()]>0) { GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_MidAirDone",1); flight_script_running[PlayerNumber()] = FALSE; Terminate; }
+hammermove[PlayerNumber()] = 5;
+detected[PlayerNumber()] = 2;	//Disable Mary's Air Dash as it makes no sense when using her umbrella.
+flight_script_running[PlayerNumber()] = TRUE;	//Let the calling script above know we're now flying.
 SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,GetActorProperty(GetCurrentPlayerTID(),APROP_Gravity)/2);
 SetAirControl(0.34);
 ACS_NamedExecuteAlways("PlayWindSound",0,GetCurrentPlayerTID(),0,0);
@@ -2634,20 +2757,20 @@ TakeInventory("MaryUmbrella_Air",1);
 int velocity[3] = { 0.01, 0.01, 0.01 };	//Velocities; [0]: Current, [1] = Requested, [2] Currently reaching
 SetActorVelocity(GetCurrentPlayerTID(),GetActorVelX(GetCurrentPlayerTID()),GetActorVelY(GetCurrentPlayerTID()),GetActorVelZ(GetCurrentPlayerTID()),FALSE,TRUE);
 
-If(flight_mod[PN()]==0)
+If(flight_mod[PlayerNumber()]==0)
 {
 	If(GetActorVelZ(0)>=-15.25) { velocity[0] = abs(GetActorVelZ(GetCurrentPlayerTID()))/2; velocity[2] = 5.25; }	//Upward momentum
 	Else { velocity[0] = GetActorVelZ(GetCurrentPlayerTID())/3; velocity[2] = (abs(GetActorVelZ(0))+GetActorVelZ(0)/7)/2; }	//"Swoop"
 }
-Else If(flight_mod[PN()]==1) { velocity[0] = 9.5; velocity[1] = 15.25; velocity[1] = 15.25; }
+Else If(flight_mod[PlayerNumber()]==1) { velocity[0] = 9.5; velocity[1] = 15.25; velocity[1] = 15.25; }
 
 Delay(1);
 
 While(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.0&&CheckActorInventory(GetCurrentPlayerTID(),"MaryHammer_Water")==FALSE)
 	{
 	Delay(1);
-	hammermove[PN()] = 5;
-	If(wind_power[PN()]>2&&disablewind[PN()]==FALSE) no_movement[PN()] = 2;	//If the wind is strong, don't let Mary push against it...humans can't do that!	If wind is disabled, don't care about the wind!
+	hammermove[PlayerNumber()] = 5;
+	If(wind_power[PlayerNumber()]>2&&disablewind[PlayerNumber()]==FALSE) no_movement[PlayerNumber()] = 2;	//If the wind is strong, don't let Mary push against it...humans can't do that!	If wind is disabled, don't care about the wind!
 	
 	If(WaterLevel(0)>0) GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_Water",1);
 		
@@ -2660,12 +2783,12 @@ While(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 	{
 		If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==FALSE)	//Flying (untransformed)
 		{
-		If(flight_mode[PN()]==FALSE) velocity[1] = umbvel_raised[CheckInventory("SuperX")];
+		If(flight_mode[PlayerNumber()]==FALSE) velocity[1] = umbvel_raised[CheckInventory("SuperX")];
 		Else  velocity[1] = umbvel_lowered[CheckInventory("SuperX")];
 		}
 		Else	//Flying (transformed)
 		{
-		If(flight_mode[PN()]==FALSE) velocity[1] = umbvel_raised[CheckInventory("SuperX")]-1.05;
+		If(flight_mode[PlayerNumber()]==FALSE) velocity[1] = umbvel_raised[CheckInventory("SuperX")]-1.05;
 		Else  velocity[1] = umbvel_lowered[CheckInventory("SuperX")]-0.5;
 		}
 	}
@@ -2678,8 +2801,8 @@ While(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 	If(up_or_down==TRUE&&velocity[0]>=velocity[2]) velocity[2] = velocity[1];
 	If((up_or_down==FALSE&&velocity[0]<=velocity[2])||(velocity[0]<-2.25&&CheckInventory("MaryUmbrella_Air")==TRUE)) velocity[2] = velocity[1];
 	
-	If(GetActorCeilingZ(0)-GetActorZ(0)<64.5&&GetActorVelZ(0)>1.25&&bounced==FALSE) { bounced = TRUE; velocity[0] = -(GetActorVelZ(0))/2; updateUmbrellaFlightVelocity[PN()] = TRUE; PlaySound(GetCurrentPlayerTID(), "misc/hit_ceiling", CHAN_WEAPON, 0.8, FALSE, 0.8); }
-	If(updateUmbrellaFlightVelocity[PN()]) { velocity[2] = velocity[1]; updateUmbrellaFlightVelocity[PN()] = FALSE; }
+	If(GetActorCeilingZ(0)-GetActorZ(0)<64.5&&GetActorVelZ(0)>1.25&&bounced==FALSE) { bounced = TRUE; velocity[0] = -(GetActorVelZ(0))/2; updateUmbrellaFlightVelocity[PlayerNumber()] = TRUE; PlaySound(GetCurrentPlayerTID(), "misc/hit_ceiling", CHAN_WEAPON, 0.8, FALSE, 0.8); }
+	If(updateUmbrellaFlightVelocity[PlayerNumber()]) { velocity[2] = velocity[1]; updateUmbrellaFlightVelocity[PlayerNumber()] = FALSE; }
 	
 	//if(bounced_tics>0) bounced_tics--;
 	
@@ -2690,41 +2813,41 @@ While(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 	If(GetActorVelY(GetCurrentPlayerTID())<-12.0) SetActorVelocity(GetCurrentPlayerTID(),GetActorVelX(GetCurrentPlayerTID()),GetActorVelY(GetCurrentPlayerTID())+0.25,GetActorVelZ(GetCurrentPlayerTID()),FALSE,TRUE);
 	}
 
-flight_mod[PN()] = 0;
-hammermove[PN()] = 5;
+flight_mod[PlayerNumber()] = 0;
+hammermove[PlayerNumber()] = 5;
 SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,GetActorProperty(GetCurrentPlayerTID(),APROP_Gravity)*2);
 SetAirControl(0.00390625);
 TakeActorInventory(GetCurrentPlayerTID(),"MaryHammer_Water",1);
 
 ACS_NamedExecuteAlways("PlayWindSound",0,GetCurrentPlayerTID(),1,0);
-flight_script_running[PN()] = FALSE;	//Now we're done flying!
+flight_script_running[PlayerNumber()] = FALSE;	//Now we're done flying!
 }
 
 script "MaryHammer_DetermineDirection" (void)
 {
-	mhammer_spin_spd[PN()] = -0.03;
-	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	mhammer_spin_spd[PlayerNumber()] = -0.03;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PlayerNumber()]);
 	Delay(1);
-	mhammer_spin_spd[PN()] = -0.07;
-	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	mhammer_spin_spd[PlayerNumber()] = -0.07;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PlayerNumber()]);
 	Delay(1);
-	mhammer_spin_spd[PN()] = -0.12;
-	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	mhammer_spin_spd[PlayerNumber()] = -0.12;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PlayerNumber()]);
 	Delay(1);
-	mhammer_spin_spd[PN()] = -0.15;
-	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	mhammer_spin_spd[PlayerNumber()] = -0.15;
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PlayerNumber()]);
 	Delay(1);
 	
 	Until(CheckInventory("MaryHammer_MidAirDone"))
 	{
-		mhammer_spin_spd[PN()] += 0.003;
-		SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+		mhammer_spin_spd[PlayerNumber()] += 0.003;
+		SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PlayerNumber()]);
 		Delay(1);
 		
-		if(mhammer_spin_spd[PN()]>-0.025) GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_MidAirDone",1);
+		if(mhammer_spin_spd[PlayerNumber()]>-0.025) GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_MidAirDone",1);
 	}
 	
-	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PN()]);
+	SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+mhammer_spin_spd[PlayerNumber()]);
 }
 
 ///////////////
@@ -2891,11 +3014,11 @@ script "WJ_Button" ENTER
 {
 While(1)
 	{	
-	if(movement[PlayerNumber()]>0&&speed_tics[PlayerNumber()]==0&&wjtics[PN()]<2) wjtics[PN()] = 2;
+	if(movement[PlayerNumber()]>0&&speed_tics[PlayerNumber()]==0&&wjtics[PlayerNumber()]<2) wjtics[PlayerNumber()] = 2;
 	
-	if(openInput[PlayerNumber()] & BT_USE&&wjtics[PlayerNumber()]<35) wjtics[PN()] = 35;
+	if(openInput[PlayerNumber()] & BT_USE&&wjtics[PlayerNumber()]<35) wjtics[PlayerNumber()] = 35;
 	
-	if(wjtics[PN()]>0&&framecount % 2 == 1) wjtics[PN()]--;
+	if(wjtics[PlayerNumber()]>0&&framecount % 2 == 1) wjtics[PlayerNumber()]--;
 	
 	Delay(1);
 	}
@@ -2909,9 +3032,9 @@ script "HammermoveTimer" ENTER
 While(1)
 	{
 	Delay(1);
-	If(hammermove[PN()]>0)
+	If(hammermove[PlayerNumber()]>0)
 		{
-		hammermove[PN()]--;
+		hammermove[PlayerNumber()]--;
 		GiveInventory("NoHammer",1);
 		}
 	Else TakeInventory("NoHammer",1);
@@ -2940,42 +3063,42 @@ While(1)
 	{
 		Delay(1);
 		
-		walldetected[PN()] = FALSE;
+		walldetected[PlayerNumber()] = FALSE;
 		
 		Until(GetActorZ(0)-GetActorFloorZ(0)>24.1&&hammermove[PlayerNumber()]==0) Delay(1);
 
-		Until(walldetected[PN()]==TRUE || GetActorZ(0)-GetActorFloorZ(0)<12.1 || GetActorProperty(0,APROP_Waterlevel)>0)
+		Until(walldetected[PlayerNumber()]==TRUE || GetActorZ(0)-GetActorFloorZ(0)<12.1 || GetActorProperty(0,APROP_Waterlevel)>0)
 		{
-		prevx[PN()] = GetActorVelX(0);
-		prevy[PN()] = GetActorVelY(0);
+		prevx[PlayerNumber()] = GetActorVelX(0);
+		prevy[PlayerNumber()] = GetActorVelY(0);
 		Delay(1);
 		
-		if(wjtics[PN()] && GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel) == 0 && (abs(prevx[PN()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PN()]) - abs(GetActorVelY(0)) > 5.0) )
+		if(wjtics[PlayerNumber()] && WaterLevel(0) == 0 && (abs(prevx[PlayerNumber()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PlayerNumber()]) - abs(GetActorVelY(0)) > 5.0) )
 			{	//Do one quick test for a wall...
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);
 			
-			If(walljumping[PN()]>0) walljumping[PN()]--;
+			If(walljumping[PlayerNumber()]>0) walljumping[PlayerNumber()]--;
 			
 			Delay(2);	//Wait at least two tics; One tic is not enough to prevent two false positives.
 			
 			If(!CheckActorInventory(GetCurrentPlayerTID(),"NoWall"))
 				{
-				if(hammermove[PN()]==0) remjumps[PN()] = 0;
-				if(hammermove[PN()]==0) detected[PN()] = 10;
-				if(hammermove[PN()]==0) walldetected[PN()] = TRUE;	//A wall was detected! Prepare to stick to wall!
+				if(hammermove[PlayerNumber()]==0) remjumps[PlayerNumber()] = 0;
+				if(hammermove[PlayerNumber()]==0) detected[PlayerNumber()] = 10;
+				if(hammermove[PlayerNumber()]==0) walldetected[PlayerNumber()] = TRUE;	//A wall was detected! Prepare to stick to wall!
 				}
 			Else TakeActorInventory(GetCurrentPlayerTID(),"NoWall",1);
 			}
 			
 		}
 		
-		if(walldetected[PN()]==TRUE && hammermove[PN()]==0)	//This area is separate because ending that loop prematurely means no walls.
+		if(walldetected[PlayerNumber()]==TRUE && hammermove[PlayerNumber()]==0)	//This area is separate because ending that loop prematurely means no walls.
 		{
-			prevx[PN()] = GetActorX(GetCurrentPlayerTID());	//Set these to the position the player stuck to the wall at.
-			prevy[PN()] = GetActorY(GetCurrentPlayerTID());	//If they move from this position when dying or teleporting, they will be forced off.
+			prevx[PlayerNumber()] = GetActorX(GetCurrentPlayerTID());	//Set these to the position the player stuck to the wall at.
+			prevy[PlayerNumber()] = GetActorY(GetCurrentPlayerTID());	//If they move from this position when dying or teleporting, they will be forced off.
 			
-			walldetected[PN()] = -1;	//This variable is used for detecting jumping off walls as well.
+			walldetected[PlayerNumber()] = -1;	//This variable is used for detecting jumping off walls as well.
 
 			SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.0);
 			SetPlayerProperty(0,ON,PROP_FROZEN);
@@ -3000,41 +3123,41 @@ While(1)
 			
 			input_wd = 0;
 			
-			Until((walldetected[PN()] == TRUE || input_wd & BT_BACK || prevx[PN()] == -13.617) || CheckActorInventory(GetCurrentPlayerTID(),"NoWall")==TRUE || GetActorProperty(GetCurrentPlayerTID(), APROP_Waterlevel)!=0 /*|| GetActorZ(0) - GetActorFloorZ(0) < 12.0*/)
+			Until((walldetected[PlayerNumber()] == TRUE || ( movement[MAX_PLAYERS+PlayerNumber()]>0 && !(openInput[PlayerNumber()] & BT_USE) ) || prevx[PlayerNumber()] == -13.617) || CheckActorInventory(GetCurrentPlayerTID(),"NoWall")==TRUE || WaterLevel(0) != 0 /*|| GetActorZ(0) - GetActorFloorZ(0) < 12.0*/)
 				{
 					Delay(1);
-					walljumping[PN()] = 5;
-					fspeed[PN()] = 0.0;
-					fscreamed[PN()] = FALSE;
+					walljumping[PlayerNumber()] = 5;
+					fspeed[PlayerNumber()] = 0.0;
+					fscreamed[PlayerNumber()] = FALSE;
 
 					input_wd = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
 					
-					if(GetActorX(0)<prevx[PN()]-20.5||GetActorX(0)>prevx[PN()]+20.5||GetActorY(0)<prevy[PN()]-20.5||GetActorY(0)>prevy[PN()]+20.5) prevx[PN()] = -13.617;
+					if(GetActorX(0)<prevx[PlayerNumber()]-20.5||GetActorX(0)>prevx[PlayerNumber()]+20.5||GetActorY(0)<prevy[PlayerNumber()]-20.5||GetActorY(0)>prevy[PlayerNumber()]+20.5) prevx[PlayerNumber()] = -13.617;
 					
-					If(ninja_tics[PN()]>0 && input_wd & BT_FORWARD && (input_wd & BT_MOVELEFT || input_wd & BT_MOVERIGHT ) )
+					If(ninja_tics[PlayerNumber()]>0 && movement[PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE )
 					{
 						if(vel < 1.8) vel += 0.1;
 						else vel = 1.8;
-						moved_up_wall[PN()] = 5;
-						ninja_tics[PN()] -= 2;
+						moved_up_wall[PlayerNumber()] = 5;
+						ninja_tics[PlayerNumber()] -= 2;
 					}
-					Else If( ( ninja_tics[PN()]==0 || (ninja_tics[PN()]>0 && (input_wd & BT_MOVELEFT || input_wd & BT_MOVERIGHT ) && ~(input_wd & BT_FORWARD) ) ) && vel > -3.75) vel -= 0.05;
+					Else If( ninja_tics[PlayerNumber()]==0 || (ninja_tics[PlayerNumber()]>0 && ( movement[MAX_PLAYERS+PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE ) ) && vel > -3.75) vel -= 0.05;
 
-					Else If(ninja_tics[PN()]>0 && ~(input_wd & BT_FORWARD))
+					Else If(ninja_tics[PlayerNumber()]>0 && movement[PlayerNumber()]==0 && movement[MAX_PLAYERS+PlayerNumber()]==0)
 					{
 						vel = 0.001;
 					}
 					
-					if(!input_wd & BT_JUMP) walldetected[PN()] = FALSE;
+					if(!input_wd & BT_JUMP) walldetected[PlayerNumber()] = FALSE;
 					if(input_wd & BT_JUMP)
 						{
-						If(walldetected[PN()] == FALSE) walldetected[PN()] = TRUE;
+						If(walldetected[PlayerNumber()] == FALSE) walldetected[PlayerNumber()] = TRUE;
 						}
-					else walldetected[PN()] = FALSE;
+					else walldetected[PlayerNumber()] = FALSE;
 					SetActorVelocity(GetCurrentPlayerTID(),0.0,0.0,vel,FALSE,FALSE);
 				}
 			
-			If(moved_up_wall[PN()]>0)
+			If(moved_up_wall[PlayerNumber()]>0)
 			{
 				ThrustThingZ(GetCurrentPlayerTID(),12, 0, TRUE);
 				Delay(3);
@@ -3046,27 +3169,27 @@ While(1)
 			SetPlayerProperty(0,OFF,PROP_FROZEN);
 						
 			Delay(1);
-			walljumping[PN()] = 6;
+			walljumping[PlayerNumber()] = 6;
 
 			SetActorState(GetCurrentPlayerTID(),"EndWallJump");
 			ACS_NamedExecuteAlways("RemoveNoWall",0,0,0,0);	//Take away the NoWall's to prevent 
 
-			if(walldetected[PN()] == TRUE)
+			if(walldetected[PlayerNumber()] == TRUE)
 			{
 			//ACS_NamedExecuteAlways("PlaySoundX",0,2,0,0);
 			ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,15,1,GetCurrentPlayerTID());
 			SetActorVelocity(GetCurrentPlayerTID(),GetActorVelX(0),GetActorVelY(0),12.25,FALSE,TRUE);
 			ActivatorSound("misc/walljump",256);
 			ActivatorSound("misc/walljump",256);
-			wjtics[PN()] = 35;
-			walljumping[PN()] = 2;	//Let other scripts know not to interfere with this.
-			walldetected[PN()] = -1;
-			jumps[PN()] = 1;
-			groundtics[PN()] = 12;
+			wjtics[PlayerNumber()] = 35;
+			walljumping[PlayerNumber()] = 2;	//Let other scripts know not to interfere with this.
+			walldetected[PlayerNumber()] = -1;
+			jumps[PlayerNumber()] = 1;
+			groundtics[PlayerNumber()] = 12;
 			}
 			else
 			{
-			//wjtics[PN()] = 0;
+			//wjtics[PlayerNumber()] = 0;
 			}
 			
 		}
@@ -3116,8 +3239,8 @@ script "GetGroundStatus" ENTER
 		
 		If(GetCVAR("debug_floor"))
 		{
-			If(CheckInventory("FloorDetected")) Print(s:"ON GROUND.\n\nOLD: ", f:OldVelZ[PN()], s:"\nNEW: ", f:GetActorVelZ(0));
-			Else Print(s:"FLOATING ABOVE FLOOR.\n\nOLD: ", f:OldVelZ[PN()], s:"\nNEW: ", f:GetActorVelZ(0));
+			If(CheckInventory("FloorDetected")) Print(s:"ON GROUND.\n\nOLD: ", f:OldVelZ[PlayerNumber()], s:"\nNEW: ", f:GetActorVelZ(0));
+			Else Print(s:"FLOATING ABOVE FLOOR.\n\nOLD: ", f:OldVelZ[PlayerNumber()], s:"\nNEW: ", f:GetActorVelZ(0));
 		}
 		
 		If(freeze_bob) SetActorVelocity(GetCurrentPlayerTID(), GetActorVelX(0), GetActorVelY(0), GetActorVelZ(0), FALSE, FALSE);
@@ -3138,9 +3261,9 @@ script "VarJumpHeights" ENTER
 			//Print(f:GetActorVelZ(0));
 			remaining_tics = var_remaining_tics[PlayerClass(PlayerNumber())];
 			velocity = var_velocity[PlayerClass(PlayerNumber())];
-			cancelJump[PN()] = FALSE;
+			cancelJump[PlayerNumber()] = FALSE;
 			
-			Until(remaining_tics==0||!(openInput[PN()] & BT_JUMP)||cancelJump[PN()]==TRUE||no_variable_jumping[PlayerNumber()]==TRUE)
+			Until(remaining_tics==0||!(openInput[PlayerNumber()] & BT_JUMP)||cancelJump[PlayerNumber()]==TRUE||no_variable_jumping[PlayerNumber()]==TRUE)
 			{
 				//Print(s:"REMAINING: ", d:remaining_tics, s:"\nVELOCITY ADDED: ", f:velocity);
 				remaining_tics--;
@@ -3149,7 +3272,7 @@ script "VarJumpHeights" ENTER
 				Delay(1);
 			}
 			
-			cancelJump[PN()] = FALSE;
+			cancelJump[PlayerNumber()] = FALSE;
 			
 			Until(GetActorVelZ(0)==0.0||GetActorZ(0)-GetActorFloorZ(0)==0.0) Delay(1);
 		}
@@ -3162,12 +3285,12 @@ script "HandleOpenInput" ENTER
 {
 	While(1)
 	{
-		openInput[PN()] = GetPlayerInput(PlayerNumber(),MODINPUT_BUTTONS);
-		openInput[MAX_PLAYERS+PN()] = GetPlayerInput(PlayerNumber(),MODINPUT_OLDBUTTONS);
-		openInput[MAX_PLAYERS*2+PN()] = GetPlayerInput(PlayerNumber(),MODINPUT_FORWARDMOVE);
-		openInput[MAX_PLAYERS*3+PN()] = GetPlayerInput(PlayerNumber(),MODINPUT_SIDEMOVE);
-		openInput[MAX_PLAYERS*4+PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
-		openInput[MAX_PLAYERS*5+PN()] = GetPlayerInput(PlayerNumber(),INPUT_OLDBUTTONS);
+		openInput[PlayerNumber()] = GetPlayerInput(PlayerNumber(),MODINPUT_BUTTONS);
+		openInput[MAX_PLAYERS+PlayerNumber()] = GetPlayerInput(PlayerNumber(),MODINPUT_OLDBUTTONS);
+		openInput[MAX_PLAYERS*2+PlayerNumber()] = GetPlayerInput(PlayerNumber(),MODINPUT_FORWARDMOVE);
+		openInput[MAX_PLAYERS*3+PlayerNumber()] = GetPlayerInput(PlayerNumber(),MODINPUT_SIDEMOVE);
+		openInput[MAX_PLAYERS*4+PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+		openInput[MAX_PLAYERS*5+PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_OLDBUTTONS);
 		Delay(1);
 	}
 }
@@ -3184,18 +3307,18 @@ script "UpdateMovementDetection" ENTER
 		movement[(MAX_PLAYERS*3)+PlayerNumber()] = 0;
 		
 		//Keyboard checks
-		If(openInput[PN()] & BT_FORWARD) { movement[PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[PlayerNumber()] = 2; }
-		If(openInput[PN()] & BT_BACK) { movement[MAX_PLAYERS+PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[MAX_PLAYERS+PlayerNumber()] = 2; }
-		If(openInput[PN()] & BT_MOVELEFT) { movement[(MAX_PLAYERS*2)+PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[(MAX_PLAYERS*2)+PlayerNumber()] = 2; }
-		If(openInput[PN()] & BT_MOVERIGHT) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[PN()] & BT_SPEED) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
+		If(openInput[PlayerNumber()] & BT_FORWARD) { movement[PlayerNumber()] = 1; If(openInput[PlayerNumber()] & BT_SPEED) movement[PlayerNumber()] = 2; }
+		If(openInput[PlayerNumber()] & BT_BACK) { movement[MAX_PLAYERS+PlayerNumber()] = 1; If(openInput[PlayerNumber()] & BT_SPEED) movement[MAX_PLAYERS+PlayerNumber()] = 2; }
+		If(openInput[PlayerNumber()] & BT_MOVELEFT) { movement[(MAX_PLAYERS*2)+PlayerNumber()] = 1; If(openInput[PlayerNumber()] & BT_SPEED) movement[(MAX_PLAYERS*2)+PlayerNumber()] = 2; }
+		If(openInput[PlayerNumber()] & BT_MOVERIGHT) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[PlayerNumber()] & BT_SPEED) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
 		
 		//Controller checks
 		If(movement[PlayerNumber()]==0&&movement[MAX_PLAYERS+PlayerNumber()]==0&&movement[(MAX_PLAYERS*2)+PlayerNumber()]==0&&movement[(MAX_PLAYERS*3)+PlayerNumber()]==0)
 		{
-			If(openInput[MAX_PLAYERS*2+PN()]>CONTROLLER_DEADZONE) { movement[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PN()]>CONTROLLER_RUNZONE) movement[PlayerNumber()] = 2; }
-			If(openInput[MAX_PLAYERS*2+PN()]<-(CONTROLLER_DEADZONE)) { movement[MAX_PLAYERS+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PN()]<-(CONTROLLER_RUNZONE)) movement[MAX_PLAYERS+PlayerNumber()] = 2; }
-			If(openInput[MAX_PLAYERS*3+PN()]>CONTROLLER_DEADZONE) { movement[(MAX_PLAYERS*2)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PN()]>CONTROLLER_RUNZONE) movement[(MAX_PLAYERS*2)+PlayerNumber()] = 2; }
-			If(openInput[MAX_PLAYERS*3+PN()]<-(CONTROLLER_DEADZONE)) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PN()]<-(CONTROLLER_RUNZONE)) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*2+PlayerNumber()]>CONTROLLER_DEADZONE) { movement[PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PlayerNumber()]>CONTROLLER_RUNZONE) movement[PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*2+PlayerNumber()]<-(CONTROLLER_DEADZONE)) { movement[MAX_PLAYERS+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*2+PlayerNumber()]<-(CONTROLLER_RUNZONE)) movement[MAX_PLAYERS+PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*3+PlayerNumber()]>CONTROLLER_DEADZONE) { movement[(MAX_PLAYERS*2)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PlayerNumber()]>CONTROLLER_RUNZONE) movement[(MAX_PLAYERS*2)+PlayerNumber()] = 2; }
+			If(openInput[MAX_PLAYERS*3+PlayerNumber()]<-(CONTROLLER_DEADZONE)) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PlayerNumber()]<-(CONTROLLER_RUNZONE)) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
 		}
 		
 		//Print(s:"FWD: ", d:forward[0], s:"\nBACK: ", d:backward[0], s:"\nL: ", d:left[0], s:"\nR: ", d:right[0]);
@@ -3207,16 +3330,16 @@ script "AddCPowerupTics" (int which)
 {
 	Switch(which)
 	{
-		Case 0: ninja_tics[PN()] += 35*CONST_SECS_NINJA; Break;
-		Case 1: water_tics[PN()] += 35*CONST_SECS_WATER; Break;
-		Case 2: damage_tics[PN()] += 35*CONST_SECS_DAMAGE; Break;
-		Case 3: heal_tics[PN()] += 35*CONST_SECS_HEAL; Break;
-		Case 4: combo_tics[PN()] += 35*CONST_SECS_COMBO; Break;
-		Case 5: speed_tics[PN()] += 35*CONST_SECS_SPEED; Break;
+		Case 0: ninja_tics[PlayerNumber()] += 35*CONST_SECS_NINJA; Break;
+		Case 1: water_tics[PlayerNumber()] += 35*CONST_SECS_WATER; Break;
+		Case 2: damage_tics[PlayerNumber()] += 35*CONST_SECS_DAMAGE; Break;
+		Case 3: heal_tics[PlayerNumber()] += 35*CONST_SECS_HEAL; Break;
+		Case 4: combo_tics[PlayerNumber()] += 35*CONST_SECS_COMBO; Break;
+		Case 5: speed_tics[PlayerNumber()] += 35*CONST_SECS_SPEED; Break;
 	}
 }
 
-script 66 (int value) { detected[PN()] = value; }
+script 66 (int value) { detected[PlayerNumber()] = value; }
 
 //bool kjumped[MAX_PLAYERS];
 
@@ -3232,64 +3355,64 @@ esc_loop = 0;	//Force esc_loop to 0 to prevent restart loop or constant ability 
 
 Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.0)	{	Delay(1);	}
 
-  if(detected[PN()]==0)
+  if(detected[PlayerNumber()]==0)
   {
-  detected[PN()] = 1;
+  detected[PlayerNumber()] = 1;
   Delay(1);
   Restart;
   }
 
-  openInput[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+  openInput[PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
 
-  While(openInput[PN()] & BT_JUMP)	//If the player's holding jump, don't count it!
+  While(openInput[PlayerNumber()] & BT_JUMP)	//If the player's holding jump, don't count it!
   {
   
-  //if(no_scripts[PlayerNumber()] == FALSE) input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+  //if(no_scripts[PlayerNumber()] == FALSE) input[PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
   Delay(1);
   }
   
   Until(esc_loop != 0)
   {
-  //if(no_scripts[PlayerNumber()] == FALSE) input[PN()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
-  if(openInput[PN()] & BT_JUMP) esc_loop = 1;
+  //if(no_scripts[PlayerNumber()] == FALSE) input[PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+  if(openInput[PlayerNumber()] & BT_JUMP) esc_loop = 1;
   if(GetActorZ(0)-GetActorFloorZ(0) < 4.0) esc_loop = 2;
   Delay(1);
   }
 
   if(esc_loop == 2) Restart;
-  detected[PN()]++;
-		If(detected[PN()]>=2&&PlayerClass(PlayerNumber())==CHAR_XANE)	//Air Puff
+  detected[PlayerNumber()]++;
+		If(detected[PlayerNumber()]>=2&&PlayerClass(PlayerNumber())==CHAR_XANE)	//Air Puff
         {
-			//PrintBold(d:detected[PN()]);
+			//PrintBold(d:detected[PlayerNumber()]);
 			
-			if(detected[PN()]>=2)
+			if(detected[PlayerNumber()]>=2)
 			{
-				if(detected[PN()]==2) { ActivatorSound("xane/jump1",127); remjumps[PN()] = 5; ACS_NamedExecuteAlways("Xane_TempAirControlChange",0,0,0,0); }
-				if(detected[PN()]==3) ActivatorSound("xane/jump2",127);
-				if(detected[PN()]==4) ActivatorSound("xane/jump3",127);
-				if(detected[PN()]==5) ActivatorSound("xane/jump4",127);
-				if(detected[PN()]==6) ActivatorSound("xane/jump5",127);
+				if(detected[PlayerNumber()]==2) { ActivatorSound("xane/jump1",127); remjumps[PlayerNumber()] = 5; ACS_NamedExecuteAlways("Xane_TempAirControlChange",0,0,0,0); }
+				if(detected[PlayerNumber()]==3) ActivatorSound("xane/jump2",127);
+				if(detected[PlayerNumber()]==4) ActivatorSound("xane/jump3",127);
+				if(detected[PlayerNumber()]==5) ActivatorSound("xane/jump4",127);
+				if(detected[PlayerNumber()]==6) ActivatorSound("xane/jump5",127);
 				
-				if(remjumps[PN()]>0&&detected[PN()]>1)
+				if(remjumps[PlayerNumber()]>0&&detected[PlayerNumber()]>1)
 				{
 					SetActorVelocity(GetCurrentPlayerTID(),GetActorVelX(GetCurrentPlayerTID()),GetActorVelY(GetCurrentPlayerTID()),10.625,FALSE,FALSE);
 					//SetActorVelocity(GetCurrentPlayerTID(),FixedMul(GetActorVelX(GetCurrentPlayerTID()),1.15),FixedMul(GetActorVelY(GetCurrentPlayerTID()),1.15),10.625,FALSE,FALSE);
-					//kjumped[PN()] = 30;
-					remjumps[PN()]--;
-					//meter[PN()] -= 20;
-					jumps[PN()] = 0;
+					//kjumped[PlayerNumber()] = 30;
+					remjumps[PlayerNumber()]--;
+					//meter[PlayerNumber()] -= 20;
+					jumps[PlayerNumber()] = 0;
 				}
 				//Delay(1);
 			}
 			//Delay(1);
 		}
-		if(detected[PN()]==2 && (PlayerClass(PlayerNumber())==CHAR_MARY||PlayerClass(PlayerNumber())==CHAR_SCALETEST) )	//Air Dash
+		if(detected[PlayerNumber()]==2 && (PlayerClass(PlayerNumber())==CHAR_MARY||PlayerClass(PlayerNumber())==CHAR_SCALETEST) )	//Air Dash
             {
 				GiveInventory("Animation1",1);	//Force Mary into her Air Dash pose/state.
 				LocalAmbientSound("sonic/thok",127);
-				//kjumped[PN()] = 70;
-				hammermove[PN()] = 3;
-				jumps[PN()] = 0;
+				//kjumped[PlayerNumber()] = 70;
+				hammermove[PlayerNumber()] = 3;
+				jumps[PlayerNumber()] = 0;
 				SetActorVelocity(GetCurrentPlayerTID(),0,0,0,FALSE,TRUE);
 				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0) ThrustThingZ(GetCurrentPlayerTID(),13,0,1);
 				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0) ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,30,0,GetCurrentPlayerTID());
@@ -3298,13 +3421,13 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 				
 				SetActorState(GetCurrentPlayerTID(),"AllowJumps",TRUE);	//Required to allow the Air Dash state.	
 				
-                remjumps[PN()]--;
+                remjumps[PlayerNumber()]--;
                 Delay(12);
             }
             Delay(1);
             }
 		
-		While(openInput[PN()] & BT_JUMP)
+		While(openInput[PlayerNumber()] & BT_JUMP)
 		{
 		Delay(1);
 		}
@@ -3345,14 +3468,14 @@ script "ComboMeter" ENTER
 
 	While(1)
 	{	
-		If(CheckInventory("IncreaseCombo")==TRUE)
+		If(CheckInventory("IncreaseCombo")>0)
 		{
 		LocalAmbientSound("misc/combo2",256);
-		If(combo[PN()]==2)LocalAmbientSound("announcer/combo1",256);
-		If(combo[PN()]==5)LocalAmbientSound("announcer/combo2",256);
+		If(combo[PlayerNumber()]==2)LocalAmbientSound("announcer/combo1",256);
+		If(combo[PlayerNumber()]==5)LocalAmbientSound("announcer/combo2",256);
 		TakeInventory("IncreaseCombo",1);
-		if(combo[PN()]<9) combo[PN()]++;
-		meter[PN()] = 100;
+		if(combo[PlayerNumber()]<9) combo[PlayerNumber()]++;
+		meter[PlayerNumber()] = 100;
 		}
 		
 		timerx++;
@@ -3369,29 +3492,29 @@ script "ComboMeter" ENTER
 			//totalcointics = CONSTANT_TCOINDISPTICS;
 		}
 		
-		If(combo[PN()]>0)	//If the player has a combo...
+		If(combo[PlayerNumber()]>0)	//If the player has a combo...
 		{
-			if(ThingCountName("CoinSP_Dummy",0)<prev_coins&&combo_tics[PN()]==0)	//Compare the number of coins in the area...
+			if(ThingCountName("CoinSP_Dummy",0)<prev_coins&&combo_tics[PlayerNumber()]==0)	//Compare the number of coins in the area...
 			{
-				meter[PN()] += CONSTANT_COIN_METERINC;
-				If(meter[PN()]>100) meter[PN()] = 100;
+				meter[PlayerNumber()] += CONSTANT_COIN_METERINC;
+				If(meter[PlayerNumber()]>100) meter[PlayerNumber()] = 100;
 			}
 			
-			if(combo[PN()+(MAX_PLAYERS*3)]>0) combo[PN()+(MAX_PLAYERS*3)]--;
-			else combo[PN()+(MAX_PLAYERS*2)] = 0;
+			if(combo[PlayerNumber()+(MAX_PLAYERS*3)]>0) combo[PlayerNumber()+(MAX_PLAYERS*3)]--;
+			else combo[PlayerNumber()+(MAX_PLAYERS*2)] = 0;
 			
-			if(timerx==0&&no_scripts[PN()]==FALSE) { If(combo_tics[PN()]==0) { /*If(framecount % 2 == 1)*/ meter[PN()]--; } }
-			if(meter[PN()]<=0)
+			if(timerx==0&&no_scripts[PlayerNumber()]==FALSE) { If(combo_tics[PlayerNumber()]==0) { /*If(framecount % 2 == 1)*/ meter[PlayerNumber()]--; } }
+			if(meter[PlayerNumber()]<=0)
 			{
-				combo[PN()]--;
-				If(combo[PN()]==0) LocalAmbientSound("announcer/combo3",255);
-				if(combo[PN()]>0) meter[PN()] = 100;
+				combo[PlayerNumber()]--;
+				If(combo[PlayerNumber()]==0) LocalAmbientSound("announcer/combo3",255);
+				if(combo[PlayerNumber()]>0) meter[PlayerNumber()] = 100;
 			}
 		}
 		Else	//Make sure the meter is empty.
 		{
-			meter[PN()] = 0;
-			combo[PN()] = 0;
+			meter[PlayerNumber()] = 0;
+			combo[PlayerNumber()] = 0;
 		}
 		
 	}
@@ -3404,18 +3527,18 @@ script "Wand_Special" (int which)
 	Switch(which)
 	{
 	Case 0:		//Shield healing starts
-		While(wand_var[PN()]==FALSE)
+		While(wand_var[PlayerNumber()]==FALSE)
 		{
 			Delay(5);
 			
 			HealThing(1, 100);
 		}
 		
-		wand_var[PN()] = FALSE;
+		wand_var[PlayerNumber()] = FALSE;
 		Break;
 
 	Case 1:		//Shield healing stops
-		wand_var[PN()] = TRUE;
+		wand_var[PlayerNumber()] = TRUE;
 	Break;
 	}
 }
@@ -3494,19 +3617,19 @@ int	amb_info_sounds[10] = { 0, 0,
 						15, 18,
 						19, 23};
 
-script "RequestAmbience" (int front, int back) { If(LineSide()==LINE_FRONT) { amb_current[PN()] = front; } If(LineSide()==LINE_BACK) { amb_current[PN()] = back; } amb_force[PN()] = TRUE; }
+script "RequestAmbience" (int front, int back) { If(LineSide()==LINE_FRONT) { amb_current[PlayerNumber()] = front; } If(LineSide()==LINE_BACK) { amb_current[PlayerNumber()] = back; } amb_force[PlayerNumber()] = TRUE; }
 
 script "Ambience" ENTER
 {
 While(1)
 	{
-	Until(amb_current[PN()]!=0||(amb_current[PN()]>0&&amb_force[PN()]!=TRUE)) Delay(17);
+	Until(amb_current[PlayerNumber()]!=0||(amb_current[PlayerNumber()]>0&&amb_force[PlayerNumber()]!=TRUE)) Delay(17);
 	
-	amb_force[PN()] = FALSE;
-	amb_tics[(PN()*2)+1] = Random(amb_info_delays[(amb_current[PN()]*2)],amb_info_delays[(amb_current[PN()]*2)+1]);	//Get the pair of min/max delays betwee minor sounds.
-	amb_msound[PN()] = Random(amb_info_sounds[(amb_current[PN()]*2)],amb_info_sounds[(amb_current[PN()]*2)+1]);
+	amb_force[PlayerNumber()] = FALSE;
+	amb_tics[(PlayerNumber()*2)+1] = Random(amb_info_delays[(amb_current[PlayerNumber()]*2)],amb_info_delays[(amb_current[PlayerNumber()]*2)+1]);	//Get the pair of min/max delays betwee minor sounds.
+	amb_msound[PlayerNumber()] = Random(amb_info_sounds[(amb_current[PlayerNumber()]*2)],amb_info_sounds[(amb_current[PlayerNumber()]*2)+1]);
 	//Ambience is needed! Fade in the requested looping background noise!
-	Switch(amb_current[PN()])	//First, play a short fading in sample.
+	Switch(amb_current[PlayerNumber()])	//First, play a short fading in sample.
 		{
 		Case 1:
 		PlaySound(GetCurrentPlayerTID(),"ambience/police_start",CHAN_6,0.5,TRUE,ATTN_NONE);
@@ -3524,7 +3647,7 @@ While(1)
 		
 	Delay(35);
 	
-	Switch(amb_current[PN()])	//Play the looping section of the ambience.
+	Switch(amb_current[PlayerNumber()])	//Play the looping section of the ambience.
 		{
 		Case 1:
 		PlaySound(GetCurrentPlayerTID(),"ambience/police",CHAN_6,0.5,TRUE,ATTN_NONE);
@@ -3540,34 +3663,34 @@ While(1)
 		Break;
 		}
 	
-	amb_lastplayed[PN()] = amb_current[PN()];
-	amb_tics[PN()*2] = 0;	//Set the player's tics to 0 to make sure no sounds glitch!
+	amb_lastplayed[PlayerNumber()] = amb_current[PlayerNumber()];
+	amb_tics[PlayerNumber()*2] = 0;	//Set the player's tics to 0 to make sure no sounds glitch!
 	
-	Until(amb_force[PN()]==TRUE)
+	Until(amb_force[PlayerNumber()]==TRUE)
 		{
 		Delay(1);
-		Until(amb_tics[PN()*2]==amb_tics[(PN()*2)+1]||amb_force[PN()]==TRUE)
+		Until(amb_tics[PlayerNumber()*2]==amb_tics[(PlayerNumber()*2)+1]||amb_force[PlayerNumber()]==TRUE)
 		{
 		Delay(1);
-		amb_tics[PN()*2]++;
+		amb_tics[PlayerNumber()*2]++;
 		}
 		
-		if(amb_msound[PN()]==amb_lastsnd[PN()])
+		if(amb_msound[PlayerNumber()]==amb_lastsnd[PlayerNumber()])
 		{
-			If(amb_msound[PN()]==amb_info_sounds[(amb_current[PN()]*2)+1])	amb_msound[PN()]--;
-			Else amb_msound[PN()]++;
+			If(amb_msound[PlayerNumber()]==amb_info_sounds[(amb_current[PlayerNumber()]*2)+1])	amb_msound[PlayerNumber()]--;
+			Else amb_msound[PlayerNumber()]++;
 		}
 		
-		if(amb_force[PN()]!=TRUE)LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PN()]),127);
+		if(amb_force[PlayerNumber()]!=TRUE)LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PlayerNumber()]),127);
 		
-		amb_tics[(PN()*2)+1] = Random(amb_info_delays[(amb_current[PN()]*2)],amb_info_delays[(amb_current[PN()]*2)+1]);	//Get the pair of min/max delays betwee minor sounds.
-		amb_tics[PN()*2] = 0;	//Set the player's tics back to 0 so another sound can play!
-		amb_msound[PN()] = Random(amb_info_sounds[(amb_current[PN()]*2)],amb_info_sounds[(amb_current[PN()]*2)+1]);
+		amb_tics[(PlayerNumber()*2)+1] = Random(amb_info_delays[(amb_current[PlayerNumber()]*2)],amb_info_delays[(amb_current[PlayerNumber()]*2)+1]);	//Get the pair of min/max delays betwee minor sounds.
+		amb_tics[PlayerNumber()*2] = 0;	//Set the player's tics back to 0 so another sound can play!
+		amb_msound[PlayerNumber()] = Random(amb_info_sounds[(amb_current[PlayerNumber()]*2)],amb_info_sounds[(amb_current[PlayerNumber()]*2)+1]);
 		}
 		
 	StopSound(GetCurrentPlayerTID(), CHAN_6);	//Stop the looping ambience to prevent weird overlap.
 		
-	Switch(amb_lastplayed[PN()])	//Play a sample of the ambience fading out.
+	Switch(amb_lastplayed[PlayerNumber()])	//Play a sample of the ambience fading out.
 	{
 		Case 1:
 		PlaySound(GetCurrentPlayerTID(),"ambience/police_end",CHAN_7,0.5,FALSE,ATTN_NONE);
@@ -3589,13 +3712,13 @@ While(1)
 
 script "PlayFMV" (int number, int frames)	//The script number and "ID" is "number" here.
 {
-if((event_completed[number-1]==TRUE||GetCVAR("xane_cutscenes")==FALSE||gamemode!=0)&&number!=1) { ACS_Execute(number,0,0,0,0); Terminate; }	//The player's already seen this event; Just skip to the after-events.
+//Add to new cutscene script when made: if((event_completed[number-1]==TRUE||GetCVAR("xane_cutscenes")==FALSE||gamemode!=0)&&number!=1) { ACS_Execute(number,0,0,0,0); Terminate; }	//The player's already seen this event; Just skip to the after-events.
 
 int current = 0, fmv_framecount = 0, milliseconds = 0;
 
 //ACS_NamedTerminate("Flash",0);
 
-SetFont("CUTF_BOX");
+/*SetFont("CUTF_BOX");
 SetHUDSize(180,135,FALSE);
 
 While(current<35)
@@ -3604,12 +3727,13 @@ While(current<35)
 		HUDMSG_PLAIN, 0, CR_UNTRANSLATED, -30.1, 0.1, 1.1, 0.5);
 	current++;
 	Delay(1);
-}
+}*/
 
-StopSound(GetCurrentPlayerTID(),CHAN_7);
-ACS_NamedExecuteAlways("ForceWantedLevel",0,0,0,1);
+//StopSound(GetCurrentPlayerTID(),CHAN_7);
 
-GiveInventory("Cutscene",1);	//Freeze everything during the cutscene.
+SetHUDSize(180,135,FALSE);
+
+GiveInventory("Cutscene",1);	//Freeze everything during the video.
 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,TRUE,TRUE);
 
 if(number==3) ACS_NamedExecute("TitleOverlay",0,0,0,0);
@@ -3620,18 +3744,17 @@ force_detransform[PlayerNumber()] = TRUE;	//Force a detransformation.
 
 	While(current<frames)
 	{
-	ltime_control = TIME_PAUSE;
 
 	SetFont(StrParam(s:"C", d:number, s:"_", d:current));
 	HUDMessageBold(s:"A";
 		HUDMSG_PLAIN, 0, CR_UNTRANSLATED, -30.1, 0.1, 0.2, 1.0);
 	Delay(1);
-	If(fmv_framecount==5||fmv_framecount==10||fmv_framecount==15||fmv_framecount==20||fmv_framecount==25||milliseconds>0.999) Delay(1);	//If it's certain tics/frames, pause more to make it 30 FPS instead of 35. Also...
-	If(milliseconds>0.999) milliseconds -= 1.0;	//...if it's built up over a second of milliseconds, delay. Unsure if this'll help anything.
+	If(fmv_framecount==5||fmv_framecount==10||fmv_framecount==15||fmv_framecount==20||fmv_framecount==25/*||milliseconds>0.999*/) Delay(1);	//If it's certain tics/frames, pause more to make it 30 FPS instead of 35. Also...
+	//If(milliseconds>0.999) milliseconds -= 1.0;	//...if it's built up over a second of milliseconds, delay. Unsure if this'll help anything.
 	
 	current++;
 	fmv_framecount++;
-	milliseconds += 0.028;	//add milliseconds to detect when this goes over a second.
+	//milliseconds += 0.028;	//add milliseconds to detect when this goes over a second.
 	if(fmv_framecount>29) fmv_framecount = 0;	//If 30 frames have been displayed, reset this variable.
 	}
 	
@@ -3639,13 +3762,12 @@ HUDMessageBold(s:"A";
 	HUDMSG_FADEOUT, 0, CR_UNTRANSLATED, -30.1, 0.1, 0.0, 1.0);
 TakeInventory("PowerTimeFreezer",1);
 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
-ltime_control = TIME_PLAY;
 
-FadeTo(0,0,0,0.0,1.0);	//Fade the screen back in when returning from the FMV.
+//FadeTo(0,0,0,0.0,1.0);	//Fade the screen back in when returning from the FMV.
 
-event_completed[number-1] = TRUE;
+//Same here: event_completed[number-1] = TRUE;
 
-ACS_Execute(number,0,0,0,0);	//Run the script with the same number as the FMV number/ID.
+//Not this, though. Use StrParam for named scripts. ACS_Execute(number,0,0,0,0);	//Run the script with the same number as the FMV number/ID.
 }
 
 script 1 (void)	//EVENT ID #1: Game Over
@@ -3657,7 +3779,7 @@ script 1 (void)	//EVENT ID #1: Game Over
 	If(gamemode==0)
 	{	//If the player has made it to 1-2, 1-3, or 1-4 then gets a game over...
 		if(GetLevelInfo(LEVELINFO_WORLDNUMBER)==1&&GetLevelInfo(LEVELINFO_WORLDLEVEL)>1) ChangeLevel("TMP2",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//...don't make them have to redo that first level again.
-		else ChangeLevel(StrParam(s:"TMP", d:level[2]),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
+		else ChangeLevel(StrParam(s:"TMP", d:level[2])+1,0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
 	}
 	Else
 	{
@@ -3677,21 +3799,21 @@ script "HandleLanding" ENTER
 
 	Delay(1);
 
-	Until(GetActorZ(0)-GetActorFloorZ(0)>20.0&&GetActorVelZ(0)<-4.0) { Delay(1); If(fspeed[PN()]<0) fspeed[PN()] = 0; }
+	Until(GetActorZ(0)-GetActorFloorZ(0)>20.0&&GetActorVelZ(0)<-4.0) { Delay(1); If(fspeed[PlayerNumber()]<0) fspeed[PlayerNumber()] = 0; }
 	
 	While(GetActorZ(0)-GetActorFloorZ(0)>8.0&&CheckInventory("FloorDetected")==FALSE)
 		{
 			
 		Delay(1);
 		
-		if(GetActorVelZ(0)>0) fspeed[PN()] = 0;	//Don't count upward movement as a "fall".
+		if(GetActorVelZ(0)>0) fspeed[PlayerNumber()] = 0;	//Don't count upward movement as a "fall".
 		
-		If(GetActorVelZ(0)<fspeed[PN()])
+		If(GetActorVelZ(0)<fspeed[PlayerNumber()])
 			{
-			fspeed[PN()] = GetActorVelZ(0);
-			If(fscreamed[PN()]==FALSE&&fspeed[PN()]<-10.5&&GetActorZ(0)-GetActorFloorZ(0)>512.0&&walljumping[PN()]==0&&PlayerClass(PlayerNumber())==CHAR_MARY) { fscreamed[PN()] = TRUE; ACS_NamedExecuteAlways("MaryScream",0,0,0,0); }
+			fspeed[PlayerNumber()] = GetActorVelZ(0);
+			If(fscreamed[PlayerNumber()]==FALSE&&fspeed[PlayerNumber()]<-10.5&&GetActorZ(0)-GetActorFloorZ(0)>512.0&&walljumping[PlayerNumber()]==0&&PlayerClass(PlayerNumber())==CHAR_MARY) { fscreamed[PlayerNumber()] = TRUE; ACS_NamedExecuteAlways("MaryScream",0,0,0,0); }
 			}
-		If(GetActorVelZ(0)>5.5&&fscreamed[PN()]==TRUE&&fscream_upward==FALSE) { fscream_upward = TRUE; PlaySound(0,"lgirl/umbrella_swoop",CHAN_VOICE); }
+		If(GetActorVelZ(0)>5.5&&fscreamed[PlayerNumber()]==TRUE&&fscream_upward==FALSE) { fscream_upward = TRUE; PlaySound(0,"lgirl/umbrella_swoop",CHAN_VOICE); }
 		}
 	
 	StopSound(0,CHAN_VOICE);
@@ -3705,9 +3827,9 @@ script "HandleLanding" ENTER
 			TakeInventory("MonsterHurt",1);
 			ACS_NamedTerminate("EnemyBounceAC",0);	//Stop the current "bounce".
 			
-			fspeed[PN()] = -fspeed[PN()];	//Make the falling speed positive.
+			fspeed[PlayerNumber()] = -fspeed[PlayerNumber()];	//Make the falling speed positive.
 			
-			if(fspeed[PN()]>30.1) fspeed [PN()] = 30.1;
+			if(fspeed[PlayerNumber()]>30.1) fspeed [PlayerNumber()] = 30.1;
 			
 			Delay(1);
 			
@@ -3715,18 +3837,18 @@ script "HandleLanding" ENTER
 		}
 	}
 	
-	If(fscreamed[PN()]==TRUE)
+	If(fscreamed[PlayerNumber()]==TRUE)
 	{
-		fscreamed[PN()] = FALSE;
+		fscreamed[PlayerNumber()] = FALSE;
 		fscream_upward = FALSE;
 		PlaySound(0,"mary/land",CHAN_VOICE,1.0);
 	}
-	Else If(fspeed[PN()]<=-13.75)
+	Else If(fspeed[PlayerNumber()]<=-13.75)
 	{
 		PlaySound(0,"misc/land", CHAN_VOICE, 1.0);
 	}
 	
-	//fspeed[PN()] = 0.0;	//This is reset in the first "while" loop at the beginning of this script to allow potential ball pits to work.
+	//fspeed[PlayerNumber()] = 0.0;	//This is reset in the first "while" loop at the beginning of this script to allow potential ball pits to work.
 	}
 }
 
@@ -3742,11 +3864,11 @@ script "EnemyBounceAC" (int mode)
 	LocalAmbientSound(StrParam(s:"bouncecombo/", d:enemies_bounced),255);
 	if(enemies_bounced>1) GiveInventory("IncreaseCombo",1);	//Award a combo for landing on multiple enemies in succession.
 	GiveInventory("ScoreX",5);	//Award a combo for landing on multiple enemies in succession.
-	SetActorVelocity(0, FixedDiv(GetActorVelX(0),1.5), FixedDiv(GetActorVelY(0),1.5), 15.1/*fspeed[PN()]*/, FALSE, FALSE);
+	SetActorVelocity(0, FixedDiv(GetActorVelX(0),1.5), FixedDiv(GetActorVelY(0),1.5), 15.1/*fspeed[PlayerNumber()]*/, FALSE, FALSE);
 	SetAirControl(0.75);	//Give the player a lot of air control to help aim for other enemies...
 	SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.75);	//...and reduce the gravity to increase air time.
 	
-	Until(on_ground[PN()]==TRUE||GetActorZ(0)-GetActorFloorZ(0)<8.1) Delay(1);
+	Until(on_ground[PlayerNumber()]==TRUE||GetActorZ(0)-GetActorFloorZ(0)<8.1) Delay(1);
 	
 	enemies_bounced = 0;	//Reset the player's combo.
 	ACS_NamedExecute("RememberGravity",0,0,0,0);
@@ -3769,22 +3891,24 @@ script "MaryScream" (void)
 	SetActorState(0,"FallScream",TRUE);
 }
 
-script "BallPitBounce" (void)
+script "BallPitBounce" (int sid)	//Only used in 1-3 but due to fspeed variable requirement it's unfortunately global.
 {	
 	//If this is a player, handle them specially.
 	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE||CheckActorClass(0, "AdultScaleTester")==TRUE)
 	{
-		If(fspeed[PlayerNumber()]<-13.5)
+		If(fspeed[PlayerNumber()]<-8.5)
 		{
-			If(openInput[PlayerNumber()] & BT_USE) { fspeed[PlayerNumber()] -= 1.75; PlaySound(0, "misc/boing"); }
-			Else PlaySound(0, "sonic/spring");
-			If(fspeed[PlayerNumber()]<-28.5) fspeed[PlayerNumber()] = -28.25;	//To prevent abuse of the ball pits, the player's velocity is limited.
-			SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), -(fspeed[PN()]), FALSE, FALSE);	//Flip the resulting velocity then "bounce" the player!
+			If(CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) { fspeed[PlayerNumber()] -= 1.33; }
+			fspeed[PlayerNumber()] -= 0.75;
+			PlaySound(0, "misc/boing");
+			ACS_NamedExecute("BallPitAnimation",0,sid,0,0);
+			If(fspeed[PlayerNumber()]<-20.5) fspeed[PlayerNumber()] = -20.5;	//To prevent abuse of the ball pits, the player's velocity is limited.
+			SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), -(fspeed[PlayerNumber()]), FALSE, FALSE);	//Flip the resulting velocity then "bounce" the player!
 		}
 	}
 	else	//Otherwise, they're an enemy or something less important and won't have a fspeed variable.
 	{
-		SetActorVelocity(0, GetActorVelX(0),GetActorVelY(0),12.5,FALSE,FALSE);
+		SetActorVelocity(0, GetActorVelX(0),GetActorVelY(0),16.25,FALSE,FALSE);
 	}
 }
 
@@ -3802,7 +3926,7 @@ script "Drowning" ENTER
 		{
 		Delay(1);
 		
-		if(airsupply[PlayerNumber()] > 0 && (water_tics[PN()] > 0 || GetCVAR("z_disabledrowning") == TRUE)) airsupply[PN()] = 1050;
+		if(airsupply[PlayerNumber()] > 0 && (water_tics[PlayerNumber()] > 0 || GetCVAR("z_disabledrowning") == TRUE)) airsupply[PlayerNumber()] = 1050;
 		
 		if(airsupply[PlayerNumber()]==840||airsupply[PlayerNumber()]==560) LocalAmbientSound("misc/waterding",127);
 		
@@ -3881,26 +4005,6 @@ If(WaterLevel(0)>1) SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.5);
 else SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,1.0);
 
 SetAirControl(0.00390625);
-
-/*if(CheckActorInventory(GetCurrentPlayerTID(), "SuperX")==FALSE)
-	{
-		If(GetActorProperty(0, APROP_Waterlevel)==0)
-		{
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.0);
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.0);
-		}
-		Else
-		{
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.01);
-			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.01);
-		}
-	}
-else
-	{
-	SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.015);
-	SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.225);
-	}*/
-
 }
 
 script "ColorCoin" (int mode)
@@ -3917,21 +4021,9 @@ script "FlowerCheck" (void)	{	If(!CheckActorFloorTexture(0,"OD1_GRS1")&&!CheckAc
 
 script "FlowerCount" (int mode) { If(mode == TRUE) flowers++; Else if(flowers>0) flowers--; }
 
-function int PN (void) //Gets the current player's number for use in 8-player arrays.
-{
-int tid;
-
-tid = PlayerNumber();
-
-Return tid;
-
-}
-
 ////////////////////////////////////
 //SPRINGS, BOOST PANELS, AND RINGS//
 ////////////////////////////////////
-
-
 int spring_timer;	//How many tics before springs are allowed to be used again. Not sure if redundant with what is below but I never bothered to add a comment to it to indicate its purpose!
 int sdelay;
 int boost_properties[MAX_PLAYERS*3];	//First set: Remaining tics to boost player. Second-third: X and Y velocities.
@@ -4026,7 +4118,7 @@ script "ForceRotateToAngle" (int affected, int reference)
 
 script "SpringBounce" (int tid, int type, int power) //Bounces the player in the direction of the "linked" thing like a spring.
 {	//First make sure it's on the whitelist here. If it isn't, it's not allowed to use springs, boost panels, and mid-air rings.
-	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "LGirlPlayer_Super")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "XanePlayer_Super")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2"))
+	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "LGirlPlayer_Super")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "XanePlayer_Super")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
 	{
 	If(CheckActorClass(0, "FlowerProjectile3_1P")) SetActorState(0, "Launch");
 	bool extra_power = 0;	//This determines whether hitting this spring with Mary's hammer should increase its power.
@@ -4057,32 +4149,32 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 	if(1)
 	{
 		spring_timer = CONSTANT_SPRING_DISABLETICS;	//Disable boosting objects for a bit.
-		fscreamed[PN()] = FALSE;
+		fscreamed[PlayerNumber()] = FALSE;
 		boost_properties[PlayerNumber()] = 0;	//Remaining boost tics
 		boost_properties[MAX_PLAYERS+PlayerNumber()] = 0;	//X velocity
 		boost_properties[(MAX_PLAYERS*2)+PlayerNumber()] = 0;	//X velocity
 		
-		If(type==0||type>3) no_movement[PN()] = 14;	//Don't let the player move for a second.
+		If(type==0||type>3) no_movement[PlayerNumber()] = 14;	//Don't let the player move for a second.
 
 		SetActorVelocity(0,0,0,0,0,0);
 		SetActorPosition(0,GetActorX(tid),GetActorY(tid),GetActorZ(tid),0);
 		If(type==0||type>3)int angle = GetActorAngle(0);
-		jumps[PN()] = 0;
-		hammermove[PN()] = 5;
+		jumps[PlayerNumber()] = 0;
+		hammermove[PlayerNumber()] = 5;
 
 		//if(CheckActorState(0, "HitSpring")) SetActorState(0, "HitSpring");
 		//else ACS_NamedExecute("PlayEnemySpringSound",0,0,0,0);
 
 		if(type==0||type>=4) //Spring
 			{
-			spring[PN()] = TRUE;
-			cancelJump[PN()] = TRUE;
+			spring[PlayerNumber()] = TRUE;
+			cancelJump[PlayerNumber()] = TRUE;
 			
 			PlaySound(tid, "sonic/spring", CHAN_BODY, 0.75, FALSE, 0.75);
 			
 			if(type>=4)
 				{
-				//kjumped[PN()] = 45;
+				//kjumped[PlayerNumber()] = 45;
 				
 				SetActorAngle(0,angle);
 				
@@ -4149,10 +4241,10 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 			If(type==1||type==2)
 				{
 				SetPlayerProperty(FALSE,ON,PROP_TOTALLYFROZEN);
-				//hammermove[PN()] = 35;
+				//hammermove[PlayerNumber()] = 35;
 				ThrustThing(GetActorAngle(tid)>> 8,15,0,0);	//Barely push the player then...
 				Delay(1);	//...after a tic...
-				no_movement[PN()] = CONST_BOOST_TICS*power;	//Don't allow the player to control their movement after this (minus jumping and Air Dashes).
+				no_movement[PlayerNumber()] = CONST_BOOST_TICS*power;	//Don't allow the player to control their movement after this (minus jumping and Air Dashes).
 				boost_properties[PlayerNumber()] = CONST_BOOST_TICS*power;	//...and activate the real boost!
 				boost_properties[MAX_PLAYERS+PlayerNumber()] = GetActorVelX(GetCurrentPlayerTID())/5;	//X velocity
 				boost_properties[(MAX_PLAYERS*2)+PlayerNumber()] = GetActorVelY(GetCurrentPlayerTID())/5;	//X velocity
@@ -4168,7 +4260,7 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 				}
 			}
 		If(type==0||type>3) SetActorAngle(0,angle);
-		If(type==0||type>3) no_movement[PN()] = 14;
+		If(type==0||type>3) no_movement[PlayerNumber()] = 14;
 		}
 	}
 }
@@ -4205,9 +4297,9 @@ script "XaneDropDash" ENTER
 	While(1)
 	{
 		//Don't allow Drop Dashes if scripts are disabled or stuck to a wall.
-		Until(no_scripts[PN()]==FALSE&&walljumping[PlayerNumber()]==0&&hammermove[PlayerNumber()]==0) Delay(1);
+		Until(no_scripts[PlayerNumber()]==FALSE&&walljumping[PlayerNumber()]==0&&hammermove[PlayerNumber()]==0) Delay(1);
 		
-		If(boost_properties[PlayerNumber()]==0&&openInput[PN()] & BT_USE)
+		If(boost_properties[PlayerNumber()]==0&&openInput[PlayerNumber()] & BT_USE)
 		{	//If on the ground and backwards+use was just pressed, give Xane a boost forward!
 			tics_boost = 15;
 			While(openInput[PlayerNumber()] & BT_USE) { Delay(1); tics_boost--; }
@@ -4260,11 +4352,11 @@ script "LandingBounce" (int mode)
 		GiveInventory("DisableAirDash",1);	//Re-use Mary's inventory item Xane never uses to make the sword lock up.
 	}
 	
-	//Unknown if this broke anything when commented out but it fixes a sword glitch. //Until(GetActorVelZ(0)<0.0||GetActorProperty(0,APROP_HEALTH)==1||force_death[PlayerNumber()]==TRUE) { hammermove[PN()] = 2; Delay(1); }
+	//Unknown if this broke anything when commented out but it fixes a sword glitch. //Until(GetActorVelZ(0)<0.0||GetActorProperty(0,APROP_HEALTH)==1||force_death[PlayerNumber()]==TRUE) { hammermove[PlayerNumber()] = 2; Delay(1); }
 	
 	Until(GetActorZ(0)-GetActorFloorZ(0)<8.0||GetActorProperty(0,APROP_HEALTH)==1||force_death[PlayerNumber()]==TRUE||(GameType()!=GAME_NET_DEATHMATCH&&CheckInventory("FloorDetected")==TRUE))
 	{
-		hammermove[PN()] = 2;	//Prevent sticking to walls while performing Drop Dashes.
+		hammermove[PlayerNumber()] = 2;	//Prevent sticking to walls while performing Drop Dashes.
 		Delay(1);
 		
 		if(GetActorVelZ(0)>0) temp_fspeed = 0;	//Don't count upward movement as a "fall".
@@ -4296,6 +4388,7 @@ script "LandingBounce" (int mode)
 	Else If(mode==1)	//"Drop Dash"
 	{
 		temp_fspeed = temp_fspeed >> 16;	//Convert it into a whole number.
+		If(CheckInventory("SuperX")==TRUE) temp_fspeed -= 10;
 		int divide_by = 9;
 		If(temp_fspeed<-15) divide_by = 8;
 		If(temp_fspeed<-20) divide_by = 7;
@@ -4307,11 +4400,11 @@ script "LandingBounce" (int mode)
 		SetActorVelocity(0,0.0,0.0,0.0,FALSE,FALSE);	//Stop the player before boosting them!
 		PlaySound(0,"sonic/thok",CHAN_VOICE,1.0,FALSE);
 		SetPlayerProperty(FALSE,ON,PROP_TOTALLYFROZEN);
-		//hammermove[PN()] = 35;
+		//hammermove[PlayerNumber()] = 35;
 		ThrustThing(GetActorAngle(0)>> 8,15,0,0);	//Barely push the player then...
 		Delay(1);	//...after a tic...
-		no_movement[PN()] = CONST_BOOST_TICS*3;	//Don't allow the player to control their movement after this (minus jumping and Air Dashes).
-		//no_scripts[PN()] = FALSE;	//Allow scripts again as Xane's now on the ground.
+		no_movement[PlayerNumber()] = CONST_BOOST_TICS*3;	//Don't allow the player to control their movement after this (minus jumping and Air Dashes).
+		//no_scripts[PlayerNumber()] = FALSE;	//Allow scripts again as Xane's now on the ground.
 		boost_properties[PlayerNumber()] = CONST_BOOST_TICS*3;	//...and activate the real boost!
 		boost_properties[MAX_PLAYERS+PlayerNumber()] = GetActorVelX(GetCurrentPlayerTID())/divide_by;	//X velocity
 		boost_properties[(MAX_PLAYERS*2)+PlayerNumber()] = GetActorVelY(GetCurrentPlayerTID())/divide_by;	//X velocity
@@ -4325,7 +4418,7 @@ script "LandingBounce" (int mode)
 		ThrustThing(GetActorAngle(0) >> 8, 35, TRUE, 0);
 	}
 	
-	If(mode==1||mode==2) no_scripts[PN()] = FALSE;	//Allow scripts as Xane should now be on the ground after the Drop Dash/sword drop attack.
+	If(mode==1||mode==2) no_scripts[PlayerNumber()] = FALSE;	//Allow scripts as Xane should now be on the ground after the Drop Dash/sword drop attack.
 }
 
 script "XaneSwordDropAttackViewAnim" (int directionx)	//0 = down, 1 = up
@@ -4384,7 +4477,7 @@ script "EnemyFollowPath" (int follower)
 	Thing_Remove(follower);
 }
 
-script "DisableWallJump" (int tics_disablewj)	{	hammermove[PN()] = tics_disablewj;	}
+script "DisableWallJump" (int tics_disablewj)	{	hammermove[PlayerNumber()] = tics_disablewj;	}
 
 script "HandleResetOnReturn" RETURN { ACS_NamedExecuteAlways("ResetPlayer",0,0,0,0); }
 
@@ -4416,8 +4509,8 @@ script "ResetPlayer" (void)
 	SetPlayerProperty(1,OFF,PROP_FROZEN);
 	SetPlayerProperty(1,OFF,PROP_TOTALLYFROZEN);
 	SetPlayerProperty(TRUE,OFF,PROP_FLIGHT);
-	disablewind[PN()] = 0;
-	no_scripts[PN()] = FALSE;
+	disablewind[PlayerNumber()] = 0;
+	no_scripts[PlayerNumber()] = FALSE;
 	
 	if(StrParam(n:PRINTNAME_LEVEL)!="SPECSTG1"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG2"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG3"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG4"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG5"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG6"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG7"&&GameType()!=GAME_NET_DEATHMATCH/*&&(GetLevelInfo(LEVELINFO_LEVELNUM)!=0&&ss_position!=3)*/) { if(level[0]<GetLevelInfo(LEVELINFO_LEVELNUM)&&GetLevelInfo(LEVELINFO_LEVELNUM)<CONST_TRANS_LEVELS_START) level[0] = GetLevelInfo(LEVELINFO_LEVELNUM); level[1] = GetLevelInfo(LEVELINFO_LEVELNUM); If(GetLevelInfo(LEVELINFO_WORLDLEVEL)==1) level[2] = GetLevelInfo(LEVELINFO_LEVELNUM); }		//If not a special level, update this variable.
 	
@@ -4592,21 +4685,21 @@ script "SetSSCheckpoint" RETURN
 int tics_scoreround = 0;	//How many tics until a score rounding occurs. If this is -1, it's disabled.
 script 70 (int add_score)	//argument 2 was "mode" but I don't know what it was for.
 {
-	if(score[PN()]>=9999990)
+	if(score[PlayerNumber()]>=9999990)
 	{
-		score[PN()] = 9999990;
+		score[PlayerNumber()] = 9999990;
 		Terminate;
 	}
 	
-	score[PN()] += add_score;	//Give or take away the requested score.
+	score[PlayerNumber()] += add_score;	//Give or take away the requested score.
 	If(add_score>0) score[MAX_PLAYERS] += add_score;	//Increase the hidden 1UP score counter (only if earning score).
 	
 	//Give an extra life if the player earned enough points.
 	If(score[MAX_PLAYERS] >= CONSTANT_1UP_SCORE) { ACS_NamedExecuteAlways("GiveExtraLife",0,0,0,0); score[MAX_PLAYERS] = 0; }
 	
 	//Lastly, make sure invalid scores are impossible.
-	If(score[PN()]<0) score[PN()] = 0;
-	if(score[PN()]>=9999990) score[PN()] = 9999990;
+	If(score[PlayerNumber()]<0) score[PlayerNumber()] = 0;
+	if(score[PlayerNumber()]>=9999990) score[PlayerNumber()] = 9999990;
 	
 	//Prepare a score-rounding in two seconds from this point unless more score's earned.
 	tics_scoreround = 70;
@@ -4616,35 +4709,35 @@ script 70 (int add_score)	//argument 2 was "mode" but I don't know what it was f
 
 if(mode==FALSE)
 {
-	if(score[PN()]>=9999990)
+	if(score[PlayerNumber()]>=9999990)
 	{
-	score[PN()] = 9999990;
+	score[PlayerNumber()] = 9999990;
 	Terminate;
 	}
 
 	If(add_score<0)
 		{
 
-		If(score[PN()]+add_score>=0)    //Remove score if requested.
+		If(score[PlayerNumber()]+add_score>=0)    //Remove score if requested.
 			{
 			
 			int score_orig;        
-			score_orig = score[PN()];
+			score_orig = score[PlayerNumber()];
 			While(remaining > 4)
 				{
 				//Command to play score counting-up sound was here.
-				score[PN()] -= 5;
+				score[PlayerNumber()] -= 5;
 				remaining -= 5;	//Don't decrease the hidden total score to prevent easy life abuse.
-				if(score[PN()]<=0) remaining = 0;	//Prevent negative score!
+				if(score[PlayerNumber()]<=0) remaining = 0;	//Prevent negative score!
 				Delay(1);
 				}
 
-			If(score[PN()]==score_orig) score[PN()] = score_orig/2;
+			If(score[PlayerNumber()]==score_orig) score[PlayerNumber()] = score_orig/2;
 			//Command to play score finished sound was here.
 			}
 		Else
 			{
-			score[PN()] = 0;
+			score[PlayerNumber()] = 0;
 			//Print(d:add_score);
 			}
 	}
@@ -4657,14 +4750,14 @@ if(mode==FALSE)
 		//Command to play score counting-up sound was here.
 		If(remaining>100)
 		{
-			score[PN()] += 10;
+			score[PlayerNumber()] += 10;
 			if(score[MAX_PLAYERS]>=0) score[MAX_PLAYERS] += 10;	//Total (never decrease)
 			remaining -= 10;
 			ss_score -= 10;
 		}
 		Else
 		{
-			score[PN()] += 5;
+			score[PlayerNumber()] += 5;
 			if(score[MAX_PLAYERS]>=0) score[MAX_PLAYERS] += 5;	//Total (never decrease)
 			remaining -= 5;
 			ss_score -= 5;
@@ -4681,25 +4774,25 @@ if(mode==FALSE)
 
 	plsbonus = FALSE;
 	//Command to play score finished sound was here.
-	If(score[PN()]<0) score[PN()] = 0;	//Just in case the above check fails, make sure negative scores are impossible!
+	If(score[PlayerNumber()]<0) score[PlayerNumber()] = 0;	//Just in case the above check fails, make sure negative scores are impossible!
 	}
 
-	If(score[PN()] % 5 > 0) //Check to see if the value is a multiple of 5
+	If(score[PlayerNumber()] % 5 > 0) //Check to see if the value is a multiple of 5
 	{
-	remaining = score[PN()] % 5;
+	remaining = score[PlayerNumber()] % 5;
 
 	While(remaining>0)
 
-	score[PN()]--;
+	score[PlayerNumber()]--;
 	score[MAX_PLAYERS]++;	//Total (never decrease)
 	remaining--;
 	Delay(1);
 	}
-	remaining = score[PN()] % 5;
+	remaining = score[PlayerNumber()] % 5;
 
 	While(remaining>0)
 	{
-	score[PN()]--;
+	score[PlayerNumber()]--;
 	remaining--;
 	Delay(1);
 	}
@@ -4751,7 +4844,7 @@ TakeActorInventory(GetCurrentPlayerTID(),"CoinSP",999);
 script "TransferPlayerTID" RESPAWN
 {
 	Thing_ChangeTID(1000+PlayerNumber(),0);	//Get rid of the player's old thing ID...
-	respawned[PN()] = TRUE;
+	respawned[PlayerNumber()] = TRUE;
     Thing_ChangeTID (0, 1000+PlayerNumber());	//...then update it to this new "body".
 }
 
@@ -4790,7 +4883,7 @@ script "WarpToHut" (void)
 		ss_returnlevel = GetLevelInfo(LEVELINFO_LEVELNUM);	//Indicate what level to return to to prevent the strange 1-2 glitch.
 		Delay(1);
 		stored_velocity[0] = -616.5;	//This odd value will force the game to take you to the hut.
-		ss_return_id = -(checkpoint_id[PN()]);
+		ss_return_id = -(checkpoint_id[PlayerNumber()]);
 		ChangeLevel("AREA1",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//Teleport the player to the hut!
 	}
 }
@@ -4893,13 +4986,18 @@ script "CheckSpecialStage" (int mode)
 			if( (StrParam(n:PRINTNAME_LEVEL)=="SPECSTG1" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG2" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG3" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG4" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG5" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG6" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG7") && GameType()!=GAME_NET_DEATHMATCH) SetResultValue(TRUE);
 			else SetResultValue(FALSE);
 		Break;
-		Case 1:
+		Case 1:	//Return the current Special Stage number.
 			SetResultValue(ss_number-1);
 		Break;
-		Case 2:	//Whether this is a special area like the small hut
+		Case 2:	//Whether this is the Small Hut.
 			if(world_info[0]==1&&world_info[1]==1&&ss_position==3) SetResultValue(TRUE);
 			else SetResultValue(FALSE);
 		Break;
+		Case 3:	//Returns TRUE if in an arena map.
+			if( (StrParam(n:PRINTNAME_LEVEL)=="ARENA1") && GameType()!=GAME_NET_DEATHMATCH) SetResultValue(TRUE);
+			else SetResultValue(FALSE);
+		Break;
+
 
 	}
 }
@@ -4995,7 +5093,7 @@ script "DemoTimer" OPEN
 		{
 			SetHUDSize(1024,640,TRUE);
 			SetFont("TITLEFNT");
-			HUDMessage(s:"TAP BACK BUTTON";
+			HUDMessage(s:"PRESS ANY KEY";
 				HUDMSG_FADEINOUT, 100, CR_UNTRANSLATED, 800.4,420.1, 0.01, 1.0, 1.0);
 			SetHUDSize(512,320,TRUE);
 			SetFont("M_DOOM");
@@ -5025,13 +5123,13 @@ script "TitleOverlay" (void)
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 128.0,40.0, 28.0, 1.0, 1.0);	
 	SetHUDSize(1024,640,FALSE);
 	SetFont("3DLETTER");
-	HUDMessageBold(s:"(C)2017 Xane Corp. Version 1.88";
+	HUDMessageBold(s:"(C)2016-2018 Xane Corp. Version 1.88";
 		HUDMSG_FADEINOUT, 0, CR_WHITE, 1236.2,638.2, 28.0, 1.0, 1.0);
 
 	SetHUDSize(512,320,TRUE);
 	While(tkeyprompt_times<15)
 	{
-		HUDMessageBold(s:"Tap the back button to begin.";
+		HUDMessageBold(s:"Press any key to begin.";
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 256.0,200.0, 0.01, 1.0, 1.0);
 		Delay(70);
 		tkeyprompt_times++;
@@ -5073,7 +5171,7 @@ While(1)
 		//Print(d:on_ground[0], s:" AND DETECTION IS ", d:detected[0]);
 		If(GetCVAR("debug_wind")!=FALSE) PrintBold(s:"-WIND DEBUG-\n\nREQ: ", f:direction[0], s:"\nCUR: ", f:wind_phase[0], s:"\nPWR: ", d:wind_power[0], s:"\nFORCE DIR: ", d:override[0], s:"\nDISABLE: ", d:disablewind[0], s:" (", d:wind_disabledelay[0], s:")\n\nALSO, FLOWERS VARIABLE (LAG REASON) IS\n", d:flowers);
 		
-		If(no_scripts[PN()]==FALSE&&GameType()!=GAME_NET_DEATHMATCH&&openInput[PN()] & BT_USER2&&!(openInput[MAX_PLAYERS+PlayerNumber()] & BT_USER2)) { ACS_NamedExecute("WarpToHut",0,0,0,0); }
+		If(no_scripts[PlayerNumber()]==FALSE&&GameType()!=GAME_NET_DEATHMATCH&&openInput[PlayerNumber()] & BT_USER2&&!(openInput[MAX_PLAYERS+PlayerNumber()] & BT_USER2)) { ACS_NamedExecute("WarpToHut",0,0,0,0); }
 		
 		pushvels[0] = 0;	//Clear the wind velocity variables before setting them to avoid thrusting the player around with no wind.
 		pushvels[1] = 0;
@@ -5082,11 +5180,11 @@ While(1)
 		If(GetActorZ(0)-GetActorFloorZ(0)<4.5) { wind_reduction = 2; pushvels[2] = 0; }
 		Else { wind_reduction = 32; pushvels[2] = 1; }
 		
-		If(flight_script_running[PN()]==TRUE&&CheckInventory("MaryHammer_MidAirDone")==FALSE) wind_reduction = 4;
+		If(flight_script_running[PlayerNumber()]==TRUE&&CheckInventory("MaryHammer_MidAirDone")==FALSE) wind_reduction = 4;
 		
 		If(CheckInventory("SuperX")) wind_reduction += 6;
 		
-		If(disablewind[PN()]==FALSE&&wind_power[PN()]>0) { pushvels[0] = wind_x[PN()]/wind_reduction; pushvels[1] = wind_y[PN()]/wind_reduction; }
+		If(disablewind[PlayerNumber()]==FALSE&&wind_power[PlayerNumber()]>0) { pushvels[0] = wind_x[PlayerNumber()]/wind_reduction; pushvels[1] = wind_y[PlayerNumber()]/wind_reduction; }
 		
 		If(pushvels[2]==FALSE) SetActorVelocity(0, pushvels[0]+boost_properties[MAX_PLAYERS+PlayerNumber()], pushvels[1]+boost_properties[(MAX_PLAYERS*2)+PlayerNumber()],0,TRUE,TRUE); //Move the player with the wind and boost panels.
 		Else SetActorVelocity(0, pushvels[0]+(boost_properties[MAX_PLAYERS+PlayerNumber()]/16), pushvels[1]+(boost_properties[(MAX_PLAYERS*2)+PlayerNumber()]/16),0,TRUE,TRUE);
@@ -5094,7 +5192,7 @@ While(1)
 		if(boost_properties[PlayerNumber()]>0) boost_properties[PlayerNumber()]--;
 		Else { boost_properties[MAX_PLAYERS+PlayerNumber()] = 0; boost_properties[(MAX_PLAYERS*2)+PlayerNumber()] = 0; }
 		
-		If(wind_disabledelay[PN()]>0) wind_disabledelay[PN()]--;
+		If(wind_disabledelay[PlayerNumber()]>0) wind_disabledelay[PlayerNumber()]--;
 		
 		if(PlayerNumber()==0) framecount++;
 		
@@ -5121,49 +5219,49 @@ While(1)
 		
 		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
 		{
-			if(water_tics[PN()]>0&&no_scripts[PlayerNumber()]==FALSE)
+			if(water_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PN()]==FALSE&&framecount % 14 == 0) FadeTo(64,128,255,0.25,0.1);
-				water_tics[PN()]--;
-				If(important_fade[PN()]==FALSE&&water_tics[PN()]==0) FadeTo(0,0,0,0.0,0.5);
+				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 0) FadeTo(64,128,255,0.25,0.1);
+				water_tics[PlayerNumber()]--;
+				If(important_fade[PlayerNumber()]==FALSE&&water_tics[PlayerNumber()]==0) FadeTo(0,0,0,0.0,0.5);
 			}
 			
-			if(ninja_tics[PN()]>0&&no_scripts[PlayerNumber()]==FALSE)
+			if(ninja_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PN()]==FALSE&&framecount % 14 == 2) FadeTo(255,128,255,0.1,0.1);
-				ninja_tics[PN()]--;
-				If(important_fade[PN()]==FALSE&&ninja_tics[PN()]==0) { FadeTo(0,0,0,0.0,0.5); }
+				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 2) FadeTo(255,128,255,0.1,0.1);
+				ninja_tics[PlayerNumber()]--;
+				If(important_fade[PlayerNumber()]==FALSE&&ninja_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 			
-			if(damage_tics[PN()]>0&&no_scripts[PlayerNumber()]==FALSE)
+			if(damage_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PN()]==FALSE&&framecount % 14 == 4) FadeTo(255,128,64,0.25,0.1);
-				damage_tics[PN()]--;
+				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 4) FadeTo(255,128,64,0.25,0.1);
+				damage_tics[PlayerNumber()]--;
 				If(doubledamage_enabled==FALSE) { doubledamage_enabled = TRUE; GiveInventory("InternalDamage",1); }
-				If(important_fade[PN()]==FALSE&&damage_tics[PN()]==0) { FadeTo(0,0,0,0.0,0.5); }
+				If(important_fade[PlayerNumber()]==FALSE&&damage_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 			else { doubledamage_enabled = FALSE; TakeInventory("PowerDamage",99); TakeInventory("PowerDoubleDamage",99); } 
 
-			if(heal_tics[PN()]>0&&no_scripts[PlayerNumber()]==FALSE)
+			if(heal_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PN()]==FALSE&&framecount % 14 == 6) FadeTo(64,255,255,0.1,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 6) FadeTo(64,255,255,0.1,0.1);
 				If(framecount % 7 == 6) HealThing(1,100);
-				heal_tics[PN()]--;
-				If(important_fade[PN()]==FALSE&&heal_tics[PN()]==0) { FadeTo(0,0,0,0.0,0.5); }
+				heal_tics[PlayerNumber()]--;
+				If(important_fade[PlayerNumber()]==FALSE&&heal_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 			
-			if(combo_tics[PN()]>0&&no_scripts[PlayerNumber()]==FALSE)
+			if(combo_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PN()]==FALSE&&framecount % 14 == 8) FadeTo(255,255,64,0.1,0.1);
-				combo_tics[PN()]--;
-				If(important_fade[PN()]==FALSE&&combo_tics[PN()]==0) { FadeTo(0,0,0,0.0,0.5); }
+				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 8) FadeTo(255,255,64,0.1,0.1);
+				combo_tics[PlayerNumber()]--;
+				If(important_fade[PlayerNumber()]==FALSE&&combo_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 			
-			if(speed_tics[PN()]>0&&no_scripts[PlayerNumber()]==FALSE)
+			if(speed_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PN()]==FALSE&&framecount % 14 == 10) FadeTo(64,255,192,0.1,0.1);
-				speed_tics[PN()]--;
-				If(important_fade[PN()]==FALSE&&combo_tics[PN()]==0) { FadeTo(0,0,0,0.0,0.5); }
+				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 10) FadeTo(64,255,192,0.1,0.1);
+				speed_tics[PlayerNumber()]--;
+				If(important_fade[PlayerNumber()]==FALSE&&combo_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 		}
 		
@@ -5172,13 +5270,13 @@ While(1)
 			tics_scoreround--;
 			If(tics_scoreround==0)
 			{
-				If(score[PN()] % 5 <= 2) score[PN()] -= score[PN()] % 5;
-				Else score[PN()] += (5 - (score[PN()] % 5) );
+				If(score[PlayerNumber()] % 5 <= 2) score[PlayerNumber()] -= score[PlayerNumber()] % 5;
+				Else score[PlayerNumber()] += (5 - (score[PlayerNumber()] % 5) );
 				tics_scoreround = -1;	//Disable rounding score.
 			}
 		}
 		
-		If(walljumping[PN()]>0) walljumping[PN()]--;
+		If(walljumping[PlayerNumber()]>0) walljumping[PlayerNumber()]--;
 		If(spring_timer>0) spring_timer--;	//Spring timer is used to prevent the game from trying to use boosting objects too quickly.
 		
 		If(totalcointics>0)
@@ -5206,9 +5304,9 @@ While(1)
 			TakeActorInventory(1007,"ShowTotalCoins",1);
 		}
 		
-		if(moved_up_wall[PN()]>0&&no_scripts[PlayerNumber()]==FALSE) moved_up_wall[PN()]--;
+		if(moved_up_wall[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE) moved_up_wall[PlayerNumber()]--;
 		
-		If(walljumping[PN()]>0&&no_scripts[PlayerNumber()]==FALSE) walljumping[PN()]--; If(hammermove[PN()]>0) hammermove[PN()]--;
+		If(walljumping[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE) walljumping[PlayerNumber()]--; If(hammermove[PlayerNumber()]>0) hammermove[PlayerNumber()]--;
 		
 		If(CheckInventory("HammerUpgrades")<upgrades[0])
 		{
@@ -5233,35 +5331,38 @@ While(1)
 		
 		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&CheckInventory("CoinSP")>CheckInventory("CoinLimit")) TakeInventory("CoinSP",CheckInventory("CoinSP")-CheckInventory("CoinLimit"));
 		
-		If(specialbehavior[PN()]==0&&WaterLevel(0)==4) airsupply[PN()]--;
-		Else airsupply[PN()] = 1050;
+		If(specialbehavior[PlayerNumber()]==0&&WaterLevel(0)==4) airsupply[PlayerNumber()]--;
+		Else airsupply[PlayerNumber()] = 1050;
 		
-		If(airsupply[PN()]<=0) { force_death[PlayerNumber()] = TRUE; }
+		If(airsupply[PlayerNumber()]<=0) { force_death[PlayerNumber()] = TRUE; }
+		
+		if(abs(GetActorVelX(1000+PlayerNumber()))>19.1||abs(GetActorVelY(1000+PlayerNumber())>19.1)) GiveInventory("SpeedTrailX",1);
+		Else TakeInventory("PowerSpeed",1);
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==FALSE)
 		{
-			If(speed_tics[PN()]==0) SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.0);
+			If(speed_tics[PlayerNumber()]==0) SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.0);
 			Else SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.18);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.0);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_DamageMultiplier, 1.0);
 		}
 		Else
 		{
-			If(speed_tics[PN()]==0) SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.225);
+			If(speed_tics[PlayerNumber()]==0) SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.225);
 			Else SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.413);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.015);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_DamageMultiplier, 1.5);
 		}
 		
-		If(forcenormal[PN()]==TRUE&&no_movement[PN()]==FALSE)
+		If(forcenormal[PlayerNumber()]==TRUE&&no_movement[PlayerNumber()]==FALSE)
 		{
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.0);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.0);
 		}
 		
-		if(no_movement[PN()]>0)
+		if(no_movement[PlayerNumber()]>0)
 		{
-			no_movement[PN()]--;
+			no_movement[PlayerNumber()]--;
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 0.0);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.0);
 		}
@@ -5281,17 +5382,17 @@ While(1)
 
 		if(CheckActorInventory(GetCurrentPlayerTID(),"ScoreX")!=0)
 		{
-			ACS_ExecuteAlways(70,0,CheckActorInventory(GetCurrentPlayerTID(),"ScoreX")*(1+combo[PN()]),0,0)	;
+			ACS_ExecuteAlways(70,0,CheckActorInventory(GetCurrentPlayerTID(),"ScoreX")*(1+combo[PlayerNumber()]),0,0)	;
 			TakeActorInventory(GetCurrentPlayerTID(),"ScoreX",32767);
 		}
 		
 		If(GetActorFloorZ(GetCurrentPlayerTID())-GetActorZ(GetCurrentPlayerTID())==0)
 		{
 			ACS_ExecuteAlways(66,0,1,0,0);
-			spring[PN()] = FALSE;
+			spring[PlayerNumber()] = FALSE;
 		}
 
-		//If(PlayerClass(PN())==0) If(kjumped[PN()]>0) kjumped[PN()]--;
+		//If(PlayerClass(PlayerNumber())==0) If(kjumped[PlayerNumber()]>0) kjumped[PlayerNumber()]--;
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"Armor")!=meter[PlayerNumber()])
 		{
@@ -5333,21 +5434,21 @@ int powers[2], oldheight[MAX_PLAYERS];
 
 	While(1)
 	{
-		oldheight[PN()] = GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID());
+		oldheight[PlayerNumber()] = GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID());
 
 		Delay(1);	//After a tic, check for if the player went over a ramp.
 		
-		If(ramph[PN()]>0 && rampv[PN()]>0)
+		If(ramph[PlayerNumber()]>0 && rampv[PlayerNumber()]>0)
 		{
-			if(oldheight[PN()]<12.0)
+			if(oldheight[PlayerNumber()]<12.0)
 			{
-			powers[0] = 0.25 * ramph[PN()];	//4 = default, 1; Other umbes are multiples of 0.25.
-			powers[1] = 0.25 * rampv[PN()];
+			powers[0] = 0.25 * ramph[PlayerNumber()];	//4 = default, 1; Other umbes are multiples of 0.25.
+			powers[1] = 0.25 * rampv[PlayerNumber()];
 			
-			jumps[PN()] = 0;
-			detected[PN()] = 1;
-			remjumps[PN()] = 1;
-			cancelJump[PN()] = TRUE;
+			jumps[PlayerNumber()] = 0;
+			detected[PlayerNumber()] = 1;
+			remjumps[PlayerNumber()] = 1;
+			cancelJump[PlayerNumber()] = TRUE;
 			
 			If(abs(GetActorVelX(0))>abs(GetActorVelY(0))/*&&abs(GetActorVelX(0))>8.0*/) SetActorVelocity(0, FixedMul(GetActorVelX(0),powers[0]), FixedMul(GetActorVelY(0),powers[0]), FixedMul(abs(GetActorVelX(0)),powers[1]), FALSE, TRUE);
 			If(abs(GetActorVelY(0))>abs(GetActorVelX(0))/*&&abs(GetActorVelY(0))>8.0*/) SetActorVelocity(0, FixedMul(GetActorVelX(0),powers[0]), FixedMul(GetActorVelY(0),powers[0]), FixedMul(abs(GetActorVelY(0)),powers[1]), FALSE, TRUE);
@@ -5355,8 +5456,8 @@ int powers[2], oldheight[MAX_PLAYERS];
 			Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())<8.0) { Delay(1); }
 			}
 			
-		ramph[PN()] = 0;
-		rampv[PN()] = 0;
+		ramph[PlayerNumber()] = 0;
+		rampv[PlayerNumber()] = 0;
 		
 		}
 	}
@@ -5364,7 +5465,7 @@ int powers[2], oldheight[MAX_PLAYERS];
 
 script "PlayerMovement" (int mode, int all_players, int freeze)	//Freeze is used to cause special behavior. 1 = freeze, 2 = lock player only (rails)
 {
-hammermove[PN()] = 35*60;
+hammermove[PlayerNumber()] = 35*60;
 If(all_players==FALSE)
 	{
 	//Log(s:"SINGLE PLAYER");
@@ -5505,7 +5606,7 @@ If(freeze>0)
 	}
 	Else
 	{
-	  hammermove[PN()] = 35;
+	  hammermove[PlayerNumber()] = 35;
 	}
   }
 }
@@ -5699,8 +5800,9 @@ SetPlayerProperty(1,OFF,PROP_TOTALLYFROZEN);
 ChangeLevel(StrParam(s:"AREA", d:ss_returnlevel+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//Return the player to the level they left; They keep the monsters/items/secrets percentages when they return.
 }
 
-script "RunSeamlessHelper" RETURN { framecount = 0; ACS_NamedExecuteAlways("SeamlessHelper",0,0,0,0); }	//Seamless helper has to be run any time a level loads or the player may be left "in the darkness"...
-script "SeamlessHelper" ENTER
+script "RunSeamlessHelper" RETURN { framecount = 0; ACS_NamedExecuteAlways("SeamlessHelper",0,FALSE,0,0); }	//Seamless helper has to be run any time a level loads or the player may be left "in the darkness"...
+script "InitialSeamlessHelper" ENTER { ACS_NamedExecuteAlways("SeamlessHelper",0,TRUE,0,0); }
+script "SeamlessHelper" (int initial_load)	//If initial_load is set, an additional waiting time will be added for culling.
 {
 	ACS_NamedExecuteAlways("SuperFormCheck",0,0,0,0);	//Always check for super forms, regardless of where the player is.
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0); Terminate; }	//This really should be identical to what's below but I'm nervous about breaking this thing.
@@ -5713,7 +5815,7 @@ script "SeamlessHelper" ENTER
 	
 	If(IsTIDUsed(1100+(8*(ss_position))+PlayerNumber())==FALSE) { ss_position = 0; }	//If the place the player's being teleported to doesn't exist, send them to the standard starting position.
 	
-	If(stored_velocity[0]==616.5) { For(int temp_settpflag = 0; temp_settpflag<PlayerCount()+1; temp_settpflag++) { tp_to_last_ground_position[temp_settpflag] = TRUE; } stored_velocity[0] = 0; tp_to_last_ground_position[PlayerNumber()] = TRUE; ss_position = 0; checkpoint_id[PN()] = abs(ss_return_id); ss_return_id = 0; ACS_NamedExecuteAlways("LoadCheckpointInfo",0,FALSE,0,0); }	//Hack that reloads the player's info in the level they were in.
+	If(stored_velocity[0]==616.5) { For(int temp_settpflag = 0; temp_settpflag<PlayerCount()+1; temp_settpflag++) { tp_to_last_ground_position[temp_settpflag] = TRUE; } stored_velocity[0] = 0; tp_to_last_ground_position[PlayerNumber()] = TRUE; ss_position = 0; checkpoint_id[PlayerNumber()] = abs(ss_return_id); ss_return_id = 0; ACS_NamedExecuteAlways("LoadCheckpointInfo",0,FALSE,0,0); }	//Hack that reloads the player's info in the level they were in.
 	Else
 	{
 		SetActorPosition(1000+PlayerNumber(), GetActorX(1100+(8*(ss_position))+PlayerNumber()), GetActorY(1100+(8*(ss_position))+PlayerNumber()), GetActorZ(1100+(8*(ss_position))+PlayerNumber()), FALSE);
@@ -5729,6 +5831,8 @@ script "SeamlessHelper" ENTER
 		SetActorPosition(1000,GetActorX(1149),GetActorY(1149),GetActorZ(1149),FALSE);
 		SetActorAngle(1000,GetActorAngle(1149));
 	}
+	
+	//After spawning the player at the correct spawn point, await the culling polyobject if necessary.
 	
 	//SuperX check was here.
 }
@@ -5812,7 +5916,7 @@ If(cgem_count<7)
 		SetPlayerProperty(0,ON,PROP_TOTALLYFROZEN);
 		ss_position = return_position_id;
 		special_id[id_special] = TRUE;	//Prevent revisiting this Special Stage in the future.
-		important_fade[PN()] = TRUE;
+		important_fade[PlayerNumber()] = TRUE;
 		ACS_NamedExecute("SSEntryTransition",0,0,0,0);
 		entering_ss = 50;
 		//fadeout = 2;
@@ -5901,7 +6005,7 @@ script "CoinConversion" ENTER
 {
 While(1)
 	{
-	If(cdrop_delay[PN()]>0) cdrop_delay[PN()]--;
+	If(cdrop_delay[PlayerNumber()]>0) cdrop_delay[PlayerNumber()]--;
 	If(CheckActorInventory(GetCurrentPlayerTID(),"CoinX")>0)
 		{ 
 		TakeActorInventory(GetCurrentPlayerTID(),"CoinX",1);
@@ -5921,58 +6025,61 @@ int prevhealth2[MAX_PLAYERS];
 
 script "HandleCoinDrops" ENTER
 {
-prevhealth2[PN()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 While(1)
 	{
-	prevhealth2[PN()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+	prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 	Delay(1);
 	int coins;
 	
-	if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) < prevhealth2[PN()])	//Drop coin depending on the character.
+	if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) < prevhealth2[PlayerNumber()])	//Drop coin depending on the character.
 		{
-		ACS_NamedExecuteAlways("DropCoins",0,(prevhealth2[PN()]-GetActorProperty(GetCurrentPlayerTID(),APROP_Health))/2,0,0);
-		prevhealth2[PN()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+		ACS_NamedExecuteAlways("DropCoins",0,(prevhealth2[PlayerNumber()]-GetActorProperty(GetCurrentPlayerTID(),APROP_Health))/2,0,0);
+		prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 		}
 
-	if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) > prevhealth2[PN()]) prevhealth2[PN()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+	if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) > prevhealth2[PlayerNumber()]) prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 	}
 }
 
 script "DropCoins" (int number)
 {
-if(framecount<10) Terminate;
-if(number<3) Terminate;
-if(number>20) number = 20;
-int angle_divided;
+	If(ActivatorTID()>=1000&&ActivatorTID()<=1007)
+	{
+		if(framecount<10) Terminate;
+		if(number<3) Terminate;
+		if(number>20) number = 20;
+		int angle_divided;
 
-if(cdrop_delay[PN()]>0) Terminate;
+		if(cdrop_delay[PlayerNumber()]>0) Terminate;
 
-If(CheckInventory("CoinSP")>=3)
-{
-	ActivatorSound("droppedcoin/drop",255);
-	ActivatorSound("droppedcoin/drop",255);
-}
+		If(CheckInventory("CoinSP")>=3)
+		{
+			ActivatorSound("droppedcoin/drop",255);
+			ActivatorSound("droppedcoin/drop",255);
+		}
 
-cdrop_delay[PN()] = 35;
-
-angle_divided = 255 / number;	//This gives the base angle amount which is multiplied later.
+		cdrop_delay[PlayerNumber()] = 35;
+	}
+	
+	angle_divided = 255 / number;	//This gives the base angle amount which is multiplied later.
 
 	For(int i2 = 0; i2 < number; i2++)
 	{
 		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE)
 		{
-			TakeInventory("CoinSP",1);
 			If(CheckInventory("CoinSP")) { TakeInventory("CoinSP",1); /*total_coins--; totalcointics = CONSTANT_TCOINDISPTICS;*/ }
 			Else Terminate;
 		}
-		SpawnProjectile(ActivatorTID(),"DroppedCoin",angle_divided * i2 + 1,Random(26,36),Random(35,40),1.0,0);
+		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,31,37/*Random(26,36),Random(35,40)*/,1.0,0);
+		else SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,24,33,1.0,0);
 	}
 
 }
 
 script "GetCDropTimer" (int mode)
 {
-if(mode==0) SetResultValue(cdrop_delay[PN()]);
+if(mode==0) SetResultValue(cdrop_delay[PlayerNumber()]);
 if(mode==1) SetResultValue(CheckWeapon("MaryHammer"));
 if(mode==2) SetResultValue(CheckActorInventory(GetCurrentPlayerTID(),"MaryHammer"));
 }

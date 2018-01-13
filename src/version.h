@@ -45,13 +45,11 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-	//Currently based on https://github.com/coelckers/gzdoom/commit/b9a23989355ab62b19798332215399b16ec66177
-
-#define VERSIONSTR "v1.87"
+#define VERSIONSTR "v1.87-dev"//"3.3pre"
 
 // The version as seen in the Windows resource
-#define RC_FILEVERSION 1,8,9999,0
-#define RC_PRODUCTVERSION 1,8,9999,0
+#define RC_FILEVERSION 3,2,9999,0
+#define RC_PRODUCTVERSION 3,2,9999,0
 #define RC_PRODUCTVERSION2 VERSIONSTR
 // These are for content versioning. The current state is '3.3'.
 #define VER_MAJOR 3
@@ -93,20 +91,20 @@ const char *GetVersionString();
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "Mary's Magical Adventure"
-#define BASEWAD "engine.pk3"
+#define BASEWAD "data.pk3"
 #define OPTIONALWAD "zd_extra.pk3"
 #define BASESF "soundfont.sf2"
 
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "Mary's Magical Adventure"
 #define GAMENAMELOWERCASE "Settings"
-#define FORUM_URL "...well, for ZDoom problems, http://forum.zdoom.org"
-#define BUGS_FORUM_URL	"...if you're absolutely sure Xane can fix this, send it to mailto:xanem1@gmail.com. Xane doesn't know C++ enough to fix source problems or random memory addresses, but he may fix problems related to the game itself"
+#define FORUM_URL "http://forum.zdoom.org/"
+#define BUGS_FORUM_URL	"mailto:xanem1@gmail.com (Xane won't really be able to help but oh well.)"
 
 #if defined(__APPLE__) || defined(_WIN32)
-#define GAME_DIR GAMENAME
+#define GAME_DIR GAMESIG
 #else
-#define GAME_DIR ".config/" GAMENAME
+#define GAME_DIR ".config/" GAMENAMELOWERCASE
 #endif
 
 

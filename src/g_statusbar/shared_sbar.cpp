@@ -1131,7 +1131,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 	{
 		screen->DrawText (SmallFont, CR_TAN, 0, GetTopOfStatusbar() - 40 * CleanYfac,
 			"Demo was recorded with a different version\n"
-			"of " GAMENAME ". Expect it to go out of sync.",
+			"of " GAMENAME ". Expect Mary to behave stupidly.",
 			DTA_CleanNoMove, true, TAG_DONE);
 	}
 
@@ -1220,14 +1220,14 @@ void DBaseStatusBar::DrawConsistancy () const
 			firsttime = false;
 			if (debugfile)
 			{
-				fprintf (debugfile, "%s of Pa rit %d (%d)\n", conbuff,
+				fprintf (debugfile, "%s as Pa rit %d (%d)\n", conbuff,
 					players[1-consoleplayer].inconsistant,
 					players[1-consoleplayer].inconsistant/ticdup);
 			}
 		}
-		/*screen->DrawText (SmallFont, CR_GREEN, 
+		screen->DrawText (SmallFont, CR_GREEN, 
 			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
-			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);*/
+			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);
 		BorderTopRefresh = screen->GetPageCount ();
 	}
 }
@@ -1247,7 +1247,7 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Waiting for:");
+				strcpy (conbuff, "Farting on: ");
 				buff_p = conbuff + 12;
 			}
 			*buff_p++ = ' ';
@@ -2074,8 +2074,8 @@ DEFINE_ACTION_FUNCTION(DBaseStatusBar, GetGlobalACSArrayValue)
 
 enum ENumFlags
 {
-	FNF_FILLZEROS,
-	FNF_WHENNOTZERO,
+	FNF_WHENNOTZERO = 0x1,
+	FNF_FILLZEROS = 0x2,
 };
 
 DEFINE_ACTION_FUNCTION(DBaseStatusBar, FormatNumber)

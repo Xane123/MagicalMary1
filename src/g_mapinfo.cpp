@@ -279,8 +279,6 @@ void level_info_t::Reset()
 	outsidefogdensity = 0;
 	skyfog = 0;
 	pixelstretch = 1.2f;
-	skymovement1 = 0;	//[XANE] Let's reset my variables as well!
-	skymovement2 = 0;
 
 	specialactions.Clear();
 	DefaultEnvironment = 0;
@@ -868,20 +866,6 @@ DEFINE_MAP_OPTION(levelnum, true)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 	info->levelnum = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(movesky_horizontal, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->skymovement1 = parse.sc.Number;
-}
-
-DEFINE_MAP_OPTION(movesky_vertical, true)
-{
-	parse.ParseAssign();
-	parse.sc.MustGetNumber();
-	info->skymovement2 = parse.sc.Number;
 }
 
 DEFINE_MAP_OPTION(next, true)
@@ -2249,7 +2233,7 @@ void G_ParseMapInfo (FString basemapinfo)
 		}
 		if (nindex != 2)
 		{
-			CommitUMapinfo(&gamedefaults);	// UMPAINFOs are collected until a regular MAPINFO is found so that they properly use the base settings.
+			CommitUMapinfo(&gamedefaults);	// UMAPINFOs are collected until a regular MAPINFO is found so that they properly use the base settings.
 			FMapInfoParser parse(nindex == 1 ? FMapInfoParser::FMT_New : FMapInfoParser::FMT_Unknown);
 			level_info_t defaultinfo;
 			parse.ParseMapInfo(lump, gamedefaults, defaultinfo);

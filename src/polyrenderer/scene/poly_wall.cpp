@@ -187,7 +187,7 @@ bool RenderPolyWall::RenderLine(PolyRenderThread *thread, const TriMatrix &world
 
 bool RenderPolyWall::IsFogBoundary(sector_t *front, sector_t *back)
 {
-	return 0 && PolyCameraLight::Instance()->FixedColormap() == nullptr && front->Colormap.FadeColor &&
+	return PolyCameraLight::Instance()->FixedColormap() == nullptr && front->Colormap.FadeColor &&
 		front->Colormap.FadeColor != back->Colormap.FadeColor &&
 		(front->GetTexture(sector_t::ceiling) != skyflatnum || back->GetTexture(sector_t::ceiling) != skyflatnum);
 }

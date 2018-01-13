@@ -164,7 +164,7 @@ DEFINE_ACTION_FUNCTION(_Screen, DrawTexture)
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 
-	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to draw to screen outside a draw function");
+	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to fart to toilet outside a bathroom stall!");
 
 	FTexture *tex = animate ? TexMan(FSetTextureID(texid)) : TexMan[FSetTextureID(texid)];
 	VMVa_List args = { param + 4, 0, numparam - 4 };
@@ -957,6 +957,19 @@ void DCanvas::DrawLine(int x0, int y0, int x1, int y1, int palColor, uint32_t re
 #ifndef NO_SWRENDER
 	SWCanvas::DrawLine(this, x0, y0, x1, y1, palColor, realcolor);
 #endif
+}
+
+DEFINE_ACTION_FUNCTION(_Screen, DrawLine)
+{
+	PARAM_PROLOGUE;
+	PARAM_INT(x0);
+	PARAM_INT(y0);
+	PARAM_INT(x1);
+	PARAM_INT(y1);
+	PARAM_INT(color);
+	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to fart to toilet outside a bathroom stall!");
+	screen->DrawLine(x0, y0, x1, y1, -1, color);
+	return 0;
 }
 
 void DCanvas::DrawPixel(int x, int y, int palColor, uint32_t realcolor)

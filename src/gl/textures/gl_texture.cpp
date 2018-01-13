@@ -64,13 +64,13 @@ CCMD(gl_flush)
 	if (GLRenderer != NULL) GLRenderer->FlushTextures();
 }
 
-CUSTOM_CVAR(Int, gl_texture_filter, 1, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, gl_texture_filter, 4, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
 {
 	if (self < 0 || self > 6) self=4;
 	if (GLRenderer != NULL && GLRenderer->mSamplerManager != NULL) GLRenderer->mSamplerManager->SetTextureFilterMode();
 }
 
-CUSTOM_CVAR(Int, gl_texture_format, 3, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, gl_texture_format, 0, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
 {
 	// [BB] The number of available texture modes depends on the GPU capabilities.
 	// RFL_TEXTURE_COMPRESSION gives us one additional mode and RFL_TEXTURE_COMPRESSION_S3TC
@@ -89,7 +89,7 @@ CUSTOM_CVAR(Bool, gl_texture_usehires, true, CVAR_ARCHIVE|CVAR_NOINITCALL)
 	if (GLRenderer != NULL) GLRenderer->FlushTextures();
 }
 
-CVAR(Bool, gl_precache, true, CVAR_ARCHIVE)
+CVAR(Bool, gl_precache, false, CVAR_ARCHIVE)
 
 CVAR(Bool, gl_trimsprites, true, CVAR_ARCHIVE);
 

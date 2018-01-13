@@ -2333,7 +2333,7 @@ void subsector_t::BuildPolyBSP()
 //
 //==========================================================================
 
-CUSTOM_CVAR(Int, r_fakecontrast, 2, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)	//Smooth fake contrast
+CUSTOM_CVAR(Int, r_fakecontrast, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 {
 	if (self < 0) self = 1;
 	else if (self > 2) self = 2;
