@@ -5,6 +5,8 @@
 
 #include "zcommon.acs"
 
+world bool 9:level_ready;	//This prevents certain scripts from working until it's set to TRUE by SeamlessHelper.
+
 global int 3:cgem_count;	//Chaos Bridges count
 global bool 23:dying[];		//If a player is dying this is TRUE.
 
@@ -51,6 +53,7 @@ If(cgem_count>=7&&GetCVAR("xane_debug")==FALSE) { Teleport_NewMap(ss_returnlevel
 //Also, if they aren't on the correct Special Stage, force them to there unless a demo is involed.
 If(cgem_count!=ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)&&GameType()!=GAME_DEMORECORD&&GameType()!=GAME_DEMOREPLAY&&GetCVAR("xane_debug")==FALSE) { ChangeLevel(StrParam(s:"SPECSTG", d:cgem_count+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());/*ACS_NamedExecute("ExitSpecialStage",0,0,0,0);*/ Terminate; }
 Delay(1);
+Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper before displaying the level title card.
 TakeActorInventory(1000 + PlayerNumber(),"CoinSP",999);
 While(CheckActorInventory(1000,"CoinSP")+CheckActorInventory(1001,"CoinSP")+CheckActorInventory(1002,"CoinSP")+CheckActorInventory(1003,"CoinSP")+CheckActorInventory(1004,"CoinSP")+CheckActorInventory(1005,"CoinSP")+CheckActorInventory(1006,"CoinSP")+CheckActorInventory(1007,"CoinSP")<coins_required[ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)]&&end==false)
     {
@@ -281,13 +284,15 @@ script "SpecialStagePrep" ENTER
 			coins_required[ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)] = 999;
 		}
 	}
+Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 ACS_NamedExecute("TimerSS",0,minutes_required[ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)],0,0);
 }
 
 script "DisplayCoinAmounts" OPEN
 {
-If(GameType()==GAME_DEMOREPLAY||GameType()==GAME_DEMORECORD) Terminate;
+If(GetCVAR("cl_demo")==TRUE) Terminate;
 If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE||GameType()==GAME_NET_DEATHMATCH) Terminate;
+Delay(1);
 
 int x, pad, spacing,x_spacing,rm,offset, x_color;
 
@@ -319,7 +324,9 @@ no_scripts[6] = FALSE;
 no_scripts[7] = FALSE;
 
 dying[PlayerNumber()] = FALSE;
-SetFont("SMALLFNT");
+SetFont("BIG_TEXT");
+
+Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 
 While(1)
 {
@@ -432,8 +439,10 @@ If(1)
 
 script "GetXCoins" ENTER
 {
-	If(GameType()==GAME_DEMOREPLAY||GameType()==GAME_DEMORECORD) Terminate;
+	If(GetCVar("cl_demo")==TRUE) Terminate;
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Terminate;
+	Delay(1);
+	Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 	
 	If(1)//StrParam(s:StrLeft(StrParam(n:PRINTNAME_LEVEL),7))=="SPECSTG" && StrParam(s:StrRight(StrParam(n:PRINTNAME_LEVEL),1))<7 && racing==0)
 	{

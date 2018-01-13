@@ -2,6 +2,8 @@
 #library "XGLOBAL"
 #include "zcommon.acs"
 
+world bool 9:level_ready;	//This prevents certain scripts from working until it's set to TRUE by SeamlessHelper.
+
 global bool 22:no_scripts[];	//Tells most standard scripts like Air Dashes not to run.
 global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice, 4: Wave-based battle
 global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins. This is synced between all players.
@@ -34,7 +36,7 @@ int tutorial_text[30] = {	//What text ID each tutorial ID should start at.
 50,	//22 (Soap Boxes)
 53,	//23 (Special Stage water)
 55,	//24 (Xane's Drop Dash)
-0,	//25
+58,	//25 (Mary's Air Dash)
 0,	//26
 0,	//27
 0,	//28
@@ -67,7 +69,7 @@ int tutorial_length[30] = {	//How many IDs of text should be shown in this tutor
 3,	//22
 2,	//23
 3,	//24
-0,	//25
+1,	//25
 0,	//26
 0,	//27
 0,	//28
@@ -100,7 +102,7 @@ int tutorial_showmsg[30] = {	//Which special message to briefly display after a 
 0,	//22
 0,	//23
 12,	//24
-0,	//25
+13,	//25
 0,	//26
 0,	//27
 0,	//28
@@ -115,6 +117,9 @@ script "CheckTutorials" OPEN
 	
 	int text_current;	//Current text ID.
 	While(GetCVAR("xane_tutorials")==FALSE) 	Delay(35); //If they don't need help, wait until they request it.
+	
+	Delay(1);
+	Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 
 	While(1)
 	{
@@ -277,8 +282,12 @@ script "ShowSTutMessage" (int id)
 		HUDMessageBold(s:"Double-push ", k:"+use", s:" on the ground to fire Xane's claw.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
-		Case 11:
+		Case 12:
 		HUDMessageBold(s:"Double-push ", k:"+use", s:" in the air to start a Drop Dash.";
+			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
+		Break;
+		Case 13:
+		HUDMessageBold(s:"Push ", k:"+jump", s:" in the air to perform the Air Dash.";
 			HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 		Break;
 	}

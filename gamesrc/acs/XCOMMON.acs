@@ -24,10 +24,12 @@ world int 5:ss_returnlevel;	//What level to return to on request by certain scri
 world int 6:movement[];	//Movement registering; They come in the order forward, backward, left, right. 1 = low amount, 2= big amount. Increase by MAX_PlAYERS+PlayerNumber as with other scripts.
 world int 7:movesky[];	//[0] is horizontal skybox movement while [1] is vertical.
 world int 8:framecount;	//Current frame; Use for waiting for certain frames to do something.
-//World variable 9 is availiable!
+
+world bool 9:level_ready;	//This prevents certain scripts from working until it's set to TRUE by SeamlessHelper.
+
 world int 10:ss_return_id;	//The checkpoint ID that the player will respawn from upon returning from a special stage.
 world int 11:OpenInput[];	//Curent player input; 0-7 = Current, 8-15 = Previous.
-//World variable 12 is availiable!
+world int 12:fadeout;	//The requested fade out during areas. Fade may seem redundant, try to remove it.
 world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PlayerNumber()] = X, [MAX_PLAYERS+PlayerNumber()] = Y, [MAX_PLAYERS*2+PlayerNumber()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PlayerNumber()] is supposedly used for jump-through platforms.
 
 //GLOBAL variables are always valid, no matter how many levels the player goes through.
@@ -137,7 +139,6 @@ bool force_detransform[MAX_PLAYERS];	//Forcibly detransforms the player if they 
           int r = MAX_R;
 		int xyr;
 
-int fadeout = 0;
 bool tp_to_last_ground_position[MAX_PLAYERS];	//If this is set for a specific player, they will teleport to their last ground position after reloading from a checkpoint.
 
 script "SetMode" (int mode) { gamemode = mode; }
@@ -1582,6 +1583,7 @@ If(gamemode==0) { seconds[PlayerNumber()] = 0; timer_tics = 0; }
 int lump_name = StrParam(n:PRINTNAME_LEVEL);
 
 Delay(1);
+Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 
 if((gamemode==0&&(lump_name == "SPECSTG1"||lump_name == "SPECSTG2"||lump_name == "SPECSTG3"||lump_name == "SPECSTG4"||lump_name == "SPECSTG5"||lump_name == "SPECSTG6"||lump_name == "SPECSTG7"))||lump_name == "TITLE"||lump_name == "INTRO") Terminate;
 
@@ -1637,6 +1639,7 @@ script "SpeedTimer" ENTER
 {	//Don't appear in the campaign, 1-1 (for the Small Hut), or loading screens.
 	If(gamemode==0||GetLevelInfo(LEVELINFO_LEVELNUM)==0||GetLevelInfo(LEVELINFO_LEVELNUM)>=CONST_TRANS_LEVELS_START) Terminate;
 	Delay(2);
+	Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 	If(StrParam(n:PRINTNAME_LEVEL)=="MAP2"&&gamemode==1)	//If in Time Attack, start off with a countdown!
 	{
 		ACS_NamedExecute("PlayerMovement",0,TRUE,FALSE,FALSE);
@@ -3606,21 +3609,24 @@ int amb_msound[MAX_PLAYERS];
 int amb_lastsnd[MAX_PLAYERS];
 bool amb_force[MAX_PLAYERS];	//Used when fading between ambiences.
 //Info
-int amb_info_delays[10] = { 0, 0, 	//Minimum then max.
+int amb_info_delays[12] = { 0, 0, 	//Minimum then max.
 						200, 400,
 						350, 575,
 						275, 525,
-						200, 425};
-int	amb_info_sounds[10] = { 0, 0,
+						200, 425,
+						375, 575};
+int	amb_info_sounds[12] = { 0, 0,
 						1, 6,
 						4, 12,
 						15, 18,
-						19, 23};
+						19, 23,
+						24, 29};
 
 script "RequestAmbience" (int front, int back) { If(LineSide()==LINE_FRONT) { amb_current[PlayerNumber()] = front; } If(LineSide()==LINE_BACK) { amb_current[PlayerNumber()] = back; } amb_force[PlayerNumber()] = TRUE; }
 
 script "Ambience" ENTER
 {
+int last_ambsnd;	//The last ambient sound attempted to be played.
 While(1)
 	{
 	Until(amb_current[PlayerNumber()]!=0||(amb_current[PlayerNumber()]>0&&amb_force[PlayerNumber()]!=TRUE)) Delay(17);
@@ -3643,6 +3649,9 @@ While(1)
 		Case 4:
 		PlaySound(GetCurrentPlayerTID(),"ambience/rain_start",CHAN_6,0.75,TRUE,ATTN_NONE);
 		Break;
+		Case 5:
+		PlaySound(GetCurrentPlayerTID(),"ambience/creepy_start",CHAN_6,1.0,TRUE,ATTN_NONE);
+		Break;
 		}
 		
 	Delay(35);
@@ -3660,6 +3669,9 @@ While(1)
 		Break;
 		Case 4:
 		PlaySound(GetCurrentPlayerTID(),"ambience/rain",CHAN_6,0.75,TRUE,ATTN_NONE);
+		Break;
+		Case 5:
+		PlaySound(GetCurrentPlayerTID(),"ambience/creepy",CHAN_6,1.0,TRUE,ATTN_NONE);
 		Break;
 		}
 	
@@ -3681,7 +3693,7 @@ While(1)
 			Else amb_msound[PlayerNumber()]++;
 		}
 		
-		if(amb_force[PlayerNumber()]!=TRUE)LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PlayerNumber()]),127);
+		if(amb_force[PlayerNumber()]!=TRUE) { LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PlayerNumber()]),127); amb_lastsnd[PlayerNumber()] = amb_msound[PlayerNumber()]; }
 		
 		amb_tics[(PlayerNumber()*2)+1] = Random(amb_info_delays[(amb_current[PlayerNumber()]*2)],amb_info_delays[(amb_current[PlayerNumber()]*2)+1]);	//Get the pair of min/max delays betwee minor sounds.
 		amb_tics[PlayerNumber()*2] = 0;	//Set the player's tics back to 0 so another sound can play!
@@ -3703,6 +3715,9 @@ While(1)
 		Break;
 		Case 4:
 		PlaySound(GetCurrentPlayerTID(),"ambience/rain_end",CHAN_7,0.75,FALSE,ATTN_NONE);
+		Break;
+		Case 5:
+		PlaySound(GetCurrentPlayerTID(),"ambience/creepy_end",CHAN_7,1.0,FALSE,ATTN_NONE);
 		Break;
 	}	
 	
@@ -4656,6 +4671,8 @@ script "ChangePlayerTIDs" enter
 	
 	Delay(2);	//Give the level two tics to set up the music variable.
 	
+	Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper to be finished before playing music.
+	
 	ACS_ExecuteAlways(254,0,initial_music,TRUE,FALSE);	//Play the level's initial music.
 
 	//Not sure if this is too important anymore. Still, to "prevent incorrect level transitions", set the Special Stage return position ID before the player can reach another level and teleport to another Special Stage!
@@ -5145,6 +5162,9 @@ bool wl;
 int wind_reduction;
 int pushvels[3];	//Calculated wind X/Y velocities based on the wind_reduction variable.
 framecount = 0;
+
+Delay(1);
+Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper before starting the main loop.
 
 While(1)
 	{
@@ -5800,13 +5820,13 @@ SetPlayerProperty(1,OFF,PROP_TOTALLYFROZEN);
 ChangeLevel(StrParam(s:"AREA", d:ss_returnlevel+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//Return the player to the level they left; They keep the monsters/items/secrets percentages when they return.
 }
 
-script "RunSeamlessHelper" RETURN { framecount = 0; ACS_NamedExecuteAlways("SeamlessHelper",0,FALSE,0,0); }	//Seamless helper has to be run any time a level loads or the player may be left "in the darkness"...
-script "InitialSeamlessHelper" ENTER { ACS_NamedExecuteAlways("SeamlessHelper",0,TRUE,0,0); }
+script "RunSeamlessHelper" RETURN { ACS_NamedExecuteAlways("SeamlessHelper",0,FALSE,0,0); }	//Seamless helper has to be run any time a level loads or the player may be left "in the darkness"...
+script "InitialSeamlessHelper" ENTER { level_ready = FALSE; ACS_NamedExecuteAlways("SeamlessHelper",0,TRUE,0,0); }
 script "SeamlessHelper" (int initial_load)	//If initial_load is set, an additional waiting time will be added for culling.
 {
 	ACS_NamedExecuteAlways("SuperFormCheck",0,0,0,0);	//Always check for super forms, regardless of where the player is.
-	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0); Terminate; }	//This really should be identical to what's below but I'm nervous about breaking this thing.
-	Else fadeout = 4;
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0); Delay(2); }	//This really should be identical to what's below but I'm nervous about breaking this thing.
+	Else { fadeout = 4;
 	
 	Delay(2);
 	
@@ -5830,9 +5850,21 @@ script "SeamlessHelper" (int initial_load)	//If initial_load is set, an addition
 	{	//If this is singleplayer and the player is Xane, start them at a different place, a'la Knuckles in the classic Sonic games.
 		SetActorPosition(1000,GetActorX(1149),GetActorY(1149),GetActorZ(1149),FALSE);
 		SetActorAngle(1000,GetActorAngle(1149));
-	}
+	} }
 	
 	//After spawning the player at the correct spawn point, await the culling polyobject if necessary.
+	If(initial_load!=0&&GetCVar("xane_rculling")!=FALSE&&GameType()==GAME_SINGLE_PLAYER)
+	{	//Make the player unable to move and able to phase through the polyobjects.
+		ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//This only freezes the activator, which should be player 1.
+		GiveInventory("Variable5",1);	//Variable5 makes players phase through everything.
+		Print(s:"Generating culling info...");
+		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Delay(100); Else Delay(35);
+		Print(s:"");
+		TakeInventory("Variable5",1);
+		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
+		level_ready = TRUE;	//Signal it's safe to begin the level now.
+	}
+	Else { level_ready = TRUE; }	//If culling isn't on, signal it's safe to assume the level is ready now.
 	
 	//SuperX check was here.
 }
@@ -5851,6 +5883,32 @@ script "SuperFormCheck" (void)
 		//Log(d:GetLevelInfo(LEVELINFO_LEVELNUM), s:"/", d:gamemode);
 		//If(GetLevelInfo(LEVELINFO_LEVELNUM)!=0) stored_velocity[0] = 0;
 		If(gamemode>0&&GetLevelInfo(LEVELINFO_LEVELNUM)==0) stored_velocity[0] = -616.5;
+	}
+}
+
+script "HandleRCulling" ENTER
+//Polyobjects:
+//11&12: ~3000
+//13&14: ~4096
+{
+	If(GetCVAR("xane_rculling")>2||GetCVAR("xane_rculling")<0) SetCVAR("xane_rculling",0);	//Disable culling if the CVAR is set to an invalid value..
+	int last_cull_setting = GetCVar("xane_rculling");
+	If(GameType()!=GAME_SINGLE_PLAYER||last_cull_setting<=0) Terminate;
+	Else Delay(3);
+
+	While(1)	//Begin moving the polyobject in hopes it reaches the player in time.
+	{
+		If(level_ready==TRUE)	//After the initial movement (which takes two seconds to be safe).
+		{
+			Polyobj_MoveToSpot(9+(last_cull_setting*2), 256, 1000);
+			Polyobj_MoveToSpot(9+(last_cull_setting*2)+1, 256, 1000);
+		}
+		Else
+		{
+			Polyobj_MoveToSpot(9+(last_cull_setting*2), 4096, 1000);
+			Polyobj_MoveToSpot(9+(last_cull_setting*2)+1, 4096, 1000);
+		}
+		Delay(1);
 	}
 }
 
@@ -5876,16 +5934,33 @@ script "HandleFadeOut" ENTER
 				Break;
 				Case 4: //Black fade-in
 				FadeTo(0,0,0,1.0,0.0);
+				Until(level_ready==TRUE) { Delay(1); FadeTo(0,0,0,1.0,0.0); }
 				Delay(17);
 				FadeTo(0,0,0,0.0,1.0);
 				Break;
 				Case 5: //White fade-in
 				FadeTo(255,255,255,1.0,0.0);
+				Until(level_ready==TRUE) { Delay(1); FadeTo(255,255,255,1.0,0.0); }
 				Delay(17);
 				FadeTo(255,255,255,0.0,1.0);
 				Break;
 				Case 6: //Quick black fade-out
-				FadeTo(0,0,0,1.0,0.25);
+				FadeTo(0,0,0,1.0,0.33);
+				Break;
+				Case 7: //Quick white fade-out
+				FadeTo(255,255,255,1.0,0.33);
+				Break;
+				Case 8: //Quick black fade-in
+				FadeTo(0,0,0,1.0,0.0);
+				Until(level_ready==TRUE) { Delay(1); FadeTo(0,0,0,1.0,0.0); }
+				Delay(1);
+				FadeTo(0,0,0,0.0,0.33);
+				Break;
+				Case 9: //Quick white fade-in
+				FadeTo(255,255,255,1.0,0.0);
+				Until(level_ready==TRUE) { Delay(1); FadeTo(255,255,255,1.0,0.0); }
+				Delay(1);
+				FadeTo(255,255,255,0.0,0.33 );
 				Break;
 				Default:
 				Log(s:"INVALID FADE '", d:fadeout, s:"'!");
