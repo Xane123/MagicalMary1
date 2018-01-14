@@ -5,6 +5,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Fixed division by zero error if returning to an area from a Special Stage if a moving skybox is in use.
 * Areas now correctly set level variables when returning from a Special Stage or the Small Hut.
 * When the screen fades in or out, Powerup Coins now won't tint the screen, which previously broke the near-seamless fade at the end of a level.
+* The Black Room Glitch could occur when returning from a Special Stage due to previous commenting out of a check that prevented updating the player's last ground position while they're on top of pure black floor, resulting in the game warping them into the room rather than out of it.
 ## Major
 * Xane's claw now pulls Xane up to whatever's above the spot it attached to. This can be seen in 1-2 near the end of the area.
 * Demos now use a CVAR (cl_demo) instead of using custom GameType checks. This increases compatibility with Delta Touch.
