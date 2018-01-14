@@ -3,7 +3,7 @@
 #include "zcommon.acs"
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
-//XCOMMON, due to how messy of a big file it is, has used 108/128 variables, with 20 left! Use them wisely!
+//XCOMMON, due to how messy of a big file it is, has used 102/128 variables, with 26 left! Use them wisely!
 //This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
@@ -3603,30 +3603,32 @@ Switch(mode)
 	}
 }
 
-int amb_lastplayed[MAX_PLAYERS];
-int amb_tics[MAX_PLAYERS*2];	
-int amb_msound[MAX_PLAYERS];
-int amb_lastsnd[MAX_PLAYERS];
 bool amb_force[MAX_PLAYERS];	//Used when fading between ambiences.
-//Info
-int amb_info_delays[12] = { 0, 0, 	//Minimum then max.
-						200, 400,
-						350, 575,
-						275, 525,
-						200, 425,
-						375, 575};
-int	amb_info_sounds[12] = { 0, 0,
-						1, 6,
-						4, 12,
-						15, 18,
-						19, 23,
-						24, 29};
 
 script "RequestAmbience" (int front, int back) { If(LineSide()==LINE_FRONT) { amb_current[PlayerNumber()] = front; } If(LineSide()==LINE_BACK) { amb_current[PlayerNumber()] = back; } amb_force[PlayerNumber()] = TRUE; }
 
 script "Ambience" ENTER
 {
-int last_ambsnd;	//The last ambient sound attempted to be played.
+//Info
+int amb_info_delays[14] = { 0, 0, 	//Minimum then max.
+						200, 400,
+						350, 575,
+						275, 525,
+						200, 425,
+						375, 575,
+						400, 550};
+int	amb_info_sounds[14] = { 0, 0,
+						1, 6,
+						4, 12,
+						15, 18,
+						19, 23,
+						24, 29,
+						14, 17};
+
+int amb_msound[MAX_PLAYERS];
+int amb_lastsnd[MAX_PLAYERS];
+int amb_lastplayed[MAX_PLAYERS];
+int amb_tics[MAX_PLAYERS*2];
 While(1)
 	{
 	Until(amb_current[PlayerNumber()]!=0||(amb_current[PlayerNumber()]>0&&amb_force[PlayerNumber()]!=TRUE)) Delay(17);
@@ -3637,42 +3639,24 @@ While(1)
 	//Ambience is needed! Fade in the requested looping background noise!
 	Switch(amb_current[PlayerNumber()])	//First, play a short fading in sample.
 		{
-		Case 1:
-		PlaySound(GetCurrentPlayerTID(),"ambience/police_start",CHAN_6,0.5,TRUE,ATTN_NONE);
-		Break;
-		Case 2:
-		PlaySound(GetCurrentPlayerTID(),"ambience/jail_start",CHAN_6,0.5,TRUE,ATTN_NONE);
-		Break;
-		Case 3:
-		PlaySound(GetCurrentPlayerTID(),"ambience/city_start",CHAN_6,0.75,TRUE,ATTN_NONE);
-		Break;
-		Case 4:
-		PlaySound(GetCurrentPlayerTID(),"ambience/rain_start",CHAN_6,0.75,TRUE,ATTN_NONE);
-		Break;
-		Case 5:
-		PlaySound(GetCurrentPlayerTID(),"ambience/creepy_start",CHAN_6,1.0,TRUE,ATTN_NONE);
-		Break;
+		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police_start",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
+		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail_start",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
+		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city_start",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 4: PlaySound(GetCurrentPlayerTID(),"ambience/rain_start",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 5: PlaySound(GetCurrentPlayerTID(),"ambience/creepy_start",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
+		Case 6: PlaySound(GetCurrentPlayerTID(),"ambience/cityday_start",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
 		}
 		
 	Delay(35);
 	
 	Switch(amb_current[PlayerNumber()])	//Play the looping section of the ambience.
 		{
-		Case 1:
-		PlaySound(GetCurrentPlayerTID(),"ambience/police",CHAN_6,0.5,TRUE,ATTN_NONE);
-		Break;
-		Case 2:
-		PlaySound(GetCurrentPlayerTID(),"ambience/jail",CHAN_6,0.5,TRUE,ATTN_NONE);
-		Break;
-		Case 3:
-		PlaySound(GetCurrentPlayerTID(),"ambience/city",CHAN_6,0.75,TRUE,ATTN_NONE);
-		Break;
-		Case 4:
-		PlaySound(GetCurrentPlayerTID(),"ambience/rain",CHAN_6,0.75,TRUE,ATTN_NONE);
-		Break;
-		Case 5:
-		PlaySound(GetCurrentPlayerTID(),"ambience/creepy",CHAN_6,1.0,TRUE,ATTN_NONE);
-		Break;
+		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
+		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
+		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 4: PlaySound(GetCurrentPlayerTID(),"ambience/rain",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 5: PlaySound(GetCurrentPlayerTID(),"ambience/creepy",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
+		Case 6: PlaySound(GetCurrentPlayerTID(),"ambience/cityday",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
 		}
 	
 	amb_lastplayed[PlayerNumber()] = amb_current[PlayerNumber()];
@@ -3695,7 +3679,7 @@ While(1)
 		
 		if(amb_force[PlayerNumber()]!=TRUE) { LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PlayerNumber()]),127); amb_lastsnd[PlayerNumber()] = amb_msound[PlayerNumber()]; }
 		
-		amb_tics[(PlayerNumber()*2)+1] = Random(amb_info_delays[(amb_current[PlayerNumber()]*2)],amb_info_delays[(amb_current[PlayerNumber()]*2)+1]);	//Get the pair of min/max delays betwee minor sounds.
+		amb_tics[(PlayerNumber()*2)+1] = Random(amb_info_delays[(amb_current[PlayerNumber()]*2)],amb_info_delays[(amb_current[PlayerNumber()]*2)+1]);	//Get the pair of min/max delays between minor sounds.
 		amb_tics[PlayerNumber()*2] = 0;	//Set the player's tics back to 0 so another sound can play!
 		amb_msound[PlayerNumber()] = Random(amb_info_sounds[(amb_current[PlayerNumber()]*2)],amb_info_sounds[(amb_current[PlayerNumber()]*2)+1]);
 		}
@@ -3704,27 +3688,17 @@ While(1)
 		
 	Switch(amb_lastplayed[PlayerNumber()])	//Play a sample of the ambience fading out.
 	{
-		Case 1:
-		PlaySound(GetCurrentPlayerTID(),"ambience/police_end",CHAN_7,0.5,FALSE,ATTN_NONE);
-		Break;
-		Case 2:
-		PlaySound(GetCurrentPlayerTID(),"ambience/jail_end",CHAN_7,0.5,FALSE,ATTN_NONE);
-		Break;
-		Case 3:
-		PlaySound(GetCurrentPlayerTID(),"ambience/city_end",CHAN_7,0.75,FALSE,ATTN_NONE);
-		Break;
-		Case 4:
-		PlaySound(GetCurrentPlayerTID(),"ambience/rain_end",CHAN_7,0.75,FALSE,ATTN_NONE);
-		Break;
-		Case 5:
-		PlaySound(GetCurrentPlayerTID(),"ambience/creepy_end",CHAN_7,1.0,FALSE,ATTN_NONE);
-		Break;
+		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police_end",CHAN_7,0.5,FALSE,ATTN_NONE); Break;
+		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail_end",CHAN_7,0.5,FALSE,ATTN_NONE); Break;
+		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city_end",CHAN_7,0.75,FALSE,ATTN_NONE); Break;
+		Case 4: PlaySound(GetCurrentPlayerTID(),"ambience/rain_end",CHAN_7,0.75,FALSE,ATTN_NONE); Break;
+		Case 5: PlaySound(GetCurrentPlayerTID(),"ambience/creepy_end",CHAN_7,1.0,FALSE,ATTN_NONE); Break;
+		Case 6: PlaySound(GetCurrentPlayerTID(),"ambience/cityday_end",CHAN_7,1.0,FALSE,ATTN_NONE); Break;
 	}	
 	
 	//Delay(35);
 	}
 }
-
 script "PlayFMV" (int number, int frames)	//The script number and "ID" is "number" here.
 {
 //Add to new cutscene script when made: if((event_completed[number-1]==TRUE||GetCVAR("xane_cutscenes")==FALSE||gamemode!=0)&&number!=1) { ACS_Execute(number,0,0,0,0); Terminate; }	//The player's already seen this event; Just skip to the after-events.
