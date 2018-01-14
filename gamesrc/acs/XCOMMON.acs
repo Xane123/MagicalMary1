@@ -516,7 +516,9 @@ While(specialbehavior[PlayerNumber()]==0)	//While water is enabled for the curre
 		lasttid = 0;
 		
 		While(WaterLevel(0)>0)
-			{			
+			{
+			if(framecount % 3 == 0) PlaySound(0, "step/water", 4, 0.7, FALSE, 0.88);	//Generate fake footstep sounds.
+			TakeInventory("Animation1",1);
 			hammermove[PlayerNumber()] = 5;
 			If(WaterLevel(0)>0)	walljumping[PlayerNumber()] = 5;
 			ACS_ExecuteAlways(66,0,0,0,0);
@@ -531,7 +533,7 @@ While(specialbehavior[PlayerNumber()]==0)	//While water is enabled for the curre
 				If(input_water[PlayerNumber()] & BT_JUMP)
 				{
 					ACS_NamedExecuteAlways("PlaySoundX",0,1,0,0);
-					ThrustThingZ(GetCurrentPlayerTID(),48,FALSE,TRUE);
+					ThrustThingZ(GetCurrentPlayerTID(),64,FALSE,TRUE);
 					Delay(5);
 				}
 				Else if(input_water[PlayerNumber()] & BT_BACK) SetActorVelocity(GetCurrentPlayerTID(),FixedDiv(GetActorVelX(GetCurrentPlayerTID()), 1.01),FixedDiv(GetActorVelY(GetCurrentPlayerTID()), 1.01),1.5,FALSE,FALSE);
@@ -546,6 +548,7 @@ While(specialbehavior[PlayerNumber()]==0)	//While water is enabled for the curre
 			}
 		}
 		TakeActorInventory(GetCurrentPlayerTID(),"onWater",1);
+		
 	}
 	
 	//Log(s:"Player stopped water detection.");
@@ -2564,17 +2567,18 @@ script "SetCheckpoint" (int spawn_tid, int set_angle)
 
 script "LoadCheckpointInfo" (int deathx)
 {
-	ACS_ExecuteAlways(254,0,check_music[PlayerNumber()],FALSE,TRUE);
+	If(deathx==FALSE) ACS_ExecuteAlways(254,0,check_music[PlayerNumber()],FALSE,FALSE);
+	Else ACS_ExecuteAlways(254,0,check_music[PlayerNumber()],FALSE,TRUE);
 	specialbehavior[PlayerNumber()] = check_specbehav[PlayerNumber()];	//Restore the player's special plane behavior and height before teleporting them!
 	specialheight[PlayerNumber()] = check_specheight[PlayerNumber()];
-	specialbehavior[MAX_PLAYERS] = check_specbehav[PlayerNumber()];	//Also restore it for monsters.
+	specialbehavior[MAX_PLAYERS] = check_specbehav[PlayerNumber()];		//Also restore it for monsters.
 	specialheight[PlayerNumber()] = check_specheight[PlayerNumber()];
 	
 	If(deathx==TRUE) lives--;	//If dying, take away a life.
 	SetActorPitch(0, 0);	//Force the player to look directly ahead.
 	
 	if(checkpoint_id[PlayerNumber()]==0) { checkpoint_id[PlayerNumber()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
-	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); Log(s:"No proper detection!"); }	//After teleporting, load all info saved at the checkpoint!
+	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); }	//After teleporting, load all info saved at the checkpoint!
 	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); tp_to_last_ground_position[PlayerNumber()] = FALSE; } }
 	If(tp_to_last_ground_position[PlayerNumber()]==TRUE) SetActorAngle(0, last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]);	//If returning from a Special Stage or Small Hut, make the player face the correct position!
 	
@@ -3705,20 +3709,21 @@ script "PlayFMV" (int number, int frames)	//The script number and "ID" is "numbe
 
 int current = 0, fmv_framecount = 0, milliseconds = 0;
 
-//ACS_NamedTerminate("Flash",0);
-
-/*SetFont("CUTF_BOX");
-SetHUDSize(180,135,FALSE);
-
-While(current<35)
+If(number==1)
 {
-	HUDMessageBold(s:"A";
-		HUDMSG_PLAIN, 0, CR_UNTRANSLATED, -30.1, 0.1, 1.1, 0.5);
-	current++;
-	Delay(1);
-}*/
+	SetFont("CUTF_BOX");
+	SetHUDSize(180,135,FALSE);
 
-//StopSound(GetCurrentPlayerTID(),CHAN_7);
+	While(current<35)
+	{
+		HUDMessageBold(s:"A";
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, -30.1, 0.1, 1.1, 0.5);
+		current++;
+		Delay(1);
+	}
+
+	StopSound(GetCurrentPlayerTID(),CHAN_7);
+}
 
 SetHUDSize(180,135,FALSE);
 
@@ -3739,11 +3744,11 @@ force_detransform[PlayerNumber()] = TRUE;	//Force a detransformation.
 		HUDMSG_PLAIN, 0, CR_UNTRANSLATED, -30.1, 0.1, 0.2, 1.0);
 	Delay(1);
 	If(fmv_framecount==5||fmv_framecount==10||fmv_framecount==15||fmv_framecount==20||fmv_framecount==25/*||milliseconds>0.999*/) Delay(1);	//If it's certain tics/frames, pause more to make it 30 FPS instead of 35. Also...
-	//If(milliseconds>0.999) milliseconds -= 1.0;	//...if it's built up over a second of milliseconds, delay. Unsure if this'll help anything.
+	If(milliseconds>0.999) milliseconds -= 1.0;	//...if it's built up over a second of milliseconds, delay. Unsure if this'll help anything.
 	
 	current++;
 	fmv_framecount++;
-	//milliseconds += 0.028;	//add milliseconds to detect when this goes over a second.
+	milliseconds += 0.028;	//add milliseconds to detect when this goes over a second.
 	if(fmv_framecount>29) fmv_framecount = 0;	//If 30 frames have been displayed, reset this variable.
 	}
 	
@@ -4254,22 +4259,33 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 	}
 }
 
-int sadness;	//This increases each USE tap.
-script "MaryCry" ENTER	//Yep, Mary's crying will return...with way more control! Push/tap USE to build up sadness!
+int sadness = -7;	//This increases each USE tap.
+script "MaryCry" ENTER	//Yep, Mary's crying returns!
 {
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",0,2,0,0)==TRUE) Terminate;	//No crying in Special Stages or the Small Hut!
+	int became_sad;
 	If(PlayerClass(PlayerNumber())!=CHAR_MARY) Terminate;	//If not Mary, disable crying.
 	While(1)
 	{
-		If(sadness>-7 && framecount % 2 == 0) sadness--;
+		If(sadness>-7&&framecount % (2+became_sad) == 0)
+		{
+			sadness--;
+			If(sadness==-7&&became_sad>0) { became_sad = 0; PlaySound(GetCurrentPlayerTID(), "mary/cry_cancel", CHAN_VOICE, 1.0, FALSE, 1.33); }
+			Else If(sadness==24) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup4", CHAN_VOICE, 1.0, FALSE, 1.25);
+			Else If(sadness==16) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup3", CHAN_VOICE, 1.0, FALSE, 1.2);
+			Else If(sadness==8) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup2", CHAN_VOICE, 1.0, FALSE, 1.15);
+			Else If(sadness==0) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup1", CHAN_VOICE, 1.0, FALSE, 1.1);
+
+		}
 		
 		If(OpenInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE && sadness > -42)
 		{	//Sadness being -42 disables crying.
 			sadness += 5;
-			If(sadness>=30) { sadness = -42; ACS_NamedExecute("PlayDialogue",0,0,0,0); Delay(50); sadness = -7; }
-			Else If(sadness>=24) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup4", CHAN_VOICE, 1.0, FALSE, 1.25);
-			Else If(sadness>=16) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup3", CHAN_VOICE, 1.0, FALSE, 1.2);
+			If(sadness>=30) { sadness = -42; ACS_NamedExecute("PlayDialogue",0,0,0,0); Delay(50); sadness = -7; became_sad = 0; }
+			Else If(sadness>=24) { became_sad = 3; PlaySound(GetCurrentPlayerTID(), "mary/crybuildup4", CHAN_VOICE, 1.0, FALSE, 1.25); }
+			Else If(sadness>=16) { became_sad = 2; PlaySound(GetCurrentPlayerTID(), "mary/crybuildup3", CHAN_VOICE, 1.0, FALSE, 1.2); }
 			Else If(sadness>=8) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup2", CHAN_VOICE, 1.0, FALSE, 1.15);
-			Else If(sadness>=0) PlaySound(GetCurrentPlayerTID(), "mary/crybuildup1", CHAN_VOICE, 1.0, FALSE, 1.1);
+			Else If(sadness>=0) { became_sad = 1; PlaySound(GetCurrentPlayerTID(), "mary/crybuildup1", CHAN_VOICE, 1.0, FALSE, 1.1); }
 		}
 		
 		While(openInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE) { Delay(1); If(sadness>-7 && framecount % 2 == 0) sadness--; }
@@ -4977,11 +4993,11 @@ script "CheckSpecialStage" (int mode)
 			if( (StrParam(n:PRINTNAME_LEVEL)=="SPECSTG1" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG2" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG3" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG4" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG5" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG6" || StrParam(n:PRINTNAME_LEVEL)=="SPECSTG7") && GameType()!=GAME_NET_DEATHMATCH) SetResultValue(TRUE);
 			else SetResultValue(FALSE);
 		Break;
-		Case 1:	//Return the current Special Stage number.
+		Case 1:	//Return the current Special Stage number.s
 			SetResultValue(ss_number-1);
 		Break;
 		Case 2:	//Whether this is the Small Hut.
-			if(world_info[0]==1&&world_info[1]==1&&ss_position==3) SetResultValue(TRUE);
+			if(StrParam(n:PRINTNAME_LEVEL)=="AREA1"/*world_info[0]==1&&world_info[1]==1&&ss_position==3*/) SetResultValue(TRUE);
 			else SetResultValue(FALSE);
 		Break;
 		Case 3:	//Returns TRUE if in an arena map.
@@ -4993,9 +5009,9 @@ script "CheckSpecialStage" (int mode)
 	}
 }
 
-////////////////////////////////////////
-//Scripts to be used for the Small Hut//
-////////////////////////////////////////
+//////////////////////////
+//Coin conversion script//
+//////////////////////////
 
 script "ConvertCoinTicsToCoins" (void)	//This is still used when dying so don't remove it!
 {
@@ -5044,7 +5060,7 @@ script "ConvertCoinTicsToCoins" (void)	//This is still used when dying so don't 
 	GiveInventory("PowerupCombo", comboc);
 	GiveInventory("PowerupSpeed", speedc);
 	
-	FadeTo(0, 0, 0, 0.0, 0.05);	//The screen stays tinted after this; Force it to return to normal.
+	If(important_fade[PlayerNumber()]==FALSE) FadeTo(0, 0, 0, 0.0, 0.05);	//The screen stays tinted after this; Force it to return to normal.
 }
 
 /////////////////////////////////
@@ -5082,9 +5098,9 @@ script "DemoTimer" OPEN
 	{
 		If(GetCVAR("cl_demo")==TRUE&&demo_seconds % 2 == 0&&lump_name2 != "INTRO" && lump_name2 != "TITLE")
 		{
-			SetHUDSize(1024,640,TRUE);
+			SetHUDSize(1024,640,TRUE);s
 			SetFont("TITLEFNT");
-			HUDMessage(s:"PRESS ANY KEY";
+			HUDMessage(l:"TITLE_PROMPT1";
 				HUDMSG_FADEINOUT, 100, CR_UNTRANSLATED, 800.4,420.1, 0.01, 1.0, 1.0);
 			SetHUDSize(512,320,TRUE);
 			SetFont("M_DOOM");
@@ -5120,7 +5136,7 @@ script "TitleOverlay" (void)
 	SetHUDSize(512,320,TRUE);
 	While(tkeyprompt_times<15)
 	{
-		HUDMessageBold(s:"Press any key to begin.";
+		HUDMessageBold(l:"TITLE_PROMPT1", s:" ", l:"TITLE_PROMPT2";
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 256.0,200.0, 0.01, 1.0, 1.0);
 		Delay(70);
 		tkeyprompt_times++;
@@ -5190,7 +5206,7 @@ While(1)
 		
 		if(PlayerNumber()==0) framecount++;
 		
-		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)==0.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE/*&&CheckActorFloorTexture(0, "SPECTS07")==FALSE*/&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
+		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)==0.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE&&CheckActorFloorTexture(0, "SPECTS07")==FALSE&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
 		{
 			last_ground_position[PlayerNumber()] = GetActorX(0);
 			last_ground_position[MAX_PLAYERS+PlayerNumber()] = GetActorY(0);
