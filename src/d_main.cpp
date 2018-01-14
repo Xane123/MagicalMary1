@@ -1242,12 +1242,6 @@ void D_DoStrifeAdvanceDemo ()
 		pagename = "vellogo";
 		wipegamestate = GS_FORCEWIPEFADE;
 		break;
-
-	case 10:
-		pagetic = 12 * TICRATE;
-		pagename = "CREDIT";
-		wipegamestate = GS_FORCEWIPEFADE;
-		break;
 	}
 	if (demosequence++ > 10)
 		demosequence = 0;
@@ -1353,13 +1347,13 @@ void D_DoAdvanceDemo (void)
 		break;
 
 	case 2:
-		pagetic = (int)(gameinfo.pageTime * TICRATE);
+		//pagetic = (int)(gameinfo.pageTime * TICRATE);
 		gamestate = GS_DEMOSCREEN;
-		if (gameinfo.creditPages.Size() > 0)
+		/*if (gameinfo.creditPages.Size() > 0)
 		{
 			pagename = gameinfo.creditPages[pagecount];
 			pagecount = (pagecount+1) % gameinfo.creditPages.Size();
-		}
+		}*/
 		demosequence = 1;
 		break;
 	}
