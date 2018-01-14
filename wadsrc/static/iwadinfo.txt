@@ -2,15 +2,14 @@
 
 IWad
 {
-	Name = "Mary's Magical Adventure (PC)"
+	Name = "Mary's Magical Adventure"
 	Autoname = "mma.base.pc"
 	Game = "Doom"
 	Config = "Doom"
 	IWADName = "mma_data.pk3"
 	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "ComputeX"
 	BannerColors = "c0 40 c0", "40 20 40"
-	Load = "mma_resources.pk3", "mma_maps.wad", "mma_videos.pk3", "fmv_hires.pk3"
+	Load = "mma_maps.wad", "mma_videos.pk3", "mma_mobile.pk3"
 }
 
 Names
@@ -20,5 +19,5 @@ Names
 
 Order	// Order in the IWAD selection box
 {
-	"Mary's Magical Adventure (PC)"
+	"Mary's Magical Adventure"
 }
