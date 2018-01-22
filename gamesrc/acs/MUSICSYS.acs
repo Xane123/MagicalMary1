@@ -106,7 +106,7 @@ While(1)
 				If(current_music[PlayerNumber()]>0)
 				{
 					HudMessage(l:StrParam(s:"MUSIC_TITLE_", d:current_music[PlayerNumber()]), s:"\n", l:StrParam(s:"MUSIC_ARTIST_", d:current_music[PlayerNumber()]);
-						HUDMSG_TYPEON, 1, CR_YELLOW, 320.0, 24.1, 3.0, 0.025, 1.0, 1.0);
+						HUDMSG_TYPEON, 2, CR_YELLOW, 320.0, 24.1, 3.0, 0.025, 1.0, 1.0);
 					HudMessage(s: "\c[LightBlue]Now playing \c[Yellow]", l:StrParam(s:"MUSIC_TITLE_", d:current_music[PlayerNumber()]), s:"\c[LightBlue] by \c[Yellow]", l:StrParam(s:"MUSIC_ARTIST_", d:current_music[PlayerNumber()]), s:"\c[LightBlue].";
 						HUDMSG_PLAIN|HUDMSG_LOG, 0, CR_UNTRANSLATED, 768.0, 480.1, 0.1);
 				}

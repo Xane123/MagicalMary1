@@ -70,7 +70,7 @@ global bool 28:special_id[];	//An array determining whether a player picked up a
 //The highest current special ID is 3.
 
 //global bool 29:tutorial_completed[];	//See TUTORIAL.acs for this global variable.
-global int 30:weapons[];	//What weapons any player has used, skipping slot 1's weapon. Use GotWeapon with arg0 (argument 1) set to the slot number of a weapon the player picks up.
+//Global variable #30 is available!
 global int 31:total_coins;	//How many coins the player has collected to be spent.
 
 //Powerup Coin tics; This stores how many tics for each coin are remaining for each player.
@@ -142,7 +142,7 @@ bool force_detransform[MAX_PLAYERS];	//Forcibly detransforms the player if they 
 bool tp_to_last_ground_position[MAX_PLAYERS];	//If this is set for a specific player, they will teleport to their last ground position after reloading from a checkpoint.
 
 script "SetMode" (int mode) { gamemode = mode; }
-script "SetCoins" (int number) { total_coins = number; }
+script "SetCoins" (int number, int mode) { If(mode==FALSE) total_coins = number; Else total_coins += number; }
 script "SetSSPosition" (int number) { if(ss_position<0) ss_position = 0; if(ss_position>3) ss_position = 3; ss_position= number; }
 script "SetFadeOut" (int number) { if(number<0) number = 0; if(number>7) number = 7; fadeout = number; }
 script "DisplayTotalCoins" (int amount)
@@ -355,9 +355,15 @@ script "DetermineWUpgradeSpawn" (int mode)	//0 = Spawn item at location, 1 = Ret
 // Teleports player from reference point (from) to reference point (to); Maintains momentum and direction!
 script "TP" (int from, int to, int below_z) 
 {
-	//Log(d:below_z, s:"/", d:GetActorZ(0)>>16		);
-	if(below_z==0)TeleportGroup(0,from,to,0,0);
+	level_ready = FALSE;	//Make the culling polyobject speed up.
+	GiveInventory("Variable5",1);	//Make the player pass through the polyobject.
+	
+	if(below_z==0) TeleportGroup(0,from,to,0,0);
 	else if(GetActorZ(0)>>16 < below_z) TeleportGroup(0,from,to,0,0);
+	
+	Delay(8);
+	level_ready = TRUE;	//Return the culling polyobject back to normal speed.
+	TakeInventory("Variable5",1);	//Return the player to being solid again.
 }
 
 //ACTIVATE/DEACTIVATE GROUP
@@ -406,13 +412,13 @@ script "Rail" (int path_follower, int bpanel)
 	
 	Thing_Activate(path_follower+whichslot);
 	
-	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,2);	//Freeze (the last argument here) being 2 means the velocity isn't stored or recovered.
+	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE) ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,2);	//Freeze (the last argument here) being 2 means the velocity isn't stored or recovered.
 	
 	rt_x = -676;
 	rt_y = -676;
 	railtics = 0;
 	
-	if(CheckActorClass(0, "LGirlPlayer")==FALSE&&CheckActorClass(0, "XanePlayer")==FALSE&&CheckActorClass(0, "LGirlPlayer_Super")==FALSE&&CheckActorClass(0, "XanePlayer_Super")==FALSE) SetActorState(0, "Grind", TRUE);	//If not Mary, make the monster appear to be "grinding".
+	if(CheckActorClass(0, "LGirlPlayer")==FALSE&&CheckActorClass(0, "XanePlayer")==FALSE) SetActorState(0, "Grind", TRUE);	//If not Mary, make the monster appear to be "grinding".
 	
 	PlaySound(path_follower+whichslot, "rail/grind", CHAN_BODY, 1.0, TRUE, 1.75);
 	
@@ -437,8 +443,8 @@ script "Rail" (int path_follower, int bpanel)
 	ThrustThing(GetActorAngle(0)>>8,23,TRUE,0);
 	if((openInput[MAX_PLAYERS*4+PlayerNumber()] & BT_JUMP || openInput[MAX_PLAYERS*4+PlayerNumber()] & BT_USE) && no_jump==FALSE) ThrustThingZ(0, 28,FALSE,TRUE);
 	
- 	if(CheckActorClass(0, "LGirlPlayer")==FALSE&&CheckActorClass(0, "XanePlayer")==FALSE&&CheckActorClass(0, "LGirlPlayer_Super")==FALSE&&CheckActorClass(0, "XanePlayer_Super")==FALSE) SetActorState(0, "GrindEnd", FALSE);	//If not Mary, make the monster appear to be "grinding".
-	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) { no_variable_jumping[PlayerNumber()] = TRUE; ACS_NamedExecuteAlways("DisableVarJumpHeightsUntilGroundHit",0,0,0,0); }
+ 	if(CheckActorClass(0, "LGirlPlayer")==FALSE&&CheckActorClass(0, "XanePlayer")==FALSE) SetActorState(0, "GrindEnd", FALSE);	//If not Mary, make the monster appear to be "grinding".
+	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE) { no_variable_jumping[PlayerNumber()] = TRUE; ACS_NamedExecuteAlways("DisableVarJumpHeightsUntilGroundHit",0,0,0,0); }
 
 	Thing_Deactivate(path_follower+whichslot);
 	
@@ -449,7 +455,7 @@ script "Rail" (int path_follower, int bpanel)
 	StopSound(path_follower+whichslot,CHAN_BODY);
 	PlaySound(path_follower+whichslot, "rail/jump", CHAN_BODY, 1.0, FALSE, 1.75);
 	Delay(5);
-	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,2);
+	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE) ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,2);
 }
 
 script "RailJump" (void) { SpawnSpotForced("ForceRailJump", 618, 0, 0); }
@@ -671,8 +677,9 @@ script "ControlBubbles" (int mode)	//0: Determine bubble size, 1: Determine wait
 bool fs_channel;	//Controls whether footstep sounds come from sound channel 4 or 5, used for metal footstep sounds.
 script "PlayFootstepSound" (void)	//This plays sounds depending on the surface the player is on.
 {
+	If(GetActorZ(0)-GetActorFloorZ(0)>1.3) Terminate;	//Footsteps can't happen if not on the ground. Water plays its own "footstep" sounds.
 	
-	if((CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE||CheckActorClass(0, "AdultScaleTester")==TRUE)&&GetCVAR("snd_footstepsplayer")==FALSE) Terminate;
+	if((CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "AdultScaleTester")==TRUE)&&GetCVAR("snd_footstepsplayer")==FALSE) Terminate;
 	else
 	{	//If not a player, they must be an enemy!
 		if(GetCVAR("snd_footstepsenemy")==FALSE) Terminate;	//If enemy footstep sounds are disabled, don't do anything!
@@ -1853,9 +1860,8 @@ script "ResetPlayerForSpeedruns" (void)
 	combo[MAX_PLAYERS] = 0;
 	combo[MAX_PLAYERS*2] = 0;
 	TakeInventory("CoinSP",999);	//Take all coins
-	If(gamemode==3) { weapons[0] = TRUE; weapons[1] = TRUE; }
 	If(gamemode==1) { level[0] = 34; level[1] = 34; level[2] = 33; }
-	ACS_NamedExecute("GiveWeapons",0,FALSE,0,0);	//Give all weapons
+	ACS_NamedExecute("GiveSRWeapons",0,-1,0,0);	//Give all weapons in Practice Mode. Change in the future for other modes.
 	SetActorProperty(0, APROP_Health, 100);
 	damage_tics[0] = 0;
 	heal_tics[0] = 0;
@@ -2003,7 +2009,26 @@ Script "ExitTransition" (void)
 	fade = 1;	//Prepare the fade in for after the "loading" screen.
 	fadeout = 6;	//Request a quick fade out to black for all players.
 	
-	Delay(7);
+	Delay(17);
+	
+	If(GameType()==GAME_SINGLE_PLAYER&&CheckActorInventory(1000, "CoinSP")>0)
+	{
+		Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
+		ACS_NamedExecute("DisplayTotalCoins",0,70+CheckActorInventory(1000, "CoinSP"),0,0);
+		Delay(17);
+		
+		Until(CheckActorInventory(1000, "CoinSP")==0)
+		{
+			Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
+			total_coins++;
+			TakeActorInventory(1000, "CoinSP", 1);
+			AmbientSound("coin/normal",256);
+			Delay(2);
+		}
+		
+		Delay(6);
+	}
+
 	If(gamemode!=3) { ChangeLevel(StrParam(s:"TMP", d:level[1]+2),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill()); }//Level[1]+201 is the temporary level for the next level. This makes the game forget this level's state before advancing.
 	Else ChangeLevel(StrParam(s:"TMP", d:level[1]+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//If in practice mode, restart the level when it's completed.
 }
@@ -2131,6 +2156,7 @@ While(1)
 							o1 = GetActorVelX(GetCurrentPlayerTID());
 							o2 = GetActorVelY(GetCurrentPlayerTID());
 							
+							AmbientSound("misc/transform",64);	//The "YEEEE-AAH!" background chord. It sounds better if a yell is heard over it.
 							ACS_NamedExecuteAlways("PlayerMovement",0,1,0,0);
 							SetActorProperty(GetCurrentPlayerTID(),PROP_FLY,ON);
 							SetActorState(GetCurrentPlayerTID(),"Transform",1);
@@ -2157,9 +2183,13 @@ While(1)
 							ActivatorSound("*super_grunt",127);
 
 						GiveActorInventory(GetCurrentPlayerTID(),"SuperX",1);
-						If(PlayerClass(PlayerNumber())==CHAR_MARY) 	MorphActor(1000, "LGirlPlayer_Super", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary
-						Else If(PlayerClass(PlayerNumber())==CHAR_XANE) 	MorphActor(1000, "XanePlayer_Super", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary						
-						//ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);
+						If(PlayerClass(PlayerNumber())==CHAR_MARY)
+						{
+							TakeInventory("WandType",2);
+							GiveInventory("Wand_Type",2);	//Select the Heart Wand.
+							GiveInventory("MaryWand",1);	//Give Magical Cutie Mary her wand.
+							UseInventory("MaryWand");		//Force the wand out for every transformation.
+						}
 						
 						While(super1<=78)
 						{
@@ -2251,17 +2281,17 @@ While(1)
 					{
 					TakeActorInventory(GetCurrentPlayerTID(),"SuperX",1);
 					
-					stored_velocity[0] = GetActorVelX(GetCurrentPlayerTID());
-					stored_velocity[1] = GetActorVelY(GetCurrentPlayerTID());
-					stored_velocity[2] = GetActorVelZ(GetCurrentPlayerTID());
+					//stored_velocity[0] = GetActorVelX(GetCurrentPlayerTID());
+					//stored_velocity[1] = GetActorVelY(GetCurrentPlayerTID());
+					//stored_velocity[2] = GetActorVelZ(GetCurrentPlayerTID());
 					
-					UnMorphActor(GetCurrentPlayerTID(),TRUE);	//Unmorphing gets rid of the player's movement and weapons, stupid design choices.
-					SetActorVelocity(GetCurrentPlayerTID(),stored_velocity[0],stored_velocity[1],stored_velocity[2],FALSE,FALSE);
-					ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);
+					//UnMorphActor(GetCurrentPlayerTID(),TRUE);	//Unmorphing gets rid of the player's movement and weapons, stupid design choices.
+					//SetActorVelocity(GetCurrentPlayerTID(),stored_velocity[0],stored_velocity[1],stored_velocity[2],FALSE,FALSE);
+					//ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);
 					
-					stored_velocity[0] = 0;	//Clear these variables or non-standard level transitions may use the velocities stored here!
-					stored_velocity[1] = 0;
-					stored_velocity[2] = 0;
+					//stored_velocity[0] = 0;	//Clear these variables or non-standard level transitions may use the velocities stored here!
+					//stored_velocity[1] = 0;
+					//stored_velocity[2] = 0;
 					}
 				}
 			}
@@ -2296,7 +2326,7 @@ int check_ambience[MAX_PLAYERS];	//Ambience at checkpoint.
 int check_weather[MAX_PLAYERS];		//The weather set at the checkpoint.
 int check_music[MAX_PLAYERS];		//Music that should play when respawning at the checkpoint.
 int check_angle[MAX_PLAYERS];		//The angle a player faced when setting a checkpoint if that argument was set.
-int check_specbehav[MAX_PLAYERS+1] = { 1, 1, 1, 1, 1, 1, 1, 1, 1 };	//How the invisible special plane is treated. (0: Water, 1: Bottomless Pit, 2: Lava)
+int check_specbehav[MAX_PLAYERS+1];	//How the invisible special plane is treated. (0: Water, 1: Bottomless Pit, 2: Lava)
 int check_specheight[MAX_PLAYERS+1] = { -1024, -1024, -1024, -1024, -1024, -1024, -1024, -1024, -1024 };	//The height of the invisible plane.
 int check_deathbehav[MAX_PLAYERS];	//Each player's "death behavior" at the last checkpoint.
 int check_windspeed[MAX_PLAYERS];	//How powerful the wind is. Wind pulls players and precipitation around.
@@ -2459,11 +2489,16 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 				SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
 				tics_death = 0;
 				ACS_NamedExecuteAlways("ShowTutorial",0,8,0,0);
+				SetActivator(1000, AAPTR_PLAYER1); SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
 				SetActivator(playertid_stored);
 			Break;
+			Case 2:	//Arena "death"
+				ACS_NamedExecute("ArenaResult",0,FALSE,0,0);	//Fail the arena.
+				SetActorProperty(0, APROP_Health, 100);
+				Delay(350);
+			Break;
 			}
-			SetActivator(1000, AAPTR_PLAYER1); SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
-			important_fade[PlayerNumber()] = FALSE;	//Tell flashing scripts to stop changing colors.
+			important_fade[PlayerNumber()] = FALSE;	//Tell flashing scripts to resume changing colors.
 			
 		}
 	
@@ -2662,9 +2697,8 @@ int mod_type = 9;
 
 script "SetDeathBehavior" (int behavior) { death_behavior[PlayerNumber()] = behavior; }
 
-script "GotWeapon" (int which, int got) { if(which<2) { Log(s:"Enter the slot number of the weapon instead of 0 or 1."); Terminate; } weapons[which-2] = got; }	//This script is called by weapons to mark them as "obtained".
-
-script "GiveWeapons" (int mode)
+script "GiveSRWeapons" (int set)	//Gives weapons for differsent parts of speedruns.
+//-1: All weapons (practice). Time attack shouldn't use this in the future.
 {
 	For(int playaz = 0; playaz < PlayerCount(); playaz++)
 	{
@@ -2674,21 +2708,18 @@ script "GiveWeapons" (int mode)
 		
 		TakeInventory("XaneSword",1);
 		
-		If(mode==FALSE)
+		Delay(1);
+		
+		Switch(PlayerClass(playaz))
 		{
-			Delay(1);
-			
-			Switch(PlayerClass(playaz))
-			{
-				Case CHAR_MARY:
-					If(weapons[1]==TRUE) GiveInventory("MaryWand",1);
-					If(weapons[0]==TRUE) GiveInventory("MaryHammer",1);
-					GiveInventory("MaryUmbrella",1);
-				Break;
-				Case CHAR_XANE:
-					GiveInventory("XaneSword",1);
-				Break;
-			}
+			Case CHAR_MARY:
+				If(set==-1) GiveInventory("MaryWand",1);
+				If(set==-1) GiveInventory("MaryHammer",1);
+				GiveInventory("MaryUmbrella",1);
+			Break;
+			Case CHAR_XANE:
+				GiveInventory("XaneSword",1);
+			Break;
 		}
 	}
 }
@@ -3270,7 +3301,7 @@ script "VarJumpHeights" ENTER
 			velocity = var_velocity[PlayerClass(PlayerNumber())];
 			cancelJump[PlayerNumber()] = FALSE;
 			
-			Until(remaining_tics==0||!(openInput[PlayerNumber()] & BT_JUMP)||cancelJump[PlayerNumber()]==TRUE||no_variable_jumping[PlayerNumber()]==TRUE)
+			Until(remaining_tics==0|| ( (StrParam(l:"MOBILE")!="YES"||GetCVAR("cl_demo")==TRUE) &&!(openInput[PlayerNumber()] & BT_JUMP) )||cancelJump[PlayerNumber()]==TRUE||no_variable_jumping[PlayerNumber()]==TRUE||spring[PlayerNumber()]>0)
 			{
 				//Print(s:"REMAINING: ", d:remaining_tics, s:"\nVELOCITY ADDED: ", f:velocity);
 				remaining_tics--;
@@ -3885,27 +3916,6 @@ script "MaryScream" (void)
 	SetActorState(0,"FallScream",TRUE);
 }
 
-script "BallPitBounce" (int sid)	//Only used in 1-3 but due to fspeed variable requirement it's unfortunately global.
-{	
-	//If this is a player, handle them specially.
-	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE||CheckActorClass(0, "AdultScaleTester")==TRUE)
-	{
-		If(fspeed[PlayerNumber()]<-8.5)
-		{
-			If(CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) { fspeed[PlayerNumber()] -= 1.33; }
-			fspeed[PlayerNumber()] -= 0.75;
-			PlaySound(0, "misc/boing");
-			ACS_NamedExecute("BallPitAnimation",0,sid,0,0);
-			If(fspeed[PlayerNumber()]<-20.5) fspeed[PlayerNumber()] = -20.5;	//To prevent abuse of the ball pits, the player's velocity is limited.
-			SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), -(fspeed[PlayerNumber()]), FALSE, FALSE);	//Flip the resulting velocity then "bounce" the player!
-		}
-	}
-	else	//Otherwise, they're an enemy or something less important and won't have a fspeed variable.
-	{
-		SetActorVelocity(0, GetActorVelX(0),GetActorVelY(0),16.25,FALSE,FALSE);
-	}
-}
-
 bool respawned[MAX_PLAYERS];
 
 script "Drowning" ENTER
@@ -4112,7 +4122,7 @@ script "ForceRotateToAngle" (int affected, int reference)
 
 script "SpringBounce" (int tid, int type, int power) //Bounces the player in the direction of the "linked" thing like a spring.
 {	//First make sure it's on the whitelist here. If it isn't, it's not allowed to use springs, boost panels, and mid-air rings.
-	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "LGirlPlayer_Super")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "XanePlayer_Super")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
+	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "StupidIdea!")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "ReallyStupidIdea!")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
 	{
 	If(CheckActorClass(0, "FlowerProjectile3_1P")) SetActorState(0, "Launch");
 	bool extra_power = 0;	//This determines whether hitting this spring with Mary's hammer should increase its power.
@@ -4455,7 +4465,7 @@ script "XaneSwordDropAttackViewAnim" (int directionx)	//0 = down, 1 = up
 
 script "PlayEnemySpringSound" (void)
 {
-	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) Terminate;	//If a player, terminate as Mary screams through other means.
+	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "StupidIdea!")==TRUE||CheckActorClass(0, "ReallyStupidIdea!")==TRUE) Terminate;	//If a player, terminate as Mary screams through other means.
 	
 	If(CheckActorClass(0, "Troll")) ActivatorSound("troll/pain",255);
 	If(CheckActorClass(0, "Tiger1")) ActivatorSound("m3/pain",255);
@@ -4480,6 +4490,9 @@ script "EnemyFollowPath" (int follower)
 	
 	Thing_Deactivate(follower);
 	Thing_Remove(follower);
+	GiveInventory("Animation2",1);	//Hackish and probably stupid, but this forces enemies to stop following this path.
+	Delay(3);
+	TakeInventory("Animation2",1);
 }
 
 script "DisableWallJump" (int tics_disablewj)	{	hammermove[PlayerNumber()] = tics_disablewj;	}
@@ -4541,7 +4554,7 @@ script "ResetPlayer" (void)
 	{
 		SetFont("3DLETTER");
 		HUDMessage (l:"TXT_LOADING";
-			HUDMSG_PLAIN, 0, CR_YELLOW, 0.5,0.5, 0.99);   //Loading text.
+			HUDMSG_PLAIN, 0, CR_UNTRANSLATED, 0.5,0.5, 0.99);   //Loading text.
 		Delay(10);
 		ChangeLevel(StrParam(s:"AREA", d:level[1]-CONST_TRANS_LEVELS_START+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
 		Delay(3);
@@ -5013,7 +5026,7 @@ script "CheckSpecialStage" (int mode)
 //Coin conversion script//
 //////////////////////////
 
-script "ConvertCoinTicsToCoins" (void)	//This is still used when dying so don't remove it!
+script "ConvertCoinTicsToCoins" (int remove)	//Remove here won't give the coins back to the player.
 {
 	If(GameType()==GAME_SINGLE_PLAYER) SetActivator(1000, AAPTR_PLAYER1);	//If this is singleplayer, make sure the activator is player 1, just in case.
 	
@@ -5053,12 +5066,15 @@ script "ConvertCoinTicsToCoins" (void)	//This is still used when dying so don't 
 	speed_tics[PlayerNumber()] = 0;
 	
 	//Give the player the coins they've converted.
-	GiveInventory("PowerupDamage", damagec);
-	GiveInventory("PowerupHeal", healc);
-	GiveInventory("PowerupNinja", ninjac);
-	GiveInventory("PowerupWater", waterc);
-	GiveInventory("PowerupCombo", comboc);
-	GiveInventory("PowerupSpeed", speedc);
+	if(remove==FALSE)
+	{
+		GiveInventory("PowerupDamage", damagec);
+		GiveInventory("PowerupHeal", healc);
+		GiveInventory("PowerupNinja", ninjac);
+		GiveInventory("PowerupWater", waterc);
+		GiveInventory("PowerupCombo", comboc);
+		GiveInventory("PowerupSpeed", speedc);
+	}
 	
 	If(important_fade[PlayerNumber()]==FALSE) FadeTo(0, 0, 0, 0.0, 0.05);	//The screen stays tinted after this; Force it to return to normal.
 }
@@ -5098,7 +5114,7 @@ script "DemoTimer" OPEN
 	{
 		If(GetCVAR("cl_demo")==TRUE&&demo_seconds % 2 == 0&&lump_name2 != "INTRO" && lump_name2 != "TITLE")
 		{
-			SetHUDSize(1024,640,TRUE);s
+			SetHUDSize(1024,640,TRUE);
 			SetFont("TITLEFNT");
 			HUDMessage(l:"TITLE_PROMPT1";
 				HUDMSG_FADEINOUT, 100, CR_UNTRANSLATED, 800.4,420.1, 0.01, 1.0, 1.0);
@@ -5143,8 +5159,6 @@ script "TitleOverlay" (void)
 		If(tkeyprompt_times==1) PlaySound(1000,"misc/title_begin", CHAN_VOICE|CHAN_NOPAUSE);
 	}
 }
-
-bool doubledamage_enabled = FALSE;	//Has the player been given the inventory item to power them up? This stops continuously giving powerups.
 
 script "UpdateMiscellaneous" ENTER  //Armor is the "combo meter". This script updates things every tic. Avoid Delay(#) here!
 {
@@ -5247,10 +5261,8 @@ While(1)
 			{
 				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 4) FadeTo(255,128,64,0.25,0.1);
 				damage_tics[PlayerNumber()]--;
-				If(doubledamage_enabled==FALSE) { doubledamage_enabled = TRUE; GiveInventory("InternalDamage",1); }
 				If(important_fade[PlayerNumber()]==FALSE&&damage_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
-			else { doubledamage_enabled = FALSE; TakeInventory("PowerDamage",99); TakeInventory("PowerDoubleDamage",99); } 
 
 			if(heal_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
@@ -5409,21 +5421,25 @@ While(1)
 				TakeActorInventory(GetCurrentPlayerTID(),"Armor",100);
 				GiveActorInventory(GetCurrentPlayerTID(),"NotArmorBonus",meter[PlayerNumber()]);
 		}
-
-	Delay(1);	//The only "delay" allowed.
-	
+		
+		If(CheckInventory("SuperX")==TRUE&&damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin_Super",1); }
+		Else If(CheckInventory("SuperX")==TRUE) { GiveInventory("InternalDSuper",1); }
+		Else If(damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin",1); }
+		
+		Delay(1);	//The only "delay" allowed.
+		
+		//After the delay, take away all of the player's damage-increasing "powerups".
+		TakeInventory("PowerDamage",99);
+		TakeInventory("PowerDoubleDamage",99);
+		TakeInventory("InternalDCoin",99);
+		TakeInventory("InternalDSuper",99);
+		TakeInventory("InternalDCoin_Super",99);
+		TakeInventory("PowerDCoin",99);
+		TakeInventory("PowerDSuper",99);
+		TakeInventory("PowerDCoin_Super",99);
+		
 	}
 }
-
-//A failed trigonometry attempt.
-/*script "SpeedTest" ENTER
-{
-	While(1)
-	{
-		Print(s:"SPEED DEBUG 2:\n-X-\n", f:GetActorVelX(0), s:"\n\n-Y-\n", f:GetActorVelY(0), s:"\n\nEXPERIMENT\n", f:abs((sin(GetActorVelX(0))+cos(GetActorVelY(0)))));
-		Delay(1);
-	}
-}*/
 
 script "SpeedDebug" ENTER
 {
@@ -5815,7 +5831,7 @@ script "InitialSeamlessHelper" ENTER { level_ready = FALSE; ACS_NamedExecuteAlwa
 script "SeamlessHelper" (int initial_load)	//If initial_load is set, an additional waiting time will be added for culling.
 {
 	ACS_NamedExecuteAlways("SuperFormCheck",0,0,0,0);	//Always check for super forms, regardless of where the player is.
-	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0); Delay(2); }	//This really should be identical to what's below but I'm nervous about breaking this thing.
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); /*ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);*/ Delay(2); }	//This really should be identical to what's below but I'm nervous about breaking this thing.
 	Else { fadeout = 4;
 	
 	Delay(2);
@@ -5843,20 +5859,44 @@ script "SeamlessHelper" (int initial_load)	//If initial_load is set, an addition
 	} }
 	
 	//After spawning the player at the correct spawn point, await the culling polyobject if necessary.
-	If(initial_load!=0&&GetCVar("xane_rculling")!=FALSE&&GameType()==GAME_SINGLE_PLAYER)
-	{	//Make the player unable to move and able to phase through the polyobjects.
-		ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//This only freezes the activator, which should be player 1.
-		GiveInventory("Variable5",1);	//Variable5 makes players phase through everything.
-		Print(s:"Generating culling info...");
-		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Delay(100); Else Delay(35);
-		Print(s:"");
-		TakeInventory("Variable5",1);
-		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
-		level_ready = TRUE;	//Signal it's safe to begin the level now.
-	}
+	If(initial_load!=0) ACS_NamedExecute("WaitForCulling",0,-1,0,0);
 	Else { level_ready = TRUE; }	//If culling isn't on, signal it's safe to assume the level is ready now.
 	
 	//SuperX check was here.
+}
+
+script "WaitForCulling" (int culltics, int cullfade)
+{
+	If(GetCVar("xane_rculling")!=FALSE&&GameType()==GAME_SINGLE_PLAYER)
+	{	//First, do some sanity checks.
+		If(culltics<-1||culltics==0||culltics>3) { Log(s:"ERROR: Valid wait times are 1-3.\nSee WaitForCulling call."); Terminate; }
+		If(cullfade<0||cullfade>1) { Log(s:"ERROR: Invalid fade for culling. Valid values are 0-1.\nSee WaitForCulling call."); Terminate; }
+		
+		fadeout = 6+cullfade;	//This will be either a black or white fade out.
+		ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//This only freezes the activator, which should be player 1.
+		GiveInventory("Variable5",1);	//Variable5 makes players phase through everything.
+		GiveInventory("Cutscene",1);	//Freeze everything during the video.
+
+		SetFont("3DLETTER");
+		HUDMessage (l:"TXT_LOADING";
+			HUDMSG_FADEINOUT, 5, CR_UNTRANSLATED, 0.5,0.5, 3.0, 0.33, 0.33);   //Loading text.
+
+		level_ready = FALSE;	//Make the render-culling polyobject speed up temporarily.
+		If(culltics==1)Delay(35);	//Wait for the set time before unlocking the player.
+		Else If(culltics==2)Delay(70);
+		Else If(culltics==3)Delay(100);		
+		Else If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Delay(100); Else Delay(35);	//-1 will use the original SeamlessHelper values.
+		
+		HUDMessage (l:"TXT_LOADING";
+			HUDMSG_FADEOUT, 5, CR_UNTRANSLATED, 0.5,0.5, 0.0, 0.33);   //Loading text.
+		
+		TakeInventory("PowerTimeFreezer",1);
+		fadeout = 8+cullfade;	//This will be either a black or white fade in.
+		TakeInventory("Variable5",1);
+		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
+		level_ready = TRUE;	//Signal it's safe to resume the level now, which will make the screen fade in.
+	}
+	Else { level_ready = TRUE; }	//If in multiplayer or culling is disabled, indicate the level is "ready" to prevent an infinite black/white screen.
 }
 
 script "SuperFormCheck" (void)
@@ -5865,11 +5905,11 @@ script "SuperFormCheck" (void)
 	{
 		ss_position = 0;
 		
-		If(CheckInventory("SuperX")==TRUE)	//If the player is visiting a new level and is transformed, make sure they turn back into their transformed forms!
+		/*If(CheckInventory("SuperX")==TRUE)	//If the player is visiting a new level and is transformed, make sure they turn back into their transformed forms!
 		{
-			If(PlayerClass(PlayerNumber())==CHAR_MARY) MorphActor(1000, "LGirlPlayer_Super", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary
-			Else If(PlayerClass(PlayerNumber())==CHAR_XANE) MorphActor(1000, "XanePlayer_Super", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary						
-		}
+			If(PlayerClass(PlayerNumber())==CHAR_MARY) MorphActor(1000, "StupidIdea!", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary
+			Else If(PlayerClass(PlayerNumber())==CHAR_XANE) MorphActor(1000, "ReallyStupidIdea!", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary						
+		}*/
 		//Log(d:GetLevelInfo(LEVELINFO_LEVELNUM), s:"/", d:gamemode);
 		//If(GetLevelInfo(LEVELINFO_LEVELNUM)!=0) stored_velocity[0] = 0;
 		If(gamemode>0&&GetLevelInfo(LEVELINFO_LEVELNUM)==0) stored_velocity[0] = -616.5;
@@ -5908,6 +5948,7 @@ script "HandleFadeOut" ENTER
 	{
 		If(fadeout>0)
 		{
+			important_fade[PlayerNumber()] = TRUE;	//These are important fades.
 			Switch(fadeout)
 			{
 				Case 1:	//Black
@@ -5957,6 +5998,7 @@ script "HandleFadeOut" ENTER
 				Break;
 			}
 			fadeout = 0;
+			important_fade[PlayerNumber()] = FALSE;	//Allow Powerup Coins to tint the screen again.
 		}
 		
 		Delay(1);
@@ -6030,7 +6072,6 @@ If(cgem_count<7)
 		no_scripts[5] = FALSE;
 		no_scripts[6] = FALSE;
 		no_scripts[7] = FALSE;
-		ACS_NamedExecuteAlways("GiveWeapons",0,TRUE,0,0);	//If the first argument is TRUE, it will ironically take your weapons away!
 		Delay(1);
 		fade = 2;
 		ChangeLevel(StrParam(s:"SPECSTG", d:cgem_count+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
@@ -6131,12 +6172,12 @@ script "DropCoins" (int number)
 
 	For(int i2 = 0; i2 < number; i2++)
 	{
-		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE)
+		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "StupidIdea!")==TRUE||CheckActorClass(0, "ReallyStupidIdea!")==TRUE)
 		{
 			If(CheckInventory("CoinSP")) { TakeInventory("CoinSP",1); /*total_coins--; totalcointics = CONSTANT_TCOINDISPTICS;*/ }
 			Else Terminate;
 		}
-		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "LGirlPlayer_Super")==TRUE||CheckActorClass(0, "XanePlayer_Super")==TRUE) SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,31,37/*Random(26,36),Random(35,40)*/,1.0,0);
+		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "StupidIdea!")==TRUE||CheckActorClass(0, "ReallyStupidIdea!")==TRUE) SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,31,37/*Random(26,36),Random(35,40)*/,1.0,0);
 		else SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,24,33,1.0,0);
 	}
 

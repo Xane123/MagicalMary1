@@ -289,7 +289,8 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY O 0 A_SpawnItemEx("MaryAirDash",4,0,2,-8,0,0,0,SXF_SETMASTER|SXF_NOCHECKPOSITION,0)
 	MARY O 0 A_CheckFloor("AirDashLand")
 	MARY O 1 A_JumpIf(velz==0.0,"AirDashLand")
-	Loop
+	MARY O 0 A_JumpIfInventory("Animation1",1,"AirDash")
+	Goto AirDashLand
   AirDashLand:
 	MARY O 0 A_TakeInventory("Animation1",1)
 	Goto See
@@ -595,14 +596,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	Stop
 
 	}
-}
-
-Actor LGirlPlayer_Super : LGirlPlayer
-{
-Health 200
-Player.DisplayName "Magical Cutie Mary"
-Player.MaxHealth 200
-Player.MorphWeapon "HeartWand"
 }
 
 ACTOR XanePlayer : DoomPlayer
@@ -995,13 +988,6 @@ ACTOR XanePlayer : DoomPlayer
 	PLAY N -1 A_CheckPlayerDone
 	Wait
 	}
-}
-
-Actor XanePlayer_Super : XanePlayer
-{
-Health 200
-Player.MaxHealth 200
-Player.MorphWeapon "XaneSword"
 }
 
 actor MaryA : LGirlPlayer
@@ -1647,14 +1633,14 @@ states
  }
 }
 
-actor InternalDamage : PowerupGiver	//Used by Power Coins to double the player's power.
+actor InternalDCoin : PowerupGiver	//Power Coin only
 {
 Radius 1
 Height 2
 Inventory.MaxAmount 0
 Powerup.Color None
 Powerup.Duration 0x7FFFFFFF
-Powerup.Type DoubleDamage
+Powerup.Type DCoin
 -COUNTITEM
 +AUTOACTIVATE
 -INVENTORY.INVBAR
@@ -1665,9 +1651,55 @@ states
    Stop
  }
 }
-actor PowerDoubleDamage : PowerDamage
+actor PowerDCoin : PowerDamage
 {
 damagefactor "normal", 2
+inventory.icon "TNT1A0"
+}
+actor InternalDSuper : PowerupGiver	//Power Coin only
+{
+Radius 1
+Height 2
+Inventory.MaxAmount 0
+Powerup.Color None
+Powerup.Duration 0x7FFFFFFF
+Powerup.Type DSuper
+-COUNTITEM
++AUTOACTIVATE
+-INVENTORY.INVBAR
+states
+ {
+ Spawn:
+   TNT1 A -1
+   Stop
+ }
+}
+actor PowerDSuper : PowerDamage
+{
+damagefactor "normal", 1.5
+inventory.icon "TNT1A0"
+}
+actor InternalDCoin_Super : PowerupGiver	//Power Coin only
+{
+Radius 1
+Height 2
+Inventory.MaxAmount 0
+Powerup.Color None
+Powerup.Duration 0x7FFFFFFF
+Powerup.Type DCoin_Super
+-COUNTITEM
++AUTOACTIVATE
+-INVENTORY.INVBAR
+states
+ {
+ Spawn:
+   TNT1 A -1
+   Stop
+ }
+}
+actor PowerDCoin_Super : PowerDamage
+{
+damagefactor "normal", 2.5
 inventory.icon "TNT1A0"
 }
 
@@ -2196,7 +2228,9 @@ Actor SpeedTrailX : PowerupGiver
   }
 }
 
-actor PowerDDamage : PowerDamage
+//Not used?
+
+/*actor PowerDDamage : PowerDamage	//Damage Coin only
 {
 damagefactor "normal", 2
 damagefactor "Hammer", 2
@@ -2208,6 +2242,32 @@ damagefactor "Fire", 2
 damagefactor "Stun", 2
 -INVENTORY.INVBAR
 }
+
+actor PowerDamage_Super : PowerDamage	//Super transformation
+{
+damagefactor "normal", 1.5
+damagefactor "Hammer", 1.5
+damagefactor "Umbrella", 1.5
+damagefactor "Flatten", 1.5
+damagefactor "AirDash", 1.5
+damagefactor "Bounce", 1.5
+damagefactor "Fire", 1.5
+damagefactor "Stun", 1.5
+-INVENTORY.INVBAR
+}
+
+actor PowerDDamage_Super : PowerDamage	//Damage Coin + super transformation
+{
+damagefactor "normal", 2.5
+damagefactor "Hammer", 2.5
+damagefactor "Umbrella", 2.5
+damagefactor "Flatten", 2.5
+damagefactor "AirDash", 2.5
+damagefactor "Bounce", 2.5
+damagefactor "Fire", 2.5
+damagefactor "Stun", 2.5
+-INVENTORY.INVBAR
+}*/
 
 Actor Cutscene : PowerupGiver
 {

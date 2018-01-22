@@ -96,6 +96,7 @@ While(CheckActorInventory(1000,"CoinSP")+CheckActorInventory(1001,"CoinSP")+Chec
     if(failed==FALSE)
     {
         ACS_Execute(254,0,5,TRUE,0);    //Start the jingle.
+        PlaySound(1050+PlayerNumber(),"mary/cgem_get",CHAN_5,1.0,FALSE,ATTN_NONE);
 
         for (int ig = 0; ig <= PlayerCount()-1; ig++) {
                 SetActorVelocity(1000+ig,0,0,0,0,1);    //Stop each player.
@@ -345,7 +346,7 @@ Else
     rm = -0.01;
     offset = -0.02;
 
-                SetFont("SMALLFNT");
+                SetFont("BIG_TEXT");
         for (int i = 0; i <= PlayerCount()-1; i++) {
             x = i;
             x_spacing = x+1;
@@ -388,8 +389,8 @@ If(1)
 
 	While(time_stop==FALSE)
 		{
-		SetFont("STIMEFNT");
-		If(GetCVAR("screenblocks")<12&&GameType()!=GAME_DEMOREPLAY)
+		SetFont("BIG_TEXT");
+		If(GetCVAR("screenblocks")<12&&GetCVAR("cl_demo")==FALSE)
 		{
 			If(secsp % 60 >= 10)
 			{
@@ -442,6 +443,7 @@ script "GetXCoins" ENTER
 	If(GetCVar("cl_demo")==TRUE) Terminate;
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Terminate;
 	Delay(1);
+	SetFont("3DLETTER");
 	Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 	
 	If(1)//StrParam(s:StrLeft(StrParam(n:PRINTNAME_LEVEL),7))=="SPECSTG" && StrParam(s:StrRight(StrParam(n:PRINTNAME_LEVEL),1))<7 && racing==0)
@@ -517,8 +519,7 @@ script "ControlClock" OPEN
 
 script 999 (int tid)
 {
-StopSound(1000 + PlayerNumber(),CHAN_VOICE);
-PlaySound(1050+PlayerNumber(),"mary/cgem_f", CHAN_VOICE, 1.0, FALSE, ATTN_NONE);	//TODO: When Xane has voices, change this for him.
+//PlaySound(tid,"mary/cgem_get", CHAN_5, 1.0, FALSE, ATTN_STATIC);	//TODO: When Xane has voices, change this for him.
 ChangeCamera(1050 + PlayerNumber(),OFF,OFF);
 }
 

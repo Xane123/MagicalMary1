@@ -49,7 +49,7 @@ States
 {
 Ready:
 TNT1 A 0
-TNT1 A 0 ACS_NamedExecute("GotWeapon",0,3,TRUE,0)	//Mark the wand as gotten.
+TNT1 A 0 A_JumpIfInventory("Wand_Type",2,"Heart")
 TNT1 A 0 A_JumpIfInventory("Wand_Type",1,"Shield")
 //Flower intro
 WNFI A 0 A_JumpIfInventory("WeaponIntroDone",1,"FlowerReady")
@@ -77,8 +77,28 @@ UMBR U 0 A_JumpIfInventory("RequestBall1",1,"ThrowBall1")
 WNPI A 2 A_WeaponReady
 Loop
 
+Heart:
+TNT1 A 0 A_JumpIfInventory("SuperX",1,"HeartAnimation")
+TNT1 A 0 A_TakeInventory("Wand_Type",3)
+Goto Ready
+HeartAnimation:
+TNT1 A 0 A_JumpIfInventory("WeaponIntroDone",1,"ShieldReady")
+WNHI DEF 2
+WNHI GHI 3
+WNHI JKLMNOOPQQQP 2
+HeartReady:
+TNT1 A 0 A_JumpIfInventory("SuperX",1,"HeartReadyConfirm")
+Goto Deselect
+HeartReadyConfirm:
+UMBR U 0 A_JumpIfInventory("RequestBallThrow",3,"ThrowBall3")
+UMBR U 0 A_JumpIfInventory("RequestBallThrow",2,"ThrowBall2")
+UMBR U 0 A_JumpIfInventory("RequestBallThrow",1,"ThrowBall1")
+WNHI A 2 A_WeaponReady
+Goto HeartReady
+
 //ATTACKS
 Fire:
+TNT1 A 0 A_JumpIfInventory("Wand_Type",2,"HeartFire")
 TNT1 A 0 A_JumpIfInventory("Wand_Type",1,"ShieldFire")
 //Flower fire
 WNF1 A 0 A_PlaySound("wand/charge",CHAN_WEAPON,1.0,FALSE)
@@ -330,17 +350,104 @@ WNP1 I 0 ACS_NamedExecuteAlways("Wand_Special",0,1,0,0)
 WNP1 I 0 A_StopSound(CHAN_WEAPON)
 Goto ShieldEnd2
 
+HeartFire:
+WNH1 A 4
+WNH1 B 3
+WNH1 CDEFGHIJKLMNOPQRSTU 2
+WNH1 VW 2
+WNH1 X 3
+WNH1 Y 2
+WNH2 ABCDEFGH 1
+WNH2 A 0 A_ReFire("HeartSpin")
+Goto HeartFinisher
+HeartSpin:
+WNH2 ABCDEFGH 1
+WNH2 A 0 A_JumpIfInventory("SuperX",1,"HeartSpinCheck")
+Goto HeartFinisher
+HeartSpinCheck:
+WNH2 A 0 A_ReFire("HeartSpin")
+HeartFinisher:
+WNH1 Y 2
+WNH1 X 3
+WNH1 WV 2
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,0,0)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,5,5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-5,5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,10,10)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,5,10)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,10)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-5,10)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-10,10)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,15,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,10,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,5,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-5,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-10,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-15,15)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,18,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,12.25,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,6.5,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-6.5,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-12.25,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-18,20)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,20,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,15,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,10,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,5,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,0,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,-5,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,-10,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,-15,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-20,26.25)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,19.5,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,14.5,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,9.25,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,4.5,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-4.5,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-9.25,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-14.5,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-19.5,32.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,18.25,35.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,13.25,35.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,8.5,35.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-8.5,35.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-13.25,35.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-18.25,35.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,12.75,40)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-12.75,40)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,9,40)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-9,40)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,6.5,37.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-6.5,37.5)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,2.75,32.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-2.75,32.75)
+WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,0,26.25)
+WNH2 I 0 A_TakeInventory("CoinSP",5)
+WNH2 IJK 2
+WNH1 B 2
+WNH1 A 3
+Goto HeartReady
+
 //Alternate fire
-//SWITCH WEAPONS
+//SWITCH WAND TYPE
 AltFire:
+TNT1 A 0 A_JumpIfInventory("Wand_Type",2,"HeartChange")
 TNT1 A 0 A_JumpIfInventory("Wand_Type",1,"ShieldChange")
 
 WNFI BC 2 A_TakeInventory("WeaponIntroDone",1)	//Flower change
 WNSI Z 6 A_GiveInventory("Wand_Type",1)
 Goto Ready
 ShieldChange:
-WNPI BC 2 A_TakeInventory("WeaponIntroDone",1)	//Flower change
-WNHI Z 6 A_TakeInventory("Wand_Type",1)
+WNPI BC 2 A_TakeInventory("WeaponIntroDone",1)	//Shield change
+WNHI Z 6 A_GiveInventory("Wand_Type",1)
+Goto Ready
+HeartChange:
+WNPI BC 2 A_TakeInventory("WeaponIntroDone",1)	//Heart change (transformed only)
+WNFI Z 6 A_TakeInventory("Wand_Type",2)
 Goto Ready
 Select:
 TNT1 A 0
@@ -720,7 +827,7 @@ Actor HeartProjectile_1P
 {
 Radius 3
 Height 6
-Damage (125)
+Damage (50)
 Speed 48
 Scale 0.1
 RenderStyle Add
@@ -740,189 +847,6 @@ Loop
 
 Actor HeartProjectileInvisible_1P : HeartProjectile_1P { +INVISIBLE }
 
-Actor HeartWand : XWeapon
-{
-+WEAPON.NOALERT
-States
-{
-Ready:
-TNT1 A 0
-TNT1 A 0 ACS_NamedExecute("GotWeapon",0,3,TRUE,0)	//Mark the wand as gotten.
-TNT1 A 50
-WNHI DEF 2
-WNHI GHI 3
-WNHI JKLMNOOPQQQP 2
-ReadyX:
-TNT1 A 0 A_JumpIfInventory("SuperX",1,"HeartReadyConfirm")
-Goto Deselect
-HeartReadyConfirm:
-UMBR U 0 A_JumpIfInventory("RequestBallThrow",3,"ThrowBall3")
-UMBR U 0 A_JumpIfInventory("RequestBallThrow",2,"ThrowBall2")
-UMBR U 0 A_JumpIfInventory("RequestBallThrow",1,"ThrowBall1")
-WNHI A 2 A_WeaponReady
-WNHI A 0 A_JumpIfInventory("FloorDetected",1,"Ready2")
-Goto ReadyX
-Ready2:
-WNHI A 0 A_TakeInventory("MaryHammer_MidAirDone",1)
-Goto ReadyX
-Fire:
-WNH1 A 4
-WNH1 B 3
-WNH1 CDEFGHIJKLMNOPQRSTU 2
-WNH1 VW 2
-WNH1 X 3
-WNH1 Y 2
-WNH2 ABCDEFGH 1
-WNH2 A 0 A_ReFire("HeartSpin")
-Goto HeartFinisher
-HeartSpin:
-WNH2 ABCDEFGH 1
-WNH2 A 0 A_JumpIfInventory("SuperX",1,"HeartSpinCheck")
-Goto HeartFinisher
-HeartSpinCheck:
-WNH2 A 0 A_ReFire("HeartSpin")
-HeartFinisher:
-WNH1 Y 2
-WNH1 X 3
-WNH1 WV 2
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,0,0)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,5,5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-5,5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,10,10)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,5,10)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,10)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-5,10)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-10,10)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,15,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,10,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,5,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-5,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-10,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-15,15)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,18,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,12.25,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,6.5,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-6.5,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-12.25,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-18,20)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,20,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,15,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,10,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,5,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,0,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,-5,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,-10,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisble_1P",0,FALSE,-15,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-20,26.25)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,19.5,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,14.5,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,9.25,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,4.5,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,0,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-4.5,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-9.25,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-14.5,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-19.5,32.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,18.25,35.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,13.25,35.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,8.5,35.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-8.5,35.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectileInvisible_1P",0,FALSE,-13.25,35.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-18.25,35.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,12.75,40)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-12.75,40)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,9,40)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-9,40)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,6.5,37.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-6.5,37.5)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,2.75,32.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,-2.75,32.75)
-WNH1 A 0 A_FireCustomMissile("HeartProjectile_1P",0,FALSE,0,26.25)
-WNH2 IJK 2
-WNH1 B 2
-WNH1 A 3
-Goto ReadyX
-AltFire:
-UMBR D 0 A_JumpIf(z-floorz>0,"MidAir")
-UMBR E 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,0)
-WNHI BC 2
-TNT1 A 2
-WNHI DEF 2
-WNHI GHI 3
-WNHI JKLM 2
-UMBR S 0 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,0)
-WNHI NOO 2
-MHM2 J 0 A_ReFire("Liftoff")
-Goto CancelLiftoff
-Liftoff:
-UMBR C 0 A_PlaySound("lgirl/triple_jump",CHAN_VOICE,1.0,FALSE,1.5)
-UMBR C 0 A_ChangeVelocity(0,0,12,CVF_REPLACE)
-WNHI P 2
-TNT1 A 0 ACS_NamedExecuteAlways("MaryHammer_AltFire",0,0,5,0)
-WNHI QQQP 2
-Goto WaitMidAir
-CancelLiftoff:
-WNHI PA 6
-Goto ReadyX
-MidAir:
-UMBR D 0 A_JumpIfInventory("MaryHammer_MidAirDone",1,"WaitCrash")
-UMBR D 0 ACS_NamedExecuteAlways("MaryHammer_AltFire",0,0,2,0)
-WNHI P 2
-Goto WaitMidAir
-WaitCrash:
-WNHI A 1
-Goto ReadyX
-WaitMidAir:
-UMBR U 0 A_JumpIfInventory("RequestBallThrow",3,"ThrowBall3_MidAir")
-UMBR U 0 A_JumpIfInventory("RequestBallThrow",2,"ThrowBall2_MidAir")
-UMBR U 0 A_JumpIfInventory("RequestBallThrow",1,"ThrowBall1_MidAir")
-WNHI P 2
-MHM2 J 0 A_ReFire("WaitMidAir")
-Goto EndMidAir
-EndMidAir:
-WNHI P 2 ACS_NamedExecuteAlways("MaryHammer_AltFire",0,0,3,0)
-Goto ReadyX
-Deselect:
-WNHI BC 2
-TNT1 A 0 A_TakeInventory("WeaponIntroDone",1)
-Goto Lower
-//Common code
-ThrowBall1:
-TNT1 A 0
-TNT1 A 0 A_FireCustomMissile("ThrownBall1",0,0,0,-8,0,12)
-TNT1 A 0 A_TakeInventory("RequestBallThrow",10)
-Goto ReadyX
-ThrowBall2:
-TNT1 A 0
-TNT1 A 0 A_FireCustomMissile("ThrownBall2",0,0,0,-8,0,10)
-TNT1 A 0 A_TakeInventory("RequestBallThrow",10)
-Goto ReadyX
-ThrowBall3:
-TNT1 A 0
-TNT1 A 0 A_FireCustomMissile("ThrownBall3",0,0,0,-8,0,9)
-TNT1 A 0 A_TakeInventory("RequestBallThrow",10)
-Goto ReadyX
-ThrowBall1_MidAir:
-TNT1 A 0
-TNT1 A 0 A_FireCustomMissile("ThrownBall1",0,0,0,-8,0,12)
-TNT1 A 0 A_TakeInventory("RequestBallThrow",10)
-Goto WaitMidAir
-ThrowBall2_MidAir:
-TNT1 A 0
-TNT1 A 0 A_FireCustomMissile("ThrownBall2",0,0,0,-8,0,10)
-TNT1 A 0 A_TakeInventory("RequestBallThrow",10)
-Goto WaitMidAir
-ThrowBall3_MidAir:
-TNT1 A 0
-TNT1 A 0 A_FireCustomMissile("ThrownBall3",0,0,0,-8,0,9)
-TNT1 A 0 A_TakeInventory("RequestBallThrow",10)
-Goto WaitMidAir
-}
-}
-
 	//Number 281 is availiable.
 Actor MaryHammer : XWeapon 
 {
@@ -937,7 +861,6 @@ States
 {
 Ready:
 MHM1 A 0
-MHM1 A 0 ACS_NamedExecute("GotWeapon",0,2,TRUE,0)	//Mark the hammer as gotten.
 ReadyX:
 MHM1 A 0 A_JumpIfInventory("Animation2",1,"StartCrying")
 MHM1 A 0 A_JumpIfInventory("JuiceBoxA",1,"Drink")
@@ -1571,7 +1494,7 @@ Spawn:
 PART A 0
 Death:
 TNT1 A 0
-TNT1 A 5 A_Explode((75),500,!XF_HURTSOURCE,FALSE,500)
+TNT1 A 5 A_Explode((30),500,!XF_HURTSOURCE,FALSE,500)
 FadeOut:
 TNT1 A 1 A_FadeOut(0.5,1)
 Loop
@@ -1591,7 +1514,7 @@ Spawn:
 PART A 0
 Death:
 TNT1 A 0
-TNT1 A 5 A_Explode((90),700,!XF_HURTSOURCE,FALSE,700)
+TNT1 A 5 A_Explode((45),700,!XF_HURTSOURCE,FALSE,700)
 FadeOut:
 TNT1 A 1 A_FadeOut(0.5,1)
 Loop
@@ -1611,7 +1534,7 @@ Spawn:
 PART A 0
 Death:
 TNT1 A 0
-TNT1 A 5 A_Explode((105),900,!XF_HURTSOURCE,FALSE,900)
+TNT1 A 5 A_Explode((60),900,!XF_HURTSOURCE,FALSE,900)
 FadeOut:
 TNT1 A 1 A_FadeOut(0.5,1)
 Loop
@@ -1631,7 +1554,7 @@ Spawn:
 PART A 0
 Death:
 TNT1 A 0
-TNT1 A 5 A_Explode((120),1200,!XF_HURTSOURCE,FALSE,1200)
+TNT1 A 5 A_Explode((75),1200,!XF_HURTSOURCE,FALSE,1200)
 FadeOut:
 TNT1 A 1 A_FadeOut(0.5,1)
 Loop
@@ -2579,7 +2502,7 @@ States
 {
 Spawn:
 TNT1 A 0
-TNT1 A 0 A_Explode((20),64,0,0,64,0,"BulletPuff","Bounce")
+TNT1 A 0 A_Explode((40),64,0,0,64,0,"BulletPuff","Bounce")
 FadeOut:
 TNT1 A 1 A_FadeOut(1,1)
 Loop
