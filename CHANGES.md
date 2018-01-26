@@ -12,7 +12,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 ## Major
 * Xane's claw now pulls Xane up to whatever's above the spot it attached to. This can be seen in 1-2 near the end of the area.
 * Demos now use a CVAR (cl_demo) instead of using custom GameType checks. This increases compatibility with Delta Touch.
-* Render culling has been added! This improves performance in Delta Touch but limits how far you can see by abusing how polyobjects stop rendering behind them. Due to this, mobile devices can safely use the computer version's game data.
+* Render culling has been added! This improves performance in Delta Touch but limits how far you can see by abusing how polyobjects stop rendering behind them. Due to this, mobile devices now use the same data as computers.
+* Skyboxes no longer render on mobile or on computers if ***mma_mobile.pk3*** is loaded. This was done because even slopes can cause lag on mobile just by looking in their direction if a skyox using them is visible, such as the distant volcano in Hell City (1-1).
 ## Minor
 * Mary's House is now correctly referred to when spawning in it initially. Before, it was called "Small Hut".
 * A small area was added behind Jane in the Small Hut, which will be used for a later game mechanic.
