@@ -1504,7 +1504,7 @@ While(1)
 }*/
 
 bool moveskybox = TRUE;	//Set this to FALSE to make this script stop moving the skybox viewpoint based on player 1's movement.
-script "MoveSkybox" (void)
+script "MoveSkybox" (int x_offset, int y_offset)	//Offsets are set by the sky viewpoint. Make sure to set them correctly!
 {	
 	Thing_ChangeTID(0, 615);
 	
@@ -1513,17 +1513,19 @@ script "MoveSkybox" (void)
 	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||movesky[0]<=0||movesky[1]<=0) Terminate;
 	SetActivator(1000, AAPTR_PLAYER1);
 	
-	int skybox_x, skybox_y, skybox_z;
+	int skybox_x, skybox_y, skybox_z;	//This is where the skybox viewpoint object initially spawns in the small room near the skybox. It moves into the skybox using offsets.
 	skybox_x = GetActorX(615);
 	skybox_y = GetActorY(615);
 	skybox_z = GetActorZ(615);
+	x_offset = x_offset << 16;	//Convert the offses into floating point numbers.
+	y_offset = y_offset << 16;
+	
 	
 	While(moveskybox)
 	{
 		If(movesky[0]==0) movesky[0] = 16;	//Prevent division by zero by setting these to a slow-moving number like 16.
 		If(movesky[1]==0) movesky[1] = 16;
-		SetActorPosition(615, skybox_x+(GetActorX(1000)/movesky[0]), skybox_y+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
-		
+		SetActorPosition(615, (skybox_x+x_offset)+(GetActorX(1000)/movesky[0]), (skybox_y+y_offset)+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
 		Delay(1);
 	}
 }
@@ -3147,16 +3149,17 @@ While(1)
 			//wangles = GetActorAngle(GetCurrentPlayerTID()) >> 8;
 			
 			SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+wangles);
-
+			
 			wangles = 0;
-
+			
 			int vel;
 			int input_wd;
-
+			
+			cancelJump[PlayerNumber()] = TRUE;	//Cancel the player's jump.
 			vel = GetActorVelZ(0)/6+1.6;
 			
 			Delay(1);
-
+			
 			SetActorState(GetCurrentPlayerTID(),"WallJump");
 			
 			input_wd = 0;
@@ -3294,22 +3297,25 @@ script "VarJumpHeights" ENTER
 	int velocity;
 	While(1)
 	{ 
-		if(no_scripts[PlayerNumber()]==FALSE&&no_variable_jumping[PlayerNumber()]==FALSE&&GetActorZ(0)-GetActorFloorZ(0)>0.0&&GetActorVelZ(0)==3.75)
+		if(no_scripts[PlayerNumber()]==FALSE&&no_variable_jumping[PlayerNumber()]==FALSE&&GetActorZ(0)-GetActorFloorZ(0)>0.0&&GetActorZ(0)-GetActorFloorZ(0)<24.5&&openInput[PlayerNumber()] & BT_JUMP&&GetActorVelZ(0)==3.75)
 		{
 			//Print(f:GetActorVelZ(0));
+			//Log(s:"A jump has started!");
 			remaining_tics = var_remaining_tics[PlayerClass(PlayerNumber())];
 			velocity = var_velocity[PlayerClass(PlayerNumber())];
 			cancelJump[PlayerNumber()] = FALSE;
 			
 			Until(remaining_tics==0|| ( (StrParam(l:"MOBILE")!="YES"||GetCVAR("cl_demo")==TRUE) &&!(openInput[PlayerNumber()] & BT_JUMP) )||cancelJump[PlayerNumber()]==TRUE||no_variable_jumping[PlayerNumber()]==TRUE||spring[PlayerNumber()]>0)
 			{
+				//Log(s:"A jump is in progress supposedly!");
 				//Print(s:"REMAINING: ", d:remaining_tics, s:"\nVELOCITY ADDED: ", f:velocity);
-				remaining_tics--;
+				remaining_tics--; 
 				velocity -= var_decrease_velocity[PlayerClass(PlayerNumber())];
 				SetActorVelocity(GetCurrentPlayerTID(),0.0,0.0,velocity,TRUE,FALSE);
 				Delay(1);
 			}
 			
+			//If(cancelJump[PlayerNumber()]==TRUE) Log(s:"Cancelled the jump.");
 			cancelJump[PlayerNumber()] = FALSE;
 			
 			Until(GetActorVelZ(0)==0.0||GetActorZ(0)-GetActorFloorZ(0)==0.0) Delay(1);
@@ -3332,6 +3338,8 @@ script "HandleOpenInput" ENTER
 		Delay(1);
 	}
 }
+
+script "RequestJumpCancel" (void) { cancelJump[PlayerNumber()] = TRUE; }	//This is for DECORATE weapons.
 
 #define CONTROLLER_DEADZONE 0.0125	//How far a analog stick must move to be counted. Not to be confused with the in-game settings.
 #define CONTROLLER_RUNZONE 0.065	//How far a analog stick must move for the player to be refistered as "running".
@@ -3419,6 +3427,7 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 
   if(esc_loop == 2) Restart;
   detected[PlayerNumber()]++;
+  If(detected[PlayerNumber()]>1) cancelJump[PlayerNumber()] = TRUE;	//If an ability is about to be used, cancel the playr's jump. This only matters on mobile.
 		If(detected[PlayerNumber()]>=2&&PlayerClass(PlayerNumber())==CHAR_XANE)	//Air Puff
         {
 			//PrintBold(d:detected[PlayerNumber()]);
@@ -3587,7 +3596,7 @@ Script "XaneAntiCheat" ENTER //XAC (Xane Anti-Cheat)
 	While(1)
 	{
 		Delay(1);
-		While(GetCVAR("xane_allowstraferun")==FALSE)
+		While(GetCVAR("xane_controltype")==FALSE)	//FALSE here means mouse/keyboard. TRUE is for controllers and mobile devices.
 		{
 			Delay(1);
 			If(no_scripts[PlayerNumber()]==FALSE)
@@ -4122,7 +4131,7 @@ script "ForceRotateToAngle" (int affected, int reference)
 
 script "SpringBounce" (int tid, int type, int power) //Bounces the player in the direction of the "linked" thing like a spring.
 {	//First make sure it's on the whitelist here. If it isn't, it's not allowed to use springs, boost panels, and mid-air rings.
-	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "StupidIdea!")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "ReallyStupidIdea!")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
+	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
 	{
 	If(CheckActorClass(0, "FlowerProjectile3_1P")) SetActorState(0, "Launch");
 	bool extra_power = 0;	//This determines whether hitting this spring with Mary's hammer should increase its power.
@@ -4157,6 +4166,7 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 		boost_properties[PlayerNumber()] = 0;	//Remaining boost tics
 		boost_properties[MAX_PLAYERS+PlayerNumber()] = 0;	//X velocity
 		boost_properties[(MAX_PLAYERS*2)+PlayerNumber()] = 0;	//X velocity
+		cancelJump[PlayerNumber()] = TRUE;	//Cancel the player's current jump, if they're currently perfoming one.
 		
 		If(type==0||type>3) no_movement[PlayerNumber()] = 14;	//Don't let the player move for a second.
 
@@ -4323,7 +4333,7 @@ script "XaneDropDash" ENTER
 			If(tics_boost<1) { tics_boost = 0; Restart; }
 			Else
 			{
-				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { ACS_NamedExecute("LandingBounce",0,1,0,0); }
+				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { cancelJump[PlayerNumber()] = TRUE; ACS_NamedExecute("LandingBounce",0,1,0,0); }
 				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { TakeInventory("Animation2",1); GiveInventory("Animation2",1); }	//Animation #2 for Xane uses the claw.
 			}
 		}
@@ -4465,7 +4475,7 @@ script "XaneSwordDropAttackViewAnim" (int directionx)	//0 = down, 1 = up
 
 script "PlayEnemySpringSound" (void)
 {
-	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "StupidIdea!")==TRUE||CheckActorClass(0, "ReallyStupidIdea!")==TRUE) Terminate;	//If a player, terminate as Mary screams through other means.
+	if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE) Terminate;	//If a player, terminate as Mary screams through other means.
 	
 	If(CheckActorClass(0, "Troll")) ActivatorSound("troll/pain",255);
 	If(CheckActorClass(0, "Tiger1")) ActivatorSound("m3/pain",255);
@@ -4642,6 +4652,8 @@ script "ChangePlayerTIDs" enter
 	Thing_ChangeTID (0, 1000+PlayerNumber());
 	TakeInventory("PlayerNumberX",8);
 	GiveInventory("PlayerNumberX",PlayerNumber()+1);
+	
+	if(StrParam(l:"MOBILE")=="YES") SetCVAR("xane_controltype",1);
 
 	ACS_NamedExecuteAlways("ResetPlayer",0,0,0,0);
 
@@ -5907,8 +5919,8 @@ script "SuperFormCheck" (void)
 		
 		/*If(CheckInventory("SuperX")==TRUE)	//If the player is visiting a new level and is transformed, make sure they turn back into their transformed forms!
 		{
-			If(PlayerClass(PlayerNumber())==CHAR_MARY) MorphActor(1000, "StupidIdea!", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary
-			Else If(PlayerClass(PlayerNumber())==CHAR_XANE) MorphActor(1000, "ReallyStupidIdea!", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary						
+			If(PlayerClass(PlayerNumber())==CHAR_MARY) MorphActor(1000, "Remove meh", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary
+			Else If(PlayerClass(PlayerNumber())==CHAR_XANE) MorphActor(1000, "Remove meh", "", 32767, MRF_NEWTIDBEHAVIOUR|MRF_UNDOBYDEATHFORCED, "", "");	//Magical Cutie Mary						
 		}*/
 		//Log(d:GetLevelInfo(LEVELINFO_LEVELNUM), s:"/", d:gamemode);
 		//If(GetLevelInfo(LEVELINFO_LEVELNUM)!=0) stored_velocity[0] = 0;
@@ -6172,12 +6184,12 @@ script "DropCoins" (int number)
 
 	For(int i2 = 0; i2 < number; i2++)
 	{
-		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "StupidIdea!")==TRUE||CheckActorClass(0, "ReallyStupidIdea!")==TRUE)
+		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE)
 		{
 			If(CheckInventory("CoinSP")) { TakeInventory("CoinSP",1); /*total_coins--; totalcointics = CONSTANT_TCOINDISPTICS;*/ }
 			Else Terminate;
 		}
-		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE||CheckActorClass(0, "StupidIdea!")==TRUE||CheckActorClass(0, "ReallyStupidIdea!")==TRUE) SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,31,37/*Random(26,36),Random(35,40)*/,1.0,0);
+		if(CheckActorClass(0, "LGirlPlayer")==TRUE||CheckActorClass(0, "XanePlayer")==TRUE) SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,31,37/*Random(26,36),Random(35,40)*/,1.0,0);
 		else SpawnProjectile(0/*ActivatorTID()*/,"DroppedCoin",angle_divided * i2 + 1,24,33,1.0,0);
 	}
 
