@@ -636,22 +636,14 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	// If we still haven't found a suitable IWAD let's error out.
 	if (picks.Size() == 0)
 	{
-		I_FatalError ("Cannot find a game IWAD (doom.wad, doom2.wad, heretic.wad, etc.).\n"
-					  "Did you install " GAMENAME " properly? You can do either of the following:\n"
-					  "\n"
+		I_FatalError("The base game data couldn't be found. Make sure to download the \"Game Data\" from The X Site.\n"
+					"\n"
 #if defined(_WIN32)
-					  "1. Place one or more of these wads in the same directory as " GAMENAME ".\n"
-					  "2. Edit your " GAMENAMELOWERCASE "-username.ini and add the directories of your iwads\n"
-					  "to the list beneath [IWADSearch.Directories]");
-#elif defined(__APPLE__)
-					  "1. Place one or more of these wads in ~/Library/Application Support/" GAMENAMELOWERCASE "/\n"
-					  "2. Edit your ~/Library/Preferences/" GAMENAMELOWERCASE ".ini and add the directories\n"
-					  "of your iwads to the list beneath [IWADSearch.Directories]");
+					"Once downloaded, extract the contents of that ZIP file to the same directory this app/program is placed within.\n"
 #else
-					  "1. Place one or more of these wads in ~/.config/" GAMENAMELOWERCASE "/.\n"
-					  "2. Edit your ~/.config/" GAMENAMELOWERCASE "/" GAMENAMELOWERCASE ".ini and add the directories of your\n"
-					  "iwads to the list beneath [IWADSearch.Directories]");
+					"Once downloaded, extract the contents of that ZIP file to the same directory this executable is placed within.\n"
 #endif
+					"\nIf this doesn't fix the problem, you can try asking Xane at xanem1@gmail.com.");
 	}
 	int pick = 0;
 

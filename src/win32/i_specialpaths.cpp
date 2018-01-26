@@ -198,7 +198,7 @@ FString M_GetCachePath(bool create)
 	}
 	// Don't use GAME_DIR and such so that ZDoom and its child ports can
 	// share the node cache.
-	path += "/zdoom/cache";
+	path += "/Mary's Magical Adventure/cache";
 	path.Substitute("//", "/");	// needed because progdir ends with a slash.
 	if (create)
 	{
@@ -232,7 +232,7 @@ FString M_GetCajunPath(const char *botfilename)
 {
 	FString path;
 
-	path << progdir << "zcajun/" << botfilename;
+	path << progdir << "bots/" << botfilename;
 	if (!FileExists(path))
 	{
 		path = "";

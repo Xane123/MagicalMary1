@@ -8,6 +8,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The Black Room Glitch could occur when returning from a Special Stage due to previous commenting out of a check that prevented updating the player's last ground position while they're on top of pure black floor, resulting in the game warping them into the room rather than out of it.
 * If Mary Air Dashes onto the water, she'll stop displaying the Air Dash animation and will run properly on the water.
 * A minor sound oddity where a footstep sound would be heard every time Mary performed an Air Dash was fixed by adding a height check to the footstep sound ACS script. It's unknown what caused the random sound, though.
+* Added and additional height/button press check to the variable jump height script to prevent it activating after bouncing off of certain springs.
 ## Major
 * Xane's claw now pulls Xane up to whatever's above the spot it attached to. This can be seen in 1-2 near the end of the area.
 * Demos now use a CVAR (cl_demo) instead of using custom GameType checks. This increases compatibility with Delta Touch.
