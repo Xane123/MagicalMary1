@@ -45,13 +45,13 @@ script "Time" (int sec) { secsp = sec; }
 
 bool end = false;
 
-script "CheckStatus" ENTER
+script "CheckStatus" ENTER 
 {
 int total_time = 0;
 If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Terminate;
 If(cgem_count>=7&&GetCVAR("xane_debug")==FALSE) { Teleport_NewMap(ss_returnlevel,0); }	//Return the player to the level they left; They keep the monsters/items/secrets percentages when they return. Terminate; }	//Force the player out if they have all of th Chaos Bridges.
 //Also, if they aren't on the correct Special Stage, force them to there unless a demo is involed.
-If(cgem_count!=ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)&&GameType()!=GAME_DEMORECORD&&GameType()!=GAME_DEMOREPLAY&&GetCVAR("xane_debug")==FALSE) { ChangeLevel(StrParam(s:"SPECSTG", d:cgem_count+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());/*ACS_NamedExecute("ExitSpecialStage",0,0,0,0);*/ Terminate; }
+If(cgem_count!=ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)&&GetCVAR("cl_demo")==FALSE&&GetCVAR("xane_debug")==FALSE) { ChangeLevel(StrParam(s:"SPECSTG", d:cgem_count+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());/*ACS_NamedExecute("ExitSpecialStage",0,0,0,0);*/ Terminate; }
 Delay(1);
 Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper before displaying the level title card.
 TakeActorInventory(1000 + PlayerNumber(),"CoinSP",999);
@@ -415,7 +415,7 @@ If(1)
 			secsp--;
 			timerx = 0;
 			
-			if(secsp==30&&clock_appeared==FALSE&&GameType()!=GAME_DEMOREPLAY&&GameSkill()<2)
+			if(secsp==30&&clock_appeared==FALSE&&GetCVAR("cl_demo")==FALSE&&GameSkill()<2)
 			{
 				PrintBold(l:"SS_CLOCKAPPEARED1");
 				If(SpawnForced("SpecialStageTimeBonus",GetActorX(0),GetActorY(0),GetActorZ(0)+128.5,950,0)) clock_appeared = TRUE;
