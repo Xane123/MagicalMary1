@@ -86,13 +86,18 @@ CUSTOM_CVAR(Int, gl_shadowmap_quality, 512, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	switch (self)
 	{
+	case 2048:
+	case 4096:
+		Printf("WARNING: shadowmaps are set to a very high number!");
+	case 32:
+	case 64:
 	case 128:
 	case 256:
 	case 512:
 	case 1024:
 		break;
 	default:
-		self = 128;
+		self = 512;
 		break;
 	}
 }

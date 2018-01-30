@@ -2143,10 +2143,14 @@ OptionValue VRMode
 
 OptionValue ShadowMapQuality
 {
-	128, "128"
-	256, "256"
-	512, "512"
-	1024, "1024"
+	32, "Abysmal"
+	64, "Very low"
+	128, "Low"
+	256, "Medium"
+	512, "High"
+	1024, "Very High"
+	2048, "High-tech"
+	4096, "Insane"
 }
 
 OptionMenu "GLTextureGLOptions" protected
