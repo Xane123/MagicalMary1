@@ -1345,7 +1345,7 @@ void D_DoAdvanceDemo (void)
 	case 0:
 		gamestate = GS_DEMOSCREEN;
 		pagename = gameinfo.TitlePage;
-		pagetic = (int)(gameinfo.titleTime * TICRATE);
+		pagetic = 0;	//pagetic = (int)(gameinfo.titleTime * TICRATE);
 		S_ChangeMusic (gameinfo.titleMusic, gameinfo.titleOrder, false);
 		demosequence = 3;
 		pagecount = 0;
@@ -1353,13 +1353,14 @@ void D_DoAdvanceDemo (void)
 		break;
 
 	case 2:
-		pagetic = (int)(gameinfo.pageTime * TICRATE);
+		pagetic = 0;
+		/*pagetic = (int)(gameinfo.pageTime * TICRATE);
 		gamestate = GS_DEMOSCREEN;
 		if (gameinfo.creditPages.Size() > 0)
 		{
 			pagename = gameinfo.creditPages[pagecount];
 			pagecount = (pagecount+1) % gameinfo.creditPages.Size();
-		}
+		}*/
 		demosequence = 1;
 		break;
 	}

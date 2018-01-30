@@ -265,12 +265,12 @@ long FileReaderZ::Read (void *buffer, long len)
 
 	if (err != Z_OK && err != Z_STREAM_END)
 	{
-		I_Error ("Corrupt zlib stream");
+		I_FatalError ("Corrupt zlib stream");
 	}
 
 	if (Stream.avail_out != 0)
 	{
-		I_Error ("Ran out of data in zlib stream");
+		I_FatalError ("Ran out of data in zlib stream");
 	}
 
 	return len - Stream.avail_out;
