@@ -1,4 +1,4 @@
-//Only one "IWAD" matters.
+// Must be sorted in identification order (easiest to recognize first!)
 
 IWad
 {

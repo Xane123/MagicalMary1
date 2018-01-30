@@ -215,7 +215,7 @@ int				lookspeed[2] = {450, 512};
 
 CVAR (Bool,		cl_run,			false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always run?
 CVAR (Bool,		invertmouse,	false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Invert mouse look down/up?
-CVAR (Bool,		freelook,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
+CVAR (Bool,		freelook,		true,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always mlook?
 CVAR (Bool,		lookstrafe,		false,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Always strafe with mouse?
 CVAR (Float,	m_pitch,		1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)		// Mouse speeds
 CVAR (Float,	m_yaw,			1.f,	CVAR_GLOBALCONFIG|CVAR_ARCHIVE)
@@ -2599,7 +2599,7 @@ void G_DeferedPlayDemo (const char *name)
 	gameaction = (gameaction == ga_loadgame) ? ga_loadgameplaydemo : ga_playdemo;
 }
 
-CCMD (playdemo)
+UNSAFE_CCMD (playdemo)
 {
 	if (netgame)
 	{
@@ -2618,7 +2618,7 @@ CCMD (playdemo)
 	}
 }
 
-CCMD (timedemo)
+UNSAFE_CCMD (timedemo)
 {
 	if (argv.argc() > 1)
 	{

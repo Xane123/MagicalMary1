@@ -130,9 +130,9 @@ CUSTOM_CVAR(Bool, hud_aspectscale, false, CVAR_ARCHIVE)
 
 CVAR (Int, crosshair, -2, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
-CVAR (Color, crosshaircolor, 0xcc88ff, CVAR_ARCHIVE);
+CVAR (Color, crosshaircolor, 0x8844ff, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
-CVAR (Float, crosshairscale, 0.35, CVAR_ARCHIVE);
+CVAR (Float, crosshairscale, 1.0, CVAR_ARCHIVE);
 CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
@@ -883,7 +883,7 @@ void DBaseStatusBar::DrawCrosshair ()
 
 		if (health >= 85)
 		{
-			color = 0x00ff00;
+			color = 0x8844ff;
 		}
 		else 
 		{
@@ -1131,7 +1131,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 	{
 		screen->DrawText (SmallFont, CR_TAN, 0, GetTopOfStatusbar() - 40 * CleanYfac,
 			"Demo was recorded with a different version\n"
-			"of " GAMENAME ". Expect Mary to behave stupidly.",
+			"of " GAMENAME ". Expect it to go out of sync.",
 			DTA_CleanNoMove, true, TAG_DONE);
 	}
 
@@ -1204,7 +1204,7 @@ void DBaseStatusBar::DrawConsistancy () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Far of crap yeah:");
+				strcpy (conbuff, "Out of sync with:");
 				buff_p = conbuff + 17;
 			}
 			*buff_p++ = ' ';
@@ -1220,7 +1220,7 @@ void DBaseStatusBar::DrawConsistancy () const
 			firsttime = false;
 			if (debugfile)
 			{
-				fprintf (debugfile, "%s as Pa rit %d (%d)\n", conbuff,
+				fprintf (debugfile, "%s as of tic %d (%d)\n", conbuff,
 					players[1-consoleplayer].inconsistant,
 					players[1-consoleplayer].inconsistant/ticdup);
 			}
@@ -1247,7 +1247,7 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Farting on: ");
+				strcpy (conbuff, "Waiting for:");
 				buff_p = conbuff + 12;
 			}
 			*buff_p++ = ' ';

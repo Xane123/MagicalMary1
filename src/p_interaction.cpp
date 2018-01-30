@@ -931,7 +931,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	int fakeDamage = 0;
 	int holdDamage = 0;
 	const int rawdamage = damage;
-	const bool telefragDamage = 0;// (rawdamage >= TELEFRAG_DAMAGE);
+	const bool telefragDamage = 0;	//(rawdamage >= TELEFRAG_DAMAGE);
 	
 	if (damage < 0) damage = 0;
 
@@ -950,7 +950,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	}
 
 	// Spectral targets only take damage from spectral projectiles.
-	if (target->flags4 & MF4_SPECTRAL)
+	if (target->flags4 & MF4_SPECTRAL /*&& !telefragDamage*/)
 	{
 		if (inflictor == NULL || !(inflictor->flags4 & MF4_SPECTRAL))
 		{
@@ -980,7 +980,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	// different here. At any rate, invulnerable is being checked before type factoring, which is then being 
 	// checked by player cheats/invul/buddha followed by monster buddha. This is inconsistent. Don't let the 
 	// original telefrag damage CHECK (rawdamage) be influenced by outside factors when looking at cheats/invul.
-	if ((target->flags2 & MF2_INVULNERABLE) && (!(flags & DMG_FORCED)))
+	if ((target->flags2 & MF2_INVULNERABLE) && /*!telefragDamage &&*/ (!(flags & DMG_FORCED)))
 	{ // actor is invulnerable
 		if (target->player == NULL)
 		{
@@ -1304,7 +1304,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 		if (!(flags & DMG_FORCED))
 		{
 			// check the real player, not a voodoo doll here for invulnerability effects
-			if ((((player->mo->flags2 & MF2_INVULNERABLE) ||
+			if ((/*!telefragDamage &&*/ ((player->mo->flags2 & MF2_INVULNERABLE) ||
 				(player->cheats & CF_GODMODE))) ||
 				(player->cheats & CF_GODMODE2) || (player->mo->flags5 & MF5_NODAMAGE))
 				//Absolutely no hurting if NODAMAGE is involved. Same for GODMODE2.
@@ -1380,7 +1380,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 			// [MC]Buddha2 absorbs telefrag damage, and anything else thrown their way.
 			if (!(flags & DMG_FORCED) && (((player->cheats & CF_BUDDHA2) || (((player->cheats & CF_BUDDHA) ||
 				(player->mo->FindInventory (PClass::FindActor(NAME_PowerBuddha),true) != nullptr) ||
-				(player->mo->flags7 & MF7_BUDDHA)))) && (player->playerstate != PST_DEAD)))
+				(player->mo->flags7 & MF7_BUDDHA)) /*&& !telefragDamage*/)) && (player->playerstate != PST_DEAD)))
 			{
 				// If this is a voodoo doll we need to handle the real player as well.
 				player->mo->health = target->health = player->health = 1;
@@ -1466,7 +1466,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	if (target->health <= 0)
 	{ 
 		//[MC]Buddha flag for monsters.
-		if (!(flags & DMG_FORCED) && ((target->flags7 & MF7_BUDDHA) && ((inflictor == NULL || !(inflictor->flags7 & MF7_FOILBUDDHA)) && !(flags & DMG_FOILBUDDHA))))
+		if (!(flags & DMG_FORCED) && ((target->flags7 & MF7_BUDDHA) && /*!telefragDamage &&*/ ((inflictor == NULL || !(inflictor->flags7 & MF7_FOILBUDDHA)) && !(flags & DMG_FOILBUDDHA))))
 		{ //FOILBUDDHA or Telefrag damage must kill it.
 			target->health = 1;
 		}
@@ -1877,7 +1877,7 @@ void P_PoisonDamage (player_t *player, AActor *source, int damage, bool playPain
 	{
 		return;
 	}
-	if ((((target->flags2 & MF2_INVULNERABLE) ||
+	if ((/*damage < TELEFRAG_DAMAGE &&*/ ((target->flags2 & MF2_INVULNERABLE) ||
 		(player->cheats & CF_GODMODE))) || (player->cheats & CF_GODMODE2))
 	{ // target is invulnerable
 		return;
@@ -1917,7 +1917,7 @@ void P_PoisonDamage (player_t *player, AActor *source, int damage, bool playPain
 	if (target->health <= 0)
 	{ // Death
 		if ((((player->cheats & CF_BUDDHA) || (player->cheats & CF_BUDDHA2) ||
-			(player->mo->flags7 & MF7_BUDDHA))) ||
+			(player->mo->flags7 & MF7_BUDDHA))/* && damage < TELEFRAG_DAMAGE*/) ||
 			(player->mo->FindInventory (PClass::FindActor(NAME_PowerBuddha),true) != nullptr))
 		{ // [SP] Save the player... 
 			player->health = target->health = 1;
@@ -1993,6 +1993,15 @@ CCMD (kill)
 			Net_WriteByte (DEM_GENERICCHEAT);
 			Net_WriteByte (CHT_MASSACRE2);
 		}
+		else if (!stricmp(argv[1], "self"))
+		{
+			// If suiciding is disabled, then don't do it.
+			if (dmflags2 & DF2_NOSUICIDE)
+				return;
+
+			// Kill the player
+			Net_WriteByte(DEM_SUICIDE);
+		}
 		else
 		{
 			Net_WriteByte (DEM_KILLCLASSCHEAT);
@@ -2002,13 +2011,13 @@ CCMD (kill)
 	else
 	{
 		// If suiciding is disabled, then don't do it.
-		if (dmflags2 & DF2_NOSUICIDE)
-			return;
+		//if (dmflags2 & DF2_NOSUICIDE)
+		//	return;
 
 		// Kill the player
-		Net_WriteByte (DEM_SUICIDE);
+		//Net_WriteByte (DEM_SUICIDE);
 	}
-	C_HideConsole ();
+	//C_HideConsole ();
 }
 
 CCMD(remove)
@@ -2020,7 +2029,7 @@ CCMD(remove)
 
 		Net_WriteByte(DEM_REMOVE);
 		Net_WriteString(argv[1]);
-		C_HideConsole();
+		//C_HideConsole();
 	}
 	else
 	{

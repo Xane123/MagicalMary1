@@ -147,7 +147,7 @@ CUSTOM_CVAR(Bool, gl_paltonemap_reverselookup, true, CVAR_ARCHIVE | CVAR_NOINITC
 		GLRenderer->ClearTonemapPalette();
 }
 
-CVAR(Float, gl_menu_blur, 0.5f, CVAR_ARCHIVE)
+CVAR(Float, gl_menu_blur, -1.0f, CVAR_ARCHIVE)
 
 EXTERN_CVAR(Float, vid_brightness)
 EXTERN_CVAR(Float, vid_contrast)
@@ -161,12 +161,13 @@ void FGLRenderer::RenderScreenQuad()
 	GLRenderer->mVBO->RenderArray(GL_TRIANGLE_STRIP, FFlatVertexBuffer::PRESENT_INDEX, 4);
 }
 
-void FGLRenderer::PostProcessScene(int fixedcm)
+void FGLRenderer::PostProcessScene(int fixedcm, const std::function<void()> &afterBloomDrawEndScene2D)
 {
 	mBuffers->BlitSceneToTexture();
 	UpdateCameraExposure();
 	mCustomPostProcessShaders->Run("beforebloom");
 	BloomScene(fixedcm);
+	afterBloomDrawEndScene2D();
 	TonemapScene();
 	ColormapScene(fixedcm);
 	LensDistortScene();

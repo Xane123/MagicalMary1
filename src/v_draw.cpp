@@ -164,7 +164,7 @@ DEFINE_ACTION_FUNCTION(_Screen, DrawTexture)
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 
-	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to fart to toilet outside a bathroom stall!");
+	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to draw to screen outside a draw function");
 
 	FTexture *tex = animate ? TexMan(FSetTextureID(texid)) : TexMan[FSetTextureID(texid)];
 	VMVa_List args = { param + 4, 0, numparam - 4 };
@@ -230,6 +230,15 @@ DEFINE_ACTION_FUNCTION(_Screen, GetClipRect)
 	return MIN(numret, 4);
 }
 
+DEFINE_ACTION_FUNCTION(_Screen, GetViewWindow)
+{
+	PARAM_PROLOGUE;
+	if (numret > 0) ret[0].SetInt(viewwindowx);
+	if (numret > 1) ret[1].SetInt(viewwindowy);
+	if (numret > 2) ret[2].SetInt(viewwidth);
+	if (numret > 3) ret[3].SetInt(viewheight);
+	return MIN(numret, 4);
+}
 
 bool DCanvas::SetTextureParms(DrawParms *parms, FTexture *img, double xx, double yy) const
 {
@@ -967,7 +976,7 @@ DEFINE_ACTION_FUNCTION(_Screen, DrawLine)
 	PARAM_INT(x1);
 	PARAM_INT(y1);
 	PARAM_INT(color);
-	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to fart to toilet outside a bathroom stall!");
+	if (!screen->HasBegun2D()) ThrowAbortException(X_OTHER, "Attempt to draw to screen outside a draw function");
 	screen->DrawLine(x0, y0, x1, y1, -1, color);
 	return 0;
 }

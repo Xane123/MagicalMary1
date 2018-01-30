@@ -79,16 +79,16 @@ static bool DoSubstitution (FString &out, const char *in);
 static int len;
 static uint8_t ChatQueue[QUEUESIZE];
 
-CVAR (String, chatmacro1, "I will kick your butt!", CVAR_ARCHIVE)
-CVAR (String, chatmacro2, "Eh, I'm fine.", CVAR_ARCHIVE)
-CVAR (String, chatmacro3, "Something's about to defeat me!", CVAR_ARCHIVE)
-CVAR (String, chatmacro4, "Hey, guys, help!", CVAR_ARCHIVE)
-CVAR (String, chatmacro5, "You suck at MMA!", CVAR_ARCHIVE)
-CVAR (String, chatmacro6, "Heh, try harder next time.", CVAR_ARCHIVE)
-CVAR (String, chatmacro7, "Get over here!", CVAR_ARCHIVE)
-CVAR (String, chatmacro8, "I've got this.", CVAR_ARCHIVE)
-CVAR (String, chatmacro9, "Yeah!", CVAR_ARCHIVE)
-CVAR (String, chatmacro0, "No.", CVAR_ARCHIVE)
+CVAR (String, chatmacro1, "I'm ready to kick butt!", CVAR_ARCHIVE)
+CVAR (String, chatmacro2, "I'm OK.", CVAR_ARCHIVE)
+CVAR (String, chatmacro3, "I'm not looking too good!", CVAR_ARCHIVE)
+CVAR (String, chatmacro4, "Help!", CVAR_ARCHIVE)
+CVAR (String, chatmacro5, "You suck!", CVAR_ARCHIVE)
+CVAR (String, chatmacro6, "Next time, scumbag...", CVAR_ARCHIVE)
+CVAR (String, chatmacro7, "Come here!", CVAR_ARCHIVE)
+CVAR (String, chatmacro8, "I'll take care of it.", CVAR_ARCHIVE)
+CVAR (String, chatmacro9, "Yes", CVAR_ARCHIVE)
+CVAR (String, chatmacro0, "No", CVAR_ARCHIVE)
 
 FStringCVar *chat_macros[10] =
 {

@@ -198,7 +198,7 @@ FString M_GetCachePath(bool create)
 	}
 	// Don't use GAME_DIR and such so that ZDoom and its child ports can
 	// share the node cache.
-	path += "/Mary's Magical Adventure/cache";
+	path += "/mma/cache";
 	path.Substitute("//", "/");	// needed because progdir ends with a slash.
 	if (create)
 	{
@@ -232,7 +232,7 @@ FString M_GetCajunPath(const char *botfilename)
 {
 	FString path;
 
-	path << progdir << "bots/" << botfilename;
+	path << progdir << "zcajun/" << botfilename;
 	if (!FileExists(path))
 	{
 		path = "";
@@ -253,18 +253,47 @@ FString M_GetCajunPath(const char *botfilename)
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
+	//HRESULT hr;
 
 	path.Format("%s" GAMENAME "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
 	{
 		return path;
 	}
-
 	path = "";
-	path = progdir;
 
-	// Couldn't get user name, so just use zdoom.ini
-		path += GAMENAMELOWERCASE ".ini";
+	// Construct a user-specific config name
+	/*if (UseKnownFolders() && GetKnownFolder(CSIDL_APPDATA, FOLDERID_RoamingAppData, true, path))
+	{
+		path += "/" GAME_DIR;
+		CreatePath(path);
+		path += "/" GAMENAMELOWERCASE ".ini";
+	}
+	else
+	{ // construct "$PROGDIR/zdoom-$USER.ini"
+		TCHAR uname[UNLEN+1];
+		DWORD unamelen = countof(uname);
+
+		path = progdir;
+		hr = GetUserName(uname, &unamelen);
+		if (SUCCEEDED(hr) && uname[0] != 0)
+		{
+			// Is it valid for a user name to have slashes?
+			// Check for them and substitute just in case.
+			char *probe = uname;
+			while (*probe != 0)
+			{
+				if (*probe == '\\' || *probe == '/')
+					*probe = '_';
+				++probe;
+			}
+			path << GAMENAMELOWERCASE "-" << uname << ".ini";
+		}
+		else
+		*/{ // Couldn't get user name, so just use zdoom.ini
+			path += GAMENAMELOWERCASE ".ini";
+		}
+	//}
 
 	// If we are reading the config file, check if it exists. If not, fallback
 	// to $PROGDIR/zdoom.ini
@@ -296,9 +325,22 @@ FString M_GetScreenshotsPath()
 {
 	FString path;
 
-	path = progdir;
-	path << "/shots/";
-
+	if (!UseKnownFolders())
+	{
+		return progdir;
+	}
+	else if (GetKnownFolder(-1, MyFOLDERID_Screenshots, true, path))
+	{
+		path << "/" GAMENAME;
+	}
+	else if (GetKnownFolder(CSIDL_MYPICTURES, FOLDERID_Pictures, true, path))
+	{
+		path << "/Screenshots/" GAMENAME;
+	}
+	else
+	{
+		return progdir;
+	}
 	CreatePath(path);
 	return path;
 }
@@ -315,10 +357,27 @@ FString M_GetSavegamesPath()
 {
 	FString path;
 
-	path = progdir;
-	path << "/saves/";
-
-	CreatePath(path);
+	if (!UseKnownFolders())
+	{
+		return progdir;
+	}
+	// Try standard Saved Games folder
+	else if (GetKnownFolder(-1, FOLDERID_SavedGames, true, path))
+	{
+		path << "/" GAMENAME;
+	}
+	// Try defacto My Documents/My Games folder
+	else if (GetKnownFolder(CSIDL_PERSONAL, FOLDERID_Documents, true, path))
+	{
+		// I assume since this isn't a standard folder, it doesn't have
+		// a localized name either.
+		path << "/My Games/" GAMENAME;
+		CreatePath(path);
+	}
+	else
+	{
+		path = progdir;
+	}
 	return path;
 }
 

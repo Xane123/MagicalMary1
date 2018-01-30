@@ -45,7 +45,11 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "v1.87-dev"//"3.3pre"
+//#ifdef GIT_DESCRIPTION
+//#define VERSIONSTR GIT_DESCRIPTION
+//#else
+#define VERSIONSTR "3.3pre"
+//#endif
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 3,2,9999,0
@@ -99,12 +103,12 @@ const char *GetVersionString();
 #define GAMENAME "Mary's Magical Adventure"
 #define GAMENAMELOWERCASE "Settings"
 #define FORUM_URL "http://forum.zdoom.org/"
-#define BUGS_FORUM_URL	"mailto:xanem1@gmail.com (Xane won't really be able to help but oh well.)"
+#define BUGS_FORUM_URL	"http://forum.zdoom.org/viewforum.php?f=2"
 
 #if defined(__APPLE__) || defined(_WIN32)
-#define GAME_DIR GAMESIG
+#define GAME_DIR GAMENAME
 #else
-#define GAME_DIR ".config/" GAMENAMELOWERCASE
+#define GAME_DIR ".config/" GAMENAME
 #endif
 
 

@@ -2367,7 +2367,7 @@ void FBehavior::SerializeVarSet (FSerializer &arc, int32_t *vars, int max)
 
 static int ParseLocalArrayChunk(void *chunk, ACSLocalArrays *arrays, int offset)
 {
-	unsigned count = (LittleShort(static_cast<unsigned short>(((unsigned *)chunk)[1]) - 2)) / 4;
+	unsigned count = LittleShort(static_cast<unsigned short>(((unsigned *)chunk)[1] - 2)) / 4;
 	int *sizes = (int *)((uint8_t *)chunk + 10);
 	arrays->Count = count;
 	if (count > 0)
@@ -9852,7 +9852,7 @@ scriptwait:
 			if (STACK(2) != 0)
 			{
 				AActor *marine;
-				NActorIterator iterator("ScriptedMarine", STACK(2));
+				NActorIterator iterator(NAME_ScriptedMarine, STACK(2));
 
 				while ((marine = iterator.Next()) != NULL)
 				{
@@ -9861,7 +9861,7 @@ scriptwait:
 			}
 			else
 			{
-				if (activator != nullptr && activator->IsKindOf (PClass::FindClass("ScriptedMarine")))
+				if (activator != nullptr && activator->IsKindOf (NAME_ScriptedMarine))
 				{
 					SetMarineWeapon(activator, STACK(1));
 				}
@@ -9878,7 +9878,7 @@ scriptwait:
 					if (STACK(2) != 0)
 					{
 						AActor *marine;
-						NActorIterator iterator("ScriptedMarine", STACK(2));
+						NActorIterator iterator(NAME_ScriptedMarine, STACK(2));
 
 						while ((marine = iterator.Next()) != NULL)
 						{
@@ -9887,7 +9887,7 @@ scriptwait:
 					}
 					else
 					{
-						if (activator != nullptr && activator->IsKindOf("ScriptedMarine"))
+						if (activator != nullptr && activator->IsKindOf(NAME_ScriptedMarine))
 						{
 							SetMarineSprite(activator, type);
 						}

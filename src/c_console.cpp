@@ -481,32 +481,32 @@ FILE *Logfile = NULL;
 
 FIntCVar msglevel ("msg", 0, CVAR_ARCHIVE);
 
-CUSTOM_CVAR (Int, msg0color, 6, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msg0color, 24, CVAR_ARCHIVE)
 {
 	setmsgcolor (0, self);
 }
 
-CUSTOM_CVAR (Int, msg1color, 5, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msg1color, 6, CVAR_ARCHIVE)
 {
 	setmsgcolor (1, self);
 }
 
-CUSTOM_CVAR (Int, msg2color, 2, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msg2color, 19, CVAR_ARCHIVE)
 {
 	setmsgcolor (2, self);
 }
 
-CUSTOM_CVAR (Int, msg3color, 3, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msg3color, 1, CVAR_ARCHIVE)
 {
 	setmsgcolor (3, self);
 }
 
-CUSTOM_CVAR (Int, msg4color, 3, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msg4color, 8, CVAR_ARCHIVE)
 {
 	setmsgcolor (4, self);
 }
 
-CUSTOM_CVAR (Int, msgmidcolor, 5, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msgmidcolor, 21, CVAR_ARCHIVE)
 {
 	setmsgcolor (PRINTLEVELS, self);
 }
@@ -627,7 +627,7 @@ void C_InitConsole (int width, int height, bool ingame)
 //
 //==========================================================================
 
-CCMD (atexit)
+UNSAFE_CCMD (atexit)
 {
 	if (argv.argc() == 1)
 	{

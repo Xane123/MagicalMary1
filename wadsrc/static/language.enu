@@ -1682,6 +1682,7 @@ OPTMNU_CHANGERENDER		= "Change Rendering Output";
 OPTMNU_DEFAULTS				= "Reset to defaults";
 OPTMNU_RESETTOSAVED			= "Reset to last saved";
 OPTMNU_CONSOLE				= "Go to console";
+OPTMNU_REVERB				= "Reverb environment editor";
 
 // Controls Menu
 
@@ -2728,7 +2729,7 @@ GLPREFMNU_AMBLIGHT 				= "Ambient light level";
 GLPREFMNU_RENDERQUALITY 		= "Rendering quality";
 GLPREFMNU_MENUBLUR				= "Menu Blur";
 GLPREFMNU_VRMODE 				= "Stereo 3D VR";
-GLPREFMNU_VRQUADSTEREO 			= "Enable Quad Stereo (Requires Restart)";
+GLPREFMNU_VRQUADSTEREO 			= "Enable Quad Stereo";
 GLPREFMNU_MULTISAMPLE			= "Multisample";
 GLPREFMNU_TONEMAP				= "Tonemap Mode";
 GLPREFMNU_BLOOM					= "Bloom effect";

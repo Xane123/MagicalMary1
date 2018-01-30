@@ -52,7 +52,7 @@
 #include "v_text.h"
 
 CVAR (Bool, queryiwad, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR (String, defaultiwad, "Mary's Magical Adventure", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (String, defaultiwad, "mma_data.pk3", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 
 //==========================================================================
 //
@@ -637,14 +637,14 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	if (picks.Size() == 0)
 	{
 		I_FatalError("The base game data couldn't be found. Make sure to download the \"Game Data\" from The X Site.\n"
-					"\n"
-#if defined(_WIN32)
-					"Once downloaded, extract the contents of that ZIP file to the same directory this app/program is placed within.\n"
-#else
-					"Once downloaded, extract the contents of that ZIP file to the same directory this executable is placed within.\n"
-#endif
-					"\nIf this doesn't fix the problem, you can try asking Xane at xanem1@gmail.com.");
+			"\n"
+	#if defined(_WIN32)
+			"Once downloaded, extract the contents of that ZIP file to the same directory this app/program is placed within.\n");
+	#else
+			"Once downloaded, extract the contents of that ZIP file to the same directory this executable is placed within.\n");
+	#endif
 	}
+
 	int pick = 0;
 
 	// We got more than one so present the IWAD selection box.

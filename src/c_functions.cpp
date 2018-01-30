@@ -42,8 +42,8 @@
 void C_PrintInfo(AActor *target, bool verbose)
 {
 	if (target->player)
-		Printf("This is a player, %s! Say hi! ", target->player->userinfo.GetName());
-	Printf("This is a %s with %d health left. It started with %d health.\n",
+		Printf("Player=%s, ", target->player->userinfo.GetName());
+	Printf("Class=%s, Health=%d, Spawnhealth=%d\n",
 		target->GetClass()->TypeName.GetChars(),
 		target->health,
 		target->SpawnHealth());
@@ -68,9 +68,9 @@ void C_PrintInv(AActor *target)
 	}
 
 	if (target->player)
-		Printf("They are carrying '%s':\n", target->player->userinfo.GetName());
+		Printf("Inventory for Player '%s':\n", target->player->userinfo.GetName());
 	else
-		Printf("It's carrying '%s':\n", target->GetClass()->TypeName.GetChars());
+		Printf("Inventory for Target '%s':\n", target->GetClass()->TypeName.GetChars());
 
 	for (item = target->Inventory; item != NULL; item = item->Inventory)
 	{
@@ -79,6 +79,6 @@ void C_PrintInv(AActor *target)
 			item->Amount, item->MaxAmount);
 		count++;
 	}
-	Printf ("This list is rated %d/10!\n", count);
+	Printf ("  List count: %d\n", count);
 }
 

@@ -983,18 +983,18 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 		{
 			ExpVal constval = static_cast<FxConstant *>(basex)->GetValue();
 			FxExpression *x = new FxConstant(constval.GetInt(), ScriptPosition);
-			/*if (constval.GetInt() != constval.GetFloat())
+			if (constval.GetInt() != constval.GetFloat())
 			{
-				ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
-			}*/
+				//ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
+			}
 
 			delete this;
 			return x;
 		}
-		/*else if (!NoWarn)
+		else if (!NoWarn)
 		{
-			ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
-		}*/
+			//ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
+		}
 
 		return this;
 	}
@@ -1009,7 +1009,7 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 			return x;
 		}
 	}
-	ScriptPosition.Message(MSG_ERROR, "Numeric fart expected.");
+	ScriptPosition.Message(MSG_ERROR, "Numeric type expected");
 	delete this;
 	return nullptr;
 }
@@ -8935,7 +8935,7 @@ FxExpression *FxVMFunctionCall::Resolve(FCompileContext& ctx)
 			else
 			{
 				bool writable;
-				ArgList[i] = ArgList[i]->Resolve(ctx);	// nust be resolved before the address is requested.
+				ArgList[i] = ArgList[i]->Resolve(ctx);	// must be resolved before the address is requested.
 				if (ArgList[i] != nullptr && ArgList[i]->ValueType != TypeNullPtr)
 				{
 					if (type == ArgList[i]->ValueType && type->isRealPointer() && type->toPointer()->PointedType->isStruct())
@@ -9378,6 +9378,13 @@ FxExpression *FxStrLen::Resolve(FCompileContext &ctx)
 {
 	SAFE_RESOLVE(Self, ctx);
 	assert(Self->ValueType == TypeString);
+	if (Self->isConstant())
+	{
+		auto constself = static_cast<FxConstant *>(Self);
+		auto constlen = new FxConstant((int)constself->GetValue().GetString().Len(), Self->ScriptPosition);
+		delete this;
+		return constlen->Resolve(ctx);
+	}
 	ValueType = TypeUInt32;
 	return this;
 }

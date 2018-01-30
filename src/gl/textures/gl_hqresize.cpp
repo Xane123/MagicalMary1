@@ -48,7 +48,7 @@
 
 #include "parallel_for.h"
 
-CUSTOM_CVAR(Int, gl_texture_hqresize, 10, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
+CUSTOM_CVAR(Int, gl_texture_hqresize, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
 	if (self < 0 || self > 16)
 	{

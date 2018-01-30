@@ -474,7 +474,6 @@ endif()
 # Start defining source files for ZDoom
 set( PLAT_WIN32_SOURCES
 	sound/mididevices/music_win_mididevice.cpp
-	win32/eaxedit.cpp
 	win32/critsec.cpp
 	win32/fb_d3d9.cpp
 	win32/fb_d3d9_wipe.cpp
@@ -512,7 +511,7 @@ set( PLAT_SDL_SOURCES
 	posix/sdl/st_start.cpp )
 set( PLAT_UNIX_SOURCES
 	posix/unix/i_specialpaths.cpp
-	posix/unix/iwadpicker_gtk.cpp )
+	posix/unix/gtk_dialogs.cpp )
 set( PLAT_OSX_SOURCES
 	posix/osx/iwadpicker_cocoa.mm
 	posix/osx/i_specialpaths.mm

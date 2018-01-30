@@ -81,9 +81,9 @@
 
 FGameConfigFile *GameConfig;
 
-CVAR(Bool, screenshot_quiet, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(Bool, screenshot_quiet, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(String, screenshot_type, "png", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR(String, screenshot_dir, "./shots/", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(String, screenshot_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 EXTERN_CVAR(Bool, longsavemessages);
 
 static long ParseCommandLine (const char *args, int *argc, char **argv);
@@ -315,7 +315,7 @@ void M_SaveDefaultsFinal ()
 	GameConfig = NULL;
 }
 
-CCMD (writeini)
+UNSAFE_CCMD (writeini)
 {
 	const char *filename = (argv.argc() == 1) ? NULL : argv[1];
 	if (!M_SaveDefaults (filename))
@@ -673,7 +673,7 @@ void M_ScreenShot (const char *filename)
 	}
 }
 
-CCMD (screenshot)
+UNSAFE_CCMD (screenshot)
 {
 	if (argv.argc() == 1)
 		G_ScreenShot (NULL);
