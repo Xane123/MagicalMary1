@@ -23,3 +23,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * ZDoom's built-in purple text color was modified to be lighter and more pink to fit Mary and the game's overall girly color scheme.
 * New "songs" were added to the radio in 1-3. "Oh-Ah, Oh-La" replaces "Foreign Song", which wasn't up to the other songs' standards. "My Michael Floatie" and "Monster Finger Owl" are the new ones, the latter sounding better.
 * On mobile (when ***mma_mobile.pk3*** is loaded) all jumps are the maximum height. This is done to counter lag and make timing Air Dashes easier on touch screens. If you're not using touch screen controls, don't load this file.
+* If the debug spawn point is enabled (the debug_spawn CVAR), it'll automatically be disabled the next time the game moves Mary/Xane to a spawn point. This fixes the Small Hut warp being broken and respawning the player outside of it on the beach.
+* Speed trails no longer appear if ***mma_mobile.pk3*** is detected. This is due to the speed powerup not respecting the speed value set in the DECORATE code, contrary to what the ZDoom Wiki states.

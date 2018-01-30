@@ -995,6 +995,7 @@ MHM2 D 0 A_JumpIfInventory("HammerUpgrades",2,"DoubleJump2")
 Goto WaitCrashA
 DoubleJump2:
 MHM2 D 0 A_GiveInventory("MaryHammer_MidAirDone",1)
+MHM2 D 0 ACS_NamedExecuteAlways("RequestJumpCancel",0,0,0,0)
 MHM2 DEFGHI 1
 MHM2 J 0 A_PlaySound("mary/hammer_puff",CHAN_VOICE,1.0)
 MHM2 J 17 A_ChangeVelocity(velx*1.05,vely*1.05,13.75,CVF_REPLACE)
@@ -1217,6 +1218,7 @@ UMBR D 0 A_JumpIf(z-floorz>0,"MidAir")
 UMBR D 0 A_JumpIfInventory("UmbrellaUpgrades",2,"PrepareLiftoff")
 Goto WaitCrash
 PrepareLiftoff:
+MHM2 D 0 ACS_NamedExecuteAlways("RequestJumpCancel",0,0,0,0)
 UMBR E 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,0)
 UMBR FG 2
 UMBR HHIIJJKKLLMMLKJIHIJKLMLKJIHJLMKIHHGF 1
@@ -1234,6 +1236,7 @@ CancelLiftoff:
 UMBR CDEFGHHHHGGFFEEDDC 3
 Goto ReadyX
 MidAir:
+MHM2 D 0 ACS_NamedExecuteAlways("RequestJumpCancel",0,0,0,0)
 UMBR D 0 A_JumpIfInventory("MaryHammer_MidAirDone",1,"WaitCrash")
 UMBR D 0 ACS_NamedExecuteAlways("MaryHammer_AltFire",0,0,2,0)
 UMBR ST 2
@@ -1982,6 +1985,7 @@ SWDA A 1
 SWDA A 0 A_JumpIfInventory("NearFloor",1,"ChargeSword1")
 SWDA A 0 A_JumpIf(CallACS("CheckMiscScriptVariable",0,0,0,0)>0,"ChargeSword1")	//If something like a Drop Dash is happening, use the on-ground sword beam.
 DropAttack:
+MHM2 D 0 ACS_NamedExecuteAlways("RequestJumpCancel",0,0,0,0)
 MHM1 J 0 ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE)
 SWDA SSSRRR 1 A_ChangeVelocity(velx,vely,0.0,CVF_REPLACE)
 SWDA R 0 ACS_NamedExecute("LandingBounce",0,2,0,0)

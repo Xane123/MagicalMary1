@@ -1287,6 +1287,14 @@ Switch(type)
 	Case 18:
 	val = FixedMul(wind_y[7],8);
 	Break;
+	Case 19:	//Mobile mod load check
+		If(StrParam(l:"MOBILE")=="YES") val = 1;
+		Else val = 0;
+	Break;
+	Case 20:	//Video mod load check
+		If(StrParam(l:"VIDEOS")=="YES") val = 1;
+		Else val = 0;
+	Break;
 }
 
 return val;
@@ -1503,14 +1511,35 @@ While(1)
 	}
 }*/
 
-bool moveskybox = TRUE;	//Set this to FALSE to make this script stop moving the skybox viewpoint based on player 1's movement.
+//This determines how the skybox viewpoint behaves. (computers only due to modifications from GZDoom's ZScript.)
+//0: Offsets based on the player's relative position from the origin. movesky array indexes set how much it moves relative to the player.
+//1: Offsets based on movesky[0] and movesky[1], giving full control over the camera's movement.
+int skybox_mode;
+
+script "TestSky" (void)
+{
+	skybox_mode = 1;	//Enable total control mode for the skybox.
+	movesky[0] = 0;
+	movesky[2] = 32;
+	While(1)
+	{
+		movesky[1] += 48.1;
+		If(movesky[1] > 2048.1) movesky[1] = -2048.9;
+		Delay(1);
+	}
+}
+
+script "SetSkyboxMode" (int mode) { If(mode<0) mode = 0; if(mode>1) mode = 1; skybox_mode = mode; }
+
 script "MoveSkybox" (int x_offset, int y_offset)	//Offsets are set by the sky viewpoint. Make sure to set them correctly!
 {	
 	Thing_ChangeTID(0, 615);
 	
+	If(StrParam(l:"MOBILE")=="YES") Log(s:"Mobile was detected!");
+	
 	Delay(3);
 	
-	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||movesky[0]<=0||movesky[1]<=0) Terminate;
+	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||StrParam(l:"MOBILE")=="YES"||movesky[0]<=0||movesky[1]<=0) Terminate;
 	SetActivator(1000, AAPTR_PLAYER1);
 	
 	int skybox_x, skybox_y, skybox_z;	//This is where the skybox viewpoint object initially spawns in the small room near the skybox. It moves into the skybox using offsets.
@@ -1520,12 +1549,20 @@ script "MoveSkybox" (int x_offset, int y_offset)	//Offsets are set by the sky vi
 	x_offset = x_offset << 16;	//Convert the offses into floating point numbers.
 	y_offset = y_offset << 16;
 	
-	
-	While(moveskybox)
+	While(1)
 	{
-		If(movesky[0]==0) movesky[0] = 16;	//Prevent division by zero by setting these to a slow-moving number like 16.
-		If(movesky[1]==0) movesky[1] = 16;
-		SetActorPosition(615, (skybox_x+x_offset)+(GetActorX(1000)/movesky[0]), (skybox_y+y_offset)+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
+		Switch(skybox_mode)
+		{
+			Case 0:	//Relative to player movement, using movesky[] as how much to move relative to player movement.
+				If(movesky[0]==0) movesky[0] = 32;	//Prevent division by zero by setting these to a slow-moving number like 32.
+				If(movesky[1]==0) movesky[1] = 32;
+				
+				SetActorPosition(615, (skybox_x+x_offset)+(GetActorX(1000)/movesky[0]), (skybox_y+y_offset)+(GetActorY(1000)/movesky[0]), skybox_z+(GetActorZ(1000)/movesky[1]), FALSE);
+			Break;
+			Case 1:	//Total control over the skybox camera using movesky[] as the offsets from the initial offset.
+				SetActorPosition(615, (skybox_x+x_offset)+movesky[0], (skybox_y+y_offset)+movesky[1], skybox_z+movesky[2], FALSE);
+			Break;
+		}
 		Delay(1);
 	}
 }
@@ -3812,7 +3849,7 @@ script 1 (void)	//EVENT ID #1: Game Over
 	fade = 1;
 	If(gamemode==0)
 	{	//If the player has made it to 1-2, 1-3, or 1-4 then gets a game over...
-		if(GetLevelInfo(LEVELINFO_WORLDNUMBER)==1&&GetLevelInfo(LEVELINFO_WORLDLEVEL)>1) ChangeLevel("TMP2",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//...don't make them have to redo that first level again.
+		if(world_info[0]==1&&world_info[1]>1) ChangeLevel("TMP2",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//...don't make them have to redo that first level again.
 		else ChangeLevel(StrParam(s:"TMP", d:level[2])+1,0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
 	}
 	Else
@@ -4540,7 +4577,7 @@ script "ResetPlayer" (void)
 	disablewind[PlayerNumber()] = 0;
 	no_scripts[PlayerNumber()] = FALSE;
 	
-	if(StrParam(n:PRINTNAME_LEVEL)!="SPECSTG1"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG2"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG3"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG4"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG5"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG6"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG7"&&GameType()!=GAME_NET_DEATHMATCH/*&&(GetLevelInfo(LEVELINFO_LEVELNUM)!=0&&ss_position!=3)*/) { if(level[0]<GetLevelInfo(LEVELINFO_LEVELNUM)&&GetLevelInfo(LEVELINFO_LEVELNUM)<CONST_TRANS_LEVELS_START) level[0] = GetLevelInfo(LEVELINFO_LEVELNUM); level[1] = GetLevelInfo(LEVELINFO_LEVELNUM); If(GetLevelInfo(LEVELINFO_WORLDLEVEL)==1) level[2] = GetLevelInfo(LEVELINFO_LEVELNUM); }		//If not a special level, update this variable.
+	if(StrParam(n:PRINTNAME_LEVEL)!="SPECSTG1"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG2"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG3"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG4"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG5"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG6"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG7"&&GameType()!=GAME_NET_DEATHMATCH/*&&(GetLevelInfo(LEVELINFO_LEVELNUM)!=0&&ss_position!=3)*/) { if(level[0]<GetLevelInfo(LEVELINFO_LEVELNUM)&&GetLevelInfo(LEVELINFO_LEVELNUM)<CONST_TRANS_LEVELS_START) level[0] = GetLevelInfo(LEVELINFO_LEVELNUM); level[1] = GetLevelInfo(LEVELINFO_LEVELNUM); If(world_info[1]==1) level[2] = GetLevelInfo(LEVELINFO_LEVELNUM); }		//If not a special level, update this variable.
 	
 	if(GetLevelInfo(LEVELINFO_LEVELNUM)<CONST_TRANS_LEVELS_START)	//Don't accept fades if this is a "temporary" level.
 	{
@@ -4586,27 +4623,6 @@ script "StoreBankCoins" (void)	//Adds any on-hand coins to Mary/Xane's bank.
 	Else { Log(s:"\c[Brick]", l:"BANK_DISABLED"); LocalAmbientSound("misc/buzzer",255); Terminate; }
 }
 
-script "CaptureAll" (void)
-{
-	SetActorAngle(0,0);
-	SetActorPitch(0,0);
-	Delay(35);
-	SetActorAngle(0,0.25);
-	Delay(35);
-	SetActorAngle(0,0.5);
-	Delay(35);
-	SetActorAngle(0,0.75);
-	Delay(35);
-	SetActorAngle(0,0);
-	SetActorPitch(0,1);
-	Delay(35);	
-	SetActorAngle(0,0);
-	SetActorPitch(0,-0.25);
-	Delay(35);	
-	SetActorAngle(0,0);
-	SetActorPitch(0,0.25);
-}
-
 int MaxLevelsPerWorld[2] = { 4, 3 };
 int selectedLevel = 1;	//Internal level number, like 1 = 1-2
 int clh_world = 1;	//Displayed world number
@@ -4614,7 +4630,7 @@ int clh_level = 2;	//Displayed level within world.
 
 script "ChangeLevelHut" (int directiona)
 {
-	//If(level[0]==0&&level[1]==0) { Log(s:"\c[Brick]This can only be done from other levels."); Terminate; }
+	If(level[0]==0&&level[1]==0) { Log(s:"\c[Brick]This can only be done from other levels."); Terminate; }
 	If(directiona==FALSE&&selectedLevel>1) { selectedLevel--; clh_level--; }
 	Else If(directiona==TRUE&&selectedLevel<level[0]) { selectedLevel++; clh_level++; }
 	
@@ -4640,9 +4656,9 @@ script "ChangeLevelHut" (int directiona)
 	HUDMessage (l:StrParam(s:"LEVELNAME_", d:selectedLevel+1);
 		HUDMSG_FADEOUT, 22, CR_FIRE, 0.5, 0.25, 3.0, 1.0);
 	SetFont("2DFONTP1");
-	If(completed_levels[selectedLevel]>=100) { HUDMessage (s:"PERCENT COMPLETE:\n",d:completed_levels[selectedLevel], s:"% \c[Green](COMPLETE)" ;
+	If(completed_levels[selectedLevel]>=100) { HUDMessage (s:"PERCENT COMPLETE:\n",d:completed_levels[selectedLevel], s:" \c[Green](COMPLETE)" ;
 		HUDMSG_FADEOUT, 23, CR_SAPPHIRE, 0.5, 0.35, 3.0, 1.0); }
-	Else { HUDMessage (s:"PERCENT COMPLETE:\n",d:completed_levels[selectedLevel], s:"% \c[Brick](INCOMPLETE)" ;
+	Else { HUDMessage (s:"PERCENT COMPLETE:\n",d:completed_levels[selectedLevel], s:" \c[Brick](INCOMPLETE)" ;
 		HUDMSG_FADEOUT, 23, CR_SAPPHIRE, 0.5, 0.35, 3.0, 1.0); }
 	ss_returnlevel = selectedLevel;
 }
@@ -4681,8 +4697,10 @@ script "ChangePlayerTIDs" enter
 	initial_music = 0;	//Initial song ID that will play when this area loads.
 	world_info[0] = 0;	//World number
 	world_info[1] = 0;	//Level number within world
+	skybox_mode = 0;	//Relative movement should be default.
 	movesky[0] = 0;	//How much less the skybox will move relative to the player. Higher values make it slower.
 	movesky[1] = 0; //The above value is horizontal, but this is vertical.
+	//movesky[2] is used in "total control" mode but this is only for relative movement.
 	
 	Delay(2);	//Give the level two tics to set up the music variable.
 	
@@ -4693,11 +4711,11 @@ script "ChangePlayerTIDs" enter
 	//Not sure if this is too important anymore. Still, to "prevent incorrect level transitions", set the Special Stage return position ID before the player can reach another level and teleport to another Special Stage!
 	if(StrParam(n:PRINTNAME_LEVEL)!="SPECSTG1"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG2"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG3"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG4"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG5"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG6"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG7"&&GameType()!=GAME_NET_DEATHMATCH&&GetLevelInfo(LEVELINFO_LEVELNUM)<CONST_TRANS_LEVELS_START) { ss_position = 0; Delay(1);fade = 0; }
 
-	if(completed_levels[level[1]+1]==TRUE)	//Test to confirm if this works when 1-2 is finished.
+	if(completed_levels[level[1]]>=100)	//Test to confirm if this works when 1-2 is finished.
 	{
 	SetFont("BIG_TEXT");
 	HUDMessage (l:"TXT_LVLCOMPLETE";
-		HUDMSG_FADEINOUT, 0, CR_GREEN, 0.15, 0.999, 3.0, 0.75, 0.75);
+		HUDMSG_FADEINOUT, 0, CR_GREEN, 0.15, 0.999, 6.5, 1.0, 1.0);
 	}
 	
 	if(fade>0) fade = 0;
@@ -5370,7 +5388,7 @@ While(1)
 		
 		If(airsupply[PlayerNumber()]<=0) { force_death[PlayerNumber()] = TRUE; }
 		
-		if(abs(GetActorVelX(1000+PlayerNumber()))>19.1||abs(GetActorVelY(1000+PlayerNumber())>19.1)) GiveInventory("SpeedTrailX",1);
+		if(ACS_NamedExecuteWithResult("GetXProperty",XPROP_MOBILE,0,0,0)&&(abs(GetActorVelX(1000+PlayerNumber()))>19.1||abs(GetActorVelY(1000+PlayerNumber())>19.1))) GiveInventory("SpeedTrailX",1);
 		Else TakeInventory("PowerSpeed",1);
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==FALSE)
@@ -5844,31 +5862,36 @@ script "SeamlessHelper" (int initial_load)	//If initial_load is set, an addition
 {
 	ACS_NamedExecuteAlways("SuperFormCheck",0,0,0,0);	//Always check for super forms, regardless of where the player is.
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); /*ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);*/ Delay(2); }	//This really should be identical to what's below but I'm nervous about breaking this thing.
-	Else { fadeout = 4;
-	
-	Delay(2);
-	
-	If(stored_velocity[0]==-616.5) { ss_position = 3; ACS_NamedExecuteAlways("SmallTitle",0,1,0,0); Line_SetBlocking(3, BLOCKF_PLAYERS, 0); }	//This is a hack to make sure the ss_position for the Small Hut is set when necessary!
-	Else ACS_NamedExecuteAlways("TitleCard",0,0,0,0);	//This will run most of the time, but when returning to the hut, the above line runs.
-	
-	If(IsTIDUsed(1100+(8*(ss_position))+PlayerNumber())==FALSE) { ss_position = 0; }	//If the place the player's being teleported to doesn't exist, send them to the standard starting position.
-	
-	If(stored_velocity[0]==616.5) { For(int temp_settpflag = 0; temp_settpflag<PlayerCount()+1; temp_settpflag++) { tp_to_last_ground_position[temp_settpflag] = TRUE; } stored_velocity[0] = 0; tp_to_last_ground_position[PlayerNumber()] = TRUE; ss_position = 0; checkpoint_id[PlayerNumber()] = abs(ss_return_id); ss_return_id = 0; ACS_NamedExecuteAlways("LoadCheckpointInfo",0,FALSE,0,0); }	//Hack that reloads the player's info in the level they were in.
 	Else
 	{
-		SetActorPosition(1000+PlayerNumber(), GetActorX(1100+(8*(ss_position))+PlayerNumber()), GetActorY(1100+(8*(ss_position))+PlayerNumber()), GetActorZ(1100+(8*(ss_position))+PlayerNumber()), FALSE);
-		SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+(8*(ss_position))+PlayerNumber()));
+		fadeout = 4;
+		
+		Delay(2);
+		
+		If(stored_velocity[0]==-616.5) { ss_position = 3; ACS_NamedExecuteAlways("SmallTitle",0,1,0,0); Line_SetBlocking(3, BLOCKF_PLAYERS, 0); }	//This is a hack to make sure the ss_position for the Small Hut is set when necessary!
+		Else ACS_NamedExecuteAlways("TitleCard",0,0,0,0);	//This will run most of the time, but when returning to the hut, the above line runs.
+		
+		If(IsTIDUsed(1100+(8*(ss_position))+PlayerNumber())==FALSE) { ss_position = 0; }	//If the place the player's being teleported to doesn't exist, send them to the standard starting position.
+		
+		If(stored_velocity[0]==616.5) { For(int temp_settpflag = 0; temp_settpflag<PlayerCount()+1; temp_settpflag++) { tp_to_last_ground_position[temp_settpflag] = TRUE; } stored_velocity[0] = 0; tp_to_last_ground_position[PlayerNumber()] = TRUE; ss_position = 0; checkpoint_id[PlayerNumber()] = abs(ss_return_id); ss_return_id = 0; ACS_NamedExecuteAlways("LoadCheckpointInfo",0,FALSE,0,0); }	//Hack that reloads the player's info in the level they were in.
+		Else
+		{
+			SetActorPosition(1000+PlayerNumber(), GetActorX(1100+(8*(ss_position))+PlayerNumber()), GetActorY(1100+(8*(ss_position))+PlayerNumber()), GetActorZ(1100+(8*(ss_position))+PlayerNumber()), FALSE);
+			SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+(8*(ss_position))+PlayerNumber()));
+		}
+		if(IsTIDUsed(1995)&&PlayerClass(0)==CHAR_XANE&&GameType()!=GAME_NET_COOPERATIVE&&GameType()!=GAME_NET_DEATHMATCH)
+		{	//If this is singleplayer and the player is Xane, start them at a different place, a'la Knuckles in the classic Sonic games.
+			SetActorPosition(1000,GetActorX(1995),GetActorY(1995),GetActorZ(1995),FALSE);
+			SetActorAngle(1000,GetActorAngle(1995));
+		}
+		if(GetCVAR("debug_spawn")==TRUE&&IsTIDUsed(1149)&&GameType()!=GAME_NET_COOPERATIVE)
+		{	//If this is singleplayer and the player is Xane, start them at a different place, a'la Knuckles in the classic Sonic games.
+			SetActorPosition(1000,GetActorX(1149),GetActorY(1149),GetActorZ(1149),FALSE);
+			SetActorAngle(1000,GetActorAngle(1149));
+		}
 	}
-	if(IsTIDUsed(1995)&&PlayerClass(0)==CHAR_XANE&&GameType()!=GAME_NET_COOPERATIVE&&GameType()!=GAME_NET_DEATHMATCH)
-	{	//If this is singleplayer and the player is Xane, start them at a different place, a'la Knuckles in the classic Sonic games.
-		SetActorPosition(1000,GetActorX(1995),GetActorY(1995),GetActorZ(1995),FALSE);
-		SetActorAngle(1000,GetActorAngle(1995));
-	}
-	if(GetCVAR("debug_spawn")==TRUE&&IsTIDUsed(1149)&&GameType()!=GAME_NET_COOPERATIVE)
-	{	//If this is singleplayer and the player is Xane, start them at a different place, a'la Knuckles in the classic Sonic games.
-		SetActorPosition(1000,GetActorX(1149),GetActorY(1149),GetActorZ(1149),FALSE);
-		SetActorAngle(1000,GetActorAngle(1149));
-	} }
+	
+	SetCVAR("debug_spawn",FALSE);	//Afterwards, disable debug spawn point spawning to prevent unexpected behavior.
 	
 	//After spawning the player at the correct spawn point, await the culling polyobject if necessary.
 	If(initial_load!=0) ACS_NamedExecute("WaitForCulling",0,-1,0,0);
@@ -5940,10 +5963,10 @@ script "HandleRCulling" ENTER
 
 	While(1)	//Begin moving the polyobject in hopes it reaches the player in time.
 	{
-		If(level_ready==TRUE)	//After the initial movement (which takes two seconds to be safe).
+		If(level_ready==TRUE)	//The speeds here are normal then "loading"/teleporting respectively.
 		{
-			Polyobj_MoveToSpot(9+(last_cull_setting*2), 256, 1000);
-			Polyobj_MoveToSpot(9+(last_cull_setting*2)+1, 256, 1000);
+			Polyobj_MoveToSpot(9+(last_cull_setting*2), 160, 1000);
+			Polyobj_MoveToSpot(9+(last_cull_setting*2)+1, 160, 1000);
 		}
 		Else
 		{
