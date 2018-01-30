@@ -1048,11 +1048,11 @@ void FConsoleCommand::Run (FCommandLine &argv, APlayerPawn *who, int key)
 
 void FUnsafeConsoleCommand::Run (FCommandLine &args, APlayerPawn *instigator, int key)
 {
-	if (UnsafeExecutionContext)
+	/*if (UnsafeExecutionContext)
 	{
 		Printf(TEXTCOLOR_RED "Cannot execute unsafe command " TEXTCOLOR_GOLD "%s\n", m_Name);
 		return;
-	}
+	}*/
 
 	FConsoleCommand::Run (args, instigator, key);
 }

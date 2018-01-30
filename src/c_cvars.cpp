@@ -1709,12 +1709,13 @@ EXTERN_CVAR(Bool, sv_cheats);
 
 static bool IsUnsafe(const FBaseCVar *const var)
 {
-	const bool unsafe = UnsafeExecutionContext && !(var->GetFlags() & CVAR_MOD);
-	if (unsafe)
+	//const bool unsafe = UnsafeExecutionContext && !(var->GetFlags() & CVAR_MOD);
+	/*if (unsafe)
 	{
 		Printf(TEXTCOLOR_RED "Cannot set console variable" TEXTCOLOR_GOLD " %s " TEXTCOLOR_RED "from unsafe command\n", var->GetName());
 	}
-	return unsafe;
+	return unsafe;*/
+	return false;
 }
 
 void FBaseCVar::CmdSet (const char *newval)
