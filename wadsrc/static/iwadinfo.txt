@@ -9,7 +9,7 @@ IWad
 	IWADName = "mma_data.pk3"
 	Mapinfo = "mapinfo/doom2.txt"
 	BannerColors = "c0 40 c0", "40 20 40"
-	Load = "mma_maps.wad", "mma_videos.pk3", "mma_mobile.pk3"
+	Load = "mma_maps.wad", "mma_videos.pk3", "mma_videos_hi.pk3", "mma_lowend.pk3", "mma_controlmod.pk3", "mma_mobile.pk3"
 }
 
 Names
