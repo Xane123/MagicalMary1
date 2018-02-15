@@ -9,6 +9,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * If Mary Air Dashes onto the water, she'll stop displaying the Air Dash animation and will run properly on the water.
 * A minor sound oddity where a footstep sound would be heard every time Mary performed an Air Dash was fixed by adding a height check to the footstep sound ACS script. It's unknown what caused the random sound, though.
 * Added and additional height/button press check to the variable jump height script to prevent it activating after bouncing off of certain springs.
+* Xane's Drop Dash now consistently makes the "thok" sound, which was only played if a landing sound didn't play when hitting the ground.
+* Coins now work correctly in Hell City (1-1) and are properly disabled when in an area that doesn't allow them instead of working forever, the complete opposite of what was intended.
 ## Major
 * Xane's claw now pulls Xane up to whatever's above the spot it attached to. This can be seen in 1-2 near the end of the area.
 * Demos now use a CVAR (cl_demo) instead of using custom GameType checks. This increases compatibility with Delta Touch.
