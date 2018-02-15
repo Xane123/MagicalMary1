@@ -2,7 +2,7 @@ actor NoWall : Inventory { Inventory.MaxAmount 1 }				//Indicates if Mary/Xane s
 actor Weakness : Inventory { Inventory.MaxAmount 1 }			//Used by enemies to detect when hit during their weak moment.
 actor DisableAirDash : Inventory { Inventory.MaxAmount 1 }		//Disables Mary's Air Dash.
 actor FloorDetected : Inventory { Inventory.MaxAmount 1 }		//Used by a script. Is "1" if "on ground", 0 otherwise.
-actor NearFloor : Inventory { Inventory.MaxAmount 1 }	//Set by script; Is "1" if below a certain distance above the ground, 256 for Mary and 384 for Xane.
+actor NearFloor : Inventory { Inventory.MaxAmount 1 }			//Set by script; Is "1" if below a certain distance above the ground, 256 for Mary and 384 for Xane.
 actor BounceRequested : Inventory { Inventory.MaxAmount 1 }		//Indicates an enemy bounce is requested; This doesn't do the bounce itself.
 actor NoHammer : Inventory { Inventory.MaxAmount 1 }			//Unknown. Identify what this does!
 actor Health125 : Inventory { Inventory.MaxAmount 1 }			//For SBARINFO's status bar.
@@ -179,7 +179,7 @@ ACTOR LGirlPlayer : DoomPlayer
   Player.ViewHeight 37
   PainChance 255
   Player.ForwardMove 1.3 1.1
-  Player.SideMove 0.85 0.675
+  Player.SideMove 1.3 1.1	//0.85 0.675
   Player.JumpZ 4.75
   Player.UseRange 48
   Player.SoundClass "lgirl"
@@ -610,7 +610,7 @@ ACTOR XanePlayer : DoomPlayer
   Player.ViewHeight 25
   PainChance 255
   Player.ForwardMove 0.98 0.78
-  Player.SideMove 0.9 0.8
+  Player.SideMove 0.98 0.78	//0.9 0.8
   Player.JumpZ 4.75
   Player.UseRange 48
   Player.SoundClass "xane"

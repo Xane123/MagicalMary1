@@ -3,20 +3,16 @@
 #include "zcommon.acs"
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
-//XCOMMON, due to how messy of a big file it is, has used 102/128 variables, with 26 left! Use them wisely!
+//XCOMMON, due to how messy of a big file it is, has used 102/128 variables, with 25 left! Use them wisely!
 //This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
 
 //User keys: USER1 = Transform into super form, USER2 = Warp to Small Hut, USER3 = Restart run in other modes, USER4 = Empty
 
-#define TIME_PLAY 0
-#define TIME_PAUSE 1
-#define TIME_STOP -1
-
 //WORLD variables are only valid until the next level. Special Stages and the Small Hut don't reset them. Use these to let level scripts interact with global script variables.
-world int 0:ltime_control;	//Whether the timer should move as normal, pause, or stop for the rest of the level.
-world int 2:ss_number;	//Whsat number this Special Stage is. Try to replace with LEVELINFO_SPECSTGNO.
+world int 0:show_timer;	//This determines whether to hide or show the speedrunning timer, used to sync up fades, maybe.
+world int 2:ss_number;	//What number this Special Stage is. Try to replace with LEVELINFO_SPECSTGNO.
 world int 3:initial_music;	//This is set by areas and determines what music it will play initially.
 world int 4:world_info[];	//This holds the world number ([0]) and level number within that world ([1]) to form things like "1-1".
 
@@ -49,7 +45,7 @@ global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Onl
 global int 15:combo[];	//Current combo (successive kills). First MAX_PLAYERS is current, while second are decrease amounts.
 global int 16:lives;
 
-global int 17:seconds[];	//The timer is global to allow the planned other modes to work.
+global int 17:seconds;	//The timer is global to allow the speedrunning timer to continue running between levels.
 global int 18:timer_tics;	//Used for the speedrunning timer's "milliseconds".
 
 //Global variable #0 is available!
@@ -63,9 +59,9 @@ global int 21:stored_velocity[];	//Used for hackish teleporting to and from the 
 global bool 22:no_scripts[];	//Tells most standard scripts like special abilities not to run.
 global bool 23:important_fade[];		//If an important fade (like dying or a transition) is happening, set this to TRUE.
 global int 24:meter[];		//Time before the current combo level is lost.
-global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice, 4: Wave-based battle
+global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice
 global bool 26:event_completed[];	//Whether the FMV with this ID has run. It will be skipped if TRUE.
-global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane). This is synced between all players. Sword upgrades are planned.
+global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane), 4: Ability upgrade. This is synced between all players.
 global bool 28:special_id[];	//An array determining whether a player picked up a special item or entered a certain special stage entrance. See the line below this one for the current highest ID.
 //The highest current special ID is 3.
 
@@ -140,6 +136,7 @@ bool force_detransform[MAX_PLAYERS];	//Forcibly detransforms the player if they 
 		int xyr;
 
 bool tp_to_last_ground_position[MAX_PLAYERS];	//If this is set for a specific player, they will teleport to their last ground position after reloading from a checkpoint.
+int canUsePCoins = FALSE;	//This is how many tics Powerup Coins have been allowed. If it's 0, they are disabled.
 
 script "SetMode" (int mode) { gamemode = mode; }
 script "SetCoins" (int number, int mode) { If(mode==FALSE) total_coins = number; Else total_coins += number; }
@@ -366,10 +363,30 @@ script "TP" (int from, int to, int below_z)
 	TakeInventory("Variable5",1);	//Return the player to being solid again.
 }
 
-//ACTIVATE/DEACTIVATE GROUP
-//Activates all objects with the specified TID. Use "AutoDoorOpener" for things like dynamic lights.
-script "SetGroupActivation" (int activate, int tid)
-{ If(activate) Thing_Activate(tid); Else Thing_Deactivate(tid); }
+script "ActivateGroup" (int front, int back)
+//Activates a group of things when crossing this line. If "back" is defined, this script's behavior changes.
+//Instead of activating and deactivating a single thing group, it'll activate one group and deactivate the
+//opposite line side's defined set. Set back to -1 to make it use no thing ID but still behave like back was set.
+{
+	If(back)	//If back is set, alternating behavior is used.
+	{
+		If(LineSide()==LINE_FRONT)
+		{
+			If(back>0) Thing_Deactivate(back);
+			Thing_Activate(front);
+		}
+		Else
+		{
+			Thing_Deactivate(front);
+			If(back>0) Thing_Activate(back);
+		}
+	}
+	Else	//Otherwise, a single group is activated and deactivated.
+	{
+		If(LineSide()==LINE_FRONT) Thing_Activate(front);
+		Else Thing_Deactivate(front);
+	}
+}
 
 //LADDERS
 //Locks the player in place then moves them up to the set height, which should be the top of the ladder.
@@ -1236,9 +1253,7 @@ Switch(type)
 	Case 1:
 	//val = wind_y;
 	Break;
-	Case 2:
-	val = GetCVAR("xane_popindistance");
-	Break;
+	//Case 2 used to be the outdated object draw distance CVAR check.
 	Case 3:
 	val = FixedMul(wind_x[0],8);
 	Break;
@@ -1287,12 +1302,20 @@ Switch(type)
 	Case 18:
 	val = FixedMul(wind_y[7],8);
 	Break;
-	Case 19:	//Mobile mod load check
-		If(StrParam(l:"MOBILE")=="YES") val = 1;
+	Case 19:	//Low-end mod load check
+		If(StrParam(l:"LOWEND")=="YES") val = 1;
 		Else val = 0;
 	Break;
 	Case 20:	//Video mod load check
 		If(StrParam(l:"VIDEOS")=="YES") val = 1;
+		Else val = 0;
+	Break;
+	Case 21:	//Controller/touchscreen mod check
+		If(StrParam(l:"CONTROLLER")=="YES") val = 1;
+		Else val = 0;
+	Break;
+	Case 22:	//Mobile mod load check
+		If(StrParam(l:"MOBILE")=="YES") val = 1;
 		Else val = 0;
 	Break;
 }
@@ -1535,11 +1558,9 @@ script "MoveSkybox" (int x_offset, int y_offset)	//Offsets are set by the sky vi
 {	
 	Thing_ChangeTID(0, 615);
 	
-	If(StrParam(l:"MOBILE")=="YES") Log(s:"Mobile was detected!");
-	
 	Delay(3);
 	
-	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||StrParam(l:"MOBILE")=="YES"||movesky[0]<=0||movesky[1]<=0) Terminate;
+	If(GameType()==GAME_NET_COOPERATIVE||GameType()==GAME_NET_DEATHMATCH||ACS_NamedExecuteWithResult("GetXProperty",XPROP_LOWEND,0,0,0)==TRUE||movesky[0]<=0||movesky[1]<=0) Terminate;
 	SetActivator(1000, AAPTR_PLAYER1);
 	
 	int skybox_x, skybox_y, skybox_z;	//This is where the skybox viewpoint object initially spawns in the small room near the skybox. It moves into the skybox using offsets.
@@ -1621,66 +1642,25 @@ While(1)
 #define TIMER_UPPER 163.1
 #define TIMER_LOWER 171.1
 
-script "GetSeconds" (void)	{	SetResultValue(seconds[0]);	}
+script "GetSeconds" (void)	{	SetResultValue(seconds);	}
 
 script "LTimer" ENTER
 {
-//gamemode = 1;
-
-If(gamemode==0) { seconds[PlayerNumber()] = 0; timer_tics = 0; }
-
-int lump_name = StrParam(n:PRINTNAME_LEVEL);
-
+if(gamemode==0) Terminate;	//This is now only for the speedrunning timer.
 Delay(1);
 Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
 
-if((gamemode==0&&(lump_name == "SPECSTG1"||lump_name == "SPECSTG2"||lump_name == "SPECSTG3"||lump_name == "SPECSTG4"||lump_name == "SPECSTG5"||lump_name == "SPECSTG6"||lump_name == "SPECSTG7"))||lump_name == "TITLE"||lump_name == "INTRO") Terminate;
-
-While(ltime_control!=TIME_STOP)	//time_pause is temporary; Time_stop is used when exiting levels.
+While(1)
     {
-		If(GetCVAR("screenblocks")==11&&gamemode==0)	//Fullscreen HUD
-		{
-			SetHUDSize(0,0,FALSE);
-			SetFont("STIMEFNT");
-			If(seconds[PlayerNumber()] % 60 >= 10)
-			{
-					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":",d:seconds[PlayerNumber()] % 60;
-				HUDMSG_FADEOUT, 20, CR_WHITE, 0.98,0.01, 60.0, 0.0, 0.0);   //Text
-					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":",d:seconds[PlayerNumber()] % 60;
-				HUDMSG_FADEOUT, 20, CR_BLACK, 0.985,0.02, 60.0, 0.0, 0.0);//Shadow
-			}
-			Else
-			{
-					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":0",d:seconds[PlayerNumber()] % 60;
-				HUDMSG_FADEOUT, 20, CR_WHITE, 0.98,0.01, 60.0, 0.05, 0.05);
-					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":0",d:seconds[PlayerNumber()] % 60;
-				HUDMSG_FADEOUT, 20, CR_BLACK, 0.985,0.02, 60.0, 0.05, 0.05);//Shadow
-			}
-		}
-		Else If(GetCVAR("screenblocks")<11&&gamemode==0)	//Status Bar
-		{
-			SetHUDSize(320,200,TRUE);
-			SetFont("BIG_TEXT");
-			If(seconds[PlayerNumber()] % 60 >= 10)
-			{
-					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":",d:seconds[PlayerNumber()] % 60;
-				HUDMSG_FADEOUT, 20, CR_WHITE, 255.0,182.1, 60.0, 0.0, 0.0);   //Text
-			}
-			Else
-			{
-					HUDMessage (d:seconds[PlayerNumber()] / 60,s:":0",d:seconds[PlayerNumber()] % 60;
-				HUDMSG_FADEOUT, 20, CR_WHITE, 255.0,182.1, 60.0, 0.0, 0.0);
-			}
-		}
-		Delay(1);
 		
-		if(ltime_control==TIME_PLAY&&(gamemode>0||(gamemode==0&&seconds[PlayerNumber()]<599))) timer_tics++;
-		ltime_control = TIME_PLAY;
-		if(timer_tics>=35&&((gamemode==0&&seconds[PlayerNumber()]<599)||gamemode>0))	//Limit the timer to ten minutes (9:59).
+		if(level_ready==TRUE&&seconds<5999) timer_tics++;
+		if(level_ready==TRUE&&timer_tics>=35&&seconds<5999)	//Limit the timer to 99:59.
 		{
 				timer_tics = 0;
-				seconds[PlayerNumber()]++;
+				seconds++;
 		}
+		
+		Delay(1);
 	}
 }
 
@@ -1689,10 +1669,10 @@ script "SpeedTimer" ENTER
 	If(gamemode==0||GetLevelInfo(LEVELINFO_LEVELNUM)==0||GetLevelInfo(LEVELINFO_LEVELNUM)>=CONST_TRANS_LEVELS_START) Terminate;
 	Delay(2);
 	Until(level_ready==TRUE) Delay(1);	//Wait for the signal first.
-	If(StrParam(n:PRINTNAME_LEVEL)=="MAP2"&&gamemode==1)	//If in Time Attack, start off with a countdown!
+	If(StrParam(n:PRINTNAME_LEVEL)=="AREA2"&&gamemode==1)	//If in Time Attack, start off with a countdown!
 	{
 		ACS_NamedExecute("PlayerMovement",0,TRUE,FALSE,FALSE);
-		ACS_NamedExecute("JaneMenuLock",0,35*3,0,0);
+		ACS_NamedExecute("LockPlayerTimed",0,35*3,0,0);
 		cgem_count = 0;
 		AmbientSound("misc/notify",255);
 		Print(d:3);
@@ -1711,7 +1691,7 @@ script "SpeedTimer" ENTER
 		GiveInventory("PowerupWater",1);
 		GiveInventory("PowerupNinja",1);
 		ACS_NamedExecute("PlayerMovement",0,FALSE,FALSE,FALSE);
-		ACS_Terminate("JaneMenuLock",0);
+		ACS_Terminate("LockPlayerTimed",0);
 	}
 	If(gamemode==3)	//Reset the timer at the beginning of all levels. Mode 3 is practice mode.
 	{
@@ -1729,10 +1709,11 @@ script "SpeedTimer" ENTER
 	
 	While(gamemode>0)
 	{
-		If(no_scripts[PlayerNumber()]==FALSE)
+		If(show_timer==TRUE)
 		{
 			If(OpenInput[0] & BT_USER3 && !(OpenInput[MAX_PLAYERS] & BT_USER3))	//USER3 = Restart Run
 			{
+				show_timer = FALSE;	//Hide the speedrunning timer when the run's restarting.
 				If(gamemode==3) { ACS_NamedExecute("ExitTransition",0,0,0,0); Delay(35); }	//Practice Mode
 				If(gamemode==1)
 				{
@@ -1747,35 +1728,57 @@ script "SpeedTimer" ENTER
 				}
 			}
 			
-			If(seconds[0] % 60 < 10 && timer_tics * 2 >= 10)
+			If(seconds % 60 < 10 && timer_tics * 2 >= 10)
 			{
-				HUDMessage (d:seconds[0] / 60,s:"\"0",d:seconds[0] % 60, s:".", d:timer_tics * 2;
+				HUDMessage (d:seconds / 60,s:"\"0",d:seconds % 60, s:".", d:timer_tics * 2;
 					HUDMSG_FADEOUT, 20, CR_CREAM, 0.5,0.875, 0.01, 0.5, 0.0);
 			}
-			Else If(seconds[0] % 60 < 10 && timer_tics* 2 < 10)
+			Else If(seconds % 60 < 10 && timer_tics* 2 < 10)
 			{
-				HUDMessage (d:seconds[0] / 60,s:"\"0",d:seconds[0] % 60, s:".0", d:timer_tics * 2;
+				HUDMessage (d:seconds / 60,s:"\"0",d:seconds % 60, s:".0", d:timer_tics * 2;
 					HUDMSG_FADEOUT, 20, CR_CREAM, 0.5,0.875, 0.01, 0.5, 0.0);
 			}
-			Else If(seconds[0] % 60 >= 10 && timer_tics * 2 < 10)
+			Else If(seconds % 60 >= 10 && timer_tics * 2 < 10)
 			{
-				HUDMessage (d:seconds[0] / 60,s:"\"",d:seconds[0] % 60, s:".0", d:timer_tics * 2;
+				HUDMessage (d:seconds / 60,s:"\"",d:seconds % 60, s:".0", d:timer_tics * 2;
 					HUDMSG_FADEOUT, 20, CR_CREAM, 0.5,0.875, 0.01, 0.5, 0.0);
 			}
-			Else If(seconds[0] % 60 >= 10 && timer_tics * 2 >= 10)
+			Else If(seconds % 60 >= 10 && timer_tics * 2 >= 10)
 			{
-				HUDMessage (d:seconds[0] / 60,s:"\"",d:seconds[0] % 60, s:".", d:timer_tics * 2;
+				HUDMessage (d:seconds / 60,s:"\"",d:seconds % 60, s:".", d:timer_tics * 2;
 					HUDMSG_FADEOUT, 20, CR_CREAM, 0.5,0.875, 0.01, 0.5, 0.0);
 			}
 		}
 		
-		If(no_scripts[PlayerNumber()]==TRUE)
+		If(show_timer==FALSE)
 		{
-			Delay(3);
-			If(no_scripts[PlayerNumber()]==FALSE) { Delay(5); }
+			Delay(1);
+			//If(show_timer[PlayerNumber()]==FALSE) { Delay(3); }
 		}
 		
 		Delay(1);
+	}
+}
+
+script "LockPlayerTimed" (int ticsx)
+{
+	If(ticsx<=0) Terminate;
+	
+	int xa, ya, za, anga, pita;
+	xa = GetActorX(0);
+	ya = GetActorY(0);
+	za = GetActorZ(0);
+	anga = GetActorAngle(0);
+	pita = GetActorPitch(0);
+	
+	While(ticsx>0)
+	{
+		SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
+		SetActorAngle(0, anga);
+		SetActorPitch(0, pita);
+		show_timer = FALSE;
+		Delay(1);
+		ticsx--;
 	}
 }
 
@@ -1787,106 +1790,102 @@ script "DisplayCoinTimers" ENTER
 
 	While(1)
 	{
-		If((ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE) && (ninja_tics[PlayerNumber()]>0||water_tics[PlayerNumber()]>0||damage_tics[PlayerNumber()]>0||heal_tics[PlayerNumber()]>0||speed_tics[PlayerNumber()]>0||combo_tics[PlayerNumber()]>0))
+		If(canUsePCoins == FALSE && (ninja_tics[PlayerNumber()]>0||water_tics[PlayerNumber()]>0||damage_tics[PlayerNumber()]>0||heal_tics[PlayerNumber()]>0||speed_tics[PlayerNumber()]>0||combo_tics[PlayerNumber()]>0))
 		{
-			HUDMessage (s:"COINS LOCKED";
+			HUDMessage (s:"POWERUP COINS ARE DISABLED IN THIS AREA.";
 				HUDMSG_FADEOUT, 0, CR_RED, 64.1,155.1, 0.01, 0.0, 0.0);
 		}
-		
-		if(ninja_tics[PlayerNumber()]>0)
+		Else
 		{
-			If(water_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
-			Else vposition =  TIMER_UPPER;
-			
-			HUDMessage (s:"NINJA:";
-				HUDMSG_FADEOUT, 0, CR_PURPLE, 254.2,vposition, 0.01, 0.0, 0.0);
-			
-			If((ninja_tics[PlayerNumber()]/35) % 60 >= 10) {
-			HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":",d:(ninja_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
-			Else {
-			HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":0",d:(ninja_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
-			
-		}
+			if(ninja_tics[PlayerNumber()]>0)
+			{
+				If(water_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
+				Else vposition =  TIMER_UPPER;
+				
+				HUDMessage (s:"NINJA:";
+					HUDMSG_FADEOUT, 0, CR_PURPLE, 254.2,vposition, 0.01, 0.0, 0.0);
+				
+				If((ninja_tics[PlayerNumber()]/35) % 60 >= 10) {
+				HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":",d:(ninja_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
+				Else {
+				HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":0",d:(ninja_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
+			}
 
-		if(water_tics[PlayerNumber()]>0)
-		{
+			if(water_tics[PlayerNumber()]>0)
+			{
 
-			HUDMessage (s:"WATER:";
-				HUDMSG_FADEOUT, 0, CR_BLUE, 254.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+				HUDMessage (s:"WATER:";
+					HUDMSG_FADEOUT, 0, CR_BLUE, 254.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+				
+				If((water_tics[PlayerNumber()]/35) % 60 >= 10) {
+				HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":",d:(water_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+				Else {
+				HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":0",d:(water_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+			}
 			
-			If((water_tics[PlayerNumber()]/35) % 60 >= 10) {
-			HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":",d:(water_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
-			Else {
-			HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":0",d:(water_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
-			
-		}
-		
-		if(damage_tics[PlayerNumber()]>0)
-		{
-			If(heal_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
-			Else vposition =  TIMER_UPPER;
-			
-			HUDMessage (s:"DAMAGE:";
-				HUDMSG_FADEOUT, 0, CR_ORANGE, 164.2,vposition, 0.01, 0.0, 0.0);
-			
-			If((damage_tics[PlayerNumber()]/35) % 60 >= 10) {
-			HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":",d:(damage_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
-			Else {
-			HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":0",d:(damage_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
-			
-		}
+			if(damage_tics[PlayerNumber()]>0)
+			{
+				If(heal_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
+				Else vposition =  TIMER_UPPER;
+				
+				HUDMessage (s:"DAMAGE:";
+					HUDMSG_FADEOUT, 0, CR_ORANGE, 164.2,vposition, 0.01, 0.0, 0.0);
+				
+				If((damage_tics[PlayerNumber()]/35) % 60 >= 10) {
+				HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":",d:(damage_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
+				Else {
+				HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":0",d:(damage_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
+			}
 
-		if(heal_tics[PlayerNumber()]>0)
-		{
-		
-			HUDMessage (s:"HEAL:";
-				HUDMSG_FADEOUT, 0, CR_RED, 164.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+			if(heal_tics[PlayerNumber()]>0)
+			{
 			
-			If((heal_tics[PlayerNumber()]/35) % 60 >= 10) {
-			HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":",d:(heal_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
-			Else {
-			HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":0",d:(heal_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
-			
-		}
+				HUDMessage (s:"HEAL:";
+					HUDMSG_FADEOUT, 0, CR_RED, 164.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+				
+				If((heal_tics[PlayerNumber()]/35) % 60 >= 10) {
+				HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":",d:(heal_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+				Else {
+				HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":0",d:(heal_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+			}
 
-		if(speed_tics[PlayerNumber()]>0)
-		{
-			If(combo_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
-			Else vposition =  TIMER_UPPER;
+			if(speed_tics[PlayerNumber()]>0)
+			{
+				If(combo_tics[PlayerNumber()]==0) vposition = TIMER_LOWER;
+				Else vposition =  TIMER_UPPER;
+				
+				HUDMessage (s:"SPEED:";
+					HUDMSG_FADEOUT, 0, CR_GREEN, 64.2,vposition, 0.01, 0.0, 0.0);
+				
+				If((speed_tics[PlayerNumber()]/35) % 60 >= 10) {
+				HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":",d:(speed_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
+				Else {
+				HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":0",d:(speed_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
+			}
 			
-			HUDMessage (s:"SPEED:";
-				HUDMSG_FADEOUT, 0, CR_GREEN, 64.2,vposition, 0.01, 0.0, 0.0);
+			if(combo_tics[PlayerNumber()]>0)
+			{
 			
-			If((speed_tics[PlayerNumber()]/35) % 60 >= 10) {
-			HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":",d:(speed_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
-			Else {
-			HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":0",d:(speed_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
-			
-		}
-		
-		if(combo_tics[PlayerNumber()]>0)
-		{
-		
-			HUDMessage (s:"COMBO:";
-				HUDMSG_FADEOUT, 0, CR_YELLOW, 64.2,TIMER_LOWER, 0.01, 0.0, 0.0);
-			
-			If((combo_tics[PlayerNumber()]/35) % 60 >= 10) {
-			HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":",d:(combo_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
-			Else {
-			HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":0",d:(combo_tics[PlayerNumber()]/35) % 60;
-				HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
-			
+				HUDMessage (s:"COMBO:";
+					HUDMSG_FADEOUT, 0, CR_YELLOW, 64.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+				
+				If((combo_tics[PlayerNumber()]/35) % 60 >= 10) {
+				HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":",d:(combo_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+				Else {
+				HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":0",d:(combo_tics[PlayerNumber()]/35) % 60;
+					HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+			}
 		}
 	Delay(1);
 	}
@@ -1929,7 +1928,7 @@ script "ResetPlayerForSpeedruns" (void)
 	Else upgrades[0] = 4;
 	
 	upgrades[1] = 100;	//The player only can collect 100 coins.
-	seconds[0] = 0;
+	seconds = 0;
 	timer_tics = 0;
 	Delay(1);
 	If(PlayerClass(0)==CHAR_MARY) UseInventory("MaryUmbrella");
@@ -1993,8 +1992,6 @@ if(levelinfo[1]!=0)monsters = levelinfo[0] * 100 / levelinfo[1];
 Else monsters = 100;
 if(levelinfo[5]!=0)secrets = levelinfo[4] * 100 / levelinfo[5];
 Else secrets = 100;
-if(gamemode==0) ltime_control = TIME_STOP;
-else ltime_control = TIME_PAUSE;
 Line_SetBlocking(line_id,BLOCKF_PLAYERS,0);
 results_final = TRUE;	//Don't let the player return to the level or get a worse score!
 int stored_bonus;
@@ -2128,44 +2125,24 @@ script "UpdatePlayerShadows" ENTER
 	If(ThingCount(T_NONE,1006)==0||(GetCVAR("vid_renderer")==FALSE||(GetCVAR("vid_renderer")==TRUE&&GetCVAR("xane_voxelshadows")==TRUE))) { Thing_Remove(2006); Thing_Remove(2014); Thing_Remove(2022); }
 	If(ThingCount(T_NONE,1007)==0||(GetCVAR("vid_renderer")==FALSE||(GetCVAR("vid_renderer")==TRUE&&GetCVAR("xane_voxelshadows")==TRUE))) { Thing_Remove(2007); Thing_Remove(2015); Thing_Remove(2023); }
 	
-	If(GetCVAR("vid_renderer")==TRUE&&GetCVAR("xane_voxelshadows")==FALSE)	//If on the OpenGL rendrer, hide the enemy shadows...
-	{
-		Thing_Deactivate(2024);
-		Thing_Deactivate(2025);
-		Thing_Deactivate(2026);
-	}
-	Else	//...otherwise, remove them.
-	{
-		Thing_Remove(2024);
-		Thing_Remove(2025);
-		Thing_Remove(2026);
-	}
+	Thing_Deactivate(2024);
+	Thing_Deactivate(2025);
+	Thing_Deactivate(2026);
 	
 	While(1)
 	{	
 		If(GetCVAR("r_shadows")==TRUE)
 		{
-			If(GetCVAR("vid_renderer")==TRUE&&GetCVAR("xane_voxelshadows")==FALSE)	//OpenGL (dynamic light shadows)
-			{
-				If(GetActorZ(0)-GetActorFloorZ(0)>68.0) { If(SetActorPosition(2016+PlayerNumber(),GetActorX(0),GetActorY(0),GetActorFloorZ(0),FALSE)==TRUE) Thing_Activate(2016+PlayerNumber()); } //SetActorVelocity(2016+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)>42.0) { If(SetActorPosition(2008+PlayerNumber(),GetActorX(0),GetActorY(0),GetActorFloorZ(0),FALSE)==TRUE) Thing_Activate(2008+PlayerNumber()); } //SetActorVelocity(2008+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)>16.0) { If(SetActorPosition(2000+PlayerNumber(),GetActorX(0),GetActorY(0),GetActorFloorZ(0),FALSE)==TRUE) Thing_Activate(2000+PlayerNumber()); } //SetActorVelocity(2000+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
-				
-				Delay(1);
-				
-				//Last, hide the shadows.
-				Thing_Deactivate(2000+PlayerNumber());
-				Thing_Deactivate(2008+PlayerNumber());
-				Thing_Deactivate(2016+PlayerNumber());
-			}
-			Else	//Software (voxel-based shadows)
-			{
-				If(GetActorZ(0)-GetActorFloorZ(0)>68.0) { SpawnForced("SWRendererShadow_Size3",GetActorX(0),GetActory(0),GetActorFloorZ(0),2016+PlayerNumber(),0); SetActorVelocity(2016+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)>42.0) { SpawnForced("SWRendererShadow_Size2",GetActorX(0),GetActory(0),GetActorFloorZ(0),2008+PlayerNumber(),0); SetActorVelocity(2008+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)>16.0) { SpawnForced("SWRendererShadow_Size1",GetActorX(0),GetActory(0),GetActorFloorZ(0),2000+PlayerNumber(),0); SetActorVelocity(2000+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
-				
-				Delay(1);
-			}
+			If(GetActorZ(0)-GetActorFloorZ(0)>68.0) { If(SetActorPosition(2016+PlayerNumber(),GetActorX(0),GetActorY(0),GetActorFloorZ(0),FALSE)==TRUE) Thing_Activate(2016+PlayerNumber()); } //SetActorVelocity(2016+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
+			Else If(GetActorZ(0)-GetActorFloorZ(0)>42.0) { If(SetActorPosition(2008+PlayerNumber(),GetActorX(0),GetActorY(0),GetActorFloorZ(0),FALSE)==TRUE) Thing_Activate(2008+PlayerNumber()); } //SetActorVelocity(2008+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
+			Else If(GetActorZ(0)-GetActorFloorZ(0)>16.0) { If(SetActorPosition(2000+PlayerNumber(),GetActorX(0),GetActorY(0),GetActorFloorZ(0),FALSE)==TRUE) Thing_Activate(2000+PlayerNumber()); } //SetActorVelocity(2000+PlayerNumber(),GetActorVelX(0),GetActorVelY(0),0.0,FALSE, FALSE); }
+			
+			Delay(1);
+			
+			//Last, hide the shadows.
+			Thing_Deactivate(2000+PlayerNumber());
+			Thing_Deactivate(2008+PlayerNumber());
+			Thing_Deactivate(2016+PlayerNumber());
 		}
 		Else Delay(1);
 	}
@@ -3091,7 +3068,7 @@ script "WJ_Button" ENTER
 {
 While(1)
 	{	
-	if(movement[PlayerNumber()]>0&&speed_tics[PlayerNumber()]==0&&wjtics[PlayerNumber()]<2) wjtics[PlayerNumber()] = 2;
+	if(movement[PlayerNumber()]>0&&(speed_tics[PlayerNumber()]==0||(speed_tics[PlayerNumber()]>0&&canUsePCoins==FALSE))&&wjtics[PlayerNumber()]<2) wjtics[PlayerNumber()] = 2;
 	
 	if(openInput[PlayerNumber()] & BT_USE&&wjtics[PlayerNumber()]<35) wjtics[PlayerNumber()] = 35;
 	
@@ -3111,8 +3088,8 @@ While(1)
 	Delay(1);
 	If(hammermove[PlayerNumber()]>0)
 		{
-		hammermove[PlayerNumber()]--;
-		GiveInventory("NoHammer",1);
+			hammermove[PlayerNumber()]--;
+			GiveInventory("NoHammer",1);
 		}
 	Else TakeInventory("NoHammer",1);
 
@@ -3212,18 +3189,22 @@ While(1)
 					
 					if(GetActorX(0)<prevx[PlayerNumber()]-20.5||GetActorX(0)>prevx[PlayerNumber()]+20.5||GetActorY(0)<prevy[PlayerNumber()]-20.5||GetActorY(0)>prevy[PlayerNumber()]+20.5) prevx[PlayerNumber()] = -13.617;
 					
-					If(ninja_tics[PlayerNumber()]>0 && movement[PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE )
+					If(canUsePCoins && ninja_tics[PlayerNumber()]>0 && movement[PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE )
 					{
 						if(vel < 1.8) vel += 0.1;
 						else vel = 1.8;
 						moved_up_wall[PlayerNumber()] = 5;
 						ninja_tics[PlayerNumber()] -= 2;
 					}
-					Else If( ninja_tics[PlayerNumber()]==0 || (ninja_tics[PlayerNumber()]>0 && ( movement[MAX_PLAYERS+PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE ) ) && vel > -3.75) vel -= 0.05;
+					Else If( ninja_tics[PlayerNumber()]==0 || (canUsePCoins && ninja_tics[PlayerNumber()]>0 && ( movement[MAX_PLAYERS+PlayerNumber()]>0 && openInput[PlayerNumber()] & BT_USE ) ) && vel > -3.75) vel -= 0.05;
 
-					Else If(ninja_tics[PlayerNumber()]>0 && movement[PlayerNumber()]==0 && movement[MAX_PLAYERS+PlayerNumber()]==0)
+					Else If(canUsePCoins && ninja_tics[PlayerNumber()]>0)// && movement[PlayerNumber()]==0 && movement[MAX_PLAYERS+PlayerNumber()]==0)
 					{
 						vel = 0.001;
+					}
+					Else
+					{
+						If(vel > -3.75) vel -= 0.05;	//Duplicate code in hopes of fixing the odd velocity with the Ninja Coin.
 					}
 					
 					if(!input_wd & BT_JUMP) walldetected[PlayerNumber()] = FALSE;
@@ -3404,7 +3385,7 @@ script "UpdateMovementDetection" ENTER
 			If(openInput[MAX_PLAYERS*3+PlayerNumber()]<-(CONTROLLER_DEADZONE)) { movement[(MAX_PLAYERS*3)+PlayerNumber()] = 1; If(openInput[MAX_PLAYERS*3+PlayerNumber()]<-(CONTROLLER_RUNZONE)) movement[(MAX_PLAYERS*3)+PlayerNumber()] = 2; }
 		}
 		
-		//Print(s:"FWD: ", d:forward[0], s:"\nBACK: ", d:backward[0], s:"\nL: ", d:left[0], s:"\nR: ", d:right[0]);
+		//Print(s:"FWD: ", d:movement[PlayerNumber()], s:"\nBACK: ", d:movement[MAX_PLAYERS+PlayerNumber()], s:"\nL: ", d:movement[(MAX_PLAYERS*2)+PlayerNumber()], s:"\nR: ", d:movement[(MAX_PLAYERS*3)+PlayerNumber()]);
 		Delay(1);
 	}
 }
@@ -3428,6 +3409,8 @@ script 66 (int value) { detected[PlayerNumber()] = value; }
 
 script 67 ENTER
 {
+upgrades[4] = TRUE;	//DEBUG
+int marydboost_tics;	//Remaining tics for downward Air Dash thrust upon hitting ground.
 int esc_loop = 0;	//1 = jumped; 2 = landed.
 While(1)
     {
@@ -3498,10 +3481,50 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 				hammermove[PlayerNumber()] = 3;
 				jumps[PlayerNumber()] = 0;
 				SetActorVelocity(GetCurrentPlayerTID(),0,0,0,FALSE,TRUE);
-				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0) ThrustThingZ(GetCurrentPlayerTID(),13,0,1);
-				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0) ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,30,0,GetCurrentPlayerTID());
-				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==1) ThrustThingZ(GetCurrentPlayerTID(),20,0,1);
-				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==1) ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,45,0,GetCurrentPlayerTID());
+						Log(d:movement[PlayerNumber()]==0);
+						Log(d:movement[MAX_PLAYERS+PlayerNumber()]);
+				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0)
+				{
+					If(upgrades[4]==TRUE&&movement[PlayerNumber()]==0&movement[MAX_PLAYERS+PlayerNumber()]==0)
+					{	//Upward Air Dash (neutral jump with upgrade only)
+						ThrustThingZ(GetCurrentPlayerTID(),48,0,1);
+						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,28,0,GetCurrentPlayerTID());
+					}
+					Else If(upgrades[4]==TRUE&&movement[PlayerNumber()]==0&&movement[MAX_PLAYERS+PlayerNumber()]>0)
+					{	//Downward Air Dash (backward+jump with upgrade only)
+						ThrustThingZ(GetCurrentPlayerTID(),-45,0,1);
+						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,26,0,GetCurrentPlayerTID());
+						Until(GetActorZ(0)-GetActorFloorZ(0)<1.0||(GetActorVelZ(0)<2.25&&GetActorVelZ(0)>-2.25)) Delay(1);
+						marydboost_tics = 3;
+						While(marydboost_tics>0) { ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,10,0,GetCurrentPlayerTID()); marydboost_tics--; Delay(1); }
+					}
+					Else
+					{	//Normal Air Dash, performed with forward+upgrade or no upgrade.
+						ThrustThingZ(GetCurrentPlayerTID(),13,0,1);	//Otherwise,just do the normal Air Dash.
+						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,30,0,GetCurrentPlayerTID());
+					}
+				}
+				Else
+				{
+					If(upgrades[4]==TRUE&&movement[PlayerNumber()]==0&movement[MAX_PLAYERS+PlayerNumber()]==0)
+					{	//Upward Air Dash (neutral jump with upgrade only)
+						ThrustThingZ(GetCurrentPlayerTID(),54,0,1);
+						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,36,0,GetCurrentPlayerTID());
+					}
+					Else If(upgrades[4]==TRUE&&movement[PlayerNumber()]==0&&movement[MAX_PLAYERS+PlayerNumber()]>0)
+					{	//Downward Air Dash (backward+jump with upgrade only)
+						ThrustThingZ(GetCurrentPlayerTID(),-52,0,1);
+						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,35,0,GetCurrentPlayerTID());
+						Until(GetActorZ(0)-GetActorFloorZ(0)<1.0||(GetActorVelZ(0)<2.25&&GetActorVelZ(0)>-2.25)) Delay(1);
+						marydboost_tics = 3;
+						While(marydboost_tics>0) { ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,15,0,GetCurrentPlayerTID()); marydboost_tics--; Delay(1); }
+					}
+					Else
+					{	//Normal Air Dash, performed with forward+upgrade or no upgrade.
+						ThrustThingZ(GetCurrentPlayerTID(),20,0,1);	//Otherwise,just do the normal Air Dash.
+						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,45,0,GetCurrentPlayerTID());
+					}
+				}
 				
 				SetActorState(GetCurrentPlayerTID(),"AllowJumps",TRUE);	//Required to allow the Air Dash state.	
 				
@@ -3571,7 +3594,7 @@ script "ComboMeter" ENTER
 		
 		if(ThingCountName("CoinSP_Dummy",0)<prev_coins)	//Compare the number of coins in the area...
 		{	//...and if there's less than there was a tic ago, the player must've collected one!			
-			HealThing(2, 50);	//Always heal the player if they're low on health.
+			HealThing(2, 25);	//Always heal the player if they're low on health.
 			//total_coins++;	//Add this coin to the player's total coins for purchases!
 			//totalcointics = CONSTANT_TCOINDISPTICS;
 		}
@@ -3587,7 +3610,7 @@ script "ComboMeter" ENTER
 			if(combo[PlayerNumber()+(MAX_PLAYERS*3)]>0) combo[PlayerNumber()+(MAX_PLAYERS*3)]--;
 			else combo[PlayerNumber()+(MAX_PLAYERS*2)] = 0;
 			
-			if(timerx==0&&no_scripts[PlayerNumber()]==FALSE) { If(combo_tics[PlayerNumber()]==0) { /*If(framecount % 2 == 1)*/ meter[PlayerNumber()]--; } }
+			if(timerx==0/*&&no_scripts[PlayerNumber()]==FALSE*/) { If(combo_tics[PlayerNumber()]==0&&canUsePCoins) { /*If(framecount % 2 == 1)*/ meter[PlayerNumber()]--; } }
 			if(meter[PlayerNumber()]<=0)
 			{
 				combo[PlayerNumber()]--;
@@ -3629,11 +3652,12 @@ script "Wand_Special" (int which)
 
 Script "XaneAntiCheat" ENTER //XAC (Xane Anti-Cheat)
 {
+	If(ACS_NamedExecuteWithResult("GetXProperty",XPROP_CONTROLLER,0,0,0)==TRUE) Terminate;	//If using a controller/touchscreen, don't interfere with the player's movement.
 	int floorHeight;
 	While(1)
 	{
 		Delay(1);
-		While(GetCVAR("xane_controltype")==FALSE)	//FALSE here means mouse/keyboard. TRUE is for controllers and mobile devices.
+		While(1)	//FALSE here means mouse/keyboard. TRUE is for controllers and mobile devices.
 		{
 			Delay(1);
 			If(no_scripts[PlayerNumber()]==FALSE)
@@ -3654,7 +3678,6 @@ Script "XaneAntiCheat" ENTER //XAC (Xane Anti-Cheat)
 						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,1,0,GetCurrentPlayerTID());
 					}
 				}
-			//TODO: Add backward equivalents; Players can still straferun backwards!
 			}
 		}
 	}
@@ -3976,7 +3999,7 @@ script "Drowning" ENTER
 		{
 		Delay(1);
 		
-		if(airsupply[PlayerNumber()] > 0 && (water_tics[PlayerNumber()] > 0 || GetCVAR("z_disabledrowning") == TRUE)) airsupply[PlayerNumber()] = 1050;
+		if(airsupply[PlayerNumber()] > 0 && ((canUsePCoins && water_tics[PlayerNumber()] > 0) || GetCVAR("z_disabledrowning") == TRUE)) airsupply[PlayerNumber()] = 1050;
 		
 		if(airsupply[PlayerNumber()]==840||airsupply[PlayerNumber()]==560) LocalAmbientSound("misc/waterding",127);
 		
@@ -4401,6 +4424,11 @@ script "CheckMiscScriptVariable" (int which)	//0: no_scripts, 1:hammermove, 2:wa
 }
 
 script "LandingBounce" (int mode)
+//Makes an action happen upon the player hitting the ground.
+//MODES:
+//0: Bounce
+//1: Drop Dash (shoot off in the player's facing direction with speed based on how fast they hit the ground)
+//2: Sword Beam drop attack, a weaker Drop Dash that gives Xane the Variable4 & Variable 5 items if he succeeds or only Variable4 if he dies.
 {
 	int temp_fspeed;	//Not to be confused with fspeed itself, this checks your falling velocity to increase the bounce height if higher than 25.1.
 	
@@ -4451,16 +4479,15 @@ script "LandingBounce" (int mode)
 	{
 		temp_fspeed = temp_fspeed >> 16;	//Convert it into a whole number.
 		If(CheckInventory("SuperX")==TRUE) temp_fspeed -= 10;
-		int divide_by = 9;
-		If(temp_fspeed<-15) divide_by = 8;
-		If(temp_fspeed<-20) divide_by = 7;
-		If(temp_fspeed<-25) divide_by = 6;
-		If(temp_fspeed<-30) divide_by = 5;
-		If(temp_fspeed<-35) divide_by = 4;
-		If(temp_fspeed<-40) divide_by = 3;
-		//Print(s:"DIVIDE! ", d:divide_by, s:"\nFSPEED: ", d:temp_fspeed, s:"\nLOCK TIME: ", d:CONST_BOOST_TICS*2);
+		int divide_by = 7;
+		If(temp_fspeed<-15) divide_by = 6;
+		If(temp_fspeed<-20) divide_by = 5;
+		If(temp_fspeed<-25) divide_by = 4;
+		If(temp_fspeed<-30) divide_by = 3;
+		If(temp_fspeed<-40) divide_by = 2;
+		Print(s:"DIVIDE! ", d:divide_by, s:"\nFSPEED: ", d:temp_fspeed, s:"\nLOCK TIME: ", d:CONST_BOOST_TICS*2);
 		SetActorVelocity(0,0.0,0.0,0.0,FALSE,FALSE);	//Stop the player before boosting them!
-		PlaySound(0,"sonic/thok",CHAN_VOICE,1.0,FALSE);
+		PlaySound(0,"sonic/thok",CHAN_BODY,1.0,FALSE);
 		SetPlayerProperty(FALSE,ON,PROP_TOTALLYFROZEN);
 		//hammermove[PlayerNumber()] = 35;
 		ThrustThing(GetActorAngle(0)>> 8,15,0,0);	//Barely push the player then...
@@ -4690,7 +4717,7 @@ script "ChangePlayerTIDs" enter
 
 	if(GameType()==GAME_NET_DEATHMATCH) cgem_count = 7;
 		
-	ltime_control = TIME_PLAY;
+	show_timer = FALSE;
 	framecount = 0;	//I'm paranoid of this value getting too high!
 	
 	//Reset these level-specific variables just in case the script doesnt define them.
@@ -4898,12 +4925,23 @@ script "TransferPlayerTID" RESPAWN
     Thing_ChangeTID (0, 1000+PlayerNumber());	//...then update it to this new "body".
 }
 
-function int abs (int x)
+function int abs (int x)	//Absolutevalue; This function returns the positive number.
 {
     if (x < 0)
         return -x;
 
     return x;
+}
+
+Script "CalculateOBJDrawDistance" (int units)
+{	//Returns the units multipled by the draw distance multiplier (xane_objdrawdistance).
+	
+	int newval = units;// << 16;	//Convert to a fixed point number.
+	newval *= GetCVar("xane_objdrawdistance");	//FixedMul(newval, GetCVar("xane_objdrawdistance"));	//Multiply by the multiplier CVAR.
+	newval = newval >> 16;	//Revert it back to a integer for DECORATE.
+	
+	SetResultValue(newval);
+	//Log(s:"ORIG: ", d:units, s:"\nNEW: ", d:newval, s:" (mul is ", f:GetCVar("xane_objdrawdistance"), s:")");
 }
 
 script "CheckGMode" (void)
@@ -5040,7 +5078,7 @@ script "CheckSpecialStage" (int mode)
 			SetResultValue(ss_number-1);
 		Break;
 		Case 2:	//Whether this is the Small Hut.
-			if(StrParam(n:PRINTNAME_LEVEL)=="AREA1"/*world_info[0]==1&&world_info[1]==1&&ss_position==3*/) SetResultValue(TRUE);
+			if(StrParam(n:PRINTNAME_LEVEL)=="AREA1"&&GetActorY(0)>6000.5/*world_info[0]==1&&world_info[1]==1&&ss_position==3*/) SetResultValue(TRUE);
 			else SetResultValue(FALSE);
 		Break;
 		Case 3:	//Returns TRUE if in an arena map.
@@ -5271,32 +5309,35 @@ While(1)
 		If(claw_verify_tics>0) claw_verify_tics--;
 		//If(GetActorCeilingZ(0)-GetActorZ(0)<56.5&&GetActorVelZ(0)>1.25) { SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), -(GetActorVelZ(0))/2, FALSE, TRUE); PlaySound(GetCurrentPlayerTID(), "misc/hit_ceiling", CHAN_WEAPON, 0.8, FALSE, 0.8); }	//If the player went too close to the ceiling, make them hit their head on it!
 		
-		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
+		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE&&level_ready==TRUE) canUsePCoins++;	//Remember, this is both a boolean check and a counter, the latter to stop the screen tints from cutting off fade ins.
+		Else canUsePCoins = FALSE;
+		
+		If(canUsePCoins && level_ready==TRUE)
 		{
 			if(water_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 0) FadeTo(64,128,255,0.25,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 0) FadeTo(64,128,255,0.25,0.1);
 				water_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&water_tics[PlayerNumber()]==0) FadeTo(0,0,0,0.0,0.5);
 			}
 			
 			if(ninja_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 2) FadeTo(255,128,255,0.1,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 2) FadeTo(255,128,255,0.1,0.1);
 				ninja_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&ninja_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 			
 			if(damage_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 4) FadeTo(255,128,64,0.25,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 4) FadeTo(255,128,64,0.25,0.1);
 				damage_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&damage_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 
 			if(heal_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 6) FadeTo(64,255,255,0.1,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 6) FadeTo(64,255,255,0.1,0.1);
 				If(framecount % 7 == 6) HealThing(1,100);
 				heal_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&heal_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
@@ -5304,14 +5345,14 @@ While(1)
 			
 			if(combo_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 8) FadeTo(255,255,64,0.1,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 8) FadeTo(255,255,64,0.1,0.1);
 				combo_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&combo_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
 			
 			if(speed_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
-				if(important_fade[PlayerNumber()]==FALSE&&framecount % 14 == 10) FadeTo(64,255,192,0.1,0.1);
+				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 10) FadeTo(64,255,192,0.1,0.1);
 				speed_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&combo_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
@@ -5356,6 +5397,8 @@ While(1)
 			TakeActorInventory(1007,"ShowTotalCoins",1);
 		}
 		
+		If(CheckInventory("InternalDCoin")||CheckInventory("PowerDCoin")) Log(s:"OH MY GLO--WAIT, NO!");
+		
 		if(moved_up_wall[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE) moved_up_wall[PlayerNumber()]--;
 		
 		If(walljumping[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE) walljumping[PlayerNumber()]--; If(hammermove[PlayerNumber()]>0) hammermove[PlayerNumber()]--;
@@ -5388,20 +5431,22 @@ While(1)
 		
 		If(airsupply[PlayerNumber()]<=0) { force_death[PlayerNumber()] = TRUE; }
 		
-		if(ACS_NamedExecuteWithResult("GetXProperty",XPROP_MOBILE,0,0,0)&&(abs(GetActorVelX(1000+PlayerNumber()))>19.1||abs(GetActorVelY(1000+PlayerNumber())>19.1))) GiveInventory("SpeedTrailX",1);
+		if(ACS_NamedExecuteWithResult("GetXProperty",XPROP_LOWEND,0,0,0)&&(abs(GetActorVelX(1000+PlayerNumber()))>19.1||abs(GetActorVelY(1000+PlayerNumber())>19.1))) GiveInventory("SpeedTrailX",1);
 		Else TakeInventory("PowerSpeed",1);
 		
 		If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==FALSE)
 		{
 			If(speed_tics[PlayerNumber()]==0) SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.0);
-			Else SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.18);
+			Else If(canUsePCoins && speed_tics[PlayerNumber()]>0)
+				SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.18);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.0);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_DamageMultiplier, 1.0);
 		}
 		Else
 		{
 			If(speed_tics[PlayerNumber()]==0) SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.225);
-			Else SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.413);
+			Else If(canUsePCoins && speed_tics[PlayerNumber()]>0)
+				SetActorProperty(GetCurrentPlayerTID(), APROP_Speed, 1.413);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_Friction, 1.015);
 			SetActorProperty(GetCurrentPlayerTID(), APROP_DamageMultiplier, 1.5);
 		}
@@ -5452,6 +5497,7 @@ While(1)
 				GiveActorInventory(GetCurrentPlayerTID(),"NotArmorBonus",meter[PlayerNumber()]);
 		}
 		
+		//The Damage Coin doesn't have any checks for the "coin lock" as you can't hut enemies in Special Stages.
 		If(CheckInventory("SuperX")==TRUE&&damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin_Super",1); }
 		Else If(CheckInventory("SuperX")==TRUE) { GiveInventory("InternalDSuper",1); }
 		Else If(damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin",1); }
@@ -5479,7 +5525,7 @@ script "SpeedDebug" ENTER
 	
 	While(1)
 	{
-		If(GetCVAR("debug_speed")==TRUE) PrintBold(d:GetActorVelX(0) >> 16, s:"\n", d:GetActorVelY(0) >> 16);
+		If(GetCVAR("debug_speed")==TRUE) PrintBold(d:GetActorVelX(0) >> 16, s:"\n", d:GetActorVelY(0) >> 16, s:"\n", d:GetActorVelZ(0) >> 16);
 		If(GetCVAR("debug_speed")==FALSE) Delay(35); If(GetCVAR("debug_speed")==TRUE) Delay(1);
 	}
 }
@@ -5607,7 +5653,7 @@ If(freeze>0)
 				SetActorVelocity(1000+PlayerNumber(),0.0,0.0,0.0,FALSE,FALSE);
 			}
 			
-			ltime_control = TIME_PAUSE;
+			//ltime_control = TIME_PAUSE;
 		}
 	Else
 		{
@@ -5643,7 +5689,7 @@ If(freeze>0)
 				If(freeze==1) SetActorVelocity(1000+PlayerNumber(),stored_velocity[0],stored_velocity[1],stored_velocity[2],FALSE,FALSE);
 				ACS_NamedExecuteAlways("RememberGravity",0,0,0,0);
 			}
-			ltime_control = TIME_PLAY;
+			//ltime_control = TIME_PLAY;
 		}
 	}
 	
@@ -5898,6 +5944,18 @@ script "SeamlessHelper" (int initial_load)	//If initial_load is set, an addition
 	Else { level_ready = TRUE; }	//If culling isn't on, signal it's safe to assume the level is ready now.
 	
 	//SuperX check was here.
+	If(GetCVAR("sv_nomonsters")==TRUE)
+	{
+		no_scripts[PlayerNumber()] = TRUE;
+		SetPlayerProperty(TRUE, ON, PROP_TOTALLYFROZEN);
+		
+		While(1)
+		{
+			FadeTo(128,64,64,1.0,0.1);
+			PrintBold(s:"MONSTERS ARE DISABLED.\nSorry, but monsters must be enabled to play Mary's Magical Adventure. Some objects have to be 'monsters' to be disabled to improve performance, so things like doors wouldn't work if you were allowed to play this.\n\nPlease set sv_nomonsters to 0 then restart the game.");
+			Delay(5);
+		}
+	}
 }
 
 script "WaitForCulling" (int culltics, int cullfade)
@@ -5930,8 +5988,9 @@ script "WaitForCulling" (int culltics, int cullfade)
 		TakeInventory("Variable5",1);
 		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
 		level_ready = TRUE;	//Signal it's safe to resume the level now, which will make the screen fade in.
+		show_timer = TRUE;
 	}
-	Else { level_ready = TRUE; }	//If in multiplayer or culling is disabled, indicate the level is "ready" to prevent an infinite black/white screen.
+	Else { level_ready = TRUE; show_timer = TRUE; }	//If in multiplayer or culling is disabled, indicate the level is "ready" to prevent an infinite black/white screen.
 }
 
 script "SuperFormCheck" (void)
@@ -5956,17 +6015,19 @@ script "HandleRCulling" ENTER
 //11&12: ~3000
 //13&14: ~4096
 {
-	If(GetCVAR("xane_rculling")>2||GetCVAR("xane_rculling")<0) SetCVAR("xane_rculling",0);	//Disable culling if the CVAR is set to an invalid value..
+	If(GetCVAR("xane_rculling")>2||GetCVAR("xane_rculling")<-1) SetCVAR("xane_rculling",-1);	//Disable culling if the CVAR is set to an invalid value..
 	int last_cull_setting = GetCVar("xane_rculling");
 	If(GameType()!=GAME_SINGLE_PLAYER||last_cull_setting<=0) Terminate;
 	Else Delay(3);
-
+	
+	If(GetCVAR("vid_renderer")==0)	ChangeSky("SPECTS07", "SPECTS07");	//Polyobjects are rendered as solid black walls in the SW renderer.
+	
 	While(1)	//Begin moving the polyobject in hopes it reaches the player in time.
 	{
 		If(level_ready==TRUE)	//The speeds here are normal then "loading"/teleporting respectively.
 		{
-			Polyobj_MoveToSpot(9+(last_cull_setting*2), 160, 1000);
-			Polyobj_MoveToSpot(9+(last_cull_setting*2)+1, 160, 1000);
+			Polyobj_MoveToSpot(9+(last_cull_setting*2), 192, 1000);
+			Polyobj_MoveToSpot(9+(last_cull_setting*2)+1, 192, 1000);
 		}
 		Else
 		{
@@ -6061,6 +6122,7 @@ If(cgem_count<7)
 		important_fade[PlayerNumber()] = TRUE;
 		ACS_NamedExecute("SSEntryTransition",0,0,0,0);
 		entering_ss = 50;
+		level_ready = FALSE;	//Make the speedrunning timer fade out. This variable SHOULD be returned to normal when returning to this area, HOPEFULLY.
 		//fadeout = 2;
 		ss_returnlevel = GetLevelInfo(LEVELINFO_LEVELNUM);	//Indicate what level to return to to prevent the strange 1-2 glitch.
 		

@@ -236,7 +236,7 @@ script "ShowSTutMessage" (int id)
 	int properties[5] = { 320.4, 250.0, 7.0, 0.25, 0.75 };	//X, Y, hold time, fade in, fade out
 	SetHUDSize(640,400,TRUE);
 	SetFont("3DLETTER");
-	If(StrParam(l:"MOBILE")!="YES")
+	if(ACS_NamedExecuteWithResult("GetXProperty",XPROP_MOBILE,0,0,0)==FALSE)
 	{
 		Switch(id)
 		{
