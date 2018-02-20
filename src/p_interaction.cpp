@@ -931,7 +931,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	int fakeDamage = 0;
 	int holdDamage = 0;
 	const int rawdamage = damage;
-	const bool telefragDamage = (rawdamage >= TELEFRAG_DAMAGE);
+	const bool telefragDamage = 0;	//(rawdamage >= TELEFRAG_DAMAGE);
 	
 	if (damage < 0) damage = 0;
 
@@ -950,7 +950,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	}
 
 	// Spectral targets only take damage from spectral projectiles.
-	if (target->flags4 & MF4_SPECTRAL && !telefragDamage)
+	if (target->flags4 & MF4_SPECTRAL /*&& !telefragDamage*/)
 	{
 		if (inflictor == NULL || !(inflictor->flags4 & MF4_SPECTRAL))
 		{
@@ -971,7 +971,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 		}
 		return 0;
 	}
-	if (target == source && (!telefragDamage || target->flags7 & MF7_LAXTELEFRAGDMG))
+	if (target == source && (/*!telefragDamage ||*/ target->flags7 & MF7_LAXTELEFRAGDMG))
 	{
 		damage = int(damage * target->SelfDamageFactor);
 	}
@@ -980,7 +980,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	// different here. At any rate, invulnerable is being checked before type factoring, which is then being 
 	// checked by player cheats/invul/buddha followed by monster buddha. This is inconsistent. Don't let the 
 	// original telefrag damage CHECK (rawdamage) be influenced by outside factors when looking at cheats/invul.
-	if ((target->flags2 & MF2_INVULNERABLE) && !telefragDamage && (!(flags & DMG_FORCED)))
+	if ((target->flags2 & MF2_INVULNERABLE) && /*!telefragDamage &&*/ (!(flags & DMG_FORCED)))
 	{ // actor is invulnerable
 		if (target->player == NULL)
 		{
@@ -1039,7 +1039,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 			return 0;
 		}
 
-		if (!telefragDamage || (target->flags7 & MF7_LAXTELEFRAGDMG)) // TELEFRAG_DAMAGE may only be reduced with LAXTELEFRAGDMG or it may not guarantee its effect.
+		if (/*!telefragDamage ||*/ (target->flags7 & MF7_LAXTELEFRAGDMG)) // TELEFRAG_DAMAGE may only be reduced with LAXTELEFRAGDMG or it may not guarantee its effect.
 		{
 			if (player && damage > 1)
 			{
@@ -1257,7 +1257,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 		target->IsTeammate (source))
 	{
 		//Use the original damage to check for telefrag amount. Don't let the now-amplified damagetypes do it.
-		if (!telefragDamage || (target->flags7 & MF7_LAXTELEFRAGDMG))
+		if (/*!telefragDamage ||*/ (target->flags7 & MF7_LAXTELEFRAGDMG))
 		{ // Still allow telefragging :-(
 			damage = (int)(damage * level.teamdamage);
 			if (damage < 0)
@@ -1304,7 +1304,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 		if (!(flags & DMG_FORCED))
 		{
 			// check the real player, not a voodoo doll here for invulnerability effects
-			if ((!telefragDamage && ((player->mo->flags2 & MF2_INVULNERABLE) ||
+			if ((/*!telefragDamage &&*/ ((player->mo->flags2 & MF2_INVULNERABLE) ||
 				(player->cheats & CF_GODMODE))) ||
 				(player->cheats & CF_GODMODE2) || (player->mo->flags5 & MF5_NODAMAGE))
 				//Absolutely no hurting if NODAMAGE is involved. Same for GODMODE2.
@@ -1329,7 +1329,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 				{
 					newdam = player->mo->AbsorbDamage(damage, mod);
 				}
-				if (!telefragDamage || (player->mo->flags7 & MF7_LAXTELEFRAGDMG)) //rawdamage is never modified.
+				if (/*!telefragDamage ||*/ (player->mo->flags7 & MF7_LAXTELEFRAGDMG)) //rawdamage is never modified.
 				{
 					// if we are telefragging don't let the damage value go below that magic value. Some further checks would fail otherwise.
 					damage = newdam;
@@ -1354,7 +1354,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 				}
 			}
 			
-			if (damage >= player->health && !telefragDamage
+			if (damage >= player->health /*&& !telefragDamage*/
 				&& (G_SkillProperty(SKILLP_AutoUseHealth) || deathmatch)
 				&& !player->morphTics)
 			{ // Try to use some inventory health
@@ -1466,7 +1466,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	if (target->health <= 0)
 	{ 
 		//[MC]Buddha flag for monsters.
-		if (!(flags & DMG_FORCED) && ((target->flags7 & MF7_BUDDHA) && !telefragDamage && ((inflictor == NULL || !(inflictor->flags7 & MF7_FOILBUDDHA)) && !(flags & DMG_FOILBUDDHA))))
+		if (!(flags & DMG_FORCED) && ((target->flags7 & MF7_BUDDHA) && /*!telefragDamage &&*/ ((inflictor == NULL || !(inflictor->flags7 & MF7_FOILBUDDHA)) && !(flags & DMG_FOILBUDDHA))))
 		{ //FOILBUDDHA or Telefrag damage must kill it.
 			target->health = 1;
 		}
@@ -1877,7 +1877,7 @@ void P_PoisonDamage (player_t *player, AActor *source, int damage, bool playPain
 	{
 		return;
 	}
-	if ((damage < TELEFRAG_DAMAGE && ((target->flags2 & MF2_INVULNERABLE) ||
+	if ((/*damage < TELEFRAG_DAMAGE &&*/ ((target->flags2 & MF2_INVULNERABLE) ||
 		(player->cheats & CF_GODMODE))) || (player->cheats & CF_GODMODE2))
 	{ // target is invulnerable
 		return;
@@ -1917,7 +1917,7 @@ void P_PoisonDamage (player_t *player, AActor *source, int damage, bool playPain
 	if (target->health <= 0)
 	{ // Death
 		if ((((player->cheats & CF_BUDDHA) || (player->cheats & CF_BUDDHA2) ||
-			(player->mo->flags7 & MF7_BUDDHA)) && damage < TELEFRAG_DAMAGE) ||
+			(player->mo->flags7 & MF7_BUDDHA))/* && damage < TELEFRAG_DAMAGE*/) ||
 			(player->mo->FindInventory (PClass::FindActor(NAME_PowerBuddha),true) != nullptr))
 		{ // [SP] Save the player... 
 			player->health = target->health = 1;
@@ -1993,7 +1993,7 @@ CCMD (kill)
 			Net_WriteByte (DEM_GENERICCHEAT);
 			Net_WriteByte (CHT_MASSACRE2);
 		}
-		else if (!stricmp (argv[1], "self") || !stricmp (argv[1], "mary") || !stricmp (argv[1], "xane"))
+		else if (!stricmp(argv[1], "self"))
 		{
 			// If suiciding is disabled, then don't do it.
 			if (dmflags2 & DF2_NOSUICIDE)
@@ -2012,9 +2012,7 @@ CCMD (kill)
 	{
 		// If suiciding is disabled, then don't do it.
 		//if (dmflags2 & DF2_NOSUICIDE)
-		
-		Printf("Kill? Be more specific about what you want to kill.\nUse \"self\" if you want to lose a life.\n");
-		return;
+		//	return;
 
 		// Kill the player
 		//Net_WriteByte (DEM_SUICIDE);

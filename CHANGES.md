@@ -11,12 +11,14 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Added and additional height/button press check to the variable jump height script to prevent it activating after bouncing off of certain springs.
 * Xane's Drop Dash now consistently makes the "thok" sound, which was only played if a landing sound didn't play when hitting the ground.
 * Coins now work correctly in Hell City (1-1) and are properly disabled when in an area that doesn't allow them instead of working forever, the complete opposite of what was intended.
+* The speedrunning timer now appears after the countdown in Time Attack.
+* Performing a Drop Dash over an area transition no longer makes Xane's sword lock up when attempting a Sword Beam on the ground.
 ## Major
 * Xane's claw now pulls Xane up to whatever's above the spot it attached to. This can be seen in 1-2 near the end of the area.
 * Demos now use a CVAR (cl_demo) instead of using custom GameType checks. This increases compatibility with Delta Touch.
 * Render culling has been added! This improves performance in Delta Touch but limits how far you can see by abusing how polyobjects stop rendering behind them. Due to this, mobile devices now use the same data as computers.
-* Skyboxes no longer render on low-end devices (see below for the low-end mod) or on computers if ***mma_mobile.pk3*** is loaded. This was done because even slopes can cause lag on mobile just by looking in their direction if a skyox using them is visible, such as the distant volcano in Hell City (1-1).
-* Object draw distance multiplier CVAR (***xane_objdrawdistance***) has been added! Its setting can be found in the display options menu at the bottom. It affects any light or sound that uses the "auto door opener" object and normal coins. Try decreasing and increasing it and notice how objects disappear at different distances relative to the decimal value you set!
+* Skyboxes no longer render on low-end devices (see below for the low-end mod) or on computers if ***mma_lowend.pk3*** is loaded. This was done because even slopes can cause lag on mobile just by looking in their direction if a skyox using them is visible, such as the distant volcano in Hell City (1-1).
+* Object draw distance multiplier CVAR (***xane_objdrawdistance***) has been added! Its setting can be found in the display options menu at the bottom. It affects any light or sound that uses the "auto door opener" object. Try decreasing and increasing it and notice how lights start turning off at closer distances to you!
 * Four "mods" are now supported; Mobile mod changes text/sounds to be more accurate for touchscreen devices, the video mod enables the Xane Corp. logo and title screen videos, the low-end mod gets rid of things in some areas and enables the low draw distance if not set previously automatically, and the controller mod disables the anti-straferunning script to allow analog stick/touchscreen users to fully control Mary without moving backwards at random. **Please** don't abuse the last mod to use straferunning. It isn't allowed unless using a controller/Delta Touch and probably breaks the game.
 ## Minor
 * Mary's House is now correctly referred to when spawning in it initially. Before, it was called "Small Hut".
@@ -30,3 +32,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * If the debug spawn point is enabled (the debug_spawn CVAR), it'll automatically be disabled the next time the game moves Mary/Xane to a spawn point. This fixes the Small Hut warp being broken and respawning the player outside of it on the beach.
 * Speed trails no longer appear if ***mma_mobile.pk3*** is detected. This is due to the speed powerup not respecting the speed value set in the DECORATE code, contrary to what the ZDoom Wiki states.
 * Mary and Xane now move sideways the same speed as forwards. This was changed to allow controllers to use their analog sticks (or Delta Touch's touchscreen controls) to gain full control of the player's movement. Remember to download the controller mod for the full experience, though...
+* A new sky was added, the moving clouds/stormy sky. It's the first animated sky in the game, with 96 frames of four cloud layers scrolling at different speeds. To see it on any level, type the command ***changesky STORM_01*** in the console.
+* Added "straw sucking" sounds to Mary's voice samples heard when she drinks from Juice Cylinders. They are actual recordings of Xane sucking an empty cup's straw, making the familiar sound.

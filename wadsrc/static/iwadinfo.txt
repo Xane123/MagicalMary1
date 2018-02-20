@@ -3,7 +3,7 @@
 IWad
 {
 	Name = "Mary's Magical Adventure"
-	Autoname = "mma.base.pc"
+	Autoname = "mma.base"
 	Game = "Doom"
 	Config = "Doom"
 	IWADName = "mma_data.pk3"
@@ -14,7 +14,8 @@ IWad
 
 Names
 {
-	"mma_data.pk3"
+	"MaryMagicalAdventure.pk3"
+	"MaryMagicalAdventure.ipk3"
 }
 
 Order	// Order in the IWAD selection box
