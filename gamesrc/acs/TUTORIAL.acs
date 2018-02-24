@@ -126,19 +126,23 @@ script "CheckTutorials" OPEN
 		
 		Until(tutorial_id[0]!=-1) Delay(17);	//Wait until a tutorial's requested by the game.
 		
-		If(GetCVAR("xane_tutorials")==FALSE&&GetCVAR("xane_tutorialpause")==FALSE&&no_scripts[PlayerNumber()]==FALSE) { tutorial_id[0] = -1; Restart; }	//If another screen is up or tutorials are disabled, ignore this request.
+		If(GetCVAR("xane_tutorials")==FALSE&&GetCVAR("xane_tutorialpause")==FALSE&&no_scripts[0]==FALSE) { tutorial_id[0] = -1; Restart; }	//If another screen is up or tutorials are disabled, ignore this request.
 		
 		If(tutorial_completed[tutorial_id[0]]==FALSE)
 		{
 			if(GetCVAR("xane_tutorials") || GetCVAR("xane_tutorialvoices"))
 			{
-				If(GetCVAR("xane_tutorialpause")==FALSE) exvertical = 100;
+				If(GetCVAR("xane_tutorialpause")==FALSE) { exvertical = 100;}	//Move the text box if pausing is off.
+				Else
+				{	//If pausing is on, only show the tutorial once the player is on the ground.
+					Until(GetActorZ(0)-GetActorFloorZ(0)==0.0) Delay(1);
+				}
 				
 				tutorial_completed[tutorial_id[0]] = TRUE;	//Mark the tutorial as completed.
 				tutorial_id[1] = tutorial_id[0];	//Set the current tutorial ID.
 				tutorial_id[0] = -1;
 				text_current = tutorial_text[tutorial_id[1]];
-				If(GetCVAR("xane_tutorialpause")==TRUE) no_scripts[PlayerNumber()] = TRUE;	//Prevent other special screens from appearing.
+				If(GetCVAR("xane_tutorialpause")==TRUE) no_scripts[0] = TRUE;	//Prevent other special screens from appearing.
 				
 				If(GetCVAR("xane_tutorialpause")==FALSE&&(tutorial_id[1]==13||tutorial_id[1]==14||tutorial_id[1]==15||tutorial_id[1]==16)) { UseInventory("MaryHammer"); GiveInventory("Mary_LookAtHammer", 1); }
 				If(GetCVAR("xane_tutorialpause")==FALSE&&(tutorial_id[1]==19||tutorial_id[1]==20)) UseInventory("MaryUmbrella");
@@ -171,7 +175,7 @@ script "CheckTutorials" OPEN
 					Delay(17);
 					input_check = GetPlayerInput(0, INPUT_BUTTONS);
 					
-					Until(waittics>=333||input_check & BT_USE) { SetFont("UBUTTON1"); If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(l:StrParam(s:"A"); HUDMSG_PLAIN, 0, CR_YELLOW, 650.4, 225.0, 0.08); } Else { HUDMessageBold(l:StrParam(s:"A"); HUDMSG_PLAIN, 0, CR_YELLOW, 650.4, 300.0, 0.08); } input_check = GetPlayerInput(0, INPUT_BUTTONS); waittics++; Delay(1); }
+					Until(waittics>=333||input_check & BT_USE) { SetFont("UBUTTON1"); If(GetCVAR("xane_tutorialpause")) { HUDMessageBold(l:StrParam(s:"A"); HUDMSG_PLAIN, 0, CR_YELLOW, 650.4, 225.0, 0.08); no_scripts[0] = TRUE; } Else { HUDMessageBold(l:StrParam(s:"A"); HUDMSG_PLAIN, 0, CR_YELLOW, 650.4, 300.0, 0.08); } input_check = GetPlayerInput(0, INPUT_BUTTONS); waittics++; Delay(1); }
 					
 					waittics = 0;
 				}
@@ -199,7 +203,7 @@ script "CheckTutorials" OPEN
 					Else { HUDMessageBold(l:StrParam(s:"TUT", d:text_current);
 						HUDMSG_FADEOUT, 11, CR_YELLOW, 320.4, 275.0, 0.01); }
 				}
-			If(GetCVAR("xane_tutorialpause")==FALSE) no_scripts[PlayerNumber()] = FALSE;	//Allow other screens.
+			If(GetCVAR("xane_tutorialpause")==FALSE) no_scripts[0] = FALSE;	//Allow other screens.
 			ChangeCamera(0,1,0);	//If something changed the camera view for this tutorial, switch it back to the player's camera.
 			If(tutorial_showmsg[tutorial_id[1]]>0) { ACS_NamedExecuteAlways("ShowSTutMessage",0,tutorial_showmsg[tutorial_id[1]],0,0); }
 			
@@ -347,6 +351,12 @@ script "ShowSTutMessage" (int id)
 			Break;
 		}
 	}
+}
+
+script "CheckSignValidity" (int tut_id)
+{	//Used by signs to determine if they should appear or not.
+	If(tutorial_completed[tut_id]==FALSE&&GetCVAR("xane_tutorials")==TRUE&&gamemode==0) SetResultValue(TRUE);
+	Else SetResultValue(FALSE);
 }
 
 Script "ShowUpgradeTutorial" (int which)

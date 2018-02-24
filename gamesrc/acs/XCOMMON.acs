@@ -436,11 +436,15 @@ script "Teleporter" (int destination, int marker, int camera)
 
 	ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//Make sure the player can't mess up this mini-cutscene.
 	FadeTo(255,255,255,1.0,0.85);
-	Delay(30);
-
-	ACS_NamedExecuteAlways("SetCheckpoint",0,destination,0,0);	//Set the checkpoint and teleport the player to the destination.
+	ACS_NamedExecute("WaitForCulling",0,1,-1,0);
+	Delay(5);
+	
 	Teleport_NoStop(destination,0,FALSE);
 	SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
+	Delay(25);
+	
+	level_ready = TRUE;	//After the transition, revert it back to normal speed.
+	ACS_NamedExecuteAlways("SetCheckpoint",0,destination,0,0);	//Set the checkpoint and teleport the player to the destination.
 	If(camera>0) ChangeCamera(0, FALSE, FALSE);	//Return the camera to normal if it was changed earlier.
 	ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);	//Allow movement again.
 	FadeTo(255,255,255,0.0,1.0);
@@ -2088,18 +2092,22 @@ Script "ExitTransition" (void)
 	Delay(17);
 	
 	If(GameType()==GAME_SINGLE_PLAYER&&CheckActorInventory(1000, "CoinSP")>0)
-	{
+	{	//Bank the player's coins but take some out as they aren't banking them themselves.
+		int coins_to_bank = CheckActorInventory(1000, "CoinSP");
+		If(coins_to_bank>15) coins_to_bank /= 4;	//Divide by 3 if they have enough coins.
+		If(CheckActorInventory(1000, "SuperX")) { coins_to_bank /= 3; If(coins_to_bank<15) coins_to_bank = 15; }	//Divide by 2 if transformed.
+		
 		If(gamemode==0)
 		{
-			Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
-			ACS_NamedExecute("DisplayTotalCoins",0,70+CheckActorInventory(1000, "CoinSP"),0,0);
+			Print(s:"Sending ", d:coins_to_bank, s:" coins to your bank...");
+			ACS_NamedExecute("DisplayTotalCoins",0,70+coins_to_bank,0,0);
 			Delay(17);
 			
-			Until(CheckActorInventory(1000, "CoinSP")==0)
+			Until(coins_to_bank==0)
 			{
-				Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
+				Print(s:"Sending ", d:coins_to_bank, s:" coins to your bank...");
 				total_coins++;
-				TakeActorInventory(1000, "CoinSP", 1);
+				coins_to_bank--;
 				AmbientSound("coin/normal",256);
 				Delay(2);
 			}
@@ -2109,7 +2117,7 @@ Script "ExitTransition" (void)
 		}
 		Else If(gamemode<3)	//Time Attack/Boss Rush
 		{
-			total_coins += CheckActorInventory(1000, "CoinSP");
+			total_coins += coins_to_bank;
 			TakeActorInventory(1000, "CoinSP", CheckActorInventory(1000, "CoinSP"));
 		}
 		Else If(gamemode==3) { TakeActorInventory(1000, "CoinSP", CheckActorInventory(1000, "CoinSP")); }
@@ -3218,6 +3226,7 @@ While(1)
 			prevx[PlayerNumber()] = GetActorX(GetCurrentPlayerTID());	//Set these to the position the player stuck to the wall at.
 			prevy[PlayerNumber()] = GetActorY(GetCurrentPlayerTID());	//If they move from this position when dying or teleporting, they will be forced off.
 			
+			GiveInventory("MaryHammer_MidAirDone",1);	//Disable Mary's hammer to avoid any strange behavior.
 			walldetected[PlayerNumber()] = -1;	//This variable is used for detecting jumping off walls as well.
 
 			SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.0);
@@ -3249,7 +3258,7 @@ While(1)
 					Delay(1);
 					walljumping[PlayerNumber()] = 5;
 					fspeed[PlayerNumber()] = 0.0;
-					fscreamed[PlayerNumber()] = FALSE;
+					//fscreamed[PlayerNumber()] = FALSE;
 
 					input_wd = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
 					
@@ -3292,6 +3301,7 @@ While(1)
 			
 			SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,1.0);
 			SetPlayerProperty(0,OFF,PROP_FROZEN);
+			TakeInventory("MaryHammer_MidAirDone",1);	//Allow use of Mary's Hammer again.
 						
 			Delay(1);
 			walljumping[PlayerNumber()] = 6;
@@ -5267,7 +5277,7 @@ script "DemoCamera" (int tid, int seconds_democam, int condition)
 	}
 }
 
-script "DemoTimer" OPEN
+script "DemoOverlay" OPEN
 {
 	If(GetCVAR("cl_demo")==FALSE) Terminate;
 	int lump_name2 = StrParam(n:PRINTNAME_LEVEL);
@@ -5285,7 +5295,7 @@ script "DemoTimer" OPEN
 			HUDMessage(s:"A";
 				HUDMSG_PLAIN, 101, CR_UNTRANSLATED, 586.2,5.1, 4.0);	//Is 585 or 586 more square? Verify in the future.
 		}
-		Delay(35);
+		Delay(70);
 	}
 }
 
@@ -6046,30 +6056,38 @@ script "WaitForCulling" (int culltics, int cullfade)
 	If(GetCVar("xane_rculling")!=FALSE&&GameType()==GAME_SINGLE_PLAYER)
 	{	//First, do some sanity checks.
 		If(culltics<-1||culltics==0||culltics>3) { Log(s:"ERROR: Valid wait times are 1-3.\nSee WaitForCulling call."); Terminate; }
-		If(cullfade<0||cullfade>1) { Log(s:"ERROR: Invalid fade for culling. Valid values are 0-1.\nSee WaitForCulling call."); Terminate; }
+		If(cullfade<-1||cullfade>1) { Log(s:"ERROR: Invalid fade for culling. Valid values are 0-1.\nSee WaitForCulling call."); Terminate; }
 		
-		fadeout = 6+cullfade;	//This will be either a black or white fade out.
-		ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//This only freezes the activator, which should be player 1.
-		GiveInventory("Variable5",1);	//Variable5 makes players phase through everything.
-		GiveInventory("Cutscene",1);	//Freeze everything during the video.
+		if(cullfade!=-1)
+		{	//-1 means no fade or stopping happens, leaving it up to the other script. See "Teleporter" for an example.
+			fadeout = 6+cullfade;	//This will be either a black or white fade out.
+			ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//This only freezes the activator, which should be player 1.
+			GiveInventory("Variable5",1);	//Variable5 makes players phase through everything.
+			GiveInventory("Cutscene",1);	//Freeze everything during the wait.
 
-		SetFont("3DLETTER");
-		HUDMessage (l:"TXT_LOADING";
-			HUDMSG_FADEINOUT, 5, CR_UNTRANSLATED, 0.5,0.5, 3.0, 0.33, 0.33);   //Loading text.
-
+			SetFont("3DLETTER");
+			HUDMessage (l:"TXT_LOADING";
+				HUDMSG_FADEINOUT, 5, CR_UNTRANSLATED, 0.5,0.5, 3.0, 0.33, 0.33);   //Loading text.
+		}
 		level_ready = FALSE;	//Make the render-culling polyobject speed up temporarily.
 		If(culltics==1)Delay(35);	//Wait for the set time before unlocking the player.
 		Else If(culltics==2)Delay(70);
 		Else If(culltics==3)Delay(100);		
 		Else If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE) Delay(100); Else Delay(35);	//-1 will use the original SeamlessHelper values.
 		
-		HUDMessage (l:"TXT_LOADING";
-			HUDMSG_FADEOUT, 5, CR_UNTRANSLATED, 0.5,0.5, 0.0, 0.33);   //Loading text.
+		if(cullfade!=-1)
+		{
+			HUDMessage (l:"TXT_LOADING";
+				HUDMSG_FADEOUT, 5, CR_UNTRANSLATED, 0.5,0.5, 0.0, 0.33);   //Loading text.
+		}
 		
 		TakeInventory("PowerTimeFreezer",1);
-		fadeout = 8+cullfade;	//This will be either a black or white fade in.
-		TakeInventory("Variable5",1);
-		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
+		if(cullfade!=-1)
+		{
+			fadeout = 8+cullfade;	//This will be either a black or white fade in.
+			TakeInventory("Variable5",1);
+			ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
+		}
 		level_ready = TRUE;	//Signal it's safe to resume the level now, which will make the screen fade in.
 		show_timer = TRUE;
 	}

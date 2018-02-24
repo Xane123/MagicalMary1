@@ -909,6 +909,8 @@ Weapon.BobRangeX 0.5
 Weapon.BobSpeed 1.8
 Weapon.BobStyle Alpha
 //+STRIFEDAMAGE
+//INVENTORY USE:
+//Variable4: Magical Cutie Mary Hammer Puff usage counter to determine coin cost.
 States
 {
 Ready:
@@ -916,21 +918,24 @@ MHM1 A 0
 ReadyX:
 MHM1 A 0 A_JumpIfInventory("Animation2",1,"StartCrying")
 MHM1 A 0 A_JumpIfInventory("JuiceBoxA",1,"Drink")
-MHM1 A 0 A_JumpIfInventory("onWater",1,"FloorCheck")
+//MHM1 A 0 A_JumpIfInventory("onWater",1,"FloorCheck")
 MHM1 A 0 A_JumpIfInventory("Mary_LookAtHammer",1,"Look")
 MHM1 A 0 A_JumpIfInventory("BounceRequested",1,"EnemyBounce")
 UMBR U 0 A_JumpIfInventory("RequestBallThrow",3,"ThrowBall3")
 UMBR U 0 A_JumpIfInventory("RequestBallThrow",2,"ThrowBall2")
 UMBR U 0 A_JumpIfInventory("RequestBallThrow",1,"ThrowBall1")
 MHM1 A 1 A_WeaponReady
-MHM1 A 0 A_TakeInventory("MaryHammer_MidAirDone",1)
-Goto ReadyX
+//Goto CheckFloor
+//MHM1 A 0 A_TakeInventory("MaryHammer_MidAirDone",1)
+//Goto ReadyX
 CheckFloor:
-MHM1 A 0 A_JumpIfInventory("FloorDetected",1,"RemoveMidAir") 
+MHM1 A 0 A_JumpIf(z-floorz<4.5,"RemoveMidAir")	//A_JumpIfInventory("FloorDetected",1,"RemoveMidAir")
+MHM1 A 0 A_JumpIfInventory("MaryHammer_MidAirDone",1,"WaitCrashCheckFloor")	//If hammer is locked, don't allow it unless this goes away.
 Goto ReadyX
 RemoveMidAir:
 MHM1 A 0 A_TakeInventory("MaryHammer_MidAirDone",1)
 MHM1 A 0 A_TakeInventory("MaryHammer_Water",1)
+MHM1 A 0 A_TakeInventory("Variable4",99)	//Variable 5 is used to punish Magical Cutie Mary's Hammer Puff usage.
 Goto ReadyX
 Fire:
 MHM1 A 0 A_JumpIfInventory("NearFloor",1,"HammerAttack")
@@ -1036,7 +1041,7 @@ Goto FinishHammerAttack
 Player8:
 MHM1 J 0 A_FireCustomMissile("TriggerProjectile_Hammer8",0,0,0,4,0,0)
 Goto FinishHammerAttack
-FloorCheck:
+FloorCheck:	//SHould be unused.
 MHM1 A 0
 MHM1 A 1
 MHM1 A 0 A_JumpIfInventory("FloorDetected",1,"Ready")
@@ -1046,13 +1051,15 @@ MHM2 D 0
 MHM2 D 0 A_JumpIfInventory("HammerUpgrades",2,"DoubleJump2")
 Goto WaitCrashA
 DoubleJump2:
-MHM2 D 0 A_GiveInventory("MaryHammer_MidAirDone",1)
+MHM2 D 0 A_JumpIfInventory("SuperX",1,"SuperPunishment")	//If Magical Cutie Mary, punish spamming with coin loss.
 MHM2 D 0 ACS_NamedExecuteAlways("RequestJumpCancel",0,0,0,0)
 MHM2 DEFGHI 1
 MHM2 J 0 A_PlaySound("mary/hammer_puff",CHAN_VOICE,1.0)
 MHM2 J 17 A_ChangeVelocity(velx*1.05,vely*1.05,13.75,CVF_REPLACE)
 MHM2 IHGFED 1
-Goto FloorCheck
+MHM2 D 0 A_JumpIfInventory("SuperX",1,"CheckFloor")	//If Magical Cutie Mary, allow this to be spammed.
+MHM2 D 0 A_GiveInventory("MaryHammer_MidAirDone",1)
+Goto CheckFloor
 AltFire:
 MHM2 D 0 A_JumpIfInventory("MaryHammer_MidAirDone",1,"WaitCrash")
 MHM2 D 0 A_JumpIfInventory("NoHammer",1,"NoHammer")
@@ -1079,7 +1086,8 @@ MHM1 L 1 A_ChangeVelocity(velx/1.75,vely/1.75,20,CVF_REPLACE)
 MHM1 L 0 ACS_NamedExecuteAlways("MaryHammer_AltFire",0,0,4,0)
 HammerJump4:
 MHM1 KJIN 1
-Goto FloorCheck
+MHM1 M 0 A_GiveInventory("Mary_MidAirDone",1)
+Goto CheckFloor
 HammerJumpCancel:
 MHM1 D 0 A_JumpIfInventory("HammerUpgrades",3,"StartSpin")
 Goto DenySpin
@@ -1123,6 +1131,37 @@ Goto ReadyX
 WaitCrashA:
 MHM1 A 1
 Goto ReadyX
+WaitCrashA:
+MHM1 A 1
+Goto CheckFloor
+SuperPunishment:	//Magical Cutie Mary loses coins every time she uses the Hammer Puff more than normally possible.
+MHM1 A 0 A_GiveInventory("Variable4",1)	//Variable 5 is the counter used for this.
+MHM1 A 0 A_JumpIfInventory("Variable4",6,"SPunish5")
+MHM1 A 0 A_JumpIfInventory("Variable4",5,"SPunish4")
+MHM1 A 0 A_JumpIfInventory("Variable4",4,"SPunish3")
+MHM1 A 0 A_JumpIfInventory("Variable4",3,"SPunish2")
+MHM1 A 0 A_JumpIfInventory("Variable4",2,"SPunish1")
+Goto DoubleJump2+1
+SPunish1:
+MHM1 A 0 A_PlaySound("droppedcoin/bounce",CHAN_WEAPON,0.7)
+MHM1 A 0 A_TakeInventory("CoinSP", 1)
+Goto DoubleJump2+1
+SPunish2:
+MHM1 A 0 A_PlaySound("droppedcoin/bounce",CHAN_WEAPON,0.8)
+MHM1 A 0 A_TakeInventory("CoinSP", 2)
+Goto DoubleJump2+1
+SPunish3:
+MHM1 A 0 A_PlaySound("droppedcoin/bounce",CHAN_WEAPON,0.9)
+MHM1 A 0 A_TakeInventory("CoinSP", 3)
+Goto DoubleJump2+1
+SPunish4:
+MHM1 A 0 A_PlaySound("droppedcoin/bounce",CHAN_WEAPON,1.0)
+MHM1 A 0 A_TakeInventory("CoinSP", 4)
+Goto DoubleJump2+1
+SPunish5:
+MHM1 A 0 A_PlaySound("droppedcoin/drop",CHAN_WEAPON,0.83)
+MHM1 A 0 A_TakeInventory("CoinSP", 5)
+Goto DoubleJump2+1
 Look:
 MHM1 OPQRSTUV 1
 MHM1 A 0 A_JumpIfInventory("Animation2",1,"StartCrying")
