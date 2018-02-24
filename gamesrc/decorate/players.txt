@@ -72,18 +72,25 @@ TNT1 A 1 A_FadeOut(0.5,1)
 Loop
 }
 }
-	//2015 is available. Use it for the scripted random upgrade spawner.
 
-actor PowerupWRandom
+actor PowerupWRandom 2015
 {
 Radius 8
 Height 16
+-SOLID
+-SHOOTABLE
++INVULNERABLE
 +NOGRAVITY
++NOINTERACTION
++NOBLOCKMAP
++INVISIBLE
+//$Title Weapon Upgrade
+//$Category powerups
 States
 {
 Spawn:
 TNT1 A 0
-TNT1 A 0 ACS_NamedExecuteAlways("DetermineWUpgradeSpawn",0,FALSE,0,0)
+TNT1 A 0 ACS_NamedExecuteAlways("DetermineWUpgradeSpawn",0,Args[0],0,0)
 TNT1 A 5
 Stop
 }
@@ -104,14 +111,20 @@ ITEM A 0
 ITEM A 0 A_ChangeVelocity(0,0,24,CVF_REPLACE)
 ITEM A 1
 ITEM A 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
-ITEM A -1
-Stop
+See:	//This loops and asks every 10 seconds about if this upgrade should keep existing.
+ITEM A 0 A_JumpIf(CallACS("Upgrade_CheckValidity",0,0,0,0)==FALSE,"Death")
+ITEM A 350
+Loop
 Pickup:
 TNT1 A 0
 TNT1 A 0 A_TakeInventory("PowerupHammer",1)
+TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,0,0,0)
 TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,0,1,1)	//Give all players a hammer upgrade.
 TNT1 A 0 ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,0,0,0)	
 Stop
+Death:
+TNT1 A 1 A_FadeOut(1,1)
+Loop
 }
 }
 
@@ -130,14 +143,20 @@ ITEM B 0
 ITEM B 0 A_ChangeVelocity(0,0,24,CVF_REPLACE)
 ITEM B 1
 ITEM B 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
-ITEM B -1
-Stop
+See:	//This loops and asks every 10 seconds about if this upgrade should keep existing.
+ITEM B 0 A_JumpIf(CallACS("Upgrade_CheckValidity",2,0,0,0)==FALSE,"Death")
+ITEM B 350
+Loop
 Pickup:
 TNT1 A 0
 TNT1 A 0 A_TakeInventory("PowerupUmbrella",1)
+TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,0,0,0)
 TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,2,1,1)	//Give all players a umbrella upgrade.
 TNT1 A 0 ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,1,0,0)	
 Stop
+Death:
+TNT1 A 1 A_FadeOut(1,1)
+Loop
 }
 }
 
@@ -156,14 +175,20 @@ ITEM D 0
 ITEM D 0 A_ChangeVelocity(0,0,24,CVF_REPLACE)
 ITEM D 1
 ITEM D 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
-ITEM D -1
-Stop
+See:	//This loops and asks every 10 seconds about if this upgrade should keep existing.
+ITEM D 0 A_JumpIf(CallACS("Upgrade_CheckValidity",3,0,0,0)==FALSE,"Death")
+ITEM D 350
+Loop
 Pickup:
 TNT1 A 0
-TNT1 A 0 A_TakeInventory("PowerupUmbrella",1)
+TNT1 A 0 A_TakeInventory("PowerupSword",1)
+TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,0,0,0)
 TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,3,1,1)	//Give all players a umbrella upgrade.
 TNT1 A 0 //ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,1,0,0)	
 Stop
+Death:
+TNT1 A 1 A_FadeOut(1,1)
+Loop
 }
 }
 
@@ -191,14 +216,29 @@ ACTOR LGirlPlayer : DoomPlayer
   Player.ScoreIcon "CPRVA0"
   Player.WeaponSlot 1, "MaryUmbrella"
   Player.WeaponSlot 2, "MaryHammer"
-  Player.WeaponSlot 3, "MaryWand"
+  Player.WeaponSlot 3, "MaryWand"	//Testing only. In the final, Mary will only have her umbrella.
   Player.ColorRange 32, 39
+  DamageFactor "Fire", 0.0
   DamageFactor "Bounce", 0.0
-
+  
   Player.ColorSet 0, "Lilac", 0x50, 0x57, 0x54
   Player.ColorSet 1, "Sky", 0xB6, 0xC4, 0xCB	
-  Player.ColorSet 2, "Pumpkin", 0x08, 0x0F, 0x0B
+  Player.ColorSet 2, "Pumpkin", 0x0F, 0x08, 0x0B
 
+  //INVENTORY VARIABLE USAGE:
+  //Variable1: No (these may be used by weapons)
+  //Variable2: No
+  //Variable3: No
+  //Variable4: No
+  //Variable5: Disable collision with objects/culling polyobject
+  
+  //Animation1: Air Dash animation until Mary hits the ground or water
+  //Animation2: Crying animation (also angers/scares enemies)
+  //ForceFlatten: Forcibly makes Mary become flattened. Not used at the moment.
+  //TauntStun: Makes Mary "randomly" taunt her enemy as if killed by a Standard Ball or certain weapon attacks.
+  //TauntFire: Same but for enemies burned with her wand or the Lava Ball.
+  //TauntIce: Same but for Mary's ice ball attack or the Icy Ball.
+  
   States
   {
   Spawn:
@@ -217,12 +257,10 @@ ACTOR LGirlPlayer : DoomPlayer
     Loop
   LoseCollision:
 	MARY A 0 A_ChangeFlag("SOLID",FALSE)
-	MARY A 0 A_ChangeFlag("INVULNERABLE",TRUE)
 	MARY A 0 A_ChangeFlag("NOPAIN",TRUE)
 	MARY A 1
 	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
 	MARY A 0 A_ChangeFlag("SOLID",TRUE)
-	MARY A 0 A_ChangeFlag("INVULNERABLE",FALSE)
 	MARY A 0 A_ChangeFlag("NOPAIN",FALSE)
 	Goto Spawn
   Blink:
@@ -240,9 +278,10 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
 	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
-	MARY A 0 A_GiveInventory("SpeedTrailX",1)
 	MARY A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
-	MARY A 0 A_JumpIfInventory("Weakness",1,"Insult")
+	MARY A 0 A_JumpIfInventory("TauntStun",1,"TauntStun")
+	MARY A 0 A_JumpIfInventory("TauntFire",1,"TauntFire")
+	MARY A 0 A_JumpIfInventory("TauntIce",1,"TauntIce")
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<3,"Spawn")	//Slowest
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<11,"See5")	//Slow
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))<19,"See3")	//Medium
@@ -285,7 +324,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	Goto See
 
   AirDash:
-  	MARY O 0 A_TakeInventory("SpeedTrailX",10)
 	MARY O 0 A_SpawnItemEx("MaryAirDash",4,0,2,-8,0,0,0,SXF_SETMASTER|SXF_NOCHECKPOSITION,0)
 	MARY O 0 A_CheckFloor("AirDashLand")
 	MARY O 1 A_JumpIf(velz==0.0,"AirDashLand")
@@ -329,7 +367,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	Goto Spawn
   Pain.Flatten:
 	MARY P 0 A_ChangeFlag("NOPAIN",TRUE)
-	MARY P 0 A_ChangeFlag("INVULNERABLE",FALSE)
 	MARY P 0 A_Pain
 	MARY P 0 A_DamageSelf(5)
 	MARY P 0 A_DamageSelf(2,"Flatten")
@@ -582,7 +619,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	Goto See
 
   cgem:
-	MCGM A 0 A_ChangeFlag("INVULNERABLE",FALSE)
 	MCGM A 37
 	MCGM BC 2
 	MCGM D 4
@@ -591,7 +627,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	Stop
 
   cgemwait:
-	MCGM A 0 A_ChangeFlag("INVULNERABLE",FALSE)
 	MCGM A -1
 	Stop
 
@@ -619,6 +654,7 @@ ACTOR XanePlayer : DoomPlayer
   Player.StartItem "XaneSword"
   Player.ScoreIcon "CPRVB0"
   Player.ColorRange 32, 39
+  DamageFactor "Fire", 0.13
   DamageFactor "Bounce", 0.0
   Player.FallingScreamSpeed 998.0, 999.0
   Player.ColorRange 32, 39
@@ -651,20 +687,16 @@ ACTOR XanePlayer : DoomPlayer
 	Goto Spawn
   LoseCollision:
 	MARY A 0 A_ChangeFlag("SOLID",FALSE)
-	MARY A 0 A_ChangeFlag("INVULNERABLE",TRUE)
 	MARY A 0 A_ChangeFlag("NOPAIN",TRUE)
 	ARTH A 1
 	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
 	MARY A 0 A_ChangeFlag("SOLID",TRUE)
-	MARY A 0 A_ChangeFlag("INVULNERABLE",FALSE)
 	MARY A 0 A_ChangeFlag("NOPAIN",FALSE)
 	Goto Spawn
   See:
 	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
-	GIRL A 0 A_GiveInventory("SpeedTrailX",1)
 	GIRL A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
 	//GIRL A 0 A_JumpIfInventory("Weakness",1,"Insult")
-	GIRL A 0 A_TakeInventory("CryIntroSeen",1)
 	GIRL A 0 A_JumpIf(max(abs(velx),abs(vely))<3,"Spawn")	//Stand
 	//GIRL A 0 A_JumpIf(max(abs(velx),abs(vely))<6,"See9")	//Slow
 	//GIRL A 0 A_JumpIf(max(abs(velx),abs(vely))<9,"See5")	//Medium
@@ -1162,9 +1194,18 @@ COIN A 0 A_JumpIf(CallACS("CheckGMode",0,0,0,0)==FALSE,"Remove")
 COIN A 0 A_ChangeVelocity(0,0,16,CVF_REPLACE)
 COIN "#" 1
 COIN A 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
+COIN "#" 0 A_JumpIf(CallACS("GetXProperty",19,0,0,0)==TRUE,"NoSpin")	//XPROP_LOWEND
 Spin:
 COIN "#" 1 A_Turn(-8.0)
 Loop
+NoSpin:
+COIN "#" 0 A_JumpIf(64,"Rotate90")
+COIN "#" -1
+Stop
+Rotate90:
+COIN "#" 0 A_SetAngle(angle+90)
+COIN "#" -1
+Stop
 Remove:
 COIN "#" 1 A_SpawnItem("CoinSP_Dummy",0,1,0)
 FadeOut:
@@ -1198,6 +1239,8 @@ COIN A 0 A_Jump(96, "Silver")
 COIN A 0 A_Jump(64, "Brown")
 COIN A 0 A_Jump(32, "Pink")
 See:
+COIN "#" 0 A_JumpIf(CallACS("GetXProperty",19,0,0,0)==TRUE,"NoSpin")	//XPROP_LOWEND
+Spin:
 COIN "#" 1 A_Turn(-8.0)
 Loop
 Silver:
@@ -1209,6 +1252,14 @@ Goto See
 Pink:
 COIN D 0
 Goto See
+NoSpin:
+COIN "#" 0 A_JumpIf(64,"Rotate90")
+COIN "#" -1
+Stop
+Rotate90:
+COIN "#" 0 A_SetAngle(angle+90)
+COIN "#" -1
+Stop
 Pickup:
 TNT1 A 0 A_GiveInventory("CoinSP",1)
 TNT1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"Water")
@@ -1568,7 +1619,7 @@ DropItem "PowerupWater", 256, 10
 DropItem "PowerupCombo", 256, 23
 DropItem "PowerupSpeed", 256, 24
 //$Title Random Coin (Standard)
-//$Category pickups
+//$Category powerups
 //$Sprite POWRC0
 }
 
@@ -1583,7 +1634,7 @@ DropItem "PowerupWater", 256, 4
 DropItem "PowerupCombo", 256, 2
 //DropItem "PowerupSpeed" 256, 24
 //$Title Random Coin (Not in Jane's Shop)
-//$Category pickups
+//$Category powerups
 }
 
 actor PowerupRandom_Water : RandomSpawner 88
@@ -1595,7 +1646,7 @@ DropItem "PowerupHeal", 256, 3
 DropItem "PowerupCombo", 256, 2
 DropItem "PowerupSpeed", 256, 1
 //$Title Random Coin (Water Help)
-//$Category pickups
+//$Category powerups
 }
 
 actor PowerupDamage : CustomInventory 
@@ -1614,6 +1665,7 @@ Inventory.PickupMessage "$CHALLENGE_DAMAGE"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1719,6 +1771,7 @@ Inventory.PickupMessage "$CHALLENGE_INVIN"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1754,6 +1807,7 @@ Inventory.PickupMessage "$CHALLENGE_NINJA"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1789,6 +1843,7 @@ Inventory.PickupMessage "$CHALLENGE_WATER"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1824,6 +1879,7 @@ Inventory.PickupMessage "$CHALLENGE_COMBO"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1860,6 +1916,7 @@ Inventory.PickupMessage "$CHALLENGE_SPEED"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1895,6 +1952,7 @@ Inventory.PickupMessage "$INVPICK_BALL1"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
  {
  Spawn:
@@ -1979,6 +2037,7 @@ Tag "$INV_TURRET"
 +INVENTORY.INVBAR
 +INVENTORY.HUBPOWER
 +INVENTORY.UNTOSSABLE
++INVENTORY.KEEPDEPLETED
 states
 {
 	Spawn:
@@ -2007,11 +2066,13 @@ Scale 0.5
 Damage (0)
 Speed 24
 MaxStepHeight 1
+Args 0
 BounceType Grenade
 WallBounceSound "droppedcoin/bounce"
 DamageType "Stun"
 -NOGRAVITY
 +USEBOUNCESTATE
++ACTIVATEPCROSS
 -SOLID
 States
 {
@@ -2043,17 +2104,25 @@ Goto LoopX
 //BALL "#" 0 A_JumpIfInventory("Variable2",4,"Death")
 //Goto LoopX
 DamageEnemy:
-TNT1 "#" 0 A_Log("attempted damage")
+//TNT1 "#" 0 A_Log("attempted damage")
 TNT1 "#" 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
 BALL "#" 0 A_GiveInventory("Variable3",1)	//Indicate the ball is about to disappear.
 TNT1 "#" 0 A_Explode((25),24,!XF_HURTSOURCE,FALSE,12)
 Goto FadeOut
 AllowPickup:
-TNT1 "#" 0 A_Log("allowing pickup.")
+//TNT1 "#" 0 A_Log("allowing pickup.")
 TNT1 "#" 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
 BALL "#" 0 A_GiveInventory("Variable3",1)	//Indicate the ball is about to disappear.
 //BALL AAAAAAAA 3 A_ChangeVelocity(velx/2,vely/2,velz-1,CVF_REPLACE)
+BALL "#" 0 A_JumpIf(Args[0]==2,"SpawnLava")
+BALL "#" 0 A_JumpIf(Args[0]==1,"SpawnIce")
 BALL "#" 0 A_SpawnItem("Ball1",0,0,FALSE)
+Goto FadeOut
+SpawnIce:
+BALL "#" 0 A_SpawnItem("Ball2",0,0,FALSE)
+Goto FadeOut
+SpawnLava:
+BALL "#" 0 A_SpawnItem("Ball3",0,0,FALSE)
 Goto FadeOut
 GetStatus:
 TNT1 "#" 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
@@ -2064,16 +2133,16 @@ TNT1 "#" 0 A_TakeInventory("Variable2",100)
 BALL "#" 0 A_JumpIf(abs(max(velx,vely))>0.5 || z-floorz>2.25,"DropPickup")
 Goto AllowPickup
 FadeOut:
-BALL "#" 0 A_Log("faded.")
+//BALL "#" 0 A_Log("faded.")
 BALL "#" 1 A_FadeOut(1,1)
 Loop
 FadeOutPrep:
-BALL "#" 0 A_Log("timed out. Transitioning to fade.")
+//BALL "#" 0 A_Log("timed out. Transitioning to fade.")
 BALL "#" 0 A_GiveInventory("Variable3",1)	//Indicate the ball is about to disappear.
 Goto FadeOut
 DropPickup:
-TNT1 A 0 A_Log("drop pickup")
-TNT1 A 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
+//TNT1 A 0 A_Log("drop pickup")
+TNT1 "#" 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
 BALL "#" 1 A_GiveInventory("Variable2",1)
 BALL "#" 0 A_JumpIfInventory("Variable2",85,"FadeOutPrep")
 BALL "#" 0 A_JumpIf(abs(z-floorz)<3.25,"DropPickupCheck2")
@@ -2098,6 +2167,7 @@ Height 12
 Scale 0.75
 Damage (0)
 Speed 22
+Args 1
 DamageType "Ice"
 States
 {
@@ -2107,11 +2177,6 @@ BALL B 0 ACS_NamedExecuteAlways("BallMonitorGlitchyBehavior",0,0,0,0)
 BALL "#" 0 A_JumpIf(abs(velx)<0.25,"FixVelX")
 BALL "#" 0 A_JumpIf(abs(vely)<0.25,"FixVelY")
 Goto Super::LoopX
-AllowPickup:
-TNT1 A 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
-//BALL AAAAAAAA 3 A_ChangeVelocity(velx/2,vely/2,velz-1,CVF_REPLACE)
-BALL A 0 A_SpawnItem("Ball2",0,0,FALSE)
-Goto FadeOut
 DamageEnemy:
 TNT1 A 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
 BALL "#" 0 A_GiveInventory("Variable3",1)	//Indicate the ball is about to disappear.
@@ -2127,6 +2192,7 @@ Height 16
 Scale 1
 Damage (0)
 Speed 20
+Args 2
 DamageType "Fire"
 States
 {
@@ -2136,11 +2202,6 @@ BALL C 0 ACS_NamedExecuteAlways("BallMonitorGlitchyBehavior",0,0,0,0)
 BALL "#" 0 A_JumpIf(abs(velx)<0.25,"FixVelX")
 BALL "#" 0 A_JumpIf(abs(vely)<0.25,"FixVelY")
 Goto Super::LoopX
-AllowPickup:
-TNT1 A 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
-//BALL AAAAAAAA 3 A_ChangeVelocity(velx/2,vely/2,velz-1,CVF_REPLACE)
-BALL A 0 A_SpawnItem("Ball3",0,0,FALSE)
-Goto FadeOut
 DamageEnemy:
 TNT1 A 0 A_ChangeFlag("USEBOUNCESTATE",FALSE)	//Stop registering bounces.
 BALL "#" 0 A_GiveInventory("Variable3",1)	//Indicate the ball is about to disappear.
@@ -2228,48 +2289,7 @@ Actor SpeedTrailX : PowerupGiver
   }
 }
 
-//Not used?
-
-/*actor PowerDDamage : PowerDamage	//Damage Coin only
-{
-damagefactor "normal", 2
-damagefactor "Hammer", 2
-damagefactor "Umbrella", 2
-damagefactor "Flatten", 2
-damagefactor "AirDash", 2
-damagefactor "Bounce", 2
-damagefactor "Fire", 2
-damagefactor "Stun", 2
--INVENTORY.INVBAR
-}
-
-actor PowerDamage_Super : PowerDamage	//Super transformation
-{
-damagefactor "normal", 1.5
-damagefactor "Hammer", 1.5
-damagefactor "Umbrella", 1.5
-damagefactor "Flatten", 1.5
-damagefactor "AirDash", 1.5
-damagefactor "Bounce", 1.5
-damagefactor "Fire", 1.5
-damagefactor "Stun", 1.5
--INVENTORY.INVBAR
-}
-
-actor PowerDDamage_Super : PowerDamage	//Damage Coin + super transformation
-{
-damagefactor "normal", 2.5
-damagefactor "Hammer", 2.5
-damagefactor "Umbrella", 2.5
-damagefactor "Flatten", 2.5
-damagefactor "AirDash", 2.5
-damagefactor "Bounce", 2.5
-damagefactor "Fire", 2.5
-damagefactor "Stun", 2.5
--INVENTORY.INVBAR
-}*/
-
-Actor Cutscene : PowerupGiver
+Actor Cutscene : PowerupGiver	//This handles freezing time during FMVs and tutorials.
 {
   Inventory.Pickupmessage ""
   Inventory.MaxAmount 0
@@ -2372,4 +2392,20 @@ ACTOR Key6 : Key1 99
     KEYI F -1
 	Stop
   }
+}
+
+Actor TutorialSign 101
+{
+Radius 12
+Height 32
++USESPECIAL
++BUMPSPECIAL
+-SOLID
+States
+{
+Spawn:
+SIGN A -1
+Stop
+
+}
 }

@@ -22,7 +22,7 @@ Actor XMonster
 PainChance 256
 MONSTER
 -SOLID	//Due to render culling, solidity can only be enabled near a player. It's pointless in MP but important in SP!
-//Add this to lines of DECORATE: TNT1 A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+//Add this to lines of DECORATE: TNT1 A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 //$Title Unnamed Monster
 //$Category monsters
 States
@@ -164,7 +164,7 @@ States
 {
 Spawn:
 TNT1 A 0
-TNT1 A 8 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TNT1 A 8 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TNT1 A 0 ACS_NamedExecuteAlways("ColorCoin",0,0,0,0)
 TNT1 A 0 A_JumpIf(Args[0]==1,"AmbushJump")
 TROL K 0 A_ChangeFlag("NOGRAVITY",FALSE)
@@ -177,37 +177,37 @@ Loop
 Ambush:
 TROL K 0 A_ChangeFlag("NOGRAVITY",FALSE)
 TROL K 0 A_ChangeVelocity(7,0,24,CVF_RELATIVE|CVF_REPLACE)
-TROL K 11 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL K 11 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 0 ACS_NamedExecuteAlways("BreakGlass",0,Args[1],Args[2],TRUE)
 TROL K 0 A_ChangeVelocity(8,0,8,CVF_RELATIVE|CVF_REPLACE)
-TNT1 A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TNT1 A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 12 A_GiveInventory("Variable1",1)
 TNT1 A 0 A_ChangeFlag("INVULNERABLE",FALSE)
 Look:
-TROL K 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL K 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 2 A_Look
 Loop
 See: 
 TROL K 0 A_ChangeFlag("NOGRAVITY",FALSE)
 TROL K 0 A_JumpIfInventory("Variable1",1,"Melee")
 TROL K 0 A_JumpIf(CallACS("GetSpecialStatus",32,0,0,0),"Cheat")
-TROL A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL ABAC 3 A_Chase("Melee","Missile2")
-TROL A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL D 3 A_Chase("","")
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
 See2:
-TROL E 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL E 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL EFED 3 A_Chase("","")
-TROL C 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL C 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL C 3 A_Chase("Melee","Missile1")
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
 Loop
 Melee:
 TROL K 0 A_TakeInventory("Variable1",1)
-TROL K 8 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL K 8 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 0 A_JumpIf(CallACS("GetSpecialStatus",32,0,0,0),"Cheat")
-TROL L 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 0 A_JumpIf(CallACS("GetSpecialStatus",32,0,0,0),"Cheat")
 TROL K 0 A_JumpIf(velz==0.0,"FireJumpSlam")
 Goto SlamRevert
@@ -215,11 +215,11 @@ FireJumpSlam:
 TROL M 0 A_PlaySound("troll/smash", CHAN_VOICE, 0.75, FALSE)
 TROL M 0 A_CustomMissile("Troll_Explosion1",32,32,0,CMF_ABSOLUTEPITCH,-90)
 TROL M 10 A_Quake(2,17,0,512)
-TROL MM 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL MM 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 0 A_JumpIf(CallACS("GetSpecialStatus",32,0,0,0),"Cheat")
 TROL K 0 ACS_NamedExecuteAlways("ShowTutorial",0,3,0,0)
 SlamRevert:
-TROL L 7 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 7 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 0 A_JumpIf(CallACS("GetSpecialStatus",32,0,0,0),"Cheat")
 Goto See
 Missile1:
@@ -232,9 +232,9 @@ Pain:
 TIGR A 0 A_SpawnItem("HurtMonster",64,32)
 TROL L 0 A_Pain
 TROL L 0 A_ChangeFlag("INVULNERABLE",TRUE)
-TROL LMLM 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL LMLM 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL L 0 A_ChangeFlag("INVULNERABLE",FALSE)
-TROL LMLMLMLMLMLML 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL LMLMLMLMLMLML 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 0 A_JumpIf(CallACS("GetSpecialStatus",32,0,0,0),"Cheat")
 TROL M 17
 TROL L 3
@@ -242,19 +242,19 @@ Goto Melee
 Pain.Stun:
 TROL L 0 A_Pain
 TROL L 3 A_ChangeVelocity(0,0,0,CVF_REPLACE)
-TROL MMMMMMLLLLLLMMMMLLLLLMMMMLLLLMMMLLLMMLLML 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL MMMMMMLLLLLLMMMMLLLLLMMMMLLLLMMMLLLMMLLML 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Goto See
 Pain.Flatten:
 TROL L 0 A_ChangeFlag("NOPAIN",TRUE)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL LLLLL 1 A_SetScale(scalex, scaley-0.1)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL MM 1 A_SetScale(scalex, scaley-0.05)
-TROL MMMMMMM 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL MMMMMMM 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL MM 1 A_SetScale(scalex, scaley+0.05)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL LLLLLKK 1 A_SetScale(scalex, scaley+0.1)
-TROL K 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL K 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL KK 1 A_SetScale(scalex, scaley-0.1)
 TROL K 0 A_ChangeFlag("NOPAIN",FALSE)
 Goto Melee
@@ -263,29 +263,29 @@ Pain.AirDash:
 "####" "#" 0 A_ChangeVelocity(-22.5,Random(-2,2),11.75,CVF_REPLACE|CVF_RELATIVE)
 Goto Pain
 Pain.Fire:
-TROL M 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL M 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL M 0 A_ChangeFlag("INVULNERABLE",TRUE)
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL LLMM 1 A_SpawnItemEx("FlowerProjectile3_Trail",Random(-36,36),Random(-36,36),Random(0,76),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION)
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL LLMM 1 A_SpawnItemEx("FlowerProjectile3_Trail",Random(-36,36),Random(-36,36),Random(0,76),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION)
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL LLMM 1 A_SpawnItemEx("FlowerProjectile3_Trail",Random(-36,36),Random(-36,36),Random(0,76),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION)
 TROL M 0 A_ChangeFlag("INVULNERABLE",FALSE)
 FireJump:
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL M 2 A_FaceTarget(90)
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL L 3 A_ChangeVelocity(10.25,0,14.75,CVF_RELATIVE|CVF_REPLACE)
 FireJumpLoop:
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL K 1 A_JumpIf(z-floorz<48.5,"FireJumpPrepare")
 Loop
 FireJumpPrepare:
-TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TROL L 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TROL L 1 A_JumpIf(z-floorz<4.5,"FireJumpSlam")
 Loop
 Cheat:	//Used when hitting water, bottomless pit, and lava.
@@ -492,97 +492,97 @@ DeathSound "m3/death"
 States
 {
 Spawn:
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AAB 5 A_Look
 Loop
 See:
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR A 0 A_JumpIfCloser(412,"Fast")
 TIGR A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AAAB 1 A_Chase("See","See")
 TIGR A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR BBCCC 1 A_Chase("See","See")
 Loop
 Chase:
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 0 A_JumpIfCloser(768,"ChaseSlow",TRUE)
 TIGR A 0 A_FaceTarget
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 2 A_ChangeVelocity(24,0,0,CVF_REPLACE|CVF_RELATIVE)
 TIGR B 0 A_FaceTarget
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR B 2 A_ChangeVelocity(24,0,0,CVF_REPLACE|CVF_RELATIVE)
 TIGR C 0 A_FaceTarget
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 2 A_ChangeVelocity(24,0,0,CVF_REPLACE|CVF_RELATIVE)
 TIGR A 0 A_Jump(32,"JumpCheck")
 Loop
 ChaseSlow:
 TIGR A 0 A_FaceTarget
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 3 A_ChangeVelocity(12,0,0,CVF_REPLACE|CVF_RELATIVE)
 TIGR B 0 A_FaceTarget
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR B 3 A_ChangeVelocity(12,0,0,CVF_REPLACE|CVF_RELATIVE)
 TIGR C 0 A_FaceTarget
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 3 A_ChangeVelocity(12,0,0,CVF_REPLACE|CVF_RELATIVE)
 TIGR A 0 A_Jump(24,"JumpCheck")
 TIGR A 0 A_JumpIfCloser(160,"Melee")
 Goto Chase
 JumpCheck:
 TIGR A 0 A_JumpIfCloser(384,"Chase",TRUE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 4
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR B 3 A_FaceTarget
 TIGR C 0 A_ChangeVelocity(9,0,6,CVF_RELATIVE|CVF_REPLACE)
 JumpCheckLoop:
-TIGR C 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR C 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 0 A_CheckFloor("Land")
 Loop
 Fast:
 TIGR A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 0 A_JumpIfCloser(256,"Medium")
 PainFast:
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AAA 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AAA 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AAA 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR BBB 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR BBB 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR BBB 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR CCC 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR CCC 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR CCC 1 A_Chase
 TIGR "#" 2 A_ChangeVelocity(15,Random(-3,3),velz*2,CVF_REPLACE|CVF_RELATIVE)
 Goto See
@@ -590,30 +590,30 @@ Medium:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR A 0 A_JumpIfCloser(128,"Slow")
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AA 2 A_Chase
 TIGR "#" 1 A_ChangeVelocity(10,Random(-2,2),velz*2,CVF_REPLACE|CVF_RELATIVE)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR BB 2 A_Chase
 TIGR "#" 1 A_ChangeVelocity(10,Random(-2,2),velz*2,CVF_REPLACE|CVF_RELATIVE)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR CC 2 A_Chase
 TIGR "#" 1 A_ChangeVelocity(10,Random(-2,2),velz*2,CVF_REPLACE|CVF_RELATIVE)
 Goto See
 Slow:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 3 A_Chase
 TIGR "#" 2 A_ChangeVelocity(7,Random(-1.5,1.5),velz*2,CVF_REPLACE|CVF_RELATIVE)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR B 3 A_Chase
 TIGR "#" 2 A_ChangeVelocity(7,Random(-1.5,1.5),velz*2,CVF_REPLACE|CVF_RELATIVE)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 3 A_Chase
 TIGR "#" 2 A_ChangeVelocity(7,Random(-1.5,1.5),velz*2,CVF_REPLACE|CVF_RELATIVE)
 Goto See
@@ -621,56 +621,56 @@ DistanceChecks:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR C 0 A_JumpIfCloser(256,"Dis1")
 TIGR C 0 A_GiveInventory("Weakness",1)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 12 A_ChangeVelocity(Random(16,24),Random(-0.85,0.85),12,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
 Goto MissileAir
 Dis1:
 TIGR C 0 A_JumpIfCloser(160,"Dis2")
 TIGR C 0 A_GiveInventory("Weakness",1)
 TIGR C 1 A_ChangeVelocity(Random(13,17),Random(-1.5,1.5),10,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 11 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 Goto MissileAir
 Dis2:
 TIGR C 0 A_GiveInventory("Weakness",1)
 TIGR C 0 A_JumpIfCloser(164,"Melee")
 TIGR C 1 A_ChangeVelocity(Random(12.25,16.25),Random(-1.02,1.02),7,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 11 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 Goto MissileAir
 Melee:
 TIGR C 0 A_JumpIf(velz!=0.0,"Fast")
 TIGR A 2 A_FaceTarget
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR B 2 A_ChangeVelocity(-8.5,Random(-8,8),6,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR CBAB 2
 TIGR D 0 A_GiveInventory("Weakness",1)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 1 A_ChangeVelocity(20,Random(-0.75,0.75),6.75,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
 TIGR C 2 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 Goto CheckFloorLoop
 CheckFloorLoop:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 3 A_CheckFloor("SecXaneAttempt")
 TIGR C 0 A_CustomMissile("TigerExplosion",4,0,0,CMF_ABSOLUTEPITCH,-90)
 Loop
 SecXaneAttempt:
 TIGR D 0 A_TakeInventory("Weakness",1)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
-TIGR DDCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR DDCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 0 A_JumpIf(velz!=0.0,"Fast")
 TIGR A 0 A_FaceTarget
 TIGR D 0 A_GiveInventory("Weakness",1)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 1 A_ChangeVelocity(20,Random(-1.5,1.5),6.75,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
 TIGR A 2 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
-TIGR BC 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR BC 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Goto CheckFloorLoopSecond
 CheckFloorLoopSecond:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 3 A_CheckFloor("TigerLandLong")
 TIGR C 0 A_CustomMissile("TigerExplosion",4,0,0,CMF_ABSOLUTEPITCH,-90)
 Loop
@@ -679,12 +679,12 @@ TIGR A 0 A_JumpIfInventory("Weakness",1,"Weakness")
 TIGR A 0 A_SpawnItem("HurtMonster",64,32)
 TIGR A 0 A_PigPain
 TIGR A 0 A_ChangeFlag("INVULNERABLE",TRUE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR DBAB 1 A_FaceTarget
 TIGR A 0 A_ChangeFlag("INVULNERABLE",FALSE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR D 6
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AB 1
 Goto PainFast
 Weakness:
@@ -694,24 +694,24 @@ TIGR A 0 A_SpawnItem("HurtMonster",64,32)
 TIGR D 0 A_TakeInventory("Weakness",1)
 TIGR D 0 A_PlaySound("wok/g34",CHAN_VOICE,1.0,FALSE,0.75)
 TIGR D 0 A_FaceTarget
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR D 1 A_ChangeVelocity(-20,Random(-0.75,0.75),14,CVF_REPLACE|CVF_RELATIVE)
 TIGR C 2 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 WeaknessCheckFloor:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR D 1 A_CheckFloor("WeaknessBounce")
 Loop
 WeaknessBounce:
 TIGR D 0 A_ChangeFlag("INVULNERABLE",FALSE)
 TIGR D 0 A_ChangeVelocity(-15,min(velx,vely)*1.5,10.5,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR A 1 A_DamageSelf(45,"None")
 TIGR B 1 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 TIGR A 1 A_ChangeFlag("NOPAIN",FALSE)
 WeaknessCheckFloor2:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR D 1 A_CheckFloor("See")
 Loop
 Pain.AirDash:
@@ -722,13 +722,13 @@ Goto Pain
 Missile:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR A 0 A_FaceTarget
-TIGR AAAB 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } } 
+TIGR AAAB 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } } 
 TIGR B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR A 0 A_JumpIf(velz==0.0,"DistanceChecks")
 Goto Fast
 MissileAir:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 3 A_CheckFloor("TigerLand")
 TIGR C 0 A_CustomMissile("TigerExplosion",4,0,0,CMF_ABSOLUTEPITCH,-90)
 Loop
@@ -736,30 +736,30 @@ CheckDeath:
 TIGR D 0 A_TakeInventory("Weakness",1)
 DANC B 0 A_ChangeFlag("INVULNERABLE",FALSE)
 DANC B 0 ACS_NamedExecuteAlways("SpecialFall",0,-1,0,0)
-TIGR AABBCCBBABCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR AABBCCBBABCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Goto See
 TigerLand:
 TIGR D 0 A_TakeInventory("Weakness",1)
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
 TIGR D 0 A_ChangeFlag("MISSILEMORE",FALSE)
 TIGR D 0 A_ChangeFlag("MISSILEEVENMORE",FALSE)
-TIGR DDD 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR DDD 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AB 2
 TIGR C 0 A_FaceTarget
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR C 3 A_ChangeVelocity(Random(-2.25,2.25),Random(-3.25,3.25),Random(3.5,6.75),CVF_RELATIVE|CVF_REPLACE)
-TIGR CCCCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR CCCCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Goto See
 TigerLandLong:
 TROL A 0 ACS_NamedExecuteAlways("PlayFootstepSound",0,1,0,0)
 TIGR D 0 A_ChangeFlag("MISSILEMORE",FALSE)
 TIGR D 0 A_ChangeFlag("MISSILEEVENMORE",FALSE)
 TIGR D 0 A_TakeInventory("Weakness",1)
-TIGR DDDDDDD 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR DDDDDDD 10 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR AB 2
 TIGR C 0 A_FaceTarget
 TIGR C 3 A_ChangeVelocity(Random(-2.25,2.25),Random(-3.25,3.25),Random(3.5,6.75),CVF_RELATIVE|CVF_REPLACE)
-TIGR CCCCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR CCCCB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Goto See
 Death.Umbrella:
 FIGH D 0 A_ScreamAndUnblock
@@ -771,9 +771,9 @@ FIGH D 0 A_ScreamAndUnblock
 FIGH D 0 A_FaceTarget
 FIGH D 0 A_ChangeVelocity(-31.5,Random(-0.25,0.25),14.25,CVF_RELATIVE|CVF_REPLACE)
 QuickDeathFinish:
-TIGR CBA 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR CBA 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 AwaitSplatter:
-TIGR D 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR D 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TIGR D 0 A_JumpIf(velx==0.0,"DeathSkipAnimation")
 TIGR D 0 A_JumpIf(vely==0.0,"DeathSkipAnimation")
 TIGR D 0 A_JumpIf(velz==0.0,"DeathSkipAnimation")
@@ -899,7 +899,7 @@ TIGR A 0 A_ChangeFlag("FRIGHTENED",TRUE)
 TIGR DDAB 1
 Goto RunAway
 CryingDetected:
-TIGR A 0 A_JumpIfCloser(384, "Hesitate", FALSE)
+TIGR A 0 A_JumpIfCloser(512, "Hesitate", FALSE)
 TIGR A 0 A_ChangeFlag("SOLID",FALSE)
 TIGR BCB 1
 TIGR AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 1 { A_Turn(180.0); A_ChangeVelocity(Random(-0.33,0.33),2,velz,CVF_RELATIVE|CVF_REPLACE); }
@@ -912,15 +912,18 @@ TIGR A 0 A_ChangeFlag("SOLID",FALSE)
 TIGR A 0 A_TakeInventory("Variable1",70)
 TIGR A 0 A_PlaySound("wtiger/weakness",CHAN_VOICE,1.0)
 TIGR AAAAAAAAAAAAAAAAAAAAAAAA 1 { A_Turn(180.0); A_ChangeVelocity(Random(-0.75,0.75),4,velz,CVF_RELATIVE|CVF_REPLACE); }
+TIGR A 0 A_ChangeFlag("NOPAIN",TRUE)
+DrainHealth:	//Take the weak tiger's health down to exactly 1 health so any attack after this kills the tiger.
+TIGR A 0 A_DamageSelf((1))
+TIGR A 0 A_JumpIfHealthLower(2,"RunAway")
+Loop
 RunAway:
 TIGR A 0 A_ChangeFlag("SOLID",FALSE)
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR A 0 A_ChangeFlag("FRIGHTENED",TRUE)
-TIGR A 0 A_ChangeFlag("NOPAIN",TRUE)
 TIGR A 0 A_GiveInventory("Variable1",1)
 TIGR A 2 A_Chase(0,0)
 TIGR BBCC 1 A_Chase(0,0)
-TIGR A 0 A_JumpIfCloser(108,"Dodge",FALSE)
 TIGR A 0 A_JumpIfInventory("Variable1",25,"CalmDown")
 Loop
 CalmDown:
@@ -1474,7 +1477,10 @@ FollowPath:
 COP1 A 0 A_GiveInventory("Animation1",1)	//Indicate the cop has already followed the path before.
 COP1 A 0 ACS_NamedExecuteAlways("EnemyFollowPath",0,args[1],0,0)
 WalkAnimation:
-COP1 ABCB 2 A_JumpIfInventory("Animation2",1,"BasicBehavior")	//If the path detects the cop was hurt, this snaps them off the path.
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 AB 2 A_JumpIfInventory("Animation2",1,"BasicBehavior")	//If the path detects the cop was hurt, this snaps them off the path.
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CB 2 A_JumpIfInventory("Animation2",1,"BasicBehavior")	//If the path detects the cop was hurt, this snaps them off the path.
 Loop
 ForceTarget:
 COP1 A 0 A_LookEx(0, 0, 768, 768, 360, "KillSightCheck")
@@ -1505,6 +1511,9 @@ COP1 A 0 A_TakeInventory("CDeath",1)
 COP1 A 0 A_TakeInventory("CPain",1)
 COP1 J 0 A_ChangeFlag("LOWGRAVITY",FALSE)
 COP1 J 0 A_ChangeFlag("INVULNERABLE",FALSE)
+COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)<2,"Walk2")	//On easy or normal difficulty, skip next check.
+COP1 A 0 A_JumpIfInventory("CryingBonus",1,"Angry")	//Once Mary cries, this cop will never behave normally again.
+Walk2:
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
@@ -1515,10 +1524,10 @@ TNT1 A 0 A_JumpIfInventory("Variable1",1,"JumpShoot")	//Still have anger towards
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 AB 3 A_Chase
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 CD 3 A_Chase
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 J 0 A_CheckProximity("See3","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
@@ -1530,9 +1539,9 @@ COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_CheckProximity("See2","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 ED 3 A_Chase
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 CB 3 A_Chase
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 J 0 A_CheckProximity("Walk","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
@@ -1550,43 +1559,43 @@ COP1 A 0 A_GiveInventory("CPain",1)
 Goto FailedReact
 ContinueReaction:
 COP1 A 0 A_PlaySound("cop2/witness",CHAN_VOICE,1.0)
-COP1 AAABBBAABBABABACACADADCB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 AAABBBAABBABABACACADADCB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Angry:
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 ABC 2 A_Chase(0,0)
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 ABC 2 A_Chase(0,0)
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 ABC 2 A_Chase(0,0)
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 A 0 A_Jump(42,"Attempt")
 COP1 J 0 A_CheckProximity("Angry","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 Goto JumpAway
 Attempt:
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 D 2
 COP1 I 0 A_CheckLOF("Proceed",CLOFF_JUMPENEMY)
 Goto Angry
 Proceed:
 COP1 A 0 A_TakeInventory("CDeath",1)
 COP1 A 0 A_TakeInventory("CPain",1)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 AABB 2 A_FaceTarget
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 CGHI 2 A_FaceTarget
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_PlaySound("weapon/gun1", CHAN_AUTO,1.0,FALSE,0.5)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 J 4 A_CustomMissile("Cop1Bullet_Angry",32,8,0)
 COP1 A 0 A_PlaySound("weapon/gun1", CHAN_AUTO,1.0,FALSE,0.5)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 K 3 A_CustomMissile("Cop1Bullet_Angry",32,8,0)
 COP1 L 2 A_ChangeFlag("LOWGRAVITY",FALSE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 KLL 2
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 Goto Walk
@@ -1598,7 +1607,7 @@ COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)==2,"MissileHard")	//If on hard difficulty, shoot very cheaply!
-COP1 A 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 A 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 I 0 A_CheckLOF("Fire",CLOFF_JUMPENEMY)
 COP1 J 0 A_CheckProximity("Missile2","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 Goto JumpAway
@@ -1610,13 +1619,13 @@ COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)==2,"FireHard")	//If on hard difficulty, shoot very cheaply!
-COP1 AB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 AB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 CCC 6 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CCC 6 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 GGG 6 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 GGG 6 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 HI 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 HI 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 FireBullet:
@@ -1627,18 +1636,18 @@ COP1 J 0 A_CheckProximity("Missile2","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 Goto JumpAway
 Missile2:
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
-COP1 KLL 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 KLL 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 AB 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 AB 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 CCCCCCC 5 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CCCCCCC 5 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 B 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 B 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 Goto Walk
 
 MissileHard:	//Hard difficulty only
-COP1 A 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 A 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 I 0 A_CheckLOF("FireHard",CLOFF_JUMPENEMY)
 COP1 J 0 A_CheckProximity("Missile2Hard","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 Goto JumpAway
@@ -1646,33 +1655,33 @@ FireHard:
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
-COP1 AB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 AB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 CC 4 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CC 4 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 GG 4 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 GG 4 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 HI 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 HI 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 A 0 A_JumpIfCloser(192, "Revert2NormalFire")
 COP1 A 0 A_PlaySound("weapon/gun1", CHAN_AUTO,1.0,FALSE,0.5)
 COP1 J 0 A_CustomMissile("Cop1Bullet",32,8,-20)
 COP1 J 0 A_CustomMissile("Cop1Bullet",32,8,20)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 J 3 A_CustomMissile("Cop1Bullet",32,8,0)
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 J 0 A_CheckProximity("Missile2Hard","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 Goto JumpAway
 Missile2Hard:
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
-COP1 KLL 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 KLL 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 AB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 AB 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 CCC 6 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CCC 6 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 B 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 B 1 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 Goto Walk
 
@@ -1681,11 +1690,11 @@ Pain:
 COP1 J 0 A_JumpIfInventory("Weakness",1,"Weakness")
 TIGR A 0 A_SpawnItem("HurtMonster",64,32)
 TIGR A 0 A_ChangeFlag("INVULNERABLE",TRUE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 P 3 A_Pain
 TIGR A 0 A_ChangeFlag("INVULNERABLE",FALSE)
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 P 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 P 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 TNT1 A 0 A_RadiusGive("CPain",768,RGF_MONSTERS|RGF_NOTARGET)
 TNT1 A 0 A_JumpIfInventory("Variable1",1,"JumpShoot")	//Still have anger towards the crying girl, cop? Let it out!
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
@@ -1695,24 +1704,28 @@ Weakness:
 COP1 A 0 A_ChangeFlag("NOPAIN",TRUE)
 COP1 A 0 A_TakeInventory("Weakness",1)
 COP1 D 2 A_ChangeVelocity(-4,8,0,CVF_REPLACE|CVF_RELATIVE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 PPPPPPPPPPPPPPPP 1 A_ChangeVelocity(-velx,-vely,0,CVF_REPLACE)
-TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+TIGR A 0 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 D 6 A_ChangeVelocity(0,0,0,CVF_REPLACE)
 COP1 A 0 A_DamageSelf(13)
 COP1 A 0 A_ChangeFlag("NOPAIN",FALSE)
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 CB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_JumpIfHealthLower(7,"FinishHim")
 Goto Walk
 FinishHim:
-COP1 B 1 A_DamageSelf(7)
+COP1 B 1 A_DamageSelf(7, "Stun")
 UNKN A 1 A_Log("ERROR: Cop didn't die from finisher!\nReport to Xane!") 
 Stop
 
 //Crying response
 Crying:
+COP1 A 0 A_JumpIf(velz==0.0,"Crying2")
+COP1 A 1 A_ChangeFlag("SOLID",FALSE)
+Loop
+Crying2:
 COP1 A 0 A_ChangeFlag("SOLID",FALSE)
 COP1 A 0 A_TakeInventory("Variable1",5)	//Variable1: Times to attack the player cheaply after hearing crying.
 COP1 A 0 A_GiveInventory("CryingBonus",1)	//Reward the player when this enemy is killed now.
@@ -1871,10 +1884,10 @@ JumpAway:
 COP1 A 0 A_JumpIf(Args[0]==0, "RegainTarget")
 COP1 A 0 A_ClearLastHeard
 COP1 A 0 A_ClearTarget
-COP1 ABC 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 ABC 2 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 COP1 D 5 A_PigPain
-COP1 DDDDDD 5 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
-COP1 CB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",224.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 DDDDDD 5 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
+COP1 CB 3 /*common*/ { If(A_CheckProximity("Spawn","PlayerPawn",512.0,1,CPXF_ANCESTOR)) { A_ChangeFlag("SOLID",TRUE); } Else { A_ChangeFlag("SOLID",FALSE); } }
 Goto Spawn
 RegainTarget:
 COP1 A 1 A_FaceTarget
@@ -2032,6 +2045,9 @@ Walk:
 COP1 J 0 A_ChangeFlag("LOWGRAVITY",FALSE)
 COP1 J 0 A_ChangeFlag("INVULNERABLE",FALSE)
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
+COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)==0,"Walk2")	//If on easy, skip the "angry" check below.
+COP1 A 0 A_JumpIfInventory("CryingBonus",1,"Angry")	//Once Mary cries, this cop will never behave normally again.
+Walk2:	//Used if on easy difficulty.
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
@@ -2048,17 +2064,6 @@ COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 CD 3 A_Chase
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 J 0 A_CheckProximity("See3","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
-Goto JumpAway
-Dodge:	//Use with "EnemyAutoJump".
-COP1 D 0 A_JumpIf(z-floorz>4.5,"NerfedJump")
-COP1 D 1 A_ChangeVelocity(-0.75,0,12.5,CVF_REPLACE|CVF_RELATIVE)
-COP1 D 0 A_PlaySound("cop3/jump",CHAN_VOICE,1.0)
-COP1 E 1
-JumpWait:
-COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"DrownOwn")
-COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 F 1 A_CheckFloor("Land")
-COP1 A 0 A_CheckProximity("JumpWait","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 Goto JumpAway
 Land:
 COP1 P 0 A_ChangeFlag("SKULLFLY",FALSE)
@@ -2078,7 +2083,7 @@ Goto JumpWait
 See3:
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
-COP1 A 0 A_CheckProximity("See2","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
+//COP1 A 0 A_CheckProximity("See2","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
 COP1 EDCB 3 A_Chase
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
 COP1 J 0 A_CheckProximity("Walk","PlayerPawn",1280.0,1,CPXF_ANCESTOR)
@@ -2207,18 +2212,22 @@ COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_JumpIfHealthLower(15,"FinishHim")
 Goto Walk
 FinishHim:
-COP1 B 1 A_DamageSelf(15)
+COP1 B 1 A_DamageSelf(15,"Stun")
 UNKN A 1 A_Log("ERROR: Cop didn't die from finisher!") 
 Stop
 
 //Crying response
 Crying:
+COP1 A 0 A_JumpIf(velz==0.0,"Crying2")
+COP1 A 1 A_ChangeFlag("SOLID",FALSE)
+Loop
+Crying2:
 COP1 A 0 A_TakeInventory("DisableAutoJump",1)	//This is just in case an enemy can hold more than one of this token.
 COP1 A 0 A_GiveInventory("DisableAutoJump",1)
 COP1 A 0 A_TakeInventory("Variable1",7)	//Variable1: Times to attack the player cheaply after hearing crying.
 COP1 A 0 A_GiveInventory("CryingBonus",1)	//Reward the player when this enemy is killed now.
 COP1 A 0 A_GiveInventory("Variable1",7)
-COP1 A 0 A_JumpIfHealthLower(7,"FinishHim")
+COP1 A 0 A_JumpIfHealthLower(15,"FinishHim")
 COP1 B 2 A_ChangeVelocity(-4,8,0,CVF_REPLACE|CVF_RELATIVE)
 COP1 ABCDCBABCDCBABCDCBABCDCBABCDCB 1 A_ChangeVelocity(-velx,-vely,velz,CVF_REPLACE)
 COP1 A 0 A_PlaySound("c3/r3",CHAN_VOICE,1.0,FALSE)	//Angry grunt
@@ -2361,20 +2370,16 @@ COP1 A 0 A_GiveInventory("DisableAutoJump",1)
 TNT1 A 0 A_SetScale(1.15)
 TNT1 A 0 A_StopSound(CHAN_VOICE)
 TNT1 A 0 A_RadiusGive("IncreaseCombo",512,RGF_PLAYERS)
-TNT1 AAAAAAAAAAAAAAA 0 A_RadiusGive("ScoreX",512,RGF_PLAYERS)
+TNT1 AAAAAAAAAAAAAAA 0 A_RadiusGive("ScoreX",512,RGF_PLAYERS)	//Each "A" here gives one point. Remember it can be multiplied by combos.
 COP1 P 0 A_ScreamAndUnblock
+TNT1 A 0 A_JumpIfInventory("CryingBonus",1,"Reward")
 DieFire:
 TIGR A 0 A_SpawnItem("HurtMonster",64,32)
 TNT1 A 0 A_RadiusGive("CDeath",768,RGF_MONSTERS|RGF_NOTARGET)
-COP1 PQRSTUV 3 A_RadiusGive("CDeath",320,RGF_MONSTERS|RGF_NOTARGET)
-COP1 W 70 A_RadiusGive("CDeath",224,RGF_MONSTERS|RGF_NOTARGET)
-COP1 XWXWXWXWYWYWYWYWY 1 A_RadiusGive("CDeath",96,RGF_MONSTERS|RGF_NOTARGET)
-TNT1 A 1 A_RadiusGive("CDeath",64,RGF_MONSTERS|RGF_NOTARGET)
-COP1 Y 1 A_RadiusGive("CDeath",64,RGF_MONSTERS|RGF_NOTARGET)
-TNT1 A 1 A_RadiusGive("CDeath",64,RGF_MONSTERS|RGF_NOTARGET)
-COP1 Y 1 A_RadiusGive("CDeath",64,RGF_MONSTERS|RGF_NOTARGET)
-TNT1 A 1 A_RadiusGive("CDeath",64,RGF_MONSTERS|RGF_NOTARGET)
-COP1 Y 1 A_RadiusGive("CDeath",64,RGF_MONSTERS|RGF_NOTARGET)
+COP1 PQRSTUV 3 A_RadiusGive("CDeath",256,RGF_MONSTERS|RGF_NOTARGET)
+COP1 WWWWWWWWWWWWWW 5 A_RadiusGive("CDeath",160,RGF_MONSTERS|RGF_NOTARGET)
+COP1 W -1
+Stop
 KilledCop:
 FadeOut:
 RemoveBody:
@@ -2991,7 +2996,7 @@ Actor Laser1
 	Radius 8
 	Height 16
 	Scale  2.25
-	Damage (1)
+	Damage (10)
 	Speed 42
 	Alpha 0.5
 	+BRIGHT

@@ -14,9 +14,11 @@ int musicinfo_tics;	//If this isn't 0, info won't be displayed!
 //See LANGUAGE.ENU fo song info.
 //NES soundtrack relies on NESMUSIC.nsf. IDs should match the song IDs inside it.
 
-int stored_music_id = 1;	//Music ID stored before drowning music.
+int stored_music_id = 6;	//Music ID stored before drowning music.
 
 bool fadein;	//Whether to forcibly restart the requested song, even if it's the current song, used for script 255.
+
+#define CONST_CHIPTUNE_MAX 13	//This is the highest ID that has a chiptune counterpart. Higher numbers fall thruog to the normal soundtrack.
 
 ////////////////////
 //MUSIC/SOUNDTRACK//
@@ -59,6 +61,7 @@ script 256 (void)	{	SetResultValue(current_music[PlayerNumber()]);	}
 
 script 255 ENTER
 {
+int temp_soundtrack;	//This stores the player's current soundtrack. It's the CVAR, but if a song isn't in 8-bit, this'll be set to 0 to save writing new code.
 While(1)
     {
 	if(musicinfo_tics>0) musicinfo_tics--;
@@ -66,14 +69,17 @@ While(1)
         {
 			if(requested_music[PlayerNumber()]==-1) requested_music[PlayerNumber()] = stored_music_id;	//If -1, instead restore their music.
 			
-			If(GetUserCVar(PlayerNumber(),"xane_soundtrack")==1)
+			If(requested_music[PlayerNumber()]<=CONST_CHIPTUNE_MAX) temp_soundtrack = GetUserCVar(PlayerNumber(),"xane_soundtrack");	//Set this to the player's soundtrack by default.
+			Else temp_soundtrack = 0;	//If the song isn't availiable in 8-bit, just play the normal soundtrack instead.
+			
+			If(GetUserCVar(PlayerNumber(),"xane_soundtrack")==1&&requested_music[PlayerNumber()]<=CONST_CHIPTUNE_MAX)
 			{
 				If(requested_music[PlayerNumber()]>0&&lives>0) LocalSetMusic("NESMUSIC",requested_music[PlayerNumber()]-1);
 				Else LocalSetMusic("");
 			}
 			Else
 			{
-				If(lives>0) LocalSetMusic(StrParam(l:StrParam(s:"MUSIC_FILE_", d:GetUserCVar(PlayerNumber(),"xane_soundtrack"), s:"_", d:requested_music[PlayerNumber()])),0,0);
+				If(lives>0) LocalSetMusic(StrParam(l:StrParam(s:"MUSIC_FILE_", d:temp_soundtrack, s:"_", d:requested_music[PlayerNumber()])),0,0);
 				Else LocalSetMusic("");
 			}
 			
@@ -122,14 +128,17 @@ While(1)
     Delay(5);
     If(current_soundtrack[PlayerNumber()]!=GetUserCVAR(PlayerNumber(),"xane_soundtrack"))
         {
-			If(GetUserCVar(PlayerNumber(),"xane_soundtrack")==1)
+			If(requested_music[PlayerNumber()]<=CONST_CHIPTUNE_MAX) temp_soundtrack = GetUserCVar(PlayerNumber(),"xane_soundtrack");	//Set this to the player's soundtrack by default.
+			Else temp_soundtrack = 0;	//If the song isn't availiable in 8-bit, just play the normal soundtrack instead.
+			
+			If(GetUserCVar(PlayerNumber(),"xane_soundtrack")==1&&requested_music[PlayerNumber()]<=CONST_CHIPTUNE_MAX)
 			{
 				If(requested_music[PlayerNumber()]>0&&lives>0) LocalSetMusic("NESMUSIC",requested_music[PlayerNumber()]-1);
 				Else LocalSetMusic("");
 			}
 			Else
 			{
-				If(lives>0) LocalSetMusic(StrParam(l:StrParam(s:"MUSIC_FILE_", d:GetUserCVar(PlayerNumber(),"xane_soundtrack"), s:"_", d:requested_music[PlayerNumber()])),0,0);
+				If(lives>0) LocalSetMusic(StrParam(l:StrParam(s:"MUSIC_FILE_", d:temp_soundtrack, s:"_", d:requested_music[PlayerNumber()])),0,0);
 				Else LocalSetMusic("");
 			}
         /*Switch(GetUserCVar(PlayerNumber(),"xane_soundtrack"))

@@ -3,7 +3,7 @@
 #include "zcommon.acs"
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
-//XCOMMON, due to how messy of a big file it is, has used 102/128 variables, with 25 left! Use them wisely!
+//XCOMMON, due to how messy of a big file it is, has used 104/128 variables, with 24 left! Use them wisely!
 //This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
@@ -29,6 +29,7 @@ world int 12:fadeout;	//The requested fade out during areas. Fade may seem redun
 world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PlayerNumber()] = X, [MAX_PLAYERS+PlayerNumber()] = Y, [MAX_PLAYERS*2+PlayerNumber()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PlayerNumber()] is supposedly used for jump-through platforms.
 
 //GLOBAL variables are always valid, no matter how many levels the player goes through.
+global bool 0:initial_setup;	//Some things only happen upon starting a game and never any other time. This prevents it from happening on every level.
 global int 2:score[];
 global int 3:cgem_count;	//Chaos Bridges count
 global int 4:ss_position;	//Return map position for special stages. The player will be teleported to 1100 * (this + 1) + PlayerNumber().
@@ -38,7 +39,7 @@ global int 7:completed_levels[];  //[0] increases as a counter; Any other array 
 #define MAX_LEVELS 4 	//Not to be confused with TRANSITION_LEVELS or whatever, this is the max number of levels that completed levels will include. This doesn't include the counter, so increase by 1 when storing.
 global int 8:curscore[];
 
-global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Only increase or decrease this variable, never forcibly set it.
+global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Only increase or decrease this variable, never forcibly set it except at the beginning of a level.
 
 //Global variables #12-#14 are available.
 
@@ -47,8 +48,6 @@ global int 16:lives;
 
 global int 17:seconds;	//The timer is global to allow the speedrunning timer to continue running between levels.
 global int 18:timer_tics;	//Used for the speedrunning timer's "milliseconds".
-
-//Global variable #0 is available!
 
 global bool 19:challenge_status[];	//Indicates if a challenge for a level is completed, marking it in the interface when selecting levels. There's only one per level, so each index is the level number - 1.
 
@@ -63,7 +62,7 @@ global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice
 global bool 26:event_completed[];	//Whether the FMV with this ID has run. It will be skipped if TRUE.
 global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane), 4: Ability upgrade. This is synced between all players.
 global bool 28:special_id[];	//An array determining whether a player picked up a special item or entered a certain special stage entrance. See the line below this one for the current highest ID.
-//The highest current special ID is 3.
+//The highest current special ID is 5.
 
 //global bool 29:tutorial_completed[];	//See TUTORIAL.acs for this global variable.
 //Global variable #30 is available!
@@ -97,7 +96,7 @@ int totalcointics = CONSTANT_TCOINDISPTICS;	//Number of tics to show the player'
 #define CONST_MAXCOIN_INCAMOUNT 5	//How much the coin limit will raise with each upgrade collected.
 #define CONST_BOOST_TICS 10	//How many tics a boost panel pushes the player.
 
-#define CONST_SECS_NINJA 30
+#define CONST_SECS_NINJA 30	//Number of seconds each Powerup Coin gives per use.
 #define CONST_SECS_WATER 25
 #define CONST_SECS_DAMAGE 30
 #define CONST_SECS_HEAL 25
@@ -322,28 +321,46 @@ angle += 0.5;
 
 }
 
-script "DetermineWUpgradeSpawn" (int mode)	//0 = Spawn item at location, 1 = Return result for Jane's shop
+script "DetermineWUpgradeSpawn" (int spec_id)
 {
-	int randomnumberwu;
-	int remaining_checks = 10;	//Try to get a random match ten times before forgetting this random weapon upgrade.
-	If(PlayerClass(0)==CHAR_SCALETEST) { Log(s:"Scale test detected!"); Terminate; }
-	While(remaining_checks>0)
-	{
-		If(PlayerClass(Random(0,PlayerCount()-1))==CHAR_MARY)	//If a random player is Mary...
+	If(special_id[spec_id]==FALSE)
+	{	//Upgrades will only spawn if the player hasn't already picked up the upgrade.
+		int randomnumberwu;
+		
+		int thing_id = UniqueTID(900,100);
+		If(thing_id==0) { Log(s:"A unique thing ID couldn't be determined. Aborting upgrade spawn."); Terminate; }
+		
+		int remaining_checks = 10;	//Try to get a random match ten times before forgetting this random weapon upgrade.
+		If(PlayerClass(0)==CHAR_SCALETEST) { Log(s:"Scale test detected!"); Terminate; }
+		While(remaining_checks>0)
 		{
-			randomnumberwu = Random(0,7);
-			If(randomnumberwu % 2 == 1 && upgrades[0] < CONST_MAXUPGRADES_HAMMER) { remaining_checks = 1; If(mode==0) Spawn("PowerupHammer",GetActorX(0),GetActorY(0),GetActorZ(0),0,0); Else SetResultValue(1); }
-			If(randomnumberwu % 2 == 0 && upgrades[2] < CONST_MAXUPGRADES_UMBRELLA) { remaining_checks = 1; If(mode==0) Spawn("PowerupUmbrella",GetActorX(0),GetActorY(0),GetActorZ(0),0,0); Else SetResultValue(2); }
-		}
-		Else	//Else, if they are playing as Xane...
-		{
-			If(upgrades[3] < CONST_MAXUPGRADES_SWORD) { remaining_checks = 1; If(mode==0) Spawn("PowerupSword",GetActorX(0),GetActorY(0),GetActorZ(0),0,0); Else SetResultValue(1); }
+			If(PlayerClass(Random(0,PlayerCount()-1))==CHAR_MARY)	//If a random player is Mary...
+			{
+				randomnumberwu = Random(0,7);
+				If(randomnumberwu % 2 == 1 && upgrades[0] < CONST_MAXUPGRADES_HAMMER) { remaining_checks = 1; Spawn("PowerupHammer",GetActorX(0),GetActorY(0),GetActorZ(0),thing_id,0); }
+				If(randomnumberwu % 2 == 0 && upgrades[2] < CONST_MAXUPGRADES_UMBRELLA) { remaining_checks = 1; Spawn("PowerupUmbrella",GetActorX(0),GetActorY(0),GetActorZ(0),thing_id,0); }
+			}
+			Else	//Else, if they are playing as Xane...
+			{
+				If(upgrades[3] < CONST_MAXUPGRADES_SWORD) { remaining_checks = 1; Spawn("PowerupSword",GetActorX(0),GetActorY(0),GetActorZ(0),thing_id,0); }
+			}
+			
+			remaining_checks--;
 		}
 		
-		remaining_checks--;
+		GiveActorInventory(thing_id,"Variable1",spec_id);	//Transfer the special ID to the upgrade object so it knows what to mark should it be picked up.
+		Thing_ChangeTID(thing_id,0);	//Remove its thing ID afterwards so other objects can use it.
 	}
 	
 	Thing_Remove(0);	//After spawning the upgrade, remove the dummy spawner object.
+}
+script "Upgrade_MarkSpecialID" (void) { special_id[CheckInventory("Variable1")] = TRUE; }	//This is used by upgrade objects to mark themselves as "collected".
+script "Upgrade_CheckValidity" (int upgrade_type)	//The "upgrade type" here is the same as the upgrade[] array.
+{	//Returns FALSE if this upgrade is no longer needed. If it's TRUE, it can stay.
+	If(upgrade_type == 0 && upgrades[0] >= CONST_MAXUPGRADES_HAMMER) SetResultValue(FALSE);
+	Else If(upgrade_type == 2 && upgrades[2] >= CONST_MAXUPGRADES_UMBRELLA) SetResultValue(FALSE);
+	Else If(upgrade_type == 3 && upgrades[3] >= CONST_MAXUPGRADES_SWORD) SetResultValue(FALSE);
+	Else SetResultValue(TRUE);
 }
 
 //Common
@@ -408,7 +425,29 @@ script "Ladder" (int height)
 	ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
 }
 
-bool rslot_busy[2];
+script "Teleporter" (int destination, int marker, int camera)
+//Briefly changes to a different camera view before enabling a map marker and teleporting the player with white fade.
+{
+	If(destination<=0) { Log(s:"This teleporter has no destination!"); Terminate; }
+
+	PlaySound(0, "misc/teleport", CHAN_AUTO|CHAN_NOPAUSE, 0.75, FALSE);
+
+	If(camera>0) ChangeCamera(camera, FALSE, FALSE);	//Change to the third-person camera for this teleporter if one's specified.
+
+	ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//Make sure the player can't mess up this mini-cutscene.
+	FadeTo(255,255,255,1.0,0.85);
+	Delay(30);
+
+	ACS_NamedExecuteAlways("SetCheckpoint",0,destination,0,0);	//Set the checkpoint and teleport the player to the destination.
+	Teleport_NoStop(destination,0,FALSE);
+	SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
+	If(camera>0) ChangeCamera(0, FALSE, FALSE);	//Return the camera to normal if it was changed earlier.
+	ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);	//Allow movement again.
+	FadeTo(255,255,255,0.0,1.0);
+	If(marker>0) Thing_Activate(marker);	//Display the destination on the map if one is specified.
+}
+
+bool rslot_busy[2];	//Whether slot #1 or #2 on any rail in the "level" is occupied. If both are, a third slot is used. Otherwise, unpredictable behavior may occur.
 
 //RAILS
 //See https://worldofkirbycraft.miraheze.org/wiki/Rail for details.
@@ -1687,6 +1726,7 @@ script "SpeedTimer" ENTER
 		Print(s:"GO!");
 		ACS_NamedExecute("ResetPlayerForSpeedruns",0,0,0,0);
 		Delay(1);
+		show_timer = TRUE;
 		GiveInventory("PowerupDamage",1);
 		GiveInventory("PowerupWater",1);
 		GiveInventory("PowerupNinja",1);
@@ -1715,7 +1755,7 @@ script "SpeedTimer" ENTER
 			{
 				show_timer = FALSE;	//Hide the speedrunning timer when the run's restarting.
 				If(gamemode==3) { ACS_NamedExecute("ExitTransition",0,0,0,0); Delay(35); }	//Practice Mode
-				If(gamemode==1)
+				If(gamemode==1)	//Time Attack; Remember to add Boss Rush's counterpart!
 				{
 					AmbientSound("menu/backup",256);
 					Log(s:"Restarting run...");
@@ -1898,7 +1938,7 @@ script "ResetPlayerForSpeedruns" (void)
 	combo[MAX_PLAYERS] = 0;
 	combo[MAX_PLAYERS*2] = 0;
 	TakeInventory("CoinSP",999);	//Take all coins
-	If(gamemode==1) { level[0] = 34; level[1] = 34; level[2] = 33; }
+	//If(gamemode==1) { level[0] = 34; level[1] = 34; level[2] = 33; }
 	ACS_NamedExecute("GiveSRWeapons",0,-1,0,0);	//Give all weapons in Practice Mode. Change in the future for other modes.
 	SetActorProperty(0, APROP_Health, 100);
 	damage_tics[0] = 0;
@@ -2049,22 +2089,32 @@ Script "ExitTransition" (void)
 	
 	If(GameType()==GAME_SINGLE_PLAYER&&CheckActorInventory(1000, "CoinSP")>0)
 	{
-		Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
-		ACS_NamedExecute("DisplayTotalCoins",0,70+CheckActorInventory(1000, "CoinSP"),0,0);
-		Delay(17);
-		
-		Until(CheckActorInventory(1000, "CoinSP")==0)
+		If(gamemode==0)
 		{
 			Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
-			total_coins++;
-			TakeActorInventory(1000, "CoinSP", 1);
-			AmbientSound("coin/normal",256);
-			Delay(2);
+			ACS_NamedExecute("DisplayTotalCoins",0,70+CheckActorInventory(1000, "CoinSP"),0,0);
+			Delay(17);
+			
+			Until(CheckActorInventory(1000, "CoinSP")==0)
+			{
+				Print(s:"Sending ", d:CheckActorInventory(1000, "CoinSP"), s:" coins to your bank...");
+				total_coins++;
+				TakeActorInventory(1000, "CoinSP", 1);
+				AmbientSound("coin/normal",256);
+				Delay(2);
+			}
+			
+			Print(s:"Sending ", d:0, s:" coins to your bank...");
+			Delay(6);
 		}
-		
-		Delay(6);
+		Else If(gamemode<3)	//Time Attack/Boss Rush
+		{
+			total_coins += CheckActorInventory(1000, "CoinSP");
+			TakeActorInventory(1000, "CoinSP", CheckActorInventory(1000, "CoinSP"));
+		}
+		Else If(gamemode==3) { TakeActorInventory(1000, "CoinSP", CheckActorInventory(1000, "CoinSP")); }
 	}
-
+		If(level[1]>3) { Log(s:"What? How did it equal ", d:level[1], s:"?"); Delay(70); level[1] = 1; }
 	If(gamemode!=3) { ChangeLevel(StrParam(s:"TMP", d:level[1]+2),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill()); }//Level[1]+201 is the temporary level for the next level. This makes the game forget this level's state before advancing.
 	Else ChangeLevel(StrParam(s:"TMP", d:level[1]+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//If in practice mode, restart the level when it's completed.
 }
@@ -2077,11 +2127,29 @@ script "Disconnect"  (int arg0) DISCONNECT
 /////////////////////
 //TECHNICAL SCRIPTS//
 /////////////////////
+int invulnerable[MAX_PLAYERS];	//This integer determines if the player is invulnerable. Use Invulnerable below 
 script "GetPlayerInformation" (int type)
 {
 	Switch(type)
 	{
 		Case 0: SetResultValue(GameSkill()); Break;
+		Case 1: SetResultValue(invulnerable[PlayerNumber()]); Break;
+	}
+}
+
+script "Invulnerable" (int enable)
+{
+	If(enable<-1||enable>1) { Log(s:"Invalid invulnerability command ", d:enable, s:"!"); Terminate; }
+	If(enable==TRUE)
+	{	//If enabling invulnerability, no checks are necessary, just turn it on and increment the counter.
+		invulnerable[PlayerNumber()]++;
+		SetPlayerProperty(FALSE, ON, PROP_INVULNERABILITY);
+	}
+	If(enable==-1) { invulnerable[PlayerNumber()] = 1; enable = FALSE; }	//-1 guarantees invulnerability is disabled.
+	If(enable==FALSE)
+	{	//If disabling invulnerability, decrement the counter then if it's zero disable the invulnerability.
+		If(invulnerable[PlayerNumber()]>0) invulnerable[PlayerNumber()]--;
+		If(invulnerable[PlayerNumber()]==0) SetPlayerProperty(FALSE, OFF, PROP_INVULNERABILITY);
 	}
 }
 
@@ -2504,7 +2572,6 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 				Ceiling_LowerByValue(64,16,32);
 				SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
 				tics_death = 0;
-				ACS_NamedExecuteAlways("ShowTutorial",0,8,0,0);
 				SetActivator(1000, AAPTR_PLAYER1); SetActorProperty(GetCurrentPlayerTID(),APROP_Health,100);
 				SetActivator(playertid_stored);
 			Break;
@@ -2515,7 +2582,6 @@ script "HandleDeath" ENTER	//Check for possible death/arrest.
 			Break;
 			}
 			important_fade[PlayerNumber()] = FALSE;	//Tell flashing scripts to resume changing colors.
-			
 		}
 	
 	}
@@ -3481,8 +3547,6 @@ Until(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 				hammermove[PlayerNumber()] = 3;
 				jumps[PlayerNumber()] = 0;
 				SetActorVelocity(GetCurrentPlayerTID(),0,0,0,FALSE,TRUE);
-						Log(d:movement[PlayerNumber()]==0);
-						Log(d:movement[MAX_PLAYERS+PlayerNumber()]);
 				If(CheckActorInventory(GetCurrentPlayerTID(),"SuperX")==0)
 				{
 					If(upgrades[4]==TRUE&&movement[PlayerNumber()]==0&movement[MAX_PLAYERS+PlayerNumber()]==0)
@@ -3856,6 +3920,7 @@ HUDMessageBold(s:"A";
 	HUDMSG_FADEOUT, 0, CR_UNTRANSLATED, -30.1, 0.1, 0.0, 1.0);
 TakeInventory("PowerTimeFreezer",1);
 ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
+If(number==1)ACS_NamedExecute("GameOverRespawn",0,0,0,0);
 
 //FadeTo(0,0,0,0.0,1.0);	//Fade the screen back in when returning from the FMV.
 
@@ -3864,11 +3929,11 @@ ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
 //Not this, though. Use StrParam for named scripts. ACS_Execute(number,0,0,0,0);	//Run the script with the same number as the FMV number/ID.
 }
 
-script 1 (void)	//EVENT ID #1: Game Over
+script "GameOverRespawn" (void)	//This is ran by the above script.
 {
-	event_completed[0] = FALSE;	//The game over FMV must always play.
+	//event_completed[0] = FALSE;	//The game over FMV must always play.
 	lives = CONSTANT_1UP_INITIAL;
-	if(PlayerNumber()>-1) score[PlayerNumber()] = score[PlayerNumber()] / 2;
+	/*if(PlayerNumber()>-1)*/ score[PlayerNumber()] = score[PlayerNumber()] / 2;
 	fade = 1;
 	If(gamemode==0)
 	{	//If the player has made it to 1-2, 1-3, or 1-4 then gets a game over...
@@ -4014,11 +4079,15 @@ script "Drowning" ENTER
 				  if(dmt==0)
 				  {
 					dmt = 45;
-					dtx = Random(0.4,0.6);
-					dty = Random(0.4,0.6);
+					//dtx = Random(0.4,0.6);
+					//dty = Random(0.4,0.6);
 		
-					if(airsupply[PlayerNumber()]/45<6&&GetActorProperty(GetCurrentPlayerTID(),APROP_Health)>0)HudMessage(d:airsupply[PlayerNumber()]/45; HUDMSG_FADEINOUT, 0, CR_WHITE, dtx, dty, 0.0, 0.05, 0.5);
-					if(airsupply[PlayerNumber()]/45<6&&GetActorProperty(GetCurrentPlayerTID(),APROP_Health)>0)HudMessage(d:airsupply[PlayerNumber()]/45; HUDMSG_FADEINOUT, 0, CR_BLUE, dtx, dty, 0.65, 0.25, 0.5);
+					if(airsupply[PlayerNumber()]/45<6&&GetActorProperty(GetCurrentPlayerTID(),APROP_Health)>0)
+					{
+						HudMessage(d:airsupply[PlayerNumber()]/45; HUDMSG_FADEINOUT, 0, CR_WHITE, 0.5, 0.25, 0.0, 0.05, 0.5);
+						HudMessage(d:airsupply[PlayerNumber()]/45; HUDMSG_FADEINOUT, 0, CR_BLUE, 0.5, 0.25, 0.65, 0.25, 0.5);
+						If(airsupply[PlayerNumber()]/45==3) PlaySound(GetCurrentPlayerTID(), "*drowning", CHAN_VOICE, 1.0, FALSE, 0.95);
+					}
 				  }
 				  dmt--;
 					Delay(1);
@@ -4342,8 +4411,8 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 int sadness = -7;	//This increases each USE tap.
 script "MaryCry" ENTER	//Yep, Mary's crying returns!
 {
-	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",0,2,0,0)==TRUE) Terminate;	//No crying in Special Stages or the Small Hut!
-	int became_sad;
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Terminate;	//No crying in Special Stages or the Small Hut! (The latter is handled below.)
+	int became_sad;	//This variable increases the closer Mary is to crying. It determines how long Mary's cooldown lasts.
 	If(PlayerClass(PlayerNumber())!=CHAR_MARY) Terminate;	//If not Mary, disable crying.
 	While(1)
 	{
@@ -4358,8 +4427,8 @@ script "MaryCry" ENTER	//Yep, Mary's crying returns!
 
 		}
 		
-		If(OpenInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE && sadness > -42)
-		{	//Sadness being -42 disables crying.
+		If(OpenInput[PlayerNumber()] & BT_USE && no_scripts[PlayerNumber()]==FALSE && ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE && sadness > -42)
+		{	//Sadness being -42 disables crying. Also, this can't be done inside the Small Hut.
 			sadness += 5;
 			If(sadness>=30) { sadness = -42; ACS_NamedExecute("PlayDialogue",0,0,0,0); Delay(50); sadness = -7; became_sad = 0; }
 			Else If(sadness>=24) { became_sad = 3; PlaySound(GetCurrentPlayerTID(), "mary/crybuildup4", CHAN_VOICE, 1.0, FALSE, 1.25); }
@@ -4603,6 +4672,7 @@ script "ResetPlayer" (void)
 	SetPlayerProperty(TRUE,OFF,PROP_FLIGHT);
 	disablewind[PlayerNumber()] = 0;
 	no_scripts[PlayerNumber()] = FALSE;
+	ACS_NamedExecuteAlways("Invulnerable",0,-1,0,0);	//Forcibly disable invulnerability.
 	
 	if(StrParam(n:PRINTNAME_LEVEL)!="SPECSTG1"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG2"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG3"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG4"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG5"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG6"&&StrParam(n:PRINTNAME_LEVEL)!="SPECSTG7"&&GameType()!=GAME_NET_DEATHMATCH/*&&(GetLevelInfo(LEVELINFO_LEVELNUM)!=0&&ss_position!=3)*/) { if(level[0]<GetLevelInfo(LEVELINFO_LEVELNUM)&&GetLevelInfo(LEVELINFO_LEVELNUM)<CONST_TRANS_LEVELS_START) level[0] = GetLevelInfo(LEVELINFO_LEVELNUM); level[1] = GetLevelInfo(LEVELINFO_LEVELNUM); If(world_info[1]==1) level[2] = GetLevelInfo(LEVELINFO_LEVELNUM); }		//If not a special level, update this variable.
 	
@@ -4632,8 +4702,8 @@ script "ResetPlayer" (void)
 		Delay(10);
 		ChangeLevel(StrParam(s:"AREA", d:level[1]-CONST_TRANS_LEVELS_START+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());
 		Delay(3);
-		HUDMessage (s:"Sorry, but this area didn't load properly! Let Xane know about this info: \nLEVEL VARS: ", d:level[0], s:"/", d:level[1], s:"/", d:level[2], s:"\nMODE #", d:gamemode, s:"\n\nAgain, apologies for any inconvenience. If in a speedrun, push ", k:"+user3", s:". Otherwise, reload your previous save or start a new game!";
-			HUDMSG_PLAIN, 0, CR_BRICK, 0.5,0.1, 90.0);   //Loading text.
+		HUDMessage (s:"Sorry, but this area didn't load properly! Let Xane know about this info: \nLEVEL VARS: ", d:level[0], s:"/", d:level[1], s:"/", d:level[2], s:"\nMODE #", d:gamemode, s:"\n\nAgain, apologies for any inconvenience. Restart your game and hope this doesn't happen again. When you tell Xane about this error, let him know what exactly you did before this failed area transition occurred.";
+			HUDMSG_PLAIN, 0, CR_PURPLE, 0.5,0.1, 90.0);   //Error message if the other area doesn't transition properly.
 	}
 }
 
@@ -4696,7 +4766,7 @@ script "ChangePlayerTIDs" enter
 	TakeInventory("PlayerNumberX",8);
 	GiveInventory("PlayerNumberX",PlayerNumber()+1);
 	
-	if(StrParam(l:"MOBILE")=="YES") SetCVAR("xane_controltype",1);
+	TakeInventory("DisableAirDash",1);
 
 	ACS_NamedExecuteAlways("ResetPlayer",0,0,0,0);
 
@@ -4706,7 +4776,7 @@ script "ChangePlayerTIDs" enter
 		//stored_velocity[3] = upgrades[1];	//Store the number of coins the player really can hold until they return from the Special Stage.
 		TakeInventory("SSRequiredCoins",999);
 		GiveInventory("SSRequiredCoins",ACS_NamedExecuteWithResult("GetCoinsRequired",0,0,0,0));
-		Log(s:"Coin code ran!\n", d:ACS_NamedExecuteWithResult("GetCoinsRequired",0,0,0,0), s:" coins should be added as req.!");
+		//Log(s:"Coin code ran!\n", d:ACS_NamedExecuteWithResult("GetCoinsRequired",0,0,0,0), s:" coins should be added as req.!");
 		If(CheckInventory("CoinSP")>1)	//If the player has coins, give half of them to the bank before the Special Stage removes them!
 		{
 			total_coins += CheckInventory("CoinSP") / 2;
@@ -4714,7 +4784,36 @@ script "ChangePlayerTIDs" enter
 			TakeInventory("CoinSP",999);
 		}
 	}
-
+	
+	If(initial_setup==FALSE)	//Set up some things, such as the inventory items.
+	{	//If an inventory item the player can hold is added, add it to this list!
+		GiveInventory("InventoryTurret",1);
+		GiveInventory("Ball3",1);
+		GiveInventory("Ball2",1);
+		GiveInventory("Ball1",1);
+		GiveInventory("PowerupSpeed",1);
+		GiveInventory("PowerupCombo",1);
+		GiveInventory("PowerupWater",1);
+		GiveInventory("PowerupNinja",1);
+		GiveInventory("PowerupHeal",1);
+		GiveInventory("PowerupDamage",1);
+		
+		Delay(1);	//Wait a tic, then take them all away!
+		
+		TakeInventory("PowerupDamage",1);
+		TakeInventory("PowerupHeal",1);
+		TakeInventory("PowerupNinja",1);
+		TakeInventory("PowerupWater",1);
+		TakeInventory("PowerupCombo",1);
+		TakeInventory("PowerupSpeed",1);
+		TakeInventory("Ball1",1);
+		TakeInventory("Ball2",1);
+		TakeInventory("Ball3",1);
+		TakeInventory("InventoryTurret",1);
+		
+		initial_setup = TRUE;
+	}
+	
 	if(GameType()==GAME_NET_DEATHMATCH) cgem_count = 7;
 		
 	show_timer = FALSE;
@@ -4959,7 +5058,6 @@ script "WarpToHut" (void)
 		ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,TRUE,TRUE);
 		fadeout = 1;
 		Delay(50);
-		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
 		StopSound(0, 1);
 		StopSound(0, 2);
 		StopSound(0, 3);
@@ -4970,6 +5068,7 @@ script "WarpToHut" (void)
 		StopSound(0, 0);
 		ss_returnlevel = GetLevelInfo(LEVELINFO_LEVELNUM);	//Indicate what level to return to to prevent the strange 1-2 glitch.
 		Delay(1);
+		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
 		stored_velocity[0] = -616.5;	//This odd value will force the game to take you to the hut.
 		ss_return_id = -(checkpoint_id[PlayerNumber()]);
 		ChangeLevel("AREA1",0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//Teleport the player to the hut!
@@ -4987,28 +5086,23 @@ script "BallMonitorGlitchyBehavior" (void)
 		oldy = GetActorY(0)>>16;
 		//oldz = GetActorZ(0)>>16;
 		
+		If(GetActorZ(0)-GetActorFloorZ(0)<2.5) ACS_NamedExecute("PlayFootstepSound",0,0,0,0);
 		exist_tics++;
 		Delay(1);
 		
-		If(GetActorX(0)>>16==oldx&&GetActorY(0)>>16==oldy/*&&GetActorZ(0)>>16==oldz*/) GiveInventory("Variable4",1);	//Force the ball to disappear.
+		//Variable5 for balls disables forcibly removing the balls through this script.
+		If(GetActorX(0)>>16==oldx&&GetActorY(0)>>16==oldy&&CheckInventory("Variable5")==FALSE/*&&GetActorZ(0)>>16==oldz*/) GiveInventory("Variable4",1);	//Force the ball to disappear.
 	}
 }
 
-///////////////////////////////
-//Juice box technical scripts//
-///////////////////////////////
+////////////////////////////////////
+//Juice Cylinder technical scripts//
+////////////////////////////////////
 
 script "JuiceBoxCheck" (int type)
 {
-int comp;
-
-comp = 200;
-
-if(type==0) comp -= 25;
-if(type==1) comp -= 50;
-
-If(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<comp) SetResultValue(TRUE);	//Juice boxes
-Else SetResultValue(FALSE);
+	If(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<75) SetResultValue(TRUE);	//Is the player hurt enough to use this?
+	Else SetResultValue(FALSE);
 }
 
 script "JuiceBoxRecover" (int type)
@@ -5157,6 +5251,7 @@ int democam_tics;	//How many tics until the current demo camera reverts to the f
 int democam_tid;	//The thing ID of the last camera activated, used to deactivate it later.
 script "DemoCamera" (int tid, int seconds_democam, int condition)
 {
+	Terminate;	//When recording, uncomment this line.
 	If(GetCVAR("cl_demo")==FALSE) Terminate;
 	
 	If(condition==0 ||
@@ -5175,12 +5270,11 @@ script "DemoCamera" (int tid, int seconds_democam, int condition)
 script "DemoTimer" OPEN
 {
 	If(GetCVAR("cl_demo")==FALSE) Terminate;
-	int demo_seconds = 30;
 	int lump_name2 = StrParam(n:PRINTNAME_LEVEL);
 
-	While(demo_seconds>0)
+	While(1)
 	{
-		If(GetCVAR("cl_demo")==TRUE&&demo_seconds % 2 == 0&&lump_name2 != "INTRO" && lump_name2 != "TITLE")
+		If(GetCVAR("cl_demo")==TRUE&&lump_name2 != "INTRO" && lump_name2 != "TITLE")
 		{
 			SetHUDSize(1024,640,TRUE);
 			SetFont("TITLEFNT");
@@ -5191,17 +5285,8 @@ script "DemoTimer" OPEN
 			HUDMessage(s:"A";
 				HUDMSG_PLAIN, 101, CR_UNTRANSLATED, 586.2,5.1, 4.0);	//Is 585 or 586 more square? Verify in the future.
 		}
-		
-		If(GetCVAR("cl_demo")==TRUE) { SetFont("BIG_TEXT"); PrintBold(d:demo_seconds); }
 		Delay(35);
-		demo_seconds--;
 	}
-	
-	If(GetCVAR("cl_demo")==TRUE) PrintBold(s:"Wait for fade...");
-	important_fade[0] = TRUE;
-	FadeTo(0,0,0,1.0,1.0);
-	Delay(35);
-	If(GetCVAR("cl_demo")==TRUE) PrintBold(s:"NOW LAND IT!");
 }
 
 script "TitleOverlay" (void)
@@ -5397,8 +5482,6 @@ While(1)
 			TakeActorInventory(1007,"ShowTotalCoins",1);
 		}
 		
-		If(CheckInventory("InternalDCoin")||CheckInventory("PowerDCoin")) Log(s:"OH MY GLO--WAIT, NO!");
-		
 		if(moved_up_wall[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE) moved_up_wall[PlayerNumber()]--;
 		
 		If(walljumping[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE) walljumping[PlayerNumber()]--; If(hammermove[PlayerNumber()]>0) hammermove[PlayerNumber()]--;
@@ -5497,7 +5580,7 @@ While(1)
 				GiveActorInventory(GetCurrentPlayerTID(),"NotArmorBonus",meter[PlayerNumber()]);
 		}
 		
-		//The Damage Coin doesn't have any checks for the "coin lock" as you can't hut enemies in Special Stages.
+		//The Damage Coin doesn't have any checks for the "coin lock" as you can't hut enemies in Special Stages .
 		If(CheckInventory("SuperX")==TRUE&&damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin_Super",1); }
 		Else If(CheckInventory("SuperX")==TRUE) { GiveInventory("InternalDSuper",1); }
 		Else If(damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin",1); }
@@ -5907,7 +5990,7 @@ script "InitialSeamlessHelper" ENTER { level_ready = FALSE; ACS_NamedExecuteAlwa
 script "SeamlessHelper" (int initial_load)	//If initial_load is set, an additional waiting time will be added for culling.
 {
 	ACS_NamedExecuteAlways("SuperFormCheck",0,0,0,0);	//Always check for super forms, regardless of where the player is.
-	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { Log(s:"This code's running, problem solved."); fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); /*ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);*/ Delay(2); }	//This really should be identical to what's below but I'm nervous about breaking this thing.
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) { /*Log(s:"This code's running, problem solved.");*/ fadeout = 5; Delay(2); SetActorPosition(1000+PlayerNumber(), GetActorX(1100+PlayerNumber()), GetActorY(1100+PlayerNumber()), GetActorZ(1100+PlayerNumber()), FALSE); SetActorAngle(1000+PlayerNumber(), GetActorAngle(1100+PlayerNumber())); /*ACS_NamedExecuteAlways("GiveWeapons",0,0,0,0);*/ Delay(2); }	//This really should be identical to what's below but I'm nervous about breaking this thing.
 	Else
 	{
 		fadeout = 4;
@@ -6224,24 +6307,29 @@ While(1)
 	}
 }
 
-int prevhealth2[MAX_PLAYERS];
+int prevhealth2[MAX_PLAYERS];	//It's unknown if this needs to be outside of the script below.
 
 script "HandleCoinDrops" ENTER
 {
-prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
-While(1)
-	{
-	prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
-	Delay(1);
 	int coins;
-	
-	if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) < prevhealth2[PlayerNumber()])	//Drop coin depending on the character.
-		{
-		ACS_NamedExecuteAlways("DropCoins",0,(prevhealth2[PlayerNumber()]-GetActorProperty(GetCurrentPlayerTID(),APROP_Health))/2,0,0);
+	prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+	While(1)
+	{
 		prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+		Delay(1);
+		
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) < prevhealth2[PlayerNumber()])	//Drop coin depending on the character.
+		{
+			ACS_NamedExecuteAlways("DropCoins",0,(prevhealth2[PlayerNumber()]-GetActorProperty(GetCurrentPlayerTID(),APROP_Health))/2,0,0);
+			prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+			
+			//Give a bit of invulnerability.
+			ACS_NamedExecuteAlways("Invulnerable",0,TRUE,0,0);
+			Delay(52-(17*GameSkill()));	//The invulnerability lasts a variable amount of time depending on difficulty.
+			ACS_NamedExecuteAlways("Invulnerable",0,FALSE,0,0);
 		}
 
-	if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) > prevhealth2[PlayerNumber()]) prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) > prevhealth2[PlayerNumber()]) prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 	}
 }
 

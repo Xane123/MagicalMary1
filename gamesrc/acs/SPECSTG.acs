@@ -53,7 +53,7 @@ If(cgem_count>=7&&GetCVAR("xane_debug")==FALSE) { Teleport_NewMap(ss_returnlevel
 //Also, if they aren't on the correct Special Stage, force them to there unless a demo is involed.
 If(cgem_count!=ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)&&GetCVAR("cl_demo")==FALSE&&GetCVAR("xane_debug")==FALSE) { ChangeLevel(StrParam(s:"SPECSTG", d:cgem_count+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());/*ACS_NamedExecute("ExitSpecialStage",0,0,0,0);*/ Terminate; }
 Delay(1);
-Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper before displaying the level title card.
+Until(level_ready==TRUE&&no_scripts[0]==FALSE) Delay(1);	//Wait for SeamlessHelper before displaying the level title card.
 TakeActorInventory(1000 + PlayerNumber(),"CoinSP",999);
 While(CheckActorInventory(1000,"CoinSP")+CheckActorInventory(1001,"CoinSP")+CheckActorInventory(1002,"CoinSP")+CheckActorInventory(1003,"CoinSP")+CheckActorInventory(1004,"CoinSP")+CheckActorInventory(1005,"CoinSP")+CheckActorInventory(1006,"CoinSP")+CheckActorInventory(1007,"CoinSP")<coins_required[ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)]&&end==false)
     {
@@ -379,7 +379,7 @@ bool clock_appeared = FALSE;
 script "TimerSS" (int min)
 {
 Delay(35);
-Until(no_scripts[0]==FALSE) Delay(1);
+Until(level_ready==TRUE&&no_scripts[0]==FALSE) Delay(1);
 secsp--;	//Subtract a second to make up for the 1-second delay above.
 int timerx;
 If(1)
