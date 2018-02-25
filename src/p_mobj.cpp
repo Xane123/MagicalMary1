@@ -3029,9 +3029,9 @@ void P_ZMovement (AActor *mo, double oldfloorz)
 		{
 			dist = mo->Distance2D (mo->target);
 			delta = (mo->target->Center()) - mo->Z();
-			if (delta < -4 /*&& dist < -(delta*3)*/)
+			if (delta < 0 /*&& dist < -(delta*3)*/)
 				mo->AddZ(-mo->FloatSpeed);
-			else if (delta > 4 /*&& dist < (delta*3)*/)
+			else if (delta > 0 /*&& dist < (delta*3)*/)
 				mo->AddZ(mo->FloatSpeed);
 		}
 	}

@@ -2145,9 +2145,9 @@ void P_FakeZMovement(AActor *mo)
 		{
 			double dist = mo->Distance2D(mo->target);
 			double delta = mo->target->Center() - mo->Z();
-			if (delta < -4 /*&& dist < -(delta * 3)*/)
+			if (delta < 0 /*&& dist < -(delta * 3)*/)
 				mo->AddZ(-mo->FloatSpeed);
-			else if (delta > 4 /*&& dist < (delta * 3)*/)
+			else if (delta > 0 /*&& dist < (delta * 3)*/)
 				mo->AddZ(mo->FloatSpeed);
 		}
 	}
