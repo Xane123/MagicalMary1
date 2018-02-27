@@ -1108,7 +1108,7 @@ void FPolyObj::UnLinkPolyobj ()
 
 bool FPolyObj::CheckMobjBlocking (side_t *sd)
 {
-	static TArray<AActor *> checker;
+	/*static TArray<AActor *> checker;
 	FBlockNode *block;
 	AActor *mobj;
 	int i, j, k;
@@ -1230,7 +1230,8 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 			}
 		}
 	}
-	return blocked;
+	return blocked;*/
+	return false;	//[XANE]Make all polyobjects not care where they move. This allows render-culling polyobjects to work without every enemy stopping them.
 }
 
 //==========================================================================
