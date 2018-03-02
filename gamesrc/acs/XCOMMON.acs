@@ -3,7 +3,7 @@
 #include "zcommon.acs"
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
-//XCOMMON, due to how messy of a big file it is, has used 104/128 variables, with 24 left! Use them wisely!
+//XCOMMON, due to how messy of a big file it is, has used 106/128 variables, with 22 left! Use them wisely!
 //This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
@@ -28,6 +28,11 @@ world int 11:OpenInput[];	//Curent player input; 0-7 = Current, 8-15 = Previous.
 world int 12:fadeout;	//The requested fade out during areas. Fade may seem redundant, try to remove it.
 world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PlayerNumber()] = X, [MAX_PLAYERS+PlayerNumber()] = Y, [MAX_PLAYERS*2+PlayerNumber()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PlayerNumber()] is supposedly used for jump-through platforms.
 
+world int 14:time_override;	//If set, this will either force a stormy appearance or disable sky/fog changes, allowing levels to use their own settings. 1: Change to stormy appearance, 2: Disable automatic time of day changes, 
+world int 15:time_settings;	//This determines which arrays will be used when setting the sky appearance, sector/fade colors, and brightness levels. The stormy weather above overrides this.
+world bool 16:time_safe;	//If the sky cannot be seen in the area the player's in, set this to TRUE and the time of day will advance mid-level.
+world int 17:time_defaults[];	//What time is used if the system is disabled? See TIME_SYS.acs for full description.
+
 //GLOBAL variables are always valid, no matter how many levels the player goes through.
 global bool 0:initial_setup;	//Some things only happen upon starting a game and never any other time. This prevents it from happening on every level.
 global int 2:score[];
@@ -41,7 +46,10 @@ global int 8:curscore[];
 
 global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Only increase or decrease this variable, never forcibly set it except at the beginning of a level.
 
-//Global variables #12-#14 are available.
+//global int 12:time_seconds;	//This counts how many seconds the current time of day has been enabled. If it goes over a certain number, time of day will advance upon changing levels/entering an "indoor" location.
+//global int 13:time_of_day;	//This keeps track of which time of day it currently is. 1: Day, 2: Sunset, 3: Night, 4: Sunrise. This is always updated like the seconds even if overridden.
+
+//Global variable #14 is available.
 
 global int 15:combo[];	//Current combo (successive kills). First MAX_PLAYERS is current, while second are decrease amounts.
 global int 16:lives;
@@ -59,10 +67,10 @@ global bool 22:no_scripts[];	//Tells most standard scripts like special abilitie
 global bool 23:important_fade[];		//If an important fade (like dying or a transition) is happening, set this to TRUE.
 global int 24:meter[];		//Time before the current combo level is lost.
 global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice
-global bool 26:event_completed[];	//Whether the FMV with this ID has run. It will be skipped if TRUE.
-global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane), 4: Ability upgrade. This is synced between all players.
+global bool 26:event_completed[];	//Whether the cutscene with this ID has run. It will be skipped if TRUE.
+global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane), 4: Ability upgrade, 5: Jump height upgrades, 6: Health upgrades. This is synced between all players.
 global bool 28:special_id[];	//An array determining whether a player picked up a special item or entered a certain special stage entrance. See the line below this one for the current highest ID.
-//The highest current special ID is 5.
+//The highest current special ID is 7.
 
 //global bool 29:tutorial_completed[];	//See TUTORIAL.acs for this global variable.
 //Global variable #30 is available!
@@ -90,8 +98,10 @@ int totalcointics = CONSTANT_TCOINDISPTICS;	//Number of tics to show the player'
 #define CONST_MAXUPGRADES_HAMMER 4	//Maximum number of hammer upgrades.
 #define CONST_MAXUPGRADES_UMBRELLA 2	//Maximum number of umbrella upgrades.
 #define CONST_MAXUPGRADES_SWORD 2	//Maximum number of sword upgrades for Xane's Sword.
-#define CONSTANT_COIN_METERINC 5	//Amount combo meter increases with each collected coin.
+#define CONST_MAXUPGRADES_JUMPS 10	//Maximum jump upgrades.
+#define CONST_MAXUPGRADES_HEALTH 4	//Health upgrades go from 100 to 200 in 25 health intervals.
 
+#define CONSTANT_COIN_METERINC 5	//Amount combo meter increases with each collected coin.
 #define CONSTANT_BOUNCE_TICS 10	//How many tics the player can avoid bouncing for when landing after pushing the back button.
 #define CONST_MAXCOIN_INCAMOUNT 5	//How much the coin limit will raise with each upgrade collected.
 #define CONST_BOOST_TICS 10	//How many tics a boost panel pushes the player.
@@ -354,12 +364,13 @@ script "DetermineWUpgradeSpawn" (int spec_id)
 	
 	Thing_Remove(0);	//After spawning the upgrade, remove the dummy spawner object.
 }
-script "Upgrade_MarkSpecialID" (void) { special_id[CheckInventory("Variable1")] = TRUE; }	//This is used by upgrade objects to mark themselves as "collected".
-script "Upgrade_CheckValidity" (int upgrade_type)	//The "upgrade type" here is the same as the upgrade[] array.
+script "Upgrade_MarkSpecialID" (int spec_id) { If(spec_id==0) special_id[CheckInventory("Variable1")] = TRUE; Else special_id[spec_id] = TRUE; }	//This is used by upgrade objects to mark themselves as "collected".
+script "Upgrade_CheckValidity" (int upgrade_type, int spec_id)	//The "upgrade type" here is the same as the upgrade[] array.
 {	//Returns FALSE if this upgrade is no longer needed. If it's TRUE, it can stay.
 	If(upgrade_type == 0 && upgrades[0] >= CONST_MAXUPGRADES_HAMMER) SetResultValue(FALSE);
 	Else If(upgrade_type == 2 && upgrades[2] >= CONST_MAXUPGRADES_UMBRELLA) SetResultValue(FALSE);
 	Else If(upgrade_type == 3 && upgrades[3] >= CONST_MAXUPGRADES_SWORD) SetResultValue(FALSE);
+	Else If(upgrade_type == -1 && special_id[spec_id]==TRUE) SetResultValue(FALSE);	//-1 is for the jump upgrades.
 	Else SetResultValue(TRUE);
 }
 
@@ -370,14 +381,12 @@ script "Upgrade_CheckValidity" (int upgrade_type)	//The "upgrade type" here is t
 script "TP" (int from, int to, int below_z) 
 {
 	level_ready = FALSE;	//Make the culling polyobject speed up.
-	GiveInventory("Variable5",1);	//Make the player pass through the polyobject.
 	
 	if(below_z==0) TeleportGroup(0,from,to,0,0);
 	else if(GetActorZ(0)>>16 < below_z) TeleportGroup(0,from,to,0,0);
 	
 	Delay(8);
 	level_ready = TRUE;	//Return the culling polyobject back to normal speed.
-	TakeInventory("Variable5",1);	//Return the player to being solid again.
 }
 
 script "ActivateGroup" (int front, int back)
@@ -915,7 +924,7 @@ While(1)
 	if(GetActorCeilingZ(spawntid)-GetActorZ(spawntid)>256.0) spawnz = GetActorZ(spawntid)+242.0;
 	Else spawnz = GetActorCeilingZ(spawntid)-32.0;
 	
-	//Next, check what direction the player is facing to limit precip. to that direction.
+	//Next, check what direction the player is facing to limit precipitation to that direction.
 	
 	pside[0] = FALSE;	//First set all the variables to FALSE.
 	pside[1] = FALSE;
@@ -984,40 +993,40 @@ While(1)
 		
 	If(rain_mode[spawntid-1000]==3&&no_scripts[spawntid-1000]==FALSE)
 	{
-	If(flowers<CONSTANT_MAX_FLOWERS)
+	If(ThingCount(T_NONE, 990)<CONSTANT_MAX_FLOWERS)
 		{
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
-		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
+		Spawn("Flower",GetActorX(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[0],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[1])*6,GetActorY(spawntid)+Random(-GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[2],GetUserCVAR(spawntid-1000,"xane_precipdist")*pside[3])*6,spawnz,990);
 		}
 	Delay(1);
 	}
@@ -2094,11 +2103,17 @@ Script "ExitTransition" (void)
 	If(GameType()==GAME_SINGLE_PLAYER&&CheckActorInventory(1000, "CoinSP")>0)
 	{	//Bank the player's coins but take some out as they aren't banking them themselves.
 		int coins_to_bank = CheckActorInventory(1000, "CoinSP");
-		If(coins_to_bank>15) coins_to_bank /= 4;	//Divide by 3 if they have enough coins.
-		If(CheckActorInventory(1000, "SuperX")) { coins_to_bank /= 3; If(coins_to_bank<15) coins_to_bank = 15; }	//Divide by 2 if transformed.
-		
+		If(coins_to_bank>15) coins_to_bank = coins_to_bank - (coins_to_bank / 4);	//Divide by 4 if they have enough coins.
+		If(CheckActorInventory(1000, "SuperX")) { coins_to_bank = coins_to_bank - (coins_to_bank / 3); }	//Divide by 3d if transformed.
+		If(CheckActorInventory(1000, "CoinSP")>40&&coins_to_bank<15) coins_to_bank = 15;	//If the player deserves more coins, forcibly give them 15.
 		If(gamemode==0)
 		{
+			If(level[0]==0&&level[1]==0&&GetCVAR("xane_tutorials")==TRUE)
+			{
+				Print(s:"At the end of every level, coins are banked."); Delay(100);
+				Print(s:"Visit the Small Hut to do this manually..."); Delay(100);
+				Print(s:"...or you will get less coins banked."); Delay(100);
+			}
 			Print(s:"Sending ", d:coins_to_bank, s:" coins to your bank...");
 			ACS_NamedExecute("DisplayTotalCoins",0,70+coins_to_bank,0,0);
 			Delay(17);
@@ -2140,8 +2155,14 @@ script "GetPlayerInformation" (int type)
 {
 	Switch(type)
 	{
-		Case 0: SetResultValue(GameSkill()); Break;
-		Case 1: SetResultValue(invulnerable[PlayerNumber()]); Break;
+		Case 0: SetResultValue(GameSkill()); Break;	//Difficulty
+		Case 1: SetResultValue(invulnerable[PlayerNumber()]); Break;	//Invulnerability
+		Case 2: SetResultValue(100+(25*upgrades[6])); Break;	//The player's maximum health
+		Case 3:
+		{	//This check returns TRUE if the player's health is below their maximum health.
+			If(GetActorProperty(0, APROP_Health)<100+(25*upgrades[6])) SetResultValue(TRUE);
+			Else SetResultValue(FALSE);
+		}
 	}
 }
 
@@ -3130,12 +3151,15 @@ script "ClawVerify" (int mode)
 script "GiveUpgrade" (int which)
 {
 	If(which<0) which = 0;
-	If(which>3) which = 3;
+	If(which>6) which = 6;
 	
 	if(which==0) if(upgrades[0]<CONST_MAXUPGRADES_HAMMER) upgrades[0]++;	//Hammer (Mary) upgrade
 	if(which==1) upgrades[1] += CONST_MAXCOIN_INCAMOUNT;	//Max coin limit increase
 	if(which==2) if(upgrades[2]<CONST_MAXUPGRADES_UMBRELLA) upgrades[2]++;	//Umbrella (Mary) upgrade
 	if(which==3) if(upgrades[3]<CONST_MAXUPGRADES_SWORD) upgrades[3]++;	//Sword (Xane) upgrade
+	if(which==4) if(upgrades[4]==FALSE) upgrades[4] = TRUE;	//Ability upgrade
+	if(which==5) if(upgrades[5]<CONST_MAXUPGRADES_JUMPS) upgrades[5]++;	//Jump height upgrade
+	if(which==6) if(upgrades[6]<CONST_MAXUPGRADES_HEALTH) upgrades[6]++;	//Health upgrade
 }
 
 script "WJ_Button" ENTER
@@ -3382,15 +3406,17 @@ script "GetGroundStatus" ENTER
 	}
 }
 
+int var_velocity[3] = { 1.999, 1.85, 1.999 };
+int var_decrease_velocity[3] = { 0.15, 0.18, 0.15 };
+
 script "VarJumpHeights" ENTER
 {	//The order for these arrays is Mary, Xane, then the adult scale test.
 	int var_remaining_tics[3] = { 13, 11, 13 };
-	int var_velocity[3] = { 1.999, 1.85, 1.999 };
-	int var_decrease_velocity[3] = { 0.15, 0.18, 0.15 };
 	int remaining_tics;
 	int velocity;
 	While(1)
 	{ 
+		//Print(f:GetActorVelZ(0));
 		if(no_scripts[PlayerNumber()]==FALSE&&no_variable_jumping[PlayerNumber()]==FALSE&&GetActorZ(0)-GetActorFloorZ(0)>0.0&&GetActorZ(0)-GetActorFloorZ(0)<24.5&&openInput[PlayerNumber()] & BT_JUMP&&GetActorVelZ(0)==3.75)
 		{
 			//Print(f:GetActorVelZ(0));
@@ -3485,7 +3511,7 @@ script 66 (int value) { detected[PlayerNumber()] = value; }
 
 script 67 ENTER
 {
-upgrades[4] = TRUE;	//DEBUG
+//upgrades[4] = TRUE;	//DEBUG
 int marydboost_tics;	//Remaining tics for downward Air Dash thrust upon hitting ground.
 int esc_loop = 0;	//1 = jumped; 2 = landed.
 While(1)
@@ -3980,7 +4006,7 @@ script "HandleLanding" ENTER
 		If(GetActorVelZ(0)<fspeed[PlayerNumber()])
 			{
 			fspeed[PlayerNumber()] = GetActorVelZ(0);
-			If(fscreamed[PlayerNumber()]==FALSE&&fspeed[PlayerNumber()]<-10.5&&GetActorZ(0)-GetActorFloorZ(0)>512.0&&walljumping[PlayerNumber()]==0&&PlayerClass(PlayerNumber())==CHAR_MARY) { fscreamed[PlayerNumber()] = TRUE; ACS_NamedExecuteAlways("MaryScream",0,0,0,0); }
+			If(fscreamed[PlayerNumber()]==FALSE&&fspeed[PlayerNumber()]<-10.5&&GetActorZ(0)-GetActorFloorZ(0)>768.0&&walljumping[PlayerNumber()]==0&&PlayerClass(PlayerNumber())==CHAR_MARY) { fscreamed[PlayerNumber()] = TRUE; ACS_NamedExecuteAlways("MaryScream",0,0,0,0); }
 			}
 		If(GetActorVelZ(0)>5.5&&fscreamed[PlayerNumber()]==TRUE&&fscream_upward==FALSE) { fscream_upward = TRUE; PlaySound(0,"lgirl/umbrella_swoop",CHAN_VOICE); }
 		}
@@ -4473,7 +4499,7 @@ script "XaneDropDash" ENTER
 			Else
 			{
 				If(GetActorZ(0)-GetActorFloorZ(0)>64.01) { cancelJump[PlayerNumber()] = TRUE; ACS_NamedExecute("LandingBounce",0,1,0,0); }
-				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { TakeInventory("Animation2",1); GiveInventory("Animation2",1); }	//Animation #2 for Xane uses the claw.
+				Else If(GetActorZ(0)-GetActorFloorZ(0)==0.0) { TakeInventory("Animation3",1); GiveInventory("Animation3",1); }	//Animation #3 for Xane uses the claw.
 			}
 		}
 		
@@ -4807,9 +4833,31 @@ script "ChangePlayerTIDs" enter
 		GiveInventory("PowerupNinja",1);
 		GiveInventory("PowerupHeal",1);
 		GiveInventory("PowerupDamage",1);
+	}
+	
+	if(GameType()==GAME_NET_DEATHMATCH) cgem_count = 7;
 		
-		Delay(1);	//Wait a tic, then take them all away!
-		
+	show_timer = FALSE;
+	//framecount = 0;	//I'm paranoid of this value getting too high!
+	
+	//Reset these level-specific variables just in case the script doesnt define them.
+	initial_music = 0;	//Initial song ID that will play when this area loads.
+	world_info[0] = 0;	//World number
+	world_info[1] = 0;	//Level number within world
+	skybox_mode = 0;	//Relative movement should be default.
+	movesky[0] = 0;	//How much less the skybox will move relative to the player. Higher values make it slower.
+	movesky[1] = 0; //The above value is horizontal, but this is vertical.
+	//movesky[2] is used in "total control" mode but this is only for relative movement.
+	time_safe = FALSE;	//Can the time of day advance without the player noticing it from the current location?
+	time_defaults[0] = 0;	//Disable time-of-day system's default lighting.
+	time_defaults[1] = 0;	//What time of day's settings should be applied? None here.
+	time_settings = 0;	//Which set of settings (sky, colors, and brightness levels) should be used for this area?
+	time_override = 0;	//Should the sky be stormy or disabled (redundant if the system is disabled)?
+	
+	Delay(2);	//Give the level two tics to set up the music variable.
+	
+	If(initial_setup==FALSE)
+	{
 		TakeInventory("PowerupDamage",1);
 		TakeInventory("PowerupHeal",1);
 		TakeInventory("PowerupNinja",1);
@@ -4823,22 +4871,6 @@ script "ChangePlayerTIDs" enter
 		
 		initial_setup = TRUE;
 	}
-	
-	if(GameType()==GAME_NET_DEATHMATCH) cgem_count = 7;
-		
-	show_timer = FALSE;
-	framecount = 0;	//I'm paranoid of this value getting too high!
-	
-	//Reset these level-specific variables just in case the script doesnt define them.
-	initial_music = 0;	//Initial song ID that will play when this area loads.
-	world_info[0] = 0;	//World number
-	world_info[1] = 0;	//Level number within world
-	skybox_mode = 0;	//Relative movement should be default.
-	movesky[0] = 0;	//How much less the skybox will move relative to the player. Higher values make it slower.
-	movesky[1] = 0; //The above value is horizontal, but this is vertical.
-	//movesky[2] is used in "total control" mode but this is only for relative movement.
-	
-	Delay(2);	//Give the level two tics to set up the music variable.
 	
 	Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper to be finished before playing music.
 	
@@ -5089,12 +5121,11 @@ script "WarpToHut" (void)
 //To fix this, this ACS script runs during a ball's "life" and commands it to deal damage if its position doesn't change.
 script "BallMonitorGlitchyBehavior" (void)
 {
-	int oldx, oldy, /*oldz,*/ exist_tics;	//These are used for the position checks below.
+	int oldx, oldy, exist_tics;	//These are used for the position checks below.
 	While(CheckInventory("Variable3")==0&&exist_tics<50)
 	{
 		oldx = GetActorX(0)>>16;
 		oldy = GetActorY(0)>>16;
-		//oldz = GetActorZ(0)>>16;
 		
 		If(GetActorZ(0)-GetActorFloorZ(0)<2.5) ACS_NamedExecute("PlayFootstepSound",0,0,0,0);
 		exist_tics++;
@@ -5109,13 +5140,13 @@ script "BallMonitorGlitchyBehavior" (void)
 //Juice Cylinder technical scripts//
 ////////////////////////////////////
 
-script "JuiceBoxCheck" (int type)
+script "JuiceCylinderCheck" (int type)
 {
-	If(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<75) SetResultValue(TRUE);	//Is the player hurt enough to use this?
+	If(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0)-25) SetResultValue(TRUE);	//Is the player hurt enough to use this?
 	Else SetResultValue(FALSE);
 }
 
-script "JuiceBoxRecover" (int type)
+script "JuiceCylinderRecover" (int type)
 {
 int remjuice = 50;	//Normal
 if(GameSkill()==0)remjuice = 100;	//Easy
@@ -5134,7 +5165,7 @@ While(remjuice>0)
 	{
 	If(times==0)
 	{
-		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<200)
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0))
 		{
 			SetActorProperty(GetCurrentPlayerTID(),APROP_Health,GetActorProperty(GetCurrentPlayerTID(),APROP_Health)+8);
 			remjuice = remjuice - 8;
@@ -5143,7 +5174,7 @@ While(remjuice>0)
 
 	If(times==1)
 	{
-		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<200)
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0))
 		{
 			SetActorProperty(GetCurrentPlayerTID(),APROP_Health,GetActorProperty(GetCurrentPlayerTID(),APROP_Health)+4);
 			remjuice = remjuice - 4;
@@ -5152,7 +5183,7 @@ While(remjuice>0)
 
 	If(times==2)
 	{
-		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<200)
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0))
 		{
 			SetActorProperty(GetCurrentPlayerTID(),APROP_Health,GetActorProperty(GetCurrentPlayerTID(),APROP_Health)+2);
 			remjuice = remjuice - 2;
@@ -5161,7 +5192,7 @@ While(remjuice>0)
 
 	if(times>2)
 	{
-		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<200) SetActorProperty(GetCurrentPlayerTID(),APROP_Health,GetActorProperty(GetCurrentPlayerTID(),APROP_Health)+1);
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_HEALTH)<ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0)) SetActorProperty(GetCurrentPlayerTID(),APROP_Health,GetActorProperty(GetCurrentPlayerTID(),APROP_Health)+1);
 		if(times % times_inc == 0) delayx++;
 		remjuice--;
 	}
@@ -5309,7 +5340,7 @@ script "TitleOverlay" (void)
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 128.0,40.0, 28.0, 1.0, 1.0);	
 	SetHUDSize(1024,640,FALSE);
 	SetFont("3DLETTER");
-	HUDMessageBold(s:"(C)2016-2018 Xane Corp. Version 1.88";
+	HUDMessageBold(s:"(C)2016-2018 Xane Corp. Version 1.9";
 		HUDMSG_FADEINOUT, 0, CR_WHITE, 1236.2,638.2, 28.0, 1.0, 1.0);
 
 	SetHUDSize(512,320,TRUE);
@@ -5323,18 +5354,34 @@ script "TitleOverlay" (void)
 	}
 }
 
+#define CONST_JUMPUPGRADE_AMOUNT 0.045	//This is how much the player's initial jump velocity is changed with each upgrade. The other array is changed by a smaller number based on this one.
+
 script "UpdateMiscellaneous" ENTER  //Armor is the "combo meter". This script updates things every tic. Avoid Delay(#) here!
 {
 bool wl;
 int wind_reduction;
+int jumpupgrades;	//This keeps track of the number of jump upgrades applied in the current area for quick updating.
+int healthupgrades;	//This is only used to catch when an upgrade is picked up and refill the player's health.
 int pushvels[3];	//Calculated wind X/Y velocities based on the wind_reduction variable.
 framecount = 0;
 
 Delay(1);
 Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper before starting the main loop.
 
+If(GetCVAR("debug_ujumps")>0) upgrades[5] = GetCVAR("debug_ujumps");
+
 While(1)
 	{
+		If(jumpupgrades<upgrades[5]&&PlayerNumber()==0)	//If not all of the upgrades have been applied yet, alter the arrays.
+		{
+			var_velocity[0] += CONST_JUMPUPGRADE_AMOUNT;	//Increase Mary and Xane's initial jump velocity.
+			var_velocity[1] += CONST_JUMPUPGRADE_AMOUNT;
+			var_decrease_velocity[0] -= CONST_JUMPUPGRADE_AMOUNT/12;	//Increase the amount to decrease velocity per tic, though a smaller amount.
+			var_decrease_velocity[1] -= CONST_JUMPUPGRADE_AMOUNT/12;
+			
+			jumpupgrades++;
+		}
+		
 		If(GetCVAR("cl_demo")==TRUE)
 		{
 			if(framecount % 4 == 1) SetActorProperty(1000, APROP_Health, 100);
@@ -5381,7 +5428,14 @@ While(1)
 		
 		If(wind_disabledelay[PlayerNumber()]>0) wind_disabledelay[PlayerNumber()]--;
 		
-		if(PlayerNumber()==0) framecount++;
+		if(PlayerNumber()==0) { framecount++; if(framecount>=3500) framecount = 0; }
+		
+		if(framecount % 2 == 0 && CheckInventory("Hearts"))
+		{
+			If(ACS_NamedExecuteWithResult("GetPlayerInformation",3,0,0,0)==TRUE)	//If health is below maximum, heal.
+			{ TakeInventory("Hearts",1); HealThing(1, 200); }
+			Else TakeInventory("Hearts",CheckInventory("Hearts"));	//Otherwise, get rid of any hearts collected.
+		}
 		
 		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)==0.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE&&CheckActorFloorTexture(0, "SPECTS07")==FALSE&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
 		{
@@ -5403,6 +5457,8 @@ While(1)
 		
 		If(claw_verify_tics>0) claw_verify_tics--;
 		//If(GetActorCeilingZ(0)-GetActorZ(0)<56.5&&GetActorVelZ(0)>1.25) { SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), -(GetActorVelZ(0))/2, FALSE, TRUE); PlaySound(GetCurrentPlayerTID(), "misc/hit_ceiling", CHAN_WEAPON, 0.8, FALSE, 0.8); }	//If the player went too close to the ceiling, make them hit their head on it!
+		
+		If(ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE&&level_ready==TRUE) totalcointics = 1;
 		
 		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE&&level_ready==TRUE) canUsePCoins++;	//Remember, this is both a boolean check and a counter, the latter to stop the screen tints from cutting off fade ins.
 		Else canUsePCoins = FALSE;
@@ -5433,7 +5489,7 @@ While(1)
 			if(heal_tics[PlayerNumber()]>0&&no_scripts[PlayerNumber()]==FALSE)
 			{
 				if(important_fade[PlayerNumber()]==FALSE&&canUsePCoins>35&&framecount % 14 == 6) FadeTo(64,255,255,0.1,0.1);
-				If(framecount % 7 == 6) HealThing(1,100);
+				If(framecount % 7 == 6) HealThing(1,ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0));
 				heal_tics[PlayerNumber()]--;
 				If(important_fade[PlayerNumber()]==FALSE&&heal_tics[PlayerNumber()]==0) { FadeTo(0,0,0,0.0,0.5); }
 			}
@@ -5572,7 +5628,7 @@ While(1)
 
 		if(CheckActorInventory(GetCurrentPlayerTID(),"ScoreX")!=0)
 		{
-			ACS_ExecuteAlways(70,0,CheckActorInventory(GetCurrentPlayerTID(),"ScoreX")*(1+combo[PlayerNumber()]),0,0)	;
+			ACS_ExecuteAlways(70,0,(CheckActorInventory(GetCurrentPlayerTID(),"ScoreX")*5)*(1+combo[PlayerNumber()]),0,0)	;
 			TakeActorInventory(GetCurrentPlayerTID(),"ScoreX",32767);
 		}
 		
@@ -5595,7 +5651,15 @@ While(1)
 		Else If(CheckInventory("SuperX")==TRUE) { GiveInventory("InternalDSuper",1); }
 		Else If(damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin",1); }
 		
+		healthupgrades = upgrades[6];	//Store the number of health upgrades to see if one's picked up by the next tic.
+		
 		Delay(1);	//The only "delay" allowed.
+		
+		If(healthupgrades < upgrades[6] && framecount > 35)
+		{
+			For(int ihum = 0; ihum <= PlayerCount()-1; ihum++) GiveActorInventory(1000+ihum, "Health", ACS_NamedExecuteWithResult("GetPlayerInformation",2,0,0,0)-GetActorProperty(1000+ihum, APROP_Health));
+			healthupgrades = upgrades[6];	//After healing every player, update this variable to prevent false positives.
+		}
 		
 		//After the delay, take away all of the player's damage-increasing "powerups".
 		TakeInventory("PowerDamage",99);
@@ -5611,15 +5675,16 @@ While(1)
 }
 
 script "SpeedDebug" ENTER
-{
-	If(GetCVAR("debug_hammer")) upgrades[0] = CONST_MAXUPGRADES_HAMMER;
-	If(GetCVAR("debug_umbrella")) upgrades[2] = CONST_MAXUPGRADES_UMBRELLA;
-	If(GetCVAR("debug_sword")) upgrades[3] = CONST_MAXUPGRADES_SWORD;
+{	//This display player 1's velocities. It also handles giving upgrades from the debug CVARs.
+	If(GetCVAR("debug_uhammer")) upgrades[0] = CONST_MAXUPGRADES_HAMMER;
+	If(GetCVAR("debug_uumbrella")) upgrades[2] = CONST_MAXUPGRADES_UMBRELLA;
+	If(GetCVAR("debug_usword")) upgrades[3] = CONST_MAXUPGRADES_SWORD;
+	If(GetCVAR("debug_uability")) upgrades[4] = TRUE;	//Character ability upgrade.
 	
-	While(1)
+	While(GetCVAR("debug_speed"))
 	{
-		If(GetCVAR("debug_speed")==TRUE) PrintBold(d:GetActorVelX(0) >> 16, s:"\n", d:GetActorVelY(0) >> 16, s:"\n", d:GetActorVelZ(0) >> 16);
-		If(GetCVAR("debug_speed")==FALSE) Delay(35); If(GetCVAR("debug_speed")==TRUE) Delay(1);
+		PrintBold(d:GetActorVelX(0) >> 16, s:"\n", d:GetActorVelY(0) >> 16, s:"\n", d:GetActorVelZ(0) >> 16);
+		Delay(1);
 	}
 }
 
@@ -6062,7 +6127,6 @@ script "WaitForCulling" (int culltics, int cullfade)
 		{	//-1 means no fade or stopping happens, leaving it up to the other script. See "Teleporter" for an example.
 			fadeout = 6+cullfade;	//This will be either a black or white fade out.
 			ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//This only freezes the activator, which should be player 1.
-			GiveInventory("Variable5",1);	//Variable5 makes players phase through everything.
 			GiveInventory("Cutscene",1);	//Freeze everything during the wait.
 
 			SetFont("3DLETTER");
@@ -6085,7 +6149,6 @@ script "WaitForCulling" (int culltics, int cullfade)
 		if(cullfade!=-1)
 		{
 			fadeout = 8+cullfade;	//This will be either a black or white fade in.
-			TakeInventory("Variable5",1);
 			ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);
 		}
 		level_ready = TRUE;	//Signal it's safe to resume the level now, which will make the screen fade in.
@@ -6320,7 +6383,7 @@ While(1)
 		TakeActorInventory(GetCurrentPlayerTID(),"DroppedCoin",1);
 		GiveActorInventory(GetCurrentPlayerTID(),"CoinSP",1);
 		}
-	If(CheckActorInventory(GetCurrentPlayerTID(),"JuiceBoxA_Spawn")>0) TakeActorInventory(GetCurrentPlayerTID(),"JuiceBoxA_Spawn",1);
+	If(CheckActorInventory(GetCurrentPlayerTID(),"JuiceCylinder_Spawn")>0) TakeActorInventory(GetCurrentPlayerTID(),"JuiceCylinder_Spawn",1);
 	Delay(1);
 	}
 }

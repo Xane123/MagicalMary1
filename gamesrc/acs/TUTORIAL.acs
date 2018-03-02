@@ -1,4 +1,4 @@
-#library "XGLOBAL"
+c#library "XGLOBAL"
 #include "zcommon.acs"
 
 world bool 9:level_ready;	//This prevents certain scripts from working until it's set to TRUE by SeamlessHelper.
@@ -36,8 +36,8 @@ int tutorial_text[30] = {	//What text ID each tutorial ID should start at.
 53,	//23 (Special Stage water)
 55,	//24 (Xane's Drop Dash)
 58,	//25 (Mary's Air Dash)
-0,	//26
-0,	//27
+59,	//26 (Introduction to Tutorial Signs)
+64,	//27 (Jump height upgrades)
 0,	//28
 0	//29
 };
@@ -69,8 +69,8 @@ int tutorial_length[30] = {	//How many IDs of text should be shown in this tutor
 2,	//23
 3,	//24
 1,	//25
-0,	//26
-0,	//27
+5,	//26
+2,	//27
 0,	//28
 0	//29
 };
@@ -130,12 +130,12 @@ script "CheckTutorials" OPEN
 		
 		If(tutorial_completed[tutorial_id[0]]==FALSE)
 		{
-			if(GetCVAR("xane_tutorials") || GetCVAR("xane_tutorialvoices"))
+			if(GetCVAR("xane_tutorials"))
 			{
 				If(GetCVAR("xane_tutorialpause")==FALSE) { exvertical = 100;}	//Move the text box if pausing is off.
 				Else
 				{	//If pausing is on, only show the tutorial once the player is on the ground.
-					Until(GetActorZ(0)-GetActorFloorZ(0)==0.0) Delay(1);
+					Until(GetActorZ(1000)-GetActorFloorZ(1000)==0.0) Delay(1);
 				}
 				
 				tutorial_completed[tutorial_id[0]] = TRUE;	//Mark the tutorial as completed.

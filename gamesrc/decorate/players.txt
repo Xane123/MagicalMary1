@@ -13,9 +13,11 @@ actor SSRequiredCoins : Inventory { Inventory.MaxAmount 999 }	//How many coins a
 
 //These inventory items make the player character jump to a certain animation/state.
 //1 - Ability (Air Dash for Mary, nothing for Xane yet.)
-//2 - Crying (Mary)/Claw (Xane)
+//2 - Crying (Mary), don't use for Xane or enemies become angry about nothing.
+//3 - Downward kick (Mary), Claw (Xane).
 actor Animation1 : Inventory { Inventory.MaxAmount 1 }
 actor Animation2 : Inventory { Inventory.MaxAmount 1 }
+actor Animation3 : Inventory { Inventory.MaxAmount 1 }
 
 actor WallCheck
 {
@@ -151,7 +153,7 @@ Pickup:
 TNT1 A 0
 TNT1 A 0 A_TakeInventory("PowerupUmbrella",1)
 TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,0,0,0)
-TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,2,1,1)	//Give all players a umbrella upgrade.
+TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,2,1,1)	//Give all players an umbrella upgrade.
 TNT1 A 0 ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,1,0,0)	
 Stop
 Death:
@@ -183,7 +185,7 @@ Pickup:
 TNT1 A 0
 TNT1 A 0 A_TakeInventory("PowerupSword",1)
 TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,0,0,0)
-TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,3,1,1)	//Give all players a umbrella upgrade.
+TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,3,1,1)	//Give all players a sword upgrade.
 TNT1 A 0 //ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,1,0,0)	
 Stop
 Death:
@@ -197,7 +199,7 @@ ACTOR LGirlPlayer : DoomPlayer
   Speed 1.05
   Scale 1.5
   Health 100
-  Player.MaxHealth 100
+  Player.MaxHealth 200
   Radius 16
   Height 44
   Mass 65
@@ -211,12 +213,12 @@ ACTOR LGirlPlayer : DoomPlayer
   Player.DisplayName "Mary"
   Player.StartItem "MaryUmbrella"
   Player.StartItem "MaryHammer"
-  Player.StartItem "MaryWand"
+  Player.StartItem "MaryWand"	//Testing only. In the final, Mary will only have her umbrella.
   Player.Portrait "BIGPGIRL"
   Player.ScoreIcon "CPRVA0"
   Player.WeaponSlot 1, "MaryUmbrella"
   Player.WeaponSlot 2, "MaryHammer"
-  Player.WeaponSlot 3, "MaryWand"	//Testing only. In the final, Mary will only have her umbrella.
+  Player.WeaponSlot 3, "MaryWand"
   Player.ColorRange 32, 39
   DamageFactor "Fire", 0.0
   DamageFactor "Bounce", 0.0
@@ -224,27 +226,27 @@ ACTOR LGirlPlayer : DoomPlayer
   Player.ColorSet 0, "Lilac", 0x50, 0x57, 0x54
   Player.ColorSet 1, "Sky", 0xB6, 0xC4, 0xCB	
   Player.ColorSet 2, "Pumpkin", 0x0F, 0x08, 0x0B
-
+  
+  +DONTTHRUST
+  
   //INVENTORY VARIABLE USAGE:
-  //Variable1: No (these may be used by weapons)
+  //Variable1: No (these may be used by weapons, remember weapons and the player use the same inventory)
   //Variable2: No
   //Variable3: No
   //Variable4: No
-  //Variable5: Disable collision with objects/culling polyobject
+  //Variable5: No (was used for render-culling polyobject, disabling player collision)
   
   //Animation1: Air Dash animation until Mary hits the ground or water
   //Animation2: Crying animation (also angers/scares enemies)
   //ForceFlatten: Forcibly makes Mary become flattened. Not used at the moment.
   //TauntStun: Makes Mary "randomly" taunt her enemy as if killed by a Standard Ball or certain weapon attacks.
   //TauntFire: Same but for enemies burned with her wand or the Lava Ball.
-  //TauntIce: Same but for Mary's ice ball attack or the Icy Ball.
+  //TauntIce: Same but for Mary's ice ball attack or the Ice Ball.
   
   States
   {
   Spawn:
-	MARY A 0
-	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollision")
-	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
+	MARY A 0 NoDelay A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
 	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
 	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
@@ -255,14 +257,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY A 0 A_JumpIf(max(abs(velx),abs(vely))>=19,"SeeFast")	//Fast
 	//MARY A 0 A_CheckFloor("AllowJumpsIdle")
     Loop
-  LoseCollision:
-	MARY A 0 A_ChangeFlag("SOLID",FALSE)
-	MARY A 0 A_ChangeFlag("NOPAIN",TRUE)
-	MARY A 1
-	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
-	MARY A 0 A_ChangeFlag("SOLID",TRUE)
-	MARY A 0 A_ChangeFlag("NOPAIN",FALSE)
-	Goto Spawn
   Blink:
 	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
 	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
@@ -274,7 +268,6 @@ ACTOR LGirlPlayer : DoomPlayer
 	MARY D 0 ACS_ExecuteAlways(66,0,0,0,0)
 	Goto Spawn
   See:
-	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollision")
 	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
 	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
 	MARY A 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
@@ -557,12 +550,11 @@ ACTOR LGirlPlayer : DoomPlayer
   FallScream:
   	MARY U 0 A_TakeInventory("SpeedTrailX",10)
 	MARY U 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
-	MARY ADEPED 1 A_CheckFloor("See")
+	MARY STUT 2 A_CheckFloor("See")
 	MARY Q 0 A_TakeInventory("SpeedTrailX",10)
 	MARY Q 0 A_RadiusGive("ProjectilePlayers",192,RGF_MONSTERS)
 	MARY A 0 A_JumpIfInventory("Animation2",1,"CryLoop")
 	MARY A 0 A_JumpIfInventory("Animation1",1,"AirDash")
-	MARY AGHPHG 1 A_CheckFloor("See")
 	Loop
 	
   CryLoop:
@@ -638,7 +630,7 @@ ACTOR XanePlayer : DoomPlayer
   Speed 0.925
   Scale 0.2
   Health 100
-  Player.MaxHealth 100
+  Player.MaxHealth 200
   Radius 16
   Height 30
   Mass 57
@@ -666,13 +658,27 @@ ACTOR XanePlayer : DoomPlayer
   Player.ColorSet 5, "Light Brown",   0x38, 0x47,  0x3A
   Player.ColorSet 6, "Light Red",     0xB0, 0xBF,  0xB2
   Player.ColorSet 7, "Light Blue",    0xC0, 0xCF,  0xC2
-
+  
+  +DONTTHRUST
+  
+  //INVENTORY VARIABLE USAGE:
+  //Variable1: No (these may be used by weapons, remember weapons and the player use the same inventory)
+  //Variable2: No
+  //Variable3: No
+  //Variable4: No
+  //Variable5: No (was used for render-culling polyobject, disabling player collision)
+  
+  //Animation1: Air Dash animation until Mary hits the ground or water
+  //Animation3: ACS script uses this item to request the claw to be fired. (See weapons.txt for usage.)
+  //ForceFlatten: Forcibly makes Xane become flattened. Not used at the moment.
+  //TauntStun: Makes Xane "randomly" taunt her enemy as if killed by a Standard Ball or certain weapon attacks.
+  //TauntFire: Same but for enemies burned with the Lava Ball.
+  //TauntIce: Same but for the Ice Ball.
+  
   States
   {
   Spawn:
-	GIRL A 0
-	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
-	ARTH A 2
+	ARTH A 2 NoDelay
 	GIRL A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
 	GIRL A 0 A_JumpIf(max(abs(velx),abs(vely))<3,"Spawn")	//Stand
 	//GIRL A 0 A_JumpIf(max(abs(velx),abs(vely))<6,"See9")	//Slow
@@ -685,16 +691,7 @@ ACTOR XanePlayer : DoomPlayer
 	GIRL D 0 A_TakeInventory("Jumps",10)
 	GIRL D 0 ACS_ExecuteAlways(66,0,0,0,0)
 	Goto Spawn
-  LoseCollision:
-	MARY A 0 A_ChangeFlag("SOLID",FALSE)
-	MARY A 0 A_ChangeFlag("NOPAIN",TRUE)
-	ARTH A 1
-	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
-	MARY A 0 A_ChangeFlag("SOLID",TRUE)
-	MARY A 0 A_ChangeFlag("NOPAIN",FALSE)
-	Goto Spawn
   See:
-	MARY A 0 A_JumpIfInventory("Variable5",1,"LoseCollsiion")
 	GIRL A 0 A_JumpIfInventory("ForceFlatten",1,"Pain.Flatten")
 	//GIRL A 0 A_JumpIfInventory("Weakness",1,"Insult")
 	GIRL A 0 A_JumpIf(max(abs(velx),abs(vely))<3,"Spawn")	//Stand
@@ -2210,17 +2207,17 @@ Goto FadeOut
 }
 }
 
-Actor Heart1 : Health 90
+actor Hearts : Inventory { Inventory.MaxAmount 200 }
+
+Actor Heart1 : CustomInventory 90
 {
 Radius 8
 Height 64
 Scale 0.13
-Translation "241:244=88:91", "240:240=232:232"
-Inventory.Amount 10
-Inventory.MaxAmount 100
+Translation "240:244=72:76"
+Inventory.MaxAmount 999
 Inventory.PickupMessage "$TXT_HEART1"
 Inventory.PickupSound "misc/heart"
-Health.LowMessage 10, "$TXT_HEART1_LOW"
 +NOGRAVITY
 +FLOATBOB
 Tag "Heart (10)"
@@ -2234,15 +2231,22 @@ HEAR A 1
 HEAR A 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
 HEAR A -1
 Stop
+Pickup:
+HEAR A 0 A_JumpIf(CallACS("GetPlayerInformation",3,0,0,0)==FALSE,"Failure")	//If the player can't use this, fail.
+HEAR A 0 A_TakeInventory("Heart1",1)
+HEAR A -1 A_GiveInventory("Hearts",10)	//This is how much health this item gives.
+Stop
+Failure:
+HEAR A 0
+Fail
 }
 }
 
 Actor Heart2 : Heart1 91
 {
 Scale 0.25
-Inventory.Amount 25
+Translation "240:244=80:84"
 Inventory.PickupMessage "$TXT_HEART2"
-Health.LowMessage 20, "$TXT_HEART2_LOW"
 Tag "Heart (25)"
 States
 {
@@ -2253,20 +2257,29 @@ HEAR A 1
 HEAR A 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
 HEAR A -1
 Stop
+Pickup:
+HEAR A 0 A_JumpIf(CallACS("GetPlayerInformation",3,0,0,0)==FALSE,"Failure")	//If the player can't use this, fail.
+HEAR A 0 A_TakeInventory("Heart2",1)
+HEAR A -1 A_GiveInventory("Heart",25)	//This is how much health this item gives.
+Stop
 }
 }
 
 Actor Heart3 : Heart2 92
 {
 Scale 0.5
-Inventory.Amount 50
+Translation "240:244=88:92"
 Inventory.PickupMessage "$TXT_HEART3"
-Health.LowMessage 30, "$TXT_HEART3_LOW"
 Tag "Heart (50)"
 States
 {
 Spawn:
 HEAR A -1
+Stop
+Pickup:
+HEAR A 0 A_JumpIf(CallACS("GetPlayerInformation",3,0,0,0)==FALSE,"Failure")	//If the player can't use this, fail.
+HEAR A 0 A_TakeInventory("Heart3",1)
+HEAR A -1 A_GiveInventory("Heart",50)	//This is how much health this item gives.
 Stop
 }
 }
@@ -2409,6 +2422,71 @@ SIGN A -1
 Stop
 Death:
 SIGN A 0 A_FadeOut(1,1)
+Loop
+}
+}
+
+actor PowerupJump : CustomInventory 102
+{
++FLOATBOB
++NOGRAVITY
++INVENTORY.AUTOACTIVATE
+Inventory.PickupMessage "You can jump slightly higher now!"
+Inventory.Amount 1
+Inventory.MaxAmount 1
+//Argument 1 (Args[0]) is the "special ID" used by this item.
+States
+{
+Spawn:
+ITEM E 0 NoDelay A_JumpIf(CallACS("Upgrade_CheckValidity",-1,Args[0],0,0)==FALSE,"Death")	//-1 means to just check the Special ID.
+ITEM E 0 A_ChangeVelocity(0,0,24,CVF_REPLACE)
+ITEM E 1
+ITEM E 0 A_ChangeVelocity(0,0,0,CVF_REPLACE)
+ITEM E -1
+Stop
+Pickup:
+TNT1 A 0
+TNT1 A 0 A_TakeInventory("PowerupJump",1)
+TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,Args[0],0,0)
+TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,5,1,1)	//Give all players a jump upgrade.
+//TNT1 A 0 ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,1,0,0)	
+Stop
+Death:
+TNT1 A 1 A_FadeOut(1,1)
+Loop
+}
+}
+
+actor PowerupHealth : CustomInventory 103
+{
+Radius 24
+Height 48
+Scale 1.25
+Translation "240:244=16:20"
++FLOATBOB
++NOGRAVITY
++INVENTORY.AUTOACTIVATE
+Inventory.PickupMessage "You have one quarter more health now!"
+Inventory.Amount 1
+Inventory.MaxAmount 1
+//Argument 1 (Args[0]) is the "special ID" used by this item.
+States
+{
+Spawn:
+HEAR A 0 NoDelay A_JumpIf(CallACS("Upgrade_CheckValidity",-1,Args[0],0,0)==FALSE,"Death")	//-1 means to just check the Special ID.
+See:	//This loops and asks every 10 seconds about if this upgrade should keep existing.
+HEAR A 0 A_JumpIf(CallACS("Upgrade_CheckValidity",-1,Args[0],0,0)==FALSE,"Death")
+HEAR A 350
+Loop
+Pickup:
+TNT1 A 0
+TNT1 A 0 A_TakeInventory("PowerupHealth",1)
+TNT1 A 0 ACS_NamedExecuteAlways("Upgrade_MarkSpecialID",0,Args[0],0,0)
+TNT1 A 0 ACS_NamedExecuteAlways("GiveUpgrade",0,6,0,0)	//Give all players a jump upgrade.
+//TNT1 A 0 ACS_NamedExecuteAlways("ShowUpgradeTutorial",0,1,0,0)	
+Stop
+Death:
+TNT1 A 1 A_FadeOut(1,1)
 Loop
 }
 }

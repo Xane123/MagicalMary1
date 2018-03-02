@@ -248,7 +248,7 @@ script "SpecialStagePrep" ENTER
 	{
 		If(coins_required[ACS_NamedExecuteWithResult("CheckSpecialStage",TRUE,0,0,0)]>-1)
 		{
-			If(GetCVAR("z_playertest")>7) SetCVAR("z_playertest", 7);
+			//If(GetCVAR("z_playertest")>7) SetCVAR("z_playertest", 7);
 			
 			Switch(GameSkill())	//Change requirements based on the difficulty.
 			{
@@ -409,6 +409,7 @@ If(1)
 		}
 		Delay(5);
 		If(no_scripts[0]==FALSE) timerx++;
+		Print(d:no_scripts[0]);
 		
 		if(timerx % 7 == 0)
 		{

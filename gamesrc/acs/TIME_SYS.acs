@@ -1,0 +1,171 @@
+#library "xglobal"
+#include "zcommon.acs"
+
+
+//WORLD variables are only valid until the next level. Special Stages and the Small Hut don't reset them. Use these to let level scripts interact with global script variables.
+world int 5:ss_returnlevel;	//What level to return to on request by certain scripts.
+world int 8:framecount;	//Current frame; Use for waiting for certain frames to do something.
+
+world bool 9:level_ready;	//This prevents certain scripts from working until it's set to TRUE by SeamlessHelper.
+
+world int 10:ss_return_id;	//The checkpoint ID that the player will respawn from upon returning from a special stage.
+
+//GLOBAL variables are always valid, no matter how many levels the player goes through.
+global bool 0:initial_setup;	//Some things only happen upon starting a game and never any other time. This prevents it from happening on every level.
+global bool 6:fade;	//Requested fade upon level transition.
+global int 8:curscore[];
+
+//Global variable #14 is available.
+
+global int 15:combo[];	//Current combo (successive kills). First MAX_PLAYERS is current, while second are decrease amounts.
+
+global bool 19:challenge_status[];	//Indicates if a challenge for a level is completed, marking it in the interface when selecting levels. There's only one per level, so each index is the level number - 1.
+
+global int 20:level[];	//Level number; [0] is highest level reached, [1] is last level played, and [2] is the last #-1 (start of world) level visited (used for Game Over script).
+
+global bool 22:no_scripts[];	//Tells most standard scripts like special abilities not to run.
+global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice
+
+//These four variables below are mainly used in this file (hopefully).
+world int 14:time_override;	//If set, this will either force a stormy appearance or disable sky/fog changes, allowing levels to use their own settings. 1: Change to stormy appearance, 2: Disable automatic time of day changes, 
+world int 15:time_settings;	//This determines which arrays will be used when setting the sky appearance, sector/fade colors, and brightness levels. The stormy weather above overrides this.
+world bool 16:time_safe;	//If the sky cannot be seen in the area the player's in, set this to TRUE and the time of day will advance mid-level.
+
+//The world variable below determines what will happen if the time cycle system is disabled on the current level.
+//Set this array's contents at the start of every level in the script where skybox and title card settings are set.
+//Naturally as the time-of-day system doesn't work on Special Stages, these won't work there even if forced.
+//
+//[0] - This determines if the time-of-day system should still apply the appearance of a certain time (specified in [1])
+//		using the settings specified in time_settings' selected arrays. If 0, the level's built-in lighting is used.
+//		Naturally, if "time_override" is set to 1, the stormy weather will be used for this.
+//[1] - This variable chooses what time of day this level is canonically supposed to take place at, which time_of_day
+//		is set to if the system is disabled, for use with the "to next sunset/sunrise" script.
+world int 17:time_defaults[];
+
+global int 12:time_seconds;	//This counts how many seconds the current time of day has been enabled. If it goes over a certain number, time of day will advance upon changing levels/entering an "indoor" location.
+global int 13:time_of_day;	//This keeps track of which time of day it currently is. 1: Day, 2: Sunset, 3: Night, 4: Sunrise. This is always updated like the seconds even if overridden.
+
+#define TIME_LENGTH 30	//How long a part of the day lasts. Sunsets and sunrises are half of this.
+
+script "ApplyTODSettings" (void)	//This script will change the appearance of the current area when called.
+{
+	//First, let's specify all of the settings.
+	//The first two arrays are first filler zeroes then RGB values/desaturation for each time of day.
+	//The third array is for brightness levels/fog distances at those times. There's no filler in this one!
+	//The fourth array contains filler then each group of two names are for the two sky layers for the four times.
+	
+	//SETTINGS #0: Hell City
+	int sectorcolors0[20] = { 0, 0, 0, 0,
+		255, 255, 255, 0,
+		255, 216, 192, 32,
+		128, 192, 255, 0,
+		255, 224, 208, 64 };
+	int fadecolors0[16] = { 0, 0, 0,
+		128, 160, 255,
+		226, 160, 112,
+		0, 0, 8,
+		226, 167, 167 };
+	int brightness0[4] = { 224, 240, 200, 240 };
+	str skytexture0[10] = { "", "",
+		"SKYOVLS1", "WOKSKY01",
+		"SKYOVLS2", "WOKSKY02",
+		"WOKSKY04", "SPECTS04",
+		"SKYOVLS2", "WOKSKY13" };
+	
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Terminate;	//Don't run in Special Stages!
+	
+	Log(s:"Well, the script ran, Xane...");
+	If(time_override==0)
+	{	//The settings in this section are for the four normal times of day, daytime, sunset, night, and sunrise.
+		Switch(time_settings)
+		{
+			Case 0:
+			Light_Fade(183, brightness0[time_of_day-1],70);
+			Sector_SetColor(183, sectorcolors0[4*time_of_day], sectorcolors0[(4*time_of_day)+1], sectorcolors0[(4*time_of_day)+2], sectorcolors0[(4*time_of_day)+3]);
+			Sector_SetFade(183, fadecolors0[3*time_of_day], fadecolors0[(3*time_of_day)+1], fadecolors0[(3*time_of_day)+2]);
+			ChangeSky(skytexture0[2*time_of_day], skytexture0[(2*time_of_day)+1]);
+		}
+	}
+	Else If(time_override==1)
+	{	//This is used for if it's raining. Using the other override mode, 2, will result in no code running.
+		Switch(time_settings)
+		{
+			Case 0:
+			Light_Fade(183, brightness0[time_of_day-1],70);
+			Sector_SetColor(183, sectorcolors0[4*time_of_day], sectorcolors0[(4*time_of_day)+1], sectorcolors0[(4*time_of_day)+2], sectorcolors0[(4*time_of_day)+3]);
+			Sector_SetFade(183, fadecolors0[3*time_of_day], fadecolors0[(3*time_of_day)+1], fadecolors0[(3*time_of_day)+2]);
+			ChangeSky(skytexture0[2*time_of_day], skytexture0[(2*time_of_day)+1]);
+		}
+	}
+}
+
+script "TOD_Timer" OPEN
+{
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Terminate;	//Don't run in Special Stages!
+	Delay(2);	//Wait for level variables to be prepared in case this level wants these scripts to set up lighting...
+	If(time_defaults[1]<=0||time_defaults[1]>4) time_defaults[1] = 1;	//If invalid, the time of day is daytime.
+	If(initial_setup==FALSE) time_of_day = time_defaults[1];	//If starting a game, set the time to its default.
+	If(GetCVAR("xane_timecycle")==FALSE)
+	{
+		If(time_defaults[0]>0)	//Disabled? If settings are set correctly, handle them before terminating this script.
+		{
+			time_of_day = time_defaults[1];	//Set the current "time" to the default time before running the script.
+			ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);	//Run the script to set the environment's settings!
+		}
+		Terminate;	//Sadly, this is where this script must stop running...
+	}
+	//First, let's do some checks, no matter how redundant with the code below.
+	If(time_of_day<=0||time_of_day>4) time_of_day = 1;	//If it's an invalid time of day, set it to daytime.
+	If(ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0))
+	{
+		time_seconds = 0;
+		time_of_day++;
+		If(time_of_day>4) time_of_day = 1;	//If it's sunrise, it's logically daytime next!
+	}
+	
+	//After that, apply the settings forcibly.
+	ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);
+	Log(s:"Made it past the initial apply!");
+	
+	int old_override = time_override;	//Set these variables so the moment one changes the settings can be re-applied.
+	int old_settings = time_settings;
+	
+	While(GetCVAR("xane_timecycle")==TRUE)	//If the player ever turns off this system, stop working.
+	{
+		If(framecount % 35 == 0) { time_seconds++; Print(d:time_seconds); LocalAmbientSound("menu/activate",192); }
+		
+		old_override = time_override;	//Update the setting variables to monitor if they change next tic.
+		old_settings = time_settings;
+		
+		Delay(1);
+		
+		If((ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0) || time_settings != old_settings || time_override != old_override) && time_safe==TRUE)
+		{	//If the timer went over the limit or a setting was changed and it's safe, change the appearance of the area.
+			If(ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0))
+			{	//If the timer is over the limit, reset it while we're at it.
+				time_seconds = 0;
+				time_of_day++;
+				If(time_of_day>4) time_of_day = 1;	//If it's sunrise, it's logically daytime next!
+			}
+			ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);
+			Print(s:"Time is now ", d:time_of_day, s:"!");
+		}
+	}
+}
+
+script "TimeSectionSecondsComplete" (void)
+{	//This returns TRUE if the seconds counter for the time-of-day system has gone over the point where it normally changes times of day.
+	If((time_of_day % 2 == 1 && time_seconds>TIME_LENGTH) || (time_of_day % 2 == 0 && time_seconds>TIME_LENGTH/2)) SetResultValue(TRUE);
+	Else SetResultValue(FALSE);
+}
+
+script "AdvanceNearestSunTime" (void)
+{	//This script advances time to the next sunset/sunrise. If it's already that time, this does nothing.
+	If(time_of_day % 2 == 1) { time_seconds = TIME_LENGTH; }//If it's day or night, set up a time change.
+}
+
+script "TimeSafeBoundary" (void)
+{	//This toggles the "safe to change time of day" variable upon crossing it.
+	If(LineSide()==LINE_FRONT) time_safe = TRUE;
+	Else time_safe = FALSE;
+}

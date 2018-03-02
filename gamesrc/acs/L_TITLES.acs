@@ -23,7 +23,7 @@ script "TitleCard" (void)
 	Delay(8);
 	Until(level_ready==TRUE) Delay(1);	//Wait for SeamlessHelper before displaying the level title card.
 	
-	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||(GameSkill()==3&&GetLevelInfo(LEVELINFO_LEVELNUM)==33)) Terminate;
+	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE) Terminate;
 	If(world_info[0]==0) { ACS_NamedExecuteAlways("SmallTitle",0,0,0,0); Terminate; }	//This is the hut, so display a unique title card, a'la the Hall of Challenges previously.
 	
 	for (int md = -0.75; md < 0; md += 0.05)
