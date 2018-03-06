@@ -45,44 +45,60 @@ world int 17:time_defaults[];
 global int 12:time_seconds;	//This counts how many seconds the current time of day has been enabled. If it goes over a certain number, time of day will advance upon changing levels/entering an "indoor" location.
 global int 13:time_of_day;	//This keeps track of which time of day it currently is. 1: Day, 2: Sunset, 3: Night, 4: Sunrise. This is always updated like the seconds even if overridden.
 
-#define TIME_LENGTH 30	//How long a part of the day lasts. Sunsets and sunrises are half of this.
+#define TIME_LENGTH 90	//How long a part of the day lasts. Sunsets and sunrises are half of this.
+#define TIME_SUNSET_DIVIDE 3	//How much of TIME_LENGTH is a sunset/sunrise.
+//Sector tag 183 is used for outdoor sectors that use the fog/fade colors specified below. 184 is used for non-foggy ones. Obviously the latter will only be used on 1-1's land areas.
 
 script "ApplyTODSettings" (void)	//This script will change the appearance of the current area when called.
 {
-	//First, let's specify all of the settings.
+	//First, let's specify all of the settings. The last values for each are for stormy weather (time_override = 1).
 	//The first two arrays are first filler zeroes then RGB values/desaturation for each time of day.
 	//The third array is for brightness levels/fog distances at those times. There's no filler in this one!
 	//The fourth array contains filler then each group of two names are for the two sky layers for the four times.
 	
 	//SETTINGS #0: Hell City
-	int sectorcolors0[20] = { 0, 0, 0, 0,
-		255, 255, 255, 0,
-		255, 216, 192, 32,
-		128, 192, 255, 0,
-		255, 224, 208, 64 };
-	int fadecolors0[16] = { 0, 0, 0,
-		128, 160, 255,
-		226, 160, 112,
-		0, 0, 8,
-		226, 167, 167 };
-	int brightness0[4] = { 224, 240, 200, 240 };
-	str skytexture0[10] = { "", "",
+	int sectorcolors0[24] = { 0, 0, 0, 0,
+		236, 248, 255, 0,		//Day
+		255, 216, 192, 32,		//Sunset
+		128, 192, 255, 0,		//Night
+		255, 224, 208, 64,		//Sunrise
+		172, 182, 206, 64 };	//Stormy
+	int fadecolors0[19] = { 0, 0, 0,
+		144, 192, 255,	//Day
+		226, 160, 112,	//Sunset
+		0, 0, 8,		//Night
+		226, 167, 167,	//Sunrise
+		45, 60, 77 };	//Stormy
+	int brightness0[5] = { 236, 240, 200, 240, 192 };
+	str skytexture0[12] = { "", "",
 		"SKYOVLS1", "WOKSKY01",
 		"SKYOVLS2", "WOKSKY02",
-		"WOKSKY04", "SPECTS04",
-		"SKYOVLS2", "WOKSKY13" };
+		"WOKSKY04", "WOKSKY04",
+		"SKYOVLS2", "WOKSKY13",
+		"SKYOVLS4", "STORM_01"};
 	
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Terminate;	//Don't run in Special Stages!
 	
-	Log(s:"Well, the script ran, Xane...");
+	If(time_of_day != TIME_NIGHT)
+	{	//It if isn't night, change the building textures to their daytime counterparts.
+		ReplaceTextures("CITYBNIT", "CITYWIND");		
+	}
+	Else
+	{	//Otherwise, change the daytime textures to fit night better in the city.
+		ReplaceTextures("CITYWIND", "CITYBNIT");		
+	}
+	
 	If(time_override==0)
 	{	//The settings in this section are for the four normal times of day, daytime, sunset, night, and sunrise.
 		Switch(time_settings)
 		{
-			Case 0:
-			Light_Fade(183, brightness0[time_of_day-1],70);
+			Case 0:	//Hell City
+			Light_Fade(183, brightness0[time_of_day-1],70);	//Tag sectors with 183 to use the TOD system's settings.
+			
+			//Sectors with fog enabled (tag 183)
 			Sector_SetColor(183, sectorcolors0[4*time_of_day], sectorcolors0[(4*time_of_day)+1], sectorcolors0[(4*time_of_day)+2], sectorcolors0[(4*time_of_day)+3]);
 			Sector_SetFade(183, fadecolors0[3*time_of_day], fadecolors0[(3*time_of_day)+1], fadecolors0[(3*time_of_day)+2]);
+			
 			ChangeSky(skytexture0[2*time_of_day], skytexture0[(2*time_of_day)+1]);
 		}
 	}
@@ -90,11 +106,14 @@ script "ApplyTODSettings" (void)	//This script will change the appearance of the
 	{	//This is used for if it's raining. Using the other override mode, 2, will result in no code running.
 		Switch(time_settings)
 		{
-			Case 0:
-			Light_Fade(183, brightness0[time_of_day-1],70);
-			Sector_SetColor(183, sectorcolors0[4*time_of_day], sectorcolors0[(4*time_of_day)+1], sectorcolors0[(4*time_of_day)+2], sectorcolors0[(4*time_of_day)+3]);
-			Sector_SetFade(183, fadecolors0[3*time_of_day], fadecolors0[(3*time_of_day)+1], fadecolors0[(3*time_of_day)+2]);
-			ChangeSky(skytexture0[2*time_of_day], skytexture0[(2*time_of_day)+1]);
+			Case 0:	//Hell City
+			Light_Fade(183, brightness0[4],70);
+			
+			//Sectors with fog enabled (tag 183)
+			Sector_SetColor(183, sectorcolors0[20], sectorcolors0[21], sectorcolors0[22], sectorcolors0[23]);
+			Sector_SetFade(183, fadecolors0[15], fadecolors0[16], fadecolors0[17]);
+			
+			ChangeSky(skytexture0[10], skytexture0[11]);
 		}
 	}
 }
@@ -125,7 +144,6 @@ script "TOD_Timer" OPEN
 	
 	//After that, apply the settings forcibly.
 	ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);
-	Log(s:"Made it past the initial apply!");
 	
 	int old_override = time_override;	//Set these variables so the moment one changes the settings can be re-applied.
 	int old_settings = time_settings;
@@ -139,7 +157,7 @@ script "TOD_Timer" OPEN
 		
 		Delay(1);
 		
-		If((ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0) || time_settings != old_settings || time_override != old_override) && time_safe==TRUE)
+		If((ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0) && time_safe==TRUE) || time_settings != old_settings || time_override != old_override)
 		{	//If the timer went over the limit or a setting was changed and it's safe, change the appearance of the area.
 			If(ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0))
 			{	//If the timer is over the limit, reset it while we're at it.
@@ -155,7 +173,7 @@ script "TOD_Timer" OPEN
 
 script "TimeSectionSecondsComplete" (void)
 {	//This returns TRUE if the seconds counter for the time-of-day system has gone over the point where it normally changes times of day.
-	If((time_of_day % 2 == 1 && time_seconds>TIME_LENGTH) || (time_of_day % 2 == 0 && time_seconds>TIME_LENGTH/2)) SetResultValue(TRUE);
+	If((time_of_day % 2 == 1 && time_seconds>TIME_LENGTH) || (time_of_day % 2 == 0 && time_seconds>TIME_LENGTH/TIME_SUNSET_DIVIDE)) SetResultValue(TRUE);
 	Else SetResultValue(FALSE);
 }
 
@@ -168,4 +186,15 @@ script "TimeSafeBoundary" (void)
 {	//This toggles the "safe to change time of day" variable upon crossing it.
 	If(LineSide()==LINE_FRONT) time_safe = TRUE;
 	Else time_safe = FALSE;
+}
+
+script "td" (int mode)
+{
+	If(mode==FALSE)
+	{
+		time_safe = !time_safe;
+		If(time_safe) Log(s:"Time will now advance.");
+		Else Log(s:"Time cycling is now disabled.");
+	}
+	Else time_seconds = TIME_LENGTH;
 }

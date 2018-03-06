@@ -982,11 +982,11 @@ Height 4
 States
 {
 Spawn:
-PART A 1 NoDelay A_Look
+TNT1 A 1 NoDelay A_Look
 Loop
 See:
-PART A 0 A_FaceTarget
-PART A 1 A_CustomMissile("UroborosLBeam",2,0,0,0)
+TNT1 A 0 A_FaceTarget
+TNT1 A 1 A_CustomMissile("UroborosLBeam",2,0,0,0)
 Loop
 }
 }
@@ -998,7 +998,9 @@ VSpeed 0
 Alpha 0
 RenderStyle Normal
 Args 3, 4
-PROJECTILE
+//PROJECTILE
++NOGRAVITY
+-SOLID
 States
 {
 Spawn:
@@ -1041,16 +1043,16 @@ Actor Snow1000
 {
 Scale 1
 VSpeed 0
-Alpha 0
+Alpha 0.01
 RenderStyle Normal
 Args 3, 4
-PROJECTILE
+//PROJECTILE
++NOGRAVITY
 +FORCEXYBILLBOARD
 States
 {
 Spawn:
-TNT1 A 0
-TNT1 A 0 ACS_NamedExecuteAlways("Snow_CheckSky",0,0,0,0)
+TNT1 A 0 NoDelay ACS_NamedExecuteAlways("Snow_CheckSky",0,0,0,0)
 TNT1 A 1
 Choose:
 TNT1 A 0 A_Jump(128,"B")
@@ -1063,7 +1065,6 @@ SPRK B 0
 Goto Move
 Move:
 SPRK "#" 0 A_ChangeVelocity(Random(-2.5,2.5)+CallACS("GetXProperty",args[0],0,0,0),Random(-2.5,2.5)+CallACS("GetXProperty",args[1],0,0,0),-3,CVF_REPLACE)
-Goto FadeIn
 FadeIn:
 SPRK "#" 1 A_FadeIn(0.1)
 SPRK "#" 1 A_FadeIn(0.1)
@@ -1076,10 +1077,9 @@ SPRK "#" 1 A_FadeIn(0.1)
 SPRK "#" 1 A_FadeIn(0.1)
 SPRK "#" 1 A_FadeIn(0.1)
 See:
-SPRK "#" 2
+SPRK "#" 2 A_JumpIf(velz==0.0||z-floorz<4.5||abs(min(velx,vely))<0.5,"Death")
 Loop
 Death:
-Goto FadeOut
 FadeOut:
 TNT1 A 1 A_FadeOut(1,1)
 Loop
@@ -1094,72 +1094,6 @@ Actor Snow1005 : Snow1000 { Args 13, 14 }
 Actor Snow1006 : Snow1000 { Args 15, 16 }
 Actor Snow1007 : Snow1000 { Args 17, 18 }
 
-Actor Flower : PotteryBit
-{
-Radius 2
-Height 4
-Gravity 16
-Speed 0
-Alpha 0.01
-+MISSILE
-+FLOORHUGGER
--NOTELEPORT
--NOICEDEATH
-States
-{
-Spawn:
-TNT1 A 3 NoDelay ACS_NamedExecuteAlways("ColorCoin",0,0,0,0)
-TNT1 A 2
-TNT1 A 1 ACS_NamedExecuteAlways("FlowerCheck",0,0,0,0)
-//TNT1 A 1 ACS_NamedExecuteAlways("FlowerCount",0,1,0,0)
-Death:
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-TNT1 A 1
-TNT1 A 0 A_JumpIfInventory("Weakness",1,"FadeOutA")
-Appearance:
-TNT1 A 1 A_Jump(192,"C","B","A")
-Loop
-A:
-TNT1 A 1
-FLWR AAAAAAAAAAAAAAAAAAAA 1 A_FadeIn(0.05,0)
-Goto Render 
-B:
-TNT1 B 1
-FLWR BBBBBBBBBBBBBBBBBBBB 1 A_FadeIn(0.05,0)
-Goto Render
-C:
-TNT1 C 1
-FLWR CCCCCCCCCCCCCCCCCCCC 1 A_FadeIn(0.05,0)
-Goto Render
-Render:
-FLWR "#" 0
-FLWR "#" 1 A_RadiusGive("Weakness",64.1,RGF_OBJECTS|RGF_MISSILES|RGF_NOTARGET)
-FLWR "#" 175	//3 A_PotteryCheck
-	//Loop
-FadeOut:
-FadeOutA:
-FLWR "#" 1 A_FadeOut(0.2,1)
-Loop
-//FadeOutA:
-//TNT1 AA 1 ACS_NamedExecuteAlways("FlowerCount",0,0,0,0)
-//FadeOutB:
-//TNT1 A 1 A_FadeOut(0.5,1)
-//Loop
-}
-}
 Actor BubbleSpawner 150
 {
 +NOGRAVITY

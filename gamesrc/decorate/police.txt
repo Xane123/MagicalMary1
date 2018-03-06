@@ -1581,7 +1581,19 @@ Stop
 }
 }
 
-Actor UroborosLBeam : LaserSight { Speed 56 Translation "240:254=160:175" }
+Actor UroborosLBeam : LaserSight
+{
+Speed 56
+Translation "240:254=160:175"
+States
+{
+Spawn:
+PART A 5 NoDelay
+Death:
+PART A 1 A_FadeOut(0.25,1)
+Loop
+}
+}
 
 actor PowerupCop : CustomInventory 999
 {
