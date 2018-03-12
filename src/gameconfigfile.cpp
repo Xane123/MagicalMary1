@@ -73,6 +73,38 @@ FGameConfigFile::FGameConfigFile ()
 {
 #ifdef __APPLE__
 	FString user_docs, user_app_support, local_app_support;
+	{
+		char cpath[PATH_MAX];
+		FSRef folder;
+
+		if (noErr == FSFindFolder(kUserDomain, kDocumentsFolderType, kCreateFolder, &folder) &&
+			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
+		{
+			user_docs << cpath << "/" GAME_DIR;
+		}
+		else
+		{
+			user_docs = "~/" GAME_DIR;
+		}
+		if (noErr == FSFindFolder(kUserDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
+			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
+		{
+			user_app_support << cpath << "/" GAME_DIR;
+		}
+		else
+		{
+			user_app_support = "~/Library/Application Support/" GAME_DIR;
+		}
+		if (noErr == FSFindFolder(kLocalDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
+			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
+		{
+			local_app_support << cpath << "/" GAME_DIR;
+		}
+		else
+		{
+			local_app_support = "Library/Application Support/" GAME_DIR;
+		}
+	}
 #endif
 	FString pathname;
 
@@ -95,32 +127,10 @@ FGameConfigFile::FGameConfigFile ()
 		SetValueForKey ("Path", ".", true);
 		SetValueForKey ("Path", "$DOOMWADDIR", true);
 #ifdef __APPLE__
-		char cpath[PATH_MAX];
-		FSRef folder;
-		
-		if (noErr == FSFindFolder(kUserDomain, kDocumentsFolderType, kCreateFolder, &folder) &&
-			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
-		{
-			user_docs << cpath << "/" GAME_DIR;
-			SetValueForKey("Path", user_docs, true);
-		}
-		else
-		{
-			SetValueForKey("Path", "~/" GAME_DIR, true);
-		}
-		if (noErr == FSFindFolder(kUserDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
-			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
-		{
-			user_app_support << cpath << "/" GAME_DIR;
-			SetValueForKey("Path", user_app_support, true);
-		}
+		SetValueForKey ("Path", user_docs, true);
+		SetValueForKey ("Path", user_app_support, true);
 		SetValueForKey ("Path", "$PROGDIR", true);
-		if (noErr == FSFindFolder(kLocalDomain, kApplicationSupportFolderType, kCreateFolder, &folder) &&
-			noErr == FSRefMakePath(&folder, (UInt8*)cpath, PATH_MAX))
-		{
-			local_app_support << cpath << "/" GAME_DIR;
-			SetValueForKey("Path", local_app_support, true);
-		}
+		SetValueForKey ("Path", local_app_support, true);
 #elif !defined(__unix__)
 		SetValueForKey ("Path", "$HOME", true);
 		SetValueForKey ("Path", "$PROGDIR", true);
@@ -158,6 +168,26 @@ FGameConfigFile::FGameConfigFile ()
 		SetValueForKey ("Path", "$DOOMWADDIR", true);
 	}
 
+	// Set default search paths if none present
+	if (!SetSection("SoundfontSearch.Directories"))
+	{
+		SetSection("SoundfontSearch.Directories", true);
+#ifdef __APPLE__
+		SetValueForKey("Path", user_docs + "/soundfonts", true);
+		SetValueForKey("Path", user_app_support + "/soundfonts", true);
+		SetValueForKey("Path", "$PROGDIR/soundfonts", true);
+		SetValueForKey("Path", local_app_support + "/soundfonts", true);
+#elif !defined(__unix__)
+		SetValueForKey("Path", "$PROGDIR/soundfonts", true);
+#else
+		SetValueForKey("Path", "$HOME/" GAME_DIR "/soundfonts", true);
+		SetValueForKey("Path", "/usr/local/share/doom/soundfonts", true);
+		SetValueForKey("Path", "/usr/local/share/games/doom/soundfonts", true);
+		SetValueForKey("Path", "/usr/share/doom/soundfonts", true);
+		SetValueForKey("Path", "/usr/share/games/doom/soundfonts", true);
+#endif
+	}
+
 	// Add some self-documentation.
 	SetSectionNote("IWADSearch.Directories",
 		"# These are the directories to automatically search for IWADs.\n"
@@ -166,6 +196,9 @@ FGameConfigFile::FGameConfigFile ()
 		"# These are the directories to search for wads added with the -file\n"
 		"# command line parameter, if they cannot be found with the path\n"
 		"# as-is. Layout is the same as for IWADSearch.Directories\n");
+	SetSectionNote("SoundfontSearch.Directories",
+		"# These are the directories to search for soundfonts that let listed in the menu.\n"
+		"# Layout is the same as for IWADSearch.Directories\n");
 }
 
 FGameConfigFile::~FGameConfigFile ()
@@ -235,6 +268,7 @@ void FGameConfigFile::DoAutoloadSetup (FIWadManager *iwad_man)
 	CreateStandardAutoExec("Doom.AutoExec", true);
 
 	// Move search paths back to the top.
+	MoveSectionToStart("SoundfontSearch.Directories");
 	MoveSectionToStart("FileSearch.Directories");
 	MoveSectionToStart("IWADSearch.Directories");
 

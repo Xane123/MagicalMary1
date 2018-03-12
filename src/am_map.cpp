@@ -230,6 +230,7 @@ static const char *ColorNames[] = {
 		"IntraTeleportColor", 
 		"InterTeleportColor",
 		"SecretSectorColor",
+		"UnexploredSecretColor",
 		"PortalColor",
 		"AlmostBackgroundColor",
 		NULL
@@ -261,6 +262,7 @@ struct AMColorset
 		IntraTeleportColor, 
 		InterTeleportColor,
 		SecretSectorColor,
+		UnexploredSecretColor,
 		PortalColor,
 		AlmostBackgroundColor,
 		AM_NUM_COLORS
@@ -362,6 +364,7 @@ static FColorCVar *cv_standard[] = {
 	&am_intralevelcolor,
 	&am_interlevelcolor,
 	&am_secretsectorcolor,
+	&am_unexploredsecretcolor,
 	&am_portalcolor
 };
 
@@ -388,6 +391,7 @@ static FColorCVar *cv_overlay[] = {
 	&am_ovtelecolor,
 	&am_ovinterlevelcolor,
 	&am_ovsecretsectorcolor,
+	&am_ovunexploredsecretcolor,
 	&am_ovportalcolor
 };
 
@@ -430,6 +434,7 @@ static unsigned char DoomColors[]= {
 	NOT_USED,		// intrateleport
 	NOT_USED,		// interteleport
 	NOT_USED,		// secretsector
+	NOT_USED,		// unexploredsecretsector
 	0x10,0x10,0x10,	// almostbackground
 	0x40,0x40,0x40	// portal
 };
@@ -457,6 +462,7 @@ static unsigned char StrifeColors[]= {
 	NOT_USED,		// intrateleport
 	NOT_USED,		// interteleport
 	NOT_USED,		// secretsector
+	NOT_USED,		// unexploredsecretsector
 	0x10,0x10,0x10,	// almostbackground
 	0x40,0x40,0x40	// portal
 };
@@ -484,6 +490,7 @@ static unsigned char RavenColors[]= {
 	NOT_USED,		// intrateleport
 	NOT_USED,		// interteleport
 	NOT_USED,		// secretsector
+	NOT_USED,		// unexploredsecretsector
 	0x10,0x10,0x10,	// almostbackground
 	0x50,0x50,0x50	// portal
 };
@@ -2209,7 +2216,7 @@ void AM_drawSubsectors()
 //
 //=============================================================================
 
-static bool AM_CheckSecret(line_t *line)
+static int AM_CheckSecret(line_t *line)
 {
 	if (AMColors.isValid(AMColors.SecretSectorColor))
 	{
@@ -2217,20 +2224,20 @@ static bool AM_CheckSecret(line_t *line)
 		{
 			if (line->frontsector->wasSecret())
 			{
-				if (am_map_secrets!=0 && !line->frontsector->isSecret()) return true;
-				if (am_map_secrets==2 && !(line->flags & ML_SECRET)) return true;
+				if (am_map_secrets!=0 && !line->frontsector->isSecret()) return 1;
+				if (am_map_secrets==2 && !(line->flags & ML_SECRET)) return 2;
 			}
 		}
 		if (line->backsector != NULL)
 		{
 			if (line->backsector->wasSecret())
 			{
-				if (am_map_secrets!=0 && !line->backsector->isSecret()) return true;
-				if (am_map_secrets==2 && !(line->flags & ML_SECRET)) return true;
+				if (am_map_secrets!=0 && !line->backsector->isSecret()) return 1;
+				if (am_map_secrets==2 && !(line->flags & ML_SECRET)) return 2;
 			}
 		}
 	}
-	return false;
+	return 0;
 }
 
 
@@ -2584,10 +2591,14 @@ void AM_drawWalls (bool allmap)
 				{
 					AM_drawMline(&l, AMColors.PortalColor);
 				}
-				else if (AM_CheckSecret(&line))
+				else if (AM_CheckSecret(&line) == 1)
 				{
 					// map secret sectors like Boom
 					AM_drawMline(&l, AMColors.SecretSectorColor);
+				}
+				else if (AM_CheckSecret(&line) == 2)
+				{
+					AM_drawMline(&l, AMColors.UnexploredSecretColor);
 				}
 				else if (line.flags & ML_SECRET)
 				{ // secret door

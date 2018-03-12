@@ -1160,8 +1160,9 @@ class PowerSpeed : Powerup
 	
 	Default
 	{
-		Powerup.Duration -255;
-		Speed 1.0;
+		Powerup.Duration -45;
+		Speed 1.5;
+		Inventory.Icon "SPBOOT0";
 		+INVENTORY.NOTELEPORTFREEZE
 	}
 	

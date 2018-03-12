@@ -1542,7 +1542,7 @@ void ParseCVarInfo()
 	{
 		GameConfig->DoModSetup (gameinfo.ConfigName);
 	}
-}
+}	
 
 //==========================================================================
 //
@@ -1948,7 +1948,6 @@ static FString CheckGameInfo(TArray<FString> & pwads)
 	for(int i=pwads.Size()-1; i>=0; i--)
 	{
 		bool isdir = false;
-		FileReader *wadinfo;
 		FResourceFile *resfile;
 		const char *filename = pwads[i];
 
@@ -1961,16 +1960,13 @@ static FString CheckGameInfo(TArray<FString> & pwads)
 
 		if (!isdir)
 		{
-			try
-			{
-				wadinfo = new FileReader(filename);
-			}
-			catch (CRecoverableError &)
+			FileReader fr;
+			if (!fr.OpenFile(filename))
 			{ 
 				// Didn't find file
 				continue;
 			}
-			resfile = FResourceFile::OpenResourceFile(filename, wadinfo, true);
+			resfile = FResourceFile::OpenResourceFile(filename, fr, true);
 		}
 		else
 			resfile = FResourceFile::OpenDirectory(filename, true);

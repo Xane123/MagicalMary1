@@ -97,7 +97,6 @@ const char *GetVersionString();
 #define GAMESIG "Mary's Magical Adventure"
 #define BASEWAD "engine.pk3"
 #define OPTIONALWAD "zd_extra.pk3"
-#define BASESF "soundfont.sf2"
 
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "Mary's Magical Adventure"
