@@ -3,7 +3,7 @@
 #include "zcommon.acs"
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
-//XCOMMON, due to how messy of a big file it is, has used 106/128 variables, with 22 left! Use them wisely!
+//XCOMMON, due to how messy of a big file it is, has used 111/128 variables, with 17 left! Use them wisely!
 //This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
@@ -46,10 +46,14 @@ global int 8:curscore[];
 
 global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Only increase or decrease this variable, never forcibly set it except at the beginning of a level.
 
-//global int 12:time_seconds;	//This counts how many seconds the current time of day has been enabled. If it goes over a certain number, time of day will advance upon changing levels/entering an "indoor" location.
+//See TIME_SYS.acs for these two global variables.
+//global int 12:time_seconds;	//This counts how many seconds the current time of day has been enabled.
 //global int 13:time_of_day;	//This keeps track of which time of day it currently is. 1: Day, 2: Sunset, 3: Night, 4: Sunrise. This is always updated like the seconds even if overridden.
 
-//Global variable #14 is available.
+//This array below remembers certain things happening, so far only things like the drill being used in 1-1.
+//Things like cutscenes, tutorials, challenges, and upgrades/Special Stage entrances (see "special_id[]") aren't
+//handled by this array.
+global bool 14:event_flag[];
 
 global int 15:combo[];	//Current combo (successive kills). First MAX_PLAYERS is current, while second are decrease amounts.
 global int 16:lives;
@@ -59,7 +63,7 @@ global int 18:timer_tics;	//Used for the speedrunning timer's "milliseconds".
 
 global bool 19:challenge_status[];	//Indicates if a challenge for a level is completed, marking it in the interface when selecting levels. There's only one per level, so each index is the level number - 1.
 
-global int 20:level[];	//Level number; [0] is highest level reached, [1] is last level played, and [2] is the last #-1 (start of world) level visited (used for Game Over script).
+global int 20:level[];	//[0] highest level reached, [1] last level played, [2] is the last #-1 (start of world) level visited (used for Game Over script), [3] = Highest world number reached.
 
 global int 21:stored_velocity[];	//Used for hackish teleporting to and from the Small Hut ([0]). Unknown about its other purposes.
 
@@ -70,7 +74,7 @@ global int 25:gamemode;	//0: Normal, 1: Time attack, 2: Boss rush, 3: Practice
 global bool 26:event_completed[];	//Whether the cutscene with this ID has run. It will be skipped if TRUE.
 global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbrella, 3: Sword (Xane), 4: Ability upgrade, 5: Jump height upgrades, 6: Health upgrades. This is synced between all players.
 global bool 28:special_id[];	//An array determining whether a player picked up a special item or entered a certain special stage entrance. See the line below this one for the current highest ID.
-//The highest current special ID is 7.
+//The highest current special ID is 8.
 
 //global bool 29:tutorial_completed[];	//See TUTORIAL.acs for this global variable.
 //Global variable #30 is available!
@@ -158,8 +162,8 @@ script "DisplayTotalCoins" (int amount)
 	Else totalcointics = amount;
 }
 
-script "StoreValues" UNLOADING	//This temporarily stores the players' scores and velocities.
-{
+script "StoreValues" UNLOADING	//This temporarily stores the players' scores. Unknown if necessary now.
+{	//This is just a letover of the earlier World of Kirbycraft versions when I didn't have a clue what I was doing.
 curscore[0] = score[0];
 curscore[1] = score[1];
 curscore[2] = score[2];
@@ -177,9 +181,10 @@ script "HammerSlam" (void)
 	int initial = GetActorZ(0);
 	
 	Until(GetActorZ(0)-GetActorFloorZ(0)<8.5||GetActorVelZ(0)==0.0||GetActorProperty(0, APROP_Health)==0) Delay(1);
-	if(GetActorProperty(0, APROP_Health)==1||force_death[PlayerNumber()]==TRUE) { GiveInventory("MaryHammer_MidAirDone",1); Terminate; }	//If Mary died, don't do the slam!
+	if(GetActorProperty(0, APROP_Health)==1||force_death[PlayerNumber()]==TRUE) { GiveInventory("NoWall",1); Delay(5); TakeInventory("NoWall",1); Terminate; }	//If Mary died, don't do the slam!
 	
-	if(((initial - GetActorZ(0))/96) >> 16 > 0) GiveInventory("Hammer_SlamDamage",((initial - GetActorZ(0))/96) >> 16);
+	//Print(d:((initial - GetActorZ(0))/192) >> 16);
+	if(((initial - GetActorZ(0))/192) >> 16 > 0) GiveInventory("Hammer_SlamDamage",((initial - GetActorZ(0))/192) >> 16);
 	else GiveInventory("Hammer_SlamDamage",1);
 }
 
@@ -446,13 +451,12 @@ script "Teleporter" (int destination, int marker, int camera)
 	ACS_NamedExecuteAlways("PlayerMovement",0,TRUE,FALSE,FALSE);	//Make sure the player can't mess up this mini-cutscene.
 	FadeTo(255,255,255,1.0,0.85);
 	ACS_NamedExecute("WaitForCulling",0,1,-1,0);
-	Delay(5);
+	Delay(30);
 	
 	Teleport_NoStop(destination,0,FALSE);
 	SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
-	Delay(25);
 	
-	level_ready = TRUE;	//After the transition, revert it back to normal speed.
+	//level_ready = TRUE;	//After the transition, revert it back to normal speed.
 	ACS_NamedExecuteAlways("SetCheckpoint",0,destination,0,0);	//Set the checkpoint and teleport the player to the destination.
 	If(camera>0) ChangeCamera(0, FALSE, FALSE);	//Return the camera to normal if it was changed earlier.
 	ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,FALSE,FALSE);	//Allow movement again.
@@ -529,8 +533,47 @@ script "Rail" (int path_follower, int bpanel)
 
 script "RailJump" (void) { SpawnSpotForced("ForceRailJump", 618, 0, 0); }
 
-int specialheight[9] = { -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1 };	//Height of water/pit/lava. Array index 9 ([MAX_PLAYERS]) is for monsters. 
-int specialbehavior[9];	//0: Water, 1: Death, 2: Lava
+#define MAX_SPECIALPLANES 10	//How many areas (including default) can be defined per area of the game.
+
+//Arguments for WaterLevel(x)
+#define WL_WATERLEVEL 		0	//What the highest water level that the player is touching is.
+#define WL_SPECIALPLANEID	1	//The lowest ID'd area with the highest water level.
+#define WL_AREAID			2	//Lowest ID'd area the player is within horizontally, even if not touching the plane.
+#define WL_BEHAVIOR			3	//The special plane behavior of lowest-ID'd area the player is touching.
+
+//Special plane properties, set by SpecialPlane objects within areas. In most arrays, [0] is the fallback/default.
+int spec_height[MAX_SPECIALPLANES] = { -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1, -9999.1 };
+int spec_behavior[MAX_SPECIALPLANES];	//What each special plane area's type is. 0: Water, 1: Bottomless pit, 2: Lava/deadly liquid
+int spec_x[MAX_SPECIALPLANES-1];	//What X/Y coordinate each square is centered around. Note that [0] doesn't exist
+int spec_y[MAX_SPECIALPLANES-1];	//for these three arrays as it affects any area not within any square area.
+int spec_radius[MAX_SPECIALPLANES-1];	//How far each non-default special plane area extends from its X/Y coordinates.
+
+script "SetPlaneProperties" (int id, int behavior, int radius)
+{	//This script sets the properties for "special plane" areas. X/Y/height are grabbed from the activating object.
+	if(id==0) Log(s:"It ran, ya farta!");
+	spec_height[id] = GetActorZ(0);	//Height
+	if(behavior<0) { spec_height[id] -= 1024.0; behavior = 1; }	//Move this way under the ground if behavior is "-1".
+	spec_behavior[id] = behavior;	//Behavior (see above for choices)
+	if(id>0)	//Positional properties only apply to non-default special plane areas.
+	{
+		//radius += 0.01;					//Increase radius by 0.01 to guarantee it's a floating point number.
+		spec_x[id-1] = GetActorX(0);	//X center position
+		spec_y[id-1] = GetActorY(0);	//Y center position
+		
+		//Next, try to make areas smaller based on their size through an algorhithm.
+		int current[2] = { 384, 5 };	//Radius then divide by number.
+		Until(current[1]<2)
+		{
+			if(radius<current[0]) { radius = radius - (radius/current[1]); current[1] = 0; }
+			Else { current[0] += current[0]; current[1]--; }	//Double the number otherwise.
+		}
+		//If the above loop ended legitimately and wasn't cut off, divide by 2 anyways.
+		if(radius>current[0]&&current[1]==1) radius = radius - (radius/2);
+		
+		spec_radius[id-1] = radius;		//Area radius from center point
+	}
+}
+
 int airsupply[MAX_PLAYERS] = { 1050, 1050, 1050, 1050, 1050, 1050, 1050, 1050 };	//Replicating the DECORATE/player struct counterpart.
 
 #define CONSTANT_LAVA_TICS 32
@@ -548,7 +591,7 @@ script "WParticles" ENTER
 {
 	While(1)
 	{
-		Delay (1);
+		Delay(1);
 		
 		If(surface_tics[PlayerNumber()+MAX_PLAYERS] == TRUE)
 		{
@@ -557,15 +600,6 @@ script "WParticles" ENTER
 			PlaySound(lasttid,"misc/watersurface",CHAN_BODY,0.7,0,ATTN_NORM);
 		}
 	}
-}
-
-script "SetSpecial" (int property, int front, int back)	//0/FALSE: behavior; 1/TRUE: height)
-{
-	if(property==1) { front = front << 16; back = back << 16; }
-	
-	If(LineSide()==LINE_FRONT) { if(property==0) { specialbehavior[PlayerNumber()] = front; specialbehavior[MAX_PLAYERS] = front; } if(property==1) { specialheight[PlayerNumber()] = front; specialheight[MAX_PLAYERS] = front; } }
-	Else { if(property==0) { specialbehavior[PlayerNumber()] = back; specialbehavior[MAX_PLAYERS] = back; } if(property==1) { specialheight[PlayerNumber()] = back; specialheight[MAX_PLAYERS] = back; } }
-	If(GetCVAR("debug_water")==TRUE) print(s:"HEIGHT: ", f:specialheight[MAX_PLAYERS], s:"\nBEHAV: ", d:specialbehavior[MAX_PLAYERS]);
 }
 
 int no_movement[MAX_PLAYERS];	//Tics until the player can move with the movement keys.
@@ -578,169 +612,188 @@ script "PreventMovement" (int tics, int all_players)
 	}
 }
 
-script "CheckWater" ENTER
-{
-int lasttid, input_water[MAX_PLAYERS];
-While(specialbehavior[PlayerNumber()]==0)	//While water is enabled for the current player.
-	{
-	waterlevels[PlayerNumber()] = WaterLevel(0);	//Get water levels
-	Delay(1);
-	if(no_scripts[PlayerNumber()]==FALSE && waterlevels[PlayerNumber()] == 0 && WaterLevel(0) < 3 && (abs(GetActorVelX(GetCurrentPlayerTID())) > 13.0 || abs(GetActorVelY(GetCurrentPlayerTID())) > 13.0) && specialbehavior[PlayerNumber()] == 0)//Compare to see if it changed.
-		{	//The water level changed now, and the player's going fast enough? Run on the water!
-		GiveActorInventory(GetCurrentPlayerTID(),"onWater",1);
-		lasttid = 0;
-		
-		While(WaterLevel(0)>0)
-			{
-			if(framecount % 3 == 0) PlaySound(0, "step/water", 4, 0.7, FALSE, 0.88);	//Generate fake footstep sounds.
-			TakeInventory("Animation1",1);
-			hammermove[PlayerNumber()] = 5;
-			If(WaterLevel(0)>0)	walljumping[PlayerNumber()] = 5;
-			ACS_ExecuteAlways(66,0,0,0,0);
-			fspeed[PlayerNumber()] = 0.0;
-			fscreamed[PlayerNumber()] = FALSE;
-			no_movement[PlayerNumber()] = 5;	//Don't allow the player to control their movement on water (minus stopping and Air Dashes).
-			lasttid++;
-			input_water[PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
-			
-			if(specialheight[PlayerNumber()]+16.1>GetActorZ(0))
-			{
-				If(input_water[PlayerNumber()] & BT_JUMP)
-				{
-					ACS_NamedExecuteAlways("PlaySoundX",0,1,0,0);
-					ThrustThingZ(GetCurrentPlayerTID(),64,FALSE,TRUE);
-					Delay(5);
-				}
-				Else if(input_water[PlayerNumber()] & BT_BACK) SetActorVelocity(GetCurrentPlayerTID(),FixedDiv(GetActorVelX(GetCurrentPlayerTID()), 1.01),FixedDiv(GetActorVelY(GetCurrentPlayerTID()), 1.01),1.5,FALSE,FALSE);
-				Else SetActorVelocity(GetCurrentPlayerTID(),FixedMul(GetActorVelX(GetCurrentPlayerTID()), 1.0),FixedMul(GetActorVelY(GetCurrentPlayerTID()), 1.0),1.5,FALSE,FALSE);
-			}
-			
-			if(lasttid>20)
-				{
-				Delay(1);
-				lasttid = 0;
-				}
-			}
-		}
-		TakeActorInventory(GetCurrentPlayerTID(),"onWater",1);
-		
-	}
-	
-	//Log(s:"Player stopped water detection.");
-	ACS_NamedExecuteAlways("RunCheckScript",0,0,0,0);
-}
+int lava_damage[MAX_PLAYERS];	//Amount of damage to apply to the player after they've been hurt by lava.
 
-script "GetSpecial" (int which) { If(which<0) which = 0; If(which>1) which = 1; If(which==0) SetResultValue(specialbehavior[PlayerNumber()]); If(which==1)SetResultValue(specialheight[PlayerNumber()]); }
+script "CheckSpecialPlanes" ENTER
+{
+	int lasttid, input_water[MAX_PLAYERS];
+	bool tics_contactdplane;	//This must be 2 or greater for pits to kill the player, increased when in contact.
+	While(1)
+	{
+		If(GetCVAR("debug_water")==TRUE) Print(s:"-DEBUG-\n\nAREA: ", d:WaterLevel(WL_AREAID), s:"\nWater level: ", d:WaterLevel(WL_WATERLEVEL), s:"\n\nARRAY: ", d:spec_x[0]>>16, s:"/", d:spec_x[1]>>16, s:"/", d:spec_x[2]>>16, s:"/", d:spec_x[3]>>16);
+		//If((GetActorX(0)>spec_x[0]-spec_radius[0])&&(GetActorX(0)<spec_x[0]+spec_radius[0])) Log(s:"Both worked!");
+		
+		If(spec_behavior[WaterLevel(WL_AREAID)]==0)	//Water...
+		{
+			waterlevels[PlayerNumber()] = WaterLevel(WL_WATERLEVEL);	//Get water levels
+			Delay(1);
+			if(no_scripts[PlayerNumber()]==FALSE && waterlevels[PlayerNumber()] == 0 && WaterLevel(WL_WATERLEVEL) < 3 && (abs(GetActorVelX(GetCurrentPlayerTID())) > 13.0 || abs(GetActorVelY(GetCurrentPlayerTID())) > 13.0))//Compare to see if it changed.
+			{	//The water level changed now, and the player's going fast enough? Run on the water!
+				GiveActorInventory(GetCurrentPlayerTID(),"onWater",1);
+				lasttid = 0;
+				
+				While(WaterLevel(WL_WATERLEVEL)>0)
+				{
+					if(framecount % 3 == 0) PlaySound(0, "step/water", 4, 0.7, FALSE, 0.88);	//Generate fake footstep sounds.
+					TakeInventory("Animation1",1);
+					hammermove[PlayerNumber()] = 5;
+					If(WaterLevel(WL_WATERLEVEL)>0)	walljumping[PlayerNumber()] = 5;
+					ACS_ExecuteAlways(66,0,0,0,0);
+					fspeed[PlayerNumber()] = 0.0;
+					fscreamed[PlayerNumber()] = FALSE;
+					//no_movement[PlayerNumber()] = 5;	//Don't allow the player to control their movement on water (minus stopping and Air Dashes).
+					lasttid++;
+					input_water[PlayerNumber()] = GetPlayerInput(PlayerNumber(),INPUT_BUTTONS);
+					
+					if(spec_height[WaterLevel(WL_AREAID)]+16.1>GetActorZ(0))
+					{
+						If(input_water[PlayerNumber()] & BT_JUMP)
+						{
+							ACS_NamedExecuteAlways("PlaySoundX",0,1,0,0);
+							ThrustThingZ(GetCurrentPlayerTID(),64,FALSE,TRUE);
+							Delay(5);
+						}
+						Else if(input_water[PlayerNumber()] & BT_BACK) SetActorVelocity(GetCurrentPlayerTID(),FixedDiv(GetActorVelX(GetCurrentPlayerTID()), 1.01),FixedDiv(GetActorVelY(GetCurrentPlayerTID()), 1.01),1.5,FALSE,FALSE);
+						Else SetActorVelocity(GetCurrentPlayerTID(),FixedMul(GetActorVelX(GetCurrentPlayerTID()), 1.0),FixedMul(GetActorVelY(GetCurrentPlayerTID()), 1.0),1.5,FALSE,FALSE);
+					}
+					
+					if(lasttid>20)
+					{
+						Delay(1);
+						lasttid = 0;
+					}
+				}
+			}
+			TakeActorInventory(GetCurrentPlayerTID(),"onWater",1);
+			
+		}
+		Else If(spec_behavior[WaterLevel(WL_AREAID)]==1)	//Bottomless pit...
+		{
+			Delay(1);
+			//If the player ever falls below the special plane's height, kill them instantly.
+			If(WaterLevel(WL_WATERLEVEL)>0)
+			{
+				If(tics_contactdplane>0)
+				{
+					force_death[PlayerNumber()] = TRUE;
+					
+					While(WaterLevel(WL_WATERLEVEL)>0)
+					{
+						SetActorVelocity(0, FixedDiv(GetActorVelX(0),1.25), FixedDiv(GetActorVelY(0),1.25), FixedDiv(GetActorVelZ(0),1.25), FALSE, FALSE);
+						Delay(1);
+					}
+					tics_contactdplane = 0;	//Reset the "tics" variable after death.
+					//Delay(35);
+				}
+				Else tics_contactdplane++;
+			}
+			Else { tics_contactdplane = 0; }	//Reset the "tics" counter if not in contact with the bottomless pit.
+		}
+		Else If(spec_behavior[WaterLevel(WL_AREAID)]==2)	//Lava/deadly liquid...
+		{
+			If(lava_damage[PlayerNumber()]>0&&framecount % 8 == 7) lava_damage[PlayerNumber()] -= 3;
+			If(lava_damage[PlayerNumber()]<0) lava_damage[PlayerNumber()] = 0;
+			
+			If(lava_damage[PlayerNumber()]<12)
+			{
+				If(WaterLevel(WL_WATERLEVEL)==1) { If(lava_damage[PlayerNumber()]<2) lava_damage[PlayerNumber()] += 3; Else lava_damage[PlayerNumber()]++; }
+				If(WaterLevel(WL_WATERLEVEL)==2) lava_damage[PlayerNumber()] ++;
+				If(WaterLevel(WL_WATERLEVEL)==3) lava_damage[PlayerNumber()] += 2;
+				If(WaterLevel(WL_WATERLEVEL)==4) lava_damage[PlayerNumber()] += 3;
+			}
+			
+			Delay(23);
+			If(lava_damage[PlayerNumber()]>0&&framecount % 23 == 0) { If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PlayerNumber()], 14); Else DamageThing(lava_damage[PlayerNumber()]/2, 14); StopSound(0, CHAN_VOICE); PrintBold(d:lava_damage[0]); }
+		}
+	}
+}
 
 function int WaterLevel (int x)	//This should recreate the built-in waterlevel variables.
 {
-	if(GetActorZ(0)<=specialheight[PlayerNumber()]-abs(GetActorProperty(0, APROP_Height))) x = 4;	//Fully submerged
-	else if(GetActorZ(0)<=(specialheight[PlayerNumber()]-abs(GetActorProperty(0, APROP_Height))/2)) x = 3;	//At least 1/2 in water.
-	else if(GetActorZ(0)<=(specialheight[PlayerNumber()]-abs(GetActorProperty(0, APROP_Height))/4)) x = 2;	//At least 1/4 in water.
-	else if(GetActorZ(0)<=specialheight[PlayerNumber()]) x = 1;	//At least this person's feet are in water.
-	else x = 0;	//Not in water.
+	if(x<0) x = 0;	//First, make sure "x" is within the limits. It will be used as an "argument".
+	if(x>3) x = 3;
 	
-	If(GetCVAR("debug_water")) Log(s:"WaterLevel: ", d:x);
-	SetActorPosition(999, GetActorX(1000), GetActorY(1000), specialheight[0], FALSE);
-
-    return x;
-}
-
-script "CheckDeathPit" (void)
-{
-	While(specialbehavior[PlayerNumber()]==1)
-	{
-		Delay(1);
-		//If the player ever falls below the special plane's height, kill them instantly.
-		If(WaterLevel(0)>0) { force_death[PlayerNumber()] = TRUE; While(WaterLevel(0)>0) { SetActorVelocity(0, FixedDiv(GetActorVelX(0),1.25), FixedDiv(GetActorVelY(0),1.25), FixedDiv(GetActorVelZ(0),1.25), FALSE, FALSE); Delay(1); } Delay(35); }
-	}
+	int monitored_wls[MAX_SPECIALPLANES];	//This array stores the results of each compatison below.
+	bool monitored_over[MAX_SPECIALPLANES];	//This is similar but only is TRUE if within the area of the plane.
+	int left_calc, right_calc, up_calc, down_calc;	//Pre-calculated area checks for the checks directly below.
 	
-	//Log(s:"Player stopped bottomless pit detection.");
-	ACS_NamedExecuteAlways("RunCheckScript",0,0,0,0);
-
-}
-
-int lava_damage[MAX_PLAYERS];	//Amount of damage to apply to the player after they've been hurt by lava.
-
-script "CheckLava" (void)
-{
-	ACS_NamedExecuteAlways("ApplyLavaDamage",0,0,0,0);
-	
-	Until(specialbehavior[PlayerNumber()]!=2&&lava_damage[PlayerNumber()]==0)
-	{
-		Until(WaterLevel(0)>0) { If(lava_damage[PlayerNumber()]>0&&framecount % 8 == 7) lava_damage[PlayerNumber()]--; Delay(1); }
-		
-		If(lava_damage[PlayerNumber()]<12)
-		{
-			If(WaterLevel(0)==1) { If(lava_damage[PlayerNumber()]<2) lava_damage[PlayerNumber()] += 3; Else lava_damage[PlayerNumber()]++; }
-			If(WaterLevel(0)==2) lava_damage[PlayerNumber()] ++;
-			If(WaterLevel(0)==3) lava_damage[PlayerNumber()] += 2;
-			If(WaterLevel(0)==4) lava_damage[PlayerNumber()] += 3;
+	For(int i = 0; i <= MAX_SPECIALPLANES; i++)
+	{	//Determine what the activator's water level would be in all of the special plane areas.
+		//Due to ACS being stupid, let's pre-calculate what each boundary is! Fake a big area if using ID 0, though...
+		If(i>0)
+		{	//Is this a non-default ID? If so, grab its proper coordinates.
+			left_calc = spec_x[i-1];
+			right_calc = spec_x[i-1];
+			up_calc = spec_y[i-1];
+			down_calc = spec_y[i-1];
+		}
+		Else
+		{	//Otherwise, just lie and center it around the activator.
+			left_calc = GetActorX(0);
+			right_calc = GetActorX(0);
+			up_calc = GetActorY(0);
+			down_calc = GetActorY(0);
 		}
 		
-		Delay(23);
+		If(i>0)
+		{	//Is this a non-default ID? Calculate its boundaries legitimately!
+			left_calc -= spec_radius[i-1]<<16;
+			right_calc += spec_radius[i-1]<<16;
+			up_calc += spec_radius[i-1]<<16;
+			down_calc -= spec_radius[i-1]<<16;
+		}
+		Else
+		{
+			left_calc -= 1024.5;
+			right_calc += 1024.5;
+			up_calc += 1024.5;
+			down_calc -= 1024.5;
+		}
+				
+		If(GetActorX(0)>left_calc&&GetActorX(0)<right_calc&&GetActorY(0)<up_calc&&GetActorY(0)>down_calc)	//This only matters if the player is actually within the area of this special plane.
+		{
+			//Log(s:"Monitoring ya variable!");
+			monitored_over[i] = TRUE;	//Even if the player isn't in the water, they were still within the area.
+			if(GetActorZ(0)<=spec_height[i]-abs(GetActorProperty(0, APROP_Height))) monitored_wls[i] = 4;	//Fully submerged
+			else if(GetActorZ(0)<=(spec_height[i]-abs(GetActorProperty(0, APROP_Height))/2)) monitored_wls[i] = 3;	//At least 1/2 in water.
+			else if(GetActorZ(0)<=(spec_height[i]-abs(GetActorProperty(0, APROP_Height))/4)) monitored_wls[i] = 2;	//At least 1/4 in water.
+			else if(GetActorZ(0)<=spec_height[i]) monitored_wls[i] = 1;	//At least this person's feet are in water.
+			else monitored_wls[i] = 0;	//Not in water.
+		}
 	}
 	
-	//Log(s:"Player stopped lava detection.");
-	ACS_NamedExecuteAlways("RunCheckScript",0,0,0,0);
-
-}
-
-script "ApplyLavaDamage" (void)
-{
-	While(specialbehavior[PlayerNumber()]==2)
+	int highest[3] = { 0, 0, 0 };	//This indicates the [0] highest water level recorded, [1] what the first ID that used it was, [2] lowest ID the player is within.
+	int i1 = 1;	//This tracks which array index this check is on.
+	
+	Until(i1>MAX_SPECIALPLANES)	//Now scan the arrays and determine the "highest" variables.
 	{
-		Delay(23);
-		If(lava_damage[PlayerNumber()]>0) { If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PlayerNumber()], 14); Else DamageThing(lava_damage[PlayerNumber()]/2, 14); StopSound(0, CHAN_VOICE); PrintBold(d:lava_damage[0]); }
+		If(monitored_wls[i1]>highest[0])
+		{	//If this is the highest water level, update the two "highest" monitoring variables within the array.
+			highest[0] = monitored_wls[i1];	//The highest water level
+			highest[1] = i1;				//Lowest ID that returned it
+			//Log(s:"I found one, ya silly ", d:i1, s:"!");
+		}
+		if(monitored_over[i1]==TRUE&&highest[2]==0) highest[2] = i1;	//If the player is over an area, set this.
+		i1++;	//Afterwards, iterate through the next array index.
 	}
-}
-
-script "RunCheckScript" (void)
-{
-	if(specialbehavior[PlayerNumber()]==0) ACS_NamedExecuteAlways("CheckWater",0,0,0,0);
-	if(specialbehavior[PlayerNumber()]==1) ACS_NamedExecuteAlways("CheckDeathPit",0,0,0,0);
-	if(specialbehavior[PlayerNumber()]==2) ACS_NamedExecuteAlways("CheckLava",0,0,0,0);	
-}
-
-#define MAXRANDOMBUBBLEINDEXES 90
-int rand_bubbles[MAXRANDOMBUBBLEINDEXES] = {	//A pusedo-random series of numbers used for bubble spawning decisions.
-0, 2, 1, 0, 0,
-1, 1, 0, 1, 0,
-0, 1, 1, 1, 0,
-1, 0, 0, 0, 1,
-1, 0, 0, 1, 0,
-0, 1, 1, 1, 0,
-1, 0, 0, 1, 0,
-1, 0, 2, 0, 1,
-0, 1, 1, 0, 1,
-0, 0, 1, 0, 0,
-1, 1, 0, 1, 0,
-0, 1, 1, 1, 0,
-1, 0, 0, 0, 1,
-1, 0, 0, 1, 0,
-0, 1, 1, 1, 2,
-1, 0, 0, 1, 0,
-1, 0, 0, 0, 1,
-0, 1, 1, 0, 1
-};	//Yes, multiple bubbles can advance this array too fast.
-int bubble_angle = 0;
-int bubble_arrayindex;
-
-script "ControlBubbles" (int mode)	//0: Determine bubble size, 1: Determine wait time
-{
-	If(mode==0)	//Determine bubble size (returns result)
+	
+	If(highest[1]==0)	//If none of the water levels were set, Just use the default ([0]) settings.
 	{
-		SetResultValue(rand_bubbles[bubble_arrayindex]);
-		bubble_arrayindex++;
-		If(bubble_arrayindex>MAXRANDOMBUBBLEINDEXES-1) bubble_arrayindex = 0;
-	}
-	Else If(mode==1)	//Determine wait time
-	{
-		Log(s:"initial wait begins.");
-		Delay(8+(rand_bubbles[26+(bubble_arrayindex%5)]));	//This formula should give okay delays between each bubble.
-		Log(d:8+(rand_bubbles[26+(bubble_arrayindex%5)]), s:" tics should have passed there.");
-		GiveInventory("Variable1",1);	//This tells the bubble spawner to create its next bubble.
-	}
+		highest[0] = monitored_wls[0];	//The highest water level
+	}	//Similarly, if the player isn't over any special plane areas, the default is set in highest[2].
+	
+	//If any non-default's detected, ignore area #0.
+	if(highest[2]>0&&highest[0]>0&&highest[1]==0) { highest[0] = 0;  }
+	
+	//X is an argument here, which will determine what it returns:
+	//0 - the highest water level for the activator
+	//1 - the ID of the aforementioned "highest water level"
+	//2 - the ID of the lowest-numbered area that the activator is over.
+	//3 - the special behavior set for that ID (deprecated)
+	if(x<3) x = highest[x];
+	else if(x==3) x = spec_behavior[highest[1]];
+	
+    return x;	//After all of this, return the value.
 }
 
 bool fs_channel;	//Controls whether footstep sounds come from sound channel 4 or 5, used for metal footstep sounds.
@@ -754,7 +807,7 @@ script "PlayFootstepSound" (void)	//This plays sounds depending on the surface t
 		if(GetCVAR("snd_footstepsenemy")==FALSE) Terminate;	//If enemy footstep sounds are disabled, don't do anything!
 	}
 	
-	If(WaterLevel(0)==0)
+	If(WaterLevel(WL_WATERLEVEL)==0)
 	{
 		If(CheckActorFloorTexture(0, "T_SHAWN2") ||
 		CheckActorFloorTexture(0, "INB_SHMB") ||
@@ -1035,9 +1088,18 @@ While(1)
 
 script 311 (int mode) { rain_mode[PlayerNumber()] = mode; }
 
-script "Snow_CheckSky" (void)	//Used by both rain and snow.
+script "Snow_CheckSky" (int player, int pnumber)	//Used by both rain and snow.
 {
-	If(CheckActorCeilingTexture(0,"SPEC_SKY")==FALSE) Thing_Remove(0);
+	Switch(player)
+	{
+		Case FALSE:	//Removes snowflake/raindrop if it's indoors
+			If(CheckActorCeilingTexture(0,"SPEC_SKY")==FALSE) Thing_Remove(0);
+		Break;
+		Case TRUE:	//Checks if associated player is indoors
+			If(CheckActorCeilingTexture(1000+pnumber,"SPEC_SKY")==FALSE) SetResultValue(TRUE);
+			Else SetResultValue(FALSE);
+		Break;
+	}
 }
 
 ////////
@@ -2070,12 +2132,6 @@ Script "ExitTransition" (void)
 		If(CheckActorInventory(1000, "CoinSP")>40&&coins_to_bank<15) coins_to_bank = 15;	//If the player deserves more coins, forcibly give them 15.
 		If(gamemode==0)
 		{
-			If(level[0]==0&&level[1]==0&&GetCVAR("xane_tutorials")==TRUE)
-			{
-				Print(s:"At the end of every level, coins are banked."); Delay(100);
-				Print(s:"Visit the Small Hut to do this manually..."); Delay(100);
-				Print(s:"...or you will get less coins banked."); Delay(100);
-			}
 			Print(s:"Sending ", d:coins_to_bank, s:" coins to your bank...");
 			ACS_NamedExecute("DisplayTotalCoins",0,70+coins_to_bank,0,0);
 			Delay(17);
@@ -2112,7 +2168,7 @@ script "Disconnect"  (int arg0) DISCONNECT
 /////////////////////
 //TECHNICAL SCRIPTS//
 /////////////////////
-int invulnerable[MAX_PLAYERS];	//This integer determines if the player is invulnerable. Use Invulnerable below 
+int invulnerable[MAX_PLAYERS];	//This integer determines if the player is invulnerable. Use Invulnerable below .
 script "GetPlayerInformation" (int type)
 {
 	Switch(type)
@@ -2273,11 +2329,12 @@ While(1)
 							Delay(1);
 						}
 						SetActorProperty(GetCurrentPlayerTID(),PROP_FLY,OFF);
-							SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+0.5);
+						SetActorAngle(GetCurrentPlayerTID(),GetActorAngle(GetCurrentPlayerTID())+0.5);
 						ChangeCamera(0,0,0);
 						Thing_Remove(C_TID+PlayerNumber());
-			ACS_NamedExecuteAlways("PlayerMovement",0,0,0,0);
-			SetActorVelocity(GetCurrentPlayerTID(),o1,o2,0,0,1);
+						ACS_NamedExecuteAlways("PlayerMovement",0,0,0,0);
+						SetActorVelocity(GetCurrentPlayerTID(),o1,o2,0,0,1);
+						ACS_NamedExecuteAlways("ShowTutorial",0,28,0,0);	//Display warning about high speed wall jump behavior.
 							}
 							Else
 							{
@@ -2665,9 +2722,6 @@ script "SetCheckpoint" (int spawn_tid, int set_angle)
 	check_windspeed[PlayerNumber()] = wind_power[PlayerNumber()];
 	check_disablewind[PlayerNumber()] = disablewind[PlayerNumber()];
 	
-	check_specbehav[PlayerNumber()] = specialbehavior[PlayerNumber()];	//Store the player's current special plane behavior and its height.
-	check_specheight[PlayerNumber()] = specialheight[PlayerNumber()];
-	
 	//Only store the current music if the player isn't drowning.
 	If(ACS_ExecuteWithResult(256,0,0,0,0)!=11) check_music[PlayerNumber()] = ACS_ExecuteWithResult(256,0,0,0,0);
 
@@ -2677,15 +2731,11 @@ script "LoadCheckpointInfo" (int deathx)
 {
 	If(deathx==FALSE) ACS_ExecuteAlways(254,0,check_music[PlayerNumber()],FALSE,FALSE);
 	Else ACS_ExecuteAlways(254,0,check_music[PlayerNumber()],FALSE,TRUE);
-	specialbehavior[PlayerNumber()] = check_specbehav[PlayerNumber()];	//Restore the player's special plane behavior and height before teleporting them!
-	specialheight[PlayerNumber()] = check_specheight[PlayerNumber()];
-	specialbehavior[MAX_PLAYERS] = check_specbehav[PlayerNumber()];		//Also restore it for monsters.
-	specialheight[PlayerNumber()] = check_specheight[PlayerNumber()];
 	
 	If(deathx==TRUE) lives--;	//If dying, take away a life.
 	SetActorPitch(0, 0);	//Force the player to look directly ahead.
 	
-	if(checkpoint_id[PlayerNumber()]==0) { checkpoint_id[PlayerNumber()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
+	if(checkpoint_id[PlayerNumber()]==0||IsTIDUsed(checkpoint_id[PlayerNumber()])==FALSE||IsTIDUsed(checkpoint_id[MAX_PLAYERS])==FALSE) { checkpoint_id[PlayerNumber()] = 616; checkpoint_id[MAX_PLAYERS] = 616; }
 	If(tp_to_last_ground_position[PlayerNumber()]==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); }	//After teleporting, load all info saved at the checkpoint!
 	Else { If(SetActorPosition(0, last_ground_position[PlayerNumber()],last_ground_position[MAX_PLAYERS+PlayerNumber()],last_ground_position[(MAX_PLAYERS*2)+PlayerNumber()],FALSE)==FALSE) { Teleport(checkpoint_id[PlayerNumber()],0,FALSE); tp_to_last_ground_position[PlayerNumber()] = FALSE; } }
 	If(tp_to_last_ground_position[PlayerNumber()]==TRUE) SetActorAngle(0, last_ground_position[(MAX_PLAYERS*3)+PlayerNumber()]);	//If returning from a Special Stage or Small Hut, make the player face the correct position!
@@ -2716,12 +2766,12 @@ script "GetSpecialStatus" (int depth, int mode, int immunity)	//Used for enemies
 	
 	If(mode==FALSE)
 	{
-		If(GetActorZ(0)-depth<specialheight[MAX_PLAYERS]&&specialbehavior[MAX_PLAYERS]!=immunity-1) SetResultValue(3);	//3 due to cops checking for the water level. If making a new monster, make them check for > 0.
+		If(WaterLevel(WL_WATERLEVEL)>0&&spec_behavior[WaterLevel(WL_AREAID)]!=immunity-1) SetResultValue(3);	//3 due to cops checking for the water level. If making a new monster, make them check for > 0.
 		Else SetResultValue(0);
 	}
 	Else
 	{
-		If(GetActorZ(0)-depth<specialheight[MAX_PLAYERS]&&specialbehavior[MAX_PLAYERS]==0) GiveInventory("Variable2",1);	//Tell the enemy they are in water.
+		If(WaterLevel(WL_WATERLEVEL)>0&&spec_behavior[WaterLevel(WL_AREAID)]==0) GiveInventory("Variable2",1);	//Tell the enemy they are in water.
 	}
 }
 
@@ -2732,9 +2782,9 @@ int mod_type = 9;
 
 	If(native_type==1) native_type = -1;	//No monster can be "native" to bottomless pits!
 	
-	If(specialbehavior[MAX_PLAYERS]==native_type) Terminate;
+	If(spec_behavior[WaterLevel(WL_AREAID)]==native_type) Terminate;
 	
-	Switch(specialbehavior[MAX_PLAYERS])
+	Switch(spec_behavior[WaterLevel(WL_AREAID)])
 	{
 		Case 0:	//Water
 			divide = 4;
@@ -2752,7 +2802,7 @@ int mod_type = 9;
 			Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/3, mod_type);
 		Break;
 		Default:
-			Log(s:"An unknown special behavior is set, ", d:specialbehavior[MAX_PLAYERS], s:".");
+			Log(s:"An unknown special behavior is set, ", d:spec_behavior[WaterLevel(WL_AREAID)], s:".");
 		Break;
 	}
 	
@@ -2763,7 +2813,7 @@ int mod_type = 9;
 	}
 	Else
 	{
-		If(specialbehavior[MAX_PLAYERS]==1) Thing_Remove(0);	//If this is a bottomless pit, remove the monster instead of killing them.
+		If(spec_behavior[WaterLevel(WL_AREAID)]==1) Thing_Remove(0);	//If this is a bottomless pit, remove the monster instead of killing them.
 		Else Thing_Damage(0, GetActorProperty(0, APROP_Health), mod_type);	//If the monster is hurt enough, kill them instead.
 	}
 }
@@ -2883,7 +2933,7 @@ While(GetActorZ(GetCurrentPlayerTID())-GetActorFloorZ(GetCurrentPlayerTID())>16.
 	hammermove[PlayerNumber()] = 5;
 	If(wind_power[PlayerNumber()]>2&&disablewind[PlayerNumber()]==FALSE) no_movement[PlayerNumber()] = 2;	//If the wind is strong, don't let Mary push against it...humans can't do that!	If wind is disabled, don't care about the wind!
 	
-	If(WaterLevel(0)>0) GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_Water",1);
+	If(WaterLevel(WL_WATERLEVEL)>0) GiveActorInventory(GetCurrentPlayerTID(),"MaryHammer_Water",1);
 		
 	If(CheckInventory("MaryUmbrella_Air")&&flight_mode[PlayerNumber()]==FALSE)	//Air current
 	{
@@ -3102,7 +3152,7 @@ script "ClawVerify" (int mode)
 	Switch(mode)
 	{
 		Case 0: claw_verify_tics = 25; Break;
-		Case 1: If(claw_verify_tics>0) { SetResultValue(TRUE); } Else SetResultValue(FALSE); Log(d:claw_verify_tics, s:" tics"); Break;
+		Case 1: If(claw_verify_tics>0) SetResultValue(TRUE); Else SetResultValue(FALSE); Break;
 		Case 2:
 			SetActorVelocity(0, 0.0, 0.0, 0.0, FALSE, FALSE);
 			ACS_NamedExecute("PlayerMovement",0,TRUE,FALSE,0);	//Temporarily stop the player from moving.
@@ -3130,7 +3180,7 @@ While(1)
 	{	
 	if(movement[PlayerNumber()]>0&&(speed_tics[PlayerNumber()]==0||(speed_tics[PlayerNumber()]>0&&canUsePCoins==FALSE))&&wjtics[PlayerNumber()]<2) wjtics[PlayerNumber()] = 2;
 	
-	if(openInput[PlayerNumber()] & BT_USE&&wjtics[PlayerNumber()]<35) wjtics[PlayerNumber()] = 35;
+	if(openInput[PlayerNumber()] & BT_USE&&wjtics[PlayerNumber()]<35) wjtics[PlayerNumber()] = 70;
 	
 	if(wjtics[PlayerNumber()]>0&&framecount % 2 == 1) wjtics[PlayerNumber()]--;
 	
@@ -3187,7 +3237,7 @@ While(1)
 		prevy[PlayerNumber()] = GetActorVelY(0);
 		Delay(1);
 		
-		if(wjtics[PlayerNumber()] && WaterLevel(0) == 0 && (abs(prevx[PlayerNumber()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PlayerNumber()]) - abs(GetActorVelY(0)) > 5.0) )
+		if(wjtics[PlayerNumber()] && WaterLevel(WL_WATERLEVEL) == 0 && (abs(prevx[PlayerNumber()]) - abs(GetActorVelX(0)) > 5.0 || abs(prevy[PlayerNumber()]) - abs(GetActorVelY(0)) > 5.0) )
 			{	//Do one quick test for a wall...
 			
 			SetActorState(GetCurrentPlayerTID(),"WJDetect",FALSE);
@@ -3239,7 +3289,7 @@ While(1)
 			
 			input_wd = 0;
 			
-			Until((walldetected[PlayerNumber()] == TRUE || ( movement[MAX_PLAYERS+PlayerNumber()]>0 && !(openInput[PlayerNumber()] & BT_USE) ) || prevx[PlayerNumber()] == -13.617) || CheckActorInventory(GetCurrentPlayerTID(),"NoWall")==TRUE || WaterLevel(0) != 0 /*|| GetActorZ(0) - GetActorFloorZ(0) < 12.0*/)
+			Until((walldetected[PlayerNumber()] == TRUE || ( movement[MAX_PLAYERS+PlayerNumber()]>0 && !(openInput[PlayerNumber()] & BT_USE) ) || prevx[PlayerNumber()] == -13.617) || CheckActorInventory(GetCurrentPlayerTID(),"NoWall")==TRUE || WaterLevel(WL_WATERLEVEL) != 0 /*|| GetActorZ(0) - GetActorFloorZ(0) < 12.0*/)
 				{
 					Delay(1);
 					walljumping[PlayerNumber()] = 5;
@@ -3340,8 +3390,8 @@ script "GetGroundStatus" ENTER
 		TakeInventory("FloorDetected",1);
 		TakeInventory("NearFloor",1);	//NearFloor checks if the player is on an object or less than a story above the ground, independently checked.
 		
-		If(PlayerClass(PlayerNumber())==CHAR_MARY) { If(GetActorZ(0)-GetActorFloorZ(0)<128.5 || (GetActorZ(0)-GetActorFloorZ(0)>=128.5&&GetActorVelZ(0)==0.0&&OldVelZ[PlayerNumber()]==0.0) ) { freeze_bob = TRUE; GiveInventory("NearFloor",1); } }	//Mary (128 off ground)
-		Else { If(GetActorZ(0)-GetActorFloorZ(0)<256.5 || (GetActorZ(0)-GetActorFloorZ(0)>=256.5&&GetActorVelZ(0)==0.0&&OldVelZ[PlayerNumber()]==0.0) ) { freeze_bob = TRUE; GiveInventory("NearFloor",1); } }	//Xane (256 off ground)
+		If(PlayerClass(PlayerNumber())==CHAR_MARY||PlayerClass(PlayerNumber())==CHAR_SCALETEST) { If(GetActorZ(0)-GetActorFloorZ(0)<192.5 || (GetActorZ(0)-GetActorFloorZ(0)>=192.5&&GetActorVelZ(0)==0.0&&OldVelZ[PlayerNumber()]==0.0) ) { freeze_bob = TRUE; GiveInventory("NearFloor",1); } }	//Mary (192 off ground)
+		Else { If(GetActorZ(0)-GetActorFloorZ(0)<320.5 || (GetActorZ(0)-GetActorFloorZ(0)>=320.5&&GetActorVelZ(0)==0.0&&OldVelZ[PlayerNumber()]==0.0) ) { freeze_bob = TRUE; GiveInventory("NearFloor",1); } }	//Xane (320 off ground)
 		
 		If(GetActorZ(0)-GetActorFloorZ(0)<6.9 || (GetActorZ(0)-GetActorFloorZ(0)>=3.9&&GetActorVelZ(0)==0.0&&OldVelZ[PlayerNumber()]==0.0) )
 		{
@@ -3463,7 +3513,7 @@ script "AddCPowerupTics" (int which)
 		Case 2: damage_tics[PlayerNumber()] += 35*CONST_SECS_DAMAGE; Break;
 		Case 3: heal_tics[PlayerNumber()] += 35*CONST_SECS_HEAL; Break;
 		Case 4: combo_tics[PlayerNumber()] += 35*CONST_SECS_COMBO; Break;
-		Case 5: speed_tics[PlayerNumber()] += 35*CONST_SECS_SPEED; Break;
+		Case 5: speed_tics[PlayerNumber()] += 35*CONST_SECS_SPEED; ACS_NamedExecuteAlways("ShowTutorial",0,28,0,0); Break;
 	}
 }
 
@@ -3730,11 +3780,11 @@ Script "XaneAntiCheat" ENTER //XAC (Xane Anti-Cheat)
 					
 					floorHeight = GetActorZ(0) - GetActorFloorZ(0);
 					
-					If(floorHeight==0.0&&WaterLevel(0)<2)
+					If(floorHeight==0.0&&WaterLevel(WL_WATERLEVEL)<2)
 					{
 						ThrustThing(GetActorAngle(GetCurrentPlayerTID())-0.5>>8,1,0,GetCurrentPlayerTID());
 					}
-					Else If(floorHeight==0.0&&WaterLevel(0)>=2)
+					Else If(floorHeight==0.0&&WaterLevel(WL_WATERLEVEL)>=2)
 					{
 						ThrustThing(GetActorAngle(GetCurrentPlayerTID())-0.5>>8,1,0,GetCurrentPlayerTID());
 						ThrustThing(GetActorAngle(GetCurrentPlayerTID())>>8,1,0,GetCurrentPlayerTID());
@@ -4141,7 +4191,7 @@ script "SetupTranslations" OPEN
 
 script "RememberGravity" (void)
 {
-If(WaterLevel(0)>1) SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.5);
+If(WaterLevel(WL_WATERLEVEL)>1) SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.5);
 else SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,1.0);
 
 SetAirControl(0.00390625);
@@ -4254,7 +4304,7 @@ script "ForceRotateToAngle" (int affected, int reference)
 
 script "SpringBounce" (int tid, int type, int power) //Bounces the player in the direction of the "linked" thing like a spring.
 {	//First make sure it's on the whitelist here. If it isn't, it's not allowed to use springs, boost panels, and mid-air rings.
-	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
+	If(CheckActorClass(0, "LGirlPlayer")||CheckActorClass(0, "XanePlayer")||CheckActorClass(0, "ScaleTestPlayer")||CheckActorClass(0, "FlowerProjectile3_1P")||CheckActorClass(0, "TriggerProjectile_Hammer1")||CheckActorClass(0, "TriggerProjectile_Hammer2")||CheckActorClass(0, "TriggerProjectile_Hammer3")||CheckActorClass(0, "TriggerProjectile_Hammer4")||CheckActorClass(0, "TriggerProjectile_Hammer5")||CheckActorClass(0, "TriggerProjectile_Hammer6")||CheckActorClass(0, "TriggerProjectile_Hammer7")||CheckActorClass(0, "TriggerProjectile_Hammer8")||CheckActorClass(0, "Fighter1")||CheckActorClass(0, "Cop1")||CheckActorClass(0, "Cop3")||CheckActorClass(0, "Cop4")||CheckActorClass(0, "Fighter2")||CheckActorClass(0, "Cop1_Enemy")||CheckActorClass(0, "Cop3_Enemy"))
 	{
 	If(CheckActorClass(0, "FlowerProjectile3_1P")) SetActorState(0, "Launch");
 	bool extra_power = 0;	//This determines whether hitting this spring with Mary's hammer should increase its power.
@@ -4812,9 +4862,16 @@ script "ChangePlayerTIDs" enter
 	time_defaults[0] = 0;	//Disable time-of-day system's default lighting.
 	time_defaults[1] = 0;	//What time of day's settings should be applied? None here.
 	time_settings = 0;	//Which set of settings (sky, colors, and brightness levels) should be used for this area?
-	time_override = 0;	//Should the sky be stormy or disabled (redundant if the system is disabled)?
+	//time_override = 0;	//Should the sky be stormy or disabled (redundant if the system is disabled)?
 	
 	Delay(2);	//Give the level two tics to set up the music variable.
+	
+	//If on a #-1 level and it's the highest world number visited, change level[3] to reflect this.
+	If(world_info[1]==1&&world_info[0]>level[3])
+	{
+		level[3] = world_info[0];
+		If(world_info[0]!=1) PrintBold(s:"New minigame levels have been unlocked!");
+	}
 	
 	If(initial_setup==FALSE)
 	{
@@ -4866,7 +4923,7 @@ script 70 (int add_score)	//argument 2 was "mode" but I don't know what it was f
 	if(score[PlayerNumber()]>=9999990)
 	{
 		score[PlayerNumber()] = 9999990;
-		Terminate;
+		//Terminate;
 	}
 	
 	score[PlayerNumber()] += add_score;	//Give or take away the requested score.
@@ -5053,7 +5110,17 @@ Else SetResultValue(FALSE);
 
 script "WarpToHut" (void)
 {
-	If(StrParam(n:PRINTNAME_LEVEL)=="AREA1"||ACS_NamedExecuteWithResult("CheckSpecialStage",FALSE,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE||GetActorZ(0)-GetActorFloorZ(0)>8.25||WaterLevel(0)>2||CheckActorFloorTexture(0, "SPEC_SKY")) { Log(s:"\c[Brick]You can't warp at the moment."); LocalAmbientSound("misc/buzzer",255); Terminate; }
+	If(StrParam(n:PRINTNAME_LEVEL)=="AREA1"||ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE||ACS_NamedExecuteWithResult("CheckSpecialStage",3,0,0,0)==TRUE||GetActorZ(0)-GetActorFloorZ(0)>8.25||WaterLevel(WL_WATERLEVEL)>2||CheckActorFloorTexture(0, "SPEC_SKY"))
+	{	//Check for any impossible warping conditions.
+		LocalAmbientSound("misc/buzzer",255);	//Play the buzzer sound then display the most relevant error.
+		If(ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==TRUE) Log(s:"\c[Brick]You are already inside the Small Hut.");
+		Else If(StrParam(n:PRINTNAME_LEVEL)=="AREA1") Log(s:"\c[Brick]The Small Hut is on the very island you're on!");
+		Else If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Log(s:"\c[Brick]This dimension prevents warping away...");
+		Else If(ACS_NamedExecuteWithResult("CheckSpecialStage",3,0,0,0)==TRUE) Log(s:"\c[Brick]Jane has disabled warping away from this minigame.");
+		Else If(WaterLevel(WL_WATERLEVEL)>2) Log(s:"\c[Brick]The device would short-circuit under this liquid!");
+		Else If(GetActorZ(0)-GetActorFloorZ(0)>8.25) Log(s:"\c[Brick]You can't warp away in the air!");
+		Terminate;	//After displaying an error message, stop this script.
+	}
 	Else
 	{
 		PlaySound(0, "misc/teleport_fast", CHAN_AUTO|CHAN_NOPAUSE, 0.75, FALSE);
@@ -5068,7 +5135,8 @@ script "WarpToHut" (void)
 		StopSound(0, 6);
 		StopSound(0, 7);
 		StopSound(0, 0);
-		ss_returnlevel = GetLevelInfo(LEVELINFO_LEVELNUM);	//Indicate what level to return to to prevent the strange 1-2 glitch.
+		If(GetLevelInfo(LEVELINFO_LEVELNUM)!=0) ss_returnlevel = GetLevelInfo(LEVELINFO_LEVELNUM);	//Indicate what level to return to to prevent the strange 1-2 glitch.
+		Else { Log(s:"Error: Invalid level!"); fadeout = 8; ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE); Terminate; }	//If this is an invalid level, error out.
 		Delay(1);
 		ACS_NamedExecuteAlways("PlayerMovement",0,FALSE,TRUE,TRUE);
 		stored_velocity[0] = -616.5;	//This odd value will force the game to take you to the hut.
@@ -5292,7 +5360,8 @@ script "DemoOverlay" OPEN
 
 script "TitleOverlay" (void)
 {
-	PlaySound(1000,"misc/title_name", CHAN_BODY|CHAN_NOPAUSE);
+	If(StrParam(n:PRINTNAME_LEVEL)=="INTRO") PlaySound(1000,"misc/title_name1", CHAN_BODY|CHAN_NOPAUSE);
+	Else PlaySound(1000,"misc/title_name2", CHAN_BODY|CHAN_NOPAUSE);	//Have Xane say this game's title if no intro.
 	int tkeyprompt_times = 0;
 	SetHUDSize(256,160,TRUE);
 	SetFont("M_DOOM");
@@ -5310,11 +5379,15 @@ script "TitleOverlay" (void)
 		HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, 256.0,200.0, 0.01, 1.0, 1.0);
 		Delay(70);
 		tkeyprompt_times++;
-		If(tkeyprompt_times==1) PlaySound(1000,"misc/title_begin", CHAN_VOICE|CHAN_NOPAUSE);
+		If(tkeyprompt_times==1)
+		{
+			If(StrParam(n:PRINTNAME_LEVEL)=="INTRO") PlaySound(1000,"misc/title_begin1", CHAN_VOICE|CHAN_NOPAUSE);
+			Else PlaySound(1000,"misc/title_begin2", CHAN_VOICE|CHAN_NOPAUSE);	//Same as above, Xane if no intro.
+		}
 	}
 }
 
-#define CONST_JUMPUPGRADE_AMOUNT 0.045	//This is how much the player's initial jump velocity is changed with each upgrade. The other array is changed by a smaller number based on this one.
+#define CONST_JUMPUPGRADE_AMOUNT 0.05	//This is how much the player's initial jump velocity is changed with each upgrade. The other array is changed by a smaller number based on this one.
 
 script "UpdateMiscellaneous" ENTER  //Armor is the "combo meter". This script updates things every tic. Avoid Delay(#) here!
 {
@@ -5397,7 +5470,7 @@ While(1)
 			Else TakeInventory("Hearts",CheckInventory("Hearts"));	//Otherwise, get rid of any hearts collected.
 		}
 		
-		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)==0.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE&&CheckActorFloorTexture(0, "SPECTS07")==FALSE&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE)
+		if(entering_ss==0&&GetActorZ(0)-GetActorFloorZ(0)==0.0&&framecount>5&&CheckActorFloorTexture(0, "SPECTS04")==FALSE&&CheckActorFloorTexture(0, "SPECTS07")==FALSE&&CheckActorFloorTexture(0, "SPEC_SKY")==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",2,0,0,0)==FALSE&&ACS_NamedExecuteWithResult("CheckSpecialStage",3,0,0,0)==FALSE)
 		{
 			last_ground_position[PlayerNumber()] = GetActorX(0);
 			last_ground_position[MAX_PLAYERS+PlayerNumber()] = GetActorY(0);
@@ -5535,7 +5608,7 @@ While(1)
 		
 		If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==FALSE&&CheckInventory("CoinSP")>CheckInventory("CoinLimit")) TakeInventory("CoinSP",CheckInventory("CoinSP")-CheckInventory("CoinLimit"));
 		
-		If(specialbehavior[PlayerNumber()]==0&&WaterLevel(0)==4) airsupply[PlayerNumber()]--;
+		If(spec_behavior[WaterLevel(WL_AREAID)]==0&&WaterLevel(WL_WATERLEVEL)==4) airsupply[PlayerNumber()]--;
 		Else airsupply[PlayerNumber()] = 1050;
 		
 		If(airsupply[PlayerNumber()]<=0) { force_death[PlayerNumber()] = TRUE; }
@@ -5574,9 +5647,9 @@ While(1)
 		}
 		
 		If(
-		(WaterLevel(0) >= 2&&wl==FALSE)
+		(WaterLevel(WL_WATERLEVEL) >= 2&&wl==FALSE)
 		||
-		(WaterLevel(0) < 2&&wl==TRUE))
+		(WaterLevel(WL_WATERLEVEL) < 2&&wl==TRUE))
 		{
 		wl = !wl;
 		if(wl==TRUE) SetActorProperty(GetCurrentPlayerTID(),APROP_Gravity,0.5);
@@ -6139,6 +6212,7 @@ script "HandleRCulling" ENTER
 //11&12: ~3000
 //13&14: ~4096
 {
+	If(GetLevelInfo(LEVELINFO_LEVELNUM)>=CONST_TRANS_LEVELS_START) Terminate;	//Don't use render culling during loading screens!
 	If(GetCVAR("xane_rculling")>2||GetCVAR("xane_rculling")<-1) SetCVAR("xane_rculling",-1);	//Disable culling if the CVAR is set to an invalid value..
 	int last_cull_setting = GetCVar("xane_rculling");
 	If(GameType()!=GAME_SINGLE_PLAYER||last_cull_setting<=0) Terminate;
@@ -6359,9 +6433,10 @@ script "HandleCoinDrops" ENTER
 		prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 		Delay(1);
 		
-		if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) < prevhealth2[PlayerNumber()])	//Drop coin depending on the character.
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) < prevhealth2[PlayerNumber()])//-10)	//Drop coin depending on the amount of damage.
 		{
-			ACS_NamedExecuteAlways("DropCoins",0,(prevhealth2[PlayerNumber()]-GetActorProperty(GetCurrentPlayerTID(),APROP_Health))/2,0,0);
+			Log(s:"Let's make yah invulnerable!");
+			ACS_NamedExecuteAlways("DropCoins",0,(prevhealth2[PlayerNumber()]-GetActorProperty(GetCurrentPlayerTID(),APROP_Health))/3,0,0);
 			prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
 			
 			//Give a bit of invulnerability.
@@ -6369,8 +6444,10 @@ script "HandleCoinDrops" ENTER
 			Delay(52-(17*GameSkill()));	//The invulnerability lasts a variable amount of time depending on difficulty.
 			ACS_NamedExecuteAlways("Invulnerable",0,FALSE,0,0);
 		}
+		Else prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);	//If health went up or didn't go down enough, just update the variable.
+		/*Else
 
-		if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) > prevhealth2[PlayerNumber()]) prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);
+		if(GetActorProperty(GetCurrentPlayerTID(),APROP_Health) > prevhealth2[PlayerNumber()]) prevhealth2[PlayerNumber()] = GetActorProperty(GetCurrentPlayerTID(),APROP_Health);*/
 	}
 }
 

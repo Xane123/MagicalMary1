@@ -47,6 +47,7 @@ global int 13:time_of_day;	//This keeps track of which time of day it currently 
 
 #define TIME_LENGTH 90	//How long a part of the day lasts. Sunsets and sunrises are half of this.
 #define TIME_SUNSET_DIVIDE 3	//How much of TIME_LENGTH is a sunset/sunrise.
+#define TIME_STORMFOG_CHANGE 24	//How much the fog distance varies during a storm depending on the time of day.
 //Sector tag 183 is used for outdoor sectors that use the fog/fade colors specified below. 184 is used for non-foggy ones. Obviously the latter will only be used on 1-1's land areas.
 
 script "ApplyTODSettings" (void)	//This script will change the appearance of the current area when called.
@@ -62,7 +63,7 @@ script "ApplyTODSettings" (void)	//This script will change the appearance of the
 		255, 216, 192, 32,		//Sunset
 		128, 192, 255, 0,		//Night
 		255, 224, 208, 64,		//Sunrise
-		172, 182, 206, 64 };	//Stormy
+		172, 182, 206, 96 };	//Stormy
 	int fadecolors0[19] = { 0, 0, 0,
 		144, 192, 255,	//Day
 		226, 160, 112,	//Sunset
@@ -107,7 +108,9 @@ script "ApplyTODSettings" (void)	//This script will change the appearance of the
 		Switch(time_settings)
 		{
 			Case 0:	//Hell City
-			Light_Fade(183, brightness0[4],70);
+			If(time_of_day==TIME_DAY) Light_Fade(183, brightness0[4]+TIME_STORMFOG_CHANGE,70);
+			Else If(time_of_day==TIME_NIGHT) Light_Fade(183, brightness0[4]-TIME_STORMFOG_CHANGE,70);
+			Else Light_Fade(183, brightness0[4],70);
 			
 			//Sectors with fog enabled (tag 183)
 			Sector_SetColor(183, sectorcolors0[20], sectorcolors0[21], sectorcolors0[22], sectorcolors0[23]);
@@ -123,7 +126,7 @@ script "TOD_Timer" OPEN
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Terminate;	//Don't run in Special Stages!
 	Delay(2);	//Wait for level variables to be prepared in case this level wants these scripts to set up lighting...
 	If(time_defaults[1]<=0||time_defaults[1]>4) time_defaults[1] = 1;	//If invalid, the time of day is daytime.
-	If(initial_setup==FALSE) time_of_day = time_defaults[1];	//If starting a game, set the time to its default.
+	If(initial_setup==FALSE||GetCVAR("xane_timecycle")==FALSE) time_of_day = time_defaults[1];	//If starting a game, set the time to its default.
 	If(GetCVAR("xane_timecycle")==FALSE)
 	{
 		If(time_defaults[0]>0)	//Disabled? If settings are set correctly, handle them before terminating this script.
@@ -131,49 +134,56 @@ script "TOD_Timer" OPEN
 			time_of_day = time_defaults[1];	//Set the current "time" to the default time before running the script.
 			ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);	//Run the script to set the environment's settings!
 		}
-		Terminate;	//Sadly, this is where this script must stop running...
-	}
+		//Terminate;	//Sadly, this is where this script must stop running...
+	}	//Let the script always run, even if this system is disabled. Just don't let time advance naturally and don't
+		//forcibly apply time settings if not specified by the level itself.
 	//First, let's do some checks, no matter how redundant with the code below.
 	If(time_of_day<=0||time_of_day>4) time_of_day = 1;	//If it's an invalid time of day, set it to daytime.
 	If(ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0))
 	{
-		time_seconds = 0;
+		if(time_of_day % 2 == 1) time_seconds -= TIME_LENGTH;
+		else { time_seconds -= TIME_LENGTH/TIME_SUNSET_DIVIDE; }
+		if(time_seconds > TIME_LENGTH * 2) time_seconds = TIME_LENGTH/2;
+		//time_seconds = 0;
 		time_of_day++;
 		If(time_of_day>4) time_of_day = 1;	//If it's sunrise, it's logically daytime next!
 	}
 	
-	//After that, apply the settings forcibly.
-	ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);
+	//After that, apply the settings forcibly, but only if the system is really enabled.
+	If(GetCVAR("xane_timecycle")==TRUE) ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);
 	
 	int old_override = time_override;	//Set these variables so the moment one changes the settings can be re-applied.
 	int old_settings = time_settings;
 	
 	While(GetCVAR("xane_timecycle")==TRUE)	//If the player ever turns off this system, stop working.
 	{
-		If(framecount % 35 == 0) { time_seconds++; Print(d:time_seconds); LocalAmbientSound("menu/activate",192); }
+		If(framecount % 35 == 0 && GetCVAR("xane_timecycle") == TRUE) { time_seconds++; /*Print(s:"Seconds into current time phase:\n", d:time_seconds);*/ }
 		
 		old_override = time_override;	//Update the setting variables to monitor if they change next tic.
 		old_settings = time_settings;
 		
 		Delay(1);
 		
-		If((ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0) && time_safe==TRUE) || time_settings != old_settings || time_override != old_override)
+		If(GetCVAR("xane_timecycle")==FALSE || (ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0) && time_safe==TRUE) || time_settings != old_settings || time_override != old_override)
 		{	//If the timer went over the limit or a setting was changed and it's safe, change the appearance of the area.
 			If(ACS_NamedExecuteWithResult("TimeSectionSecondsComplete",0,0,0,0))
 			{	//If the timer is over the limit, reset it while we're at it.
-				time_seconds = 0;
+				if(time_of_day % 2 == 1) time_seconds -= TIME_LENGTH;
+				else { time_seconds -= TIME_LENGTH/TIME_SUNSET_DIVIDE; }
+				if(time_seconds > TIME_LENGTH * 2) time_seconds = TIME_LENGTH/2;
+				//time_seconds = 0;
 				time_of_day++;
 				If(time_of_day>4) time_of_day = 1;	//If it's sunrise, it's logically daytime next!
 			}
 			ACS_NamedExecuteAlways("ApplyTODSettings",0,0,0,0);
-			Print(s:"Time is now ", d:time_of_day, s:"!");
+			//Print(s:"Time is now ", d:time_of_day, s:"!");
 		}
 	}
 }
 
 script "TimeSectionSecondsComplete" (void)
 {	//This returns TRUE if the seconds counter for the time-of-day system has gone over the point where it normally changes times of day.
-	If((time_of_day % 2 == 1 && time_seconds>TIME_LENGTH) || (time_of_day % 2 == 0 && time_seconds>TIME_LENGTH/TIME_SUNSET_DIVIDE)) SetResultValue(TRUE);
+	If((time_of_day % 2 == 1 && time_seconds>=TIME_LENGTH) || (time_of_day % 2 == 0 && time_seconds>TIME_LENGTH/TIME_SUNSET_DIVIDE)) SetResultValue(TRUE);
 	Else SetResultValue(FALSE);
 }
 
@@ -184,6 +194,7 @@ script "AdvanceNearestSunTime" (void)
 
 script "TimeSafeBoundary" (void)
 {	//This toggles the "safe to change time of day" variable upon crossing it.
+	If(GetCVAR("xane_timecycle")==FALSE) Terminate;	//Don't care about how safe it is if the system is disabled.
 	If(LineSide()==LINE_FRONT) time_safe = TRUE;
 	Else time_safe = FALSE;
 }

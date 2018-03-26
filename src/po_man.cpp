@@ -1108,7 +1108,7 @@ void FPolyObj::UnLinkPolyobj ()
 
 bool FPolyObj::CheckMobjBlocking (side_t *sd)
 {
-	if (bHurtOnTouch) return false;
+	if (bHurtOnTouch) return false;	//[XANE]Render-culling polyobjects stop for nothing.
 	else
 	{
 		static TArray<AActor *> checker;

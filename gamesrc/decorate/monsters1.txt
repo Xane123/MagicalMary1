@@ -227,10 +227,10 @@ TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
 TROL LLMM 1 A_SpawnItemEx("FlowerProjectile3_Trail",Random(-36,36),Random(-36,36),Random(0,76),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION)
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
 TROL LLMM 1 A_SpawnItemEx("FlowerProjectile3_Trail",Random(-36,36),Random(-36,36),Random(0,76),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION)
-TROL M 0 A_ChangeFlag("INVULNERABLE",FALSE)
 FireJump:
 TROL M 2 A_FaceTarget(90)
 TROL L 3 A_ChangeVelocity(10.25,0,14.75,CVF_RELATIVE|CVF_REPLACE)
+TROL M 0 A_ChangeFlag("INVULNERABLE",FALSE)
 FireJumpLoop:
 TROL K 1 A_JumpIf(z-floorz<48.5,"FireJumpPrepare")
 Loop
@@ -297,7 +297,7 @@ States
 {
 Spawn:
 BLOB A 0
-//BLOB A 0 A_PlaySound("grind/loop", CHAN_VOICE, 1.0, TRUE, 4.0)
+//BLOB A 0 A_PlaySound("burn/yell", CHAN_VOICE, 1.0, TRUE, 4.0)
 BLOB A 0 A_TakeInventory("Variable1",70)
 BLOB A 0 A_TakeInventory("Variable2",70)
 CheckForFloor:
@@ -346,7 +346,7 @@ COP1 A 0 A_LookEx(LOF_NOSOUNDCHECK, 0, 768, 0, 360, "StartBurn")
 COP1 A 0 A_Log("ERROR: Fire Blob couldn't find a target!")
 Goto StartBurn
 FireDeath:
-//COP1 B 0 A_PlaySound("grind/end", CHAN_VOICE, 1.0, FALSE, 3.0)
+//COP1 B 0 A_PlaySound("burn/end", CHAN_VOICE, 1.0, FALSE, 3.0)
 Goto DieFire
 CheckCoolOffTo2:
 FIGH A 0 ACS_NamedExecuteAlways("GetSpecialStatus",0,0,TRUE,0)	//This checks if the enemy is in water and gives them the "Variable2" inventory item.
@@ -784,7 +784,6 @@ TIGR DDAB 1
 Goto RunAway
 CryingDetected:
 TIGR A 0 A_JumpIfCloser(512, "Hesitate", FALSE)
-TIGR A 0 A_ChangeFlag("SOLID",FALSE)
 TIGR BCB 1
 TIGR AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 1 { A_Turn(180.0); A_ChangeVelocity(Random(-0.33,0.33),2,velz,CVF_RELATIVE|CVF_REPLACE); }
 TIGR BAA 2
@@ -792,7 +791,6 @@ Goto See
 Hesitate:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR CBA 6
-TIGR A 0 A_ChangeFlag("SOLID",FALSE)
 TIGR A 0 A_TakeInventory("Variable1",70)
 TIGR A 0 A_PlaySound("wtiger/weakness",CHAN_VOICE,1.0)
 TIGR AAAAAAAAAAAAAAAAAAAAAAAA 1 { A_Turn(180.0); A_ChangeVelocity(Random(-0.75,0.75),4,velz,CVF_RELATIVE|CVF_REPLACE); }
@@ -802,7 +800,6 @@ TIGR A 0 A_DamageSelf((1))
 TIGR A 0 A_JumpIfHealthLower(2,"RunAway")
 Loop
 RunAway:
-TIGR A 0 A_ChangeFlag("SOLID",FALSE)
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR A 0 A_ChangeFlag("FRIGHTENED",TRUE)
 TIGR A 0 A_GiveInventory("Variable1",1)
@@ -1357,6 +1354,7 @@ States
 {
 Spawn:
 COP1 A 0
+COP1 A 0 A_JumpIfInventory("Variable3",1,"Burn4")	//To fix the Phantom Cop Glitch, just kill if they're burning.
 COP1 A 0 A_JumpIf(Args[0]==0,"BasicBehavior")
 COP1 A 0 A_JumpIfInventory("Animation1",1,"StandardBehavior")	//Animation1 is used to prevent walking on a non-existant path.
 COP1 A 0 A_JumpIf(Args[0]==1,"FollowPath")
@@ -1611,7 +1609,6 @@ COP1 A 0 A_PlaySound("c3/r3",CHAN_VOICE,1.0,FALSE)	//Angry grunt
 COP1 ABCDCBABCDCBABCDCBABCDCBABCDCB 1 A_ChangeVelocity(-velx,-vely,velz,CVF_REPLACE)
 COP1 A 0 A_Stop
 JumpShoot:
-COP1 A 0 A_ChangeFlag("SOLID",FALSE)
 COP1 A 0 A_TakeInventory ("Variable1",1)
 COP1 A 0 A_PlaySound("misc/shutup",CHAN_VOICE,1.0)
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
@@ -1709,7 +1706,7 @@ TNT1 A 0 A_RadiusGive("IncreaseCombo",512,RGF_PLAYERS)
 TNT1 AA 0 A_RadiusGive("ScoreX",512,RGF_PLAYERS)
 Burn1:
 COP1 B 0 A_JumpIfInventory("Variable2",1,"FireDeath")
-COP1 A 0 A_PlaySound("grind/loop", CHAN_VOICE, 1.0, TRUE, 4.0)
+COP1 A 0 A_PlaySound("burn/yell", CHAN_VOICE, 1.0, TRUE, 4.0)
 COP1 AAAAAAAA 0 { A_RadiusGive("CDeath",384,RGF_MONSTERS|RGF_NOTARGET); A_SpawnItemEx("FlowerProjectile3_Trail",0,Random(-16,16),Random(8,48),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION); }
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
 COP1 A 1 A_Chase("","")
@@ -1749,7 +1746,7 @@ FIGH A 0 ACS_NamedExecuteAlways("GetSpecialStatus",0,0,TRUE,0)	//This checks if 
 Goto Burn4
 FireDeath:
 COP1 A 0 A_NoBlocking
-COP1 B 0 A_PlaySound("grind/end", CHAN_VOICE, 1.0, FALSE, 3.0)
+COP1 B 0 A_PlaySound("burn/end", CHAN_VOICE, 1.0, FALSE, 3.0)
 COP1 ABCD 1 ACS_NamedExecuteAlways("ColorCoin",0,4,0,0)
 Goto DieFire
 Death:
@@ -1815,7 +1812,6 @@ Pain.AirDash:
 "####" "#" 0 A_JumpIfInventory("CPain",1,"ReactPain")
 Goto Pain
 Pain.Flatten:
-"####" "#" 0 A_ChangeFlag("SOLID",FALSE)
 "####" "#" 0 A_ChangeFlag("LOWGRAVITY",FALSE)
 "####" "#" 0 A_ChangeFlag("NOPAIN",TRUE)
 "####" "#" 1 A_SetScale(1.0,0.75)
@@ -1885,6 +1881,7 @@ States
 {
 Spawn:
 COP1 A 0
+COP1 A 0 A_JumpIfInventory("Variable3",1,"Burn4")	//To fix the Phantom Cop Glitch, just kill if they're burning.
 COP1 A 0 A_JumpIf(Args[0]==0,"BasicBehavior")
 COP1 A 0 A_JumpIf(Args[0]==1,"FollowPath")
 COP1 A 0 A_JumpIf(Args[0]==3,"WatchTheatre")
@@ -2099,7 +2096,6 @@ Stop
 //Crying response
 Crying:
 COP1 A 0 A_JumpIf(velz==0.0,"Crying2")
-COP1 A 1 A_ChangeFlag("SOLID",FALSE)
 Loop
 Crying2:
 COP1 A 0 A_TakeInventory("DisableAutoJump",1)	//This is just in case an enemy can hold more than one of this token.
@@ -2188,7 +2184,7 @@ COP1 A 0 ACS_NamedExecuteAlways("ColorCoin",0,3,0,0)
 TNT1 A 0 A_RadiusGive("IncreaseCombo",512,RGF_PLAYERS)
 TNT1 AA 0 A_RadiusGive("ScoreX",512,RGF_PLAYERS)
 Burn1:
-COP1 A 0 A_PlaySound("grind/loop", CHAN_VOICE, 1.0, TRUE, 4.0)
+COP1 A 0 A_PlaySound("burn/yell", CHAN_VOICE, 1.0, TRUE, 4.0)
 COP1 AAAAAAAA 0 { A_RadiusGive("CDeath",384,RGF_MONSTERS|RGF_NOTARGET); A_SpawnItemEx("FlowerProjectile3_Trail",0,Random(-16,16),Random(8,48),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION); }
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
 COP1 A 1 A_Chase("","")
@@ -2216,7 +2212,7 @@ COP1 A 0 A_LookEx(0, 0, 1024, 1024, 90, "Burn1")
 Goto Burn1
 FireDeath:
 COP1 A 0 A_NoBlocking
-COP1 B 0 A_PlaySound("grind/end", CHAN_VOICE, 1.0, FALSE, 3.0)
+COP1 B 0 A_PlaySound("burn/end", CHAN_VOICE, 1.0, FALSE, 3.0)
 COP1 ABCD 1 ACS_NamedExecuteAlways("ColorCoin",0,4,0,0)
 Goto DieFire
 CheckCoolOffTo2:
@@ -2535,7 +2531,7 @@ COP1 A 0 ACS_NamedExecuteAlways("ColorCoin",0,3,0,0)
 TNT1 A 0 A_GiveInventory("IncreaseCombo",1,AAPTR_TARGET)
 TNT1 A 0 A_GiveInventory("ScoreX",5,AAPTR_TARGET)
 Burn:
-COP1 A 0 A_PlaySound("grind/loop_old", CHAN_VOICE, 1.0, TRUE, 4.0)
+COP1 A 0 A_PlaySound("burn/yell_old", CHAN_VOICE, 1.0, TRUE, 4.0)
 COP1 AAAAAAAA 0 A_SpawnItemEx("FlowerProjectile3_Trail",0,Random(-16,16),Random(8,48),Random(-1,1),Random(-1,1),Random(5,7),0,SXF_NOCHECKPOSITION)
 TROL M 0 A_CustomMissile("BurningPerson",32,32,0,CMF_ABSOLUTEPITCH,-90)
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckCoolOffTo2")
@@ -2575,7 +2571,7 @@ FIGH A 0 ACS_NamedExecuteAlways("GetSpecialStatus",0,0,TRUE,0)	//This checks if 
 Goto Burn4
 FireDeath:
 COP1 A 0
-COP1 B 0 A_PlaySound("grind/end_old", CHAN_VOICE, 1.0, FALSE, 3.0)
+COP1 B 0 A_PlaySound("burn/end_old", CHAN_VOICE, 1.0, FALSE, 3.0)
 FIGH FFFF 1 ACS_NamedExecuteAlways("ColorCoin",0,4,0,0)
 FIGH GGGGGG 1
 FIGH I -1
@@ -2692,7 +2688,7 @@ Radius 20
 Height 32
 Scale 1.75
 PainChance 255
-FloatSpeed 8
+FloatSpeed 1.5
 Health 60
 DamageFactor "Bounce", 0.0
 DamageFactor "AirDash", 0.0

@@ -1,4 +1,4 @@
-c#library "XGLOBAL"
+#library "XGLOBAL"
 #include "zcommon.acs"
 
 world bool 9:level_ready;	//This prevents certain scripts from working until it's set to TRUE by SeamlessHelper.
@@ -9,7 +9,7 @@ global int 27:upgrades[];	//Upgrades; 0: Hammer upgrades, 1: Max coins, 2: Umbre
 global bool 29:tutorial_completed[];	//An array tracking which tutorials have been seen previously.
 
 int tutorial_id[2] = { -1, -1 };	//The requested (0) and current (1) tutorial ID's.
-int tutorial_text[30] = {	//What text ID each tutorial ID should start at.
+int tutorial_text[40] = {	//What text ID each tutorial ID should start at.
 0,	//0 (Special stages)
 3,	//1 (Introduction to the Wanted Level)
 6,	//2 (Wanted Level star pickups)
@@ -38,11 +38,21 @@ int tutorial_text[30] = {	//What text ID each tutorial ID should start at.
 58,	//25 (Mary's Air Dash)
 59,	//26 (Introduction to Tutorial Signs)
 64,	//27 (Jump height upgrades)
-0,	//28
-0	//29
+66,	//28 (Warning about wall jump behavior)
+0,	//29
+0,	//30
+0,	//31
+0,	//32
+0,	//33
+0,	//34
+0,	//35
+0,	//36
+0,	//37
+0,	//38
+0	//39
 };
 
-int tutorial_length[30] = {	//How many IDs of text should be shown in this tutorial.
+int tutorial_length[40] = {	//How many IDs of text should be shown in this tutorial.
 3,	//0
 3,	//1
 1,	//2
@@ -71,11 +81,21 @@ int tutorial_length[30] = {	//How many IDs of text should be shown in this tutor
 1,	//25
 5,	//26
 2,	//27
-0,	//28
-0	//29
+3,	//28
+0,	//29
+0,	//30
+0,	//31
+0,	//32
+0,	//33
+0,	//34
+0,	//35
+0,	//36
+0,	//37
+0,	//38
+0	//39
 };
 
-int tutorial_showmsg[30] = {	//Which special message to briefly display after a tutorial is finished.
+int tutorial_showmsg[40] = {	//Which special message to briefly display after a tutorial is finished.
 0,	//0
 0,	//1
 0,	//2
@@ -104,8 +124,18 @@ int tutorial_showmsg[30] = {	//Which special message to briefly display after a 
 13,	//25
 0,	//26
 0,	//27
-0,	//28
-0	//29
+14,	//28
+0,	//29
+0,	//30
+0,	//31
+0,	//32
+0,	//33
+0,	//34
+0,	//35
+0,	//36
+0,	//37
+0,	//38
+0	//39
 };
 
 script "CheckTutorials" OPEN
@@ -295,6 +325,10 @@ script "ShowSTutMessage" (int id)
 			HUDMessageBold(s:"Push ", k:"+jump", s:" in the air to perform the Air Dash.";
 				HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 			Break;
+			Case 14:
+			HUDMessageBold(s:"Push ", k:"+use", s:" before hitting walls to stick to them at high speeds.";
+				HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
+			Break;
 		}
 	}
 	Else
@@ -345,8 +379,16 @@ script "ShowSTutMessage" (int id)
 			HUDMessageBold(s:"Double-tap the USE button on the ground to fire Xane's claw.";
 				HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 			Break;
-			Case 11:
+			Case 12:
 			HUDMessageBold(s:"Double-tap the USE button in the air to start a Drop Dash.";
+				HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
+			Break;
+			Case 13:
+			HUDMessageBold(s:"Tap the JUMP button in mid-air to perform the Air Dash.";
+				HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
+			Break;
+			Case 14:
+			HUDMessageBold(s:"Tap the USE button before hitting walls to stick to them at high speeds.";
 				HUDMSG_FADEINOUT, 0, CR_UNTRANSLATED, properties[0], properties[1], properties[2], properties[3], properties[4]);
 			Break;
 		}
