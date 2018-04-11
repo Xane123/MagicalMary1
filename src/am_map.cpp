@@ -124,7 +124,8 @@ CUSTOM_CVAR (Int, am_emptyspacemargin, 0, CVAR_ARCHIVE)
 CVAR(Color, am_backcolor, 0x6c5440, CVAR_ARCHIVE);
 CVAR(Color, am_yourcolor, 0xfce8d8, CVAR_ARCHIVE);
 CVAR(Color, am_wallcolor, 0x2c1808, CVAR_ARCHIVE);
-CVAR(Color, am_secretwallcolor, 0x000000, CVAR_ARCHIVE);
+CVAR(Color, am_secretwallcolor, 0x444444, CVAR_ARCHIVE);
+CVAR(Color, am_unexploredsecretcolor, 0x886644, CVAR_ARCHIVE);
 CVAR(Color, am_specialwallcolor, 0xffffff, CVAR_ARCHIVE);
 CVAR(Color, am_tswallcolor, 0x888888, CVAR_ARCHIVE);
 CVAR(Color, am_fdwallcolor, 0x887058, CVAR_ARCHIVE);
@@ -138,7 +139,6 @@ CVAR(Color, am_lockedcolor, 0x007800, CVAR_ARCHIVE);
 CVAR(Color, am_intralevelcolor, 0x0000ff, CVAR_ARCHIVE);
 CVAR(Color, am_interlevelcolor, 0xff0000, CVAR_ARCHIVE);
 CVAR(Color, am_secretsectorcolor, 0xff00ff, CVAR_ARCHIVE);
-CVAR(Color, am_unexploredsecretcolor, 0x880088, CVAR_ARCHIVE);
 CVAR(Color, am_thingcolor_friend, 0xfcfcfc, CVAR_ARCHIVE);
 CVAR(Color, am_thingcolor_monster, 0xfcfcfc, CVAR_ARCHIVE);
 CVAR(Color, am_thingcolor_ncmonster, 0xfcfcfc, CVAR_ARCHIVE);
@@ -147,8 +147,9 @@ CVAR(Color, am_thingcolor_citem, 0xfcfcfc, CVAR_ARCHIVE);
 CVAR(Color, am_portalcolor, 0x404040, CVAR_ARCHIVE);
 
 CVAR(Color, am_ovyourcolor, 0xcd80cd, CVAR_ARCHIVE);
-CVAR(Color, am_ovwallcolor, 0xffffff, CVAR_ARCHIVE); 
+CVAR(Color, am_ovwallcolor, 0xffffff, CVAR_ARCHIVE);
 CVAR(Color, am_ovsecretwallcolor, 0xcae690, CVAR_ARCHIVE);
+CVAR(Color, am_ovunexploredsecretcolor, 0x90e6ca, CVAR_ARCHIVE);
 CVAR(Color, am_ovspecialwallcolor, 0xbbffbb, CVAR_ARCHIVE);
 CVAR(Color, am_ovotherwallscolor, 0xffa0a0, CVAR_ARCHIVE);
 CVAR(Color, am_ovlockedcolor, 0xffa0a0, CVAR_ARCHIVE);
@@ -160,7 +161,6 @@ CVAR(Color, am_ovtelecolor, 0xffa0ff, CVAR_ARCHIVE);
 CVAR(Color, am_ovportalcolor, 0xffa0ff, CVAR_ARCHIVE);
 CVAR(Color, am_ovinterlevelcolor, 0xc0ffff, CVAR_ARCHIVE);
 CVAR(Color, am_ovsecretsectorcolor, 0xe6e690, CVAR_ARCHIVE);
-CVAR(Color, am_ovunexploredsecretcolor, 0x90e6e6, CVAR_ARCHIVE);
 CVAR(Color, am_ovthingcolor, 0xc0ffff, CVAR_ARCHIVE);
 CVAR(Color, am_ovthingcolor_friend, 0xbbffbb, CVAR_ARCHIVE);
 CVAR(Color, am_ovthingcolor_monster, 0xffc0c0, CVAR_ARCHIVE);
@@ -952,7 +952,7 @@ void AM_StaticInit()
 	for (int i = 0; i < 10; i++)
 	{
 		mysnprintf (namebuf, countof(namebuf), "AMMNUM%d", i);
-		marknums[i] = TexMan.CheckForTexture (namebuf, FTexture::TEX_MiscPatch);
+		marknums[i] = TexMan.CheckForTexture (namebuf, ETextureType::MiscPatch);
 	}
 	markpointnum = 0;
 	mapback.SetInvalid();
@@ -1356,11 +1356,11 @@ void AM_LevelInit ()
 {
 	if (level.info->MapBackground.Len() == 0)
 	{
-		mapback = TexMan.CheckForTexture("AUTOPAGE", FTexture::TEX_MiscPatch);
+		mapback = TexMan.CheckForTexture("AUTOPAGE", ETextureType::MiscPatch);
 	}
 	else
 	{
-		mapback = TexMan.CheckForTexture(level.info->MapBackground, FTexture::TEX_MiscPatch);
+		mapback = TexMan.CheckForTexture(level.info->MapBackground, ETextureType::MiscPatch);
 	}
 
 	AM_clearMarks();
@@ -2195,7 +2195,7 @@ void AM_drawSubsectors()
 
 		// Draw the polygon.
 		FTexture *pic = TexMan(maptex);
-		if (pic != NULL && pic->UseType != FTexture::TEX_Null)
+		if (pic != NULL && pic->UseType != ETextureType::Null)
 		{
 			screen->FillSimplePoly(TexMan(maptex),
 				&points[0], points.Size(),
@@ -3069,7 +3069,7 @@ void AM_drawThings ()
 static void DrawMarker (FTexture *tex, double x, double y, int yadjust,
 	INTBOOL flip, double xscale, double yscale, int translation, double alpha, uint32_t fillcolor, FRenderStyle renderstyle)
 {
-	if (tex == NULL || tex->UseType == FTexture::TEX_Null)
+	if (tex == NULL || tex->UseType == ETextureType::Null)
 	{
 		return;
 	}
@@ -3088,7 +3088,7 @@ static void DrawMarker (FTexture *tex, double x, double y, int yadjust,
 		DTA_TranslationIndex, translation,
 		DTA_Alpha, alpha,
 		DTA_FillColor, fillcolor,
-		DTA_RenderStyle, uint32_t(renderstyle),
+		DTA_RenderStyle, renderstyle.AsDWORD,
 		TAG_DONE);
 }
 

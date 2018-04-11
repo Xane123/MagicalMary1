@@ -2316,6 +2316,11 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 					// structs and classes only get passed by pointer.
 					type = NewPointer(type);
 				}
+				else if (type->isDynArray())
+				{
+					Error(f, "The return type of a function cannot be a dynamic array");
+					break;
+				}
 				// TBD: disallow certain types? For now, let everything pass that isn't an array.
 				rets.Push(type);
 				t = static_cast<decltype(t)>(t->SiblingNext);
@@ -2742,8 +2747,8 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 						// Defaults must be identical to parent class
 						if (parentfunc->Variants[0].Implementation->DefaultArgs.Size() > 0)
 						{
-							Printf("Copying defaults from %s to %s\n", parentfunc->Variants[0].Implementation->PrintableName.GetChars(), sym->Variants[0].Implementation->PrintableName.GetChars());
 							sym->Variants[0].Implementation->DefaultArgs = parentfunc->Variants[0].Implementation->DefaultArgs;
+							sym->Variants[0].ArgFlags = parentfunc->Variants[0].ArgFlags;
 						}
 					}
 				}

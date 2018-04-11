@@ -121,6 +121,8 @@
 
 EXTERN_CVAR(Bool, hud_althud)
 void DrawHUD();
+void D_DoAnonStats();
+
 
 // MACROS ------------------------------------------------------------------
 
@@ -916,7 +918,7 @@ void D_Display ()
 	// [RH] Draw icon, if any
 	if (D_DrawIcon)
 	{
-		FTextureID picnum = TexMan.CheckForTexture (D_DrawIcon, FTexture::TEX_MiscPatch);
+		FTextureID picnum = TexMan.CheckForTexture (D_DrawIcon, ETextureType::MiscPatch);
 
 		D_DrawIcon = NULL;
 		if (picnum.isValid())
@@ -2351,6 +2353,9 @@ void D_DoomMain (void)
 
 	D_DoomInit();
 
+	extern void D_ConfirmSendStats();
+	D_ConfirmSendStats();
+
 	// [RH] Make sure zdoom.pk3 is always loaded,
 	// as it contains magic stuff we need.
 	wad = BaseFileSearch (BASEWAD, NULL, true);
@@ -2744,6 +2749,8 @@ void D_DoomMain (void)
 			D_StartTitle ();				// start up intro loop
 			setmodeneeded = false;			// This may be set to true here, but isn't needed for a restart
 		}
+
+		D_DoAnonStats();
 
 		if (I_FriendlyWindowTitle)
 			I_SetWindowTitle(DoomStartupInfo.Name.GetChars());
