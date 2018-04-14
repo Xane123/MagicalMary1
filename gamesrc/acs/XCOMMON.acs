@@ -3,7 +3,7 @@
 #include "zcommon.acs"
 
 //WARNING: There's a limit of 128 variables outside of script scope per file!
-//XCOMMON, due to how messy of a big file it is, has used 111/128 variables, with 17 left! Use them wisely!
+//XCOMMON, due to how messy of a big file it is, has used 109/128 variables, with 19 left! Use them wisely!
 //This number may be out of date and it may be closer to the limit than this states.
 
 #define MAX_PLAYERS 8	//Maximum number of players, used for multiplayer, in case this ever is ported to Zandronum.
@@ -28,10 +28,7 @@ world int 11:OpenInput[];	//Curent player input; 0-7 = Current, 8-15 = Previous.
 world int 12:fadeout;	//The requested fade out during areas. Fade may seem redundant, try to remove it.
 world int 13:last_ground_position[];	//The last XYZ coordinates each player was detected to be on the ground at. [PlayerNumber()] = X, [MAX_PLAYERS+PlayerNumber()] = Y, [MAX_PLAYERS*2+PlayerNumber()] = Z, [MAX_PLAYERS*3+P)] = Angle. [MAX_PLAYERS*4+PlayerNumber()] is supposedly used for jump-through platforms.
 
-world int 14:time_override;	//If set, this will either force a stormy appearance or disable sky/fog changes, allowing levels to use their own settings. 1: Change to stormy appearance, 2: Disable automatic time of day changes, 
-world int 15:time_settings;	//This determines which arrays will be used when setting the sky appearance, sector/fade colors, and brightness levels. The stormy weather above overrides this.
-world bool 16:time_safe;	//If the sky cannot be seen in the area the player's in, set this to TRUE and the time of day will advance mid-level.
-world int 17:time_defaults[];	//What time is used if the system is disabled? See TIME_SYS.acs for full description.
+//World variables 14-17 are available!
 
 //GLOBAL variables are always valid, no matter how many levels the player goes through.
 global bool 0:initial_setup;	//Some things only happen upon starting a game and never any other time. This prevents it from happening on every level.
@@ -46,9 +43,7 @@ global int 8:curscore[];
 
 global int 9:disablewind[];	//If non-zero, wind stops affecting this player. Only increase or decrease this variable, never forcibly set it except at the beginning of a level.
 
-//See TIME_SYS.acs for these two global variables.
-//global int 12:time_seconds;	//This counts how many seconds the current time of day has been enabled.
-//global int 13:time_of_day;	//This keeps track of which time of day it currently is. 1: Day, 2: Sunset, 3: Night, 4: Sunrise. This is always updated like the seconds even if overridden.
+//Global variables 12 and 13 are available!
 
 //This array below remembers certain things happening, so far only things like the drill being used in 1-1.
 //Things like cutscenes, tutorials, challenges, and upgrades/Special Stage entrances (see "special_id[]") aren't
@@ -550,7 +545,7 @@ int spec_radius[MAX_SPECIALPLANES-1];	//How far each non-default special plane a
 
 script "SetPlaneProperties" (int id, int behavior, int radius)
 {	//This script sets the properties for "special plane" areas. X/Y/height are grabbed from the activating object.
-	if(id==0) Log(s:"It ran, ya farta!");
+	//if(id==0) Log(s:"It ran, ya farta!");
 	spec_height[id] = GetActorZ(0);	//Height
 	if(behavior<0) { spec_height[id] -= 1024.0; behavior = 1; }	//Move this way under the ground if behavior is "-1".
 	spec_behavior[id] = behavior;	//Behavior (see above for choices)
@@ -561,14 +556,14 @@ script "SetPlaneProperties" (int id, int behavior, int radius)
 		spec_y[id-1] = GetActorY(0);	//Y center position
 		
 		//Next, try to make areas smaller based on their size through an algorhithm.
-		int current[2] = { 384, 5 };	//Radius then divide by number.
+		/*int current[2] = { 384, 5 };	//Radius then divide by number.
 		Until(current[1]<2)
 		{
 			if(radius<current[0]) { radius = radius - (radius/current[1]); current[1] = 0; }
 			Else { current[0] += current[0]; current[1]--; }	//Double the number otherwise.
 		}
 		//If the above loop ended legitimately and wasn't cut off, divide by 2 anyways.
-		if(radius>current[0]&&current[1]==1) radius = radius - (radius/2);
+		if(radius>current[0]&&current[1]==1) radius = radius - (radius/2);*/
 		
 		spec_radius[id-1] = radius;		//Area radius from center point
 	}
@@ -691,20 +686,42 @@ script "CheckSpecialPlanes" ENTER
 		}
 		Else If(spec_behavior[WaterLevel(WL_AREAID)]==2)	//Lava/deadly liquid...
 		{
-			If(lava_damage[PlayerNumber()]>0&&framecount % 8 == 7) lava_damage[PlayerNumber()] -= 3;
 			If(lava_damage[PlayerNumber()]<0) lava_damage[PlayerNumber()] = 0;
 			
-			If(lava_damage[PlayerNumber()]<12)
+			If(lava_damage[PlayerNumber()]<8&&WaterLevel(WL_WATERLEVEL)>0)
 			{
-				If(WaterLevel(WL_WATERLEVEL)==1) { If(lava_damage[PlayerNumber()]<2) lava_damage[PlayerNumber()] += 3; Else lava_damage[PlayerNumber()]++; }
-				If(WaterLevel(WL_WATERLEVEL)==2) lava_damage[PlayerNumber()] ++;
+				//If(WaterLevel(WL_WATERLEVEL)==1) lava_damage[PlayerNumber()]++;
+				If(WaterLevel(WL_WATERLEVEL)<3) lava_damage[PlayerNumber()]++;
 				If(WaterLevel(WL_WATERLEVEL)==3) lava_damage[PlayerNumber()] += 2;
 				If(WaterLevel(WL_WATERLEVEL)==4) lava_damage[PlayerNumber()] += 3;
+				
+				If(lava_damage[PlayerNumber()]<=3) lava_damage[PlayerNumber()] += 2;	//If just entering the lava, double the damage.
+				Delay(20);	//Wait 20 tics or the lava damage will become high very fast.
 			}
 			
-			Delay(23);
-			If(lava_damage[PlayerNumber()]>0&&framecount % 23 == 0) { If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PlayerNumber()], 14); Else DamageThing(lava_damage[PlayerNumber()]/2, 14); StopSound(0, CHAN_VOICE); PrintBold(d:lava_damage[0]); }
+			Delay(3);
+			//If(lava_damage[PlayerNumber()]>0&&framecount % 23 == 0) { If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PlayerNumber()], 14); Else DamageThing(lava_damage[PlayerNumber()]/2, 14); StopSound(0, CHAN_VOICE); PrintBold(d:lava_damage[0]); }
 		}
+	}
+}
+
+script "DealLavaDamage" ENTER
+{
+	While(1)
+	{
+		If(lava_damage[PlayerNumber()]>0)
+		{
+			If(CheckInventory("SuperX")==FALSE) DamageThing(lava_damage[PlayerNumber()], 14);
+			Else DamageThing(lava_damage[PlayerNumber()]/2, 14);
+			StopSound(0, CHAN_VOICE);
+			
+			//Next, decrease the lava damage, faster at higher numbers.
+			If(lava_damage[PlayerNumber()]>4) lava_damage[PlayerNumber()] -= 2;
+			Else If(lava_damage[PlayerNumber()]>0) lava_damage[PlayerNumber()]--;
+			
+			If(1) PrintBold(d:lava_damage[0]);
+		}
+		Delay(23);
 	}
 }
 
@@ -737,10 +754,10 @@ function int WaterLevel (int x)	//This should recreate the built-in waterlevel v
 		
 		If(i>0)
 		{	//Is this a non-default ID? Calculate its boundaries legitimately!
-			left_calc -= spec_radius[i-1]<<16;
-			right_calc += spec_radius[i-1]<<16;
-			up_calc += spec_radius[i-1]<<16;
-			down_calc -= spec_radius[i-1]<<16;
+			left_calc -= (spec_radius[i-1]/2)<<16;	//Divide by two as each half of the radius is calculated separate.
+			right_calc += (spec_radius[i-1]/2)<<16;
+			up_calc += (spec_radius[i-1]/2)<<16;
+			down_calc -= (spec_radius[i-1]/2)<<16;
 		}
 		Else
 		{
@@ -807,7 +824,7 @@ script "PlayFootstepSound" (void)	//This plays sounds depending on the surface t
 		if(GetCVAR("snd_footstepsenemy")==FALSE) Terminate;	//If enemy footstep sounds are disabled, don't do anything!
 	}
 	
-	If(WaterLevel(WL_WATERLEVEL)==0)
+	If(WaterLevel(WL_WATERLEVEL)==0||WaterLevel(WL_WATERLEVEL)>2)
 	{
 		If(CheckActorFloorTexture(0, "T_SHAWN2") ||
 		CheckActorFloorTexture(0, "INB_SHMB") ||
@@ -1869,8 +1886,8 @@ script "DisplayCoinTimers" ENTER
 	{
 		If(canUsePCoins == FALSE && (ninja_tics[PlayerNumber()]>0||water_tics[PlayerNumber()]>0||damage_tics[PlayerNumber()]>0||heal_tics[PlayerNumber()]>0||speed_tics[PlayerNumber()]>0||combo_tics[PlayerNumber()]>0))
 		{
-			HUDMessage (s:"POWERUP COINS ARE DISABLED IN THIS AREA.";
-				HUDMSG_FADEOUT, 0, CR_RED, 64.1,155.1, 0.01, 0.0, 0.0);
+			HUDMessage (s:"POWERUP COINS ARE DISABLED HERE.";
+				HUDMSG_FADEINOUT, 0, CR_RED, 64.2,TIMER_LOWER, 0.0, 0.25, 0.25);
 		}
 		Else
 		{
@@ -1880,28 +1897,28 @@ script "DisplayCoinTimers" ENTER
 				Else vposition =  TIMER_UPPER;
 				
 				HUDMessage (s:"NINJA:";
-					HUDMSG_FADEOUT, 0, CR_PURPLE, 254.2,vposition, 0.01, 0.0, 0.0);
+					HUDMSG_FADEINOUT, 0, CR_PURPLE, 254.2,vposition, 0.01, 0.0, 0.0);
 				
 				If((ninja_tics[PlayerNumber()]/35) % 60 >= 10) {
 				HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":",d:(ninja_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_CREAM, 294.2,vposition, 0.0, 0.25, 0.25); }
 				Else {
 				HUDMessage (d:(ninja_tics[PlayerNumber()]/35) / 60,s:":0",d:(ninja_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_CREAM, 294.2,vposition, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_CREAM, 294.2,vposition, 0.0, 0.25, 0.25); }
 			}
 
 			if(water_tics[PlayerNumber()]>0)
 			{
 
 				HUDMessage (s:"WATER:";
-					HUDMSG_FADEOUT, 0, CR_BLUE, 254.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+					HUDMSG_FADEINOUT, 0, CR_BLUE, 254.2,TIMER_LOWER, 0.01, 0.0, 0.0);
 				
 				If((water_tics[PlayerNumber()]/35) % 60 >= 10) {
 				HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":",d:(water_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.0, 0.25, 0.25); }
 				Else {
 				HUDMessage (d:(water_tics[PlayerNumber()]/35) / 60,s:":0",d:(water_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_CYAN, 294.2,TIMER_LOWER, 0.0, 0.25, 0.25); }
 			}
 			
 			if(damage_tics[PlayerNumber()]>0)
@@ -1910,28 +1927,28 @@ script "DisplayCoinTimers" ENTER
 				Else vposition =  TIMER_UPPER;
 				
 				HUDMessage (s:"DAMAGE:";
-					HUDMSG_FADEOUT, 0, CR_ORANGE, 164.2,vposition, 0.01, 0.0, 0.0);
+					HUDMSG_FADEINOUT, 0, CR_ORANGE, 164.2,vposition, 0.01, 0.0, 0.0);
 				
 				If((damage_tics[PlayerNumber()]/35) % 60 >= 10) {
 				HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":",d:(damage_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_YELLOW, 204.2,vposition, 0.0, 0.25, 0.25); }
 				Else {
 				HUDMessage (d:(damage_tics[PlayerNumber()]/35) / 60,s:":0",d:(damage_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_YELLOW, 204.2,vposition, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_YELLOW, 204.2,vposition, 0.0, 0.25, 0.25); }
 			}
 
 			if(heal_tics[PlayerNumber()]>0)
 			{
 			
 				HUDMessage (s:"HEAL:";
-					HUDMSG_FADEOUT, 0, CR_RED, 164.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+					HUDMSG_FADEINOUT, 0, CR_RED, 164.2,TIMER_LOWER, 0.01, 0.0, 0.0);
 				
 				If((heal_tics[PlayerNumber()]/35) % 60 >= 10) {
 				HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":",d:(heal_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.0, 0.25, 0.25); }
 				Else {
 				HUDMessage (d:(heal_tics[PlayerNumber()]/35) / 60,s:":0",d:(heal_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_TAN, 204.2,TIMER_LOWER, 0.0, 0.25, 0.25); }
 			}
 
 			if(speed_tics[PlayerNumber()]>0)
@@ -1940,28 +1957,28 @@ script "DisplayCoinTimers" ENTER
 				Else vposition =  TIMER_UPPER;
 				
 				HUDMessage (s:"SPEED:";
-					HUDMSG_FADEOUT, 0, CR_GREEN, 64.2,vposition, 0.01, 0.0, 0.0);
+					HUDMSG_FADEINOUT, 0, CR_GREEN, 64.2,vposition, 0.01, 0.0, 0.0);
 				
 				If((speed_tics[PlayerNumber()]/35) % 60 >= 10) {
 				HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":",d:(speed_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_YELLOW, 104.2,vposition, 0.0, 0.25, 0.25); }
 				Else {
 				HUDMessage (d:(speed_tics[PlayerNumber()]/35) / 60,s:":0",d:(speed_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_YELLOW, 104.2,vposition, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_YELLOW, 104.2,vposition, 0.0, 0.25, 0.25); }
 			}
 			
 			if(combo_tics[PlayerNumber()]>0)
 			{
 			
 				HUDMessage (s:"COMBO:";
-					HUDMSG_FADEOUT, 0, CR_YELLOW, 64.2,TIMER_LOWER, 0.01, 0.0, 0.0);
+					HUDMSG_FADEINOUT, 0, CR_YELLOW, 64.2,TIMER_LOWER, 0.01, 0.0, 0.0);
 				
 				If((combo_tics[PlayerNumber()]/35) % 60 >= 10) {
 				HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":",d:(combo_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.0, 0.25, 0.25); }
 				Else {
 				HUDMessage (d:(combo_tics[PlayerNumber()]/35) / 60,s:":0",d:(combo_tics[PlayerNumber()]/35) % 60;
-					HUDMSG_FADEOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.01, 0.0, 0.0); }
+					HUDMSG_FADEINOUT, 0, CR_TAN, 104.2,TIMER_LOWER, 0.0, 0.25, 0.25); }
 			}
 		}
 	Delay(1);
@@ -2458,8 +2475,6 @@ int check_ambience[MAX_PLAYERS];	//Ambience at checkpoint.
 int check_weather[MAX_PLAYERS];		//The weather set at the checkpoint.
 int check_music[MAX_PLAYERS];		//Music that should play when respawning at the checkpoint.
 int check_angle[MAX_PLAYERS];		//The angle a player faced when setting a checkpoint if that argument was set.
-int check_specbehav[MAX_PLAYERS+1];	//How the invisible special plane is treated. (0: Water, 1: Bottomless Pit, 2: Lava)
-int check_specheight[MAX_PLAYERS+1] = { -1024, -1024, -1024, -1024, -1024, -1024, -1024, -1024, -1024 };	//The height of the invisible plane.
 int check_deathbehav[MAX_PLAYERS];	//Each player's "death behavior" at the last checkpoint.
 int check_windspeed[MAX_PLAYERS];	//How powerful the wind is. Wind pulls players and precipitation around.
 int check_wind_dir[MAX_PLAYERS];	//Where the wind is blowing. By default, it moves through a list.
@@ -4310,8 +4325,9 @@ script "SpringBounce" (int tid, int type, int power) //Bounces the player in the
 	bool extra_power = 0;	//This determines whether hitting this spring with Mary's hammer should increase its power.
 	
 	//If power is negative, this means hitting the spring with Mary's hammer should increase its power a bit. This will be 0-2, 1 if power or type is negative and 2 is both are. Note type -1 i a horizontal spring.
-	If(type<0) { type = abs(type); extra_power++; }	//If type is negative, add one additional power if hit with Mary's Hammer.
+	If(type<0) { if(type!=-2) type = abs(type); extra_power++; }	//If type is negative, add one additional power if hit with Mary's Hammer.
 	If(power<0) { extra_power++; power = abs(power); }
+	If(type==-2) type = 0;	//-2 is the same as 0, only used to allow being launched by hammer from spring type 0.
 	If((type<1||type>2)&&tid>0)	//Don't do any of this if it is a boost panel.
 	{
 		//First, see if Mary's hitting this with her hammer.
@@ -4833,6 +4849,7 @@ script "ChangePlayerTIDs" enter
 	
 	If(initial_setup==FALSE)	//Set up some things, such as the inventory items.
 	{	//If an inventory item the player can hold is added, add it to this list!
+		GiveInventory("PowerupDamage",1);
 		GiveInventory("InventoryTurret",1);
 		GiveInventory("Ball3",1);
 		GiveInventory("Ball2",1);
@@ -4842,7 +4859,6 @@ script "ChangePlayerTIDs" enter
 		GiveInventory("PowerupWater",1);
 		GiveInventory("PowerupNinja",1);
 		GiveInventory("PowerupHeal",1);
-		GiveInventory("PowerupDamage",1);
 	}
 	
 	if(GameType()==GAME_NET_DEATHMATCH) cgem_count = 7;
@@ -4858,11 +4874,6 @@ script "ChangePlayerTIDs" enter
 	movesky[0] = 0;	//How much less the skybox will move relative to the player. Higher values make it slower.
 	movesky[1] = 0; //The above value is horizontal, but this is vertical.
 	//movesky[2] is used in "total control" mode but this is only for relative movement.
-	time_safe = FALSE;	//Can the time of day advance without the player noticing it from the current location?
-	time_defaults[0] = 0;	//Disable time-of-day system's default lighting.
-	time_defaults[1] = 0;	//What time of day's settings should be applied? None here.
-	time_settings = 0;	//Which set of settings (sky, colors, and brightness levels) should be used for this area?
-	//time_override = 0;	//Should the sky be stormy or disabled (redundant if the system is disabled)?
 	
 	Delay(2);	//Give the level two tics to set up the music variable.
 	
@@ -5684,6 +5695,8 @@ While(1)
 		Else If(CheckInventory("SuperX")==TRUE) { GiveInventory("InternalDSuper",1); }
 		Else If(damage_tics[PlayerNumber()]>0) { GiveInventory("InternalDCoin",1); }
 		
+		If(speed_tics[PlayerNumber()]>0 && CanUsePCoins) GiveInventory("PowerDoubleFiringSpeed",1);
+		
 		healthupgrades = upgrades[6];	//Store the number of health upgrades to see if one's picked up by the next tic.
 		
 		Delay(1);	//The only "delay" allowed.
@@ -5696,6 +5709,7 @@ While(1)
 		
 		//After the delay, take away all of the player's damage-increasing "powerups".
 		TakeInventory("PowerDamage",99);
+		TakeInventory("PowerDoubleFiringSpeed",99);
 		TakeInventory("PowerDoubleDamage",99);
 		TakeInventory("InternalDCoin",99);
 		TakeInventory("InternalDSuper",99);
@@ -5703,6 +5717,7 @@ While(1)
 		TakeInventory("PowerDCoin",99);
 		TakeInventory("PowerDSuper",99);
 		TakeInventory("PowerDCoin_Super",99);
+		
 		
 	}
 }
@@ -6455,6 +6470,8 @@ script "DropCoins" (int number)
 {
 	If(ActivatorTID()>=1000&&ActivatorTID()<=1007)
 	{
+		//Players shouldn't cheaply lose coins when falling into pits and lava; This will only be allowed in water/land!
+		If(WaterLevel(WL_WATERLEVEL)>0&&spec_behavior[WaterLevel(WL_AREAID)]>0) Terminate;
 		if(framecount<10) Terminate;
 		if(number<3) Terminate;
 		if(number>20) number = 20;

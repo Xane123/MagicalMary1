@@ -626,6 +626,7 @@ PART A 1 A_SpawnItemEx("FlowerProjectile3_Trail",0,0,0,Random(-3.5,3.5),Random(-
 PART A 0 A_SpawnItemEx("FlowerProjectile3_Trail",0,0,0,Random(-3.5,3.5),Random(-3.5,3.5),Random(-3.5,3.5),0,SXF_NOCHECKPOSITION|SXF_TRANSFERTRANSLATION)
 TNT1 A 0 A_RadiusGive("Projectile2",320,RGF_MONSTERS)
 PART A 1 A_SetScale(scalex+0.05)
+PART A 0 A_ChangeFlag("NOCLIP",FALSE)
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,Args[0])>0,"Water")
 PART AAAAAAAA 1 A_SpawnItemEx("FlowerProjectile3_Trail",0,0,0,Random(-3.5,3.5),Random(-3.5,3.5),Random(-3.5,3.5),0,SXF_NOCHECKPOSITION|SXF_TRANSFERTRANSLATION)
 PART A 1 A_SpawnItemEx("FlowerProjectile3_Trail",0,0,0,Random(-3.5,3.5),Random(-3.5,3.5),Random(-3.5,3.5),0,SXF_NOCHECKPOSITION|SXF_TRANSFERTRANSLATION)
@@ -651,6 +652,7 @@ FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,Args[0])>0,"Water")
 PART AAAAAAAA 1 A_SpawnItemEx("FlowerProjectile3_Trail",0,0,0,Random(-3.5,3.5),Random(-3.5,3.5),Random(-3.5,3.5),0,SXF_NOCHECKPOSITION|SXF_TRANSFERTRANSLATION)
 Loop
 Launch:
+PART A 0 A_ChangeFlag("NOCLIP",TRUE)
 PART A 0 A_ChangeFlag("NOGRAVITY",FALSE)
 PART A 1 A_GiveInventory("Variable1",1)
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,Args[0])>0,"Water")
@@ -1102,12 +1104,13 @@ Goto WaitCrashA
 DoubleJump2:
 MHM2 D 0 A_JumpIfInventory("SuperX",1,"SuperPunishment")	//If Magical Cutie Mary, punish spamming with coin loss.
 MHM2 D 0 ACS_NamedExecuteAlways("RequestJumpCancel",0,0,0,0)
+MHM2 D 0 A_JumpIfInventory("SuperX",1,"DoubleJump_Super")	//If Magical Cutie Mary, allow this to be spammed.
+MHM2 D 0 A_GiveInventory("MaryHammer_MidAirDone",1)
+DoubleJump_Super:
 MHM2 DEFGHI 1
 MHM2 J 0 A_PlaySound("mary/hammer_puff",CHAN_VOICE,1.0)
 MHM2 J 17 A_ChangeVelocity(velx*1.05,vely*1.05,13.75,CVF_REPLACE)
 MHM2 IHGFED 1
-MHM2 D 0 A_JumpIfInventory("SuperX",1,"CheckFloor")	//If Magical Cutie Mary, allow this to be spammed.
-MHM2 D 0 A_GiveInventory("MaryHammer_MidAirDone",1)
 Goto CheckFloor
 AltFire:
 MHM2 D 0 A_JumpIfInventory("MaryHammer_MidAirDone",1,"WaitCrash")

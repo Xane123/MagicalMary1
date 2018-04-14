@@ -9,6 +9,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Weaker cops (1-1's variants) now respond to being burned. firing a single bullet (blue) or a burst of bullets (green).
 * Warping from the Battle Arena minigame is now impossible. This fixes a glitch where you could return to the Small Hut and use the teleporter to return to Isle Hell City (1-1), which should be impossible once you enter Rooftop to Rooftop (1-2).
 * Added sanity check for checkpoints; Now if the player or monsters are set to spawn at an object that doesn't exist, the checkpoint ID will revert to the level default, 616. This should fix the Black Room Glitch when dying in 1-1 after returning from a Battle Arena fight.
+* Fixed "special plane areas" being double the size they were set to.
+* Special Stages don't drain your time on the ground, now updated to the new special plane system.
 ## Major
 * Health and jump height can be upgraded by picking up upgrade items for them, which are separate from weapon upgrade items.
 * Mary's Hammer Slam attack behaves differently now; Instead of activating based on height alone, which could lead to unfair deaths, it now activates if at a high enough height **and** the attack button is held down. Briefly pressing the attack button will do the normal hammer attack now, even in mid-air!
