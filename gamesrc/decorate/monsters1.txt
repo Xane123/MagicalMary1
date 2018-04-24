@@ -62,9 +62,9 @@ Radius 1
 Height 2
 Scale 1.5
 Gravity 0.35
--MISSILE
+Decal "BloodSplat"
++MISSILE
 -NOTELEPORT
-
 States
 {
 Spawn:
@@ -86,19 +86,23 @@ Goto Render
 Q:
 "####" Q 0
 Render:
-"####" "#" 1 A_JumpIf(velz==0.0&&z-floorz<2.5,"BecomeFlat")
+"####" "#" 1 A_JumpIf(velz<0.0&&z-floorz<5,"BecomeFlat")
 Loop
 BecomeFlat:
+"####" "#" 0 A_ChangeFlag("MISSILE",FALSE)
 "####" "#" 0 A_ChangeFlag("FLATSPRITE",TRUE)
 "####" "#" 0 A_SetScale(scalex+0.33)
 "####" "#" 140
 FadeOut:
 "####" "#" 1 A_FadeOut(0.05,1)
 Loop
+Death:	//This leaves a decal on the wall this "part" hit.
+TNT1 A 1
+Goto FadeOut
 }
 }
 
-Actor SoapPart : BloodPart { Translation "68:68=244:244", "58:58=242:242", "67:67=242:242", "69:69=244:244", "5:5=244:244", "102:111=242:242" }
+Actor SoapPart : BloodPart { Decal "SoapSplat" Translation "68:68=244:244", "58:58=242:242", "67:67=242:242", "69:69=244:244", "5:5=244:244", "102:111=242:242" }
 
 Actor Troll : XMonster 303
 {
@@ -531,13 +535,13 @@ Dis1:
 TIGR C 0 A_JumpIfCloser(160,"Dis2")
 TIGR C 0 A_GiveInventory("Weakness",1)
 TIGR C 1 A_ChangeVelocity(Random(13,17),Random(-1.5,1.5),10,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR C 11 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
+TIGR C 11 //ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 Goto MissileAir
 Dis2:
 TIGR C 0 A_GiveInventory("Weakness",1)
 TIGR C 0 A_JumpIfCloser(164,"Melee")
 TIGR C 1 A_ChangeVelocity(Random(12.25,16.25),Random(-1.02,1.02),7,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR C 11 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
+TIGR C 11 //ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 Goto MissileAir
 Melee:
 TIGR C 0 A_JumpIf(velz!=0.0,"Fast")
@@ -546,7 +550,7 @@ TIGR B 2 A_ChangeVelocity(-8.5,Random(-8,8),6,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEF
 TIGR CBAB 2
 TIGR D 0 A_GiveInventory("Weakness",1)
 TIGR C 1 A_ChangeVelocity(20,Random(-0.75,0.75),6.75,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR C 2 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
+TIGR C 2 //ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 Goto CheckFloorLoop
 CheckFloorLoop:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
@@ -561,7 +565,7 @@ TIGR C 0 A_JumpIf(velz!=0.0,"Fast")
 TIGR A 0 A_FaceTarget
 TIGR D 0 A_GiveInventory("Weakness",1)
 TIGR A 1 A_ChangeVelocity(20,Random(-1.5,1.5),6.75,CVF_RELATIVE|CVF_REPLACE,AAPTR_DEFAULT)
-TIGR A 2 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
+TIGR A 2 //ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 TIGR BC 2
 Goto CheckFloorLoopSecond
 CheckFloorLoopSecond:
@@ -587,7 +591,7 @@ TIGR D 0 A_TakeInventory("Weakness",1)
 TIGR D 0 A_PlaySound("wok/g34",CHAN_VOICE,1.0,FALSE,0.75)
 TIGR D 0 A_FaceTarget
 TIGR D 1 A_ChangeVelocity(-20,Random(-0.75,0.75),14,CVF_REPLACE|CVF_RELATIVE)
-TIGR C 2 ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
+TIGR C 2 //ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0)
 WeaknessCheckFloor:
 FIGH B 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>0,"CheckDeath")
 TIGR D 1 A_CheckFloor("WeaknessBounce")
@@ -1334,18 +1338,21 @@ PainSound "cop2/pain"
 DeathSound "cop2/death"
 //$Title Blue HCPD Cop
 //$Category monsters/Tier 1
-//$Arg0Title Behavior
+//$Arg0 Behavior
 //0: Arena (more basic behavior)
 //1: Follow path follower indicated by args[1]
 //2: Standard behavior
 //3: Watch movie in 1-2's theatre
+//4: Shoot continuously
+//5: "Wall jump" then shoot continuously
+//6: Scripted 1-3 "jumping" cop
 //$Arg0Default 2
-//$Arg1Title Path follower TID
+//$Arg1Name Path follower TID
 
 //INVENTORY USAGE:
 //Variable1: How many more "stop crying!" jump-shoots are left in the current rage. Also, burning timer in fire death.
 //Variable2: Indicates if this cop touched water during burning (fire death)
-//Variable3: Whether setup of burning animation during fire death was done
+//Variable3: Whether setup of burning animation during fire death was done. Also used for continuous shooting.
 //Variable4: During Args[0]==3, this alerts the cop that their movie was interrupted.
 
 //Animation1: Indicates this cop already has a path to follow. (Args[0]==1)
@@ -1355,13 +1362,16 @@ States
 Spawn:
 COP1 A 0
 COP1 A 0 A_JumpIfInventory("Variable3",1,"Burn4")	//To fix the Phantom Cop Glitch, just kill if they're burning.
-COP1 A 0 A_JumpIf(Args[0]==0,"BasicBehavior")
+COP1 A 0 A_JumpIf(Args[0]==6,"IntroSA3_FindPlayer")	//1-3 scripted jumping cop behavior
+COP1 A 0 A_JumpIf(Args[0]==5,"Intro_FakeWallJump")	//Wall jump then continuous shooting behavior
+COP1 A 0 A_JumpIf(Args[0]==0,"BasicBehavior")	//Arena behavior
+COP1 A 0 A_JumpIf(Args[0]==4,"BasicBehavior")	//Continuous shooting behavior
 COP1 A 0 A_JumpIfInventory("Animation1",1,"StandardBehavior")	//Animation1 is used to prevent walking on a non-existant path.
 COP1 A 0 A_JumpIf(Args[0]==1,"FollowPath")
 COP1 A 0 A_JumpIf(Args[0]==3,"WatchTheatre")
 StandardBehavior:	//Args[0] being 2 is "standard behavior". The cop will occasionally receive calls which distract.
 COP1 ABCBABCBABCBABCB 7 A_LookEx(0, 64, 256, 320, 40, "Walk")
-COP1 A 0 A_JumpIfInventory("CDeath",1,"ForceTarget")
+COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_Jump(48, "ReceiveMessage")
 Loop
 FollowPath:
@@ -1370,19 +1380,10 @@ COP1 A 0 ACS_NamedExecuteAlways("EnemyFollowPath",0,args[1],0,0)
 WalkAnimation:
 COP1 ABCB 2 A_JumpIfInventory("Animation2",1,"BasicBehavior")	//If the path detects the cop was hurt, this snaps them off the path.
 Loop
-ForceTarget:
-COP1 A 0 A_LookEx(0, 0, 768, 768, 360, "KillSightCheck")
-FailedReact:
-COP1 A 0 A_TakeInventory("CDeath",1)
-COP1 A 0 A_PlaySound("c3/r3",CHAN_VOICE,1.0,FALSE,0.95)	//Angrily grunt, indicating the cop knew about the death but couldn't find any players.
-Goto Spawn
-KillSightCheck:
-COP1 I 0 A_CheckLOF("React",CLOFF_JUMPENEMY)
-Goto FailedReact
 ReceiveMessage:
 COP1 A 0 A_PlaySound("cop2/walkietalkie",CHAN_VOICE,1.0,FALSE,1.13)
 COP1 BC 3
-COP1 D 80
+COP1 D 110
 COP1 C 3 A_PlaySound("cop2/pain",CHAN_VOICE,1.0)
 COP1 B 3 
 Goto Spawn
@@ -1439,12 +1440,15 @@ TNT1 A 0 A_JumpIfInventory("Variable1",1,"JumpShoot")	//Still have anger towards
 COP1 A 0 A_TakeInventory("CPain",1)
 COP1 A 0 A_PlaySound("cop2/witness_pain",CHAN_AUTO,1.0)
 Goto Missile
+ReactCheckDistance:
+TNT1 A 0 A_JumpIfCloser(384,"ContinueReaction")
+Goto FailedReact
 React:
+TNT1 A 0 A_JumpIf(Args[0]==4,"ReactCheckDistance")
 TNT1 A 0 A_JumpIfInventory("Variable1",1,"JumpShoot")	//Still have anger towards the crying girl, cop? Let it out!
 COP1 I 0 A_CheckLOF("ContinueReaction",CLOFF_JUMPENEMY)
 COP1 A 0 A_TakeInventory("CDeath",1)
 COP1 A 0 A_GiveInventory("CPain",1)
-Goto FailedReact
 ContinueReaction:
 COP1 A 0 A_PlaySound("cop2/witness",CHAN_VOICE,1.0)
 COP1 AAABBBAABBABABACACADADCB 1
@@ -1484,6 +1488,8 @@ COP1 A 0
 COP1 A 0 A_JumpIfInventory("CDeath",1,"React")
 COP1 A 0 A_JumpIfInventory("CPain",1,"ReactPain")
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
+COP1 A 0 A_JumpIf(Args[0]==4,"ShootContinuously")	//Continuous shooting behavior
+COP1 A 0 A_JumpIf(Args[0]==5,"ShootContinuously")	//Fake "wall jump" intro behavior
 COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)==2,"MissileHard")	//If on hard difficulty, shoot very cheaply!
 COP1 A 2
 COP1 I 0 A_CheckLOF("Fire",CLOFF_JUMPENEMY)
@@ -1536,12 +1542,12 @@ COP1 AB 1
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 CC 4
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
-COP1 GG 4
+COP1 GG 3
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 HI 2
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 A 0 A_JumpIf(CallACS("GetSpecialStatus",0,0,0,0)>1,"Drown")
-COP1 A 0 A_JumpIfCloser(192, "Revert2NormalFire")
+//COP1 A 0 A_JumpIfCloser(192, "Revert2NormalFire")
 COP1 A 0 A_PlaySound("weapon/gun1", CHAN_AUTO,1.0,FALSE,0.5)
 COP1 J 0 A_CustomMissile("Cop1Bullet",32,8,-20)
 COP1 J 0 A_CustomMissile("Cop1Bullet",32,8,20)
@@ -1560,6 +1566,112 @@ COP1 CCC 6
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
 COP1 B 1
 COP1 A 0 A_JumpIfInventory("Animation2",1,"Crying",AAPTR_TARGET)
+Goto Walk
+
+//Fake "wall jump" intro
+Intro_FakeWallJump:
+//COP1 BCD 1
+COP1 E 0 A_PlaySound("cop2/jump",CHAN_VOICE,1.0,FALSE,0.9)
+COP1 E 0 A_ChangeVelocity(18,0,3,CVF_RELATIVE|CVF_REPLACE)
+COP1 EEFFF 3
+COP1 E 0 A_SetAngle(angle+180)
+COP1 EFEFEF 1 A_ChangeVelocity(0,0,-13,CVF_RELATIVE|CVF_REPLACE)
+COP1 E 0 A_PlaySound("misc/walljump",CHAN_BODY,1.0,FALSE,0.85)
+COP1 E 5 A_ChangeVelocity(6,0,8,CVF_RELATIVE|CVF_REPLACE)
+IntroWJ_DetectFloor:
+COP1 F 1
+COP1 F 0 A_JumpIf(velz==0.0&&z-floorz<8,"IntroWJ_Finish")
+Loop
+IntroWJ_Finish:
+COP1 EDDDCB 3
+COP1 AAAA 1 A_LookEx(LOF_NOSOUNDCHECK,0,1024,0,120,"ShootContinuously")
+Goto BasicBehavior	//If no target was found somehow, just revert to basic behavior.
+
+//Scripted 1-3 jumping cop
+IntroSA3_FindPlayer:
+COP1 A 1 A_LookEx(0, 0, 1024, 1024, 360, "Intro_ScriptedArea3")
+Loop
+Intro_ScriptedArea3:
+COP1 ABCB 3 A_CheckProximity("IntroSA3_Jump","PlayerPawn",128.0,1,CPXF_ANCESTOR)
+Loop
+IntroSA3_Jump:
+COP1 A 0 A_ChangeFlag("INVULNERABLE",TRUE)
+COP1 A 0 A_ChangeFlag("NODAMAGETHRUST",TRUE)
+COP1 A 0 A_ChangeFlag("NOCLIP",TRUE)
+COP1 ABCBABCBAB 2 A_ChangeVelocity(16,0,0,CVF_REPLACE)
+COP1 CD 4
+COP1 E 0 A_PlaySound("cop2/jump",CHAN_VOICE,1.0,FALSE,0.9)
+COP1 E 5 A_ChangeVelocity(22.5,-4.5,14,CVF_REPLACE)
+COP1 EFFF 5
+COP1 E 0 A_Stop
+COP1 EDDDCB 3 A_CheckProximity("IntroSA3_PrepareObstacle","PlayerPawn",192.0,1,CPXF_ANCESTOR)
+IntroSA3_WaitForPlayer:
+COP1 ABCB 3 A_CheckProximity("IntroSA3_PrepareObstacle","PlayerPawn",192.0,1,CPXF_ANCESTOR)
+Loop
+IntroSA3_PrepareObstacle:
+COP1 D 2 A_ChangeVelocity(15.5,8,12,CVF_REPLACE)
+COP1 E 0 A_PlaySound("cop2/jump",CHAN_VOICE,1.0,FALSE,0.9)
+COP1 EFFFFE 5 A_ChangeVelocity(velx,3,velz,CVF_REPLACE)
+IntroSA3_FireBullets:
+COP1 DCBA 1 A_ChangeVelocity(0.0,0.0,velz,CVF_REPLACE)
+COP1 GHI 4 A_CheckProximity("IntroSA3_TransitionToNormal","PlayerPawn",256.0,1,CPXF_ANCESTOR)
+COP1 J 0 A_FaceTarget
+COP1 J 3 A_CustomMissile("Cop1Bullet",32,8,0,CMF_ABSOLUTEPITCH,0)
+COP1 KL 5 A_CheckProximity("IntroSA3_TransitionToNormal","PlayerPawn",256.0,1,CPXF_ANCESTOR)
+COP1 D 2 A_ChangeVelocity(velx,-6,8,CVF_REPLACE)
+COP1 EFFE 4 A_CheckProximity("IntroSA3_TransitionToNormal","PlayerPawn",256.0,1,CPXF_ANCESTOR)
+
+COP1 DCBA 1 A_ChangeVelocity(0.0,0.0,velz,CVF_REPLACE)
+COP1 GHI 4 A_CheckProximity("IntroSA3_TransitionToNormal","PlayerPawn",256.0,1,CPXF_ANCESTOR)
+COP1 J 0 A_FaceTarget
+COP1 J 3 A_CustomMissile("Cop1Bullet",32,8,0,CMF_ABSOLUTEPITCH,0)
+COP1 KL 5 A_CheckProximity("IntroSA3_TransitionToNormal","PlayerPawn",256.0,1,CPXF_ANCESTOR)
+COP1 D 2 A_ChangeVelocity(velx,6,8,CVF_REPLACE)
+COP1 EFFE 4 A_CheckProximity("IntroSA3_TransitionToNormal","PlayerPawn",256.0,1,CPXF_ANCESTOR)
+Loop
+IntroSA3_TransitionToNormal:
+COP1 A 0 A_ChangeFlag("NOCLIP",FALSE)
+COP1 A 0 A_ChangeFlag("NODAMAGETHRUST",FALSE)
+COP1 A 0 A_ChangeFlag("INVULNERABLE",FALSE)
+COP1 D 2 A_ChangeVelocity(14,vely,9,CVF_REPLACE)
+COP1 E 0 A_PlaySound("cop2/jump",CHAN_VOICE,1.0,FALSE,0.9)
+COP1 EFFE 5
+COP1 DCB 3
+Goto ShootContinuously_Easy
+//Continuous shooting
+ShootContinuously:
+COP1 G 0 A_JumpIfCloser(144, "Missile2")	//If the player is too close, just shoot normally.
+COP1 GGHI 3
+COP1 I 0 A_TakeInventory("Variable3",70)	//Variable1 is now used to keep track of remaining bullets.
+COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)==0,"ShootContinuously_Easy")	//If on easy difficulty, shoot less.
+COP1 A 0 A_JumpIf(CallACS("GetPlayerInformation",0,0,0,0)==2,"ShootContinuously_Hard")	//If on hard difficulty, shoot more and faster!
+ShootContinuously_Loop:	//Normal difficulty
+COP1 J 0 A_FaceTarget
+COP1 A 0 A_PlaySound("weapon/gun1", CHAN_WEAPON,1.0,FALSE,0.5)
+COP1 J 3 A_CustomMissile("Cop1Bullet",32,8,0)
+COP1 K 5 A_GiveInventory("Variable3",1)
+COP1 L 6 A_JumpIfInventory("Variable3",8,"FinishContinuousShooting")
+COP1 L 0 A_JumpIfCloser(128,"FinishContinuousShooting")	//If the player approaches, stop shooting continuously.
+Loop
+ShootContinuously_Easy:	//Easy difficulty
+COP1 J 0 A_FaceTarget
+COP1 A 0 A_PlaySound("weapon/gun1", CHAN_WEAPON,1.0,FALSE,0.5)
+COP1 J 5 A_CustomMissile("Cop1Bullet_Angry",32,8,0)
+COP1 K 7 A_GiveInventory("Variable3",1)
+COP1 L 8 A_JumpIfInventory("Variable3",5,"FinishContinuousShooting")
+COP1 L 0 A_JumpIfCloser(192,"FinishContinuousShooting")	//If the player approaches, stop shooting continuously.
+Loop
+ShootContinuously_Hard:	//Hard difficulty
+COP1 J 0 A_FaceTarget
+COP1 A 0 A_PlaySound("weapon/gun1", CHAN_WEAPON,1.0,FALSE,0.5)
+COP1 J 2 A_CustomMissile("Cop1Bullet_Angry",32,8,0)
+COP1 K 3 A_GiveInventory("Variable3",1)
+COP1 L 4 A_JumpIfInventory("Variable3",11,"FinishContinuousShooting")
+Loop
+FinishContinuousShooting:
+COP1 L 10 A_TakeInventory("Variable3",70)
+COP1 D 3
+COP1 D 0 A_JumpIfCloser(192, "Proceed")
 Goto Walk
 
 Pain:
@@ -1870,7 +1982,7 @@ ActiveSound "cop3/talk"
 PainSound "cop3/pain"
 DeathSound "cop3/death"
 //$Title Green HCPD Cop
-//$Arg0Title Behavior
+//$Arg0 Behavior
 //0: Arena (more basic behavior)
 //1: Follow path follower indicated by args[1].
 //2: Standard behavior.
@@ -1902,8 +2014,8 @@ Goto Spawn
 ReceiveMessage:
 COP1 A 0 A_PlaySound("cop2/walkietalkie",CHAN_VOICE,1.0,FALSE,1.13)
 COP1 BC 3
-COP1 D 80
-COP1 C 3 A_PlaySound("cop2/pain",CHAN_VOICE,1.0)
+COP1 D 110
+COP1 C 3 A_PlaySound("cop3/wt_response",CHAN_VOICE,1.0)
 COP1 B 3 
 Goto Spawn
 WatchTheatre:
@@ -2178,6 +2290,7 @@ Goto JumpShootFall
 
 Death.Fire:
 COP1 A 0 A_GiveInventory("DisableAutoJump",1)
+COP1 A 0 A_GiveInventory("Variable3",1)	//This SHOULD fix the Phantom Cop Glitch.
 TIGR A 0 A_SpawnItem("HurtMonster",64,32)
 COP1 A 0 A_TakeInventory("Variable1",70)
 COP1 A 0 ACS_NamedExecuteAlways("ColorCoin",0,3,0,0)
@@ -2380,11 +2493,12 @@ Damage (15)
 PainSound "fighter/pain"
 DeathSound "fighter/death"
 //$Title Fighter (Weak)
-//$Arg0 Initial mode
+//$Arg0 Behavior
+//$Arg0Default 1
 //0: Arena (basic behavior)
 //1: Await player (limited sight range)
 //2: Jump upon seeing player
-//3: Move backwards towards rail, disappearing if this fails.
+//3: Move backwards towards rail, reverting to normal behavior if this fails.
 States
 {
 Spawn:
@@ -2695,13 +2809,19 @@ DamageFactor "AirDash", 0.0
 DamageFactor "Hammer", 2.0
 -NOGRAVITY
 +SOLID
--COUNTKILL
++COUNTKILL
 +DONTTHRUST
+-RANDOMIZE
 +INTERPOLATEANGLES
++NOBLOOD
 MONSTER
 PainSound "turret/pain"
 //$Title Turret
 //$Category monsters/Turrets
+//Args[0]: Behavior
+//0: Normal (768-unit detection range)
+//1: Shoot at fast rhythm
+//2: Shoot at slow rhythm
 var int user_angle;	//The initial angle the turret was spawned at; It'll try to return to this when deactivating.
 var int user_storedangle;	//The angle last aimed at before firing, used to prevent firing lasers at the player.
 States
@@ -2716,18 +2836,42 @@ TURR A 0 A_SpawnItemEx("Turret1_Support",0,0,0,0,0,0,0,SXF_SETMASTER)
 TURR A 0 A_ChangeFlag("NOGRAVITY",TRUE)
 Spawn_NoSupport:
 TURR B 3
+TURR B 0 A_JumpIf(Args[0]==1||Args[0]==2,"PrepareRhythm")
 TURR B 0 A_LookEx(LOF_NOSOUNDCHECK, 0, 768, 0, 90, "ConfirmTarget")
 Loop
+PrepareRhythm:
+TURR B 0 A_ChangeFlag("COUNTKILL",FALSE)	//These "rhythm" turrets are designed as obstacles, not "enemies".
+TURR B 8 A_ChangeVelocity(0,0,1.25,CVF_REPLACE)
+TURR B 0 A_Stop
+TURR B 0 ACS_NamedExecuteAlways("TurretUserVariables",0,2,angle,0)
+TURR B 0 A_JumpIf(Args[0]==2,"RhythmShootSlow_Wait")
+Goto RhythmShootFast_Wait
+RhythmShootFast:
+TURR EEEEFGH 5
+TURR H 0 A_PlaySound("weapon/laser", CHAN_WEAPON,1.0,FALSE,0.5)
+TURR HHHGGGGFFFFEE 1 A_CustomMissile("Laser1",4.25,0,user_storedangle,CMF_AIMDIRECTION,0)
+TNT1 A 0 A_CheckProximity("RhythmShootFast","PlayerPawn",1600.0,1,CPXF_ANCESTOR)
+RhythmShootFast_Wait:
+TURR E 17 A_CheckProximity("RhythmShootFast","PlayerPawn",1600.0,1,CPXF_ANCESTOR)
+Loop
+RhythmShootSlow:
+TURR EEEEEEEEEEEFGH 5	//Waits two seconds between laser fires.
+TURR H 0 A_PlaySound("weapon/laser", CHAN_WEAPON,1.0,FALSE,0.5)
+TURR HHHGGGGFFFFEE 1 A_CustomMissile("Laser1",4.25,0,user_storedangle,CMF_AIMDIRECTION,0)
+TNT1 A 0 A_CheckProximity("RhythmShootSlow","PlayerPawn",1600.0,1,CPXF_ANCESTOR)
+RhythmShootSlow_Wait:
+TURR E 17 A_CheckProximity("RhythmShootSlow","PlayerPawn",1600.0,1,CPXF_ANCESTOR)
+Loop
 ConfirmTarget:
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-40)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,40)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-40)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,40)
 Goto Spawn_NoSupport
 See:
 TURR F 0 A_PlaySound("turret/move",CHAN_BODY,0.68,FALSE,0.95)
@@ -2737,29 +2881,29 @@ TURR CD 2
 TURR F 0 A_StopSound(CHAN_BODY)
 TURR E 15
 TURR B 0 A_ChangeFlag("FLOAT",TRUE)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-40)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,40)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-40)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,40)
 Goto FixRotationPrepare
 Charge:
 TURR F 0 A_PlaySound("turret/motor",CHAN_BODY,0.75,TRUE,1.05)
 TURR FFFFFFGGGGGGGHHHHHH 1 A_FaceTarget(6.0,0.0)
 TURR F 0 A_StopSound(CHAN_BODY)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-40)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
-TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,40)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-40)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
+TURR F 0 A_CheckLOF("MissileLoop", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,40)
 Goto FixRotationPrepare
 MissileLoop:
 TURR HGF 2
@@ -2771,13 +2915,13 @@ TURR F 0 A_PlaySound("turret/motor",CHAN_BODY,0.75,TRUE,1.05)
 TURR G 0 A_ChangeFlag("FLOAT",FALSE)
 TURR G 0 A_SetAngle(floor(angle))	//Make sure it's not a decimal value.
 FixRotation:
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
 TURR F 0 A_JumpIf(angle<user_angle,"RotateRight")
 TURR F 0 A_JumpIf(angle>user_angle,"RotateLeft")
 Revert:
@@ -2810,13 +2954,13 @@ TURR E 1 A_Turn(-5.0)
 TURR F 0 A_JumpIf(angle-5<user_angle,"FixRotationFine")
 Goto FixRotation
 FixRotationFine:
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
 TURR F 0 A_JumpIf(angle<user_angle,"RotateFineRight")
 TURR F 0 A_JumpIf(angle>user_angle,"RotateFineLeft")
 Goto Revert
@@ -2871,15 +3015,16 @@ Stop
 }
 }
 
-Actor Laser1
+Actor Laser1 : FastProjectile
 {
 	Radius 8
 	Height 16
 	Scale  2.25
-	Damage (10)
+	Damage (1)
 	Speed 42
 	Alpha 0.5
 	+BRIGHT
+	+THRUGHOST
 	PROJECTILE
 	States
 	{
@@ -2891,6 +3036,7 @@ Actor Laser1
 			Loop
 	}
 }
+Actor Laser1_Friendly : Laser1 { Damage (10) -RIPPER }
 
 Actor Turret1_Lights : Turret1 20	//This is identical, the only difference being the dynamic lights attached to this object.
 { //$Title Laser Turret (Dynamic Lights)
@@ -2938,15 +3084,15 @@ TURR B 0 A_LookEx(LOF_NOSOUNDCHECK, 0, 768, 0, 70, "Charge")
 TURR E 0 A_JumpIfInventory("Variable1",1,"Scan")
 Goto FixRotationPrepare
 ConfirmTarget:
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-40)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
-TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,40)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-40)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
+TNT1 A 0 A_CheckLOF("See", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,40)
 Goto Spawn_NoSupport
 See:
 TURR B 0 A_ChangeFlag("FLOAT",TRUE)
@@ -2955,30 +3101,30 @@ TURR B 0 A_Stop
 TURR CD 2
 See_Return:
 TURR E 15 A_JumpIfHealthLower(1,"FixRotationPrepare",AAPTR_TARGET)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-40)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,40)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-40)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,40)
 Goto FixRotationPrepare
 Charge:
 TURR G 0 A_ChangeFlag("FLOAT",TRUE)
 TURR C 0 A_PlaySound("turret/motor",CHAN_BODY,0.75,FALSE,0.95)
 TURR FFFFFFGGGGGGGHHHHHH 1 A_FaceTarget(6.0,0.0)
 TURR H 0 A_JumpIfHealthLower(1,"FixRotationPrepare",AAPTR_TARGET)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-40)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
-TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,40)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-40)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
+TURR F 0 A_CheckLOF("Missile", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,40)
 Goto FixRotationPrepare
 CancelMissile:
 TURR H 0 A_StopSound(CHAN_BODY)
@@ -2993,13 +3139,13 @@ TURR C 0 A_ClearSoundTarget
 TURR C 0 A_ClearLastHeard
 TURR C 0 
 TURR C 0 A_PlaySound("turret/motor",CHAN_BODY,0.75,FALSE,0.95)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
 TURR F 0 A_JumpIf(angle<user_angle,"RotateRight")
 TURR F 0 A_JumpIf(angle>user_angle,"RotateLeft")
 Revert:
@@ -3020,7 +3166,7 @@ Goto RevertFinish
 Missile:
 TURR H 0 ACS_NamedExecuteAlways("TurretUserVariables",0,2,angle,0)
 TURR A 0 A_PlaySound("weapon/laser", CHAN_WEAPON,1.0,FALSE,0.5)
-TURR HHHGGGGFFFFEE 1 A_CustomMissile("Laser1",4.25,0,user_storedangle,CMF_AIMDIRECTION,0)
+TURR HHHGGGGFFFFEE 1 A_CustomMissile("Laser1_Friendly",4.25,0,user_storedangle,CMF_AIMDIRECTION,0)
 TURR H 0 A_DamageSelf(20)
 TURR E 0 A_TakeInventory("Variable2",1)
 TURR E 0 A_JumpIfInventory("Variable2",1,"See_Return")
@@ -3037,13 +3183,13 @@ TURR E 1 A_Turn(-5.0)
 TURR F 0 A_JumpIf(angle-5<user_angle,"FixRotationFine")
 Goto FixRotation
 FixRotationFine:
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,-30)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,10)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,20)
-TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,768,0,30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,-30)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,10)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,20)
+TURR F 0 A_CheckLOF("Charge", CLOFF_NOAIM_HORZ|CLOFF_AIM_VERT_NOOFFSET|CLOFF_MUSTBESOLID,1024,0,30)
 TURR F 0 A_JumpIf(angle<user_angle,"RotateFineRight")
 TURR F 0 A_JumpIf(angle>user_angle,"RotateFineLeft")
 Goto Revert

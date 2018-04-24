@@ -57,7 +57,7 @@ script 254 (int music_id, int all_players, int fade_in)
 	}
 }
 
-script 256 (void)	{	SetResultValue(current_music[PlayerNumber()]);	}
+script "GetMusic" (void)	{	SetResultValue(current_music[PlayerNumber()]);	}
 
 script 255 ENTER
 {

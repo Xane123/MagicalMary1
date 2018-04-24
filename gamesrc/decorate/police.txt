@@ -1073,6 +1073,7 @@ DamageFactor "AirDash", 0.0
 -SOLID
 -COUNTKILL
 +DONTTHRUST
++NOBLOOD
 MONSTER
 //$Title Turret
 //$Category monsters/Turrets

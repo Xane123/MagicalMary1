@@ -100,9 +100,8 @@ int totalcointics = CONSTANT_TCOINDISPTICS;	//Number of tics to show the player'
 #define CONST_MAXUPGRADES_JUMPS 10	//Maximum jump upgrades.
 #define CONST_MAXUPGRADES_HEALTH 4	//Health upgrades go from 100 to 200 in 25 health intervals.
 
-#define CONSTANT_COIN_METERINC 5	//Amount combo meter increases with each collected coin.
-#define CONSTANT_BOUNCE_TICS 10	//How many tics the player can avoid bouncing for when landing after pushing the back button.
-#define CONST_MAXCOIN_INCAMOUNT 5	//How much the coin limit will raise with each upgrade collected.
+#define CONSTANT_COIN_METERINC 15	//Amount combo meter increases with each collected coin.
+#define CONST_MAXCOIN_INCAMOUNT 10	//How much the coin limit will raise with each upgrade collected.
 #define CONST_BOOST_TICS 10	//How many tics a boost panel pushes the player.
 
 #define CONST_SECS_NINJA 30	//Number of seconds each Powerup Coin gives per use.
@@ -989,8 +988,9 @@ While(1)
 		
 		}
 	
-	if(GetActorCeilingZ(spawntid)-GetActorZ(spawntid)>256.0) spawnz = GetActorZ(spawntid)+256.0;
-	Else spawnz = GetActorCeilingZ(spawntid)-32.0;
+	if(GetActorCeilingZ(spawntid)-GetActorZ(spawntid)>=128.0&&CheckActorCeilingTexture(spawntid, "SPEC_SKY")) spawnz = GetActorZ(spawntid)+256.0;
+	else if(GetActorCeilingZ(spawntid)-GetActorZ(spawntid)<128.0&&CheckActorCeilingTexture(spawntid, "SPEC_SKY")) spawnz = GetActorCeilingZ(spawntid)-16.0;
+	else spawnz = GetActorCeilingZ(spawntid)+128.0;
 	
 	//Next, check what direction the player is facing to limit precipitation to that direction.
 	
@@ -1330,90 +1330,6 @@ script "SetWind" (int mode, int value, int all_players)
 			direction[7] = value;
 		}
 	}
-}
-
-script "GetXProperty" (int type, int extra) { SetResultValue(GetValue(type)); }
-
-function bool GetValue (int type)
-{
-int val;
-
-Switch(type)
-{
-	Case 0:	//Use >>16 if errors happen in-game for 0 and 1!
-	//val = wind_x;
-	Break;
-	Case 1:
-	//val = wind_y;
-	Break;
-	//Case 2 used to be the outdated object draw distance CVAR check.
-	Case 3:
-	val = FixedMul(wind_x[0],8);
-	Break;
-	Case 4:
-	val = FixedMul(wind_y[0],8);
-	Break;
-	Case 5:
-	val = FixedMul(wind_x[1],8);
-	Break;
-	Case 6:
-	val = FixedMul(wind_y[1],8);
-	Break;
-	Case 7:
-	val = FixedMul(wind_x[2],8);
-	Break;
-	Case 8:
-	val = FixedMul(wind_y[2],8);
-	Break;
-	Case 9:
-	val = FixedMul(wind_x[3],8);
-	Break;
-	Case 10:
-	val = FixedMul(wind_y[3],8);
-	Break;
-	Case 11:
-	val = FixedMul(wind_x[4],8);
-	Break;
-	Case 12:
-	val = FixedMul(wind_y[4],8);
-	Break;
-	Case 13:
-	val = FixedMul(wind_x[5],8);
-	Break;
-	Case 14:
-	val = FixedMul(wind_y[5],8);
-	Break;
-	Case 15:
-	val = FixedMul(wind_x[6],8);
-	Break;
-	Case 16:
-	val = FixedMul(wind_y[6],8);
-	Break;
-	Case 17:
-	val = FixedMul(wind_x[7],8);
-	Break;
-	Case 18:
-	val = FixedMul(wind_y[7],8);
-	Break;
-	Case 19:	//Low-end mod load check
-		If(StrParam(l:"LOWEND")=="YES") val = 1;
-		Else val = 0;
-	Break;
-	Case 20:	//Video mod load check
-		If(StrParam(l:"VIDEOS")=="YES") val = 1;
-		Else val = 0;
-	Break;
-	Case 21:	//Controller/touchscreen mod check
-		If(StrParam(l:"CONTROLLER")=="YES") val = 1;
-		Else val = 0;
-	Break;
-	Case 22:	//Mobile mod load check
-		If(StrParam(l:"MOBILE")=="YES") val = 1;
-		Else val = 0;
-	Break;
-}
-
-return val;
 }
 
 script "ObjGroup_Spawn" (int tid, int tid_high, int type)
@@ -2145,7 +2061,6 @@ Script "ExitTransition" (void)
 	{	//Bank the player's coins but take some out as they aren't banking them themselves.
 		int coins_to_bank = CheckActorInventory(1000, "CoinSP");
 		If(coins_to_bank>15) coins_to_bank = coins_to_bank - (coins_to_bank / 4);	//Divide by 4 if they have enough coins.
-		If(CheckActorInventory(1000, "SuperX")) { coins_to_bank = coins_to_bank - (coins_to_bank / 3); }	//Divide by 3d if transformed.
 		If(CheckActorInventory(1000, "CoinSP")>40&&coins_to_bank<15) coins_to_bank = 15;	//If the player deserves more coins, forcibly give them 15.
 		If(gamemode==0)
 		{
@@ -2172,7 +2087,6 @@ Script "ExitTransition" (void)
 		}
 		Else If(gamemode==3) { TakeActorInventory(1000, "CoinSP", CheckActorInventory(1000, "CoinSP")); }
 	}
-		If(level[1]>3) { Log(s:"What? How did it equal ", d:level[1], s:"?"); Delay(70); level[1] = 1; }
 	If(gamemode!=3) { ChangeLevel(StrParam(s:"TMP", d:level[1]+2),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill()); }//Level[1]+201 is the temporary level for the next level. This makes the game forget this level's state before advancing.
 	Else ChangeLevel(StrParam(s:"TMP", d:level[1]+1),0,CHANGELEVEL_NOINTERMISSION|CHANGELEVEL_PRERAISEWEAPON, GameSkill());	//If in practice mode, restart the level when it's completed.
 }
@@ -2705,6 +2619,92 @@ script "DetermineAutoJump" (int avoid_carry, int dodges_carry)
 	Else SetResultValue(FALSE);
 }
 
+script "GetXProperty" (int type, int extra) { SetResultValue(GetValue(type)); }
+
+function bool GetValue (int type)
+{
+int val;
+
+Switch(type)
+{
+	Case 0:	//Use >>16 if errors happen in-game for 0 and 1!
+	//val = wind_x;
+	Break;
+	Case 1:
+	//val = wind_y;
+	Break;
+	Case 2:	//Current checkpoint ID
+	val = checkpoint_id[PlayerNumber()];
+	Break;
+	Case 3:
+	val = FixedMul(wind_x[0],8);
+	Break;
+	Case 4:
+	val = FixedMul(wind_y[0],8);
+	Break;
+	Case 5:
+	val = FixedMul(wind_x[1],8);
+	Break;
+	Case 6:
+	val = FixedMul(wind_y[1],8);
+	Break;
+	Case 7:
+	val = FixedMul(wind_x[2],8);
+	Break;
+	Case 8:
+	val = FixedMul(wind_y[2],8);
+	Break;
+	Case 9:
+	val = FixedMul(wind_x[3],8);
+	Break;
+	Case 10:
+	val = FixedMul(wind_y[3],8);
+	Break;
+	Case 11:
+	val = FixedMul(wind_x[4],8);
+	Break;
+	Case 12:
+	val = FixedMul(wind_y[4],8);
+	Break;
+	Case 13:
+	val = FixedMul(wind_x[5],8);
+	Break;
+	Case 14:
+	val = FixedMul(wind_y[5],8);
+	Break;
+	Case 15:
+	val = FixedMul(wind_x[6],8);
+	Break;
+	Case 16:
+	val = FixedMul(wind_y[6],8);
+	Break;
+	Case 17:
+	val = FixedMul(wind_x[7],8);
+	Break;
+	Case 18:
+	val = FixedMul(wind_y[7],8);
+	Break;
+	Case 19:	//Low-end mod load check
+		If(StrParam(l:"LOWEND")=="YES") val = 1;
+		Else val = 0;
+	Break;
+	Case 20:	//Video mod load check
+		If(StrParam(l:"VIDEOS")=="YES") val = 1;
+		Else val = 0;
+	Break;
+	Case 21:	//Controller/touchscreen mod check
+		If(StrParam(l:"CONTROLLER")=="YES") val = 1;
+		Else val = 0;
+	Break;
+	Case 22:	//Mobile mod load check
+		If(StrParam(l:"MOBILE")=="YES") val = 1;
+		Else val = 0;
+	Break;
+}
+
+return val;
+}
+
 script "SetCheckpoint" (int spawn_tid, int set_angle)
 {
 	If(checkpoint_id[PlayerNumber()]==spawn_tid) Terminate;
@@ -2738,7 +2738,7 @@ script "SetCheckpoint" (int spawn_tid, int set_angle)
 	check_disablewind[PlayerNumber()] = disablewind[PlayerNumber()];
 	
 	//Only store the current music if the player isn't drowning.
-	If(ACS_ExecuteWithResult(256,0,0,0,0)!=11) check_music[PlayerNumber()] = ACS_ExecuteWithResult(256,0,0,0,0);
+	If(ACS_NamedExecuteWithResult("GetMusic",0,0,0,0)!=11) check_music[PlayerNumber()] = ACS_NamedExecuteWithResult("GetMusic",0,0,0,0);
 
 }
 
@@ -2775,7 +2775,7 @@ script "LoadCheckpointInfo" (int deathx)
 //This script determines whether an enemy is touching a "special plane" like water, a bottomless pit, or lava.
 //The third argument controls which it won't trigger for. 0: None, 1: Water, 2: Pit, 3: Lava.
 script "GetSpecialStatus" (int depth, int mode, int immunity)	//Used for enemies and objects to check if they're even BARELY touching water, bottomless pits, and lava. Immunity determines which the activator won't be affected by.
-{
+{	//TOTO: Remove this script and replace it with just the last part, giving Variable2 if touching water.
 	If(depth<=0) depth = 32;
 	depth += 0.1;
 	
@@ -2790,52 +2790,61 @@ script "GetSpecialStatus" (int depth, int mode, int immunity)	//Used for enemies
 	}
 }
 
-script "SpecialFall" (int native_type, int wlevel_death)	//-1 = kill by all, 0: Water enemy, 2: Lava enemy. wlevel_death is what water level will kill them on.
-{
-int divide = 5;
-int mod_type = 9;
+script "EnemyHandleSpecialPlanes" (int native_type)	//-1 = kill by all, 0: Water enemy, 2: Lava enemy.
+//This script handles hurting/killing enemies that fall into things like water. It also gives them a shadow in mid-air.
+{	//First, initialize some things.
+	bool in_air = FALSE;	//This stops this enemy from using all the "enemy shadow slots".
+	int divide = 5, mod_type = 9;
 
 	If(native_type==1) native_type = -1;	//No monster can be "native" to bottomless pits!
 	
-	If(spec_behavior[WaterLevel(WL_AREAID)]==native_type) Terminate;
-	
-	Switch(spec_behavior[WaterLevel(WL_AREAID)])
+	//Next, monitor this monster's "water level" and on-ground status.
+	While(GetActorProperty(0, APROP_Health)>0)
 	{
-		Case 0:	//Water
-			divide = 4;
-			mod_type = 12;
-			Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/4, mod_type);
-		Break;
-		Case 1:	//Bottomless Pit
-			divide = 3;
-			mod_type = 17;
-			Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/2, mod_type);
-		Break;
-		Case 2:	//Lava
-			divide = 4;
-			mod_type = 14;
-			Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/3, mod_type);
-		Break;
-		Default:
-			Log(s:"An unknown special behavior is set, ", d:spec_behavior[WaterLevel(WL_AREAID)], s:".");
-		Break;
-	}
-	
-	If(GetActorProperty(0, APROP_Health)>(GetActorProperty(0, APROP_SpawnHealth) / divide))
-	{
-		SetActorPosition(0, GetActorX(checkpoint_id[MAX_PLAYERS]), GetActorY(checkpoint_id[MAX_PLAYERS]), GetActorZ(checkpoint_id[MAX_PLAYERS]), FALSE);
-		SetActorAngle(0, checkpoint_id[MAX_PLAYERS]);	//Teleport the monster if they have enough health left.
-	}
-	Else
-	{
-		If(spec_behavior[WaterLevel(WL_AREAID)]==1) Thing_Remove(0);	//If this is a bottomless pit, remove the monster instead of killing them.
-		Else Thing_Damage(0, GetActorProperty(0, APROP_Health), mod_type);	//If the monster is hurt enough, kill them instead.
+		If(GetActorZ(0)-GetActorFloorZ(0)>8.5)
+		{	//If the enemy goes airborne, create its shadow then wait until it hits the ground again.
+			ACS_NamedExecuteAlways("EnemyShadow",0,0,0,0);
+			Until(GetActorZ(0)-GetActorFloorZ(0)<8.5) { Delay(7); }
+		}
+		
+		If(WaterLevel(WL_WATERLEVEL)>2&&spec_behavior[WaterLevel(WL_AREAID)]!=native_type)
+		{	//If this enemy goes under a special plane, either hurt or kill them.
+			Switch(spec_behavior[WaterLevel(WL_AREAID)])
+			{
+				Case 0:	//Water
+					divide = 4;
+					mod_type = 12;
+					Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/4, mod_type);
+				Break;
+				Case 1:	//Bottomless Pit
+					divide = 3;
+					mod_type = 17;
+					Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/2, mod_type);
+				Break;
+				Case 2:	//Lava
+					divide = 4;
+					mod_type = 14;
+					Thing_Damage(0, GetActorProperty(0, APROP_SpawnHealth)/3, mod_type);
+				Break;
+			}
+			
+			If(GetActorProperty(0, APROP_Health)>(GetActorProperty(0, APROP_SpawnHealth) / divide))
+			{
+				SetActorPosition(0, GetActorX(checkpoint_id[MAX_PLAYERS]), GetActorY(checkpoint_id[MAX_PLAYERS]), GetActorZ(checkpoint_id[MAX_PLAYERS]), FALSE);
+				SetActorAngle(0, checkpoint_id[MAX_PLAYERS]);	//Teleport the monster if they have enough health left.
+			}
+			Else
+			{
+				If(spec_behavior[WaterLevel(WL_AREAID)]==1) Thing_Remove(0);	//If this is a bottomless pit, remove the monster instead of killing them.
+				Else Thing_Damage(0, GetActorProperty(0, APROP_Health), mod_type);	//If the monster is hurt enough, kill them instead.
+			}
+		}
 	}
 }
 
 script "SetDeathBehavior" (int behavior) { death_behavior[PlayerNumber()] = behavior; }
 
-script "GiveSRWeapons" (int set)	//Gives weapons for differsent parts of speedruns.
+script "GiveSRWeapons" (int set)	//Gives weapons for different parts of speedruns.
 //-1: All weapons (practice). Time attack shouldn't use this in the future.
 {
 	For(int playaz = 0; playaz < PlayerCount(); playaz++)
@@ -3697,19 +3706,18 @@ script "ComboMeter" ENTER
 {
 	If(ACS_NamedExecuteWithResult("CheckSpecialStage",0,0,0,0)==TRUE) Terminate;
 	
-	int timerx = 0;
-	int prev_coins;
+	int timerx = 0, prev_coins, highest_combo;
 
 	While(1)
 	{	
 		If(CheckInventory("IncreaseCombo")>0)
 		{
-		LocalAmbientSound("misc/combo2",256);
-		If(combo[PlayerNumber()]==2)LocalAmbientSound("announcer/combo1",256);
-		If(combo[PlayerNumber()]==5)LocalAmbientSound("announcer/combo2",256);
-		TakeInventory("IncreaseCombo",1);
-		if(combo[PlayerNumber()]<9) combo[PlayerNumber()]++;
-		meter[PlayerNumber()] = 100;
+			if(combo[PlayerNumber()]<9) { combo[PlayerNumber()]++; highest_combo++; }
+			meter[PlayerNumber()] = 100;
+			LocalAmbientSound("misc/combo2",256);
+			If(highest_combo==3)LocalAmbientSound("announcer/combo1",256);
+			If(highest_combo==6)LocalAmbientSound("announcer/combo2",256);
+			TakeInventory("IncreaseCombo",1);
 		}
 		
 		timerx++;
@@ -3737,11 +3745,23 @@ script "ComboMeter" ENTER
 			if(combo[PlayerNumber()+(MAX_PLAYERS*3)]>0) combo[PlayerNumber()+(MAX_PLAYERS*3)]--;
 			else combo[PlayerNumber()+(MAX_PLAYERS*2)] = 0;
 			
-			if(timerx==0/*&&no_scripts[PlayerNumber()]==FALSE*/) { If(combo_tics[PlayerNumber()]==0&&canUsePCoins) { /*If(framecount % 2 == 1)*/ meter[PlayerNumber()]--; } }
+			if(timerx==0/*&&no_scripts[PlayerNumber()]==FALSE*/)
+			{
+				If(combo_tics[PlayerNumber()]==0&&canUsePCoins)
+				{
+					If(framecount % 3 == 0) meter[PlayerNumber()] -= 2;
+					else meter[PlayerNumber()]--;
+				}
+			}
+			
 			if(meter[PlayerNumber()]<=0)
 			{
 				combo[PlayerNumber()]--;
-				If(combo[PlayerNumber()]==0) LocalAmbientSound("announcer/combo3",255);
+				If(combo[PlayerNumber()]==0)
+				{
+					If(highest_combo>=3) LocalAmbientSound("announcer/combo3",255);
+					highest_combo = 0;	//After losing a combo fully, reset this variable.
+				}
 				if(combo[PlayerNumber()]>0) meter[PlayerNumber()] = 100;
 			}
 		}
@@ -3841,20 +3861,22 @@ script "RequestAmbience" (int front, int back) { If(LineSide()==LINE_FRONT) { am
 script "Ambience" ENTER
 {
 //Info
-int amb_info_delays[14] = { 0, 0, 	//Minimum then max.
+int amb_info_delays[16] = { 0, 0, 	//Minimum then max.
 						200, 400,
 						350, 575,
 						275, 525,
 						200, 425,
 						375, 575,
-						400, 550};
-int	amb_info_sounds[14] = { 0, 0,
+						325, 450,
+						400, 525};
+int	amb_info_sounds[16] = { 0, 0,
 						1, 6,
 						4, 12,
 						15, 18,
 						19, 23,
-						24, 29,
-						14, 17};
+						24, 30,
+						15, 16,
+						31, 35};
 
 int amb_msound[MAX_PLAYERS];
 int amb_lastsnd[MAX_PLAYERS];
@@ -3870,24 +3892,26 @@ While(1)
 	//Ambience is needed! Fade in the requested looping background noise!
 	Switch(amb_current[PlayerNumber()])	//First, play a short fading in sample.
 		{
-		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police_start",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
-		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail_start",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
-		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city_start",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police_start",CHAN_6,0.9,TRUE,ATTN_NONE); Break;
+		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail_start",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city_start",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
 		Case 4: PlaySound(GetCurrentPlayerTID(),"ambience/rain_start",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
 		Case 5: PlaySound(GetCurrentPlayerTID(),"ambience/creepy_start",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
 		Case 6: PlaySound(GetCurrentPlayerTID(),"ambience/cityday_start",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
+		Case 7: PlaySound(GetCurrentPlayerTID(),"ambience/hcpd_start",CHAN_6,0.6,TRUE,ATTN_NONE); Break;
 		}
 		
 	Delay(35);
 	
 	Switch(amb_current[PlayerNumber()])	//Play the looping section of the ambience.
 		{
-		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
-		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail",CHAN_6,0.5,TRUE,ATTN_NONE); Break;
-		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police",CHAN_6,0.9,TRUE,ATTN_NONE); Break;
+		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
+		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
 		Case 4: PlaySound(GetCurrentPlayerTID(),"ambience/rain",CHAN_6,0.75,TRUE,ATTN_NONE); Break;
 		Case 5: PlaySound(GetCurrentPlayerTID(),"ambience/creepy",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
 		Case 6: PlaySound(GetCurrentPlayerTID(),"ambience/cityday",CHAN_6,1.0,TRUE,ATTN_NONE); Break;
+		Case 7: PlaySound(GetCurrentPlayerTID(),"ambience/hcpd",CHAN_6,0.6,TRUE,ATTN_NONE); Break;
 		}
 	
 	amb_lastplayed[PlayerNumber()] = amb_current[PlayerNumber()];
@@ -3908,7 +3932,7 @@ While(1)
 			Else amb_msound[PlayerNumber()]++;
 		}
 		
-		if(amb_force[PlayerNumber()]!=TRUE) { LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PlayerNumber()]),127); amb_lastsnd[PlayerNumber()] = amb_msound[PlayerNumber()]; }
+		if(amb_force[PlayerNumber()]!=TRUE) { Log(s:"Played amb #", d:amb_msound[PlayerNumber()], s:"!"); LocalAmbientSound(StrParam(s:"ambient/", d:amb_msound[PlayerNumber()]),127); amb_lastsnd[PlayerNumber()] = amb_msound[PlayerNumber()]; }
 		
 		amb_tics[(PlayerNumber()*2)+1] = Random(amb_info_delays[(amb_current[PlayerNumber()]*2)],amb_info_delays[(amb_current[PlayerNumber()]*2)+1]);	//Get the pair of min/max delays between minor sounds.
 		amb_tics[PlayerNumber()*2] = 0;	//Set the player's tics back to 0 so another sound can play!
@@ -3919,12 +3943,13 @@ While(1)
 		
 	Switch(amb_lastplayed[PlayerNumber()])	//Play a sample of the ambience fading out.
 	{
-		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police_end",CHAN_7,0.5,FALSE,ATTN_NONE); Break;
-		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail_end",CHAN_7,0.5,FALSE,ATTN_NONE); Break;
-		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city_end",CHAN_7,0.75,FALSE,ATTN_NONE); Break;
+		Case 1: PlaySound(GetCurrentPlayerTID(),"ambience/police_end",CHAN_7,0.9,FALSE,ATTN_NONE); Break;
+		Case 2: PlaySound(GetCurrentPlayerTID(),"ambience/jail_end",CHAN_7,0.75,FALSE,ATTN_NONE); Break;
+		Case 3: PlaySound(GetCurrentPlayerTID(),"ambience/city_end",CHAN_7,1.0,FALSE,ATTN_NONE); Break;
 		Case 4: PlaySound(GetCurrentPlayerTID(),"ambience/rain_end",CHAN_7,0.75,FALSE,ATTN_NONE); Break;
 		Case 5: PlaySound(GetCurrentPlayerTID(),"ambience/creepy_end",CHAN_7,1.0,FALSE,ATTN_NONE); Break;
 		Case 6: PlaySound(GetCurrentPlayerTID(),"ambience/cityday_end",CHAN_7,1.0,FALSE,ATTN_NONE); Break;
+		Case 7: PlaySound(GetCurrentPlayerTID(),"ambience/hcpd_end",CHAN_7,0.6,FALSE,ATTN_NONE); Break;
 	}	
 	
 	//Delay(35);
@@ -6526,11 +6551,22 @@ script "PlaySoundX" (int number)
 	}
 }
 
-script "AutoDoorOpener_Command" (int sid, int reflection, int open_door)
+script "AutoDoorOpener_Command" (int sid, int type, int open_door)
 {
-	If(reflection>=2)
+	If(type>=1)
 	{
-		If(reflection==2)	//North/south PolyObject door.
+		If(type==1)	//Door used on 3D floor
+		{
+			If(open_door)
+			{
+				Ceiling_RaiseByValue(sid, 32, 124);
+			}
+			Else
+			{
+				Ceiling_LowerByValue(sid, 32, 124);
+			}
+		}
+		If(type==2)	//North/south PolyObject door.
 		{
 			If(open_door)
 			{
@@ -6542,7 +6578,7 @@ script "AutoDoorOpener_Command" (int sid, int reflection, int open_door)
 			}
 		}
 		
-		If(reflection==3)	//West/East PolyObject door.
+		If(type==3)	//West/East PolyObject door.
 		{
 			If(open_door)
 			{
@@ -6554,7 +6590,7 @@ script "AutoDoorOpener_Command" (int sid, int reflection, int open_door)
 			}
 		}
 		
-		If(reflection==4)	//Counter-clockwise rotating door.
+		If(type==4)	//Counter-clockwise rotating door.
 		{
 			If(open_door)
 			{
@@ -6565,7 +6601,7 @@ script "AutoDoorOpener_Command" (int sid, int reflection, int open_door)
 				Polyobj_OR_RotateRight(sid, 24, 85);
 			}
 		}
-		If(reflection==5)	//Dynamic Lights (thing activate/deactivate)
+		If(type==5)	//Dynamic Lights/Objects (thing activate/deactivate)
 		{
 			If(open_door)
 			{
@@ -6582,12 +6618,10 @@ script "AutoDoorOpener_Command" (int sid, int reflection, int open_door)
 		If(open_door)
 		{
 			Door_Open(sid, 32, 0);
-			If(reflection==1) Floor_LowerByValue(sid, 32, 124);
 		}
 		Else
 		{
 			Door_Close(sid, 32, 0);
-			If(reflection==1) Floor_RaiseByValue(sid, 32, 124);
 		}
 	}
 }

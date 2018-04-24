@@ -17,7 +17,7 @@ int tutorial_text[40] = {	//What text ID each tutorial ID should start at.
 9,	//4 (ENEMY: Green cop)
 11,	//5 (ENEMY: Yellow cop)
 13,	//6 (Level goals)
-17,	//7	(Bottomless pit death, unused)
+17,	//7	(Multi-key door)
 18,	//8	(Arrested by HCPD)
 19,	//9	(Cop dropped key)
 20,	//10 (Wall jump)

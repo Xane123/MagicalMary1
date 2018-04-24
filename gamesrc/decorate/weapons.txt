@@ -332,14 +332,14 @@ WNP1 ABBA 2
 WNPI A 2
 WNP1 C 2
 WWP1 I 0 A_PlaySound("wand/shield", CHAN_WEAPON, 1.0)
-SWDA B 0 ACS_NamedExecuteAlways("Invulnerable",0,TRUE,0,0)
-SWDA B 0 A_ChangeFlag("REFLECTIVE",TRUE)
-SWDA B 0 A_ChangeFlag("AIMREFLECT",TRUE)
-WNP1 D 2
-WNP1 EFGHI 4
-SWDA B 0 ACS_NamedExecuteAlways("Invulnerable",0,FALSE,0,0)
-SWDA B 0 A_ChangeFlag("REFLECTIVE",FALSE)
-SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
+//SWDA B 0 ACS_NamedExecuteAlways("Invulnerable",0,TRUE,0,0)
+//SWDA B 0 A_ChangeFlag("REFLECTIVE",TRUE)
+//SWDA B 0 A_ChangeFlag("AIMREFLECT",TRUE)
+WNP1 DEEFFGGHHII 2 A_SpawnItem("MissileReflector",16,0,FALSE)
+//WNP1 EFGHI 4
+//SWDA B 0 ACS_NamedExecuteAlways("Invulnerable",0,FALSE,0,0)
+//SWDA B 0 A_ChangeFlag("REFLECTIVE",FALSE)
+//SWDA B 0 A_ChangeFlag("AIMREFLECT",FALSE)
 TNT1 A 0 A_JumpIfInventory("SuperX",1,"ShieldEnd2")
 TNT1 A 0 A_JumpIf(CallACS("CheckSpecialStage",3,0,0,0)==TRUE,"ShieldEnd2")	//If in an arena, don't allow healing.
 SWDA A 0 A_ReFire("ShieldStart")
