@@ -61,7 +61,7 @@ CVAR (Int,		team,					TEAM_NONE,	CVAR_USERINFO | CVAR_ARCHIVE);
 CVAR (String,	gender,					"female",		CVAR_USERINFO | CVAR_ARCHIVE);
 CVAR (Bool,		neverswitchonpickup,	false,		CVAR_USERINFO | CVAR_ARCHIVE);
 CVAR (Float,	movebob,				0.25f,		CVAR_USERINFO | CVAR_ARCHIVE);
-CVAR (Float,	stillbob,				1.f,		CVAR_USERINFO | CVAR_ARCHIVE);
+CVAR (Float,	stillbob,				0.f,		CVAR_USERINFO | CVAR_ARCHIVE);
 CVAR (Float,	wbobspeed,				1.f,		CVAR_USERINFO | CVAR_ARCHIVE);
 CVAR (String,	playerclass,			"LGirlPlayer",	CVAR_USERINFO | CVAR_ARCHIVE);
 CVAR (Bool,		classicflight,			false,		CVAR_USERINFO | CVAR_ARCHIVE);
@@ -83,7 +83,7 @@ enum
 	INFO_ClassicFlight,
 };
 
-const char *GenderNames[3] = { "male", "female", "unknown" };
+const char *GenderNames[3] = { "male", "female", "other" };
 
 // Replace \ with %/ and % with %%
 FString D_EscapeUserInfo (const char *str)

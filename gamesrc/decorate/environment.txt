@@ -923,6 +923,10 @@ Height 4
 +ISMONSTER
 +SHOOTABLE
 -COUNTKILL
++DONTTHRUST
++NOBLOOD
++INVULNERABLE
++GHOST
 //$Title Uroboros laser beam spawner
 //$Category decoration/Hell City
 States

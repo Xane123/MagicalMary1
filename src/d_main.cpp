@@ -2313,7 +2313,7 @@ void D_DoomMain (void)
 	}
 	FString basewad = wad;
 
-	FString optionalwad = BaseFileSearch(OPTIONALWAD, NULL, true);
+	//FString optionalwad = BaseFileSearch(OPTIONALWAD, NULL, true);
 
 	iwad_man = new FIWadManager(basewad);
 
@@ -2347,7 +2347,7 @@ void D_DoomMain (void)
 		{
 			iwad_man = new FIWadManager(basewad);
 		}
-		const FIWADInfo *iwad_info = iwad_man->FindIWAD(allwads, iwad, basewad, optionalwad);
+		const FIWADInfo *iwad_info = iwad_man->FindIWAD(allwads, iwad, basewad);
 		gameinfo.gametype = iwad_info->gametype;
 		gameinfo.flags = iwad_info->flags;
 		gameinfo.ConfigName = iwad_info->Configname;

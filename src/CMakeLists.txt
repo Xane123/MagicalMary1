@@ -806,7 +806,6 @@ set( FASTMATH_SOURCES
 	sound/sndfile_decoder.cpp
 	sound/timiditypp/fft4g.cpp
 	sound/timiditypp/reverb.cpp
-	gl/utility/gl_clock.cpp
 	textures/hires/hqnx/init.cpp
 	textures/hires/hqnx/hq2x.cpp
 	textures/hires/hqnx/hq3x.cpp
@@ -1059,6 +1058,7 @@ set (PCH_SOURCES
 	hwrenderer/dynlights/hw_aabbtree.cpp
 	hwrenderer/textures/hw_material.cpp
 	hwrenderer/textures/hw_precache.cpp
+	hwrenderer/utility/hw_clock.cpp
 	
 	menu/joystickmenu.cpp
 	menu/loadsavemenu.cpp
@@ -1329,7 +1329,7 @@ endif()
 
 add_custom_command(TARGET zdoom POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	${CMAKE_SOURCE_DIR}/soundfont/soundfont.sf2 $<TARGET_FILE_DIR:zdoom>/soundfonts/default.sf2)
+	${CMAKE_SOURCE_DIR}/soundfont/soundfont.sf2 $<TARGET_FILE_DIR:zdoom>/soundfonts/soundfont.sf2)
 
 if( CMAKE_COMPILER_IS_GNUCXX )
 	# GCC misoptimizes this file

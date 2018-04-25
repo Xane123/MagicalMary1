@@ -1100,9 +1100,9 @@ void FPolyObj::UnLinkPolyobj ()
 //
 //==========================================================================
 
-bool FPolyObj::CheckMobjBlocking (side_t *sd)
+bool FPolyObj::CheckMobjBlocking(side_t *sd)
 {
-	if (bHurtOnTouch) return false;
+	if (crush) return false;	//[XANE]This is so draw distance polyobjects are non-solid.
 	else
 	{
 		static TArray<AActor *> checker;

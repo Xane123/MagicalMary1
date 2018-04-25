@@ -45,11 +45,11 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-//#ifdef GIT_DESCRIPTION
-//#define VERSIONSTR GIT_DESCRIPTION
-//#else
+#ifdef GIT_DESCRIPTION
+#define VERSIONSTR GIT_DESCRIPTION
+#else
 #define VERSIONSTR "3.3pre"
-//#endif
+#endif
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 3,2,9999,0
@@ -96,7 +96,6 @@ const char *GetVersionString();
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
 #define GAMESIG "Mary's Magical Adventure"
 #define BASEWAD "engine.pk3"
-#define OPTIONALWAD "zd_extra.pk3"
 
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "Mary's Magical Adventure"
@@ -107,7 +106,7 @@ const char *GetVersionString();
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME
 #else
-#define GAME_DIR ".config/" GAMENAME
+#define GAME_DIR ".config/" GAMENAMELOWERCASE
 #endif
 
 

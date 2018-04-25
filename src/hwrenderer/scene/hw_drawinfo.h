@@ -3,6 +3,7 @@
 #include "r_defs.h"
 
 struct FSectorPortalGroup;
+class GLWall;
 
 //==========================================================================
 //
@@ -57,6 +58,8 @@ struct HWDrawInfo
 		subsector_t * sub;
 		uint8_t flags;
 	};
+    
+    int FixedColormap;
 
 	TArray<MissingTextureInfo> MissingUpperTextures;
 	TArray<MissingTextureInfo> MissingLowerTextures;
@@ -78,6 +81,14 @@ struct HWDrawInfo
 	TArray<uint8_t> ss_renderflags;
 	TArray<uint8_t> no_renderflags;
 
+private:
+    // For ProcessLowerMiniseg
+    bool inview;
+    subsector_t * viewsubsector;
+    TArray<seg_t *> lowersegs;
+    
+    sector_t fakesec;    // this is a struct member because it gets used in recursively called functions so it cannot be put on the stack.
+public:
 
 	void ClearBuffers();
 
@@ -110,6 +121,11 @@ struct HWDrawInfo
 	virtual void FloodLowerGap(seg_t * seg) = 0;
 	virtual void ProcessLowerMinisegs(TArray<seg_t *> &lowersegs) = 0;
     virtual void AddSubsectorToPortal(FSectorPortalGroup *portal, subsector_t *sub) = 0;
+    
+    virtual void AddWall(GLWall *w) = 0;
+    virtual void AddMirrorSurface(GLWall *w) = 0;
+    virtual void ProcessActorsInPortal(FLinePortalSpan *glport) = 0;
+
 
 };
 

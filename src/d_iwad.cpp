@@ -48,8 +48,8 @@
 #include "doomerrors.h"
 #include "v_text.h"
 
-CVAR (Bool, queryiwad, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR (String, defaultiwad, "mma_data.pk3", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (Bool, queryiwad, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR (String, defaultiwad, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 
 //==========================================================================
 //
@@ -503,7 +503,7 @@ void FIWadManager::ValidateIWADs()
 
 static bool havepicked = false;
 
-int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad, const char *optional_wad)
+int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad)
 {
 	const char *iwadparm = Args->CheckValue ("-iwad");
 	FString custwad;
@@ -647,15 +647,23 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	// If we still haven't found a suitable IWAD let's error out.
 	if (picks.Size() == 0)
 	{
-		I_FatalError("The base game data couldn't be found. Make sure to download the \"Game Data\" from The X Site.\n"
-			"\n"
-	#if defined(_WIN32)
-			"Once downloaded, extract the contents of that ZIP file to the same directory this app/program is placed within.\n");
-	#else
-			"Once downloaded, extract the contents of that ZIP file to the same directory this executable is placed within.\n");
-	#endif
+		I_FatalError ("Cannot find a game IWAD (doom.wad, doom2.wad, heretic.wad, etc.).\n"
+					  "Did you install " GAMENAME " properly? You can do either of the following:\n"
+					  "\n"
+#if defined(_WIN32)
+					  "1. Place one or more of these wads in the same directory as " GAMENAME ".\n"
+					  "2. Edit your " GAMENAMELOWERCASE "-username.ini and add the directories of your iwads\n"
+					  "to the list beneath [IWADSearch.Directories]");
+#elif defined(__APPLE__)
+					  "1. Place one or more of these wads in ~/Library/Application Support/" GAMENAMELOWERCASE "/\n"
+					  "2. Edit your ~/Library/Preferences/" GAMENAMELOWERCASE ".ini and add the directories\n"
+					  "of your iwads to the list beneath [IWADSearch.Directories]");
+#else
+					  "1. Place one or more of these wads in ~/.config/" GAMENAMELOWERCASE "/.\n"
+					  "2. Edit your ~/.config/" GAMENAMELOWERCASE "/" GAMENAMELOWERCASE ".ini and add the directories of your\n"
+					  "iwads to the list beneath [IWADSearch.Directories]");
+#endif
 	}
-
 	int pick = 0;
 
 	// We got more than one so present the IWAD selection box.
@@ -706,9 +714,9 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	D_AddFile (wadfiles, zdoom_wad);
 
 	// [SP] Load non-free assets if available. This must be done before the IWAD.
-	if (D_AddFile(wadfiles, optional_wad))
+	/*if (D_AddFile(wadfiles, optional_wad))
 		Wads.SetIwadNum(2);
-	else
+	else*/
 		Wads.SetIwadNum(1);
 
 	if (picks[pick].mRequiredPath.IsNotEmpty())
@@ -746,9 +754,9 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 //
 //==========================================================================
 
-const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad, const char *optionalwad)
+const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad)
 {
-	int iwadType = IdentifyVersion(wadfiles, iwad, basewad, optionalwad);
+	int iwadType = IdentifyVersion(wadfiles, iwad, basewad);
 	//gameiwad = iwadType;
 	const FIWADInfo *iwad_info = &mIWadInfos[iwadType];
 	if (DoomStartupInfo.Name.IsEmpty()) DoomStartupInfo.Name = iwad_info->Name;

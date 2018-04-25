@@ -91,6 +91,10 @@ CUSTOM_CVAR(Int,gl_fogmode,2,CVAR_ARCHIVE|CVAR_NOINITCALL)
 	if (self<0) self=0;
 }
 
+
+
+
+
 //==========================================================================
 //
 // Sets render state to draw the given render style

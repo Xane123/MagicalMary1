@@ -40,6 +40,7 @@
 // These shouldn't be called 'gl...' anymore...
 CVAR (Bool, gl_light_sprites, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
 CVAR (Bool, gl_light_particles, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
+
 CVAR(Int, gl_attenuate, -1, 0);	// This is mainly a debug option.
 
 //==========================================================================

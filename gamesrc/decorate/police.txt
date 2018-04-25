@@ -1733,6 +1733,7 @@ Actor UroborosLBeam : LaserSight
 {
 Speed 56
 Translation "240:254=160:175"
++THRUGHOST
 States
 {
 Spawn:

@@ -502,7 +502,7 @@ CUSTOM_CVAR (Int, msgmidcolor, 21, CVAR_ARCHIVE)
 	setmsgcolor (PRINTLEVELS, self);
 }
 
-CUSTOM_CVAR (Int, msgmidcolor2, 4, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, msgmidcolor2, 22, CVAR_ARCHIVE)
 {
 	setmsgcolor (PRINTLEVELS+1, self);
 }
