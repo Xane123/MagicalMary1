@@ -6,6 +6,9 @@
 EXTERN_CVAR(Bool, gl_lights)
 EXTERN_CVAR(Bool, gl_attachedlights)
 
+struct side_t;
+struct seg_t;
+
 class ADynamicLight;
 class FSerializer;
 
@@ -229,5 +232,7 @@ public:
 	LightFlags lightflags;
 	DAngle SpotInnerAngle = 10.0;
 	DAngle SpotOuterAngle = 25.0;
+    
+    int mShadowmapIndex = 1024;
 
 };

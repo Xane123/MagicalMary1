@@ -24,26 +24,22 @@
 #include "p_local.h"
 #include "p_lnspec.h"
 #include "a_sharedglobal.h"
-#include "g_level.h"
-#include "templates.h"
-#include "vectors.h"
 #include "r_defs.h"
 #include "r_sky.h"
 #include "r_utility.h"
 #include "p_maputl.h"
 #include "doomdata.h"
-#include "portal.h"
 #include "g_levellocals.h"
+#include "hwrenderer/dynlights/hw_dynlightdata.h"
+#include "hwrenderer/textures/hw_material.h"
 
 #include "gl/system/gl_cvars.h"
+#include "gl/system/gl_interface.h"
 #include "gl/renderer/gl_lightdata.h"
-#include "gl/dynlights/gl_dynlight.h"
 #include "gl/scene/gl_drawinfo.h"
 #include "gl/scene/gl_portal.h"
 #include "gl/scene/gl_scenedrawer.h"
-#include "gl/textures/gl_material.h"
 #include "gl/utility/gl_clock.h"
-#include "gl/shaders/gl_shader.h"
 
 
 void FDrawInfo::AddWall(GLWall *wall)
@@ -55,7 +51,8 @@ void FDrawInfo::AddWall(GLWall *wall)
 	{
 		wall->ViewDistance = (r_viewpoint.Pos - (wall->seg->linedef->v1->fPos() + wall->seg->linedef->Delta() / 2)).XY().LengthSquared();
 		if (gl.buffermethod == BM_DEFERRED) wall->MakeVertices(true);
-		drawlists[GLDL_TRANSLUCENT].AddWall(wall);
+		auto newwall = drawlists[GLDL_TRANSLUCENT].NewWall();
+		*newwall = *wall;
 	}
 	else
 	{
@@ -77,8 +74,8 @@ void FDrawInfo::AddWall(GLWall *wall)
 			list = masked ? GLDL_MASKEDWALLS : GLDL_PLAINWALLS;
 		}
 		if (gl.buffermethod == BM_DEFERRED) wall->MakeVertices(false);
-		drawlists[list].AddWall(wall);
-
+		auto newwall = drawlists[list].NewWall();
+		*newwall = *wall;
 	}
 }
 
@@ -172,7 +169,8 @@ void GLWall::PutPortal(int ptype)
 		{
 			// draw a reflective layer over the mirror
 			type=RENDERWALL_MIRRORSURFACE;
-			gl_drawinfo->drawlists[GLDL_TRANSLUCENTBORDER].AddWall(this);
+			auto newwall = gl_drawinfo->drawlists[GLDL_TRANSLUCENTBORDER].NewWall();
+			*newwall = *this;
 		}
 		break;
 
@@ -604,7 +602,7 @@ bool GLWall::SetWallCoordinates(seg_t * seg, FTexCoordInfo *tci, float textureto
 	{
 		bool normalize = false;
 		if (gltexture->tex->bHasCanvas) normalize = true;
-		else if (flags & GLT_CLAMPY)
+		else if (flags & GLWF_CLAMPY)
 		{
 			// for negative scales we can get negative coordinates here.
 			normalize = (tcs[UPLFT].v > tcs[LOLFT].v || tcs[UPRGT].v > tcs[LORGT].v);
@@ -654,7 +652,7 @@ void GLWall::CheckTexturePosition(FTexCoordInfo *tci)
 		if ((tcs[UPLFT].v == 0.f && tcs[UPRGT].v == 0.f && tcs[LOLFT].v <= 1.f && tcs[LORGT].v <= 1.f) ||
 			(tcs[UPLFT].v >= 0.f && tcs[UPRGT].v >= 0.f && tcs[LOLFT].v == 1.f && tcs[LORGT].v == 1.f))
 		{
-			flags |= GLT_CLAMPY;
+			flags |= GLWF_CLAMPY;
 		}
 	}
 	else
@@ -675,7 +673,7 @@ void GLWall::CheckTexturePosition(FTexCoordInfo *tci)
 		if ((tcs[LOLFT].v == 0.f && tcs[LORGT].v == 0.f && tcs[UPLFT].v <= 1.f && tcs[UPRGT].v <= 1.f) ||
 			(tcs[LOLFT].v >= 0.f && tcs[LORGT].v >= 0.f && tcs[UPLFT].v == 1.f && tcs[UPRGT].v == 1.f))
 		{
-			flags |= GLT_CLAMPY;
+			flags |= GLWF_CLAMPY;
 		}
 	}
 
@@ -691,7 +689,7 @@ void GLWall::CheckTexturePosition(FTexCoordInfo *tci)
 		if ((tcs[UPLFT].u == 0.f && tcs[LOLFT].u == 0.f && tcs[UPRGT].u <= 1.f && tcs[LORGT].u <= 1.f) ||
 			(tcs[UPLFT].u >= 0.f && tcs[LOLFT].u >= 0.f && tcs[UPRGT].u == 1.f && tcs[LORGT].u == 1.f))
 		{
-			flags |= GLT_CLAMPX;
+			flags |= GLWF_CLAMPX;
 		}
 	}
 }
@@ -944,15 +942,15 @@ void GLWall::DoMidTexture(seg_t * seg, bool drawfogboundary,
 		if ((textureoffset == 0 && righttex <= tci.mRenderWidth) ||
 			(textureoffset >= 0 && righttex == tci.mRenderWidth))
 		{
-			flags |= GLT_CLAMPX;
+			flags |= GLWF_CLAMPX;
 		}
 		else
 		{
-			flags &= ~GLT_CLAMPX;
+			flags &= ~GLWF_CLAMPX;
 		}
 		if (!wrap)
 		{
-			flags |= GLT_CLAMPY;
+			flags |= GLWF_CLAMPY;
 		}
 	}
 	if (mirrory)
@@ -1084,7 +1082,7 @@ void GLWall::DoMidTexture(seg_t * seg, bool drawfogboundary,
 	}
 	// restore some values that have been altered in this function
 	glseg=glsave;
-	flags&=~(GLT_CLAMPX|GLT_CLAMPY|GLWF_NOSPLITUPPER|GLWF_NOSPLITLOWER);
+	flags&=~(GLWF_CLAMPX|GLWF_CLAMPY|GLWF_NOSPLITUPPER|GLWF_NOSPLITLOWER);
 	RenderStyle = STYLE_Normal;
 }
 
@@ -1195,7 +1193,7 @@ void GLWall::BuildFFBlock(seg_t * seg, F3DFloor * rover,
 	alpha = 1.0f;
 	lightlevel = savelight;
 	Colormap = savecolor;
-	flags &= ~GLT_CLAMPY;
+	flags &= ~GLWF_CLAMPY;
 }
 
 

@@ -2,7 +2,7 @@
 
 #include "r_defs.h"
 #include "m_fixed.h"
-#include "gl_clipper.h"
+#include "hwrenderer/scene/hw_clipper.h"
 #include "gl_portal.h"
 #include "gl/renderer/gl_lightdata.h"
 #include "gl/renderer/gl_renderer.h"
@@ -72,8 +72,6 @@ public:
 	void EndDrawScene(sector_t * viewsector);
 	void DrawEndScene2D(sector_t * viewsector);
 	void RenderActorsInPortal(FLinePortalSpan *glport);
-
-	void CheckViewArea(vertex_t *v1, vertex_t *v2, sector_t *frontsector, sector_t *backsector);
 
 	sector_t *RenderViewpoint(AActor * camera, GL_IRECT * bounds, float fov, float ratio, float fovratio, bool mainview, bool toscreen);
 	void RenderView(player_t *player);

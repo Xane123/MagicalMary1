@@ -39,22 +39,15 @@
 #include "events.h"
 #include "actorinlines.h"
 #include "r_data/r_vanillatrans.h"
-#include "i_time.h"
 
 #include "gl/system/gl_interface.h"
-#include "gl/system/gl_framebuffer.h"
 #include "gl/system/gl_cvars.h"
 #include "gl/renderer/gl_lightdata.h"
 #include "gl/renderer/gl_renderstate.h"
 #include "gl/renderer/gl_renderer.h"
 #include "gl/scene/gl_drawinfo.h"
 #include "gl/scene/gl_scenedrawer.h"
-#include "gl/scene/gl_portal.h"
 #include "gl/models/gl_models.h"
-#include "gl/shaders/gl_shader.h"
-#include "gl/textures/gl_material.h"
-#include "gl/utility/gl_clock.h"
-#include "gl/data/gl_vertexbuffer.h"
 #include "gl/renderer/gl_quaddrawer.h"
 
 CVAR(Bool, gl_usecolorblending, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
@@ -351,7 +344,7 @@ void GLSprite::Draw(int pass)
 		if (gl_lights && GLRenderer->mLightCount && mDrawer->FixedColormap == CM_DEFAULT && !fullbright)
 		{
 			if (modelframe && !particle)
-				gl_SetDynModelLight(gl_light_sprites ? actor : NULL, dynlightindex);
+				dynlightindex = gl_SetDynModelLight(gl_light_sprites ? actor : NULL, dynlightindex);
 			else
 				gl_SetDynSpriteLight(gl_light_sprites ? actor : NULL, gl_light_particles ? particle : NULL);
 		}
@@ -523,7 +516,9 @@ inline void GLSprite::PutSprite(bool translucent)
 	{
 		list = GLDL_MODELS;
 	}
-	gl_drawinfo->drawlists[list].AddSprite(this);
+	dynlightindex = -1;
+	auto newsprt = gl_drawinfo->drawlists[list].NewSprite();
+	*newsprt = *this;
 }
 
 //==========================================================================
@@ -785,7 +780,7 @@ void GLSprite::Process(AActor* thing, sector_t * sector, int thruportal)
 
 	if (sector->sectornum != thing->Sector->sectornum && !thruportal)
 	{
-		rendersector = gl_FakeFlat(thing->Sector, &rs, mDrawer->in_area, false);
+		rendersector = hw_FakeFlat(thing->Sector, &rs, mDrawer->in_area, false);
 	}
 	else
 	{
@@ -1325,7 +1320,7 @@ void GLSceneDrawer::RenderActorsInPortal(FLinePortalSpan *glport)
 					th->Prev += newpos - savedpos;
 
 					GLSprite spr(this);
-					spr.Process(th, gl_FakeFlat(th->Sector, &fakesector, in_area, false), 2);
+					spr.Process(th, hw_FakeFlat(th->Sector, &fakesector, in_area, false), 2);
 					th->Angles.Yaw = savedangle;
 					th->SetXYZ(savedpos);
 					th->Prev -= newpos - savedpos;

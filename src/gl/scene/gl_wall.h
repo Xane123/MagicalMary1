@@ -116,8 +116,8 @@ public:
 
 	enum
 	{
-		//GLWF_CLAMPX=1, use GLT_* for these!
-		//GLWF_CLAMPY=2,
+		GLWF_CLAMPX=1,
+		GLWF_CLAMPY=2,
 		GLWF_SKYHACK=4,
 		GLWF_GLOW=8,		// illuminated by glowing flats
 		GLWF_NOSPLITUPPER=16,
@@ -276,6 +276,17 @@ public:
 		mDrawer = drawer;
 	}
 
+	GLWall(const GLWall &other)
+	{
+		memcpy(this, &other, sizeof(GLWall));
+	}
+
+	GLWall & operator=(const GLWall &other)
+	{
+		memcpy(this, &other, sizeof(GLWall));
+		return *this;
+	}
+
 	void Process(seg_t *seg, sector_t *frontsector, sector_t *backsector);
 	void ProcessLowerMiniseg(seg_t *seg, sector_t *frontsector, sector_t *backsector);
 	void Draw(int pass);
@@ -349,6 +360,18 @@ public:
 	void SetFrom3DFloor(F3DFloor *rover, bool top, bool underside);
 	void ProcessSector(sector_t * frontsector);
 	void Draw(int pass, bool trans);
+
+	GLFlat(const GLFlat &other)
+	{
+		memcpy(this, &other, sizeof(GLFlat));
+	}
+
+	GLFlat & operator=(const GLFlat &other)
+	{
+		memcpy(this, &other, sizeof(GLFlat));
+		return *this;
+	}
+
 };
 
 
@@ -418,6 +441,18 @@ public:
 
 	// Lines start-end and fdiv must intersect.
 	double CalcIntersectionVertex(GLWall * w2);
+
+	GLSprite(const GLSprite &other)
+	{
+		memcpy(this, &other, sizeof(GLSprite));
+	}
+
+	GLSprite & operator=(const GLSprite &other)
+	{
+		memcpy(this, &other, sizeof(GLSprite));
+		return *this;
+	}
+
 };
 
 inline float Dist2(float x1,float y1,float x2,float y2)
