@@ -11,28 +11,24 @@
 8 "slot 8"
 9 "slot 9"
 0 "slot 0"
-[ invprev
-] invnext
+[ "screenblocks 10"
+] "screenblocks 12"
 mwheelleft invprev
 mwheelright invnext
-enter invuse
-- sizedown
-= sizeup
-ctrl +attack
-alt +strafe
+q +attack
+e +altattack
 shift +speed
 space +use
-rightarrow +right
-leftarrow +left
-uparrow +forward
-downarrow +back
-, +moveleft
-. +moveright
+d +right
+a +left
+w +forward
+s +back
+space +jump
 mouse1 +attack
-mouse2 +strafe
-mouse3 +forward
-mouse4 +speed
-capslock "toggle cl_run"
+mouse2 +jump
+mouse3 invuse
+mouse4 +user1
+capslock chase
 f1 menu_help
 f2 menu_save
 f3 menu_load
@@ -47,20 +43,17 @@ f10 menu_quit
 tab togglemap
 pause pause
 sysrq screenshot
-t messagemode
+enter messagemode
 \ +showscores
 f12 spynext
 mwheeldown weapnext
 mwheelup weapprev
 
-// Originally just for Heretic, Hexen, and Strife.
-// I can't see why they shouldn't be for Doom or Chex either.
-pgup +moveup
-ins +movedown
-home land
-pgdn +lookup
-del +lookdown
-end centerview
+// Inventory
+uparrow invuse
+downarrow invuse
+leftarrow invprev
+rightarrow invnext
 
 // Generic joystick buttons
 joy1 +attack
@@ -68,21 +61,21 @@ joy2 +strafe
 joy3 +speed
 joy4 +use
 
-// Xbox 360 / PS2 controllers
-pad_a +use
-pad_y +jump
+// Xbox / PlayStation controllers
+pad_a +jump
+pad_b weapprev
+pad_x +use
+pad_y weapnext
 rtrigger +attack
 ltrigger +altattack
-lshoulder weapprev
-rshoulder weapnext
+lshoulder +user1
+rshoulder +user2
 dpadleft invprev
 dpadright invnext
 dpaddown invuse
 dpadup togglemap
-pad_start pause
-pad_back menu_main
-lthumb crouch
-
+pad_start menu_main
+pad_back +user3
 
 /* Default automap bindings */
 mapbind f am_togglefollow
