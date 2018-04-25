@@ -122,7 +122,7 @@ CVAR (Int, crosshair, -2, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
 CVAR (Color, crosshaircolor, 0x8888ff, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
-CVAR (Float, crosshairscale, 2.0, CVAR_ARCHIVE);
+CVAR (Float, crosshairscale, 0.33, CVAR_ARCHIVE);
 CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
