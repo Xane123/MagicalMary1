@@ -1,5 +1,7 @@
 /* Default keybindings for all games */
 
+doublebind w +mc_run
+
 ` toggleconsole
 1 "slot 1"
 2 "slot 2"
