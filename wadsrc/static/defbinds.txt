@@ -21,10 +21,10 @@ q +attack
 e +altattack
 shift +speed
 space +use
-d +right
-a +left
 w +forward
 s +back
+d +moveright
+a +moveleft
 space +jump
 mouse1 +attack
 mouse2 +jump
