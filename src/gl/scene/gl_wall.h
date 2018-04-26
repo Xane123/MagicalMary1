@@ -10,6 +10,8 @@
 #include "textures/textures.h"
 #include "gl/renderer/gl_colormap.h"
 
+#pragma warning(disable:4244)
+
 struct GLHorizonInfo;
 struct F3DFloor;
 struct model_t;
@@ -24,6 +26,7 @@ struct FSectorPortalGroup;
 struct FFlatVertex;
 struct FLinePortalSpan;
 class GLSceneDrawer;
+struct FDynLightData;
 
 enum
 {
@@ -203,15 +206,11 @@ private:
 	void PutPortal(HWDrawInfo *di, int ptype);
 	void CheckTexturePosition(FTexCoordInfo *tci);
 
-	void RenderFogBoundaryCompat();
-	void RenderLightsCompat(int pass);
-
 	void Put3DWall(HWDrawInfo *di, lightlist_t * lightlist, bool translucent);
 	bool SplitWallComplex(HWDrawInfo *di, sector_t * frontsector, bool translucent, float& maplightbottomleft, float& maplightbottomright);
 	void SplitWall(HWDrawInfo *di, sector_t * frontsector, bool translucent);
 
-	void SetupLights();
-	bool PrepareLight(ADynamicLight * light, int pass);
+	bool SetupLights(FDynLightData &lightdata);
 	void MakeVertices(bool nosplit);
 	void RenderWall(int textured);
 	void RenderTextured(int rflags);
@@ -257,13 +256,11 @@ private:
 					  float fch1, float fch2, float ffh1, float ffh2,
 					  float bch1, float bch2, float bfh1, float bfh2);
 
-	void DrawDecal(DBaseDecal *actor);
-	void DoDrawDecals();
-
 	void RenderFogBoundary();
 	void RenderMirrorSurface();
 	void RenderTranslucentWall();
 
+	void CreateVertices(FFlatVertex *&ptr, bool nosplit);
 	void SplitLeftEdge (FFlatVertex *&ptr);
 	void SplitRightEdge(FFlatVertex *&ptr);
 	void SplitUpperEdge(FFlatVertex *&ptr);

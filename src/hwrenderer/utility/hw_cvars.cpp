@@ -21,10 +21,10 @@
 //
 
 
-#include "gl/system/gl_system.h"
 #include "c_cvars.h"
+#include "c_dispatch.h"
 #include "v_video.h"
-#include "gl/system/gl_cvars.h"
+#include "hw_cvars.h"
 #include "menu/menu.h"
 
 
@@ -77,34 +77,35 @@ CUSTOM_CVAR (Float, vid_saturation, 1.f, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 	}
 }
 
-CUSTOM_CVAR(Int, gl_satformula, 1, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR(Int, gl_satformula, 1, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+
+//==========================================================================
+//
+// Texture CVARs
+//
+//==========================================================================
+CUSTOM_CVAR(Float,gl_texture_filter_anisotropic,8.0f,CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
 {
-	if (screen != NULL)
-	{
-		screen->SetGamma(Gamma);
-	}
+	screen->TextureFilterChanged();
 }
 
-
-// Do some tinkering with the menus so that certain options only appear
-// when they are actually valid.
-void gl_SetupMenu()
+CCMD(gl_flush)
 {
-#ifndef HAVE_MMX
-	FOptionValues **opt = OptionValues.CheckKey("HqResizeModes");
-	if (opt != NULL) 
-	{
-		for(int i = (*opt)->mValues.Size()-1; i>=0; i--)
-		{
-			// Delete hqNx MMX resize modes for targets
-			// without support of this instruction set
-			const auto index = llround((*opt)->mValues[i].Value);
-
-			if (index > 6 && index < 10)
-			{
-				(*opt)->mValues.Delete(i);
-			}
-		}
-	}
-#endif
+	screen->FlushTextures();
 }
+
+CUSTOM_CVAR(Int, gl_texture_filter, 4, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINITCALL)
+{
+	if (self < 0 || self > 6) self=4;
+	screen->TextureFilterChanged();
+}
+
+CUSTOM_CVAR(Bool, gl_texture_usehires, true, CVAR_ARCHIVE|CVAR_NOINITCALL)
+{
+	screen->FlushTextures();
+}
+
+CVAR(Bool, gl_precache, false, CVAR_ARCHIVE)
+
+CVAR(Bool, gl_trimsprites, true, CVAR_ARCHIVE);
+

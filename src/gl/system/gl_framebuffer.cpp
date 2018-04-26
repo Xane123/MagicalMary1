@@ -52,7 +52,6 @@ FGLRenderer *GLRenderer;
 
 void gl_LoadExtensions();
 void gl_PrintStartupLog();
-void gl_SetupMenu();
 
 CUSTOM_CVAR(Int, vid_hwgamma, 2, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
@@ -86,7 +85,6 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(void *hMonitor, int width, int height, int 
 	InitializeState();
 	mDebug = std::make_shared<FGLDebug>();
 	mDebug->Update();
-	gl_SetupMenu();
 	DoSetGamma();
 }
 
@@ -403,6 +401,16 @@ FModelRenderer *OpenGLFrameBuffer::CreateModelRenderer(int mli)
 void OpenGLFrameBuffer::UnbindTexUnit(int no)
 {
 	FHardwareTexture::Unbind(no);
+}
+
+void OpenGLFrameBuffer::FlushTextures()
+{
+	if (GLRenderer) GLRenderer->FlushTextures();
+}
+
+void OpenGLFrameBuffer::TextureFilterChanged()
+{
+	if (GLRenderer != NULL && GLRenderer->mSamplerManager != NULL) GLRenderer->mSamplerManager->SetTextureFilterMode();
 }
 
 

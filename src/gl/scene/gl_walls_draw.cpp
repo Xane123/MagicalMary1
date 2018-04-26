@@ -29,7 +29,7 @@
 #include "hwrenderer/dynlights/hw_dynlightdata.h"
 
 #include "gl/system/gl_interface.h"
-#include "gl/system/gl_cvars.h"
+#include "hwrenderer/utility/hw_cvars.h"
 #include "gl/renderer/gl_lightdata.h"
 #include "gl/renderer/gl_renderstate.h"
 #include "gl/renderer/gl_renderer.h"
@@ -42,17 +42,17 @@
 
 EXTERN_CVAR(Bool, gl_seamless)
 
+FDynLightData lightdata;
+
 //==========================================================================
 //
 // Collect lights for shader
 //
 //==========================================================================
-FDynLightData lightdata;
 
-
-void GLWall::SetupLights()
+bool GLWall::SetupLights(FDynLightData &lightdata)
 {
-	if (RenderStyle == STYLE_Add && !level.lightadditivesurfaces) return;	// no lights on additively blended surfaces.
+	if (RenderStyle == STYLE_Add && !level.lightadditivesurfaces) return false;	// no lights on additively blended surfaces.
 
 	// check for wall types which cannot have dynamic lights on them (portal types never get here so they don't need to be checked.)
 	switch (type)
@@ -60,7 +60,7 @@ void GLWall::SetupLights()
 	case RENDERWALL_FOGBOUNDARY:
 	case RENDERWALL_MIRRORSURFACE:
 	case RENDERWALL_COLOR:
-		return;
+		return false;
 	}
 
 	float vtx[]={glseg.x1,zbottom[0],glseg.y1, glseg.x1,ztop[0],glseg.y1, glseg.x2,ztop[1],glseg.y2, glseg.x2,zbottom[1],glseg.y2};
@@ -141,8 +141,7 @@ void GLWall::SetupLights()
 		}
 		node = node->nextLight;
 	}
-
-	dynlightindex = GLRenderer->mLights->UploadLights(lightdata);
+	return true;
 }
 
 //==========================================================================
@@ -155,22 +154,8 @@ void GLWall::MakeVertices(bool nosplit)
 {
 	if (vertcount == 0)
 	{
-		bool split = (gl_seamless && !nosplit && seg->sidedef != NULL && !(seg->sidedef->Flags & WALLF_POLYOBJ) && !(flags & GLWF_NOSPLIT));
-
 		FFlatVertex *ptr = GLRenderer->mVBO->GetBuffer();
-
-		ptr->Set(glseg.x1, zbottom[0], glseg.y1, tcs[LOLFT].u, tcs[LOLFT].v);
-		ptr++;
-		if (split && glseg.fracleft == 0) SplitLeftEdge(ptr);
-		ptr->Set(glseg.x1, ztop[0], glseg.y1, tcs[UPLFT].u, tcs[UPLFT].v);
-		ptr++;
-		if (split && !(flags & GLWF_NOSPLITUPPER)) SplitUpperEdge(ptr);
-		ptr->Set(glseg.x2, ztop[1], glseg.y2, tcs[UPRGT].u, tcs[UPRGT].v);
-		ptr++;
-		if (split && glseg.fracright == 1) SplitRightEdge(ptr);
-		ptr->Set(glseg.x2, zbottom[1], glseg.y2, tcs[LORGT].u, tcs[LORGT].v);
-		ptr++;
-		if (split && !(flags & GLWF_NOSPLITLOWER)) SplitLowerEdge(ptr);
+		CreateVertices(ptr, nosplit);
 		vertcount = GLRenderer->mVBO->GetCount(ptr, &vertindex);
 	}
 }
@@ -235,7 +220,7 @@ void GLWall::RenderFogBoundary()
 		}
 		else
 		{
-			RenderFogBoundaryCompat();
+			gl_drawinfo->RenderFogBoundaryCompat(this);
 		}
 	}
 }
@@ -297,7 +282,7 @@ void GLWall::RenderMirrorSurface()
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		glPolygonOffset(-1.0f, -128.0f);
 		glDepthMask(false);
-		DoDrawDecals();
+		gl_drawinfo->DoDrawDecals(this);
 		glDepthMask(true);
 		glPolygonOffset(0.0f, 0.0f);
 		glDisable(GL_POLYGON_OFFSET_FILL);
@@ -389,7 +374,8 @@ void GLWall::RenderTranslucentWall()
 	{
 		if (mDrawer->FixedColormap == CM_DEFAULT && gl_lights && gl.lightmethod == LM_DIRECT)
 		{
-			SetupLights();
+			if (SetupLights(lightdata))
+				dynlightindex = GLRenderer->mLights->UploadLights(lightdata);
 		}
 		if (!gltexture->tex->GetTranslucency()) gl_RenderState.AlphaFunc(GL_GEQUAL, gl_mask_threshold);
 		else gl_RenderState.AlphaFunc(GL_GEQUAL, 0.f);
@@ -419,11 +405,13 @@ void GLWall::Draw(int pass)
 	switch (pass)
 	{
 	case GLPASS_LIGHTSONLY:
-		SetupLights();
+		if (SetupLights(lightdata))
+			dynlightindex = GLRenderer->mLights->UploadLights(lightdata);
 		break;
 
 	case GLPASS_ALL:
-		SetupLights();
+		if (SetupLights(lightdata))
+			dynlightindex = GLRenderer->mLights->UploadLights(lightdata);
 		// fall through
 	case GLPASS_PLAIN:
 		RenderTextured(RWF_TEXTURED);
@@ -450,7 +438,7 @@ void GLWall::Draw(int pass)
 	case GLPASS_LIGHTTEX:
 	case GLPASS_LIGHTTEX_ADDITIVE:
 	case GLPASS_LIGHTTEX_FOGGY:
-		RenderLightsCompat(pass);
+		gl_drawinfo->RenderLightsCompat(this, pass);
 		break;
 
 	case GLPASS_TEXONLY:
