@@ -11,16 +11,19 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Added sanity check for checkpoints; Now if the player or monsters are set to spawn at an object that doesn't exist, the checkpoint ID will revert to the level default, 616. This should fix the Black Room Glitch when dying in 1-1 after returning from a Battle Arena fight.
 * Fixed "special plane areas" being double the size they were set to.
 * Special Stages don't drain your time on the ground, now updated to the new special plane system.
+* Fixed the hammer's silly behavior in the air if the player didn't have enough hammer upgrades to perform the Hammer Slam.
+* Respawning from checkpoints that are placed on 3D floors now places the player on the 3D floor and not on the ground/bottomless pit below it.
 ## Major
 * Health and jump height can be upgraded by picking up upgrade items for them, which are separate from weapon upgrade items.
 * Mary's Hammer Slam attack behaves differently now; Instead of activating based on height alone, which could lead to unfair deaths, it now activates if at a high enough height **and** the attack button is held down. Briefly pressing the attack button will do the normal hammer attack now, even in mid-air!
 * Reverted the bubble spawner's behavior to World of Kirbycraft v1.4's true randomness. This was done as the new system was ironically **too** predictable.
 * Render-culling polyobjects are now non-solid due to a small source code modification. This replaces the "hurt on touch" polyobject behavior but the othe two polyobject types are still solid as before.
-* Projectile reflection has been altered thanks to Ryuhi (developer of Heretical Doom); Projectiles only are reflected in front of Mary/Xane and you aren't invulnerable during the reflection. Lasers cannot be reflected, so they will phase through your protection. 
-* City Street Run (1-3) can be completed now! Jump in the Uroboros (the "airship") at the end and it will "lift off" and Mary/Xane will go to "The Command Master", an incomplete area. Once this is complete, the game will become v2.0 and be ready to be converted into the **ZDoom Forums Demo**!
+* Projectile reflection has been altered thanks to Ryuhi (developer of *Heretical Doom*); Projectiles only are reflected in front of Mary/Xane and you aren't invulnerable during the reflection. Lasers cannot be reflected, so they will phase through your protection. 
+* City Street Run (1-3) can be completed now! Jump in the Uroboros (the "airship") at the end and it will "lift off" and Mary/Xane will go to "The Command Master", an incomplete area. Once this boss area is complete, the game will become v2.0 and the **ZDoom Forums Demo** will be made from this version, allowing playing of the four levels plus the arena!
+* The Windows executable is now 32-bit! This allows more people to play the game.
 ## Minor
 * Making it to the end of an area with more than 15 coins will automatically send them to the bank in the Small Hut, but some coins will be removed. Additionally, if transformed even less will be stored in the bank. This was done to encourage the player to warp to the Small Hut and add them to the bank manually, which could give them interest in buying things from its shop or trying out minigames. Those give the player a lot of coins if played well.
-* Lovely Heart's big heart-shaped projectile isn't treated as a "powerful projectile" to enemies anymore. This was done so enemies like cops wouldn't jump over Magical Cutie Mary's attacks, which would waste the five coins it takes to perform the attack.		
+* Lovely Heart's big heart-shaped projectile isn't treated as a "powerful projectile" to enemies anymore. This was done so enemies like cops wouldn't jump over Magical Cutie Mary's attacks, which would waste the five coins it takes to perform the attack. Altering how Magical Cutie Mary behaves is planned in the future but for now, yes, using certain attacks costs coins.	
 * Mary's "falling scream" sprites have been re-added into the game, but in the new art style.
 * The drill in the Small Hut now functions. It costs 100 coins to "dig a tunnel" to the blue building seen in the first area. The building will contain minigames which will give Mary/Xane extra coins, making it worth the price.
 * Mary's Hammer Slam now maintains momentum. This feels more natural and lets Mary "launch" herself at enemies. The Hammer Slam's height it activates at was raised to 1½ stories (192 units) off the ground. This makes it harder to perform the more powerful slams but improves balance. Perform the downward Air Dash before it for a boost forward upon landing!
@@ -31,3 +34,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The combo meter drains slightly quicker now to balance the planned amounts of enemies. However, coins now increase more of the combo meter, allowing continuing combos without Combo Coins easier.
 * Extra dialogue was added to Rooftop to Rooftop and City Street Run for Mary and Xane.
 * Turrets can now automatically shoot lasers to a fast or slow rhythm instead of the default player detection. Hitting a turret in these modes will temporarily change it to its default behavior until it loses sight of you and reverts.
+* Linedefs that triggered script errors about a non-existant "TimeSafeBoundary" script have had the script attached to them removed.
