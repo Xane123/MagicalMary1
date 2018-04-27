@@ -993,6 +993,7 @@ OptionMenu "MiscOptions" protected
 	{
 		Option "$MISCMNU_MERGEKEYS", 			"k_mergekeys", "OnOff"
 		Option "$MISCMNU_WINFULLSCREENTOGGLE",	"k_allowfullscreentoggle", "OnOff"
+		Option "$MISCMNU_WINPROCESSPRIORITY",	"i_highpriority", "OnOff"
 	}
 	IfOption(Mac)
 	{
