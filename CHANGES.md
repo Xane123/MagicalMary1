@@ -35,3 +35,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Extra dialogue was added to Rooftop to Rooftop and City Street Run for Mary and Xane.
 * Turrets can now automatically shoot lasers to a fast or slow rhythm instead of the default player detection. Hitting a turret in these modes will temporarily change it to its default behavior until it loses sight of you and reverts.
 * Linedefs that triggered script errors about a non-existant "TimeSafeBoundary" script have had the script attached to them removed.
+* Above-normal process priority option was added (Windows only); GZDoom changes the game's process priority automatically, but this prevents the user manually setting it to anything but "normal", so this was added.
