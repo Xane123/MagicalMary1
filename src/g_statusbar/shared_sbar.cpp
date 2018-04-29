@@ -1170,7 +1170,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 	DrawMessages (HUDMSGLayer_OverHUD, (state == HUD_StatusBar) ? GetTopOfStatusbar() : SCREENHEIGHT);
 	E_RenderOverlay(state);
 
-	DrawConsistancy ();
+	//DrawConsistancy ();
 	DrawWaiting ();
 	if (ShowLog && MustDrawLog(state)) DrawLog ();
 
@@ -1181,7 +1181,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 }
 
 
-void DBaseStatusBar::DrawConsistancy () const
+/*void DBaseStatusBar::DrawConsistancy () const
 {
 	static bool firsttime = true;
 	int i;
@@ -1222,7 +1222,7 @@ void DBaseStatusBar::DrawConsistancy () const
 			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
 			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);
 	}
-}
+}*/
 
 void DBaseStatusBar::DrawWaiting () const
 {
@@ -1239,8 +1239,8 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Waiting for:");
-				buff_p = conbuff + 12;
+				strcpy (conbuff, "Waiting for player ");
+				buff_p = conbuff + 19;
 			}
 			*buff_p++ = ' ';
 			*buff_p++ = '1' + i;
@@ -1250,7 +1250,7 @@ void DBaseStatusBar::DrawWaiting () const
 
 	if (buff_p != NULL)
 	{
-		screen->DrawText (SmallFont, CR_ORANGE, 
+		screen->DrawText (SmallFont, CR_YELLOW, 
 			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
 			SmallFont->GetHeight()*CleanYfac, conbuff, DTA_CleanNoMove, true, TAG_DONE);
 	}
