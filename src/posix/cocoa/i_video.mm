@@ -267,7 +267,7 @@ CUSTOM_CVAR(Float, rgamma, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (NULL != screen)
 	{
-		screen->SetGamma();
+		screen->SetGamma(Gamma);
 	}
 }
 
@@ -275,7 +275,7 @@ CUSTOM_CVAR(Float, ggamma, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (NULL != screen)
 	{
-		screen->SetGamma();
+		screen->SetGamma(Gamma);
 	}
 }
 
@@ -283,7 +283,7 @@ CUSTOM_CVAR(Float, bgamma, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (NULL != screen)
 	{
-		screen->SetGamma();
+		screen->SetGamma(Gamma);
 	}
 }
 

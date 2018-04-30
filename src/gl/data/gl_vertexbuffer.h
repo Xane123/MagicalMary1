@@ -23,15 +23,11 @@
 #ifndef __VERTEXBUFFER_H
 #define __VERTEXBUFFER_H
 
-#include <atomic>
-#include <thread>
-#include <mutex>
 #include "tarray.h"
 #include "hwrenderer/utility/hw_clock.h"
 #include "gl/system/gl_interface.h"
 #include "r_data/models/models.h"
 #include "hwrenderer/data/flatvertices.h"
-#include "hwrenderer/scene/hw_skydome.h"
 
 struct vertex_t;
 struct secplane_t;
@@ -97,8 +93,7 @@ class FFlatVertexBuffer : public FVertexBuffer, public FFlatVertexGenerator
 {
 	FFlatVertex *map;
 	unsigned int mIndex;
-	std::atomic<unsigned int> mCurIndex;
-	std::mutex mBufferMutex;
+	unsigned int mCurIndex;
 	unsigned int mNumReserved;
 
 
@@ -130,22 +125,12 @@ public:
 	{
 		return &map[mCurIndex];
 	}
-
-	template<class T>
-	FFlatVertex *Alloc(int num, T *poffset)
+	FFlatVertex *Alloc(int num, int *poffset)
 	{
-	again:
 		FFlatVertex *p = GetBuffer();
-		auto index = mCurIndex.fetch_add(num);
-		*poffset = static_cast<T>(index);
-		if (index + num >= BUFFER_SIZE_TO_USE)
-		{
-			std::lock_guard<std::mutex> lock(mBufferMutex);
-			if (mCurIndex >= BUFFER_SIZE_TO_USE)	// retest condition, in case another thread got here first
-				mCurIndex = mIndex;
-
-			if (index >= BUFFER_SIZE_TO_USE) goto again;
-		}
+		*poffset = mCurIndex;
+		mCurIndex += num;
+		if (mCurIndex >= BUFFER_SIZE_TO_USE) mCurIndex = mIndex;
 		return p;
 	}
 
@@ -197,15 +182,73 @@ public:
 };
 
 
-class FSkyVertexBuffer : public FVertexBuffer, public FSkyDomeCreator
+struct FSkyVertex
 {
+	float x, y, z, u, v;
+	PalEntry color;
+
+	void Set(float xx, float zz, float yy, float uu=0, float vv=0, PalEntry col=0xffffffff)
+	{
+		x = xx;
+		z = zz;
+		y = yy;
+		u = uu;
+		v = vv;
+		color = col;
+	}
+
+	void SetXYZ(float xx, float yy, float zz, float uu = 0, float vv = 0, PalEntry col = 0xffffffff)
+	{
+		x = xx;
+		y = yy;
+		z = zz;
+		u = uu;
+		v = vv;
+		color = col;
+	}
+
+};
+
+class FSkyVertexBuffer : public FVertexBuffer
+{
+public:
+	static const int SKYHEMI_UPPER = 1;
+	static const int SKYHEMI_LOWER = 2;
+
+	enum
+	{
+		SKYMODE_MAINLAYER = 0,
+		SKYMODE_SECONDLAYER = 1,
+		SKYMODE_FOGLAYER = 2
+	};
+
+private:
+	TArray<FSkyVertex> mVertices;
+	TArray<unsigned int> mPrimStart;
+
+	int mRows, mColumns;
+
+	// indices for sky cubemap faces
+	int mFaceStart[7];
+	int mSideStart;
+
+	void SkyVertex(int r, int c, bool yflip);
+	void CreateSkyHemisphere(int hemi);
+	void CreateDome();
 	void RenderRow(int prim, int row);
 
 public:
 
 	FSkyVertexBuffer();
+	virtual ~FSkyVertexBuffer();
 	void RenderDome(FMaterial *tex, int mode);
 	void BindVBO();
+	int FaceStart(int i)
+	{
+		if (i >= 0 && i < 7) return mFaceStart[i];
+		else return mSideStart;
+	}
+
 };
 
 class FModelVertexBuffer : public FVertexBuffer, public IModelVertexBuffer

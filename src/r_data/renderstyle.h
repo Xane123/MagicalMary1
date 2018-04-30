@@ -62,7 +62,6 @@ enum ERenderStyle
 	STYLE_AddStencil,		// Fill image interior with alphacolor
 	STYLE_AddShaded,		// Treat patch data as alpha values for alphacolor
 	STYLE_Multiply,			// Multiply source with destination (HW renderer only.)
-	STYLE_InverseMultiply,	// Multiply source with inverse of destination (HW renderer only.)
 
 	STYLE_Count
 };

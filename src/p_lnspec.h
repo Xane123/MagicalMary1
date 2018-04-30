@@ -108,9 +108,6 @@ typedef enum {
 	hDamage_Sludge = 85,
 	Sector_Outside = 87,
 
-	GLSector_NoSkyDraw = 89,
-	GLSector_Skybox = 90,
-
 	// And here are some for Strife
 	sLight_Strobe_Hurt = 104,
 	sDamage_Hellslime = 105,

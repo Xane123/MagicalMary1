@@ -229,13 +229,21 @@ void DIntermissionScreenFader::Drawer ()
 		if (mType == FADE_In) factor = 1.0 - factor;
 		int color = MAKEARGB(int(factor*255), 0,0,0);
 
-		screen->DrawTexture (TexMan[mBackground], 0, 0, DTA_Fullscreen, true, DTA_ColorOverlay, color, TAG_DONE);
-		for (unsigned i=0; i < mOverlays.Size(); i++)
+		if (screen->Begin2D(false))
 		{
-			if (CheckOverlay(i))
-				screen->DrawTexture (TexMan[mOverlays[i].mPic], mOverlays[i].x, mOverlays[i].y, DTA_320x200, true, DTA_ColorOverlay, color, TAG_DONE);
+			screen->DrawTexture (TexMan[mBackground], 0, 0, DTA_Fullscreen, true, DTA_ColorOverlay, color, TAG_DONE);
+			for (unsigned i=0; i < mOverlays.Size(); i++)
+			{
+				if (CheckOverlay(i))
+					screen->DrawTexture (TexMan[mOverlays[i].mPic], mOverlays[i].x, mOverlays[i].y, DTA_320x200, true, DTA_ColorOverlay, color, TAG_DONE);
+			}
+			screen->FillBorder (NULL);
 		}
-		screen->FillBorder (NULL);
+		else
+		{
+			V_SetBlend (0,0,0,int(256*factor));
+			Super::Drawer();
+		}
 	}
 }
 

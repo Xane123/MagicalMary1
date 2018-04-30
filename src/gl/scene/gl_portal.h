@@ -40,8 +40,36 @@
 #include "actor.h"
 #include "gl/renderer/gl_renderer.h"
 #include "gl/scene/gl_drawinfo.h"
-#include "hwrenderer/scene/hw_drawstructs.h"
-#include "hwrenderer/scene/hw_portal.h"
+
+struct GLHorizonInfo
+{
+	GLSectorPlane plane;
+	int lightlevel;
+	FColormap colormap;
+	PalEntry specialcolor;
+};
+
+struct GLSkyInfo
+{
+	float x_offset[2];
+	float y_offset;		// doubleskies don't have a y-offset
+	FMaterial * texture[2];
+	FTextureID skytexno1;
+	bool mirrored;
+	bool doublesky;
+	bool sky2;
+	PalEntry fadecolor;	// if this isn't made part of the dome things will become more complicated when sky fog is used.
+
+	bool operator==(const GLSkyInfo & inf)
+	{
+		return !memcmp(this, &inf, sizeof(*this));
+	}
+	bool operator!=(const GLSkyInfo & inf)
+	{
+		return !!memcmp(this, &inf, sizeof(*this));
+	}
+	void init(int sky1, PalEntry fadecolor);
+};
 
 extern UniqueList<GLSkyInfo> UniqueSkies;
 extern UniqueList<GLHorizonInfo> UniqueHorizons;
@@ -64,6 +92,7 @@ public:
 	static GLSceneDrawer *drawer;
 	static int PlaneMirrorMode;
 	static int inupperstack;
+	static int	instack[2];
 	static bool	inskybox;
 
 private:
@@ -105,6 +134,13 @@ protected:
 	virtual void PopState() {}
 
 public:
+
+	enum
+	{
+		PClip_InFront,
+		PClip_Inside,
+		PClip_Behind,
+	};
 
 	void RenderPortal(bool usestencil, bool doquery)
 	{

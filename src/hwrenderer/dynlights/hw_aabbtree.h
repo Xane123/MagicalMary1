@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "tarray.h"
 #include "vectors.h"
 
 namespace hwrenderer
