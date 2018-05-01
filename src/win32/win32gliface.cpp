@@ -71,7 +71,6 @@ PFNWGLSWAPINTERVALEXTPROC myWglSwapIntervalExtProc;
 
 
 
-CVAR(Bool, vid_activeinbackground, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
 CUSTOM_CVAR(Bool, gl_debug, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
@@ -1120,7 +1119,7 @@ void SystemFrameBuffer::InitializeState()
 
 bool SystemFrameBuffer::CanUpdate()
 {
-	if (!AppActive && (IsFullscreen() || !vid_activeinbackground)) return false;
+	if (!AppActive && IsFullscreen()) return false;
 	return true;
 }
 

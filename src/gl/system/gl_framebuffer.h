@@ -23,7 +23,10 @@ public:
 	void Update();
 
 	// Color correction
-	void SetGamma();
+	bool SetGamma (float gamma);
+	bool SetBrightness(float bright);
+	bool SetContrast(float contrast);
+	void DoSetGamma();
 
 	void CleanForRestart() override;
 	void UpdatePalette() override;
@@ -31,6 +34,7 @@ public:
 	PalEntry *GetPalette () override;
 	bool SetFlash(PalEntry rgb, int amount) override;
 	void GetFlash(PalEntry &rgb, int &amount) override;
+	bool Begin2D(bool copy3d) override;
 	void GameRestart() override;
 	void InitForLevel() override;
 	void SetClearColor(int color) override;
@@ -44,8 +48,6 @@ public:
 	void UnbindTexUnit(int no) override;
 	void FlushTextures() override;
 	void TextureFilterChanged() override;
-	void ResetFixedColormap() override;
-	void BeginFrame() override;
 
 	// Retrieves a buffer containing image data for a screenshot.
 	// Hint: Pitch can be negative for upside-down images, in which case buffer

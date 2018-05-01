@@ -157,9 +157,13 @@ FFlatVertexBuffer::FFlatVertexBuffer(int width, int height)
 	mIndex = mCurIndex = 0;
 	mNumReserved = NUM_RESERVED;
 
-	Map();
-	memcpy(map, &vbo_shadowdata[0], mNumReserved * sizeof(FFlatVertex));
-	Unmap();
+	if (gl.buffermethod == BM_DEFERRED)
+	{
+		Map();
+		memcpy(map, &vbo_shadowdata[0], mNumReserved * sizeof(FFlatVertex));
+		Unmap();
+	}
+
 }
 
 FFlatVertexBuffer::~FFlatVertexBuffer()

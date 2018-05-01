@@ -1,10 +1,8 @@
 #pragma once
 
 #include <stdint.h>
-#include "tarray.h"
 
 typedef TMap<int, bool> SpriteHits;
-class FTexture;
 
 class IHardwareTexture
 {

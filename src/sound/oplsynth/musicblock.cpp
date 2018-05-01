@@ -53,8 +53,6 @@ int musicBlock::releaseVoice(uint32_t slot, uint32_t killed)
 	struct OPLVoice *ch = &voices[slot];
 	io->WriteFrequency(slot, ch->note, ch->pitch, 0);
 	ch->index = ~0u;
-	ch->sustained = false;
-	if (!killed) ch->timestamp = ++timeCounter;
 	if (killed) io->MuteChannel(slot);
 	return slot;
 }
@@ -67,25 +65,15 @@ int musicBlock::releaseVoice(uint32_t slot, uint32_t killed)
 
 int musicBlock::findFreeVoice()
 {
-	// We want to prefer the least recently freed voice, as more recently
-	// freed voices can still play a tone from their release state.
-	// Sustained voices are replaced when there are no free voices.
-	uint32_t min_value = ~0u;
-	int result = -1;
 	for (uint32_t i = 0; i < io->NumChannels; ++i)
 	{
-		uint32_t voice_value = voices[i].timestamp + (voices[i].sustained ? (1 << 31) : 0);
-		if ((voices[i].index == ~0u || voices[i].sustained) && (voice_value < min_value))
+		if (voices[i].index == ~0u)
 		{
-			min_value = voice_value;
-			result = i;
+			releaseVoice(i, 1);
+			return i;
 		}
 	}
-	if (result >= 0)
-	{
-		releaseVoice(result, 1);
-	}
-	return result;
+	return -1;
 }
 
 //----------------------------------------------------------------------------
@@ -106,6 +94,7 @@ int musicBlock::replaceExistingVoice()
 	// Lower numbered MIDI channels implicitly have a higher priority
 	// than higher-numbered channels, eg. MIDI channel 1 is never
 	// discarded for MIDI channel 2.
+
 	int result = 0;
 
 	for (uint32_t i = 0; i < io->NumChannels; ++i)
@@ -247,11 +236,7 @@ void musicBlock::noteOff(uint32_t id, uint8_t note)
 	{
 		if (voices[i].index == id && voices[i].key == note)
 		{
-			if (sustain >= MIN_SUSTAIN)
-			{
-				voices[i].sustained = true;
-				voices[i].timestamp = ++timeCounter;
-			}
+			if (sustain >= MIN_SUSTAIN) voices[i].sustained = true;
 			else releaseVoice(i, 0);
 		}
 	}
@@ -372,11 +357,7 @@ void musicBlock::notesOff(uint32_t id, int value)
 	{
 		if (voices[i].index == id)
 		{
-			if (oplchannels[id].Sustain >= MIN_SUSTAIN) 
-			{
-				voices[i].sustained = true;
-				voices[i].timestamp = ++timeCounter;
-			}
+			if (oplchannels[id].Sustain >= MIN_SUSTAIN) voices[i].sustained = true;
 			else releaseVoice(i, 0);
 		}
 	}
@@ -494,7 +475,5 @@ void musicBlock::stopAllVoices()
 	for (uint32_t i = 0; i < io->NumChannels; i++)
 	{
 		if (voices[i].index != ~0u) releaseVoice(i, 1);
-		voices[i].timestamp = 0;
 	}
-	timeCounter = 0;
 }

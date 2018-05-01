@@ -153,14 +153,15 @@ bool hw_CheckClip(side_t * sidedef, sector_t * frontsector, sector_t * backsecto
 
 //==========================================================================
 //
-// check for levels with exposed lower areas. May only be called if actual
-// state is not known yet!
+// check for levels with exposed lower areas
 //
 //==========================================================================
 
-area_t hw_CheckViewArea(vertex_t *v1, vertex_t *v2, sector_t *frontsector, sector_t *backsector)
+area_t hw_CheckViewArea(area_t in_area, vertex_t *v1, vertex_t *v2, sector_t *frontsector, sector_t *backsector)
 {
-	if (backsector->GetHeightSec() && !frontsector->GetHeightSec())
+	if (in_area == area_default &&
+		(backsector->heightsec && !(backsector->heightsec->MoreFlags & SECF_IGNOREHEIGHTSEC)) &&
+		(!frontsector->heightsec || frontsector->heightsec->MoreFlags & SECF_IGNOREHEIGHTSEC))
 	{
 		sector_t * s = backsector->heightsec;
 
@@ -175,7 +176,7 @@ area_t hw_CheckViewArea(vertex_t *v1, vertex_t *v2, sector_t *frontsector, secto
 		else
 			return area_normal;
 	}
-	return area_default;
+	return in_area;
 }
 
 
@@ -187,19 +188,22 @@ area_t hw_CheckViewArea(vertex_t *v1, vertex_t *v2, sector_t *frontsector, secto
 //==========================================================================
 sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool back)
 {
-	if (!sec->GetHeightSec() || sec->heightsec==sec) 
+	if (!sec->heightsec || sec->heightsec->MoreFlags & SECF_IGNOREHEIGHTSEC || sec->heightsec==sec) 
 	{
 		// check for backsectors with the ceiling lower than the floor. These will create
 		// visual glitches because upper amd lower textures overlap.
-		if (back && (sec->MoreFlags & SECMF_OVERLAPPING))
+		if (back && sec->planes[sector_t::floor].TexZ > sec->planes[sector_t::ceiling].TexZ)
 		{
-			*dest = *sec;
-			dest->ceilingplane = sec->floorplane;
-			dest->ceilingplane.FlipVert();
-			dest->planes[sector_t::ceiling].TexZ = dest->planes[sector_t::floor].TexZ;
-			dest->ClearPortal(sector_t::ceiling);
-			dest->ClearPortal(sector_t::floor);
-			return dest;
+			if (!sec->floorplane.isSlope() && !sec->ceilingplane.isSlope())
+			{
+				*dest = *sec;
+				dest->ceilingplane=sec->floorplane;
+				dest->ceilingplane.FlipVert();
+				dest->planes[sector_t::ceiling].TexZ = dest->planes[sector_t::floor].TexZ;
+				dest->ClearPortal(sector_t::ceiling);
+				dest->ClearPortal(sector_t::floor);
+				return dest;
+			}
 		}
 		return sec;
 	}
@@ -213,10 +217,10 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 
 	if (in_area==area_above)
 	{
-		if (sec->heightsec->MoreFlags&SECMF_FAKEFLOORONLY /*|| sec->GetTexture(sector_t::ceiling)==skyflatnum*/) in_area=area_normal;
+		if (sec->heightsec->MoreFlags&SECF_FAKEFLOORONLY /*|| sec->GetTexture(sector_t::ceiling)==skyflatnum*/) in_area=area_normal;
 	}
 
-	int diffTex = (sec->heightsec->MoreFlags & SECMF_CLIPFAKEPLANES);
+	int diffTex = (sec->heightsec->MoreFlags & SECF_CLIPFAKEPLANES);
 	sector_t * s = sec->heightsec;
 	
 #if 0
@@ -231,16 +235,16 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		if (s->floorplane.CopyPlaneIfValid (&dest->floorplane, &sec->ceilingplane))
 		{
 			dest->SetTexture(sector_t::floor, s->GetTexture(sector_t::floor), false);
-			dest->SetPlaneTexZQuick(sector_t::floor, s->GetPlaneTexZ(sector_t::floor));
+			dest->SetPlaneTexZ(sector_t::floor, s->GetPlaneTexZ(sector_t::floor));
 			dest->vboindex[sector_t::floor] = sec->vboindex[sector_t::vbo_fakefloor];
 			dest->vboheight[sector_t::floor] = s->vboheight[sector_t::floor];
 		}
-		else if (s->MoreFlags & SECMF_FAKEFLOORONLY)
+		else if (s->MoreFlags & SECF_FAKEFLOORONLY)
 		{
 			if (in_area==area_below)
 			{
 				dest->CopyColors(s);
-				if (!(s->MoreFlags & SECMF_NOFAKELIGHT))
+				if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 				{
 					dest->lightlevel  = s->lightlevel;
 					dest->SetPlaneLight(sector_t::floor, s->GetPlaneLight(sector_t::floor));
@@ -255,21 +259,21 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 	}
 	else
 	{
-		dest->SetPlaneTexZQuick(sector_t::floor, s->GetPlaneTexZ(sector_t::floor));
+		dest->SetPlaneTexZ(sector_t::floor, s->GetPlaneTexZ(sector_t::floor));
 		dest->floorplane   = s->floorplane;
 
 		dest->vboindex[sector_t::floor] = sec->vboindex[sector_t::vbo_fakefloor];
 		dest->vboheight[sector_t::floor] = s->vboheight[sector_t::floor];
 	}
 
-	if (!(s->MoreFlags&SECMF_FAKEFLOORONLY))
+	if (!(s->MoreFlags&SECF_FAKEFLOORONLY))
 	{
 		if (diffTex)
 		{
 			if (s->ceilingplane.CopyPlaneIfValid (&dest->ceilingplane, &sec->floorplane))
 			{
 				dest->SetTexture(sector_t::ceiling, s->GetTexture(sector_t::ceiling), false);
-				dest->SetPlaneTexZQuick(sector_t::ceiling, s->GetPlaneTexZ(sector_t::ceiling));
+				dest->SetPlaneTexZ(sector_t::ceiling, s->GetPlaneTexZ(sector_t::ceiling));
 				dest->vboindex[sector_t::ceiling] = sec->vboindex[sector_t::vbo_fakeceiling];
 				dest->vboheight[sector_t::ceiling] = s->vboheight[sector_t::ceiling];
 			}
@@ -277,7 +281,7 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 		else
 		{
 			dest->ceilingplane  = s->ceilingplane;
-			dest->SetPlaneTexZQuick(sector_t::ceiling, s->GetPlaneTexZ(sector_t::ceiling));
+			dest->SetPlaneTexZ(sector_t::ceiling, s->GetPlaneTexZ(sector_t::ceiling));
 			dest->vboindex[sector_t::ceiling] = sec->vboindex[sector_t::vbo_fakeceiling];
 			dest->vboheight[sector_t::ceiling] = s->vboheight[sector_t::ceiling];
 		}
@@ -286,8 +290,8 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 	if (in_area==area_below)
 	{
 		dest->CopyColors(s);
-		dest->SetPlaneTexZQuick(sector_t::floor, sec->GetPlaneTexZ(sector_t::floor));
-		dest->SetPlaneTexZQuick(sector_t::ceiling, s->GetPlaneTexZ(sector_t::floor));
+		dest->SetPlaneTexZ(sector_t::floor, sec->GetPlaneTexZ(sector_t::floor));
+		dest->SetPlaneTexZ(sector_t::ceiling, s->GetPlaneTexZ(sector_t::floor));
 		dest->floorplane=sec->floorplane;
 		dest->ceilingplane=s->floorplane;
 		dest->ceilingplane.FlipVert();
@@ -300,7 +304,7 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 
 		dest->ClearPortal(sector_t::ceiling);
 
-		if (!(s->MoreFlags & SECMF_NOFAKELIGHT))
+		if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 		{
 			dest->lightlevel  = s->lightlevel;
 		}
@@ -327,7 +331,7 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 				dest->planes[sector_t::ceiling].xform = s->planes[sector_t::ceiling].xform;
 			}
 			
-			if (!(s->MoreFlags & SECMF_NOFAKELIGHT))
+			if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 			{
 				dest->SetPlaneLight(sector_t::floor, s->GetPlaneLight(sector_t::floor));
 				dest->SetPlaneLight(sector_t::ceiling, s->GetPlaneLight(sector_t::ceiling));
@@ -339,8 +343,8 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 	else if (in_area == area_above)
 	{
 		dest->CopyColors(s);
-		dest->SetPlaneTexZQuick(sector_t::ceiling, sec->GetPlaneTexZ(sector_t::ceiling));
-		dest->SetPlaneTexZQuick(sector_t::floor, s->GetPlaneTexZ(sector_t::ceiling));
+		dest->SetPlaneTexZ(sector_t::ceiling, sec->GetPlaneTexZ(sector_t::ceiling));
+		dest->SetPlaneTexZ(sector_t::floor, s->GetPlaneTexZ(sector_t::ceiling));
 		dest->ceilingplane = sec->ceilingplane;
 		dest->floorplane = s->ceilingplane;
 		dest->floorplane.FlipVert();
@@ -353,7 +357,7 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 
 		dest->ClearPortal(sector_t::floor);
 
-		if (!(s->MoreFlags & SECMF_NOFAKELIGHT))
+		if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 		{
 			dest->lightlevel  = s->lightlevel;
 		}
@@ -370,7 +374,7 @@ sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool bac
 				dest->planes[sector_t::floor].xform = s->planes[sector_t::floor].xform;
 			}
 			
-			if (!(s->MoreFlags & SECMF_NOFAKELIGHT))
+			if (!(s->MoreFlags & SECF_NOFAKELIGHT))
 			{
 				dest->lightlevel  = s->lightlevel;
 				dest->SetPlaneLight(sector_t::floor, s->GetPlaneLight(sector_t::floor));
