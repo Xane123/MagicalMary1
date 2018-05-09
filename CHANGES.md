@@ -13,6 +13,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Special Stages don't drain your time on the ground, now updated to the new special plane system.
 * Fixed the hammer's silly behavior in the air if the player didn't have enough hammer upgrades to perform the Hammer Slam.
 * Respawning from checkpoints that are placed on 3D floors now places the player on the 3D floor and not on the ground/bottomless pit below it.
+* Fixed Xane spawning at the beginning of the current area when returning from a Special Stage.
 ## Major
 * Health and jump height can be upgraded by picking up upgrade items for them, which are separate from weapon upgrade items.
 * Mary's Hammer Slam attack behaves differently now; Instead of activating based on height alone, which could lead to unfair deaths, it now activates if at a high enough height **and** the attack button is held down. Briefly pressing the attack button will do the normal hammer attack now, even in mid-air!
@@ -23,6 +24,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The Windows executable is now 32-bit! This allows more people to play the game.
 * Added a new mod, the Materials Mod (*mma_materials.pk3*). This enables the new GLDEFS materials, viewable in the OpenGL ("true 3D") renderer. It makes metal and wooden surfaces reflect any lights around them.
 * Added a second mod, the hi-res sprites/textures mod (*mma_hires.pk3*). This mod increases the resolution of textures and weapon sprites, not included with the game by default to keep the filesize down.
+* The challenges from World of Kirbycraft are being added to Mary's Magical Adventure! To test them, bring down the console (~) and type "pukename sc [type] [seconds] [parameter] then enter a different area using "changemap" or just use the teleporter in the Small Hut. In the future, the "C" rug in the Small Hut will toggle challenges on and each area will have a challenge based on the difficulty level.	
+* Score cannot be earned during challenges or in Monster Arenas. This is to prevent easily getitng extra lives outside of main gameplay while keeping the score in sync with the 10,000-point increments, so the player always knows how far they are from an extra life without an additional counter.
 ## Minor
 * Making it to the end of an area with more than 15 coins will automatically send them to the bank in the Small Hut, but some coins will be removed. Additionally, if transformed even less will be stored in the bank. This was done to encourage the player to warp to the Small Hut and add them to the bank manually, which could give them interest in buying things from its shop or trying out minigames. Those give the player a lot of coins if played well.
 * Lovely Heart's big heart-shaped projectile isn't treated as a "powerful projectile" to enemies anymore. This was done so enemies like cops wouldn't jump over Magical Cutie Mary's attacks, which would waste the five coins it takes to perform the attack. Altering how Magical Cutie Mary behaves is planned in the future but for now, yes, using certain attacks costs coins.	
@@ -38,3 +41,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Turrets can now automatically shoot lasers to a fast or slow rhythm instead of the default player detection. Hitting a turret in these modes will temporarily change it to its default behavior until it loses sight of you and reverts.
 * Linedefs that triggered script errors about a non-existant "TimeSafeBoundary" script have had the script attached to them removed.
 * Above-normal process priority option was added (Windows only); GZDoom changes the game's process priority automatically, but this prevents the user manually setting it to anything but "normal", so this was added.
+* If crying is started during dialogue, it will happen after Mary stops talking.
+* Turrets can be provoked by crying like the HCPD officers. If this is done, they will shoot at double-speed any time that particular turret detects you.
