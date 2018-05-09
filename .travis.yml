@@ -120,9 +120,18 @@ script:
 notifications:
   email: false
 
+#deploy:
+#  provider: pages
+#  skip_cleanup: true
+#  github_token: $githubtoken # Set in travis-ci.org dashboard
+#  on:
+#    branch: master
+
 deploy:
-  provider: pages
+  provider: releases
+  api_key: $githubreleasetoken # Set in travis-ci.org dashboard
+  file_glob: true
+  file: TRAVIS_BUILD_DIR/*
   skip_cleanup: true
-  github_token: $githubtoken # Set in travis-ci.org dashboard
   on:
-    branch: master
+    tags: true

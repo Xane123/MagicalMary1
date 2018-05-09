@@ -24,7 +24,7 @@ build_script:
 
 after_build:
   - set OUTPUT_DIR=%APPVEYOR_BUILD_FOLDER%\build\%CONFIGURATION%\
-  - 7z a ..\CompiledWindows.zip "%OUTPUT_DIR%play.exe" "%OUTPUT_DIR%*.pk3"
+  - 7z a ..\CompiledWindows.zip "%OUTPUT_DIR%*.exe" "%OUTPUT_DIR%*.pk3" "%OUTPUT_DIR%*.dll"
 
 artifacts:
   - path: CompiledWindows.zip
