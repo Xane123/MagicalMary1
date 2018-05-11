@@ -7,13 +7,13 @@
 	<key>CFBundleExecutable</key>
 	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string>zdoom.icns</string>
+	<string>mma.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.drdteam.gzdoom</string>
+	<string>org.xanecorp.mma</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>GZDoom</string>
+	<string>Mary's Magical Adventure</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -28,17 +28,14 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>Doom Resource File</string>
+			<string>id Tech 0 Resource</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>wad</string>
 				<string>pk3</string>
-				<string>zip</string>
 				<string>pk7</string>
-				<string>7z</string>
-				<string>iwad</string>
 				<string>ipk3</string>
 				<string>ipk7</string>
 			</array>
