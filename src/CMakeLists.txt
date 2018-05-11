@@ -504,7 +504,7 @@ set( PLAT_UNIX_SOURCES
 set( PLAT_OSX_SOURCES
 	posix/osx/iwadpicker_cocoa.mm
 	posix/osx/i_specialpaths.mm
-	posix/osx/zdoom.icns )
+	posix/osx/mma.icns )
 set( PLAT_COCOA_SOURCES
 	posix/cocoa/critsec.cpp
 	posix/cocoa/i_input.mm
