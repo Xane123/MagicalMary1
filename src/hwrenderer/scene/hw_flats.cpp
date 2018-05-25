@@ -25,7 +25,6 @@
 **
 */
 
-#include "gl/system/gl_system.h"
 #include "a_sharedglobal.h"
 #include "r_defs.h"
 #include "r_sky.h"
@@ -93,14 +92,13 @@ bool hw_SetPlaneTextureRotation(const GLSectorPlane * secplane, FMaterial * glte
 //
 //==========================================================================
 
-bool GLFlat::SetupSubsectorLights(int pass, subsector_t * sub, FDynLightData &lightdata)
+bool GLFlat::SetupLights(int pass, FLightNode * node, FDynLightData &lightdata, int portalgroup)
 {
 	Plane p;
 
 	if (renderstyle == STYLE_Add && !level.lightadditivesurfaces) return false;	// no lights on additively blended surfaces.
 
 	lightdata.Clear();
-	FLightNode * node = sub->lighthead;
 	while (node)
 	{
 		ADynamicLight * light = node->lightsource;
@@ -122,11 +120,21 @@ bool GLFlat::SetupSubsectorLights(int pass, subsector_t * sub, FDynLightData &li
 		}
 
 		p.Set(plane.plane.Normal(), plane.plane.fD());
-		lightdata.GetLight(sub->sector->PortalGroup, p, light, false);
+		lightdata.GetLight(portalgroup, p, light, false);
 		node = node->nextLight;
 	}
 
 	return true;
+}
+
+bool GLFlat::SetupSubsectorLights(int pass, subsector_t * sub, FDynLightData &lightdata)
+{
+	return SetupLights(pass, sub->lighthead, lightdata, sub->sector->PortalGroup);
+}
+
+bool GLFlat::SetupSectorLights(int pass, sector_t * sec, FDynLightData &lightdata)
+{
+	return SetupLights(pass, sec->lighthead, lightdata, sec->PortalGroup);
 }
 
 //==========================================================================
@@ -221,11 +229,11 @@ void GLFlat::SetFrom3DFloor(F3DFloor *rover, bool top, bool underside)
 	renderstyle = rover->flags&FF_ADDITIVETRANS? STYLE_Add : STYLE_Translucent;
 	if (plane.model->VBOHeightcheck(plane.isceiling))
 	{
-		vboindex = plane.vindex;
+		iboindex = plane.vindex;
 	}
 	else
 	{
-		vboindex = -1;
+		iboindex = -1;
 	}
 }
 
@@ -290,11 +298,11 @@ void GLFlat::ProcessSector(HWDrawInfo *di, sector_t * frontsector)
 		{
 			if (frontsector->VBOHeightcheck(sector_t::floor))
 			{
-				vboindex = frontsector->vboindex[sector_t::floor];
+				iboindex = frontsector->iboindex[sector_t::floor];
 			}
 			else
 			{
-				vboindex = -1;
+				iboindex = -1;
 			}
 
 			ceiling = false;
@@ -350,11 +358,11 @@ void GLFlat::ProcessSector(HWDrawInfo *di, sector_t * frontsector)
 		{
 			if (frontsector->VBOHeightcheck(sector_t::ceiling))
 			{
-				vboindex = frontsector->vboindex[sector_t::ceiling];
+				iboindex = frontsector->iboindex[sector_t::ceiling];
 			}
 			else
 			{
-				vboindex = -1;
+				iboindex = -1;
 			}
 
 			ceiling = true;

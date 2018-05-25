@@ -20,7 +20,7 @@
 //--------------------------------------------------------------------------
 //
 
-#include "gl/system/gl_system.h"
+#include "gl_load/gl_system.h"
 #include "p_local.h"
 #include "p_lnspec.h"
 #include "a_sharedglobal.h"
@@ -28,7 +28,7 @@
 #include "actorinlines.h"
 #include "hwrenderer/dynlights/hw_dynlightdata.h"
 
-#include "gl/system/gl_interface.h"
+#include "gl_load/gl_interface.h"
 #include "hwrenderer/utility/hw_cvars.h"
 #include "gl/renderer/gl_lightdata.h"
 #include "gl/renderer/gl_renderstate.h"
@@ -142,7 +142,7 @@ void FDrawInfo::RenderMirrorSurface(GLWall *wall)
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		glPolygonOffset(-1.0f, -128.0f);
 		glDepthMask(false);
-		gl_drawinfo->DrawDecalsForMirror(wall);
+		DrawDecalsForMirror(wall);
 		glDepthMask(true);
 		glPolygonOffset(0.0f, 0.0f);
 		glDisable(GL_POLYGON_OFFSET_FILL);
@@ -293,7 +293,7 @@ void FDrawInfo::DrawWall(GLWall *wall, int pass)
 	case GLPASS_LIGHTTEX:
 	case GLPASS_LIGHTTEX_ADDITIVE:
 	case GLPASS_LIGHTTEX_FOGGY:
-		gl_drawinfo->RenderLightsCompat(wall, pass);
+		RenderLightsCompat(wall, pass);
 		break;
 
 	case GLPASS_TEXONLY:
@@ -426,7 +426,7 @@ void FDrawInfo::AddPortal(GLWall *wall, int ptype)
 			line_t *otherside = wall->lineportal->lines[0]->mDestination;
 			if (otherside != NULL && otherside->portalindex < level.linePortals.Size())
 			{
-				ProcessActorsInPortal(otherside->getPortal()->mGroup, mDrawer->in_area);
+				ProcessActorsInPortal(otherside->getPortal()->mGroup, in_area);
 			}
 			portal = new GLLineToLinePortal(wall->lineportal);
 		}
