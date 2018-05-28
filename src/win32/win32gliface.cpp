@@ -1159,15 +1159,10 @@ bool SystemFrameBuffer::IsFullscreen()
 // 
 //
 //==========================================================================
-EXTERN_CVAR(Bool, vid_vsync);
-CUSTOM_CVAR(Bool, gl_control_tear, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
-{
-	vid_vsync.Callback();
-}
 
 void SystemFrameBuffer::SetVSync (bool vsync)
 {
-	if (myWglSwapIntervalExtProc != NULL) myWglSwapIntervalExtProc(vsync ? (gl_control_tear? SwapInterval : 1) : 0);
+	if (myWglSwapIntervalExtProc != NULL) myWglSwapIntervalExtProc(vsync ? SwapInterval : 0);
 }
 
 void SystemFrameBuffer::SwapBuffers()

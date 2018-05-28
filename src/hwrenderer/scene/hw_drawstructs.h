@@ -311,9 +311,7 @@ public:
 
 	int dynlightindex;
 
-	bool SetupLights(int pass, FLightNode *head, FDynLightData &lightdata, int portalgroup);
 	bool SetupSubsectorLights(int pass, subsector_t * sub, FDynLightData &lightdata);
-	bool SetupSectorLights(int pass, sector_t * sec, FDynLightData &lightdata);
 
 	void PutFlat(HWDrawInfo *di, bool fog = false);
 	void Process(HWDrawInfo *di, sector_t * model, int whichplane, bool notexture);

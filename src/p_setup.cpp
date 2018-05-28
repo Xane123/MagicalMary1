@@ -1510,7 +1510,6 @@ void P_LoadSectors (MapData *map, FMissingTextureTracker &missingtex)
 		ss->friction = ORIG_FRICTION;
 		ss->movefactor = ORIG_FRICTION_FACTOR;
 		ss->sectornum = i;
-		ss->ibocount = -1;
 	}
 	delete[] msp;
 }
