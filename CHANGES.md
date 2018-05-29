@@ -14,6 +14,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Fixed the hammer's silly behavior in the air if the player didn't have enough hammer upgrades to perform the Hammer Slam.
 * Respawning from checkpoints that are placed on 3D floors now places the player on the 3D floor and not on the ground/bottomless pit below it.
 * Fixed Xane spawning at the beginning of the current area when returning from a Special Stage.
+* Fixed Special Stages incorrectly draining time just by standing on the main floor. This was caused by an outdated water level function from before the better area system was added.
 ## Major
 * Health and jump height can be upgraded by picking up upgrade items for them, which are separate from weapon upgrade items.
 * Mary's Hammer Slam attack behaves differently now; Instead of activating based on height alone, which could lead to unfair deaths, it now activates if at a high enough height **and** the attack button is held down. Briefly pressing the attack button will do the normal hammer attack now, even in mid-air!
@@ -28,7 +29,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Score cannot be earned during challenges or in Monster Arenas. This is to prevent easily getitng extra lives outside of main gameplay while keeping the score in sync with the 10,000-point increments, so the player always knows how far they are from an extra life without an additional counter.
 * MacOS and Ubuntu builds are now up-to-date, though due to limitations, the MacOS build doesn't have sound. It's unknown if the Ubuntu build can get OpenAL sound at the moment as it will not start up in the virtual machine Xane is using.
 * Title cards now appear before level transitions rather than after them. This makes the loading screens more interesting by reminding the player where they are going and looks vaguely like Sonic 3 & Knuckles' level titles during black-screen load times.
-* *Ocean Floor* by Kulor has been replaced with an original composition, "To the Core", which now plays after Mary/Xane enters the big HCPD building in City Street Run.
+* *Ocean Floor* by Kulor has been replaced with an original composition, *To the Core*, which now plays after Mary/Xane enters HCPD HQ in City Street Run.
 * Song info doesn't appear anymore if your music volume is below ¼.
 ## Minor
 * Making it to the end of an area with more than 15 coins will automatically send them to the bank in the Small Hut, but some coins will be removed. Additionally, if transformed even less will be stored in the bank. This was done to encourage the player to warp to the Small Hut and add them to the bank manually, which could give them interest in buying things from its shop or trying out minigames. Those give the player a lot of coins if played well.
