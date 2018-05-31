@@ -31,6 +31,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Title cards now appear before level transitions rather than after them. This makes the loading screens more interesting by reminding the player where they are going and looks vaguely like Sonic 3 & Knuckles' level titles during black-screen load times.
 * *Ocean Floor* by Kulor has been replaced with an original composition, *To the Core*, which now plays after Mary/Xane enters HCPD HQ in City Street Run.
 * Song info doesn't appear anymore if your music volume is below ¼.
+* Mary's Umbrella's "Liftoff" upgrade has been buffed; It now takes Mary three stories (384 units) into the air when performed.
 ## Minor
 * Making it to the end of an area with more than 15 coins will automatically send them to the bank in the Small Hut, but some coins will be removed. Additionally, if transformed even less will be stored in the bank. This was done to encourage the player to warp to the Small Hut and add them to the bank manually, which could give them interest in buying things from its shop or trying out minigames. Those give the player a lot of coins if played well.
 * Lovely Heart's big heart-shaped projectile isn't treated as a "powerful projectile" to enemies anymore. This was done so enemies like cops wouldn't jump over Magical Cutie Mary's attacks, which would waste the five coins it takes to perform the attack. Altering how Magical Cutie Mary behaves is planned in the future but for now, yes, using certain attacks costs coins.	
