@@ -1227,8 +1227,8 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 				}
 			}
 		}
+		return blocked;
 	}
-	return blocked;
 }
 
 //==========================================================================
