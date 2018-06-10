@@ -39,19 +39,27 @@
 #include "screen_triangle.h"
 #include "x86.h"
 
+static bool isBgraRenderTarget = false;
+
 void PolyTriangleDrawer::ClearBuffers(DCanvas *canvas)
 {
 	PolyStencilBuffer::Instance()->Clear(canvas->GetWidth(), canvas->GetHeight(), 0);
 	PolyZBuffer::Instance()->Resize(canvas->GetPitch(), canvas->GetHeight());
 }
 
-void PolyTriangleDrawer::SetViewport(const DrawerCommandQueuePtr &queue, int x, int y, int width, int height, DCanvas *canvas, bool span_drawers)
+bool PolyTriangleDrawer::IsBgra()
+{
+	return isBgraRenderTarget;
+}
+
+void PolyTriangleDrawer::SetViewport(const DrawerCommandQueuePtr &queue, int x, int y, int width, int height, DCanvas *canvas)
 {
 	uint8_t *dest = (uint8_t*)canvas->GetPixels();
 	int dest_width = canvas->GetWidth();
 	int dest_height = canvas->GetHeight();
 	int dest_pitch = canvas->GetPitch();
 	bool dest_bgra = canvas->IsBgra();
+	isBgraRenderTarget = dest_bgra;
 
 	int offsetx = clamp(x, 0, dest_width);
 	int offsety = clamp(y, 0, dest_height);
@@ -66,12 +74,12 @@ void PolyTriangleDrawer::SetViewport(const DrawerCommandQueuePtr &queue, int x, 
 	dest_width = clamp(viewport_x + viewport_width, 0, dest_width - offsetx);
 	dest_height = clamp(viewport_y + viewport_height, 0, dest_height - offsety);
 
-	queue->Push<PolySetViewportCommand>(viewport_x, viewport_y, viewport_width, viewport_height, dest, dest_width, dest_height, dest_pitch, dest_bgra, span_drawers);
+	queue->Push<PolySetViewportCommand>(viewport_x, viewport_y, viewport_width, viewport_height, dest, dest_width, dest_height, dest_pitch, dest_bgra);
 }
 
-void PolyTriangleDrawer::SetTransform(const DrawerCommandQueuePtr &queue, const Mat4f *objectToClip)
+void PolyTriangleDrawer::SetTransform(const DrawerCommandQueuePtr &queue, const Mat4f *objectToClip, const Mat4f *objectToWorld)
 {
-	queue->Push<PolySetTransformCommand>(objectToClip);
+	queue->Push<PolySetTransformCommand>(objectToClip, objectToWorld);
 }
 
 void PolyTriangleDrawer::SetCullCCW(const DrawerCommandQueuePtr &queue, bool ccw)
@@ -91,7 +99,7 @@ void PolyTriangleDrawer::SetWeaponScene(const DrawerCommandQueuePtr &queue, bool
 
 /////////////////////////////////////////////////////////////////////////////
 
-void PolyTriangleThreadData::SetViewport(int x, int y, int width, int height, uint8_t *new_dest, int new_dest_width, int new_dest_height, int new_dest_pitch, bool new_dest_bgra, bool new_span_drawers)
+void PolyTriangleThreadData::SetViewport(int x, int y, int width, int height, uint8_t *new_dest, int new_dest_width, int new_dest_height, int new_dest_pitch, bool new_dest_bgra)
 {
 	viewport_x = x;
 	viewport_y = y;
@@ -102,14 +110,14 @@ void PolyTriangleThreadData::SetViewport(int x, int y, int width, int height, ui
 	dest_height = new_dest_height;
 	dest_pitch = new_dest_pitch;
 	dest_bgra = new_dest_bgra;
-	span_drawers = new_span_drawers;
 	ccw = true;
 	weaponScene = false;
 }
 
-void PolyTriangleThreadData::SetTransform(const Mat4f *newObjectToClip)
+void PolyTriangleThreadData::SetTransform(const Mat4f *newObjectToClip, const Mat4f *newObjectToWorld)
 {
 	objectToClip = newObjectToClip;
+	objectToWorld = newObjectToWorld;
 }
 
 void PolyTriangleThreadData::DrawElements(const PolyDrawArgs &drawargs)
@@ -124,9 +132,7 @@ void PolyTriangleThreadData::DrawElements(const PolyDrawArgs &drawargs)
 	args.clipbottom = dest_height;
 	args.uniforms = &drawargs;
 	args.destBgra = dest_bgra;
-	args.stencilPitch = PolyStencilBuffer::Instance()->BlockWidth();
-	args.stencilValues = PolyStencilBuffer::Instance()->Values();
-	args.stencilMasks = PolyStencilBuffer::Instance()->Masks();
+	args.stencilbuffer = PolyStencilBuffer::Instance()->Values();
 	args.zbuffer = PolyZBuffer::Instance()->Values();
 	args.depthOffset = weaponScene ? 1.0f : 0.0f;
 
@@ -183,9 +189,7 @@ void PolyTriangleThreadData::DrawArrays(const PolyDrawArgs &drawargs)
 	args.clipbottom = dest_height;
 	args.uniforms = &drawargs;
 	args.destBgra = dest_bgra;
-	args.stencilPitch = PolyStencilBuffer::Instance()->BlockWidth();
-	args.stencilValues = PolyStencilBuffer::Instance()->Values();
-	args.stencilMasks = PolyStencilBuffer::Instance()->Masks();
+	args.stencilbuffer = PolyStencilBuffer::Instance()->Values();
 	args.zbuffer = PolyZBuffer::Instance()->Values();
 	args.depthOffset = weaponScene ? 1.0f : 0.0f;
 
@@ -232,18 +236,30 @@ void PolyTriangleThreadData::DrawArrays(const PolyDrawArgs &drawargs)
 ShadedTriVertex PolyTriangleThreadData::ShadeVertex(const PolyDrawArgs &drawargs, const TriVertex &v)
 {
 	// Apply transform to get clip coordinates:
-	Vec4f position = (*objectToClip) * Vec4f(v.x, v.y, v.z, v.w);
+	Vec4f objpos = Vec4f(v.x, v.y, v.z, v.w);
+	Vec4f clippos = (*objectToClip) * objpos;
 
 	ShadedTriVertex sv;
-	sv.x = position.X;
-	sv.y = position.Y;
-	sv.z = position.Z;
-	sv.w = position.W;
+	sv.x = clippos.X;
+	sv.y = clippos.Y;
+	sv.z = clippos.Z;
+	sv.w = clippos.W;
 	sv.u = v.u;
 	sv.v = v.v;
-	sv.worldX = v.x;
-	sv.worldY = v.y;
-	sv.worldZ = v.z;
+
+	if (!objectToWorld) // Identity matrix
+	{
+		sv.worldX = v.x;
+		sv.worldY = v.y;
+		sv.worldZ = v.z;
+	}
+	else
+	{
+		Vec4f worldpos = (*objectToWorld) * objpos;
+		sv.worldX = worldpos.X;
+		sv.worldY = worldpos.Y;
+		sv.worldZ = worldpos.Z;
+	}
 
 	// Calculate gl_ClipDistance[i]
 	for (int i = 0; i < 3; i++)
@@ -371,10 +387,7 @@ void PolyTriangleThreadData::DrawShadedTriangle(const ShadedTriVertex *vert, boo
 			args->v3 = &clippedvert[i - 2];
 			if (IsFrontfacing(args) == ccw && args->CalculateGradients())
 			{
-				if (!span_drawers)
-					ScreenTriangle::Draw(args, this);
-				else
-					ScreenTriangle::DrawSWRender(args, this);
+				ScreenTriangle::Draw(args, this);
 			}
 		}
 	}
@@ -387,10 +400,7 @@ void PolyTriangleThreadData::DrawShadedTriangle(const ShadedTriVertex *vert, boo
 			args->v3 = &clippedvert[i];
 			if (IsFrontfacing(args) != ccw && args->CalculateGradients())
 			{
-				if (!span_drawers)
-					ScreenTriangle::Draw(args, this);
-				else
-					ScreenTriangle::DrawSWRender(args, this);
+				ScreenTriangle::Draw(args, this);
 			}
 		}
 	}
@@ -579,13 +589,13 @@ PolyTriangleThreadData *PolyTriangleThreadData::Get(DrawerThread *thread)
 
 /////////////////////////////////////////////////////////////////////////////
 
-PolySetTransformCommand::PolySetTransformCommand(const Mat4f *objectToClip) : objectToClip(objectToClip)
+PolySetTransformCommand::PolySetTransformCommand(const Mat4f *objectToClip, const Mat4f *objectToWorld) : objectToClip(objectToClip), objectToWorld(objectToWorld)
 {
 }
 
 void PolySetTransformCommand::Execute(DrawerThread *thread)
 {
-	PolyTriangleThreadData::Get(thread)->SetTransform(objectToClip);
+	PolyTriangleThreadData::Get(thread)->SetTransform(objectToClip, objectToWorld);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -623,14 +633,14 @@ void PolySetWeaponSceneCommand::Execute(DrawerThread *thread)
 
 /////////////////////////////////////////////////////////////////////////////
 
-PolySetViewportCommand::PolySetViewportCommand(int x, int y, int width, int height, uint8_t *dest, int dest_width, int dest_height, int dest_pitch, bool dest_bgra, bool span_drawers)
-	: x(x), y(y), width(width), height(height), dest(dest), dest_width(dest_width), dest_height(dest_height), dest_pitch(dest_pitch), dest_bgra(dest_bgra), span_drawers(span_drawers)
+PolySetViewportCommand::PolySetViewportCommand(int x, int y, int width, int height, uint8_t *dest, int dest_width, int dest_height, int dest_pitch, bool dest_bgra)
+	: x(x), y(y), width(width), height(height), dest(dest), dest_width(dest_width), dest_height(dest_height), dest_pitch(dest_pitch), dest_bgra(dest_bgra)
 {
 }
 
 void PolySetViewportCommand::Execute(DrawerThread *thread)
 {
-	PolyTriangleThreadData::Get(thread)->SetViewport(x, y, width, height, dest, dest_width, dest_height, dest_pitch, dest_bgra, span_drawers);
+	PolyTriangleThreadData::Get(thread)->SetViewport(x, y, width, height, dest, dest_width, dest_height, dest_pitch, dest_bgra);
 }
 
 /////////////////////////////////////////////////////////////////////////////

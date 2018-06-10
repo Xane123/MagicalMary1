@@ -30,6 +30,7 @@
 #include "p_pspr.h"
 #include "r_data/voxels.h"
 #include "info.h"
+#include "g_levellocals.h"
 
 #define MAX_LODS			4
 
@@ -64,7 +65,7 @@ public:
 
 	virtual ModelRendererType GetType() const = 0;
 
-	virtual void BeginDrawModel(AActor *actor, FSpriteModelFrame *smf, const VSMatrix &objectToWorldMatrix) = 0;
+	virtual void BeginDrawModel(AActor *actor, FSpriteModelFrame *smf, const VSMatrix &objectToWorldMatrix, bool mirrored) = 0;
 	virtual void EndDrawModel(AActor *actor, FSpriteModelFrame *smf) = 0;
 
 	virtual IModelVertexBuffer *CreateVertexBuffer(bool needindex, bool singleframe) = 0;
@@ -74,7 +75,7 @@ public:
 
 	virtual VSMatrix GetViewToWorldMatrix() = 0;
 
-	virtual void BeginDrawHUDModel(AActor *actor, const VSMatrix &objectToWorldMatrix) = 0;
+	virtual void BeginDrawHUDModel(AActor *actor, const VSMatrix &objectToWorldMatrix, bool mirrored) = 0;
 	virtual void EndDrawHUDModel(AActor *actor) = 0;
 
 	virtual void SetInterpolation(double interpolation) = 0;
@@ -498,5 +499,50 @@ public:
 };
 
 extern DeletingModelArray Models;
+
+// Check if circle potentially intersects with node AABB
+inline bool CheckBBoxCircle(float *bbox, float x, float y, float radiusSquared)
+{
+	float centerX = (bbox[BOXRIGHT] + bbox[BOXLEFT]) * 0.5f;
+	float centerY = (bbox[BOXBOTTOM] + bbox[BOXTOP]) * 0.5f;
+	float extentX = (bbox[BOXRIGHT] - bbox[BOXLEFT]) * 0.5f;
+	float extentY = (bbox[BOXBOTTOM] - bbox[BOXTOP]) * 0.5f;
+	float aabbRadiusSquared = extentX * extentX + extentY * extentY;
+	x -= centerX;
+	y -= centerY;
+	float dist = x * x + y * y;
+	return dist <= radiusSquared + aabbRadiusSquared;
+}
+
+// Helper function for BSPWalkCircle
+template<typename Callback>
+void BSPNodeWalkCircle(void *node, float x, float y, float radiusSquared, const Callback &callback)
+{
+	while (!((size_t)node & 1))
+	{
+		node_t *bsp = (node_t *)node;
+
+		if (CheckBBoxCircle(bsp->bbox[0], x, y, radiusSquared))
+			BSPNodeWalkCircle(bsp->children[0], x, y, radiusSquared, callback);
+
+		if (!CheckBBoxCircle(bsp->bbox[1], x, y, radiusSquared))
+			return;
+
+		node = bsp->children[1];
+	}
+
+	subsector_t *sub = (subsector_t *)((uint8_t *)node - 1);
+	callback(sub);
+}
+
+// Search BSP for subsectors within the given radius and call callback(subsector) for each found
+template<typename Callback>
+void BSPWalkCircle(float x, float y, float radiusSquared, const Callback &callback)
+{
+	if (level.nodes.Size() == 0)
+		callback(&level.subsectors[0]);
+	else
+		BSPNodeWalkCircle(level.HeadNode(), x, y, radiusSquared, callback);
+}
 
 #endif
