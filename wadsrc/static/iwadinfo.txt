@@ -8,7 +8,7 @@ IWad
 	Config = "Doom"
 	Mapinfo = "mapinfo/doom2.txt"
 	BannerColors = "c0 40 c0", "40 20 40"
-	Load = "mma_maps.wad", "mma_mobile.pk3", "mma_lowend.pk3", "mma_materials.pk3", "mma_hires.pk3", "mma_controlmod.pk3"
+	Load = "mma_maps.wad", "mma_mobile.pk3", "mma_materials.pk3", "mma_hires.pk3"
 }
 
 Names
