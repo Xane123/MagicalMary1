@@ -358,6 +358,7 @@ bool I_WriteIniFailed ()
 		return false;
 		// return true to retry
 	}
+	else return false;	//[XANE]If the player has showing of config-saving errors disabled, always silently ignore them.
 }
 
 static const char *pattern;

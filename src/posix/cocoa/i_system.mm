@@ -264,6 +264,7 @@ bool I_WriteIniFailed()
 		printf("The config file %s could not be saved:\n%s\n", GameConfig->GetPathName(), strerror(errno));
 		return false; // return true to retry
 	}
+	else return false;	//[XANE]If the player has showing of config-saving errors disabled, always silently ignore them.
 }
 
 

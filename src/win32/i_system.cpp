@@ -1183,6 +1183,7 @@ bool I_WriteIniFailed()
 		LocalFree(lpMsgBuf);
 		return MessageBox(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
 	}
+	else return false;	//[XANE]If the player has showing of config-saving errors disabled, always silently ignore them.
 }
 
 //==========================================================================
