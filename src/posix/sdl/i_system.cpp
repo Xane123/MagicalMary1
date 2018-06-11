@@ -53,6 +53,7 @@
 #include "gameconfigfile.h"
 
 EXTERN_CVAR (String, language)
+CVAR(Bool, saveconfig, true, CVAR_ARCHIVE)	//Show error if writing fails? THis is disabled on disc distributions, even if those are only for Windows!
 
 extern "C"
 {
@@ -351,9 +352,12 @@ int I_PickIWad (WadStuff *wads, int numwads, bool showwin, int defaultiwad)
 
 bool I_WriteIniFailed ()
 {
-	printf ("The config file %s could not be saved:\n%s\n", GameConfig->GetPathName(), strerror(errno));
-	return false;
-	// return true to retry
+	if (saveconfig)
+	{
+		printf("The config file %s could not be saved:\n%s\n", GameConfig->GetPathName(), strerror(errno));
+		return false;
+		// return true to retry
+	}
 }
 
 static const char *pattern;
