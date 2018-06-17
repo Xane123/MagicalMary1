@@ -179,7 +179,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 }
 
 CVAR (Float, timelimit, 0.f, CVAR_SERVERINFO);
-CVAR (Int, wipetype, 0, 0);
+CVAR (Int, wipetype, 0, 0);	//[XANE]Wipes are ugly; Never remember what the user chose!
 CVAR (Int, snd_drawoutput, 0, 0);
 CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 {

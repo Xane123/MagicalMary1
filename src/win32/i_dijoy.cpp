@@ -789,7 +789,8 @@ void FDInputJoystick::SetDefaultConfig()
 		// Four axes? First two are movement, last two are looking around.
 		if (Axes.Size() >= 4)
 		{
-			Axes[3].GameAxis = JOYAXIS_Pitch;	Axes[3].Multiplier = 0.75f;
+			Axes[2].GameAxis = JOYAXIS_Pitch; 	Axes[2].Multiplier = 0.75f;	//[XANE]They appear to be backward from what they should be on the Logitech Dual Action, so flip 'em around!
+			Axes[3].GameAxis = JOYAXIS_Yaw;
 			// Five axes? Use the fifth one for moving up and down.
 			if (Axes.Size() >= 5)
 			{
