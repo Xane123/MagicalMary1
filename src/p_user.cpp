@@ -2173,7 +2173,7 @@ void P_FallingDamage (AActor *actor)
 
 	if (actor->player)
 	{
-		S_Sound (actor, CHAN_AUTO, "*land", 1, ATTN_NORM);
+		//S_Sound (actor, CHAN_AUTO, "*land", 1, ATTN_NORM);
 		P_NoiseAlert (actor, actor, true);
 		if (damage >= TELEFRAG_DAMAGE && ((actor->player->cheats & (CF_GODMODE | CF_BUDDHA) ||
 			(actor->FindInventory(PClass::FindActor(NAME_PowerBuddha), true) != nullptr))))

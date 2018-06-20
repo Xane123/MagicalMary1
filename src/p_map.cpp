@@ -2971,7 +2971,7 @@ void FSlide::HitSlideLine(line_t* ld)
 			tmmove.Y /= 2; // absorb half the velocity
 			if (slidemo->player && slidemo->health > 0 && !(slidemo->player->cheats & CF_PREDICTING))
 			{
-				S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!//   ^
+				//S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!//   ^
 			}
 		}																		//   |
 		else																	// phares
@@ -2987,7 +2987,7 @@ void FSlide::HitSlideLine(line_t* ld)
 			tmmove.Y = -tmmove.Y / 2;
 			if (slidemo->player && slidemo->health > 0 && !(slidemo->player->cheats & CF_PREDICTING))
 			{
-				S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
+				//S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
 			}
 		}
 		else
@@ -3019,7 +3019,7 @@ void FSlide::HitSlideLine(line_t* ld)
 		movelen /= 2; // absorb
 		if (slidemo->player && slidemo->health > 0 && !(slidemo->player->cheats & CF_PREDICTING))
 		{
-			S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
+			//S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
 		}
 		tmmove = moveangle.ToVector(movelen);
 	}	
