@@ -344,7 +344,6 @@ OptionMenu "OptionsMenu" protected
 	StaticText " "
 	Submenu "$OPTMNU_PLAYER",			"PlayerMenu"
 	Submenu "$OPTMNU_GAMEPLAY",			"GameplayOptions"
-	Submenu "$OPTMNU_COMPATIBILITY",	"CompatibilityOptions"
 	Submenu "$OPTMNU_AUTOMAP",			"AutomapOptions"
 	Submenu "$OPTMNU_HUD",				"HUDOptions"
 	Submenu "$OPTMNU_MISCELLANEOUS",	"MiscOptions"
@@ -1611,8 +1610,8 @@ OptionMenu SoundOptions protected
 	Slider "$SNDMNU_MENUVOLUME",		"snd_menuvolume", 0, 1, 0.05, 2
 	Slider "$SNDMNU_MUSICVOLUME",		"snd_musicvolume", 0, 1, 0.05, 2
 	Option "$SNDMNU_MIDIDEVICE",		"snd_mididevice", "MidiDevices"
+	Option "$SNDMNU_SOUNDTRACK",		"xane_soundtrack", "SoundtrackList"
 	StaticText " "
-	Option "$SNDMNU_UNDERWATERREVERB",	"snd_waterreverb", "OnOff"
 	Option "$SNDMNU_RANDOMIZEPITCHES",	"snd_pitched", "OnOff"
 	Slider "$SNDMNU_CHANNELS",			"snd_channels", 64, 256, 8, 0
 	StaticText " "
@@ -1626,6 +1625,10 @@ OptionMenu SoundOptions protected
 	}
 	StaticText " "
 	Command "$SNDMNU_RESTART",			"snd_reset"
+
+	StaticText " "
+	Option "$SNDMNU_STEPPLAYER", "snd_footstepsplayer", "OnOff"
+	Option "$SNDMNU_STEPENEMY", "snd_footstepsenemy", "OnOff"
 
 	StaticText " "
 	Submenu "$SNDMNU_ADVANCED",			"AdvSoundOptions"
@@ -1658,6 +1661,12 @@ OptionValue OplCores
 	3, "$OPTVAL_NUKEDOPL3"
 }
 
+OptionValue SoundtrackList
+{
+	0, "Standard"
+	1, "Chiptune"
+	//2, "MIDI"
+}
 
 OptionMenu AdvSoundOptions protected
 {

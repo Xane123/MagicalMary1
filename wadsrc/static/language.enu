@@ -713,55 +713,6 @@ GMPLYMNU_KEEPAMMO			= "Keep ammo";
 GMPLYMNU_LOSEHALFAMMO		= "Lose half ammo";
 GMPLYMNU_SPAWNWHEREDIED		= "Spawn where died";
 
-// Compatibility Options
-CMPTMNU_TITLE				= "COMPATIBILITY OPTIONS";
-CMPTMNU_MODE				= "Compatibility mode";
-CMPTMNU_ACTORBEHAVIOR		= "Actor Behavior";
-CMPTMNU_CORPSEGIBS			= "Crushed monsters can be resurrected";
-CMPTMNU_NOBLOCKFRIENDS		= "Friendly monsters aren't blocked";
-CMPTMNU_LIMITPAIN			= "Limit Pain Elementals' Lost Souls";
-CMPTMNU_MBFMONSTERMOVE		= "Monster movement is affected by effects";
-CMPTMNU_CROSSDROPOFF		= "Monsters cannot cross dropoffs";
-CMPTMNU_DROPOFF				= "Monsters get stuck over dropoffs";
-CMPTMNU_INVISIBILITY		= "Monsters see invisible players";
-CMPTMNU_MINOTAUR			= "No Minotaur floor flames in water";
-CMPTMNU_NOTOSSDROPS			= "Spawn item drops on the floor";
-CMPTMNU_DEHACKEDBEHAVIOR	= "DehackEd Behavior";
-CMPTMNU_DEHHEALTH			= "DEH health settings like Doom2.exe";
-CMPTMNU_MUSHROOM			= "Original A_Mushroom speed in DEH mods";
-CMPTMNU_MAPACTIONBEHAVIOR	= "Map/Action Behavior";
-CMPTMNU_USEBLOCKING			= "All special lines can block <use>";
-CMPTMNU_ANYBOSSDEATH		= "Allow any bossdeath for level special";
-CMPTMNU_NODOORLIGHT			= "Disable BOOM door light effect";
-CMPTMNU_LIGHT				= "Find neighboring light like Doom";
-CMPTMNU_SHORTTEX			= "Find shortest textures like Doom";
-CMPTMNU_STAIRS				= "Use buggier stair building";
-CMPTMNU_FLOORMOVE			= "Use Doom's floor motion behavior";
-CMPTMNU_POINTONLINE			= "Use Doom's point-on-line algorithm";
-CMPTMNU_MULTIEXIT			= "Level exit can be triggered more than once";
-CMPTMNU_PHYSICSBEHAVIOR		= "Physics Behavior";
-CMPTMNU_NOPASSOVER			= "Actors are infinitely tall";
-CMPTMNU_BOOMSCROLL			= "Boom scrollers are additive";
-CMPTMNU_BADANGLES			= "Cannot travel straight NSEW";
-CMPTMNU_WALLRUN				= "Enable wall running";
-CMPTMNU_RAVENSCROLL			= "Raven scrollers use original speed";
-CMPTMNU_TRACE				= "Self ref. sectors don't block shots";
-CMPTMNU_HITSCAN				= "Use Doom code for hitscan checks";
-CMPTMNU_MISSILECLIP			= "Use Doom heights for missile clipping";
-CMPTMNU_RENDERINGBEHAVIOR	= "Rendering Behavior";
-CMPTMNU_POLYOBJ				= "Draw polyobjects like Hexen";
-CMPTMNU_MASKEDMIDTEX		= "Ignore Y offsets on masked midtextures";
-CMPTMNU_SPRITESORT			= "Invert sprite sorting";
-CMPTMNU_SOUNDBEHAVIOR		= "Sound Behavior";
-CMPTMNU_SOUNDSLOTS			= "Cripple sound for silent BFG trick";
-CMPTMNU_SILENTPICKUP		= "Don't let others hear your pickups";
-CMPTMNU_SILENTINSTANTFLOORS	= "Inst. moving floors are not silent";
-CMPTMNU_SECTORSOUNDS		= "Sector sounds use center as source";
-CMPTMNU_SOUNDCUTOFF			= "Sounds stop when actor vanishes";
-CMPTMNU_SOUNDTARGET			= "Use original sound target handling";
-CMPTMNU_TELEPORT			= "Scripted teleports don't trigger sector actions";
-CMPTMNU_PUSHWINDOW			= "Non-blocking lines can be pushed";
-
 // Sound Options
 SNDMNU_TITLE			= "SOUND OPTIONS";
 SNDMNU_SFXVOLUME		= "Sounds volume";
@@ -778,6 +729,10 @@ SNDMNU_RESTART			= "Restart sound";
 SNDMNU_ADVANCED			= "Advanced options";
 SNDMNU_MODREPLAYER		= "Module replayer options";
 SNDMNU_MIDIPLAYER		= "Midi player options";
+SNDMNU_SOUNDTRACK		= "Soundtrack";
+SNDMNU_CDAUDIO			= "CD playback";
+SNDMNU_STEPPLAYER		= "Player footsteps";
+SNDMNU_STEPENEMY		= "Enemy footsteps";
 
 // OpenAL Options
 OPENALMNU_TITLE				= "OPENAL OPTIONS";
