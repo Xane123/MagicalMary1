@@ -1610,12 +1610,9 @@ OptionMenu SoundOptions protected
 	Slider "$SNDMNU_MENUVOLUME",		"snd_menuvolume", 0, 1, 0.05, 2
 	Slider "$SNDMNU_MUSICVOLUME",		"snd_musicvolume", 0, 1, 0.05, 2
 	Option "$SNDMNU_MIDIDEVICE",		"snd_mididevice", "MidiDevices"
-	StaticText " "
 	Option "$SNDMNU_RANDOMIZEPITCHES",	"snd_pitched", "OnOff"
 	Slider "$SNDMNU_CHANNELS",			"snd_channels", 64, 256, 8, 0
-	StaticText " "
-	Option "$SNDMNU_BACKGROUND",			"i_soundinbackground", "OnOff"
-	Option "$SNDMNU_SOUNDTRACK",		"snd_soundtrack", "SoundtrackList"
+	Option "$SNDMNU_BACKGROUND",		"i_soundinbackground", "OnOff"
 	StaticText " "
 
 	ifoption(openal)
@@ -1627,6 +1624,7 @@ OptionMenu SoundOptions protected
 	Command "$SNDMNU_RESTART",			"snd_reset"
 
 	StaticText " "
+	Option "$SNDMNU_SOUNDTRACK",		"snd_soundtrack", "SoundtrackList"
 	Option "$SNDMNU_STEPPLAYER", "snd_footstepsplayer", "OnOff"
 	Option "$SNDMNU_STEPENEMY", "snd_footstepsenemy", "OnOff"
 
@@ -1663,7 +1661,7 @@ OptionValue OplCores
 
 OptionValue SoundtrackList
 {
-	0, "Standard"
+	0, "Normal"
 	1, "Chiptune"
 	//2, "MIDI"
 }
