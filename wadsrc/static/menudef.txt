@@ -492,6 +492,7 @@ OptionMenu "CustomizeControls" protected
 	Control 	"$CNTRLMNU_SCREENSHOT",				"screenshot"
 	Control 	"$CNTRLMNU_MESSAGES",				"toggle show_messages"
 	Control  	"$CNTRLMNU_CONSOLE",				"toggleconsole"
+	Control  	"$CNTRLMNU_PANORAMA",				"panorama"
 }
 
 //-------------------------------------------------------------------------------------------
