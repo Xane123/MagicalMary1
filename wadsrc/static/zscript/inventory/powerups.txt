@@ -317,7 +317,7 @@ class PowerInvulnerable : Powerup
 {
 	Default
 	{
-		Powerup.Duration -30;
+		Powerup.Duration -32767;
 		inventory.icon "SPSHLD0";
 	}
 
