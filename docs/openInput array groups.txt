@@ -1,0 +1,16 @@
+The array openInput[] stores input data from GetPlayerInput for each player; It looks confusing with its eleven groups of variables, but this will simplify it!
+
+INPUT (MODIFIED)				openInput[PlayerNumber()]
+PREV. INPUT (MODIFIED)			openInput[MAX_PLAYERS+PlayerNumber()]
+FORWARD MOVEMENT (MODIFIED)		openInput[MAX_PLAYERS*2+PlayerNumber()]
+SIDEWAYS MOVEMENT (MODIFIED)	openInput[MAX_PLAYERS*3+PlayerNumber()]
+
+INPUT (STANDARD)				openInput[MAX_PLAYERS*4+PlayerNumber()]
+PREV. INPUT (STANDARD)			openInput[MAX_PLAYERS*5+PlayerNumber()]
+FORWARD MOVEMENT (STANDARD)		openInput[MAX_PLAYERS*6+PlayerNumber()]
+SIDEWAYS MOVEMENT (STANDARD)	openInput[MAX_PLAYERS*7+PlayerNumber()]
+
+LOOK LEFT/RIGHT (MODIFIED)		openInput[MAX_PLAYERS*8+PlayerNumber()]
+LOOK UP/DOWN (MODIFIED)			openInput[MAX_PLAYERS*9+PlayerNumber()]
+LOOK LEFT/RIGHT (STANDARD)		openInput[MAX_PLAYERS*10+PlayerNumber()]
+LOOK UP/DOWN (STANDARD)			openInput[MAX_PLAYERS*11+PlayerNumber()]

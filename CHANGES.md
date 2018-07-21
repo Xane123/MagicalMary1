@@ -7,7 +7,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
 * Soap Boxes can be bought from Jane's Shop in packs of four! You can hold up to sixteen of them and place them anywhere to try catching enemies off-guard.
 * Jane now has animated sprites using her "old design". If Jane ever gets a new design like Mary, her sprites will be replaced.
-* Wall Jumps can now only be performed on certain walls. This may limit its usage and make it inconsistent what you can wall jump off of, but this prevents glitches where Mary could (frustratingly) stick to thin air nearly every time she performed the Air Dash. This also prevents "sticking to" enemies (then getting hurt). Think of it like Xane's claw nerfing that happened previously.
+* You can now listen to the same radio "station" heard in City Street Run in Jane's Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
+* The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker. Once it's migrated, the two switches will be removed.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
