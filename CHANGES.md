@@ -2,6 +2,7 @@ s# Changes (for v2.0)
 This is a list of any changes done to Mary's Magical Adventure since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
 * Disabled "HandleHealthEvents" script in the Small Hut, which fixes the player randomly dropping coins upon warping there for a second time after losing health in the level.
+* Fixed blue cops with rapid-fire behavior trying to run constantly. This was due to a leftover skip that caused the DECORATE code to skip the "if closer than 512 units, slowly walk" line, jumping straight to running. If playing on hard difficulty, the cop would endlessly slide into you!
 ## Major
 * Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
 * Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
