@@ -3,6 +3,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 ## Bug-fixes
 * Disabled "HandleHealthEvents" script in the Small Hut, which fixes the player randomly dropping coins upon warping there for a second time after losing health in the level.
 * Fixed blue cops with rapid-fire behavior trying to run constantly. This was due to a leftover skip that caused the DECORATE code to skip the "if closer than 512 units, slowly walk" line, jumping straight to running. If playing on hard difficulty, the cop would endlessly slide into you!
+* Lasers between Uroboros platforms have been re-added! This was due to removal of the laser projectiles, which were in the now-removed police DECORATE file used for the weaker police found in the scrapped first level.
 ## Major
 * Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
 * Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
@@ -18,3 +19,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Magical Cutie Mary isn't affected by cops' stunning bullets and other special pain reactions.
 * Disabled draw distance in Jane's Hut as the area is too small to need it. All other levels can still have it enabled.
 * Checkpoints no longer store the player's angle. This is to clear a **SetCheckpoint** script argument slot for a "forced ambience" argument, which will fix cases where the wrong ambience is heard upon returning to a checkpoint.
+* New songs were added to replace some of the radio songs. They're no more safe to use than the old ones, but the goal is to have the radio sounding higher-quality by the final version.
+* Doors now have new sounds that sound less silly.
