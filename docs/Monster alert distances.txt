@@ -1,0 +1,9 @@
+Weapon attacks should alert any nearby monsters that haven't seen/lost the player previously. For standardization, certain distances will be used for various attack types.
+
+Light sounds (eg, Mary blowing flower wand, shield wand protection sound)
+A_AlertMonsters(256.0)
+
+Standard attacks (Mary's machine-gun flower wand firing)
+A_AlertMonsters(512.0)
+
+Very loud noises (Mary crying)
