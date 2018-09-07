@@ -2171,13 +2171,9 @@ bool AActor::FloorBounceMissile (secplane_t &plane)
 	// Set bounce state
 	if (BounceFlags & BOUNCE_UseBounceState)
 	{
-		FName names[2];
-		FState *bouncestate;
-
-		names[0] = NAME_Bounce;
-		names[1] = plane.fC() < 0 ? NAME_Ceiling : NAME_Floor;
-		bouncestate = FindState(2, names);
-		if (bouncestate != NULL)
+		FName names[2] = { NAME_Bounce, plane.fC() < 0 ? NAME_Ceiling : NAME_Floor };
+		FState *bouncestate = FindState(2, names);
+		if (bouncestate != nullptr)
 		{
 			SetState(bouncestate);
 		}
@@ -2349,7 +2345,6 @@ double P_XYMovement (AActor *mo, DVector2 scroll)
 {
 	static int pushtime = 0;
 	bool bForceSlide = !scroll.isZero();
-	DAngle Angle;
 	DVector2 ptry;
 	player_t *player;
 	DVector2 move;

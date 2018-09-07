@@ -106,17 +106,17 @@ void G_VerifySkill();
 
 CUSTOM_CVAR(Bool, gl_brightfog, false, CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
-	if (level.info->brightfog == -1) level.brightfog = self;
+	if (level.info == nullptr || level.info->brightfog == -1) level.brightfog = self;
 }
 
 CUSTOM_CVAR(Bool, gl_lightadditivesurfaces, false, CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
-	if (level.info->lightadditivesurfaces == -1) level.lightadditivesurfaces = self;
+	if (level.info == nullptr || level.info->lightadditivesurfaces == -1) level.lightadditivesurfaces = self;
 }
 
 CUSTOM_CVAR(Bool, gl_notexturefill, false, CVAR_NOINITCALL)
 {
-	if (level.info->notexturefill == -1) level.notexturefill = self;
+	if (level.info == nullptr || level.info->notexturefill == -1) level.notexturefill = self;
 }
 
 CUSTOM_CVAR(Int, gl_lightmode, 1, CVAR_ARCHIVE | CVAR_NOINITCALL)
@@ -1045,6 +1045,16 @@ void G_DoLoadLevel (int position, bool autosave)
 
 	G_UnSnapshotLevel (!savegamerestore);	// [RH] Restore the state of the level.
 	int pnumerr = G_FinishTravel ();
+
+	if (!level.FromSnapshot)
+	{
+		for (int i = 0; i<MAXPLAYERS; i++)
+		{
+			if (playeringame[i] && players[i].mo != NULL)
+				P_PlayerStartStomp(players[i].mo);
+		}
+	}
+
 	// For each player, if they are viewing through a player, make sure it is themselves.
 	for (int ii = 0; ii < MAXPLAYERS; ++ii)
 	{
@@ -2031,6 +2041,30 @@ DEFINE_ACTION_FUNCTION(FLevelLocals, Vec3Diff)
 	PARAM_FLOAT(y2);
 	PARAM_FLOAT(z2);
 	ACTION_RETURN_VEC3(VecDiff(DVector3(x1, y1, z1), DVector3(x2, y2, z2)));
+}
+
+DEFINE_ACTION_FUNCTION(FLevelLocals, SphericalCoords)
+{
+	PARAM_PROLOGUE;
+	PARAM_FLOAT(viewpointX);
+	PARAM_FLOAT(viewpointY);
+	PARAM_FLOAT(viewpointZ);
+	PARAM_FLOAT(targetX);
+	PARAM_FLOAT(targetY);
+	PARAM_FLOAT(targetZ);
+	PARAM_ANGLE_DEF(viewYaw);
+	PARAM_ANGLE_DEF(viewPitch);
+	PARAM_BOOL_DEF(absolute);
+
+	DVector3 viewpoint(viewpointX, viewpointY, viewpointZ);
+	DVector3 target(targetX, targetY, targetZ);
+	auto vecTo = absolute ? target - viewpoint : VecDiff(viewpoint, target);
+
+	ACTION_RETURN_VEC3(DVector3(
+		deltaangle(vecTo.Angle(), viewYaw).Degrees,
+		deltaangle(-vecTo.Pitch(), viewPitch).Degrees,
+		vecTo.Length()
+	));
 }
 
 DEFINE_ACTION_FUNCTION(FLevelLocals, Vec2Offset)

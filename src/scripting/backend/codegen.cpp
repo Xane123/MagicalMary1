@@ -46,6 +46,7 @@
 #include "codegen.h"
 #include "v_text.h"
 #include "w_wad.h"
+#include "doomstat.h"
 
 inline PClass *PObjectPointer::PointedClass() const { return static_cast<PClassType*>(PointedType)->Descriptor; }
 
@@ -2476,6 +2477,12 @@ FxExpression *FxAssign::Resolve(FCompileContext &ctx)
 		if (Base->ValueType->isArray())
 		{
 			ScriptPosition.Message(MSG_ERROR, "Cannot assign arrays");
+			delete this;
+			return nullptr;
+		}
+		else if (Base->IsDynamicArray())
+		{
+			ScriptPosition.Message(MSG_ERROR, "Cannot assign dynamic arrays, use Copy() or Move() function instead");
 			delete this;
 			return nullptr;
 		}
@@ -6855,8 +6862,13 @@ ExpEmit FxCVar::Emit(VMFunctionBuilder *build)
 
 	case CVAR_DummyBool:
 	{
+		int *pVal;
 		auto cv = static_cast<FFlagCVar *>(CVar);
-		build->Emit(OP_LKP, addr.RegNum, build->GetConstantAddress(&cv->ValueVar.Value));
+		auto vcv = &cv->ValueVar;
+		if (vcv == &compatflags) pVal = &i_compatflags;
+		else if (vcv == &compatflags2) pVal = &i_compatflags2;
+		else pVal = &vcv->Value;
+		build->Emit(OP_LKP, addr.RegNum, build->GetConstantAddress(pVal));
 		build->Emit(OP_LW, dest.RegNum, addr.RegNum, nul);
 		build->Emit(OP_SRL_RI, dest.RegNum, dest.RegNum, cv->BitNum);
 		build->Emit(OP_AND_RK, dest.RegNum, dest.RegNum, build->GetConstantInt(1));
@@ -9051,7 +9063,7 @@ ExpEmit FxVMFunctionCall::Emit(VMFunctionBuilder *build)
 	{
 		assert(Self != nullptr);
 		selfemit = Self->Emit(build);
-		assert((selfemit.RegType == REGT_POINTER) || (selfemit.Fixed && selfemit.Target));
+		assert(selfemit.RegType == REGT_POINTER || selfemit.RegType == REGT_STRING || (selfemit.Fixed && selfemit.Target));
 
 		int innerside = FScopeBarrier::SideFromFlags(Function->Variants[0].Flags);
 
@@ -9071,7 +9083,7 @@ ExpEmit FxVMFunctionCall::Emit(VMFunctionBuilder *build)
 			}
 		}
 
-		if (selfemit.Fixed && selfemit.Target)
+		if ((selfemit.Fixed && selfemit.Target) || selfemit.RegType == REGT_STRING)
 		{
 			// Address of a local variable.
 			build->Emit(OP_PARAM, 0, selfemit.RegType | REGT_ADDROF, selfemit.RegNum);
@@ -9324,10 +9336,8 @@ ExpEmit FxFlopFunctionCall::Emit(VMFunctionBuilder *build)
 //==========================================================================
 
 FxVectorBuiltin::FxVectorBuiltin(FxExpression *self, FName name)
-	:FxExpression(EFX_VectorBuiltin, self->ScriptPosition)
+	:FxExpression(EFX_VectorBuiltin, self->ScriptPosition), Function(name), Self(self)
 {
-	Self = self;
-	Function = name;
 }
 
 FxVectorBuiltin::~FxVectorBuiltin()
@@ -11124,7 +11134,7 @@ ExpEmit FxRuntimeStateIndex::Emit(VMFunctionBuilder *build)
 FxMultiNameState::FxMultiNameState(const char *_statestring, const FScriptPosition &pos, PClassActor *checkclass)
 	:FxExpression(EFX_MultiNameState, pos)
 {
-	FName scopename;
+	FName scopename = NAME_None;
 	FString statestring = _statestring;
 	int scopeindex = statestring.IndexOf("::");
 
@@ -11132,10 +11142,6 @@ FxMultiNameState::FxMultiNameState(const char *_statestring, const FScriptPositi
 	{
 		scopename = FName(statestring, scopeindex, false);
 		statestring = statestring.Right(statestring.Len() - scopeindex - 2);
-	}
-	else
-	{
-		scopename = NAME_None;
 	}
 	names = MakeStateNameList(statestring);
 	names.Insert(0, scopename);

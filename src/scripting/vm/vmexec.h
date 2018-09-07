@@ -665,6 +665,11 @@ static int Exec(VMFrameStack *stack, const VMOP *pc, VMReturn *ret, int numret)
 		ASSERTA(a); ASSERTA(B);
 		{
 			auto o = (DObject*)reg.a[B];
+			if (o == nullptr)
+			{
+				ThrowAbortException(X_READ_NIL, nullptr);
+				return 0;
+			}
 			auto p = o->GetClass();
 			assert(C < p->Virtuals.Size());
 			reg.a[a] = p->Virtuals[C];
@@ -673,7 +678,13 @@ static int Exec(VMFrameStack *stack, const VMOP *pc, VMReturn *ret, int numret)
 	OP(SCOPE):
 		{
 			ASSERTA(a); ASSERTKA(C);
-			FScopeBarrier::ValidateCall(((DObject*)reg.a[a])->GetClass(), (VMFunction*)konsta[C].v, B - 1);
+			auto o = (DObject*)reg.a[a];
+			if (o == nullptr)
+			{
+				ThrowAbortException(X_READ_NIL, nullptr);
+				return 0;
+			}
+			FScopeBarrier::ValidateCall(o->GetClass(), (VMFunction*)konsta[C].v, B - 1);
 		}
 		NEXTOP;
 
@@ -1022,7 +1033,7 @@ static int Exec(VMFrameStack *stack, const VMOP *pc, VMReturn *ret, int numret)
 		NEXTOP;
 	OP(SRL_KR):
 		ASSERTD(a); ASSERTKD(B); ASSERTD(C);
-		reg.d[a] = (unsigned)konstd[B] >> C;
+		reg.d[a] = (unsigned)konstd[B] >> reg.d[C];
 		NEXTOP;
 
 	OP(SRA_RR):

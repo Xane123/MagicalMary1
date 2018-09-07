@@ -28,6 +28,10 @@
 
 // HEADER FILES ------------------------------------------------------------
 
+#ifdef _WIN32
+#include <direct.h>
+#endif
+
 #ifdef HAVE_FPU_CONTROL
 #include <fpu_control.h>
 #endif
@@ -99,6 +103,7 @@
 #include "r_data/r_vanillatrans.h"
 
 EXTERN_CVAR(Bool, hud_althud)
+EXTERN_CVAR(Int, vr_mode)
 void DrawHUD();
 void D_DoAnonStats();
 
@@ -111,12 +116,10 @@ void D_DoAnonStats();
 
 extern void I_SetWindowTitle(const char* caption);
 extern void ReadStatistics();
-extern void M_RestoreMode ();
 extern void M_SetDefaultMode ();
 extern void G_NewInit ();
 extern void SetupPlayerClasses ();
 extern void HUD_InitHud();
-void gl_PatchMenu();	// remove modern OpenGL options on old hardware.
 void DeinitMenus();
 const FIWADInfo *D_FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad);
 
@@ -148,9 +151,7 @@ EXTERN_CVAR (Bool, sv_cheats)
 EXTERN_CVAR (Bool, sv_unlimited_pickup)
 EXTERN_CVAR (Bool, I_FriendlyWindowTitle)
 
-extern int testingmode;
 extern bool setmodeneeded;
-extern int NewWidth, NewHeight, NewBits, DisplayBits;
 extern bool gameisdead;
 extern bool demorecording;
 extern bool M_DemoNoPlay;	// [RH] if true, then skip any demos in the loop
@@ -223,8 +224,8 @@ int eventhead;
 int eventtail;
 gamestate_t wipegamestate = GS_DEMOSCREEN;	// can be -1 to force a wipe
 bool PageBlank;
-FTexture *Page;
 FTexture *Advisory;
+FTextureID Page;
 bool nospriterename;
 FStartupInfo DoomStartupInfo;
 FString lastIWAD;
@@ -259,20 +260,6 @@ void D_ProcessEvents (void)
 {
 	event_t *ev;
 		
-	// [RH] If testing mode, do not accept input until test is over
-	if (testingmode)
-	{
-		if (testingmode == 1)
-		{
-			M_SetDefaultMode ();
-		}
-		else if (testingmode <= I_GetTime())
-		{
-			M_RestoreMode ();
-		}
-		return;
-	}
-
 	for (; eventtail != eventhead ; eventtail = (eventtail+1)&(MAXEVENTS-1))
 	{
 		ev = &events[eventtail];
@@ -651,7 +638,8 @@ CVAR(Bool, vid_activeinbackground, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
 void D_Display ()
 {
-	bool wipe;
+	FTexture *wipe = nullptr;
+	int wipe_type;
 	sector_t *viewsec;
 
 	if (nodrawers || screen == NULL)
@@ -675,6 +663,7 @@ void D_Display ()
 		players[consoleplayer].camera = players[consoleplayer].mo;
 	}
 
+    auto &vp = r_viewpoint;
 	if (viewactive)
 	{
 		DAngle fov = 90.f;
@@ -685,178 +674,160 @@ void D_Display ()
 				fov = cam->player->FOV;
 			else fov = cam->CameraFOV;
 		}
-		R_SetFOV(r_viewpoint, fov);
+		R_SetFOV(vp, fov);
 	}
 
-	// [RH] change the screen mode if needed
+	// fullscreen toggle has been requested
 	if (setmodeneeded)
 	{
-		// Change screen mode.
-		if (Video->SetResolution (NewWidth, NewHeight, NewBits))
-		{
-			// Recalculate various view parameters.
-			setsizeneeded = true;
-			// Let the status bar know the screen size changed
-			if (StatusBar != NULL)
-			{
-				StatusBar->CallScreenSizeChanged ();
-			}
-			// Refresh the console.
-			C_NewModeAdjust ();
-			// Reload crosshair if transitioned to a different size
-			ST_LoadCrosshair (true);
-			AM_NewResolution ();
-			// Reset the mouse cursor in case the bit depth changed
-			vid_cursor.Callback();
-		}
+		setmodeneeded = false;
+		screen->ToggleFullscreen(fullscreen);
+		V_OutputResized(screen->GetWidth(), screen->GetHeight());
 	}
 
 	// change the view size if needed
-	if (setsizeneeded && StatusBar != NULL)
+	if (setsizeneeded)
 	{
-		R_ExecuteSetViewSize (r_viewpoint, r_viewwindow);
+		if (StatusBar == nullptr)
+		{
+			viewwidth = SCREENWIDTH;
+			viewheight = SCREENHEIGHT;
+			setsizeneeded = false;
+		}
+		else
+		{
+			R_ExecuteSetViewSize (vp, r_viewwindow);
 	}
-	setmodeneeded = false;
+	}
 
 	// [RH] Allow temporarily disabling wipes
 	if (NoWipe)
 	{
 		NoWipe--;
-		wipe = false;
+		wipe = nullptr;
 		wipegamestate = gamestate;
 	}
-	else if (gamestate != wipegamestate && gamestate != GS_FULLCONSOLE && gamestate != GS_TITLELEVEL)
+	// No wipes when in a stereo3D VR mode
+	else if (gamestate != wipegamestate && gamestate != GS_FULLCONSOLE && gamestate != GS_TITLELEVEL && (vr_mode == 0 || vid_rendermode != 4))
 	{ // save the current screen if about to wipe
+		wipe = screen->WipeStartScreen ();
 		switch (wipegamestate)
 		{
 		default:
-			wipe = screen->WipeStartScreen (wipetype);
+			wipe_type = wipetype;
 			break;
 
 		case GS_FORCEWIPEFADE:
-			wipe = screen->WipeStartScreen (wipe_Fade);
+			wipe_type = wipe_Fade;
 			break;
 
 		case GS_FORCEWIPEBURN:
-			wipe = screen->WipeStartScreen (wipe_Burn);
+			wipe_type =wipe_Burn;
 			break;
 
 		case GS_FORCEWIPEMELT:
-			wipe = screen->WipeStartScreen (wipe_Melt);
+			wipe_type = wipe_Melt;
 			break;
 		}
 		wipegamestate = gamestate;
 	}
 	else
 	{
-		wipe = false;
+		wipe = nullptr;
 	}
-
+	
+	screen->FrameTime = I_msTimeFS();
+	TexMan.UpdateAnimations(screen->FrameTime);
+	R_UpdateSky(screen->FrameTime);
+	screen->BeginFrame();
+	screen->ClearClipRect();
+	if ((gamestate == GS_LEVEL || gamestate == GS_TITLELEVEL) && gametic != 0)
 	{
-		screen->FrameTime = I_msTimeFS();
-		TexMan.UpdateAnimations(screen->FrameTime);
-		R_UpdateSky(screen->FrameTime);
-		screen->BeginFrame();
-		screen->ClearClipRect();
+		// [ZZ] execute event hook that we just started the frame
+		//E_RenderFrame();
+		//
+		
+		// Check for the presence of dynamic lights at the start of the frame once.
+		if ((gl_lights && vid_rendermode == 4) || (r_dynlights && vid_rendermode != 4))
+		{
+			TThinkerIterator<ADynamicLight> it(STAT_DLIGHT);
+			level.HasDynamicLights = !!it.Next();
+		}
+		else level.HasDynamicLights = false;	// lights are off so effectively we have none.
+		
+		viewsec = screen->RenderView(&players[consoleplayer]);
+		screen->Begin2D();
+		screen->DrawBlend(viewsec);
+		if (automapactive)
+		{
+			AM_Drawer (hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
+		}
+		if (!automapactive || viewactive)
+		{
+			screen->RefreshViewBorder ();
+		}
+		
+		// for timing the statusbar code.
+		//cycle_t stb;
+		//stb.Reset();
+		//stb.Clock();
+		if (hud_althud && viewheight == SCREENHEIGHT && screenblocks > 10)
+		{
+			StatusBar->DrawBottomStuff (HUD_AltHud);
+			if (DrawFSHUD || automapactive) DrawHUD();
+			if (players[consoleplayer].camera && players[consoleplayer].camera->player && !automapactive)
+			{
+				StatusBar->DrawCrosshair();
+			}
+			StatusBar->CallDraw (HUD_AltHud, vp.TicFrac);
+			StatusBar->DrawTopStuff (HUD_AltHud);
+		}
+		else if (viewheight == SCREENHEIGHT && viewactive && screenblocks > 10)
+		{
+			EHudState state = DrawFSHUD ? HUD_Fullscreen : HUD_None;
+			StatusBar->DrawBottomStuff (state);
+			StatusBar->CallDraw (state, vp.TicFrac);
+			StatusBar->DrawTopStuff (state);
+		}
+		else
+		{
+			StatusBar->DrawBottomStuff (HUD_StatusBar);
+			StatusBar->CallDraw (HUD_StatusBar, vp.TicFrac);
+			StatusBar->DrawTopStuff (HUD_StatusBar);
+		}
+		//stb.Unclock();
+		//Printf("Stbar = %f\n", stb.TimeMS());
+	}
+	else
+	{
+		screen->Begin2D();
 		switch (gamestate)
 		{
-		case GS_FULLCONSOLE:
-			screen->Begin2D(false);
-			C_DrawConsole ();
-			M_Drawer ();
-			screen->End2D();
-			screen->Update ();
-			return;
-
-		case GS_LEVEL:
-		case GS_TITLELEVEL:
-			if (!gametic)
-			{
-				screen->Begin2D(false);
+			case GS_FULLCONSOLE:
+				screen->Begin2D();
+				C_DrawConsole ();
+				M_Drawer ();
+				screen->End2DAndUpdate ();
+				return;
+				
+			case GS_INTERMISSION:
+				WI_Drawer ();
 				break;
-			}
-
-			// [ZZ] execute event hook that we just started the frame
-			//E_RenderFrame();
-			//
-
-			// Check for the presence of dynamic lights at the start of the frame once.
-			if (gl_lights)
-			{
-				TThinkerIterator<ADynamicLight> it(STAT_DLIGHT);
-				level.HasDynamicLights = !!it.Next();
-			}
-			else level.HasDynamicLights = false;	// lights are off so effectively we have none.
-
-			viewsec = screen->RenderView(&players[consoleplayer]);
-			screen->Begin2D(false);
-			screen->DrawBlend(viewsec);
-			// returns with 2S mode set.
-			if (automapactive)
-			{
-				AM_Drawer (hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
-			}
-			if (!automapactive || viewactive)
-			{
-				screen->RefreshViewBorder ();
-			}
-
-			// for timing the statusbar code.
-			//cycle_t stb;
-			//stb.Reset();
-			//stb.Clock();
-			if (hud_althud && viewheight == SCREENHEIGHT && screenblocks > 10)
-			{
-				StatusBar->DrawBottomStuff (HUD_AltHud);
-				if (DrawFSHUD || automapactive) DrawHUD();
-				if (players[consoleplayer].camera && players[consoleplayer].camera->player && !automapactive)
-				{
-					StatusBar->DrawCrosshair();
-				}
-				StatusBar->CallDraw (HUD_AltHud);
-				StatusBar->DrawTopStuff (HUD_AltHud);
-			}
-			else 
-			if (viewheight == SCREENHEIGHT && viewactive && screenblocks > 10)
-			{
-				EHudState state = DrawFSHUD ? HUD_Fullscreen : HUD_None;
-				StatusBar->DrawBottomStuff (state);
-				StatusBar->CallDraw (state);
-				StatusBar->DrawTopStuff (state);
-			}
-			else
-			{
-				StatusBar->DrawBottomStuff (HUD_StatusBar);
-				StatusBar->CallDraw (HUD_StatusBar);
-				StatusBar->DrawTopStuff (HUD_StatusBar);
-			}
-			//stb.Unclock();
-			//Printf("Stbar = %f\n", stb.TimeMS());
-			CT_Drawer ();
-			break;
-
-		case GS_INTERMISSION:
-			screen->Begin2D(false);
-			WI_Drawer ();
-			CT_Drawer ();
-			break;
-
-		case GS_FINALE:
-			screen->Begin2D(false);
-			F_Drawer ();
-			CT_Drawer ();
-			break;
-
-		case GS_DEMOSCREEN:
-			screen->Begin2D(false);
-			D_PageDrawer ();
-			CT_Drawer ();
-			break;
-
-		default:
-			break;
+				
+			case GS_FINALE:
+				F_Drawer ();
+				break;
+				
+			case GS_DEMOSCREEN:
+				D_PageDrawer ();
+				break;
+				
+			default:
+				break;
 		}
 	}
+	CT_Drawer ();
+
 	// draw pause pic
 	if ((paused || pauseext) && menuactive == MENU_Off)
 	{
@@ -897,15 +868,17 @@ void D_Display ()
 		GSnd->DrawWaveDebug(snd_drawoutput);
 	}
 
-	if (!wipe || NoWipe < 0)
+	if (!wipe || NoWipe < 0 || wipe_type == wipe_None)
 	{
+		if (wipe != nullptr) delete wipe;
+		wipe = nullptr;
 		NetUpdate ();			// send out any new accumulation
 		// normal update
 		// draw ZScript UI stuff
 		C_DrawConsole ();	// draw console
 		M_Drawer ();			// menu is drawn even on top of everything
 		FStat::PrintStat ();
-		screen->Update ();		// page flip or blit buffer
+		screen->End2DAndUpdate ();
 	}
 	else
 	{
@@ -915,7 +888,10 @@ void D_Display ()
 
 		GSnd->SetSfxPaused(true, 1);
 		I_FreezeTime(true);
-		screen->WipeEndScreen ();
+		screen->End2D();
+		auto wipend = screen->WipeEndScreen ();
+		auto wiper = Wiper::Create(wipe_type);
+		wiper->SetTextures(wipe, wipend);
 
 		wipestart = I_msTime();
 		NetUpdate();		// send out any new accumulation
@@ -929,17 +905,17 @@ void D_Display ()
 				diff = (nowtime - wipestart) * 40 / 1000;	// Using 35 here feels too slow.
 			} while (diff < 1);
 			wipestart = nowtime;
-			done = screen->WipeDo (1);
+			screen->Begin2D();
+			done = wiper->Run(1);
 			C_DrawConsole ();	// console and
 			M_Drawer ();			// menu are drawn even on top of wipes
-			screen->Update ();		// page flip or blit buffer
+			screen->End2DAndUpdate ();
 			NetUpdate ();			// [RH] not sure this is needed anymore
 		} while (!done);
-		screen->WipeCleanup();
+		delete wiper;
 		I_FreezeTime(false);
 		GSnd->SetSfxPaused(false, 1);
 	}
-	screen->End2D();
 	cycles.Unclock();
 	FrameCycles = cycles;
 }
@@ -988,7 +964,8 @@ void D_DoomLoop ()
 
 	// Clamp the timer to TICRATE until the playloop has been entered.
 	r_NoInterpolate = true;
-	Page = Advisory = NULL;
+	Page.SetInvalid();
+	Advisory = nullptr;
 
 	vid_cursor.Callback();
 
@@ -1073,9 +1050,9 @@ void D_PageTicker (void)
 void D_PageDrawer (void)
 {
 	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
-	if (Page != NULL)
+	if (Page.Exists())
 	{
-		screen->DrawTexture (Page, 0, 0,
+		screen->DrawTexture (TexMan(Page), 0, 0,
 			DTA_Fullscreen, true,
 			DTA_Masked, false,
 			DTA_BilinearFilter, true,
@@ -1217,18 +1194,7 @@ void D_DoStrifeAdvanceDemo ()
 	if (demosequence == 9 && !(gameinfo.flags & GI_SHAREWARE))
 		demosequence = 10;
 
-	if (pagename)
-	{
-		if (Page != NULL)
-		{
-			Page->Unload ();
-			Page = NULL;
-		}
-		if (pagename[0])
-		{
-			Page = TexMan[pagename];
-		}
-	}
+	if (pagename != nullptr) Page = TexMan.CheckForTexture(pagename, ETextureType::MiscPatch);
 }
 
 //==========================================================================
@@ -1327,13 +1293,10 @@ void D_DoAdvanceDemo (void)
 		break;
 	}
 
+
 	if (pagename.IsNotEmpty())
 	{
-		if (Page != NULL)
-		{
-			Page->Unload ();
-		}
-		Page = TexMan(pagename);
+		Page = TexMan.CheckForTexture(pagename, ETextureType::MiscPatch);
 	}
 }
 
@@ -2636,7 +2599,6 @@ void D_DoomMain (void)
 			}
 
 			V_Init2();
-			gl_PatchMenu();	// removes unapplicable entries for old hardware. This cannot be done in MENUDEF because at the point it gets parsed it doesn't have the needed info.
 			UpdateJoystickMenu(NULL);
 
 			v = Args->CheckValue ("-loadgame");
@@ -2704,7 +2666,6 @@ void D_DoomMain (void)
 			screen->InitPalette();
 			// These calls from inside V_Init2 are still necessary
 			C_NewModeAdjust();
-			M_InitVideoModesMenu();
 			D_StartTitle ();				// start up intro loop
 			setmodeneeded = false;			// This may be set to true here, but isn't needed for a restart
 		}

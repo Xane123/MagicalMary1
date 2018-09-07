@@ -470,7 +470,7 @@ void S_Start ()
 
 	// Don't start the music if loading a savegame, because the music is stored there.
 	// Don't start the music if revisiting a level in a hub for the same reason.
-	if (!savegamerestore && (level.info == nullptr || level.info->Snapshot.mBuffer == nullptr || !level.info->isValid()))
+	if (!level.IsReentering())
 	{
 		if (level.cdtrack == 0 || !S_ChangeCDMusic (level.cdtrack, level.cdid))
 			S_ChangeMusic (level.Music, level.musicorder);
@@ -776,8 +776,8 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 				{
 					DVector2 disp = level.Displacements.getOffset(pgroup, poly->CenterSubsector->sector->PortalGroup);
 					CalcPolyobjSoundOrg(listenpos + disp, poly, *pos);
-					pos->X += (float)disp.X;
-					pos->Z += (float)disp.Y;
+					pos->X -= (float)disp.X;
+					pos->Z -= (float)disp.Y;
 				}
 				break;
 			}
