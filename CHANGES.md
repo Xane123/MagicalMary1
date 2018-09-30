@@ -24,3 +24,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Checkpoints no longer store the player's angle. This is to clear a **SetCheckpoint** script argument slot for a "forced ambience" argument, which will fix cases where the wrong ambience is heard upon returning to a checkpoint.
 * New songs were added to replace some of the radio songs. They're no more safe to use than the old ones, but the goal is to have the radio sounding higher-quality by the final version.
 * Doors now have new sounds that sound less silly.
+* After Mary is hurt, a third, purple "pain" meter appears until she has recovered from the pain. If this meter fills up, the crying behavior mentioned in the major changes will occur. If the player forces Mary to cry, the meter will disappear, as if she did it herself.
