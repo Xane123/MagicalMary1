@@ -1,19 +1,21 @@
-s# Changes (for v2.0)
+# Changes (for v2.0)
 This is a list of any changes done to Mary's Magical Adventure since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
 * Disabled "HandleHealthEvents" script in the Small Hut, which fixes the player randomly dropping coins upon warping there for a second time after losing health in the level.
 * Fixed blue cops with rapid-fire behavior trying to run constantly. This was due to a leftover skip that caused the DECORATE code to skip the "if closer than 512 units, slowly walk" line, jumping straight to running. If playing on hard difficulty, the cop would endlessly slide into you!
 * Lasers between Uroboros platforms have been re-added! This was due to removal of the laser projectiles, which were in the now-removed police DECORATE file used for the weaker police found in the scrapped first level.
 * Mary no longer gets trapped in an endless loop of lowering her wand's Light Form after detransforming. This would happen even if said wand form wasn't unlocked yet.
+* Returning from minigames in Jane's Hut now works as expected, spawning the player on the platform as it returns to its normal height. Glitches involving ***ss_position*** (now named ***spawn_position**** have been mostly fixed and it now serves a non-Special Stage purpose, hence the name change.
 ## Major
 * Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
 * Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
 * Soap Boxes can be bought from Jane's Shop in packs of four! You can hold up to sixteen of them and place them anywhere to try catching enemies off-guard.
 * Jane now has animated sprites using her "old design". If Jane ever gets a new design like Mary, her sprites will be replaced.
 * You can now listen to the same radio "station" heard in City Street Run in Jane's Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
-* The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker. Once it's migrated, the two switches will be removed.
+* The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker.
 * Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles.
 * It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, run and hide fast, as everyone will start trying to cheaply kill you.
+* The **Double Jump** and **Triple Jump** have been re-added from World of Kirbycraft v1.4! Push the jump button very shortly after you land from a jump while moving and you'll jump higher, though this disables your Air Dash (Mary)/Kirby Puffs (Xane).
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
@@ -25,3 +27,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * New songs were added to replace some of the radio songs. They're no more safe to use than the old ones, but the goal is to have the radio sounding higher-quality by the final version.
 * Doors now have new sounds that sound less silly.
 * After Mary is hurt, a third, purple "pain" meter appears until she has recovered from the pain. If this meter fills up, the crying behavior mentioned in the major changes will occur. If the player forces Mary to cry, the meter will disappear, as if she did it herself.
+* Replaced some openInput variable checks to use verisons that aren't affected by players' frozen statuses. This removes the need for the psuedo-freeze that happens when viewing the minigame menu.
+* Due to changed priorities relating to minigames, the only minigame that is guaranteed to end up in the final game is Battle Arena. Therefore, the platform in the middle of the room in Jane's Hut now serves as the entrance to the minigame, moving down after a destination is chosen.
+* Added ***-1*** as a valid number for the ***xane_lowend*** CVAR. When this is chosen, the roads in City Street Run become reflective, which will not happen on normal (0) and performance (1) settings. This is due to even my gaming laptop lagging when the reflective roads are in sight and I would look to the opposite side of the open city area.
+* More lights and reflective surfaces have been overall added to City Street Run. Additionally, a new room was added to the building with the walkway.
