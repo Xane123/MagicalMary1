@@ -6,6 +6,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Lasers between Uroboros platforms have been re-added! This was due to removal of the laser projectiles, which were in the now-removed police DECORATE file used for the weaker police found in the scrapped first level.
 * Mary no longer gets trapped in an endless loop of lowering her wand's Light Form after detransforming. This would happen even if said wand form wasn't unlocked yet.
 * Returning from minigames in Jane's Hut now works as expected, spawning the player on the platform as it returns to its normal height. Glitches involving ***ss_position*** (now named ***spawn_position**** have been mostly fixed and it now serves a non-Special Stage purpose, hence the name change.
+* Rain ambience now correctly starts when the storm begins in 1-3. Before, outdoor areas would then lose all ambient sounds.
 ## Major
 * Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
 * Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
@@ -31,3 +32,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Due to changed priorities relating to minigames, the only minigame that is guaranteed to end up in the final game is Battle Arena. Therefore, the platform in the middle of the room in Jane's Hut now serves as the entrance to the minigame, moving down after a destination is chosen.
 * Added ***-1*** as a valid number for the ***xane_lowend*** CVAR. When this is chosen, the roads in City Street Run become reflective, which will not happen on normal (0) and performance (1) settings. This is due to even my gaming laptop lagging when the reflective roads are in sight and I would look to the opposite side of the open city area.
 * More lights and reflective surfaces have been overall added to City Street Run. Additionally, a new room was added to the building with the walkway.
+* The "absolute value" (abs) function has been moved out of COMMON1.acs to mma_extra.acs, so it can now be used in any script file.
