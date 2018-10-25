@@ -10,45 +10,8 @@ PRESSKEY = "press a key.";
 PRESSYN = "press y or n.";
 
 QUITMSG = "are you sure you want to\nquit this great game?";
-TXT_YES = "Yes";
-TXT_NO = "No";
-
-// Quit Doom 1 messages
-QUITMSG1 = "please don't leave, there's more\ndemons to toast!";
-QUITMSG2 = "let's beat it -- this is turning\ninto a bloodbath!";
-QUITMSG3 = "i wouldn't leave if i were you.\ndos is much worse.";
-QUITMSG4 = "you're trying to say you like dos\nbetter than me, right?";
-QUITMSG5 = "don't leave yet -- there's a\ndemon around that corner!";
-QUITMSG6 = "ya know, next time you come in here\ni'm gonna toast ya.";
-QUITMSG7 = "go ahead and leave. see if i care.";
-
-// Quit Doom II messages
-QUITMSG8 = "you want to quit?\nthen, thou hast lost an eighth!";
-QUITMSG9 = "don't go now, there's a \ndimensional shambler waiting\nat the dos prompt!";
-QUITMSG10 = "get outta here and go back\nto your boring programs.";
-QUITMSG11 = "if i were your boss, i'd \n deathmatch ya in a minute!";
-QUITMSG12 = "look, bud. you leave now\nand you forfeit your body count!";
-QUITMSG13 = "just leave. when you come\nback, i'll be waiting with a bat.";
-QUITMSG14 = "you're lucky i don't smack\nyou for thinking about leaving.";
-
-// Quit Strife messages
-QUITMSG15 = "where are you going?!\nwhat about the rebellion?";
-QUITMSG16 = "carnage interruptus...\nwhat a tease!";
-QUITMSG17 = "but you're the hope\n-- my only chance!!";
-QUITMSG18 = "nobody walks out on blackbird.";
-QUITMSG19 = "i thought you were different...";
-QUITMSG20 = "fine! just kill and run!";
-QUITMSG21 = "you can quit...\nbut you can't hide...";
-QUITMSG22 = "whaaa, what's the matter?\nmommy says dinnertime?";
-
-// Quit Chex messages
-QUITMSG23 = "Don't quit now, there are still\nflemoids on the loose!";
-QUITMSG24 = "Don't give up -- the flemoids will\nget the upper hand!";
-QUITMSG25 = "Don't leave now.\nWe need your help!";
-QUITMSG26 = "I hope you're just taking a\nbreak for Chex(R) party mix.";
-QUITMSG27 = "Don't quit now!\nWe need your help!";
-QUITMSG28 = "Don't abandon the\nIntergalactic Federation of Cereals!";
-QUITMSG29 = "The real Chex(R) Warrior\nwouldn't give up so fast!";
+TXT_YES = "Yeah!";
+TXT_NO = "No...";
 
 LOADNET = "you can't do load while in a net game!\n\npress a key.";
 QLOADNET = "you can't quickload during a netgame!\n\npress a key.";
@@ -58,7 +21,7 @@ QSPROMPT = "quicksave over your game named\n\n'%s'?\n\npress y or n.";
 QLPROMPT = "do you want to quickload the game named\n\n'%s'?\n\npress y or n.";
 NEWGAME = "you can't start a new game\nwhile in a network game.\n\npress a key.";
 NIGHTMARE = "are you sure? this skill level\nisn't even remotely fair.\n\npress y or n.";
-SWSTRING = "this is the shareware version of doom.\n\nyou need to order the entire trilogy.\n\npress a key.";
+SWSTRING = "This version of Mary's Magical Adventure doesn't support mods. Please wait until a later version.";
 MSGOFF = "Messages OFF";
 MSGON = "Messages ON";
 NETEND = "you can't end a netgame!\n\npress a key.";
@@ -102,75 +65,6 @@ TXT_BUDDHA2ON = "Ultimate Buddha Mode ON";
 TXT_BUDDHA2OFF = "Ultimate Buddha Mode OFF";
 TXT_DEFAULTPICKUPMSG = "You got a pickup";
 
-// Cast list (must appear in this order)
-CC_ZOMBIE = "GREEN GUY";
-CC_SHOTGUN = "GLITCHY SHOTGUN";
-CC_HEAVY = "HEAVY ROCK DUDE";
-CC_IMP = "PMI";
-CC_DEMON = "NOMED";
-CC_LOST = "LOST DATA";
-CC_CACO = "CACO-NOMED";
-CC_HELL = "RIPOFF";
-CC_BARON = "AWESOME IN D-2016";
-CC_ARACH = "NORTON H'CARA";
-CC_PAIN = "RO-ME-RO";
-CC_REVEN = "AAAAAAAH!";
-CC_MANCU = "YOU-AAARE...!";
-CC_ARCH = "GLITCHY FAST THING";
-CC_SPIDER = "THE RE-DIPPED MASTERMIND";
-CC_CYBER = "THE MOOH~!";
-CC_HERO = "OUR BROKEN MESS OF AN ENDING SEQUENCE";
-
-
-// Friendly names
-FN_ZOMBIE = "Zombieman";
-FN_SHOTGUN = "Sergeant";
-FN_HEAVY = "Chaingunner";
-FN_IMP = "Imp";
-FN_DEMON = "Demon";
-FN_SPECTRE = "Spectre";
-FN_LOST = "Lost Soul";
-FN_CACO = "Cacodemon";
-FN_HELL = "Hell Knight";
-FN_BARON = "Baron of Hell";
-FN_ARACH = "Arachnotron";
-FN_PAIN = "Pain Elemental";
-FN_REVEN = "Revenant";
-FN_MANCU = "Mancubus";
-FN_ARCH = "Arch-vile";
-FN_SPIDER = "Spider Mastermind";
-FN_CYBER = "Cyberdemon";
-FN_WOLFSS = "Nazi";
-FN_DOG = "Dog";
-
-// New strings from BOOM
-PD_BLUEC = "You need a blue card to open this door";
-PD_REDC = "You need a red card to open this door";
-PD_YELLOWC = "You need a yellow card to open this door";
-PD_BLUES = "You need a blue skull to open this door";
-PD_REDS = "You need a red skull to open this door";
-PD_YELLOWS = "You need a yellow skull to open this door";
-PD_ANY = "Any key will open this door";
-PD_ANYOBJ = "Any key will activate this object";
-PD_ALL3 = "You need all three keys to open this door";
-PD_ALL3O = "You need all three keys to activate this object";
-PD_ALL6 = "You need all six keys to open this door";
-PD_ALL6O = "You need all six keys to activate this object";
-PD_ALLKEYS = "You need all the keys";
-
-// MBF (BOOM?) narration backgrounds
-bgflatE1 = "FLOOR4_8";
-bgflatE2 = "SFLR6_1";
-bgflatE3 = "MFLR8_4";
-bgflatE4 = "MFLR8_3";
-bgflat06 = "SLIME16";
-bgflat11 = "RROCK14";
-bgflat20 = "RROCK07";
-bgflat30 = "RROCK17";
-bgflat15 = "RROCK13";
-bgflat31 = "RROCK19";
-bgcastcall = "BOSSBACK";
-
 // Gameflow messages
 TXT_FRAGLIMIT = "Fraglimit hit.";
 TXT_TIMELIMIT = "Timelimit hit.";
@@ -192,28 +86,28 @@ MULTI5 = "Monster kill!";
 
 // Obituary strings
 // First the self-kills, then the other-kills
-OB_SUICIDE = "%o suicides.";
-OB_FALLING = "%o fell too far.";
-OB_CRUSH = "%o was squished.";
-OB_EXIT = "%o tried to leave.";
-OB_WATER = "%o can't swim.";
+OB_SUICIDE = "%o was weakened too much.";
+OB_FALLING = "%o forgot fall damage was enabled.";
+OB_CRUSH = "%o became squishy!";
+OB_EXIT = "%o tried to run from their destiny.";
+OB_WATER = "%o thought GZDoom swimming was decent.";
 OB_SLIME = "%o mutated.";
 OB_LAVA = "%o melted.";
 OB_BARREL = "%o went boom.";
 OB_SPLASH = "%o stood in the wrong spot.";
 OB_R_SPLASH = "%o should have stood back.";
 OB_ROCKET = "%o should have stood back.";
-OB_KILLEDSELF = "%o killed %hself.";
+OB_KILLEDSELF = "%o hurt %hself too much.";
 
 // Same as OB_MPTELEFRAG, but shown when a monster telefrags you
-OB_MONTELEFRAG = "%o was telefragged.";
+OB_MONTELEFRAG = "%o should've avoided standing there.";
 
-OB_DEFAULT = "%o died.";
-OB_MPDEFAULT = "%o was killed by %k.";
-OB_FRIENDLY1 = "%k mows down a teammate.";
-OB_FRIENDLY2 = "%k checks %p glasses.";
-OB_FRIENDLY3 = "%k gets a frag for the other team.";
-OB_FRIENDLY4 = "%k loses another friend.";
+OB_DEFAULT = "%o was defeated.";
+OB_MPDEFAULT = "%o was defeated by %k.";
+OB_FRIENDLY1 = "%k eliminates a teammate.";
+OB_FRIENDLY2 = "%k looks closely at the defeated person.";
+OB_FRIENDLY3 = "%k helps out the other team. Traitor!";
+OB_FRIENDLY4 = "%k loses a friend.";
 
 SAVEGAMENAME = "zdoomsv";
 STARTUP1 = "";
@@ -259,312 +153,6 @@ TXT_LEADBOOTSOFF = "LEAD BOOTS OFF";
 TXT_LIGHTER = "You feel lighter";
 TXT_GRAVITY = "Gravity weighs you down";
 
-// Raven intermission
-
-TXT_IMKILLS = "KILLS";
-TXT_IMITEMS = "ITEMS";
-TXT_IMSECRETS = "SECRETS";
-TXT_IMTIME = "TIME";
-
-RAVENQUITMSG = "ARE YOU SURE YOU WANT TO QUIT?";
-
-// Friendly names
-FN_CHICKEN = "Chicken";
-FN_BEAST = "Weredragon";
-FN_CLINK = "Sabreclaw";
-FN_DSPARIL = "D'Sparil";
-FN_HERETICIMP = "Gargoyle";
-FN_IRONLICH = "Ironlich";
-FN_BONEKNIGHT = "Undead Warrior";
-FN_MINOTAUR = "Maulotaur";
-FN_MUMMY = "Golem";
-FN_MUMMYLEADER = "Nitrogolem";
-FN_SNAKE = "Ophidian";
-FN_WIZARD = "Wizard";
-
-// Hexen strings
-
-// Mana
-
-TXT_MANA_1 = "BLUE MANA";
-TXT_MANA_2 = "GREEN MANA";
-TXT_MANA_BOTH = "COMBINED MANA";
-
-// Keys
-
-TXT_KEY_STEEL = "STEEL KEY";
-TXT_KEY_CAVE = "CAVE KEY";
-TXT_KEY_AXE = "AXE KEY";
-TXT_KEY_FIRE = "FIRE KEY";
-TXT_KEY_EMERALD = "EMERALD KEY";
-TXT_KEY_DUNGEON = "DUNGEON KEY";
-TXT_KEY_SILVER = "SILVER KEY";
-TXT_KEY_RUSTED = "RUSTED KEY";
-TXT_KEY_HORN = "HORN KEY";
-TXT_KEY_SWAMP = "SWAMP KEY";
-TXT_KEY_CASTLE = "CASTLE KEY";
-
-TXT_NEED_KEY_STEEL = "You need the STEEL KEY";
-TXT_NEED_KEY_CAVE = "You need the CAVE KEY";
-TXT_NEED_KEY_AXE = "You need the AXE KEY";
-TXT_NEED_KEY_FIRE = "You need the FIRE KEY";
-TXT_NEED_KEY_EMERALD = "You need the EMERALD KEY";
-TXT_NEED_KEY_DUNGEON = "You need the DUNGEON KEY";
-TXT_NEED_KEY_SILVER = "You need the SILVER KEY";
-TXT_NEED_KEY_RUSTED = "You need the RUSTED KEY";
-TXT_NEED_KEY_HORN = "You need the HORN KEY";
-TXT_NEED_KEY_SWAMP = "You need the SWAMP KEY";
-TXT_NEED_KEY_CASTLE = "You need the CASTLE KEY";
-
-// Artifacts
-
-TXT_ARTIINVULNERABILITY2 = "ICON OF THE DEFENDER";
-TXT_ARTISUMMON = "DARK SERVANT";
-TXT_ARTIEGG2 = "PORKALATOR";
-TXT_ARTIPOISONBAG = "FLECHETTE";
-TXT_ARTITELEPORTOTHER = "BANISHMENT DEVICE";
-TXT_ARTISPEED = "BOOTS OF SPEED";
-TXT_ARTIBOOSTMANA = "KRATER OF MIGHT";
-TXT_ARTIBOOSTARMOR = "DRAGONSKIN BRACERS";
-TXT_ARTIBLASTRADIUS = "DISC OF REPULSION";
-TXT_ARTIHEALINGRADIUS = "MYSTIC AMBIT INCANT";
-
-// Puzzle artifacts
-
-TXT_ARTIPUZZSKULL = "YORICK'S SKULL";
-TXT_ARTIPUZZGEMBIG = "HEART OF D'SPARIL";
-TXT_ARTIPUZZGEMRED = "RUBY PLANET";
-TXT_ARTIPUZZGEMGREEN1 = "EMERALD PLANET";
-TXT_ARTIPUZZGEMGREEN2 = "EMERALD PLANET";
-TXT_ARTIPUZZGEMBLUE1 = "SAPPHIRE PLANET";
-TXT_ARTIPUZZGEMBLUE2 = "SAPPHIRE PLANET";
-TXT_ARTIPUZZBOOK1 = "DAEMON CODEX";
-TXT_ARTIPUZZBOOK2 = "LIBER OSCURA";
-TXT_ARTIPUZZSKULL2 = "FLAME MASK";
-TXT_ARTIPUZZFWEAPON = "GLAIVE SEAL";
-TXT_ARTIPUZZCWEAPON = "HOLY RELIC";
-TXT_ARTIPUZZMWEAPON = "SIGIL OF THE MAGUS";
-TXT_ARTIPUZZGEAR = "CLOCK GEAR";
-TXT_USEPUZZLEFAILED = "YOU CANNOT USE THIS HERE";
-
-// Items
-
-TXT_ARMOR1 = "MESH ARMOR";
-TXT_ARMOR2 = "FALCON SHIELD";
-TXT_ARMOR3 = "PLATINUM HELMET";
-TXT_ARMOR4 = "AMULET OF WARDING";
-
-// Weapons
-
-TXT_WEAPON_F2 = "TIMON'S AXE";
-TXT_WEAPON_F3 = "HAMMER OF RETRIBUTION";
-TXT_WEAPON_F4 = "QUIETUS ASSEMBLED";
-TXT_WEAPON_C2 = "SERPENT STAFF";
-TXT_WEAPON_C3 = "FIRESTORM";
-TXT_WEAPON_C4 = "WRAITHVERGE ASSEMBLED";
-TXT_WEAPON_M2 = "FROST SHARDS";
-TXT_WEAPON_M3 = "ARC OF DEATH";
-TXT_WEAPON_M4 = "BLOODSCOURGE ASSEMBLED";
-TXT_WEAPONPIECE = "A weapon piece! This is your lucky day!";
-TXT_QUIETUS_PIECE = "SEGMENT OF QUIETUS";
-TXT_WRAITHVERGE_PIECE = "SEGMENT OF WRAITHVERGE";
-TXT_BLOODSCOURGE_PIECE = "SEGMENT OF BLOODSCOURGE";
-
-// Strife locks
-
-TXT_NEEDKEY = "You don't have the key";
-TXT_NEED_PASSCARD = "You need a passcard";
-TXT_NEED_PASSCARD_DOOR = "You need a pass card key to open this door";
-TXT_NEED_IDCARD = "You need an ID card";
-TXT_NEED_PRISONKEY = "You don't have the key to the prison";
-TXT_NEED_HANDPRINT = "Hand print not on file";
-TXT_NEED_GOLDKEY = "You need the Gold Key";
-TXT_NEED_IDBADGE = "You need an ID Badge";
-TXT_NEED_IDBADGE_DOOR = "You need an ID Badge to open this door";
-TXT_NEED_SILVERKEY = "You need the Silver Key";
-TXT_NEED_BRASSKEY = "You need the Brass Key";
-TXT_NEED_REDCRYSTAL = "You need the Red Crystal";
-TXT_NEED_BLUECRYSTAL = "You need the Blue Crystal";
-TXT_RETAIL_ONLY = "THIS AREA IS ONLY AVAILABLE IN THE RETAIL VERSION OF STRIFE";
-TXT_DOES_NOT_WORK = "That doesn't seem to work";
-
-// Strife Quest messages
-
-TXT_QUEST_14 = "You've Blown Up the Crystal";
-TXT_QUEST_16 = "You've Blown Up the Gates";
-TXT_QUEST_27 = "You've Blown Up the Computer";
-
-TXT_KILLED_BISHOP = "You Killed The Bishop!";
-TXT_KILLED_ORACLE = "You've Killed The Oracle!";
-TXT_KILLED_MACIL = "You Killed Macil!";
-TXT_KILLED_LOREMASTER = "You've Killed the Loremaster!";
-
-TXT_YOUFOOL = "You Fool!  You've set off the alarm.";
-TXT_YOUREDEAD = "You're dead!  You set off the alarm.";
-
-// Strife pickup messages
-
-TXT_METALARMOR = "You picked up the Metal Armor.";
-TXT_LEATHERARMOR = "You picked up the Leather Armor.";
-TXT_MEDPATCH = "You picked up the Med patch.";
-TXT_MEDICALKIT = "You picked up the Medical kit.";
-TXT_SURGERYKIT = "You picked up the Surgery Kit.";
-TXT_STRIFEMAP = "You picked up the map.";
-TXT_BELDINSRING = "You picked up the ring.";
-TXT_OFFERINGCHALICE = "You picked up the Offering Chalice.";
-TXT_EAR = "You picked up the ear.";
-TXT_BROKENCOUPLING = "You picked up the broken power coupling.";
-TXT_SHADOWARMOR = "You picked up the Shadow armor.";
-TXT_ENVSUIT = "You picked up the Environmental Suit.";
-TXT_GUARDUNIFORM = "You picked up the Guard Uniform.";
-TXT_OFFICERSUNIFORM = "You picked up the Officer's Uniform.";
-TXT_FTHROWERPARTS = "You picked up the flame thrower parts.";
-TXT_REPORT = "You picked up the report.";
-TXT_INFO = "You picked up the info.";
-TXT_TARGETER = "You picked up the Targeter.";
-TXT_COMMUNICATOR = "You picked up the Communicator.";
-TXT_COIN = "You picked up the coin.";
-TXT_XGOLD = "You picked up %d gold.";
-TXT_BEACON = "You picked up the Teleporter Beacon.";
-TXT_DEGNINORE = "You picked up the Degnin Ore.";
-TXT_SCANNER = "You picked up the scanner.";
-TXT_NEEDMAP = "The scanner won't work without a map!\n";
-TXT_PRISONPASS = "You picked up the Prison pass.";
-
-TXT_STRIFECROSSBOW = "You picked up the crossbow.";
-TXT_ASSAULTGUN = "You picked up the assault gun.";
-TXT_MMLAUNCHER = "You picked up the mini missile launcher.";
-TXT_FLAMER = "You picked up the flame thrower.";
-TXT_MAULER = "You picked up the mauler.";
-TXT_GLAUNCHER = "You picked up the Grenade launcher.";
-TXT_SIGIL = "You picked up the SIGIL.";
-
-TXT_BASEKEY = "You picked up the Base Key.";
-TXT_GOVSKEY = "You picked up the Govs Key.";
-TXT_PASSCARD = "You picked up the Passcard.";
-TXT_IDBADGE = "You picked up the ID Badge.";
-TXT_PRISONKEY = "You picked up the Prison Key.";
-TXT_SEVEREDHAND = "You picked up the Severed Hand.";
-TXT_POWER1KEY = "You picked up the Power1 Key.";
-TXT_POWER2KEY = "You picked up the Power2 Key.";
-TXT_POWER3KEY = "You picked up the Power3 Key.";
-TXT_GOLDKEY = "You picked up the Gold Key.";
-TXT_IDCARD = "You picked up the ID Card.";
-TXT_SILVERKEY = "You picked up the Silver Key.";
-TXT_ORACLEKEY = "You picked up the Oracle Key.";
-TXT_MILITARYID = "You picked up the Military ID.";
-TXT_ORDERKEY = "You picked up the Order Key.";
-TXT_WAREHOUSEKEY = "You picked up the Warehouse Key.";
-TXT_BRASSKEY = "You picked up the Brass Key.";
-TXT_REDCRYSTAL = "You picked up the Red Crystal Key.";
-TXT_BLUECRYSTAL = "You picked up the Blue Crystal Key.";
-TXT_CHAPELKEY = "You picked up the Chapel Key.";
-TXT_CATACOMBKEY = "You picked up the Catacomb Key.";
-TXT_SECURITYKEY = "You picked up the Security Key.";
-TXT_COREKEY = "You picked up the Core Key.";
-TXT_MAULERKEY = "You picked up the Mauler Key.";
-TXT_FACTORYKEY = "You picked up the Factory Key.";
-TXT_MINEKEY = "You picked up the Mine Key.";
-TXT_NEWKEY5 = "You picked up the New Key5.";
-TXT_ORACLEPASS = "You picked up the Oracle Pass.";
-
-TXT_HEGRENADES = "You picked up the HE-Grenade Rounds.";
-TXT_PHGRENADES = "You picked up the Phosphorus-Grenade Rounds.";
-TXT_CLIPOFBULLETS = "You picked up the clip of bullets.";
-TXT_BOXOFBULLETS = "You picked up the box of bullets.";
-TXT_MINIMISSILES = "You picked up the mini missiles.";
-TXT_CRATEOFMISSILES = "You picked up the crate of missiles.";
-TXT_ENERGYPOD = "You picked up the energy pod.";
-TXT_ENERGYPACK = "You picked up the energy pack.";
-TXT_POISONBOLTS = "You picked up the poison bolts.";
-TXT_ELECTRICBOLTS = "You picked up the electric bolts.";
-TXT_AMMOSATCHEL = "You picked up the ammo satchel.";
-
-// Random dialogs
-
-TXT_RANDOM_PEASANT_01 = "Please don't hurt me.";
-TXT_RANDOM_PEASANT_02 = "If you're looking to hurt me, I'm not really worth the effort.";
-TXT_RANDOM_PEASANT_03 = "I don't know anything.";
-TXT_RANDOM_PEASANT_04 = "Go away or I'll call the guards!";
-TXT_RANDOM_PEASANT_05 = "I wish sometimes that all these rebels would just learn their place and stop this nonsense.";
-TXT_RANDOM_PEASANT_06 = "Just leave me alone, OK?";
-TXT_RANDOM_PEASANT_07 = "I'm not sure, but sometimes I think that I know some of the acolytes.";
-TXT_RANDOM_PEASANT_08 = "The order's got everything around here pretty well locked up tight.";
-TXT_RANDOM_PEASANT_09 = "There's no way that this is just a security force.";
-TXT_RANDOM_PEASANT_10 = "I've heard that the order is really nervous about the front's actions around here.";
-
-TXT_RANDOM_REBEL_01 = "There's no way the order will stand against us.";
-TXT_RANDOM_REBEL_02 = "We're almost ready to strike. Macil's plans are falling in place.";
-TXT_RANDOM_REBEL_03 = "We're all behind you, don't worry.";
-TXT_RANDOM_REBEL_04 = "Don't get too close to any of those big robots. They'll melt you down for scrap!";
-TXT_RANDOM_REBEL_05 = "The day of our glory will soon come, and those who oppose us will be crushed!";
-TXT_RANDOM_REBEL_06 = "Don't get too comfortable. We've still got our work cut out for us.";
-TXT_RANDOM_REBEL_07 = "Macil says that you're the new hope. Bear that in mind.";
-TXT_RANDOM_REBEL_08 = "Once we've taken these charlatans down, we'll be able to rebuild this world as it should be.";
-TXT_RANDOM_REBEL_09 = "Remember that you aren't fighting just for yourself, but for everyone here and outside.";
-TXT_RANDOM_REBEL_10 = "As long as one of us still stands, we will win.";
-
-TXT_RANDOM_AGUARD_01 = "Move along, peasant.";
-TXT_RANDOM_AGUARD_02 = "Follow the true faith, only then will you begin to understand.";
-TXT_RANDOM_AGUARD_03 = "Only through death can one be truly reborn.";
-TXT_RANDOM_AGUARD_04 = "I'm not interested in your useless drivel.";
-TXT_RANDOM_AGUARD_05 = "If I had wanted to talk to you I would have told you so.";
-TXT_RANDOM_AGUARD_06 = "Go and annoy someone else!";
-TXT_RANDOM_AGUARD_07 = "Keep moving!";
-TXT_RANDOM_AGUARD_08 = "If the alarm goes off, just stay out of our way!";
-TXT_RANDOM_AGUARD_09 = "The order will cleanse the world and usher it into the new era.";
-TXT_RANDOM_AGUARD_10 = "Problem? No, I thought not.";
-
-TXT_RANDOM_BEGGAR_01 = "Alms for the poor?";
-TXT_RANDOM_BEGGAR_02 = "What are you looking at, surfacer?";
-TXT_RANDOM_BEGGAR_03 = "You wouldn't have any extra food, would you?";
-TXT_RANDOM_BEGGAR_04 = "You surface people will never understand us.";
-TXT_RANDOM_BEGGAR_05 = "Ha, the guards can't find us. Those idiots don't even know we exist.";
-TXT_RANDOM_BEGGAR_06 = "One day everyone but those who serve the order will be forced to join us.";
-TXT_RANDOM_BEGGAR_07 = "Stare now, but you know that this will be your own face one day.";
-TXT_RANDOM_BEGGAR_08 = "There's nothing more annoying than a surfacer with an attitude!";
-TXT_RANDOM_BEGGAR_09 = "The order will make short work of your pathetic front.";
-TXT_RANDOM_BEGGAR_10 = "Watch yourself, surfacer. We know our enemies!";
-
-TXT_RANDOM_PGUARD_01 = "We are the hands of fate. To earn our wrath is to find oblivion!";
-TXT_RANDOM_PGUARD_02 = "The order will cleanse the world of the weak and corrupt!";
-TXT_RANDOM_PGUARD_03 = "Obey the will of the masters!";
-TXT_RANDOM_PGUARD_04 = "Long life to the brothers of the order!";
-TXT_RANDOM_PGUARD_05 = "Free will is an illusion that binds the weak minded.";
-TXT_RANDOM_PGUARD_06 = "Power is the path to glory. To follow the order is to walk that path!";
-TXT_RANDOM_PGUARD_07 = "Take your place among the righteous, join us!";
-TXT_RANDOM_PGUARD_08 = "The order protects its own.";
-TXT_RANDOM_PGUARD_09 = "Acolytes? They have yet to see the full glory of the order.";
-TXT_RANDOM_PGUARD_10 = "If there is any honor inside that pathetic shell of a body, you'll enter into the arms of the order.";
-
-TXT_RANDOMGOODBYE_1 = "Bye!";
-TXT_RANDOMGOODBYE_2 = "Thanks, bye!";
-TXT_RANDOMGOODBYE_3 = "See you later!";
-TXT_HAVEENOUGH		= "You seem to have enough!";
-TXT_GOAWAY			= "Go away!";
-
-TXT_COMM0			= "Incoming Message";
-TXT_COMM1			= "Incoming Message from BlackBird";
-
-TXT_TRADE			=  " for %u";
-
-AMMO_CLIP			= "Bullets";
-AMMO_SHELLS			= "Shotgun Shells";
-AMMO_ROCKETS		= "Rockets";
-AMMO_CELLS			= "Energy Cells";
-AMMO_GOLDWAND		= "Wand Crystals";
-AMMO_CROSSBOW		= "Ethereal Arrows";
-AMMO_BLASTER		= "Claw Orbs";
-AMMO_MACE			= "Mace Spheres";
-AMMO_SKULLROD		= "Hellstaff Runes";
-AMMO_PHOENIXROD		= "Flame Orbs";
-AMMO_MANA1			= "Blue Mana";
-AMMO_MANA2			= "Green Mana";
-$ifgame(chex) AMMO_CLIP = "Mini Zorch Charge";
-$ifgame(chex) AMMO_SHELLS = "Large Zorcher Charge";
-$ifgame(chex) AMMO_ROCKETS = "Propulsor Charge";
-$ifgame(chex) AMMO_CELLS = "Phasing Zorcher Charge";
-
 // Menu Strings
 
 // Main Menu
@@ -577,53 +165,8 @@ MNU_QUITGAME		= "QUIT GAME";
 // Skills
 MNU_CHOOSESKILL		= "CHOOSE SKILL LEVEL:";
 
-SKILL_BABY			= "I'm too young to die";
-SKILL_EASY			= "Hey, not too rough";
-SKILL_NORMAL		= "Hurt me plenty";
-SKILL_HARD			= "Ultra-Violence";
-SKILL_NIGHTMARE		= "NIGHTMARE!";
-
-CSKILL_BABY			= "Easy does it";
-CSKILL_EASY			= "Not so sticky";
-CSKILL_NORMAL		= "Gobs of goo";
-CSKILL_HARD			= "Extreme Ooze";
-CSKILL_NIGHTMARE	= "Super Slimey!";
-
-SSKILL_BABY			= "Training";
-SSKILL_EASY			= "Rookie";
-SSKILL_NORMAL		= "Veteran";
-SSKILL_HARD			= "Elite";
-SSKILL_NIGHTMARE	= "Bloodbath";
-
-MNU_WETNURSE		= "THOU NEEDETH A WET-NURSE";
-MNU_YELLOWBELLIES	= "YELLOWBELLIES-R-US";
-MNU_BRINGEST		= "BRINGEST THEM ONETH";
-MNU_SMITE			= "THOU ART A SMITE-MEISTER";
-MNU_BLACKPLAGUE		= "BLACK PLAGUE POSSESSES THEE";
-
-MNU_SQUIRE			= "SQUIRE";
-MNU_KNIGHT			= "KNIGHT";
-MNU_WARRIOR			= "WARRIOR";
-MNU_BERSERKER		= "BERSERKER";
-MNU_TITAN			= "TITAN";
-
-MNU_ALTARBOY		= "ALTAR BOY";
-MNU_ACOLYTE			= "ACOLYTE";
-MNU_PRIEST			= "PRIEST";
-MNU_CARDINAL		= "CARDINAL";
-MNU_POPE			= "POPE";
-
-MNU_APPRENTICE		= "APPRENTICE";
-MNU_ENCHANTER		= "ENCHANTER";
-MNU_SORCERER        = "SORCERER";
-MNU_WARLOCK			= "WARLOCK";
-MNU_ARCHMAGE		= "ARCHMAGE";
-
 // Classes
 MNU_CHOOSECLASS		= "CHOOSE CLASS:";
-MNU_FIGHTER			= "FIGHTER";
-MNU_CLERIC			= "CLERIC";
-MNU_MAGE			= "MAGE";
 MNU_RANDOM			= "RANDOM";
 
 // Game Files
@@ -636,12 +179,6 @@ MNU_DELETESG		= "Do you really want to delete the savegame\n";
 
 // Episodes
 MNU_EPISODE			= "Select Episode";
-MNU_COTD			= "CITY OF THE DAMNED";
-MNU_HELLSMAW		= "HELL'S MAW";
-MNU_DOME			= "THE DOME OF D'SPARIL";
-MNU_OSSUARY			= "THE OSSUARY";
-MNU_DEMESNE			= "THE STAGNANT DEMESNE";
-$ifgame(heretic) SWSTRING = "ONLY AVAILABLE IN THE REGISTERED VERSION";
 
 // Options Menu
 OPTMNU_TITLE				= "OPTIONS";
@@ -1073,7 +610,7 @@ SNDMNU_BACKGROUND		= "Sound in Background";
 SNDMNU_UNDERWATERREVERB	= "Underwater reverb";
 SNDMNU_RANDOMIZEPITCHES	= "Randomize pitches";
 SNDMNU_CHANNELS			= "Sound channels";
-SNDMNU_BACKEND			= "Sound backend";
+SNDMNU_BACKEND			= "Sound";
 SNDMNU_OPENAL			= "OpenAL options";
 SNDMNU_RESTART			= "Restart sound";
 SNDMNU_ADVANCED			= "Advanced options";
@@ -1412,7 +949,7 @@ OPTSTR_DIRECTSOUND			= "DirectSound";
 OPTSTR_WASAPI				= "Vista WASAPI";
 OPTSTR_ASIO					= "ASIO";
 OPTSTR_WAVEOUT				= "WaveOut";
-OPTSTR_NOSOUND				= "No Sound";
+OPTSTR_NOSOUND				= "Disabled";
 OPTSTR_OSS					= "OSS";
 OPTSTR_ALSA					= "ALSA";
 OPTSTR_SDL					= "SDL";
@@ -1427,231 +964,18 @@ OPTSTR_PCMFLOAT				= "32-bit float";
 OPTSTR_AUTO					= "Auto";
 OPTSTR_MONO					= "Mono";
 OPTSTR_STEREO				= "Stereo";
-OPTSTR_PROLOGIC				= "Dolby Prologic Decoder";
+OPTSTR_PROLOGIC				= "Dolby(R) Prologic(TM) Decoder";	//Yes, let's parody stupid nonsense like Intel(R)'s unnecessary legal mark spam, why not.
 OPTSTR_QUAD					= "Quad";
 OPTSTR_SURROUND				= "5 speakers";
 OPTSTR_5POINT1				= "5.1 speakers";
 OPTSTR_7POINT1				= "7.1 speakers";
 OPTSTR_NOINTERPOLATION		= "No interpolation";
 OPTSTR_SPLINE				= "Spline";
-OPTSTR_OPENAL				= "OpenAL";
+OPTSTR_OPENAL				= "Enabled";	//FMod is no more, so what's the point of naming OpenAL specifically?
 
 NOTSET				= "Not set";
 SAFEMESSAGE			= "Do you really want to do this?";
 MNU_COLORPICKER		= "SELECT COLOR";
-
-WI_FINISHED			= "finished";
-WI_ENTERING			= "Now entering:";
-
-AM_MONSTERS			= "Monsters:";
-AM_SECRETS			= "Secrets:";
-AM_ITEMS			= "Items:";
-
-// Bloodbath announcer
-
-BBA_BONED = "%k boned %o like a fish";
-BBA_CASTRA = "%k castrated %o";
-BBA_CREAMED = "%k creamed %o";
-BBA_DECIMAT = "%k decimated %o";
-BBA_DESTRO = "%k destroyed %o";
-BBA_DICED = "%k diced %o";
-BBA_DISEMBO = "%k disembowled %o";
-BBA_FLATTE = "%k flattened %o";
-BBA_JUSTICE = "%k gave %o Anal Justice";
-BBA_MADNESS = "%k gave AnAl MaDnEsS to %o";
-BBA_KILLED = "%k killed %o";
-BBA_MINCMEAT = "%k made mincemeat out of %o";
-BBA_MASSACR = "%k massacred %o";
-BBA_MUTILA = "%k mutilated %o";
-BBA_REAMED = "%k reamed %o";
-BBA_RIPPED = "%k ripped %o a new orifice";
-BBA_SLAUGHT = "%k slaughtered %o";
-BBA_SMASHED = "%k smashed %o";
-BBA_SODOMIZ = "%k sodomized %o";
-BBA_SPLATT = "%k splattered %o";
-BBA_SQUASH = "%k squashed %o";
-BBA_THROTTL = "%k throttled %o";
-BBA_WASTED = "%k wasted %o";
-BBA_BODYBAG = "%k body bagged %o";
-BBA_HELL = "%k sent %o to Hell";
-BBA_TOAST = "%k toasted %o";
-BBA_SNUFF = "%k snuffed %o";
-BBA_HOSED = "%k hosed %o";
-BBA_SPRAYED = "%k sprayed %o";
-BBA_DOGMEAT = "%k made dog meat out of %o";
-BBA_BEATEN = "%k beat %o like a cur";
-
-BBA_EXCREMENT = "%o is excrement";
-BBA_HAMBURGER = "%o is hamburger";
-BBA_SCROTUM = "%o suffered scrotum separation";
-BBA_POPULATION = "%o volunteered for population control";
-BBA_SUICIDE = "%o has suicided";
-BBA_DARWIN = "%o received the Darwin Award";
-
-// Chex Quest Strings
-CHUSTR_E1M1 = "E1M1: Landing Zone";
-CHUSTR_E1M2 = "E1M2: Storage Facility";
-CHUSTR_E1M3 = "E1M3: Experimental Lab";
-CHUSTR_E1M4 = "E1M4: Arboretum";
-CHUSTR_E1M5 = "E1M5: Caverns of Bazoik";
-
-CE1TEXT =
-		"Mission accomplished.\n"
-		"\n"
-		"Are you prepared for the next mission?\n"
-		"\n"
-		"\n"
-		"\n"
-		"\n"
-		"\n"
-		"\n"
-		"Press the escape key to continue...";
-
-CE2TEXT = "You've done it!";
-CE3TEXT = "Wonderful Job!";
-CE4TEXT = "Fantastic";
-
-CLOADNET = "you can't do load while in a net quest!\n\npress a key.";
-$ifgame(chex) QSPROMPT = "quicksave over your quest named\n\n'%s'?\n\npress y or n.";
-$ifgame(chex) QLOADNET = "you can't quickload during a netquest!\n\npress a key.";
-$ifgame(chex) QLPROMPT = "do you want to quickload the quest named\n\n'%s'?\n\npress y or n.";
-CNEWGAME = "you can't start a new quest\nwhile in a network quest.\n\npress a key.";
-
-CNIGHTMARE = "Careful, this will be tough.\nDo you wish to continue?\n\npress y or n.";
-
-CSWSTRING = "this is Chex(R) Quest. look for\n\nfuture levels at www.chexquest.com.\n\npress a key.";
-
-$ifgame(chex) NETEND = "you can't end a netquest!\n\npress a key.";
-$ifgame(chex) ENDGAME = "are you sure you want to end the quest?\n\npress y or n.";
-
-GOTCHEXARMOR = "Picked up the Chex(R) Armor.";
-GOTSUPERCHEXARMOR = "Picked up the Super Chex(R) Armor!";
-GOTWATER = "Picked up a glass of water.";
-GOTREPELLENT = "Picked up slime repellent.";
-GOTBREAKFAST = "Supercharge Breakfast!";
-GOTCBLUEKEY = "Picked up a blue key.";
-GOTCYELLOWKEY = "Picked up a yellow key.";
-GOTCREDKEY = "Picked up a red key.";
-GOTFRUIT = "Picked up a bowl of fruit.";
-GOTVEGETABLESNEED = "Vegetables are REALLY good for you!";
-GOTVEGETABLES = "Picked up a bowl of vegetables.";
-GOTSLIMESUIT = "Found a Slime-Proof Suit";
-GOTCHEXMAP = "Found a Computer Area Map";
-
-GOTZORCHRECHARGE = "Picked up a mini zorch recharge.";
-GOTMINIZORCHPACK = "Picked up a mini zorch pack.";
-GOTPROPULSORRECHARGE = "Picked up a zorch propulsor recharge.";
-GOTPROPULSORPACK = "Picked up a zorch propulsor pack.";
-GOTPHASINGZORCHERRECHARGE = "Picked up a phasing zorcher recharge";
-GOTPHASINGZORCHERPACK = "Picked up a phasing zorcher pack.";
-GOTLARGEZORCHERRECHARGE = "Picked up a large zorcher recharge.";
-GOTLARGEZORCHERPACK = "Picked up a large zorcher pack.";
-GOTZORCHPACK = "Picked up a Zorchpak!";
-
-GOTLAZDEVICE = "You got the LAZ Device! Woot!";
-GOTRAPIDZORCHER = "You got the Rapid Zorcher!";
-GOTSUPERBOOTSPORK = "You got the Super Bootspork!";
-GOTZORCHPROPULSOR = "You got the Zorch Propulsor!";
-GOTPHASINGZORCHER = "You got the Phasing Zorcher!";
-GOTLARGEZORCHER = "You got the Large Zorcher!";
-GOTSUPERLARGEZORCHER = "You got the Mega Zorcher!";
-GOTMINIZORCHER = "Picked up a Mini Zorcher.";
-
-$ifgame(chex) STSTR_DQDON = "Invincible Mode ON";
-$ifgame(chex) STSTR_DQDOFF = "Invincible Mode OFF";
-$ifgame(chex) STSTR_FAADDED = "Zorch Added";
-$ifgame(chex) STSTR_KFAADDED = "Super Zorch Added";
-$ifgame(chex) STSTR_CHOPPERS = "... Eat Chex(R)!";
-
-OB_COMMONUS = "%o was slimed by a flemoid.";
-OB_BIPEDICUS = "%o was slimed by a bipedicus.";
-OB_BIPEDICUS2 = "%o was slimed by an armored bipedicus.";
-OB_CYCLOPTIS = "%o was slimed by a cycloptis.";
-OB_FLEMBRANE = "%o was defeated by the Flembrane.";
-
-OB_MPSPOON = "%o was spoon fed by %k.";
-OB_MPBOOTSPORK = "%o was thouroughly mixed with %k's bootspork.";
-OB_MPZORCH = "%o was zorched by %k.";
-OB_MPMEGAZORCH = "%o was hit by %k's mega-zorcher.";
-OB_MPRAPIDZORCH = "%o was rapid zorched by %k.";
-OB_MPPROPULSOR = "%o was zorched by %k's propulsor.";
-OB_MPP_SPLASH = "%o was hit by %k's propulsor.";
-OB_MPPHASEZORCH = "%o was phase zorched by %k.";
-OB_MPLAZ_BOOM = "%o fell prey to %k's LAZ device.";
-OB_MPLAZ_SPLASH = "%o was lazzed by %k.";
-
-// Music names for Doom. These are needed in the string table only so that they can
-// be replaced by Dehacked.
-// Note that these names are not prefixed with 'd_' because that's how Dehacked patches
-// expect them.
-
-MUSIC_E1M1 = "e1m1";
-MUSIC_E1M2 = "e1m2";
-MUSIC_E1M3 = "e1m3";
-MUSIC_E1M4 = "e1m4";
-MUSIC_E1M5 = "e1m5";
-MUSIC_E1M6 = "e1m6";
-MUSIC_E1M7 = "e1m7";
-MUSIC_E1M8 = "e1m8";
-MUSIC_E1M9 = "e1m9";
-MUSIC_E2M1 = "e2m1";
-MUSIC_E2M2 = "e2m2";
-MUSIC_E2M3 = "e2m3";
-MUSIC_E2M4 = "e2m4";
-MUSIC_E2M5 = "e2m5";
-MUSIC_E2M6 = "e2m6";
-MUSIC_E2M7 = "e2m7";
-MUSIC_E2M8 = "e2m8";
-MUSIC_E2M9 = "e2m9";
-MUSIC_E3M1 = "e3m1";
-MUSIC_E3M2 = "e3m2";
-MUSIC_E3M3 = "e3m3";
-MUSIC_E3M4 = "e3m4";
-MUSIC_E3M5 = "e3m5";
-MUSIC_E3M6 = "e3m6";
-MUSIC_E3M7 = "e3m7";
-MUSIC_E3M8 = "e3m8";
-MUSIC_E3M9 = "e3m9";
-MUSIC_INTER = "inter";
-MUSIC_INTRO = "intro";
-MUSIC_BUNNY = "bunny";
-MUSIC_VICTOR = "victor";
-MUSIC_INTROA = "introa";
-MUSIC_RUNNIN = "runnin";
-MUSIC_STALKS = "stalks";
-MUSIC_COUNTD = "countd";
-MUSIC_BETWEE = "betwee";
-MUSIC_DOOM = "doom";
-MUSIC_THE_DA = "the_da";
-MUSIC_SHAWN = "shawn";
-MUSIC_DDTBLU = "ddtblu";
-MUSIC_IN_CIT = "in_cit";
-MUSIC_DEAD = "dead";
-MUSIC_STLKS2 = "stlks2";
-MUSIC_THEDA2 = "theda2";
-MUSIC_DOOM2 = "doom2";
-MUSIC_DDTBL2 = "ddtbl2";
-MUSIC_RUNNI2 = "runni2";
-MUSIC_DEAD2 = "dead2";
-MUSIC_STLKS3 = "stlks3";
-MUSIC_ROMERO = "romero";
-MUSIC_SHAWN2 = "shawn2";
-MUSIC_MESSAG = "messag";
-MUSIC_COUNT2 = "count2";
-MUSIC_DDTBL3 = "ddtbl3";
-MUSIC_AMPIE = "ampie";
-MUSIC_THEDA3 = "theda3";
-MUSIC_ADRIAN = "adrian";
-MUSIC_MESSG2 = "messg2";
-MUSIC_ROMER2 = "romer2";
-MUSIC_TENSE = "tense";
-MUSIC_SHAWN3 = "shawn3";
-MUSIC_OPENIN = "openin";
-MUSIC_EVIL = "evil";
-MUSIC_ULTIMA = "ultima";
-MUSIC_READ_M = "read_m";
-MUSIC_DM2TTL = "dm2ttl";
-MUSIC_DM2INT = "dm2int";
 
 // GZDoom exclusive:
 
