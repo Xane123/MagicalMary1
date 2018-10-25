@@ -8,6 +8,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Returning from minigames in Jane's Hut now works as expected, spawning the player on the platform as it returns to its normal height. Glitches involving ***ss_position*** (now named ***spawn_position**** have been mostly fixed and it now serves a non-Special Stage purpose, hence the name change.
 * Rain ambience now correctly starts when the storm begins in 1-3. Before, outdoor areas would then lose all ambient sounds.
 ## Major
+* You can actually fail in Battle Arenas again! Somehow, I broke the arenas using their own "death behavior", which made them use #0, which is the default, taking a life from the player. This means the only way the player could lose was by running out of time, not dying!
 * Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
 * Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
 * Soap Boxes can be bought from Jane's Shop in packs of four! You can hold up to sixteen of them and place them anywhere to try catching enemies off-guard.
