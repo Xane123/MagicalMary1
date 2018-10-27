@@ -15,9 +15,10 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Jane now has animated sprites using her "old design". If Jane ever gets a new design like Mary, her sprites will be replaced.
 * You can now listen to the same radio "station" heard in City Street Run in Jane's Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
 * The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker.
-* Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles.
+* Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles and city roads.
 * It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, run and hide fast, as everyone will start trying to cheaply kill you.
 * The **Double Jump** and **Triple Jump** have been re-added from World of Kirbycraft v1.4! Push the jump button very shortly after you land from a jump while moving and you'll jump higher, though this disables your Air Dash (Mary)/Kirby Puffs (Xane).
+* If playing on easy difficulty, you cannot get a Game Over anymore, being stuck at nine lives. In the future, Game Overs will change their behavior to just restart the current level, being renamed to "tries" which depend on the player's magic.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
@@ -34,3 +35,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Added ***-1*** as a valid number for the ***xane_lowend*** CVAR. When this is chosen, the roads in City Street Run become reflective, which will not happen on normal (0) and performance (1) settings. This is due to even my gaming laptop lagging when the reflective roads are in sight and I would look to the opposite side of the open city area.
 * More lights and reflective surfaces have been overall added to City Street Run. Additionally, a new room was added to the building with the walkway.
 * The "absolute value" (abs) function has been moved out of COMMON1.acs to mma_extra.acs, so it can now be used in any script file.
+* If the moving skybox is disabled in Uroboros (1-4), a fake, slow-moving tunnel is used for the background.
