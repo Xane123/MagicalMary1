@@ -38,7 +38,7 @@ capslock chase
 f1 menu_help
 f2 menu_save
 f3 menu_load
-f4 menu_options
+f4 openmenu Xane_MainMenu
 f5 menu_display
 f6 quicksave
 f7 menu_endgame
