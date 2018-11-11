@@ -6,7 +6,7 @@ Mary's Magical Adventure's code is licensed under the GNU General Public License
 ### Google Drive downloads
 Due to the problems mentioned above, you can download the latest builds from Xane's Google Drive.
 * [![Windows XP+ download badge](https://img.shields.io/badge/Windows%20(XP+)-Download-green.svg)](https://storage.googleapis.com/marys-magical-adventure/downloads/engine-windows.zip)
-* [![MacOS download badge](https://img.shields.io/badge/MacOS-Download-blue.svg)](https://storage.googleapis.com/marys-magical-adventure/downloads/engine-macos.zip)
+* [![MacOS download badge](https://img.shields.io/badge/MacOS-Download-blue.svg)](https://storage.googleapis.com/marys-magical-adventure/downloads/engine-mac.zip)
 * [![Ubuntu download badge](https://img.shields.io/badge/Ubuntu-Download-red.svg)](https://storage.googleapis.com/marys-magical-adventure/downloads/engine-ubuntu.zip)
 Don't forget to download the [game data](https://storage.googleapis.com/marys-magical-adventure/downloads/game-data.zip) as well, or the game won't start up!
 ## Credits (incomplete)
