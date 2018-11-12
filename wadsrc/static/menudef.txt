@@ -335,7 +335,7 @@ DefaultOptionMenu
 	}
 }
 
-OptionMenu "OptionsMenu"
+OptionMenu "ZDoom_OptionsMenu"
 {
 	Title "$OPTMNU_TITLE"
 	Submenu "$OPTMNU_CONTROLS",			"CustomizeControls"
@@ -625,6 +625,35 @@ OptionValue BlendMethods
 	1.0, "$OPTVAL_PRECISE"
 }
 
+OptionValue LEPresets
+{
+	0, "$OPTVAL_HIGH"
+	1, "$OPTVAL_MEDIUM"
+	2, "$OPTVAL_LOW"
+	3, "$OPTVAL_CRAP"
+}
+
+OptionValue LEAddLineOpt
+{
+	0, "$OPTVAL_ON"
+	1, "$OPTVAL_IMPORTANT"
+	2, "$OPTVAL_OFF"
+}
+
+OptionValue LEEffectsOpt
+{
+	0, "$OPTVAL_ON"
+	1, "$OPTVAL_REDUCED"
+	2, "$OPTVAL_OFF"
+}
+
+OptionValue LEDrawDistances
+{
+	0, "$OPTVAL_FULL"
+	2, "$OPTVAL_LARGE"
+	1, "$OPTVAL_SMALL"
+}
+
 OptionValue SkyModes
 {
 	0.0, "$OPTVAL_NORMAL"
@@ -743,6 +772,15 @@ OptionMenu "VideoOptions"
 	Slider "$DSPLYMNU_BLOODFADE",				"blood_fade_scalar", 0.0, 1.0, 0.05, 2
 	Slider "$DSPLYMNU_PICKUPFADE",				"pickup_fade_scalar", 0.0, 1.0, 0.05, 2
 	Slider "$DSPLYMNU_WATERFADE",				"underwater_fade_scalar", 0.0, 1.0, 0.05, 2
+	
+	StaticText " "
+	Option "$DSPLYMNU_LEPRESET",				"le_preset",		"LEPresets"
+	Option "$DSPLYMNU_LEADDLINE",				"le_addlines",		"LEAddLineOpt"
+	Option "$DSPLYMNU_LEBLOCKVIS",				"le_blockvis",		"OnOff"
+	Option "$DSPLYMNU_LEEFFECTS",				"le_effects",		"LEEffectsOpt"
+	Option "$DSPLYMNU_LEDRAWDIST",				"le_drawdistance",	"LEDrawDistances"
+	Option "$DSPLYMNU_LESKYOFF",				"le_skyboxoff",		"OffOn"
+
 
 	StaticText " "
 	Option "$DSPLYMNU_WIPETYPE",				"wipetype", "Wipes"

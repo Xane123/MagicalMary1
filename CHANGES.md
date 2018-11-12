@@ -19,6 +19,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, run and hide fast, as everyone will start trying to cheaply kill you.
 * The **Double Jump** and **Triple Jump** have been re-added from World of Kirbycraft v1.4! Push the jump button very shortly after you land from a jump while moving and you'll jump higher, though this disables your Air Dash (Mary)/Kirby Puffs (Xane).
 * If playing on easy difficulty, you cannot get a Game Over anymore, being stuck at nine lives. In the future, Game Overs will change their behavior to just restart the current level, being renamed to "tries" which depend on the player's magic.
+* Added a new red-striped variant of the falling platform, which falls automatically after 2-4 seconds, depending on difficulty. These are more faithful to the falling platforms' inspiration, Sonic Robo Blast 2.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!

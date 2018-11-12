@@ -328,6 +328,12 @@ DSPLYMNU_VSYNC					= "Vertical Sync";
 DSPLYMNU_CAPFPS					= "Rendering Interpolation";
 DSPLYMNU_COLUMNMETHOD			= "Column render mode";
 DSPLYMNU_BLENDMETHOD			= "Transparency render mode";
+DSPLYMNU_LEPRESET				= "Low-end presets";
+DSPLYMNU_LEADDLINE				= "Additive-rendered lines";
+DSPLYMNU_LEBLOCKVIS				= "Block distant rendering";
+DSPLYMNU_LEEFFECTS				= "Effects";
+DSPLYMNU_LEDRAWDIST				= "Draw distance";
+DSPLYMNU_LESKYOFF				= "Moving Skybox";
 
 DSPLYMNU_WIPETYPE				= "Screen wipe style";
 DSPLYMNU_SHOWENDOOM				= "Show ENDOOM screen";
@@ -361,6 +367,12 @@ DSPLYMNU_MOVEBOB 				= "View bob amount while moving";
 DSPLYMNU_STILLBOB 				= "View bob amount while not moving";
 DSPLYMNU_BOBSPEED				= "Weapon bob speed";
 DSPLYMNU_GPUSWITCH				= "Notebook Switchable GPU";
+
+//Low-end presets
+OPTVAL_HIGH						= "Perfect";
+OPTVAL_MEDIUM					= "Decent";
+OPTVAL_LOW						= "Average";
+OPTVAL_CRAP						= "Crappy";
 
 // HUD Options
 HUDMNU_TITLE					= "HUD Options";
@@ -751,7 +763,12 @@ JOYMNU_NOAXES = "No configurable axes";
 
 // Option Values
 OPTVAL_OFF					= "Off";
+OPTVAL_IMPORTANT			= "Important only";
+OPTVAL_REDUCED				= "Reduced";
 OPTVAL_ON					= "On";
+OPTVAL_SMALL				= "Small";
+OPTVAL_LARGE				= "Large";
+OPTVAL_FULL					= "Full";
 OPTVAL_AUTO					= "Auto";
 OPTVAL_MALE					= "Male";
 OPTVAL_FEMALE				= "Female";
