@@ -116,10 +116,10 @@ CVAR(Bool, le_skyboxoff, false, CVAR_ARCHIVE | CVAR_MOD | CVAR_GLOBALCONFIG)	//[
 
 CUSTOM_CVAR(Int, le_preset, 0, CVAR_ARCHIVE | CVAR_NOINITCALL) //[XANE]Similar to compatflags; Sets low-end variables to preset values.
 {
-	if (self < 0 || self > 3) self = 0;
+	if (self < -1 || self > 3) self = -1;
 	switch (self)
 	{
-		default:
+		default:	//Default is -1, custom, which doesn't forcibly override the user's choices.
 		break;
 		case 0: //High
 			le_addlines = 0;		//ADDITIVE LINES: On
@@ -130,9 +130,9 @@ CUSTOM_CVAR(Int, le_preset, 0, CVAR_ARCHIVE | CVAR_NOINITCALL) //[XANE]Similar t
 		break;
 		case 1: //Medium
 			le_addlines = 1;		//ADDITIVE LINES: Invisible walls only
-			le_blockvis = false;	//VISIBILITY BLOCKING: Off
+			le_blockvis = true;	//VISIBILITY BLOCKING: Off
 			le_effects = 1;			//EFFECTS: Reduced
-			le_drawdistance = 0;	//DRAW DISTANCE: Full
+			le_drawdistance = 2;	//DRAW DISTANCE: Large
 			le_skyboxoff = false;	//MOVING SKYBOX: On
 		break;
 		case 2: //Low
@@ -140,7 +140,7 @@ CUSTOM_CVAR(Int, le_preset, 0, CVAR_ARCHIVE | CVAR_NOINITCALL) //[XANE]Similar t
 			le_blockvis = true;		//VISIBILITY BLOCKING: On
 			le_effects = 2;			//EFFECTS: Off
 			le_drawdistance = 2;	//DRAW DISTANCE: Large
-			le_skyboxoff = false;	//MOVING SKYBOX: On
+			le_skyboxoff = true;	//MOVING SKYBOX: Off
 		break;
 		case 3: //Bare-bones
 			le_addlines = 2;		//ADDITIVE LINES: All disabled

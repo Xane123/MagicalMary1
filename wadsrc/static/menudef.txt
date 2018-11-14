@@ -627,6 +627,7 @@ OptionValue BlendMethods
 
 OptionValue LEPresets
 {
+	-1, "$OPTVAL_CUSTOM"
 	0, "$OPTVAL_HIGH"
 	1, "$OPTVAL_MEDIUM"
 	2, "$OPTVAL_LOW"
