@@ -37,3 +37,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * More lights and reflective surfaces have been overall added to City Street Run. Additionally, a new room was added to the building with the walkway.
 * The "absolute value" (abs) function has been moved out of COMMON1.acs to mma_extra.acs, so it can now be used in any script file.
 * If the moving skybox is disabled in Uroboros (1-4), a fake, slow-moving tunnel is used for the background.
+* Removed USE key jumping on rails. This made no sense, so now only JUMP will make you jump when grinding.
