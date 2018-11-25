@@ -107,51 +107,6 @@ EXTERN_CVAR(Int, vr_mode)
 void DrawHUD();
 void D_DoAnonStats();
 
-//[XANE]Low-end CVARs. Set these if your system lags when playing the game.
-CVAR(Int, le_addlines, 0, CVAR_ARCHIVE | CVAR_MOD | CVAR_GLOBALCONFIG)			//[XANE]Hides certain additive-rendered lines. (0: All shown, 1: Hide invisible walls, 2: Hide all additive-rendered lines.
-CVAR(Bool, le_blockvis, false, CVAR_ARCHIVE | CVAR_MOD | CVAR_GLOBALCONFIG)		//[XANE]If TRUE, this adds in areas that block visibility unless near them.
-CVAR(Int, le_effects, 0, CVAR_ARCHIVE | CVAR_MOD | CVAR_GLOBALCONFIG)		//[XANE]Reduces then disables effects. (0: All on, 1: Reduced, 2: Disabled)
-CVAR(Int, le_drawdistance, 0, CVAR_ARCHIVE | CVAR_MOD | CVAR_GLOBALCONFIG)		//[XANE]Culls distant geometry using polyobjects. -1: Use default, 0: Off, 1: ~3000, 2: 4096
-CVAR(Bool, le_skyboxoff, false, CVAR_ARCHIVE | CVAR_MOD | CVAR_GLOBALCONFIG)	//[XANE]Disables moving skyboxes if TRUE, making it similar to Delta Touch.
-
-CUSTOM_CVAR(Int, le_preset, 0, CVAR_ARCHIVE | CVAR_NOINITCALL) //[XANE]Similar to compatflags; Sets low-end variables to preset values.
-{
-	if (self < -1 || self > 3) self = -1;
-	switch (self)
-	{
-		default:	//Default is -1, custom, which doesn't forcibly override the user's choices.
-		break;
-		case 0: //High
-			le_addlines = 0;		//ADDITIVE LINES: On
-			le_blockvis = false;	//VISIBILITY BLOCKING: Off
-			le_effects = 0;			//EFFECTS: On
-			le_drawdistance = 0;	//DRAW DISTANCE: Full
-			le_skyboxoff = false;	//MOVING SKYBOX: On
-		break;
-		case 1: //Medium
-			le_addlines = 1;		//ADDITIVE LINES: Invisible walls only
-			le_blockvis = true;	//VISIBILITY BLOCKING: Off
-			le_effects = 1;			//EFFECTS: Reduced
-			le_drawdistance = 2;	//DRAW DISTANCE: Large
-			le_skyboxoff = false;	//MOVING SKYBOX: On
-		break;
-		case 2: //Low
-			le_addlines = 1;		//ADDITIVE LINES: Invisible walls only
-			le_blockvis = true;		//VISIBILITY BLOCKING: On
-			le_effects = 2;			//EFFECTS: Off
-			le_drawdistance = 2;	//DRAW DISTANCE: Large
-			le_skyboxoff = true;	//MOVING SKYBOX: Off
-		break;
-		case 3: //Bare-bones
-			le_addlines = 2;		//ADDITIVE LINES: All disabled
-			le_blockvis = true;		//VISIBILITY BLOCKING: On
-			le_effects = 2;			//EFFECTS: Off
-			le_drawdistance = 1;	//DRAW DISTANCE: Small
-			le_skyboxoff = true;	//MOVING SKYBOX: Off
-		break;
-	}
-}
-
 // MACROS ------------------------------------------------------------------
 
 // TYPES -------------------------------------------------------------------
