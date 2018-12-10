@@ -625,15 +625,6 @@ OptionValue BlendMethods
 	1.0, "$OPTVAL_PRECISE"
 }
 
-OptionValue LEPresets
-{
-	-1, "$OPTVAL_CUSTOM"
-	0, "$OPTVAL_HIGH"
-	1, "$OPTVAL_MEDIUM"
-	2, "$OPTVAL_LOW"
-	3, "$OPTVAL_CRAP"
-}
-
 OptionValue LEAddLineOpt
 {
 	0, "$OPTVAL_ON"
@@ -775,7 +766,6 @@ OptionMenu "VideoOptions"
 	Slider "$DSPLYMNU_WATERFADE",				"underwater_fade_scalar", 0.0, 1.0, 0.05, 2
 	
 	StaticText " "
-	Option "$DSPLYMNU_LEPRESET",				"le_preset",		"LEPresets"
 	Option "$DSPLYMNU_LEADDLINE",				"le_addlines",		"LEAddLineOpt"
 	Option "$DSPLYMNU_LEBLOCKVIS",				"le_blockvis",		"OnOff"
 	Option "$DSPLYMNU_LEEFFECTS",				"le_effects",		"LEEffectsOpt"
