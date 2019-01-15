@@ -7,6 +7,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Mary no longer gets trapped in an endless loop of lowering her wand's Light Form after detransforming. This would happen even if said wand form wasn't unlocked yet.
 * Returning from minigames in Jane's Hut now works as expected, spawning the player on the platform as it returns to its normal height. Glitches involving ***ss_position*** (now named ***spawn_position**** have been mostly fixed and it now serves a non-Special Stage purpose, hence the name change.
 * Rain ambience now correctly starts when the storm begins in 1-3. Before, outdoor areas would then lose all ambient sounds.
+* Challenges can now be properly turned off/on using the checkbox on the bottom-right corner panel of Teleport-Hacker's interface. Before this version, this checkbox didn't matter and would always start the level's challenge if the player got over the completion percentage ont the selected level. 
 ## Major
 * You can actually fail in Battle Arenas again! Somehow, I broke the arenas using their own "death behavior", which made them use #0, which is the default, taking a life from the player. This means the only way the player could lose was by running out of time, not dying!
 * Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
@@ -17,7 +18,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker.
 * Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles and city roads.
 * It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, run and hide fast, as everyone will start trying to cheaply kill you.
-* Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. However, they will stilll be used in Time Attack and Boss Rush to limit the number of times you can lose in a single level before the run forcibly resets. In other modes, you will lose a chunk of your score, which increases every time you lose a life on the same level.
+* Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. However, they will stilll be used in Time Attack and Boss Rush to limit the number of times you can lose in a single level 
+before the run forcibly resets. In other modes, you will lose a chunk of your score, which increases every time you lose a life on the same level.
 * Added a new red-striped variant of the falling platform, which falls automatically after 2-4 seconds, depending on difficulty. These are more faithful to the falling platforms' inspiration, Sonic Robo Blast 2.
 * Coins stored in Jane's bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
@@ -42,3 +44,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Removed USE key jumping on rails. This made no sense, so now only JUMP will make you jump when grinding.
 * The Command Master now has a third "call" to the HCPD officers in HCPD HQ, heard when picking up the second key. Overall, he has improved lines now, though they are still text-to-speech courtesy of Google Cloud.
 * Blue (or green, in the case of the bathroom) ceiling speakers are now in HCPD HQ, which are where the Command Master's voice comes from now. This is done so you can't escape the building then hear his reverb-heavy voice samples anywhere. The subtitles always appear, but at least now the speech doesn't follow you.
+* The Rooftop Battle Arena (now internally **ZBATTLE1** instead of **ARENA1**) now detects cheating using "kill monsters". If you use that cheat, the minigame will forcibly end with a red "you cheated" message when it advances to the next group of enemies to spawn. This is because it checks to see if the next wave is dead, which is normally impossible.
