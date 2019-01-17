@@ -48,6 +48,8 @@
 #include "r_utility.h"
 #include "g_levellocals.h"
 #include "actorinlines.h"
+#include "scriptutil.h"
+#include "vm.h"
 
 static FRandom pr_script("FScript");
 
@@ -220,7 +222,7 @@ static PClassActor * ActorTypes[countof(ActorNames_init)];
 // Doom index is only supported for the original things up to MBF
 //
 //==========================================================================
-PClassActor * T_GetMobjType(svalue_t arg)
+PClassActor * FParser::T_GetMobjType(svalue_t arg)
 {
 	PClassActor * pclass=NULL;
 	
@@ -254,7 +256,7 @@ PClassActor * T_GetMobjType(svalue_t arg)
 // Input can be either an actor variable or an index value
 //
 //==========================================================================
-static int T_GetPlayerNum(const svalue_t &arg)
+int FParser::T_GetPlayerNum(const svalue_t &arg)
 {
 	int playernum;
 	if(arg.type == svt_mobj)
@@ -283,6 +285,17 @@ static int T_GetPlayerNum(const svalue_t &arg)
 	return playernum;
 }
 
+AActor *FParser::T_GetPlayerActor(const svalue_t &arg)
+{
+	int num = T_GetPlayerNum(arg);
+	return num == -1 ? nullptr : players[num].mo;
+}
+
+PClassActor *T_ClassType(const svalue_t &arg)
+{
+	return PClass::FindActor(stringvalue(arg));
+}
+
 //==========================================================================
 //
 // Finds a sector from a tag. This has been extended to allow looking for
@@ -292,20 +305,20 @@ static int T_GetPlayerNum(const svalue_t &arg)
 class FSSectorTagIterator : public FSectorTagIterator
 {
 public:
-	FSSectorTagIterator(int tag)
-		: FSectorTagIterator(tag)
+	FSSectorTagIterator(FLevelLocals *Level, int tag)
+		: FSectorTagIterator(Level->tagManager, tag)
 	{
 		if (tag < 0)
 		{
 			searchtag = INT_MIN;
-			start = tag == -32768? 0 : -tag < (int)level.sectors.Size()? -tag : -1;
+			start = tag == -32768? 0 : -tag < (int)Level->sectors.Size()? -tag : -1;
 		}
 	}
 };
 
-inline int T_FindFirstSectorFromTag(int tagnum)
+inline int T_FindFirstSectorFromTag(FLevelLocals *Level, int tagnum)
 {
-	FSSectorTagIterator it(tagnum);
+	FSSectorTagIterator it(Level, tagnum);
 	return it.Next();
 }
 
@@ -622,7 +635,7 @@ void FParser::SF_Clock(void)
 
 void FParser::SF_ExitLevel(void)
 {
-	G_ExitLevel(0, false);
+	G_ExitLevel(Level, 0, false);
 }
 
 //==========================================================================
@@ -853,7 +866,7 @@ void FParser::SF_Spawn(void)
 			// [Graf Zahl] added option of spawning with a relative z coordinate
 			if(t_argc > 5)
 			{
-				if (intvalue(t_argv[5])) pos.Z += P_PointInSector(pos)->floorplane.ZatPoint(pos);
+				if (intvalue(t_argv[5])) pos.Z += P_PointInSector(Level, pos)->floorplane.ZatPoint(pos);
 			}
 		}
 		else
@@ -868,18 +881,18 @@ void FParser::SF_Spawn(void)
 		}
 		
 		t_return.type = svt_mobj;
-		t_return.value.mobj = Spawn(pclass, pos, ALLOW_REPLACE);
+		t_return.value.mobj = Spawn(Level, pclass, pos, ALLOW_REPLACE);
 
 		if (t_return.value.mobj)		
 		{
 			t_return.value.mobj->Angles.Yaw = angle;
 
-			if (!DFraggleThinker::ActiveThinker->nocheckposition)
+			if (!Level->info->fs_nocheckposition)
 			{
 				if (!P_TestMobjLocation(t_return.value.mobj))
 				{
-					if (t_return.value.mobj->flags&MF_COUNTKILL) level.total_monsters--;
-					if (t_return.value.mobj->flags&MF_COUNTITEM) level.total_items--;
+					if (t_return.value.mobj->flags&MF_COUNTKILL) Level->total_monsters--;
+					if (t_return.value.mobj->flags&MF_COUNTITEM) Level->total_items--;
 					t_return.value.mobj->Destroy();
 					t_return.value.mobj = NULL;
 				}
@@ -1054,7 +1067,7 @@ void FParser::SF_Teleport(void)
 		}
 		
 		if(mo)
-			EV_Teleport(0, tag, NULL, 0, mo, TELF_DESTFOG | TELF_SOURCEFOG);
+			EV_Teleport(Level, 0, tag, NULL, 0, mo, TELF_DESTFOG | TELF_SOURCEFOG);
 	}
 }
 
@@ -1083,7 +1096,7 @@ void FParser::SF_SilentTeleport(void)
 		}
 		
 		if(mo)
-			EV_Teleport(0, tag, NULL, 0, mo, TELF_KEEPORIENTATION);
+			EV_Teleport(Level, 0, tag, NULL, 0, mo, TELF_KEEPORIENTATION);
 	}
 }
 
@@ -1137,7 +1150,7 @@ void FParser::SF_ObjSector(void)
 	}
 
 	t_return.type = svt_int;
-	t_return.value.i = mo ? tagManager.GetFirstSectorTag(mo->Sector) : 0; // nullptr check
+	t_return.value.i = mo ? Level->tagManager.GetFirstSectorTag(mo->Sector) : 0; // nullptr check
 }
 
 //==========================================================================
@@ -1505,10 +1518,10 @@ void FParser::SF_StartSectorSound(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		int i=-1;
-		FSSectorTagIterator itr(tagnum);
+		FSSectorTagIterator itr(Level, tagnum);
 		while ((i = itr.Next()) >= 0)
 		{
-			sector = &level.sectors[i];
+			sector = &Level->sectors[i];
 			S_Sound(sector, CHAN_BODY, T_FindSound(stringvalue(t_argv[1])), 1.0f, ATTN_NORM);
 		}
 	}
@@ -1542,10 +1555,10 @@ void FParser::SF_FloorHeight(void)
 			
 			// set all sectors with tag
 			
-			FSSectorTagIterator itr(tagnum);
+			FSSectorTagIterator itr(Level, tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
-				auto &sec = level.sectors[i];
+				auto &sec = Level->sectors[i];
 				if (sec.floordata) continue;	// don't move floors that are active!
 
 				if (sec.MoveFloor(
@@ -1561,13 +1574,13 @@ void FParser::SF_FloorHeight(void)
 		}
 		else
 		{
-			secnum = T_FindFirstSectorFromTag(tagnum);
+			secnum = T_FindFirstSectorFromTag(Level, tagnum);
 			if(secnum < 0)
 			{ 
 				script_error("sector not found with tagnum %i\n", tagnum); 
 				return;
 			}
-			returnval = level.sectors[secnum].CenterFloor();
+			returnval = Level->sectors[secnum].CenterFloor();
 		}
 		
 		// return floor height
@@ -1597,10 +1610,10 @@ void FParser::SF_MoveFloor(void)
 		
 		// move all sectors with tag
 		
-		FSSectorTagIterator itr(tagnum);
+		FSSectorTagIterator itr(Level, tagnum);
 		while ((secnum = itr.Next()) >= 0)
 		{
-			P_CreateFloor(&level.sectors[secnum], DFloor::floorMoveToValue, NULL, platspeed, destheight, crush, 0, false, false);
+			P_CreateFloor(&Level->sectors[secnum], DFloor::floorMoveToValue, NULL, platspeed, destheight, crush, 0, false, false);
 		}
 	}
 }
@@ -1632,10 +1645,10 @@ void FParser::SF_CeilingHeight(void)
 			dest = floatvalue(t_argv[1]);
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(tagnum);
+			FSSectorTagIterator itr(Level, tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
-				auto &sec = level.sectors[i];
+				auto &sec = Level->sectors[i];
 				if (sec.ceilingdata) continue;	// don't move ceilings that are active!
 
 				if (sec.MoveCeiling(
@@ -1651,13 +1664,13 @@ void FParser::SF_CeilingHeight(void)
 		}
 		else
 		{
-			secnum = T_FindFirstSectorFromTag(tagnum);
+			secnum = T_FindFirstSectorFromTag(Level, tagnum);
 			if(secnum < 0)
 			{ 
 				script_error("sector not found with tagnum %i\n", tagnum); 
 				return;
 			}
-			returnval = level.sectors[secnum].CenterCeiling();
+			returnval = Level->sectors[secnum].CenterCeiling();
 		}
 		
 		// return ceiling height
@@ -1689,10 +1702,10 @@ void FParser::SF_MoveCeiling(void)
 		silent=t_argc>4 ? intvalue(t_argv[4]):1;
 		
 		// move all sectors with tag
-		FSSectorTagIterator itr(tagnum);
+		FSSectorTagIterator itr(Level, tagnum);
 		while ((secnum = itr.Next()) >= 0)
 		{
-			P_CreateCeiling(&level.sectors[secnum], DCeiling::ceilMoveToValue, NULL, tagnum, platspeed, platspeed, destheight, crush, silent | 4, 0, DCeiling::ECrushMode::crushDoom);
+			P_CreateCeiling(&Level->sectors[secnum], DCeiling::ceilMoveToValue, NULL, tagnum, platspeed, platspeed, destheight, crush, silent | 4, 0, DCeiling::ECrushMode::crushDoom);
 		}
 	}
 }
@@ -1714,24 +1727,24 @@ void FParser::SF_LightLevel(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		// argv is sector tag
-		secnum = T_FindFirstSectorFromTag(tagnum);
+		secnum = T_FindFirstSectorFromTag(Level, tagnum);
 		
 		if(secnum < 0)
 		{ 
 			return;
 		}
 		
-		sector = &level.sectors[secnum];
+		sector = &Level->sectors[secnum];
 		
 		if(t_argc > 1)          // > 1: set light level
 		{
 			int i = -1;
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(tagnum);
+			FSSectorTagIterator itr(Level, tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
-				level.sectors[i].SetLightLevel(intvalue(t_argv[1]));
+				Level->sectors[i].SetLightLevel(intvalue(t_argv[1]));
 			}
 		}
 		
@@ -1755,7 +1768,7 @@ class DLightLevel : public DLighting
 	unsigned char destlevel;
 	unsigned char speed;
 
-	DLightLevel() {}
+	DLightLevel() = default;
 
 public:
 
@@ -1846,10 +1859,10 @@ void FParser::SF_FadeLight(void)
 		destlevel = intvalue(t_argv[1]);
 		speed = t_argc>2 ? intvalue(t_argv[2]) : 1;
 		
-		FSectorTagIterator it(sectag);
+		FSectorTagIterator it(Level->tagManager, sectag);
 		while ((i = it.Next()) >= 0)
 		{
-			if (!level.sectors[i].lightingdata) Create<DLightLevel>(&level.sectors[i],destlevel,speed);
+			if (!Level->sectors[i].lightingdata) CreateThinker<DLightLevel>(&Level->sectors[i],destlevel,speed);
 		}
 	}
 }
@@ -1869,29 +1882,29 @@ void FParser::SF_FloorTexture(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		// argv is sector tag
-		secnum = T_FindFirstSectorFromTag(tagnum);
+		secnum = T_FindFirstSectorFromTag(Level, tagnum);
 		
 		if(secnum < 0)
 		{ script_error("sector not found with tagnum %i\n", tagnum); return;}
 		
-		sector = &level.sectors[secnum];
+		sector = &Level->sectors[secnum];
 		
 		if(t_argc > 1)
 		{
 			int i = -1;
-			FTextureID picnum = TexMan.GetTexture(t_argv[1].string, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
+			FTextureID picnum = TexMan.GetTextureID(t_argv[1].string, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(tagnum);
+			FSSectorTagIterator itr(Level, tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
-				level.sectors[i].SetTexture(sector_t::floor, picnum);
+				Level->sectors[i].SetTexture(sector_t::floor, picnum);
 			}
 		}
 		
 		t_return.type = svt_string;
-		FTexture * tex = TexMan[sector->GetTexture(sector_t::floor)];
-		t_return.string = tex? tex->Name : "";
+		FTexture * tex = TexMan.GetTexture(sector->GetTexture(sector_t::floor));
+		t_return.string = tex? tex->GetName() : "";
 	}
 }
 
@@ -1921,22 +1934,22 @@ void FParser::SF_SectorColormap(void)
 	tagnum = intvalue(t_argv[0]);
 	
 	// argv is sector tag
-	secnum = T_FindFirstSectorFromTag(tagnum);
+	secnum = T_FindFirstSectorFromTag(Level, tagnum);
 	
 	if(secnum < 0)
 	{ script_error("sector not found with tagnum %i\n", tagnum); return;}
 	
-	sector = &level.sectors[secnum];
+	sector = &Level->sectors[secnum];
 
 	if (t_argv[1].type==svt_string)
 	{
 		uint32_t cm = R_ColormapNumForName(t_argv[1].value.s);
 
-		FSSectorTagIterator itr(tagnum);
+		FSSectorTagIterator itr(Level, tagnum);
 		while ((i = itr.Next()) >= 0)
 		{
 			sectors[i].midmap=cm;
-			sectors[i].heightsec=&level.sectors[i];
+			sectors[i].heightsec=&Level->sectors[i];
 		}
 	}
 	*/	
@@ -1959,29 +1972,29 @@ void FParser::SF_CeilingTexture(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		// argv is sector tag
-		secnum = T_FindFirstSectorFromTag(tagnum);
+		secnum = T_FindFirstSectorFromTag(Level, tagnum);
 		
 		if(secnum < 0)
 		{ script_error("sector not found with tagnum %i\n", tagnum); return;}
 		
-		sector = &level.sectors[secnum];
+		sector = &Level->sectors[secnum];
 		
 		if(t_argc > 1)
 		{
 			int i = -1;
-			FTextureID picnum = TexMan.GetTexture(t_argv[1].string, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
+			FTextureID picnum = TexMan.GetTextureID(t_argv[1].string, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(tagnum);
+			FSSectorTagIterator itr(Level, tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
-				level.sectors[i].SetTexture(sector_t::ceiling, picnum);
+				Level->sectors[i].SetTexture(sector_t::ceiling, picnum);
 			}
 		}
 		
 		t_return.type = svt_string;
-		FTexture * tex = TexMan[sector->GetTexture(sector_t::ceiling)];
-		t_return.string = tex? tex->Name : "";
+		FTexture * tex = TexMan.GetTexture(sector->GetTexture(sector_t::ceiling));
+		t_return.string = tex? tex->GetName() : "";
 	}
 }
 
@@ -2029,7 +2042,7 @@ void FParser::SF_OpenDoor(void)
 		if(t_argc > 2) speed = intvalue(t_argv[2]);
 		else speed = 1;    // 1= normal speed
 
-		EV_DoDoor(wait_time ? DDoor::doorRaise : DDoor::doorOpen, NULL, NULL, sectag, 2. * clamp(speed, 1, 127), wait_time, 0, 0);
+		EV_DoDoor(Level, wait_time ? DDoor::doorRaise : DDoor::doorOpen, NULL, NULL, sectag, 2. * clamp(speed, 1, 127), wait_time, 0, 0);
 	}
 }
 
@@ -2054,7 +2067,7 @@ void FParser::SF_CloseDoor(void)
 		if(t_argc > 1) speed = intvalue(t_argv[1]);
 		else speed = 1;    // 1= normal speed
 		
-		EV_DoDoor(DDoor::doorClose, NULL, NULL, sectag, 2.*clamp(speed, 1, 127), 0, 0, 0);
+		EV_DoDoor(Level, DDoor::doorClose, NULL, NULL, sectag, 2.*clamp(speed, 1, 127), 0, 0, 0);
 	}
 }
 
@@ -2067,7 +2080,7 @@ void FParser::SF_CloseDoor(void)
 // run console cmd
 void FParser::SF_RunCommand(void)
 {
-	FS_EmulateCmd(GetFormatString(0).LockBuffer());
+	FS_EmulateCmd(Level, GetFormatString(0).LockBuffer());
 }
 
 //==========================================================================
@@ -2085,7 +2098,7 @@ void FParser::SF_LineTrigger()
 		mld.special=intvalue(t_argv[0]);
 		mld.tag=t_argc > 1 ? intvalue(t_argv[1]) : 0;
 		P_TranslateLineDef(&line, &mld);
-		P_ExecuteSpecial(line.special, NULL, Script->trigger, false, 
+		P_ExecuteSpecial(Level, line.special, NULL, Script->trigger, false, 
 			line.args[0],line.args[1],line.args[2],line.args[3],line.args[4]); 
 	}
 }
@@ -2144,11 +2157,11 @@ void FParser::SF_SetLineBlocking(void)
 		{
 			blocking=blocks[blocking];
 			int tag=intvalue(t_argv[0]);
-			FLineIdIterator itr(tag);
+			FLineIdIterator itr(Level->tagManager, tag);
 			int i;
 			while ((i = itr.Next()) >= 0)
 			{
-				level.lines[i].flags = (level.lines[i].flags & ~(ML_BLOCKING | ML_BLOCKEVERYTHING)) | blocking;
+				Level->lines[i].flags = (Level->lines[i].flags & ~(ML_BLOCKING | ML_BLOCKEVERYTHING)) | blocking;
 			}
 		}
 	}
@@ -2167,11 +2180,11 @@ void FParser::SF_SetLineMonsterBlocking(void)
 		int blocking = intvalue(t_argv[1]) ? (int)ML_BLOCKMONSTERS : 0;
 		int tag=intvalue(t_argv[0]);
 
-		FLineIdIterator itr(tag);
+		FLineIdIterator itr(Level->tagManager, tag);
 		int i;
 		while ((i = itr.Next()) >= 0)
 		{
-			level.lines[i].flags = (level.lines[i].flags & ~ML_BLOCKMONSTERS) | blocking;
+			Level->lines[i].flags = (Level->lines[i].flags & ~ML_BLOCKMONSTERS) | blocking;
 		}
 	}
 }
@@ -2222,32 +2235,32 @@ void FParser::SF_SetLineTexture(void)
 			position=3-position;
 			
 			texture = stringvalue(t_argv[3]);
-			texturenum = TexMan.GetTexture(texture, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
+			texturenum = TexMan.GetTextureID(texture, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
 			
-			FLineIdIterator itr(tag);
+			FLineIdIterator itr(Level->tagManager, tag);
 			while ((i = itr.Next()) >= 0)
 			{
 				// bad sidedef, Hexen just SEGV'd here!
-				if (level.lines[i].sidedef[side] != NULL)
+				if (Level->lines[i].sidedef[side] != NULL)
 				{
 					if (position >= 0 && position <= 2)
 					{
-						level.lines[i].sidedef[side]->SetTexture(position, texturenum);
+						Level->lines[i].sidedef[side]->SetTexture(position, texturenum);
 					}
 				}
 			}
 		}
 		else // and an improved legacy version
 		{ 
-			FTextureID picnum = TexMan.GetTexture(t_argv[1].string, ETextureType::Wall, FTextureManager::TEXMAN_Overridable); 
+			FTextureID picnum = TexMan.GetTextureID(t_argv[1].string, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
 			side = !!intvalue(t_argv[2]); 
 			int sections = intvalue(t_argv[3]); 
 			
 			// set all sectors with tag 
-			FLineIdIterator itr(tag);
+			FLineIdIterator itr(Level->tagManager, tag);
 			while ((i = itr.Next()) >= 0)
 			{ 
-				side_t *sided = level.lines[i].sidedef[side];
+				side_t *sided = Level->lines[i].sidedef[side];
 				if(sided != NULL)
 				{ 
 					if(sections & 1) sided->SetTexture(side_t::top, picnum);
@@ -2395,96 +2408,13 @@ void FParser::SF_IsPlayerObj(void)
 
 //============================================================================
 //
-// DoGiveInv
-//
-// Gives an item to a single actor.
-//
-//============================================================================
-
-static void FS_GiveInventory (AActor *actor, const char * type, int amount)
-{
-	if (amount <= 0)
-	{
-		return;
-	}
-	if (strcmp (type, "Armor") == 0)
-	{
-		type = "BasicArmorPickup";
-	}
-	auto info = PClass::FindActor (type);
-	if (info == NULL || !info->IsDescendantOf(RUNTIME_CLASS(AInventory)))
-	{
-		Printf ("Unknown inventory item: %s\n", type);
-		return;
-	}
-
-	actor->GiveInventory(info, amount);
-}
-
-//============================================================================
-//
-// DoTakeInv
-//
-// Takes an item from a single actor.
-//
-//============================================================================
-
-static void FS_TakeInventory (AActor *actor, const char * type, int amount)
-{
-	if (strcmp (type, "Armor") == 0)
-	{
-		type = "BasicArmor";
-	}
-	if (amount <= 0)
-	{
-		return;
-	}
-	PClassActor * info = PClass::FindActor (type);
-	if (info == NULL)
-	{
-		return;
-	}
-
-	AInventory *item = actor->FindInventory (info);
-	if (item != NULL)
-	{
-		item->Amount -= amount;
-		if (item->Amount <= 0)
-		{
-			// If it's not ammo, destroy it. Ammo needs to stick around, even
-			// when it's zero for the benefit of the weapons that use it and 
-			// to maintain the maximum ammo amounts a backpack might have given.
-			item->DepleteOrDestroy();
-		}
-	}
-}
-
-//============================================================================
-//
 // CheckInventory
 //
-// Returns how much of a particular item an actor has.
+// forward to the ACS equivalent.
 //
 //============================================================================
 
-static int FS_CheckInventory (AActor *activator, const char *type)
-{
-	if (activator == NULL)
-		return 0;
-
-	if (strcmp (type, "Armor") == 0)
-	{
-		type = "BasicArmor";
-	}
-	else if (strcmp (type, "Health") == 0)
-	{
-		return activator->health;
-	}
-
-	PClassActor *info = PClass::FindActor (type);
-	AInventory *item = activator->FindInventory (info);
-	return item ? item->Amount : 0;
-}
+int CheckInventory(AActor *activator, const char *type, bool max = false);
 
 
 //==========================================================================
@@ -2497,9 +2427,9 @@ static int FS_CheckInventory (AActor *activator, const char *type)
 
 void FParser::SF_PlayerKeys(void)
 {
-	static const char * const DoomKeys[]={"BlueCard", "YellowCard", "RedCard", "BlueSkull", "YellowSkull", "RedSkull"};
+	static const ENamedName DoomKeys[]={NAME_BlueCard, NAME_YellowCard, NAME_RedCard, NAME_BlueSkull, NAME_YellowSkull, NAME_RedSkull};
 	int  playernum, keynum, givetake;
-	const char * keyname;
+	FName keyname;
 	
 	if (CheckArgs(2))
 	{
@@ -2517,14 +2447,13 @@ void FParser::SF_PlayerKeys(void)
 		if(t_argc == 2)
 		{
 			t_return.type = svt_int;
-			t_return.value.i = FS_CheckInventory(players[playernum].mo, keyname);
+			t_return.value.i = CheckInventory(players[playernum].mo, keyname);
 			return;
 		}
 		else
 		{
 			givetake = intvalue(t_argv[2]);
-			if(givetake) FS_GiveInventory(players[playernum].mo, keyname, 1);
-			else FS_TakeInventory(players[playernum].mo, keyname, 1);
+			ScriptUtil::Exec(givetake?NAME_GiveInventory : NAME_TakeInventory, ScriptUtil::Pointer, players[playernum].mo, ScriptUtil::Int, keyname.GetIndex(), ScriptUtil::Int, 1, ScriptUtil::End);
 			t_return.type = svt_int;
 			t_return.value.i = 0;
 		}
@@ -2540,30 +2469,11 @@ void FParser::SF_PlayerKeys(void)
 
 void FParser::SF_PlayerAmmo(void)
 {
-	int playernum, amount;
-	PClassActor * ammotype;
-	
 	if (CheckArgs(2))
 	{
-		playernum=T_GetPlayerNum(t_argv[0]);
-		if (playernum==-1) return;
-
-		ammotype=T_GetAmmo(t_argv[1]);
-		if (!ammotype) return;
-
-		if(t_argc >= 3)
-		{
-			AInventory * iammo = players[playernum].mo->FindInventory(ammotype);
-			amount = intvalue(t_argv[2]);
-			if(amount < 0) amount = 0;
-			if (iammo) iammo->Amount = amount;
-			else players[playernum].mo->GiveAmmo(ammotype, amount);
-		}
-
 		t_return.type = svt_int;
-		AInventory * iammo = players[playernum].mo->FindInventory(ammotype);
-		if (iammo) t_return.value.i = iammo->Amount;
-		else t_return.value.i = 0;
+		t_return.value.i = ScriptUtil::Exec("PlayerAmmo", ScriptUtil::Pointer, T_GetPlayerActor(t_argv[0]), ScriptUtil::Class, T_GetAmmo(t_argv[1]),
+			ScriptUtil::Int, t_argc >= 3 ? intvalue(t_argv[2]) : INT_MIN, ScriptUtil::End);
 	}
 }
 
@@ -2576,50 +2486,11 @@ void FParser::SF_PlayerAmmo(void)
 
 void FParser::SF_MaxPlayerAmmo()
 {
-	int playernum, amount;
-	PClassActor * ammotype;
-
 	if (CheckArgs(2))
 	{
-		playernum=T_GetPlayerNum(t_argv[0]);
-		if (playernum==-1) return;
-
-		ammotype=T_GetAmmo(t_argv[1]);
-		if (!ammotype) return;
-
-		if(t_argc == 2)
-		{
-		}
-		else if(t_argc >= 3)
-		{
-			auto iammo = players[playernum].mo->FindInventory(ammotype);
-			amount = intvalue(t_argv[2]);
-			if(amount < 0) amount = 0;
-			if (!iammo) 
-			{
-				players[playernum].mo->GiveAmmo(ammotype, 1);
-				iammo = players[playernum].mo->FindInventory(ammotype);
-				iammo->Amount = 0;
-			}
-			iammo->MaxAmount = amount;
-
-
-			for (AInventory *item = players[playernum].mo->Inventory; item != NULL; item = item->Inventory)
-			{
-				if (item->IsKindOf(NAME_BackpackItem))
-				{
-					if (t_argc>=4) amount = intvalue(t_argv[3]);
-					else amount*=2;
-					break;
-				}
-			}
-			iammo->IntVar("BackpackMaxAmount") = amount;
-		}
-
 		t_return.type = svt_int;
-		AInventory * iammo = players[playernum].mo->FindInventory(ammotype);
-		if (iammo) t_return.value.i = iammo->MaxAmount;
-		else t_return.value.i = ((AInventory*)GetDefaultByType(ammotype))->MaxAmount;
+		t_return.value.i = ScriptUtil::Exec("MaxPlayerAmmo", ScriptUtil::Pointer, T_GetPlayerActor(t_argv[0]), ScriptUtil::Class, T_GetAmmo(t_argv[1]),
+			ScriptUtil::Int, t_argc >= 3? intvalue(t_argv[2]) : INT_MIN, ScriptUtil::Int, t_argc >= 4 ? intvalue(t_argv[3]) : INT_MIN, ScriptUtil::End);
 	}
 }
 
@@ -2680,8 +2551,13 @@ void FParser::SF_PlayerWeapon()
 					if (players[playernum].PendingWeapon==wp) players[playernum].PendingWeapon=WP_NOCHANGE;
 					if (players[playernum].ReadyWeapon==wp) 
 					{
-						players[playernum].ReadyWeapon=NULL;
-						players[playernum].mo->PickNewWeapon(NULL);
+						players[playernum].ReadyWeapon=nullptr;
+						
+						IFVM(PlayerPawn, PickNewWeapon)
+						{
+							VMValue param[] = { players[playernum].mo, (void*)nullptr };
+							VMCall(func, param, 2, nullptr, 0);
+						}
 					}
 				}
 			}
@@ -2740,7 +2616,7 @@ void FParser::SF_PlayerSelectedWeapon()
 				return;
 			}
 
-			players[playernum].PendingWeapon = (AWeapon*)players[playernum].mo->FindInventory(ti);
+			players[playernum].PendingWeapon = players[playernum].mo->FindInventory(ti);
 
 		} 
 		t_return.type = svt_int;
@@ -2772,7 +2648,7 @@ void FParser::SF_GiveInventory(void)
 
 		if(t_argc == 2) count=1;
 		else count=intvalue(t_argv[2]);
-		FS_GiveInventory(players[playernum].mo, stringvalue(t_argv[1]), count);
+		ScriptUtil::Exec(NAME_GiveInventory, ScriptUtil::Pointer, players[playernum].mo, ScriptUtil::Int, FName(stringvalue(t_argv[1])).GetIndex(), ScriptUtil::Int, count, ScriptUtil::End);
 		t_return.type = svt_int;
 		t_return.value.i = 0;
 	}
@@ -2795,7 +2671,7 @@ void FParser::SF_TakeInventory(void)
 
 		if(t_argc == 2) count=32767;
 		else count=intvalue(t_argv[2]);
-		FS_TakeInventory(players[playernum].mo, stringvalue(t_argv[1]), count);
+		ScriptUtil::Exec(NAME_TakeInventory, ScriptUtil::Pointer, players[playernum].mo, ScriptUtil::Int, FName(stringvalue(t_argv[1])).GetIndex(), ScriptUtil::Int, count, ScriptUtil::End);
 		t_return.type = svt_int;
 		t_return.value.i = 0;
 	}
@@ -2820,7 +2696,7 @@ void FParser::SF_CheckInventory(void)
 			return;
 		}
 		t_return.type = svt_int;
-		t_return.value.i = FS_CheckInventory(players[playernum].mo, stringvalue(t_argv[1]));
+		t_return.value.i = CheckInventory(players[playernum].mo, stringvalue(t_argv[1]));
 	}
 }
 
@@ -2834,34 +2710,8 @@ void FParser::SF_SetWeapon()
 {
 	if (CheckArgs(2))
 	{
-		int playernum=T_GetPlayerNum(t_argv[0]);
-		if (playernum!=-1) 
-		{
-			AInventory *item = players[playernum].mo->FindInventory (PClass::FindActor (stringvalue(t_argv[1])));
-
-			if (item == NULL || !item->IsKindOf(NAME_Weapon))
-			{
-			}
-			else if (players[playernum].ReadyWeapon == item)
-			{
-				// The weapon is already selected, so setweapon succeeds by default,
-				// but make sure the player isn't switching away from it.
-				players[playernum].PendingWeapon = WP_NOCHANGE;
-				t_return.value.i = 1;
-			}
-			else
-			{
-				auto weap = static_cast<AWeapon *> (item);
-
-				if (weap->CheckAmmo (AWeapon::EitherFire, false))
-				{
-					// There's enough ammo, so switch to it.
-					t_return.value.i = 1;
-					players[playernum].PendingWeapon = weap;
-				}
-			}
-		}
-		t_return.value.i = 0;
+		t_return.type = svt_int;
+		t_return.value.i = ScriptUtil::Exec(NAME_SetWeapon, ScriptUtil::Pointer, T_GetPlayerActor(t_argv[0]), ScriptUtil::Class, T_ClassType(t_argv[1]), ScriptUtil::End);
 	}
 }
 
@@ -3003,7 +2853,7 @@ void FParser::SF_AmbientSound(void)
 
 void FParser::SF_ExitSecret(void)
 {
-	G_SecretExitLevel(0);
+	G_SecretExitLevel(Level, 0);
 }
 
 
@@ -3078,9 +2928,9 @@ void FParser::SF_SpawnExplosion()
 		if(t_argc > 3)
 			pos.Z = floatvalue(t_argv[3]);
 		else
-			pos.Z = P_PointInSector(pos)->floorplane.ZatPoint(pos);
+			pos.Z = P_PointInSector(Level, pos)->floorplane.ZatPoint(pos);
 		
-		spawn = Spawn (pclass, pos, ALLOW_REPLACE);
+		spawn = Spawn (Level, pclass, pos, ALLOW_REPLACE);
 		t_return.type = svt_int;
 		t_return.value.i=0;
 		if (spawn)
@@ -3258,7 +3108,7 @@ void FParser::SF_SpawnMissile()
 
 void FParser::SF_MapThingNumExist()
 {
-	auto &SpawnedThings = DFraggleThinker::ActiveThinker->SpawnedThings;
+	auto &SpawnedThings = Level->FraggleScriptThinker->SpawnedThings;
 
 	int intval;
 
@@ -3273,16 +3123,7 @@ void FParser::SF_MapThingNumExist()
 		}
 		else
 		{
-			// Inventory items in the player's inventory have to be considered non-present.
-			if (SpawnedThings[intval]->IsKindOf(RUNTIME_CLASS(AInventory)) && 
-				barrier_cast<AInventory*>(SpawnedThings[intval])->Owner != NULL)
-			{
-				t_return.value.i = 0;
-			}
-			else
-			{
-				t_return.value.i = 1;
-			}
+			t_return.value.i = SpawnedThings[intval]->IsMapActor();
 			t_return.type = svt_int;
 		}
 	}
@@ -3296,7 +3137,7 @@ void FParser::SF_MapThingNumExist()
 
 void FParser::SF_MapThings()
 {
-	auto &SpawnedThings = DFraggleThinker::ActiveThinker->SpawnedThings;
+	auto &SpawnedThings = Level->FraggleScriptThinker->SpawnedThings;
 
 	t_return.type = svt_int;
 	t_return.value.i = SpawnedThings.Size();
@@ -3363,13 +3204,13 @@ void FParser::SF_LineFlag()
 	if (CheckArgs(2))
 	{
 		linenum = intvalue(t_argv[0]);
-		if(linenum >= level.lines.Size())
+		if(linenum >= Level->lines.Size())
 		{
 			script_error("LineFlag: Invalid line number.\n");
 			return;
 		}
 		
-		line = &level.lines[linenum];
+		line = &Level->lines[linenum];
 		
 		flagnum = intvalue(t_argv[1]);
 		if(flagnum < 0 || (flagnum > 8 && flagnum!=15))
@@ -3470,7 +3311,7 @@ void FParser::SF_Resurrect()
 		mo->Height = mo->GetDefault()->Height;
 		mo->radius = mo->GetDefault()->radius;
 		mo->Revive();
-		mo->target = NULL;
+		mo->target = nullptr;
 	}
 }
 
@@ -3732,7 +3573,7 @@ void FParser::SF_SetCorona(void)
 void FParser::SF_LevelNum()
 {
 	t_return.type = svt_int;
-	t_return.value.f = level.levelnum;
+	t_return.value.f = Level->levelnum;
 }
 
 
@@ -3804,16 +3645,15 @@ void FParser::SF_ThingCount(void)
 		pClass = pClass->GetReplacement();
 		
 again:
-		TThinkerIterator<AActor> it;
+		TThinkerIterator<AActor> it(Level);
 
-		if (t_argc<2 || intvalue(t_argv[1])==0 || pClass->IsDescendantOf(RUNTIME_CLASS(AInventory)))
+		if (t_argc<2 || intvalue(t_argv[1])==0 || pClass->IsDescendantOf(NAME_Inventory))
 		{
 			while ((mo=it.Next()))
 			{
 				if (mo->IsA(pClass))
 				{
-					if (!mo->IsKindOf (RUNTIME_CLASS(AInventory)) ||
-						static_cast<AInventory *>(mo)->Owner == NULL)
+					if (mo->IsMapActor())
 					{
 						count++;
 					}
@@ -3860,7 +3700,7 @@ void FParser::SF_SetColor(void)
 	{
 		tagnum = intvalue(t_argv[0]);
 		
-		secnum = T_FindFirstSectorFromTag(tagnum);
+		secnum = T_FindFirstSectorFromTag(Level, tagnum);
 		
 		if(secnum < 0)
 		{ 
@@ -3881,22 +3721,10 @@ void FParser::SF_SetColor(void)
 		else return;
 
 		// set all sectors with tag
-		FSSectorTagIterator itr(tagnum);
+		FSSectorTagIterator itr(Level, tagnum);
 		while ((i = itr.Next()) >= 0)
 		{
-			if (!DFraggleThinker::ActiveThinker->setcolormaterial)
-			{
-				level.sectors[i].SetColor(color.r, color.g, color.b, 0);
-			}
-			else
-			{
-				// little hack for testing the D64 color stuff.
-				for (int j = 0; j < 4; j++) level.sectors[i].SetSpecialColor(j, color);
-				// simulates 'nocoloredspritelighting' settings.
-				int v = (color.r + color.g + color.b) / 3;
-				v = (255 + v + v) / 3;
-				level.sectors[i].SetSpecialColor(sector_t::sprites, v, v, v);
-			}
+			Level->sectors[i].SetColor(color, 0);
 		}
 	}
 }
@@ -3933,7 +3761,7 @@ void FParser::SF_SpawnShot2(void)
 
 		t_return.type = svt_mobj;
 
-		AActor *mo = Spawn(pclass, source->PosPlusZ(z), ALLOW_REPLACE);
+		AActor *mo = Spawn(Level, pclass, source->PosPlusZ(z), ALLOW_REPLACE);
 		if (mo)
 		{
 			S_Sound(mo, CHAN_VOICE, mo->SeeSound, 1, ATTN_NORM);
@@ -3958,13 +3786,13 @@ void  FParser::SF_KillInSector()
 {
 	if (CheckArgs(1))
 	{
-		TThinkerIterator<AActor> it;
+		TThinkerIterator<AActor> it(Level);
 		AActor * mo;
 		int tag=intvalue(t_argv[0]);
 
 		while ((mo=it.Next()))
 		{
-			if (mo->flags3&MF3_ISMONSTER && tagManager.SectorHasTag(mo->Sector, tag)) P_DamageMobj(mo, NULL, NULL, 1000000, NAME_Massacre);
+			if (mo->flags3&MF3_ISMONSTER && Level->tagManager.SectorHasTag(mo->Sector, tag)) P_DamageMobj(mo, NULL, NULL, 1000000, NAME_Massacre);
 		}
 	}
 }
@@ -3986,16 +3814,16 @@ void FParser::SF_SetLineTrigger()
 		id=intvalue(t_argv[0]);
 		spec=intvalue(t_argv[1]);
 		if (t_argc>2) tag=intvalue(t_argv[2]);
-		FLineIdIterator itr(id);
+		FLineIdIterator itr(Level->tagManager, id);
 		while ((i = itr.Next()) >= 0)
 		{
 			maplinedef_t mld;
 			mld.special = spec;
 			mld.tag = tag;
 			mld.flags = 0;
-			int f = level.lines[i].flags;
-			P_TranslateLineDef(&level.lines[i], &mld);
-			level.lines[i].flags = (level.lines[i].flags & (ML_MONSTERSCANACTIVATE | ML_REPEAT_SPECIAL | ML_SPAC_MASK | ML_FIRSTSIDEONLY)) |
+			int f = Level->lines[i].flags;
+			P_TranslateLineDef(&Level->lines[i], &mld);
+			Level->lines[i].flags = (Level->lines[i].flags & (ML_MONSTERSCANACTIVATE | ML_REPEAT_SPECIAL | ML_SPAC_MASK | ML_FIRSTSIDEONLY)) |
 				(f & ~(ML_MONSTERSCANACTIVATE | ML_REPEAT_SPECIAL | ML_SPAC_MASK | ML_FIRSTSIDEONLY));
 
 		}
@@ -4020,7 +3848,7 @@ void FParser::RunLineSpecial(const FLineSpecial *spec)
 			if (t_argc>i) args[i]=intvalue(t_argv[i]);
 			else args[i] = 0;
 		}
-		t_return.value.i = P_ExecuteSpecial(spec->number, NULL,Script->trigger,false, args[0],args[1],args[2],args[3],args[4]);
+		t_return.value.i = P_ExecuteSpecial(Level, spec->number, NULL,Script->trigger,false, args[0],args[1],args[2],args[3],args[4]);
 	}
 }
 
@@ -4033,7 +3861,7 @@ void FParser::RunLineSpecial(const FLineSpecial *spec)
 
 DRunningScript *FParser::SaveCurrentScript()
 {
-	DFraggleThinker *th = DFraggleThinker::ActiveThinker;
+	DFraggleThinker *th = Level->FraggleScriptThinker;
 	if (th)
 	{
 		DRunningScript *runscr = Create<DRunningScript>(Script->trigger, Script, Script->MakeIndex(Rover));
@@ -4159,7 +3987,7 @@ void FParser::SF_StartScript()
 		return;
 	}
 
-	DFraggleThinker *th = DFraggleThinker::ActiveThinker;
+	DFraggleThinker *th = Level->FraggleScriptThinker;
 	if (th)
 	{
 
@@ -4195,7 +4023,7 @@ void FParser::SF_ScriptRunning()
 	
 	snum = intvalue(t_argv[0]);  
 	
-	for(current = DFraggleThinker::ActiveThinker->RunningScripts->next; current; current=current->next)
+	for(current = Level->FraggleScriptThinker->RunningScripts->next; current; current=current->next)
 	{
 		if(current->script->scriptnum == snum)
 		{
@@ -4218,16 +4046,14 @@ void FParser::SF_ScriptRunning()
 //
 //==========================================================================
 
-static int zoom=1;	// Dummy - no longer needed!
-
-void init_functions(void)
+void DFraggleThinker::InitFunctions()
 {
 	for(unsigned i=0;i<countof(ActorNames_init);i++)
 	{
 		ActorTypes[i]=PClass::FindActor(ActorNames_init[i]);
 	}
 
-	DFsScript * gscr = global_script;
+	DFsScript * gscr = GlobalScript;
 
 	// add all the functions
 	gscr->NewVariable("consoleplayer", svt_pInt)->value.pI = &consoleplayer;

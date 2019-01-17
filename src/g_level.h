@@ -42,6 +42,7 @@
 struct level_info_t;
 struct cluster_info_t;
 class FSerializer;
+struct FLevelLocals;
 
 #if defined(_MSC_VER)
 #pragma section(".yreg$u",read)
@@ -191,7 +192,7 @@ enum ELevelFlags : unsigned int
 	LEVEL_SWAPSKIES				= 0x10000000,	// Used by lightning
 	LEVEL_NOALLIES				= 0x20000000,	// i.e. Inside Strife's front base
 	LEVEL_CHANGEMAPCHEAT		= 0x40000000,	// Don't display cluster messages
-	LEVEL_VISITED				= 0x80000000,	// Used for intermission map
+	//LEVEL_VISITED				= 0x80000000,	// Used for intermission map
 
 	// The flags uint64_t is now split into 2 DWORDs 
 	LEVEL2_RANDOMPLAYERSTARTS	= 0x00000001,	// Select single player starts randomnly (no voodoo dolls)
@@ -247,6 +248,7 @@ enum ELevelFlags : unsigned int
 	LEVEL3_NOCOLOREDSPRITELIGHTING = 0x00000010,	// draw sprites only with color-less light
 	LEVEL3_EXITNORMALUSED		= 0x00000020,
 	LEVEL3_EXITSECRETUSED		= 0x00000040,
+	LEVEL3_FORCEWORLDPANNING	= 0x00000080,	// Forces the world panning flag for all textures, even those without it explicitly set.
 };
 
 
@@ -262,25 +264,6 @@ class DScroller;
 class FScanner;
 struct level_info_t;
 
-struct FOptionalMapinfoData
-{
-	FOptionalMapinfoData *Next = nullptr;
-	FName identifier = NAME_None;
-	virtual ~FOptionalMapinfoData() {}
-	virtual FOptionalMapinfoData *Clone() const = 0;
-};
-
-struct FOptionalMapinfoDataPtr
-{
-	FOptionalMapinfoData *Ptr;
-
-	FOptionalMapinfoDataPtr() throw() : Ptr(NULL) {}
-	~FOptionalMapinfoDataPtr() { if (Ptr!=NULL) delete Ptr; }
-	FOptionalMapinfoDataPtr(const FOptionalMapinfoDataPtr &p) throw() : Ptr(p.Ptr->Clone()) {}
-	FOptionalMapinfoDataPtr &operator= (FOptionalMapinfoDataPtr &p) throw() { Ptr = p.Ptr->Clone(); return *this; }
-};
-
-typedef TMap<FName, FOptionalMapinfoDataPtr> FOptData;
 typedef TMap<int, FName> FMusicMap;
 
 enum EMapType : int
@@ -314,6 +297,7 @@ struct FExitText
 	}
 };
 
+
 struct level_info_t
 {
 	int			levelnum;
@@ -342,8 +326,6 @@ struct level_info_t
 	FString		LevelName;
 	int8_t		WallVertLight, WallHorizLight;
 	int			musicorder;
-	FCompressedBuffer	Snapshot;
-	TArray<acsdefered_t> deferred;
 	float		skyspeed1;
 	float		skyspeed2;
 	uint32_t	fadeto;
@@ -384,7 +366,6 @@ struct level_info_t
 
 	double		teamdamage;
 
-	FOptData	optdata;
 	FMusicMap	MusicMap;
 
 	TArray<FSpecialAction> specialactions;
@@ -395,49 +376,26 @@ struct level_info_t
 	
 	TArray<FString> EventHandlers;
 
-	int8_t		lightmode;
+	ELightMode	lightmode;
 	int8_t		brightfog;
 	int8_t		lightadditivesurfaces;
 	int8_t		notexturefill;
 	FVector3	skyrotatevector;
 	FVector3	skyrotatevector2;
 
+	FString		EDName;
+	FString		acsName;
+	bool		fs_nocheckposition;
+
 
 	level_info_t() 
 	{ 
 		Reset(); 
 	}
-	~level_info_t()
-	{
-		Snapshot.Clean();
-		ClearDefered();
-	}
 	void Reset();
-	bool isValid();
-	FString LookupLevelName ();
-	void ClearDefered()
-	{
-		deferred.Clear();
-	}
-	level_info_t *CheckLevelRedirect ();
-
-	template<class T>
-	T *GetOptData(FName id, bool create = true)
-	{
-		FOptionalMapinfoDataPtr *pdat = optdata.CheckKey(id);
-		
-		if (pdat != NULL)
-		{
-			return static_cast<T*>(pdat->Ptr);
-		}
-		else if (create)
-		{
-			T *newobj = new T;
-			optdata[id].Ptr = newobj;
-			return newobj;
-		}
-		else return NULL;
-	}
+	bool isValid() const;
+	FString LookupLevelName () const;
+	level_info_t *CheckLevelRedirect () const;
 };
 
 
@@ -486,10 +444,10 @@ void G_DeferedInitNew (const char *mapname, int skill = -1);
 struct FGameStartup;
 void G_DeferedInitNew (FGameStartup *gs);
 
-void G_ExitLevel (int position, bool keepFacing);
-void G_SecretExitLevel (int position);
-const char *G_GetExitMap();
-const char *G_GetSecretExitMap();
+void G_ExitLevel (FLevelLocals *Level, int position, bool keepFacing);
+void G_SecretExitLevel (FLevelLocals *Level, int position);
+const char *G_GetExitMap(FLevelLocals *Level);
+const char *G_GetSecretExitMap(FLevelLocals *Level);
 
 enum 
 {
@@ -502,12 +460,12 @@ enum
 	CHANGELEVEL_PRERAISEWEAPON = 64,
 };
 
-void G_ChangeLevel(const char *levelname, int position, int flags, int nextSkill=-1);
+void G_ChangeLevel(FLevelLocals *Level, const char *levelname, int position, int flags, int nextSkill=-1);
 
 void G_StartTravel ();
-int G_FinishTravel ();
+int G_FinishTravel (FLevelLocals *);
 
-void G_DoLoadLevel (int position, bool autosave);
+void G_DoLoadLevel (const FString &mapname, int position, bool autosave, bool newGame);
 
 void G_InitLevelLocals (void);
 
@@ -523,14 +481,12 @@ FString CalcMapName (int episode, int level);
 void G_ParseMapInfo (FString basemapinfo);
 
 void G_ClearSnapshots (void);
-void P_RemoveDefereds ();
 void G_SnapshotLevel (void);
-void G_UnSnapshotLevel (bool keepPlayers);
+void G_UnSnapshotLevel(const TArray<FLevelLocals *> &levels, bool hubLoad);
 void G_ReadSnapshots (FResourceFile *);
 void G_WriteSnapshots (TArray<FString> &, TArray<FCompressedBuffer> &);
 void G_WriteVisited(FSerializer &arc);
 void G_ReadVisited(FSerializer &arc);
-void G_ClearHubInfo();
 
 enum ESkillProperty
 {

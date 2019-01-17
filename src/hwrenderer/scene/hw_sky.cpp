@@ -41,16 +41,16 @@ CVAR(Bool,gl_noskyboxes, false, 0)
 //
 //==========================================================================
 
-void GLSkyInfo::init(int sky1, PalEntry FadeColor)
+void GLSkyInfo::init(HWDrawInfo *di, int sky1, PalEntry FadeColor)
 {
 	memset(this, 0, sizeof(*this));
 	if ((sky1 & PL_SKYFLAT) && (sky1 & (PL_SKYFLAT - 1)))
 	{
-		const line_t *l = &level.lines[(sky1&(PL_SKYFLAT - 1)) - 1];
+		const line_t *l = &di->Level->lines[(sky1&(PL_SKYFLAT - 1)) - 1];
 		const side_t *s = l->sidedef[0];
 		int pos;
 
-		if (level.flags & LEVEL_SWAPSKIES && s->GetTexture(side_t::bottom).isValid())
+		if (di->Level->flags & LEVEL_SWAPSKIES && s->GetTexture(side_t::bottom).isValid())
 		{
 			pos = side_t::bottom;
 		}
@@ -61,7 +61,7 @@ void GLSkyInfo::init(int sky1, PalEntry FadeColor)
 
 		FTextureID texno = s->GetTexture(pos);
 		texture[0] = FMaterial::ValidateTexture(texno, false, true);
-		if (!texture[0] || texture[0]->tex->UseType == ETextureType::Null) goto normalsky;
+		if (!texture[0] || !texture[0]->tex->isValid()) goto normalsky;
 		skytexno1 = texno;
 		x_offset[0] = s->GetTextureXOffset(pos) * (360.f/65536.f);
 		y_offset = s->GetTextureYOffset(pos);
@@ -70,29 +70,29 @@ void GLSkyInfo::init(int sky1, PalEntry FadeColor)
 	else
 	{
 	normalsky:
-		if (level.flags&LEVEL_DOUBLESKY)
+		if (di->Level->flags&LEVEL_DOUBLESKY)
 		{
-			texture[1] = FMaterial::ValidateTexture(sky1texture, false, true);
-			x_offset[1] = hw_sky1pos;
+			texture[1] = FMaterial::ValidateTexture(di->Level->skytexture1, false, true);
+			x_offset[1] = di->Level->hw_sky1pos;
 			doublesky = true;
 		}
 
-		if ((level.flags&LEVEL_SWAPSKIES || (sky1 == PL_SKYFLAT) || (level.flags&LEVEL_DOUBLESKY)) &&
-			sky2texture != sky1texture)	// If both skies are equal use the scroll offset of the first!
+		if ((di->Level->flags&LEVEL_SWAPSKIES || (sky1 == PL_SKYFLAT) || (di->Level->flags&LEVEL_DOUBLESKY)) &&
+			di->Level->skytexture2 != di->Level->skytexture1)	// If both skies are equal use the scroll offset of the first!
 		{
-			texture[0] = FMaterial::ValidateTexture(sky2texture, false, true);
-			skytexno1 = sky2texture;
+			texture[0] = FMaterial::ValidateTexture(di->Level->skytexture2, false, true);
+			skytexno1 = di->Level->skytexture2;
 			sky2 = true;
-			x_offset[0] = hw_sky2pos;
+			x_offset[0] = di->Level->hw_sky2pos;
 		}
 		else if (!doublesky)
 		{
-			texture[0] = FMaterial::ValidateTexture(sky1texture, false, true);
-			skytexno1 = sky1texture;
-			x_offset[0] = hw_sky1pos;
+			texture[0] = FMaterial::ValidateTexture(di->Level->skytexture1, false, true);
+			skytexno1 = di->Level->skytexture1;
+			x_offset[0] = di->Level->hw_sky1pos;
 		}
 	}
-	if (level.skyfog > 0)
+	if (di->Level->skyfog > 0)
 	{
 		fadecolor = FadeColor;
 		fadecolor.a = 0;
@@ -119,10 +119,10 @@ void GLWall::SkyPlane(HWDrawInfo *di, sector_t *sector, int plane, bool allowref
 	if ((sportal == nullptr && sector->GetTexture(plane) == skyflatnum) || (gl_noskyboxes && sportal != nullptr && sportal->mType == PORTS_SKYVIEWPOINT))
 	{
 		GLSkyInfo skyinfo;
-		skyinfo.init(sector->sky, Colormap.FadeColor);
+		skyinfo.init(di, sector->sky, Colormap.FadeColor);
 		ptype = PORTALTYPE_SKY;
 		sky = &skyinfo;
-		PutPortal(di, ptype);
+		PutPortal(di, ptype, plane);
 	}
 	else if (sportal != nullptr)
 	{
@@ -162,7 +162,7 @@ void GLWall::SkyPlane(HWDrawInfo *di, sector_t *sector, int plane, bool allowref
 	}
 	if (ptype != -1)
 	{
-		PutPortal(di, ptype);
+		PutPortal(di, ptype, plane);
 	}
 }
 
@@ -189,7 +189,7 @@ void GLWall::SkyLine(HWDrawInfo *di, sector_t *fs, line_t *line)
 	}
 	else
 	{
-		skyinfo.init(fs->sky, Colormap.FadeColor);
+		skyinfo.init(di, fs->sky, Colormap.FadeColor);
 		ptype = PORTALTYPE_SKY;
 		sky = &skyinfo;
 	}
@@ -197,7 +197,7 @@ void GLWall::SkyLine(HWDrawInfo *di, sector_t *fs, line_t *line)
 	ztop[1] = zceil[1];
 	zbottom[0] = zfloor[0];
 	zbottom[1] = zfloor[1];
-	PutPortal(di, ptype);
+	PutPortal(di, ptype, -1);
 }
 
 
@@ -243,13 +243,13 @@ void GLWall::SkyTop(HWDrawInfo *di, seg_t * seg,sector_t * fs,sector_t * bs,vert
 			{
 				if (bs->GetPlaneTexZ(sector_t::floor)==fs->GetPlaneTexZ(sector_t::floor)+1.)
 				{
-					FTexture * tex = TexMan(seg->sidedef->GetTexture(side_t::bottom));
-					if (!tex || tex->UseType==ETextureType::Null) return;
+					FTexture * tex = TexMan.GetTexture(seg->sidedef->GetTexture(side_t::bottom), true);
+					if (!tex || !tex->isValid()) return;
 
 					// very, very, very ugly special case (See Icarus MAP14)
 					// It is VERY important that this is only done for a floor height difference of 1
 					// or it will cause glitches elsewhere.
-					tex = TexMan(seg->sidedef->GetTexture(side_t::mid));
+					tex = TexMan.GetTexture(seg->sidedef->GetTexture(side_t::mid), true);
 					if (tex != NULL && !(seg->linedef->flags & ML_DONTPEGTOP) &&
 						seg->sidedef->GetTextureYOffset(side_t::mid) > 0)
 					{
@@ -265,7 +265,7 @@ void GLWall::SkyTop(HWDrawInfo *di, seg_t * seg,sector_t * fs,sector_t * bs,vert
 
 		ztop[0]=ztop[1]=32768.0f;
 
-		FTexture * tex = TexMan(seg->sidedef->GetTexture(side_t::top));
+		FTexture * tex = TexMan.GetTexture(seg->sidedef->GetTexture(side_t::top), true);
 		if (bs->GetTexture(sector_t::ceiling) != skyflatnum)
 
 		{
@@ -325,10 +325,10 @@ void GLWall::SkyBottom(HWDrawInfo *di, seg_t * seg,sector_t * fs,sector_t * bs,v
 	if (fs->GetTexture(sector_t::floor)==skyflatnum)
 	{
 		if (bs->special == GLSector_NoSkyDraw) return;
-		FTexture * tex = TexMan(seg->sidedef->GetTexture(side_t::bottom));
+		FTexture * tex = TexMan.GetTexture(seg->sidedef->GetTexture(side_t::bottom), true);
 		
-		// For lower skies the normal logic only applies to walls with no lower texture!
-		if (tex->UseType==ETextureType::Null)
+		// For lower skies the normal logic only applies to walls with no lower texture.
+		if (!tex->isValid())
 		{
 			if (bs->GetTexture(sector_t::floor)==skyflatnum)
 			{
@@ -346,16 +346,16 @@ void GLWall::SkyBottom(HWDrawInfo *di, seg_t * seg,sector_t * fs,sector_t * bs,v
 		}
 		zbottom[0]=zbottom[1]=-32768.0f;
 
-		if ((tex && tex->UseType!=ETextureType::Null) || bs->GetTexture(sector_t::floor)!=skyflatnum)
+		if ((tex && tex->isValid()) || bs->GetTexture(sector_t::floor) != skyflatnum)
 		{
-			ztop[0]=zfloor[0];
-			ztop[1]=zfloor[1];
+			ztop[0] = zfloor[0];
+			ztop[1] = zfloor[1];
 		}
 		else
 		{
 			ztop[0] = bs->floorplane.ZatPoint(v1);
 			ztop[1] = bs->floorplane.ZatPoint(v2);
-			flags|=GLWF_SKYHACK;	// mid textures on such lines need special treatment!
+			flags |= GLWF_SKYHACK;	// mid textures on such lines need special treatment!
 		}
 	}
 	else 

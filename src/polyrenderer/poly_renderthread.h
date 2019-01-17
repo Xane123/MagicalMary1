@@ -32,7 +32,7 @@ class RenderMemory;
 class PolyTranslucentObject;
 class PolyDrawSectorPortal;
 class PolyDrawLinePortal;
-class ADynamicLight;
+struct FDynamicLight;
 
 class PolyRenderThread
 {
@@ -54,10 +54,10 @@ public:
 	std::vector<std::unique_ptr<PolyDrawSectorPortal>> SectorPortals;
 	std::vector<std::unique_ptr<PolyDrawLinePortal>> LinePortals;
 
-	TArray<ADynamicLight*> AddedLightsArray;
+	TArray<FDynamicLight*> AddedLightsArray;
 
 	// Make sure texture can accessed safely
-	void PrepareTexture(FTexture *texture, FRenderStyle style);
+	void PrepareTexture(FSoftwareTexture *texture, FRenderStyle style);
 
 	// Setup poly object in a threadsafe manner
 	void PreparePolyObject(subsector_t *sub);

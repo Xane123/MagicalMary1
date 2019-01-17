@@ -28,14 +28,11 @@ struct FRenderer
 	// renders view to a savegame picture
 	virtual void WriteSavePic(player_t *player, FileWriter *file, int width, int height) = 0;
 
-	// render to a camera texture
-	virtual void RenderTextureView(FCanvasTexture *tex, AActor *viewpoint, double fov) = 0;
-
 	// draws player sprites with hardware acceleration (only useful for software rendering)
 	virtual void DrawRemainingPlayerSprites() = 0;
 
-	// set up the colormap for a newly loaded level.
-	virtual void SetColormap() = 0;
+	// set up the colormap for a newly loaded map.
+	virtual void SetColormap(FLevelLocals *) = 0;
 
 	virtual void SetClearColor(int color) = 0;
 

@@ -189,37 +189,6 @@ cluster_info_t *FindClusterInfo (int cluster)
 //
 //==========================================================================
 
-void G_ClearSnapshots (void)
-{
-	for (unsigned int i = 0; i < wadlevelinfos.Size(); i++)
-	{
-		wadlevelinfos[i].Snapshot.Clean();
-	}
-	// Since strings are only locked when snapshotting a level, unlock them
-	// all now, since we got rid of all the snapshots that cared about them.
-	GlobalACSStrings.UnlockAll();
-}
-
-//==========================================================================
-//
-// Remove any existing defereds
-//
-//==========================================================================
-
-void P_RemoveDefereds (void)
-{
-	for (unsigned int i = 0; i < wadlevelinfos.Size(); i++)
-	{
-		wadlevelinfos[i].ClearDefered();
-	}
-}
-
-
-//==========================================================================
-//
-//
-//==========================================================================
-
 void level_info_t::Reset()
 {
 	MapName = "";
@@ -245,8 +214,6 @@ void level_info_t::Reset()
 	WallVertLight = +8;
 	F1Pic = "";
 	musicorder = 0;
-	Snapshot = { 0,0,0,0,0,nullptr };
-	deferred.Clear();
 	skyspeed1 = skyspeed2 = 0.f;
 	fadeto = 0;
 	outsidefog = 0xff000000;
@@ -284,7 +251,7 @@ void level_info_t::Reset()
 	PrecacheSounds.Clear();
 
 	brightfog = -1;
-	lightmode = -1;
+	lightmode = ELightMode::NotSet;
 	notexturefill = -1;
 	lightadditivesurfaces = -1;
 	skyrotatevector = FVector3(0, 0, 1);
@@ -298,7 +265,7 @@ void level_info_t::Reset()
 //
 //==========================================================================
 
-FString level_info_t::LookupLevelName()
+FString level_info_t::LookupLevelName() const
 {
 	if (flags & LEVEL_LOOKUPLEVELNAME)
 	{
@@ -353,7 +320,7 @@ FString level_info_t::LookupLevelName()
 //
 //==========================================================================
 
-level_info_t *level_info_t::CheckLevelRedirect ()
+level_info_t *level_info_t::CheckLevelRedirect () const
 {
 	if (RedirectType != NAME_None)
 	{
@@ -382,7 +349,7 @@ level_info_t *level_info_t::CheckLevelRedirect ()
 //
 //==========================================================================
 
-bool level_info_t::isValid()
+bool level_info_t::isValid() const
 {
 	return MapName.Len() != 0 || this == &TheDefaultLevelInfo;
 }
@@ -1381,9 +1348,9 @@ DEFINE_MAP_OPTION(lightmode, false)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 
-	if ((parse.sc.Number >= 0 && parse.sc.Number <= 4) || parse.sc.Number == 8)
+	if ((parse.sc.Number >= 0 && parse.sc.Number <= 4) || parse.sc.Number == 8 || parse.sc.Number == 16)
 	{
-		info->lightmode = uint8_t(parse.sc.Number);
+		info->lightmode = ELightMode(parse.sc.Number);
 	}
 	else
 	{
@@ -1444,6 +1411,34 @@ DEFINE_MAP_OPTION(skyrotate2, false)
 	info->skyrotatevector2.Z = (float)parse.sc.Float;
 	info->skyrotatevector2.MakeUnit();
 }
+
+DEFINE_MAP_OPTION(fs_nocheckposition, false)
+{
+	if (parse.CheckAssign())
+	{
+		parse.sc.MustGetNumber();
+		info->fs_nocheckposition = !!parse.sc.Number;
+	}
+	else
+	{
+		info->fs_nocheckposition = true;
+	}
+}
+
+DEFINE_MAP_OPTION(edata, false)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetString();
+	info->EDName = parse.sc.String;
+}
+
+DEFINE_MAP_OPTION(loadacs, false)
+{
+	parse.ParseAssign();
+	parse.sc.MustGetString();
+	info->acsName = parse.sc.String;
+}
+
 
 //==========================================================================
 //
@@ -1553,6 +1548,7 @@ MapFlagHandlers[] =
 	{ "forcefakecontrast",				MITYPE_SETFLAG3,	LEVEL3_FORCEFAKECONTRAST, 0 },
 	{ "nolightfade",					MITYPE_SETFLAG3,	LEVEL3_NOLIGHTFADE, 0 },
 	{ "nocoloredspritelighting",		MITYPE_SETFLAG3,	LEVEL3_NOCOLOREDSPRITELIGHTING, 0 },
+	{ "forceworldpanning",				MITYPE_SETFLAG3,	LEVEL3_FORCEWORLDPANNING, 0 },
 	{ "nobotnodes",						MITYPE_IGNORE,	0, 0 },		// Skulltag option: nobotnodes
 	{ "compat_shorttex",				MITYPE_COMPATFLAG, COMPATF_SHORTTEX, 0 },
 	{ "compat_stairs",					MITYPE_COMPATFLAG, COMPATF_STAIRINDEX, 0 },
@@ -2255,8 +2251,6 @@ static void ClearMapinfo()
 	AllSkills.Clear();
 	DefaultSkill = -1;
 	DeinitIntermissions();
-	level.info = NULL;
-	level.F1Pic = "";
 }
 
 //==========================================================================

@@ -396,7 +396,7 @@ class Minotaur : Actor
 		let mf = MinotaurFriend(self);
 		if (mf)
 		{
-			if (mf.StartTime >= 0 && (level.maptime - mf.StartTime) >= MAULATORTICS)
+			if (mf.StartTime >= 0 && (Level.maptime - mf.StartTime) >= MAULATORTICS)
 			{
 				DamageMobj (null, null, TELEFRAG_DAMAGE, 'None');
 				return;
@@ -409,13 +409,13 @@ class Minotaur : Actor
 		if (random[MinotaurRoam]() < 6)
 		{
 			//Choose new direction
-			movedir = random[MinotaurRoam]() % 8;
+			movedir = random[MinotaurRoam](0, 7);
 			FaceMovementDirection ();
 		}
 		if (!MonsterMove())
 		{
 			// Turn
-			if (random[MinotaurRoam]() & 1)
+			if (random[MinotaurRoam](0, 1))
 				movedir = (movedir + 1) % 8;
 			else
 				movedir = (movedir + 7) % 8;
@@ -472,7 +472,7 @@ class Minotaur : Actor
 
 		if (!target)				// Normal monster search
 		{
-			ThinkerIterator it = ThinkerIterator.Create("Actor");
+			ThinkerIterator it = Level.CreateThinkerIterator("Actor");
 
 			while ((mo = Actor(it.Next())) != null)
 			{
@@ -517,7 +517,7 @@ class Minotaur : Actor
 		// In case pain caused him to skip his fade in.
 		A_SetRenderStyle(1, STYLE_Normal);
 
-		if (mf.StartTime >= 0 && (level.maptime - mf.StartTime) >= MAULATORTICS)
+		if (mf.StartTime >= 0 && (Level.maptime - mf.StartTime) >= MAULATORTICS)
 		{
 			DamageMobj (null, null, TELEFRAG_DAMAGE, 'None');
 			return;
@@ -619,7 +619,7 @@ class MinotaurFriend : Minotaur
 		if (tracer && tracer.health > 0 && tracer.player)
 		{
 			// Search thinker list for minotaur
-			ThinkerIterator it = ThinkerIterator.Create("MinotaurFriend");
+			ThinkerIterator it = Level.CreateThinkerIterator("MinotaurFriend");
 			MinotaurFriend mo;
 
 			while ((mo = MinotaurFriend(it.Next())) != null)
@@ -628,7 +628,7 @@ class MinotaurFriend : Minotaur
 				// [RH] Minotaurs can't be morphed, so this isn't needed
 				//if (!(mo.flags&MF_COUNTKILL)) continue;		// for morphed minotaurs
 				if (mo.bCorpse) continue;
-				if (mo.StartTime >= 0 && (level.maptime - StartTime) >= MAULATORTICS) continue;
+				if (mo.StartTime >= 0 && (Level.maptime - StartTime) >= MAULATORTICS) continue;
 				if (mo.tracer != null && mo.tracer.player == tracer.player) break;
 			}
 

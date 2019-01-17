@@ -23,6 +23,7 @@
 #include "hwrenderer/dynlights/hw_shadowmap.h"
 #include "hwrenderer/utility/hw_cvars.h"
 #include "hwrenderer/dynlights/hw_dynlightdata.h"
+#include "hwrenderer/data/buffers.h"
 #include "stats.h"
 #include "g_levellocals.h"
 
@@ -84,19 +85,22 @@ CUSTOM_CVAR (Bool, gl_light_shadowmap, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
     if (!self)
     {
-        // Unset any residual shadow map indices in the light actors.
-        TThinkerIterator<ADynamicLight> it(STAT_DLIGHT);
-        while (auto light = it.Next())
-        {
-            light->mShadowmapIndex = 1024;
-        }
+		ForAllLevels([](FLevelLocals *Level)
+		{
+			auto light = Level->lights;
+			while (light)
+			{
+				light->mShadowmapIndex = 1024;
+				light = light->next;
+			}
+		});
     }
 }
 
-bool IShadowMap::ShadowTest(ADynamicLight *light, const DVector3 &pos)
+bool IShadowMap::ShadowTest(FDynamicLight *light, const DVector3 &pos)
 {
-	if (light->shadowmapped && light->radius > 0.0 && IsEnabled() && mAABBTree)
-		return mAABBTree->RayTest(light->Pos(), pos) >= 1.0f;
+	if (light->shadowmapped && light->GetRadius() > 0.0 && IsEnabled() && mAABBTree)
+		return mAABBTree->RayTest(light->Pos, pos) >= 1.0f;
 	else
 		return true;
 }
@@ -106,14 +110,13 @@ bool IShadowMap::IsEnabled() const
 	return gl_light_shadowmap && (screen->hwcaps & RFL_SHADER_STORAGE_BUFFER);
 }
 
-void IShadowMap::CollectLights()
+void IShadowMap::CollectLights(FDynamicLight *head)
 {
 	if (mLights.Size() != 1024 * 4) mLights.Resize(1024 * 4);
 	int lightindex = 0;
 
 	// Todo: this should go through the blockmap in a spiral pattern around the player so that closer lights are preferred.
-	TThinkerIterator<ADynamicLight> it(STAT_DLIGHT);
-	while (auto light = it.Next())
+	for (auto light = head; light; light = light->next)
 	{
 		LightsProcessed++;
 		if (light->shadowmapped && light->IsActive() && lightindex < 1024 * 4)
@@ -141,22 +144,80 @@ void IShadowMap::CollectLights()
 	}
 }
 
-bool IShadowMap::ValidateAABBTree()
+bool IShadowMap::ValidateAABBTree(FLevelLocals *Level)
 {
 	// Just comparing the level info is not enough. If two MAPINFO-less levels get played after each other, 
 	// they can both refer to the same default level info.
-	if (level.info != mLastLevel && (level.nodes.Size() != mLastNumNodes || level.segs.Size() != mLastNumSegs))
+	if (Level->info != mLastLevel && (Level->nodes.Size() != mLastNumNodes || Level->segs.Size() != mLastNumSegs))
 	{
 		mAABBTree.reset();
 
-		mLastLevel = level.info;
-		mLastNumNodes = level.nodes.Size();
-		mLastNumSegs = level.segs.Size();
+		mLastLevel = Level->info;
+		mLastNumNodes = Level->nodes.Size();
+		mLastNumSegs = Level->segs.Size();
 	}
 
 	if (mAABBTree)
 		return true;
 
-	mAABBTree.reset(new hwrenderer::LevelAABBTree());
+	mAABBTree.reset(new hwrenderer::LevelAABBTree(Level));
 	return false;
 }
+
+bool IShadowMap::PerformUpdate(FLevelLocals *Level)
+{
+	UpdateCycles.Reset();
+
+	LightsProcessed = 0;
+	LightsShadowmapped = 0;
+
+	if (IsEnabled())
+	{
+		UpdateCycles.Clock();
+		UploadAABBTree(Level);
+		UploadLights(Level->lights);
+		mLightList->BindBase();
+		mNodesBuffer->BindBase();
+		mLinesBuffer->BindBase();
+		return true;
+	}
+	return false;
+}
+
+void IShadowMap::UploadLights(FDynamicLight *head)
+{
+	CollectLights(head);
+
+	if (mLightList == nullptr)
+		mLightList = screen->CreateDataBuffer(4, true);
+
+	mLightList->SetData(sizeof(float) * mLights.Size(), &mLights[0]);
+}
+
+
+void IShadowMap::UploadAABBTree(FLevelLocals *Level)
+{
+	if (!ValidateAABBTree(Level))
+	{
+		if (!mNodesBuffer)
+			mNodesBuffer = screen->CreateDataBuffer(2, true);
+		mNodesBuffer->SetData(mAABBTree->NodesSize(), mAABBTree->Nodes());
+
+		if (!mLinesBuffer)
+			mLinesBuffer = screen->CreateDataBuffer(3, true);
+		mLinesBuffer->SetData(mAABBTree->LinesSize(), mAABBTree->Lines());
+	}
+	else if (mAABBTree->Update())
+	{
+		mNodesBuffer->SetSubData(mAABBTree->DynamicNodesOffset(), mAABBTree->DynamicNodesSize(), mAABBTree->DynamicNodes());
+		mLinesBuffer->SetSubData(mAABBTree->DynamicLinesOffset(), mAABBTree->DynamicLinesSize(), mAABBTree->DynamicLines());
+	}
+}
+
+IShadowMap::~IShadowMap()
+{
+	if (mLightList) delete mLightList;
+	if (mNodesBuffer) delete mNodesBuffer;
+	if (mLinesBuffer) delete mLinesBuffer;
+}
+

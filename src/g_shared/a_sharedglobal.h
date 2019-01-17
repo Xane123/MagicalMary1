@@ -9,6 +9,7 @@ struct vertex_t;
 struct side_t;
 struct F3DFloor;
 class DBaseDecal;
+struct SpreadInfo;
 
 class DBaseDecal *ShootDecal(const FDecalTemplate *tpl, AActor *basisactor, sector_t *sec, double x, double y, double z, DAngle angle, double tracedist, bool permanent);
 void SprayDecal(AActor *shooter, const char *name,double distance = 172.);
@@ -18,9 +19,8 @@ class DBaseDecal : public DThinker
 	DECLARE_CLASS (DBaseDecal, DThinker)
 	HAS_OBJECT_POINTERS
 public:
-	DBaseDecal ();
-	DBaseDecal(double z);
-	DBaseDecal(int statnum, double z);
+	static const int DEFAULT_STAT = STAT_DECAL;
+	DBaseDecal(FLevelLocals *l, double z = 0);
 	DBaseDecal (const AActor *actor);
 	DBaseDecal (const DBaseDecal *basis);
 
@@ -52,29 +52,31 @@ protected:
 	void CalcFracPos(side_t *wall, double x, double y);
 	void Remove ();
 
-	static void SpreadLeft (double r, vertex_t *v1, side_t *feelwall, F3DFloor *ffloor);
-	static void SpreadRight (double r, side_t *feelwall, double wallsize, F3DFloor *ffloor);
+	static void SpreadLeft (double r, vertex_t *v1, side_t *feelwall, F3DFloor *ffloor, SpreadInfo *spread);
+	static void SpreadRight (double r, side_t *feelwall, double wallsize, F3DFloor *ffloor, SpreadInfo *spread);
+protected:
+	DBaseDecal() = default;
 };
 
 class DImpactDecal : public DBaseDecal
 {
 	DECLARE_CLASS (DImpactDecal, DBaseDecal)
 public:
-	DImpactDecal(double z);
+	static const int DEFAULT_STAT = STAT_AUTODECAL;
+	DImpactDecal(FLevelLocals *l, double z);
 	DImpactDecal (side_t *wall, const FDecalTemplate *templ);
 
 	static DImpactDecal *StaticCreate(const char *name, const DVector3 &pos, side_t *wall, F3DFloor * ffloor, PalEntry color = 0);
 	static DImpactDecal *StaticCreate(const FDecalTemplate *tpl, const DVector3 &pos, side_t *wall, F3DFloor * ffloor, PalEntry color = 0);
 
 	void BeginPlay ();
-	void OnDestroy() override;
 
 protected:
 	DBaseDecal *CloneSelf(const FDecalTemplate *tpl, double x, double y, double z, side_t *wall, F3DFloor * ffloor) const;
-	static void CheckMax ();
+	void CheckMax ();
 
 private:
-	DImpactDecal();
+	DImpactDecal() {}
 };
 
 class DFlashFader : public DThinker
@@ -95,11 +97,11 @@ public:
 protected:
 	float Blends[2][4];
 	int TotalTics;
-	int StartTic;
+	int RemainingTics;
 	TObjPtr<AActor*> ForWho;
 	bool Terminate;
 	void SetBlend (float time);
-	DFlashFader ();
+	DFlashFader() = default;
 };
 
 enum
@@ -126,6 +128,7 @@ class DEarthquake : public DThinker
 	DECLARE_CLASS (DEarthquake, DThinker)
 	HAS_OBJECT_POINTERS
 public:
+	static const int DEFAULT_STAT = STAT_EARTHQUAKE;
 	DEarthquake(AActor *center, int intensityX, int intensityY, int intensityZ, int duration,
 		int damrad, int tremrad, FSoundID quakesfx, int flags, 
 		double waveSpeedX, double waveSpeedY, double waveSpeedZ, int falloff, int highpoint, double rollIntensity, double rollWave);
@@ -151,24 +154,7 @@ public:
 	static int StaticGetQuakeIntensities(double ticFrac, AActor *viewer, FQuakeJiggers &jiggers);
 
 private:
-	DEarthquake ();
-};
-
-class AMorphedMonster : public AActor
-{
-	DECLARE_CLASS (AMorphedMonster, AActor)
-	HAS_OBJECT_POINTERS
-public:
-	void Tick ();
-	
-	void Serialize(FSerializer &arc);
-	void Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOfDeath) override;
-	void OnDestroy() override;
-
-	TObjPtr<AActor*> UnmorphedMe;
-	int UnmorphTime, MorphStyle;
-	PClassActor *MorphExitFlash;
-	ActorFlags FlagsSave;
+	DEarthquake() = default;
 };
 
 #endif //__A_SHAREDGLOBAL_H__

@@ -24,6 +24,7 @@ class FTagManager
 	friend class FSectorTagIterator;
 	friend class FLineIdIterator;
 
+	FLevelLocals *Level;
 	TArray<FTagItem> allTags;
 	TArray<FTagItem> allIDs;
 	TArray<int> startForSector;
@@ -42,6 +43,7 @@ class FTagManager
 	}
 
 public:
+	FTagManager(FLevelLocals *l) : Level(l) {}
 	void Clear()
 	{
 		allTags.Clear();
@@ -54,6 +56,7 @@ public:
 
 	bool SectorHasTags(const sector_t *sector) const;
 	int GetFirstSectorTag(const sector_t *sect) const;
+	int GetFirstSectorTag(int sect) const;
 	bool SectorHasTag(int sector, int tag) const;
 	bool SectorHasTag(const sector_t *sector, int tag) const;
 
@@ -67,17 +70,21 @@ public:
 	void RemoveSectorTags(int sect);
 
 	void DumpTags();
-};
 
-extern FTagManager tagManager;
+	int FindFirstSectorFromTag(int tag);
+	int FindFirstLineFromID(int tag);
+
+};
 
 class FSectorTagIterator
 {
 protected:
 	int searchtag;
 	int start;
+	FLevelLocals *Level;
+	FTagManager &tagManager;
 
-	FSectorTagIterator()
+	FSectorTagIterator(FTagManager &manager) : tagManager(manager)
 	{
 		// For DSectorTagIterator
 	}
@@ -103,13 +110,13 @@ protected:
 	}
 
 public:
-	FSectorTagIterator(int tag)
+	FSectorTagIterator(FTagManager &manager, int tag) : tagManager(manager)
 	{
 		Init(tag);
 	}
 
 	// Special constructor for actions that treat tag 0 as  'back of activation line'
-	FSectorTagIterator(int tag, line_t *line)
+	FSectorTagIterator(FTagManager &manager, int tag, line_t *line) : tagManager(manager)
 	{
 		Init(tag, line);
 	}
@@ -123,9 +130,10 @@ class FLineIdIterator
 protected:
 	int searchtag;
 	int start;
+	FTagManager &tagManager;
 
 public:
-	FLineIdIterator(int id)
+	FLineIdIterator(FTagManager &manager, int id) : tagManager(manager)
 	{
 		searchtag = id;
 		start = tagManager.IDHashFirst[((unsigned int)id) % FTagManager::TAG_HASH_SIZE];
@@ -135,15 +143,15 @@ public:
 };
 
 
-inline int P_FindFirstSectorFromTag(int tag)
+inline int FTagManager::FindFirstSectorFromTag(int tag)
 {
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(*this, tag);
 	return it.Next();
 }
 
-inline int P_FindFirstLineFromID(int tag)
+inline int FTagManager::FindFirstLineFromID(int tag)
 {
-	FLineIdIterator it(tag);
+	FLineIdIterator it(*this, tag);
 	return it.Next();
 }
 

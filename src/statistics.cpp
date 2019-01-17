@@ -68,18 +68,6 @@ CVAR(String, statfile, "zdoomstat.txt", CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 //
 //==========================================================================
 
-// This struct is used to track statistics data in game
-struct OneLevel
-{
-	int totalkills, killcount;
-	int totalitems, itemcount;
-	int totalsecrets, secretcount;
-	int leveltime;
-	FString Levelname;
-};
-
-// Current game's statistics
-static TArray<OneLevel> LevelData;
 static FEpisode *StartEpisode;
 
 // The statistics for one level
@@ -363,7 +351,7 @@ static void LevelStatEntry(FSessionStatistics *es, const char *level, const char
 //
 //==========================================================================
 
-void STAT_StartNewGame(const char *mapname)
+void STAT_StartNewGame(TArray<OneLevel> &LevelData, const char *mapname)
 {
 	LevelData.Clear();
 	if (!deathmatch && !multiplayer)
@@ -386,34 +374,34 @@ void STAT_StartNewGame(const char *mapname)
 //
 //==========================================================================
 
-static void StoreLevelStats()
+static void StoreLevelStats(TArray<OneLevel> &LevelData, FLevelLocals *Level)
 {
 	unsigned int i;
 
 	if (gamestate != GS_LEVEL) return;
 
-	if (!(level.flags2&LEVEL2_NOSTATISTICS))	// don't consider maps that were excluded from statistics
+	if (!(Level->flags2&LEVEL2_NOSTATISTICS))	// don't consider maps that were excluded from statistics
 	{
 		for(i=0;i<LevelData.Size();i++)
 		{
-			if (!LevelData[i].Levelname.CompareNoCase(level.MapName)) break;
+			if (!LevelData[i].Levelname.CompareNoCase(Level->MapName)) break;
 		}
 		if (i==LevelData.Size())
 		{
 			LevelData.Reserve(1);
-			LevelData[i].Levelname = level.MapName;
+			LevelData[i].Levelname = Level->MapName;
 		}
-		LevelData[i].totalkills = level.total_monsters;
-		LevelData[i].killcount = level.killed_monsters;
-		LevelData[i].totalitems = level.total_items;
-		LevelData[i].itemcount = level.found_items;
-		LevelData[i].totalsecrets = level.total_secrets;
-		LevelData[i].secretcount = level.found_secrets;
-		LevelData[i].leveltime = level.maptime;
+		LevelData[i].totalkills = Level->total_monsters;
+		LevelData[i].killcount = Level->killed_monsters;
+		LevelData[i].totalitems = Level->total_items;
+		LevelData[i].itemcount = Level->found_items;
+		LevelData[i].totalsecrets = Level->total_secrets;
+		LevelData[i].secretcount = Level->found_secrets;
+		LevelData[i].leveltime = Level->maptime;
 
 		// Check for living monsters. On some maps it can happen
 		// that the counter misses some. 
-		TThinkerIterator<AActor> it;
+		TThinkerIterator<AActor> it(Level);
 		AActor *ac;
 		int mc = 0;
 
@@ -432,12 +420,12 @@ static void StoreLevelStats()
 //
 //==========================================================================
 
-void STAT_ChangeLevel(const char *newl)
+void STAT_ChangeLevel(TArray<OneLevel> &LevelData, const char *newl, FLevelLocals *Level)
 {
 	// record the current level's stats.
-	StoreLevelStats();
+	StoreLevelStats(LevelData, Level);
 
-	level_info_t *thisinfo = level.info;
+	const level_info_t *thisinfo = Level->info;
 	level_info_t *nextinfo = NULL;
 	
 	if (strncmp(newl, "enDSeQ", 6))
@@ -481,7 +469,7 @@ void STAT_ChangeLevel(const char *newl)
 			}
 
 			infostring.Format("%4d/%4d, %4d/%4d, %3d/%3d, %2d", statvals[0], statvals[1], statvals[2], statvals[3], statvals[4], statvals[5], validlevels);
-			FSessionStatistics *es = StatisticsEntry(sl, infostring, level.totaltime);
+			FSessionStatistics *es = StatisticsEntry(sl, infostring, currentSession->totaltime);
 
 			for(unsigned i = 0; i < LevelData.Size(); i++)
 			{
@@ -524,7 +512,7 @@ FSerializer &Serialize(FSerializer &arc, const char *key, OneLevel &l, OneLevel 
 	return arc;
 }
 
-void STAT_Serialize(FSerializer &arc)
+void STAT_Serialize(TArray<OneLevel> &LevelData, FSerializer &arc)
 {
 	FString startlevel;
 	int i = LevelData.Size();
@@ -564,11 +552,12 @@ void STAT_Serialize(FSerializer &arc)
 
 FString GetStatString()
 {
+	auto &LevelData = currentSession->Statistics;
 	FString compose;
 	for(unsigned i = 0; i < LevelData.Size(); i++)
 	{
 		OneLevel *l = &LevelData[i];
-		compose.AppendFormat("Level %s - Kills: %d/%d - Items: %d/%d - Secrets: %d/%d - Time: %d:%02d\n", 
+		compose.AppendFormat("Map %s - Kills: %d/%d - Items: %d/%d - Secrets: %d/%d - Time: %d:%02d\n", 
 			l->Levelname.GetChars(), l->killcount, l->totalkills, l->itemcount, l->totalitems, l->secretcount, l->totalsecrets,
 			l->leveltime/(60*TICRATE), (l->leveltime/TICRATE)%60);
 	}
@@ -577,7 +566,7 @@ FString GetStatString()
 
 CCMD(printstats)
 {
-	StoreLevelStats();	// Refresh the current level's results.
+	if (currentSession) StoreLevelStats(currentSession->Statistics, currentSession->Levelinfo[0]);	// Refresh the current level's results.
 	Printf("%s", GetStatString().GetChars());
 }
 
@@ -590,12 +579,12 @@ CCMD(finishgame)
 		Printf("Cannot use 'finishgame' while not in a game!\n");
 		return;
 	}
-	// This CCMD simulates an end-of-game action and exists to end mods that never exit their last level.
+	// This CCMD simulates an end-of-game action and exists to end mods that never exit their last map.
 	Net_WriteByte(DEM_FINISHGAME);
 }
 
 ADD_STAT(statistics)
 {
-	StoreLevelStats();	// Refresh the current level's results.
+	if (currentSession) StoreLevelStats(currentSession->Statistics, currentSession->Levelinfo[0]);	// Refresh the current level's results.
 	return GetStatString();
 }

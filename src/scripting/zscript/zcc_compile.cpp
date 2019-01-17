@@ -175,6 +175,10 @@ void ZCCCompiler::ProcessClass(ZCC_Class *cnode, PSymbolTreeNode *treenode)
 			cls->Properties.Push(static_cast<ZCC_Property *>(node));
 			break;
 
+		case AST_FlagDef:
+			cls->FlagDefs.Push(static_cast<ZCC_FlagDef*>(node));
+			break;
+
 		case AST_VarDeclarator: 
 			cls->Fields.Push(static_cast<ZCC_VarDeclarator *>(node)); 
 			break;
@@ -455,7 +459,7 @@ void ZCCCompiler::MessageV(ZCC_TreeNode *node, const char *txtcolor, const char 
 //
 // ZCCCompiler :: Compile
 //
-// Compile everything defined at this level.
+// Compile everything defined at this level
 //
 //==========================================================================
 
@@ -1114,7 +1118,7 @@ void ZCCCompiler::CompileAllFields()
 	// Create copies of the arrays which can be altered
 	auto Classes = this->Classes;
 	auto Structs = this->Structs;
-	TMap<PClass*, bool> HasNativeChildren;
+	TMap<FName, bool> HasNativeChildren;
 
 	// first step: Look for native classes with native children.
 	// These may not have any variables added to them because it'd clash with the native definitions.
@@ -1130,7 +1134,7 @@ void ZCCCompiler::CompileAllFields()
 				if (ac->ParentClass != nullptr && ac->ParentClass->VMType == c->Type() && ac->Size != TentativeClass)
 				{
 					// Only set a marker here, so that we can print a better message when the actual fields get added.
-					HasNativeChildren.Insert(ac, true);
+					HasNativeChildren.Insert(c->Type()->TypeName, true);
 					break;
 				}
 			}
@@ -1176,7 +1180,7 @@ void ZCCCompiler::CompileAllFields()
 			else
 				type->MetaSize = 0;
 
-			if (CompileFields(type->VMType, Classes[i]->Fields, nullptr, &Classes[i]->TreeNodes, false, !!HasNativeChildren.CheckKey(type)))
+			if (CompileFields(type->VMType, Classes[i]->Fields, nullptr, &Classes[i]->TreeNodes, false, !!HasNativeChildren.CheckKey(type->TypeName)))
 			{
 				// Remove from the list if all fields got compiled.
 				Classes.Delete(i--);
@@ -1284,7 +1288,13 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 
 		if (field->Type->ArraySize != nullptr)
 		{
-			fieldtype = ResolveArraySize(fieldtype, field->Type->ArraySize, type);
+			bool nosize;
+			fieldtype = ResolveArraySize(fieldtype, field->Type->ArraySize, type, &nosize);
+
+			if (nosize)
+			{
+				Error(field, "Must specify array size");
+			}
 		}
 
 		auto name = field->Names;
@@ -1300,7 +1310,13 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 				auto thisfieldtype = fieldtype;
 				if (name->ArraySize != nullptr)
 				{
-					thisfieldtype = ResolveArraySize(thisfieldtype, name->ArraySize, type);
+					bool nosize;
+					thisfieldtype = ResolveArraySize(thisfieldtype, name->ArraySize, type, &nosize);
+
+					if (nosize)
+					{
+						Error(field, "Must specify array size");
+					}
 				}
 				
 				if (varflags & VARF_Native)
@@ -1332,19 +1348,29 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 						}
 						else
 						{
+
 							// This is a global variable.
 							if (fd->BitValue != 0) thisfieldtype = fd->FieldSize == 1 ? TypeUInt8 : fd->FieldSize == 2 ? TypeUInt16 : TypeUInt32;
-							PField *field = Create<PField>(name->Name, thisfieldtype, varflags | VARF_Native | VARF_Static, fd->FieldOffset, fd->BitValue);
+							PField *f = Create<PField>(name->Name, thisfieldtype, varflags | VARF_Native | VARF_Static, fd->FieldOffset, fd->BitValue);
+							if (f->Flags & (ZCC_Version | ZCC_Deprecated))
+							{
+								f->mVersion = field->Version;
+							}
+							if (name->Name == NAME_globalfreeze)	// Give the parser a kick in the butt for not parsing the declaration properly. I have no idea why it doesn't work.
+							{
+								f->mVersion = MakeVersion(3, 8, 0);
+								f->Flags |= VARF_Deprecated;
+							}
 
-							if (OutNamespace->Symbols.AddSymbol(field) == nullptr)
+							if (OutNamespace->Symbols.AddSymbol(f) == nullptr)
 							{ // name is already in use
-								field->Destroy();
+								f->Destroy();
 								return false;
 							}
 						}
 					}
 				}
-				else if (hasnativechildren)
+				else if (hasnativechildren && !(varflags & VARF_Meta))
 				{
 					Error(field, "Cannot add field %s to %s. %s has native children which means it size may not change", FName(name->Name).GetChars(), type->TypeName.GetChars(), type->TypeName.GetChars());
 				}
@@ -1375,6 +1401,10 @@ void ZCCCompiler::CompileAllProperties()
 	{
 		if (c->Properties.Size() > 0)
 			CompileProperties(c->ClassType(), c->Properties, c->Type()->TypeName);
+
+		if (c->FlagDefs.Size() > 0)
+			CompileFlagDefs(c->ClassType(), c->FlagDefs, c->Type()->TypeName);
+
 	}
 }
 
@@ -1415,20 +1445,88 @@ bool ZCCCompiler::CompileProperties(PClass *type, TArray<ZCC_Property *> &Proper
 				fields.Push(f);
 				id = (ZCC_Identifier*)id->SiblingNext;
 			} while (id != p->Body);
+
+			FString qualifiedname;
+			// Store the full qualified name and prepend some 'garbage' to the name so that no conflicts with other symbol types can happen.
+			// All these will be removed from the symbol table after the compiler finishes to free up the allocated space.
+			FName name = FName(p->NodeName);
+			if (prefix == NAME_None) qualifiedname.Format("@property@%s", name.GetChars());
+			else qualifiedname.Format("@property@%s.%s", prefix.GetChars(), name.GetChars());
+
+			fields.ShrinkToFit();
+			if (!type->VMType->Symbols.AddSymbol(Create<PProperty>(qualifiedname, fields)))
+			{
+				Error(id, "Unable to add property %s to class %s", FName(p->NodeName).GetChars(), type->TypeName.GetChars());
+			}
 		}
+	}
+	return true;
+}
 
-		FString qualifiedname;
-		// Store the full qualified name and prepend some 'garbage' to the name so that no conflicts with other symbol types can happen.
-		// All these will be removed from the symbol table after the compiler finishes to free up the allocated space.
-		FName name = FName(p->NodeName);
-		if (prefix == NAME_None) qualifiedname.Format("@property@%s", name.GetChars());
-		else qualifiedname.Format("@property@%s.%s", prefix.GetChars(), name.GetChars());
+//==========================================================================
+//
+// ZCCCompiler :: CompileProperties
+//
+// builds the internal structure of a single class or struct
+//
+//==========================================================================
 
-		fields.ShrinkToFit();
-		if (!type->VMType->Symbols.AddSymbol(Create<PProperty>(qualifiedname, fields)))
+bool ZCCCompiler::CompileFlagDefs(PClass *type, TArray<ZCC_FlagDef *> &Properties, FName prefix)
+{
+	if (!type->IsDescendantOf(RUNTIME_CLASS(AActor)))
+	{
+		Error(Properties[0], "Flags can only be defined for actors");
+		return false;
+	}
+	for (auto p : Properties)
+	{
+		PField *field;
+		FName referenced = FName(p->RefName);
+
+		if (FName(p->NodeName) == FName("prefix") && Wads.GetLumpFile(Lump) == 0)
 		{
-			Error(id, "Unable to add property %s to class %s", FName(p->NodeName).GetChars(), type->TypeName.GetChars());
+			// only for internal definitions: Allow setting a prefix. This is only for compatiblity with the old DECORATE property parser, but not for general use.
+			prefix = referenced;
 		}
+		else
+		{
+			if (referenced != NAME_None)
+			{
+				field = dyn_cast<PField>(type->FindSymbol(referenced, true));
+				if (field == nullptr)
+				{
+					Error(p, "Variable %s not found in %s", referenced.GetChars(), type->TypeName.GetChars());
+				}
+				if (!field->Type->isInt() || field->Type->Size != 4)
+				{
+					Error(p, "Variable %s in %s must have a size of 4 bytes for use as flag storage", referenced.GetChars(), type->TypeName.GetChars());
+				}
+			}
+			else field = nullptr;
+
+
+			FString qualifiedname;
+			// Store the full qualified name and prepend some 'garbage' to the name so that no conflicts with other symbol types can happen.
+			// All these will be removed from the symbol table after the compiler finishes to free up the allocated space.
+			FName name = FName(p->NodeName);
+			for (int i = 0; i < 2; i++)
+			{
+				if (i == 0) qualifiedname.Format("@flagdef@%s", name.GetChars());
+				else
+				{
+					if (prefix == NAME_None) continue;
+					qualifiedname.Format("@flagdef@%s.%s", prefix.GetChars(), name.GetChars());
+				}
+
+				if (!type->VMType->Symbols.AddSymbol(Create<PPropFlag>(qualifiedname, field, p->BitValue, i == 0 && prefix != NAME_None)))
+				{
+					Error(p, "Unable to add flag definition %s to class %s", FName(p->NodeName).GetChars(), type->TypeName.GetChars());
+				}
+			}
+
+			if (field != nullptr)
+				type->VMType->AddNativeField(FStringf("b%s", name.GetChars()), TypeSInt32, field->Offset, 0, 1 << p->BitValue);
+		} 
 	}
 	return true;
 }
@@ -1729,7 +1827,7 @@ PType *ZCCCompiler::ResolveUserType(ZCC_BasicType *type, PSymbolTable *symt, boo
 //
 //==========================================================================
 
-PType *ZCCCompiler::ResolveArraySize(PType *baseType, ZCC_Expression *arraysize, PContainerType *cls)
+PType *ZCCCompiler::ResolveArraySize(PType *baseType, ZCC_Expression *arraysize, PContainerType *cls, bool *nosize)
 {
 	TArray<ZCC_Expression *> indices;
 
@@ -1741,6 +1839,22 @@ PType *ZCCCompiler::ResolveArraySize(PType *baseType, ZCC_Expression *arraysize,
 		node = static_cast<ZCC_Expression*>(node->SiblingNext);
 	} while (node != arraysize);
 
+	if (indices.Size() == 1 && indices [0]->Operation == PEX_Nil)
+	{
+		*nosize = true;
+		return baseType;
+	}
+
+	if (mVersion >= MakeVersion(3, 7, 2))
+	{
+		TArray<ZCC_Expression *> fixedIndices;
+		for (auto node : indices)
+		{
+			fixedIndices.Insert (0, node);
+		}
+
+		indices = std::move(fixedIndices);
+	}
 
 	FCompileContext ctx(OutNamespace, cls, false);
 	for (auto node : indices)
@@ -1763,6 +1877,8 @@ PType *ZCCCompiler::ResolveArraySize(PType *baseType, ZCC_Expression *arraysize,
 		}
 		baseType = NewArray(baseType, size);
 	}
+
+	*nosize = false;
 	return baseType;
 }
 
@@ -2287,7 +2403,7 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 	TArray<PType *> rets(1);
 	TArray<PType *> args;
 	TArray<uint32_t> argflags;
-	TArray<VMValue> argdefaults;
+	TArray<TypedVMValue> argdefaults;
 	TArray<FName> argnames;
 
 	rets.Clear();
@@ -2495,7 +2611,7 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 			do
 			{
 				int elementcount = 1;
-				VMValue vmval[3];	// default is REGT_NIL which means 'no default value' here.
+				TypedVMValue vmval[3];	// default is REGT_NIL which means 'no default value' here.
 				if (p->Type != nullptr)
 				{
 					auto type = DetermineType(c->Type(), p, f->Name, p->Type, false, false);
@@ -3105,7 +3221,7 @@ void ZCCCompiler::CompileStates()
 		}
 		try
 		{
-			GetDefaultByType(c->ClassType())->Finalize(statedef);
+			FinalizeClass(c->ClassType(), statedef);
 		}
 		catch (CRecoverableError &err)
 		{
@@ -3465,33 +3581,55 @@ FxExpression *ZCCCompiler::ConvertNode(ZCC_TreeNode *ast)
 
 		if (loc->Type->ArraySize != nullptr)
 		{
-			ztype = ResolveArraySize(ztype, loc->Type->ArraySize, ConvertClass);
+			bool nosize;
+			ztype = ResolveArraySize(ztype, loc->Type->ArraySize, ConvertClass, &nosize);
+
+			if (nosize)
+			{
+				Error(node, "Must specify array size");
+			}
 		}
 
 		do
 		{
 			PType *type;
 
+			bool nosize = false;
 			if (node->ArraySize != nullptr)
 			{
-				type = ResolveArraySize(ztype, node->ArraySize, ConvertClass);
+				type = ResolveArraySize(ztype, node->ArraySize, ConvertClass, &nosize);
+
+				if (nosize && !node->InitIsArray)
+				{
+					Error(node, "Must specify array size for non-initialized arrays");
+				}
 			}
 			else
 			{
 				type = ztype;
 			}
 
-			FxExpression *val;
-			if (node->InitIsArray)
+			if (node->InitIsArray && (type->isArray() || type->isDynArray() || nosize))
 			{
-				Error(node, "Compound initializer not implemented yet");
-				val = nullptr;
+				auto arrtype = static_cast<PArray *>(type);
+				if (!nosize && (arrtype->ElementType->isArray() || arrtype->ElementType->isDynArray()))
+				{
+					Error(node, "Compound initializer not implemented yet for multi-dimensional arrays");
+				}
+				FArgumentList args;
+				ConvertNodeList(args, node->Init);
+
+				if (nosize)
+				{
+					type = NewArray(type, args.Size());
+				}
+				list->Add(new FxLocalArrayDeclaration(type, node->Name, args, 0, *node));
 			}
 			else
 			{
-				val = node->Init ? ConvertNode(node->Init) : nullptr;
+				FxExpression *val = node->Init ? ConvertNode(node->Init) : nullptr;
+				list->Add(new FxLocalVariableDeclaration(type, node->Name, val, 0, *node));	// todo: Handle flags in the grammar.
 			}
-			list->Add(new FxLocalVariableDeclaration(type, node->Name, val, 0, *node));	// todo: Handle flags in the grammar.
 
 			node = static_cast<decltype(node)>(node->SiblingNext);
 		} while (node != loc->Vars);

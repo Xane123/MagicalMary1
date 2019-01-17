@@ -136,13 +136,15 @@ namespace swrenderer
 							break;
 						}
 						sec = rover->model;
+						auto nc = !!(sec->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
+
 						if (rover->flags & FF_FADEWALLS)
 						{
-							mybasecolormap = GetColorTable(sec->Colormap, spr->sector->SpecialColors[sector_t::sprites], true);
+							mybasecolormap = GetSpriteColorTable(sec->Colormap, spr->sector->SpecialColors[sector_t::sprites], nc);
 						}
 						else
 						{
-							mybasecolormap = GetColorTable(spr->sector->e->XFloor.lightlist[i].extra_colormap, spr->sector->SpecialColors[sector_t::sprites], true);
+							mybasecolormap = GetSpriteColorTable(spr->sector->e->XFloor.lightlist[i].extra_colormap, spr->sector->SpecialColors[sector_t::sprites], nc);
 						}
 					}
 					break;
@@ -163,9 +165,7 @@ namespace swrenderer
 				bool isFullBright = !foggy && (renderflags & RF_FULLBRIGHT);
 				bool fadeToBlack = spr->RenderStyle == LegacyRenderStyles[STYLE_Add] && mybasecolormap->Fade != 0;
 
-				int spriteshade = LightVisibility::LightLevelToShade(sec->lightlevel + LightVisibility::ActualExtraLight(spr->foggy, thread->Viewport.get()), foggy);
-
-				Light.SetColormap(thread->Light->SpriteGlobVis(foggy) / MAX(MINZ, (double)spr->depth), spriteshade, mybasecolormap, isFullBright, invertcolormap, fadeToBlack);
+				Light.SetColormap(thread, spr->depth, sec->lightlevel, foggy, mybasecolormap, isFullBright, invertcolormap, fadeToBlack, false, false);
 			}
 		}
 
@@ -342,8 +342,8 @@ namespace swrenderer
 					continue;
 				}
 
-				float neardepth = MIN(ds->sz1, ds->sz2);
-				float fardepth = MAX(ds->sz1, ds->sz2);
+				float neardepth = MIN(ds->WallC.sz1, ds->WallC.sz2);
+				float fardepth = MAX(ds->WallC.sz1, ds->WallC.sz2);
 
 				// Check if sprite is in front of draw seg:
 				if ((!spr->IsWallSprite() && neardepth > spr->depth) || ((spr->IsWallSprite() || fardepth > spr->depth) &&
@@ -416,8 +416,8 @@ namespace swrenderer
 					int r1 = MAX<int>(ds->x1, x1);
 					int r2 = MIN<int>(ds->x2, x2);
 
-					float neardepth = MIN(ds->sz1, ds->sz2);
-					float fardepth = MAX(ds->sz1, ds->sz2);
+					float neardepth = MIN(ds->WallC.sz1, ds->WallC.sz2);
+					float fardepth = MAX(ds->WallC.sz1, ds->WallC.sz2);
 
 					// Check if sprite is in front of draw seg:
 					if ((!spr->IsWallSprite() && neardepth > spr->depth) || ((spr->IsWallSprite() || fardepth > spr->depth) &&

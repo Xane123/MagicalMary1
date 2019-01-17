@@ -89,10 +89,17 @@ void cht_DoCheat (player_t *player, int cheat)
 		"PowerTargeter",
 	};
 	PClassActor *type;
-	AInventory *item;
+	AActor *item;
+	FString smsg;
 	const char *msg = "";
 	char msgbuild[32];
 	int i;
+
+	// No cheating when not having a pawn attached.
+	if (player->mo == nullptr)
+	{
+		return;
+	}
 
 	switch (cheat)
 	{
@@ -188,7 +195,8 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_MORPH:
-		msg = cht_Morph (player, PClass::FindActor (gameinfo.gametype == GAME_Heretic ? NAME_ChickenPlayer : NAME_PigPlayer), true);
+		smsg = cht_Morph (player, PClass::FindActor (gameinfo.gametype == GAME_Heretic ? NAME_ChickenPlayer : NAME_PigPlayer), true);
+		msg = smsg.GetChars();
 		break;
 
 	case CHT_NOTARGET:
@@ -279,7 +287,10 @@ void cht_DoCheat (player_t *player, int cheat)
 
 		if (i == 4)
 		{
-			level.flags2 ^= LEVEL2_ALLMAP;
+			ForAllLevels([](FLevelLocals *Level)
+			{
+				Level->flags2 ^= LEVEL2_ALLMAP;
+			});
 		}
 		else if (player->mo != NULL && player->health >= 0)
 		{
@@ -408,29 +419,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_TAKEWEAPS:
-		if (player->morphTics || player->mo == NULL || player->mo->health <= 0)
-		{
-			return;
-		}
-		{
-			// Take away all weapons that are either non-wimpy or use ammo.
-			AInventory **invp = &player->mo->Inventory, **lastinvp;
-			for (item = *invp; item != NULL; item = *invp)
-			{
-				lastinvp = invp;
-				invp = &(*invp)->Inventory;
-				if (item->IsKindOf(NAME_Weapon))
-				{
-					AWeapon *weap = static_cast<AWeapon *> (item);
-					if (!(weap->WeaponFlags & WIF_WIMPY_WEAPON) ||
-						weap->AmmoType1 != NULL)
-					{
-						item->Destroy ();
-						invp = lastinvp;
-					}
-				}
-			}
-		}
+		cht_Takeweaps(player);
 		msg = GStrings("TXT_CHEATIDKFA");
 		break;
 
@@ -476,7 +465,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		if (player->mo != NULL && player->health >= 0)
 		{
 			static VMFunction *gsp = nullptr;
-			if (gsp == nullptr) PClass::FindFunction(&gsp, NAME_Sigil, NAME_GiveSigilPiece);
+			if (gsp == nullptr) PClass::FindFunction(&gsp, NAME_Actor, NAME_GiveSigilPiece);
 			if (gsp)
 			{
 				VMValue params[1] = { player->mo };
@@ -494,7 +483,7 @@ void cht_DoCheat (player_t *player, int cheat)
 					}
 					else
 					{
-						player->PendingWeapon = static_cast<AWeapon *> (item);
+						player->PendingWeapon = item;
 					}
 				}
 			}
@@ -525,8 +514,9 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_FREEZE:
-		bglobal.changefreeze ^= 1;
-		if (bglobal.freeze ^ bglobal.changefreeze)
+	{
+		currentSession->changefreeze ^= 2;
+		if (currentSession->isFrozen() ^ currentSession->changefreeze)
 		{
 			msg = GStrings("TXT_FREEZEON");
 		}
@@ -535,6 +525,7 @@ void cht_DoCheat (player_t *player, int cheat)
 			msg = GStrings("TXT_FREEZEOFF");
 		}
 		break;
+	}
 	}
 
 	if (!*msg)              // [SO] Don't print blank lines!
@@ -546,65 +537,36 @@ void cht_DoCheat (player_t *player, int cheat)
 		Printf ("%s cheats: %s\n", player->userinfo.GetName(), msg);
 }
 
-const char *cht_Morph (player_t *player, PClassActor *morphclass, bool quickundo)
+FString cht_Morph(player_t *player, PClassActor *morphclass, bool quickundo)
 {
-	if (player->mo == NULL)
-	{
-		return "";
-	}
-	auto oldclass = player->mo->GetClass();
+	if (player->mo == nullptr)	return "";
 
-	// Set the standard morph style for the current game
-	int style = MORPH_UNDOBYTOMEOFPOWER;
-	if (gameinfo.gametype == GAME_Hexen) style |= MORPH_UNDOBYCHAOSDEVICE;
-
-	if (player->morphTics)
+	IFVIRTUALPTRNAME(player->mo, NAME_PlayerPawn, CheatMorph)
 	{
-		if (P_UndoPlayerMorph (player, player))
-		{
-			if (!quickundo && oldclass != morphclass && P_MorphPlayer (player, player, morphclass, 0, style))
-			{
-				return GStrings("TXT_STRANGER");
-			}
-			return GStrings("TXT_NOTSTRANGE");
-		}
-	}
-	else if (P_MorphPlayer (player, player, morphclass, 0, style))
-	{
-		return GStrings("TXT_STRANGE");
+		FString message;
+		VMReturn msgret(&message);
+		VMValue params[3] = { player->mo, morphclass, quickundo };
+		VMCall(func, params, 3, &msgret, 1);
+		return message;
 	}
 	return "";
 }
 
 void cht_SetInv(player_t *player, const char *string, int amount, bool beyond)
 {
-	if (!stricmp(string, "health"))
+	if (!player->mo) return;
+	IFVIRTUALPTRNAME(player->mo, NAME_PlayerPawn, CheatTakeInv)
 	{
-		if (amount <= 0)
-		{
-			cht_Suicide(player);
-			return;
-		}
-		if (!beyond) amount = MIN(amount, player->mo->GetMaxHealth(true));
-		player->health = player->mo->health = amount;
-	}
-	else
-	{
-		auto item = PClass::FindActor(string);
-		if (item != nullptr && item->IsDescendantOf(RUNTIME_CLASS(AInventory)))
-		{
-			player->mo->SetInventory(item, amount, beyond);
-			return;
-		}
-		Printf("Unknown item \"%s\"\n", string);
+		FString message = string;
+		VMValue params[] = { player->mo, &message, amount, beyond };
+		VMCall(func, params, 4, nullptr, 0);
 	}
 }
 
 void cht_Give (player_t *player, const char *name, int amount)
 {
-	if (player->mo == nullptr)	return;
-
-	IFVIRTUALPTR(player->mo, APlayerPawn, CheatGive)
+	if (!player->mo) return;
+	IFVIRTUALPTRNAME(player->mo, NAME_PlayerPawn, CheatGive)
 	{
 		FString namestr = name;
 		VMValue params[3] = { player->mo, &namestr, amount };
@@ -614,13 +576,22 @@ void cht_Give (player_t *player, const char *name, int amount)
 
 void cht_Take (player_t *player, const char *name, int amount)
 {
-	if (player->mo == nullptr) return;
-
-	IFVIRTUALPTR(player->mo, APlayerPawn, CheatTake)
+	if (!player->mo) return;
+	IFVIRTUALPTRNAME(player->mo, NAME_PlayerPawn, CheatTake)
 	{
 		FString namestr = name;
 		VMValue params[3] = { player->mo, &namestr, amount };
 		VMCall(func, params, 3, nullptr, 0);
+	}
+}
+
+void cht_Takeweaps(player_t *player)
+{
+	if (!player->mo) return;
+	IFVIRTUALPTRNAME(player->mo, NAME_PlayerPawn, CheatTakeWeaps)
+	{
+		VMValue params[3] = { player->mo };
+		VMCall(func, params, 1, nullptr, 0);
 	}
 }
 
@@ -629,8 +600,9 @@ class DSuicider : public DThinker
 	DECLARE_CLASS(DSuicider, DThinker)
 	HAS_OBJECT_POINTERS;
 public:
-	TObjPtr<APlayerPawn*> Pawn;
+	TObjPtr<AActor*> Pawn;
 
+	DSuicider(AActor *pawn) : DThinker(pawn->Level), Pawn(pawn) {}
 	void Tick()
 	{
 		Pawn->flags |= MF_SHOOTABLE;
@@ -653,6 +625,8 @@ public:
 		Super::Serialize(arc);
 		arc("pawn", Pawn);
 	}
+private:
+	DSuicider() = default;
 };
 
 IMPLEMENT_CLASS(DSuicider, false, true)
@@ -670,7 +644,7 @@ void cht_Suicide (player_t *plyr)
 	// the initial tick.
 	if (plyr->mo != NULL)
 	{
-		DSuicider *suicide = Create<DSuicider>();
+		DSuicider *suicide = CreateThinker<DSuicider>(plyr->mo);
 		suicide->Pawn = plyr->mo;
 		GC::WriteBarrier(suicide, suicide->Pawn);
 	}
@@ -678,7 +652,7 @@ void cht_Suicide (player_t *plyr)
 
 DEFINE_ACTION_FUNCTION(APlayerPawn, CheatSuicide)
 {
-	PARAM_SELF_PROLOGUE(APlayerPawn);
+	PARAM_SELF_PROLOGUE(AActor);
 	cht_Suicide(self->player);
 	return 0;
 }

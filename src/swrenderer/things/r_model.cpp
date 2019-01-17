@@ -75,6 +75,22 @@ namespace swrenderer
 	void RenderModel::Render(RenderThread *thread, short *cliptop, short *clipbottom, int minZ, int maxZ, Fake3DTranslucent clip3DFloor)
 	{
 		SWModelRenderer renderer(thread, clip3DFloor, &WorldToClip, MirrorWorldToClip);
+
+		renderer.sector = actor->Sector;
+		renderer.RenderStyle = actor->RenderStyle;
+		renderer.RenderAlpha = (float)actor->Alpha;
+		if (!renderer.RenderStyle.IsVisible(renderer.RenderAlpha))
+			return;
+
+		bool foggy = false;
+		int actualextralight = foggy ? 0 : PolyRenderer::Instance()->Viewpoint.extralight << 4;
+		bool fullbrightSprite = ((actor->renderflags & RF_FULLBRIGHT) || (actor->flags5 & MF5_BRIGHT));
+		renderer.lightlevel = fullbrightSprite ? 255 : actor->Sector->lightlevel + actualextralight;
+		renderer.visibility = PolyRenderer::Instance()->Light.SpriteGlobVis(foggy);
+
+		renderer.fillcolor = actor->fillcolor;
+		renderer.Translation = actor->Translation;
+
 		renderer.AddLights(actor);
 		renderer.RenderModel(x, y, z, smf, actor, r_viewpoint.TicFrac);
 		PolyTriangleDrawer::SetModelVertexShader(thread->DrawQueue, -1, -1, 0.0f);
@@ -82,9 +98,47 @@ namespace swrenderer
 
 	/////////////////////////////////////////////////////////////////////////////
 
+	static bool isBright(DPSprite *psp)
+	{
+		if (psp != nullptr && psp->GetState() != nullptr)
+		{
+			bool disablefullbright = false;
+			FTextureID lump = sprites[psp->GetSprite()].GetSpriteFrame(psp->GetFrame(), 0, 0., nullptr);
+			if (lump.isValid())
+			{
+				FTexture * tex = TexMan.GetTexture(lump, true);
+				if (tex) disablefullbright = tex->isFullbrightDisabled();
+			}
+			return psp->GetState()->GetFullbright() && !disablefullbright;
+		}
+		return false;
+	}
+
 	void RenderHUDModel(RenderThread *thread, DPSprite *psp, float ofsx, float ofsy)
 	{
 		SWModelRenderer renderer(thread, Fake3DTranslucent(), &thread->Viewport->WorldToClip, false);
+
+		AActor *playermo = players[consoleplayer].camera;
+		auto rs = psp->GetRenderStyle(playermo->RenderStyle, playermo->Alpha);
+		renderer.sector = playermo->Sector;
+		renderer.RenderStyle = rs.first;
+		renderer.RenderAlpha = rs.second;
+		if (psp->Flags & PSPF_FORCEALPHA) renderer.RenderAlpha = 0.0f;
+		if (!renderer.RenderStyle.IsVisible(renderer.RenderAlpha))
+			return;
+
+		bool foggy = false;
+		int actualextralight = foggy ? 0 : PolyRenderer::Instance()->Viewpoint.extralight << 4;
+		bool fullbrightSprite = isBright(psp);
+		renderer.lightlevel = fullbrightSprite ? 255 : playermo->Sector->lightlevel + actualextralight;
+		renderer.visibility = PolyRenderer::Instance()->Light.SpriteGlobVis(foggy);
+
+		PalEntry ThingColor = (playermo->RenderStyle.Flags & STYLEF_ColorIsFixed) ? playermo->fillcolor : 0xffffff;
+		ThingColor.a = 255;
+
+		renderer.fillcolor = fullbrightSprite ? ThingColor : ThingColor.Modulate(playermo->Sector->SpecialColors[sector_t::sprites]);
+		renderer.Translation = 0xffffffff;// playermo->Translation;
+
 		renderer.RenderHUDModel(psp, ofsx, ofsy);
 		PolyTriangleDrawer::SetModelVertexShader(thread->DrawQueue, -1, -1, 0.0f);
 	}
@@ -109,13 +163,13 @@ namespace swrenderer
 			float z = (float)actor->Center();
 			float radiusSquared = (float)(actor->renderradius * actor->renderradius);
 
-			BSPWalkCircle(x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
+			BSPWalkCircle(actor->Level, x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
 			{
-				FLightNode * node = subsector->lighthead;
+				FLightNode * node = subsector->section->lighthead;
 				while (node) // check all lights touching a subsector
 				{
-					ADynamicLight *light = node->lightsource;
-					if (light->visibletoplayer && !(light->flags2&MF2_DORMANT) && (!(light->lightflags&LF_DONTLIGHTSELF) || light->target != actor) && !(light->lightflags&LF_DONTLIGHTACTORS))
+					FDynamicLight *light = node->lightsource;
+					if (light->ShouldLightActor(actor))
 					{
 						int group = subsector->sector->PortalGroup;
 						DVector3 pos = light->PosRelative(group);
@@ -140,9 +194,9 @@ namespace swrenderer
 			Lights = Thread->FrameMemory->AllocMemory<PolyLight>(NumLights);
 			for (int i = 0; i < NumLights; i++)
 			{
-				ADynamicLight *lightsource = addedLights[i];
+				FDynamicLight *lightsource = addedLights[i];
 
-				bool is_point_light = (lightsource->lightflags & LF_ATTENUATE) != 0;
+				bool is_point_light = lightsource->IsAttenuated();
 
 				uint32_t red = lightsource->GetRed();
 				uint32_t green = lightsource->GetGreen();
@@ -162,7 +216,6 @@ namespace swrenderer
 
 	void SWModelRenderer::BeginDrawModel(AActor *actor, FSpriteModelFrame *smf, const VSMatrix &objectToWorldMatrix, bool mirrored)
 	{
-		ModelActor = actor;
 		const_cast<VSMatrix &>(objectToWorldMatrix).copy(ObjectToWorld.Matrix);
 
 		ClipTop = {};
@@ -209,8 +262,6 @@ namespace swrenderer
 		if (actor->RenderStyle == LegacyRenderStyles[STYLE_Normal] || !!(smf->flags & MDL_DONTCULLBACKFACES))
 			PolyTriangleDrawer::SetTwoSided(Thread->DrawQueue, false);
 		PolyTriangleDrawer::SetCullCCW(Thread->DrawQueue, true);
-
-		ModelActor = nullptr;
 	}
 
 	IModelVertexBuffer *SWModelRenderer::CreateVertexBuffer(bool needindex, bool singleframe)
@@ -218,22 +269,15 @@ namespace swrenderer
 		return new SWModelVertexBuffer(needindex, singleframe);
 	}
 
-	void SWModelRenderer::SetVertexBuffer(IModelVertexBuffer *buffer)
-	{
-	}
-
-	void SWModelRenderer::ResetVertexBuffer()
-	{
-	}
-
 	VSMatrix SWModelRenderer::GetViewToWorldMatrix()
 	{
 		// Calculate the WorldToView matrix as it would have looked like without yshearing:
 		const auto &Viewpoint = Thread->Viewport->viewpoint;
+		auto Level = Thread->Viewport->GetLevel();
 		const auto &Viewwindow = Thread->Viewport->viewwindow;
 		double radPitch = Viewpoint.Angles.Pitch.Normalized180().Radians();
 		double angx = cos(radPitch);
-		double angy = sin(radPitch) * level.info->pixelstretch;
+		double angy = sin(radPitch) * Level->info->pixelstretch;
 		double alen = sqrt(angx*angx + angy*angy);
 		float adjustedPitch = (float)asin(angy / alen);
 		float adjustedViewAngle = (float)(Viewpoint.Angles.Yaw - 90).Radians();
@@ -243,7 +287,7 @@ namespace swrenderer
 		Mat4f altWorldToView =
 			Mat4f::Rotate(adjustedPitch, 1.0f, 0.0f, 0.0f) *
 			Mat4f::Rotate(adjustedViewAngle, 0.0f, -1.0f, 0.0f) *
-			Mat4f::Scale(1.0f, level.info->pixelstretch, 1.0f) *
+			Mat4f::Scale(1.0f, Level->info->pixelstretch, 1.0f) *
 			Mat4f::SwapYZ() *
 			Mat4f::Translate((float)-Viewpoint.Pos.X, (float)-Viewpoint.Pos.Y, (float)-Viewpoint.Pos.Z);
 
@@ -263,7 +307,6 @@ namespace swrenderer
 
 	void SWModelRenderer::BeginDrawHUDModel(AActor *actor, const VSMatrix &objectToWorldMatrix, bool mirrored)
 	{
-		ModelActor = actor;
 		const_cast<VSMatrix &>(objectToWorldMatrix).copy(ObjectToWorld.Matrix);
 		ClipTop = {};
 		ClipBottom = {};
@@ -277,7 +320,6 @@ namespace swrenderer
 
 	void SWModelRenderer::EndDrawHUDModel(AActor *actor)
 	{
-		ModelActor = nullptr;
 		PolyTriangleDrawer::SetWeaponScene(Thread->DrawQueue, false);
 
 		if (actor->RenderStyle == LegacyRenderStyles[STYLE_Normal])
@@ -309,20 +351,12 @@ namespace swrenderer
 
 	void SWModelRenderer::DrawArrays(int start, int count)
 	{
-		const auto &viewpoint = Thread->Viewport->viewpoint;
-
-		bool foggy = false;
-		int actualextralight = foggy ? 0 : viewpoint.extralight << 4;
-		sector_t *sector = ModelActor->Sector;
-
-		bool fullbrightSprite = ((ModelActor->renderflags & RF_FULLBRIGHT) || (ModelActor->flags5 & MF5_BRIGHT));
-		int lightlevel = fullbrightSprite ? 255 : ModelActor->Sector->lightlevel + actualextralight;
-
 		PolyDrawArgs args;
-		args.SetLight(GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true), lightlevel, Thread->Light->SpriteGlobVis(foggy), fullbrightSprite);
+		auto nc = !!(sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
+		args.SetLight(GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc), lightlevel, visibility, fullbrightSprite);
 		args.SetLights(Lights, NumLights);
 		args.SetNormal(FVector3(0.0f, 0.0f, 0.0f));
-		args.SetStyle(ModelActor->RenderStyle, ModelActor->Alpha, ModelActor->fillcolor, ModelActor->Translation, SkinTexture, fullbrightSprite);
+		args.SetStyle(RenderStyle, RenderAlpha, fillcolor, Translation, SkinTexture->GetSoftwareTexture(), fullbrightSprite);
 		args.SetDepthTest(true);
 		args.SetWriteDepth(true);
 		args.SetWriteStencil(false);
@@ -335,20 +369,12 @@ namespace swrenderer
 
 	void SWModelRenderer::DrawElements(int numIndices, size_t offset)
 	{
-		const auto &viewpoint = Thread->Viewport->viewpoint;
-
-		bool foggy = false;
-		int actualextralight = foggy ? 0 : viewpoint.extralight << 4;
-		sector_t *sector = ModelActor->Sector;
-
-		bool fullbrightSprite = ((ModelActor->renderflags & RF_FULLBRIGHT) || (ModelActor->flags5 & MF5_BRIGHT));
-		int lightlevel = fullbrightSprite ? 255 : ModelActor->Sector->lightlevel + actualextralight;
-
 		PolyDrawArgs args;
-		args.SetLight(GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true), lightlevel, Thread->Light->SpriteGlobVis(foggy), fullbrightSprite);
+		auto nc = !!(sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
+		args.SetLight(GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc), lightlevel, visibility, fullbrightSprite);
 		args.SetLights(Lights, NumLights);
 		args.SetNormal(FVector3(0.0f, 0.0f, 0.0f));
-		args.SetStyle(ModelActor->RenderStyle, ModelActor->Alpha, ModelActor->fillcolor, ModelActor->Translation, SkinTexture, fullbrightSprite);
+		args.SetStyle(RenderStyle, RenderAlpha, fillcolor, Translation, SkinTexture->GetSoftwareTexture(), fullbrightSprite);
 		args.SetDepthTest(true);
 		args.SetWriteDepth(true);
 		args.SetWriteStencil(false);

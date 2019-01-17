@@ -160,10 +160,10 @@ namespace swrenderer
 		this->dontmaplines = dontmaplines;
 
 		// [RH] Setup particles for this frame
-		P_FindParticleSubsectors();
+		ForAllLevels(P_FindParticleSubsectors);
 
 		// Link the polyobjects right before drawing the scene to reduce the amounts of calls to this function
-		PO_LinkToSubsectors();
+		ForAllLevels(PO_LinkToSubsectors);
 
 		R_UpdateFuzzPosFrameStart();
 
@@ -189,7 +189,11 @@ namespace swrenderer
 		RenderPSprites();
 
 		MainThread()->Viewport->viewpoint.camera->renderflags = savedflags;
-		interpolator.RestoreInterpolations();
+		// Restore interpolations for all levels.
+		ForAllLevels([](FLevelLocals *Level)
+		{
+			Level->interpolator.RestoreInterpolations();
+		});
 	}
 
 	void RenderScene::RenderPSprites()
@@ -292,7 +296,7 @@ namespace swrenderer
 		if (thread->X2 < viewwidth)
 			thread->ClipSegments->Clip(thread->X2, viewwidth, true, &visitor);
 
-		thread->OpaquePass->RenderScene();
+		thread->OpaquePass->RenderScene(thread->Viewport->GetLevel());
 		thread->Clip3D->ResetClip(); // reset clips (floor/ceiling)
 
 		if (thread->MainThread)

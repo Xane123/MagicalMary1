@@ -301,6 +301,7 @@ enum EFxType
 	EFX_ColorLiteral,
 	EFX_GetDefaultByType,
 	EFX_FontCast,
+	EFX_LocalArrayDeclaration,
 	EFX_COUNT
 };
 
@@ -404,7 +405,6 @@ public:
 class FxClassDefaults : public FxExpression
 {
 	FxExpression *obj;
-	bool EmitTail;
 
 public:
 	FxClassDefaults(FxExpression *, const FScriptPosition &);
@@ -501,6 +501,13 @@ public:
 		isresolved = true;
 	}
 
+	FxConstant(void *state, const FScriptPosition &pos) : FxExpression(EFX_Constant, pos)
+	{
+		value.pointer = state;
+		ValueType = value.Type = TypeVoidPtr;
+		isresolved = true;
+	}
+
 	FxConstant(const FScriptPosition &pos) : FxExpression(EFX_Constant, pos)
 	{
 		value.pointer = nullptr;
@@ -508,7 +515,7 @@ public:
 		isresolved = true;
 	}
 
-	FxConstant(PType *type, VMValue &vmval, const FScriptPosition &pos) : FxExpression(EFX_Constant, pos)
+	FxConstant(PType *type, TypedVMValue &vmval, const FScriptPosition &pos) : FxExpression(EFX_Constant, pos)
 	{
 		isresolved = true;
 		switch (vmval.Type)
@@ -1250,16 +1257,15 @@ public:
 class FxRandom : public FxExpression
 {
 protected:
-	bool EmitTail;
 	FRandom *rng;
 	FxExpression *min, *max;
 
+	FxRandom(EFxType type, FRandom * r, const FScriptPosition &pos);
 public:
 
 	FxRandom(FRandom *, FxExpression *mi, FxExpression *ma, const FScriptPosition &pos, bool nowarn);
 	~FxRandom();
 	FxExpression *Resolve(FCompileContext&);
-	PPrototype *ReturnProto();
 	ExpEmit Emit(VMFunctionBuilder *build);
 };
 
@@ -1305,7 +1311,6 @@ public:
 
 class FxRandom2 : public FxExpression
 {
-	bool EmitTail;
 	FRandom * rng;
 	FxExpression *mask;
 
@@ -1314,7 +1319,6 @@ public:
 	FxRandom2(FRandom *, FxExpression *m, const FScriptPosition &pos, bool nowarn);
 	~FxRandom2();
 	FxExpression *Resolve(FCompileContext&);
-	PPrototype *ReturnProto();
 	ExpEmit Emit(VMFunctionBuilder *build);
 };
 
@@ -1328,7 +1332,6 @@ public:
 class FxRandomSeed : public FxExpression
 {
 protected:
-	bool EmitTail;
 	FRandom *rng;
 	FxExpression *seed;
 
@@ -1575,7 +1578,6 @@ public:
 class FxActionSpecialCall : public FxExpression
 {
 	int Special;
-	bool EmitTail;
 	FxExpression *Self;
 	FArgumentList ArgList;
 
@@ -1584,7 +1586,6 @@ public:
 	FxActionSpecialCall(FxExpression *self, int special, FArgumentList &args, const FScriptPosition &pos);
 	~FxActionSpecialCall();
 	FxExpression *Resolve(FCompileContext&);
-	PPrototype *ReturnProto();
 	ExpEmit Emit(VMFunctionBuilder *build);
 };
 
@@ -1744,7 +1745,6 @@ class FxVMFunctionCall : public FxExpression
 {
 	friend class FxMultiAssign;
 
-	bool EmitTail = false;
 	bool NoVirtual;
 	bool hasStringArgs = false;
 	FxExpression *Self;
@@ -1756,6 +1756,7 @@ class FxVMFunctionCall : public FxExpression
 	PFunction *CallingFunction;
 
 	bool CheckAccessibility(const VersionInfo &ver);
+	bool UnravelVarArgAJump(FCompileContext&);
 
 public:
 	FxVMFunctionCall(FxExpression *self, PFunction *func, FArgumentList &args, const FScriptPosition &pos, bool novirtual);
@@ -1806,6 +1807,7 @@ class FxCompoundStatement : public FxSequence
 	friend class FxLocalVariableDeclaration;
 	friend class FxStaticArray;
 	friend class FxMultiAssign;
+	friend class FxLocalArrayDeclaration;
 
 public:
 	FxCompoundStatement(const FScriptPosition &pos) : FxSequence(pos) {}
@@ -2104,6 +2106,7 @@ public:
 		: FxExpression(EFX_Nop, p)
 	{
 		isresolved = true;
+		ValueType = TypeError;
 	}
 	ExpEmit Emit(VMFunctionBuilder *build)
 	{
@@ -2122,6 +2125,7 @@ class FxLocalVariableDeclaration : public FxExpression
 	friend class FxCompoundStatement;
 	friend class FxLocalVariable;
 	friend class FxStaticArrayVariable;
+	friend class FxLocalArrayDeclaration;
 
 	FName Name;
 	FxExpression *Init;
@@ -2178,6 +2182,25 @@ public:
 		delete this;
 		return nullptr;
 	}
+};
+
+//==========================================================================
+//
+//
+//
+//==========================================================================
+
+class FxLocalArrayDeclaration : public FxLocalVariableDeclaration
+{
+	PType *ElementType;
+	FArgumentList values;
+	FxExpression *clearExpr;
+
+public:
+
+	FxLocalArrayDeclaration(PType *type, FName name, FArgumentList &args, int varflags, const FScriptPosition &pos);
+	FxExpression *Resolve(FCompileContext&);
+	ExpEmit Emit(VMFunctionBuilder *build);
 };
 
 #endif

@@ -162,11 +162,11 @@ void DIntermissionScreen::Drawer ()
 	{
 		if (!mFlatfill)
 		{
-			screen->DrawTexture (TexMan[mBackground], 0, 0, DTA_Fullscreen, true, TAG_DONE);
+			screen->DrawTexture (TexMan.GetTexture(mBackground), 0, 0, DTA_Fullscreen, true, TAG_DONE);
 		}
 		else
 		{
-			screen->FlatFill (0,0, SCREENWIDTH, SCREENHEIGHT, TexMan[mBackground]);
+			screen->FlatFill (0,0, SCREENWIDTH, SCREENHEIGHT, TexMan.GetTexture(mBackground));
 		}
 	}
 	else
@@ -176,7 +176,7 @@ void DIntermissionScreen::Drawer ()
 	for (unsigned i=0; i < mOverlays.Size(); i++)
 	{
 		if (CheckOverlay(i))
-			screen->DrawTexture (TexMan[mOverlays[i].mPic], mOverlays[i].x, mOverlays[i].y, DTA_320x200, true, TAG_DONE);
+			screen->DrawTexture (TexMan.GetTexture(mOverlays[i].mPic), mOverlays[i].x, mOverlays[i].y, DTA_320x200, true, TAG_DONE);
 	}
 	if (!mFlatfill) screen->FillBorder (NULL);
 }
@@ -229,11 +229,11 @@ void DIntermissionScreenFader::Drawer ()
 		if (mType == FADE_In) factor = 1.0 - factor;
 		int color = MAKEARGB(int(factor*255), 0,0,0);
 
-		screen->DrawTexture (TexMan[mBackground], 0, 0, DTA_Fullscreen, true, DTA_ColorOverlay, color, TAG_DONE);
+		screen->DrawTexture (TexMan.GetTexture(mBackground), 0, 0, DTA_Fullscreen, true, DTA_ColorOverlay, color, TAG_DONE);
 		for (unsigned i=0; i < mOverlays.Size(); i++)
 		{
 			if (CheckOverlay(i))
-				screen->DrawTexture (TexMan[mOverlays[i].mPic], mOverlays[i].x, mOverlays[i].y, DTA_320x200, true, DTA_ColorOverlay, color, TAG_DONE);
+				screen->DrawTexture (TexMan.GetTexture(mOverlays[i].mPic), mOverlays[i].x, mOverlays[i].y, DTA_320x200, true, DTA_ColorOverlay, color, TAG_DONE);
 		}
 		screen->FillBorder (NULL);
 	}
@@ -337,7 +337,7 @@ void DIntermissionScreenText::Drawer ()
 				continue;
 			}
 
-			pic = SmallFont->GetChar (c, &w);
+			pic = SmallFont->GetChar (c, mTextColor, &w);
 			w += kerning;
 			w *= CleanXfac;
 			if (cx + w > SCREENWIDTH)
@@ -376,7 +376,7 @@ void DIntermissionScreenCast::Init(FIntermissionAction *desc, bool first)
 		mCastSounds[i].mSound = static_cast<FIntermissionActionCast*>(desc)->mCastSounds[i].mSound;
 	}
 	caststate = mDefaults->SeeState;
-	if (mClass->IsDescendantOf(RUNTIME_CLASS(APlayerPawn)))
+	if (mClass->IsDescendantOf(NAME_PlayerPawn))
 	{
 		advplayerstate = mDefaults->MissileState;
 		casttranslation = TRANSLATION(TRANSLATION_Players, consoleplayer);
@@ -419,7 +419,7 @@ int DIntermissionScreenCast::Responder (event_t *ev)
 		castframes = 0;
 		castattacking = false;
 
-		if (mClass->IsDescendantOf(RUNTIME_CLASS(APlayerPawn)))
+		if (mClass->IsDescendantOf(NAME_PlayerPawn))
 		{
 			int snd = S_FindSkinnedSound(players[consoleplayer].mo, "*death");
 			if (snd != 0) S_Sound (CHAN_VOICE | CHAN_UI, snd, 1, ATTN_NONE);
@@ -479,7 +479,7 @@ int DIntermissionScreenCast::Ticker ()
 	{
 		// go into attack frame
 		castattacking = true;
-		if (!mClass->IsDescendantOf(RUNTIME_CLASS(APlayerPawn)))
+		if (!mClass->IsDescendantOf(NAME_PlayerPawn))
 		{
 			if (castonmelee)
 				basestate = caststate = mDefaults->MeleeState;
@@ -546,7 +546,7 @@ void DIntermissionScreenCast::Drawer ()
 
 		if (!(mDefaults->flags4 & MF4_NOSKIN) &&
 			mDefaults->SpawnState != NULL && caststate->sprite == mDefaults->SpawnState->sprite &&
-			mClass->IsDescendantOf(RUNTIME_CLASS(APlayerPawn)) &&
+			mClass->IsDescendantOf(NAME_PlayerPawn) &&
 			Skins.Size() > 0)
 		{
 			// Only use the skin sprite if this class has not been removed from the
@@ -568,13 +568,13 @@ void DIntermissionScreenCast::Drawer ()
 		}
 
 		sprframe = &SpriteFrames[sprites[castsprite].spriteframes + caststate->GetFrame()];
-		pic = TexMan(sprframe->Texture[0]);
+		pic = TexMan.GetTexture(sprframe->Texture[0], true);
 
 		screen->DrawTexture (pic, 160, 170,
 			DTA_320x200, true,
 			DTA_FlipX, sprframe->Flip & 1,
-			DTA_DestHeightF, pic->GetScaledHeightDouble() * castscale.Y,
-			DTA_DestWidthF, pic->GetScaledWidthDouble() * castscale.X,
+			DTA_DestHeightF, pic->GetDisplayHeightDouble() * castscale.Y,
+			DTA_DestWidthF, pic->GetDisplayWidthDouble() * castscale.X,
 			DTA_RenderStyle, mDefaults->RenderStyle,
 			DTA_Alpha, mDefaults->Alpha,
 			DTA_TranslationIndex, casttranslation,
@@ -611,13 +611,13 @@ int DIntermissionScreenScroller::Responder (event_t *ev)
 
 void DIntermissionScreenScroller::Drawer ()
 {
-	FTexture *tex = TexMan[mFirstPic];
-	FTexture *tex2 = TexMan[mSecondPic];
+	FTexture *tex = TexMan.GetTexture(mFirstPic);
+	FTexture *tex2 = TexMan.GetTexture(mSecondPic);
 	if (mTicker >= mScrollDelay && mTicker < mScrollDelay + mScrollTime && tex != NULL && tex2 != NULL)
 	{
 
-		int fwidth = tex->GetScaledWidth();
-		int fheight = tex->GetScaledHeight();
+		int fwidth = tex->GetDisplayWidth();
+		int fheight = tex->GetDisplayHeight();
 
 		double xpos1 = 0, ypos1 = 0, xpos2 = 0, ypos2 = 0;
 
@@ -681,7 +681,7 @@ DIntermissionController::DIntermissionController(FIntermissionDescriptor *Desc, 
 	mIndex = 0;
 	mAdvance = false;
 	mSentAdvance = false;
-	mScreen = NULL;
+	mScreen = nullptr;
 	mFirst = true;
 	mGameState = state;
 }
@@ -787,8 +787,7 @@ void DIntermissionController::Ticker ()
 			switch (mGameState)
 			{
 			case FSTATE_InLevel:
-				if (level.cdtrack == 0 || !S_ChangeCDMusic (level.cdtrack, level.cdid))
-					S_ChangeMusic (level.Music, level.musicorder);
+				currentSession->Levelinfo[0]->SetMusic();
 				gamestate = GS_LEVEL;
 				wipegamestate = GS_LEVEL;
 				P_ResumeConversation ();
@@ -871,7 +870,6 @@ void F_StartIntermission(FName seq, uint8_t state)
 		F_StartIntermission(*pdesc, false, state);
 	}
 }
-
 
 //==========================================================================
 //

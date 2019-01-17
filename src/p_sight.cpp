@@ -92,6 +92,7 @@ static TArray<SightTask> portals(32);
 
 class SightCheck
 {
+	FLevelLocals *Level;
 	DVector3 sightstart;
 	DVector2 sightend;
 	double Startfrac;
@@ -120,6 +121,7 @@ public:
 
 	void init(AActor * t1, AActor * t2, sector_t *startsector, SightTask *task, int flags)
 	{
+		Level = t1->Level;
 		sightstart = t1->PosRelative(task->portalgroup);
 		sightend = t2->PosRelative(task->portalgroup);
 		sightstart.Z += t1->Height * 0.75;
@@ -216,7 +218,7 @@ bool SightCheck::PTR_SightTraverse (intercept_t *in)
 //
 
 	// ignore self referencing sectors if COMPAT_TRACE is on
-	if ((i_compatflags & COMPATF_TRACE) && li->frontsector == li->backsector)
+	if ((Level->i_compatflags & COMPATF_TRACE) && li->frontsector == li->backsector)
 		return true;
 
 	double trX = Trace.x + Trace.dx * in->frac;
@@ -407,7 +409,7 @@ bool SightCheck::LineBlocksSight(line_t *ld)
 			{
 				return true;
 			}
-			if (ld->args[1] != 0 && ld->args[1] != level.levelnum)
+			if (ld->args[1] != 0 && ld->args[1] != Level->levelnum)
 			{
 				return true;
 			}
@@ -476,16 +478,15 @@ int SightCheck::P_SightBlockLinesIterator (int x, int y)
 
 	polyblock_t *polyLink;
 	unsigned int i;
-	extern polyblock_t **PolyBlockMap;
 
-	offset = y*level.blockmap.bmapwidth+x;
+	offset = y*Level->blockmap.bmapwidth+x;
 
 	// if any of the previous blocks may contain a portal we may abort the collection of lines here, but we may not abort the sight check.
 	// (We still try to delay activating this for as long as possible.)
-	portalfound = portalfound || level.PortalBlockmap(x, y).containsLinkedPortals;
+	portalfound = portalfound || Level->PortalBlockmap(x, y).containsLinkedPortals;
 
-	polyLink = PolyBlockMap[offset];
-	portalfound |= (polyLink && level.PortalBlockmap.hasLinkedPolyPortals);
+	polyLink = Level->PolyBlockMap[offset];
+	portalfound |= (polyLink && Level->PortalBlockmap.hasLinkedPolyPortals);
 	while (polyLink)
 	{
 		if (polyLink->polyobj)
@@ -506,9 +507,9 @@ int SightCheck::P_SightBlockLinesIterator (int x, int y)
 		polyLink = polyLink->next;
 	}
 
-	for (list = level.blockmap.GetLines(x, y); *list != -1; list++)
+	for (list = Level->blockmap.GetLines(x, y); *list != -1; list++)
 	{
-		if (!P_SightCheckLine (&level.lines[*list]))
+		if (!P_SightCheckLine (&Level->lines[*list]))
 		{
 			if (!portalfound) return 0;
 			else res = -1;
@@ -587,7 +588,7 @@ bool SightCheck::P_SightTraverseIntercepts ()
 
 		for (auto rover : lastsector->e->XFloor.ffloors)
 		{
-			if ((rover->flags & FF_SOLID) == myseethrough || !(rover->flags & FF_EXISTS)) continue;
+			if ((rover->flags & FF_SEETHROUGH) == myseethrough || !(rover->flags & FF_EXISTS)) continue;
 			if ((Flags & SF_IGNOREWATERBOUNDARY) && (rover->flags & FF_SOLID) == 0) continue;
 
 			double ff_bottom = rover->bottom.plane->ZatPoint(seeingthing);
@@ -628,7 +629,7 @@ bool SightCheck::P_SightPathTraverse ()
 	y1 = sightstart.Y + Startfrac * Trace.dy;
 	x2 = sightend.X;
 	y2 = sightend.Y;
-	if (lastsector == NULL) lastsector = P_PointInSector(x1, y1);
+	if (lastsector == NULL) lastsector = P_PointInSector(seeingthing->Level, x1, y1);
 
 	// for FF_SEETHROUGH the following rule applies:
 	// If the viewer is in an area without FF_SEETHROUGH he can only see into areas without this flag
@@ -637,7 +638,8 @@ bool SightCheck::P_SightPathTraverse ()
 	for(auto rover : lastsector->e->XFloor.ffloors)
 	{
 		if(!(rover->flags & FF_EXISTS)) continue;
-		
+		if ((Flags & SF_IGNOREWATERBOUNDARY) && (rover->flags & FF_SOLID) == 0) continue;
+
 		double ff_bottom=rover->bottom.plane->ZatPoint(sightstart);
 		double ff_top=rover->top.plane->ZatPoint(sightstart);
 
@@ -661,13 +663,13 @@ bool SightCheck::P_SightPathTraverse ()
 		portals.Push({ 0, topslope, bottomslope, sector_t::floor, lastsector->GetOppositePortalGroup(sector_t::floor) });
 	}
 
-	x1 -= level.blockmap.bmaporgx;
-	y1 -= level.blockmap.bmaporgy;
+	x1 -= Level->blockmap.bmaporgx;
+	y1 -= Level->blockmap.bmaporgy;
 	xt1 = x1 / FBlockmap::MAPBLOCKUNITS;
 	yt1 = y1 / FBlockmap::MAPBLOCKUNITS;
 
-	x2 -= level.blockmap.bmaporgx;
-	y2 -= level.blockmap.bmaporgy;
+	x2 -= Level->blockmap.bmaporgx;
+	y2 -= Level->blockmap.bmaporgy;
 	xt2 = x2 / FBlockmap::MAPBLOCKUNITS;
 	yt2 = y2 / FBlockmap::MAPBLOCKUNITS;
 
@@ -747,7 +749,7 @@ bool SightCheck::P_SightPathTraverse ()
 	{
 		// end traversing when reaching the end of the blockmap
 		// an early out is not possible because with portals a trace can easily land outside the map's bounds.
-		if (!level.blockmap.isValidBlock(mapx, mapy))
+		if (!Level->blockmap.isValidBlock(mapx, mapy))
 		{
 			break;
 		}
@@ -833,7 +835,7 @@ sightcounts[2]++;
 =====================
 */
 
-bool P_CheckSight (AActor *t1, AActor *t2, int flags)
+int P_CheckSight (AActor *t1, AActor *t2, int flags)
 {
 	SightCycles.Clock();
 
@@ -846,15 +848,16 @@ bool P_CheckSight (AActor *t1, AActor *t2, int flags)
 		return false;
 	}
 
+	auto Level = t1->Level;
 	const sector_t *s1 = t1->Sector;
 	const sector_t *s2 = t2->Sector;
-	int pnum = int(s1->Index()) * level.sectors.Size() + int(s2->Index());
+	int pnum = int(s1->Index()) * Level->sectors.Size() + int(s2->Index());
 
 //
 // check for trivial rejection
 //
-	if (level.rejectmatrix.Size() > 0 &&
-		(level.rejectmatrix[pnum>>3] & (1 << (pnum & 7))))
+	if (Level->rejectmatrix.Size() > 0 &&
+		(Level->rejectmatrix[pnum>>3] & (1 << (pnum & 7))))
 	{
 sightcounts[0]++;
 		res = false;			// can't possibly be connected
@@ -933,14 +936,6 @@ sightcounts[0]++;
 done:
 	SightCycles.Unclock();
 	return res;
-}
-
-DEFINE_ACTION_FUNCTION(AActor, CheckSight)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	PARAM_OBJECT_NOT_NULL(target, AActor);
-	PARAM_INT_DEF(flags);
-	ACTION_RETURN_BOOL(P_CheckSight(self, target, flags));
 }
 
 ADD_STAT (sight)

@@ -74,26 +74,28 @@ class DScroller : public DThinker
 	DECLARE_CLASS (DScroller, DThinker)
 	HAS_OBJECT_POINTERS
 public:
-	
-	DScroller (EScroll type, double dx, double dy, int control, int affectee, int accel, EScrollPos scrollpos = EScrollPos::scw_all);
-	DScroller (double dx, double dy, const line_t *l, int control, int accel, EScrollPos scrollpos = EScrollPos::scw_all);
+	static const int DEFAULT_STAT = STAT_SCROLLER;
+
+	DScroller(EScroll type, double dx, double dy, sector_t *control, sector_t *sec, side_t *side, int accel, EScrollPos scrollpos = EScrollPos::scw_all);
+	DScroller (double dx, double dy, const line_t *l, sector_t *control, int accel, EScrollPos scrollpos = EScrollPos::scw_all);
 	void OnDestroy() override;
 
 	void Serialize(FSerializer &arc);
 	void Tick ();
 
-	bool AffectsWall (int wallnum) const { return m_Type == EScroll::sc_side && m_Affectee == wallnum; }
-	int GetWallNum () const { return m_Type == EScroll::sc_side ? m_Affectee : -1; }
+	bool AffectsWall (side_t * wall) const { return m_Side == wall; }
+	side_t *GetWall () const { return m_Side; }
+	sector_t *GetSector() const { return m_Sector; }
 	void SetRate (double dx, double dy) { m_dx = dx; m_dy = dy; }
 	bool IsType (EScroll type) const { return type == m_Type; }
-	int GetAffectee () const { return m_Affectee; }
 	EScrollPos GetScrollParts() const { return m_Parts; }
 
 protected:
 	EScroll m_Type;		// Type of scroll effect
 	double m_dx, m_dy;		// (dx,dy) scroll speeds
-	int m_Affectee;			// Number of affected sidedef, sector, tag, or whatever
-	int m_Control;			// Control sector (-1 if none) used to control scrolling
+	sector_t *m_Sector;		// Affected sector
+	side_t *m_Side;			// ... or side
+	sector_t *m_Controller;	// Control sector (nullptr if none) used to control scrolling
 	double m_LastHeight;	// Last known height of control sector
 	double m_vdx, m_vdy;	// Accumulated velocity if accelerative
 	int m_Accel;			// Whether it's accelerative
@@ -101,9 +103,7 @@ protected:
 	TObjPtr<DInterpolation*> m_Interpolations[3];
 
 private:
-	DScroller ()
-	{
-	}
+	DScroller() = default;
 };
 
 IMPLEMENT_CLASS(DScroller, false, true)
@@ -138,8 +138,9 @@ void DScroller::Serialize(FSerializer &arc)
 	arc.Enum("type", m_Type)
 		("dx", m_dx)
 		("dy", m_dy)
-		("affectee", m_Affectee)
-		("control", m_Control)
+		("sector", m_Sector)
+		("side", m_Side)
+		("control", m_Controller)
 		("lastheight", m_LastHeight)
 		("vdx", m_vdx)
 		("vdy", m_vdy)
@@ -199,10 +200,9 @@ void DScroller::Tick ()
 {
 	double dx = m_dx, dy = m_dy, tdx, tdy;
 
-	if (m_Control != -1)
+	if (m_Controller != nullptr)
 	{	// compute scroll amounts based on a sector's height changes
-		double height = level.sectors[m_Control].CenterFloor () +
-			level.sectors[m_Control].CenterCeiling ();
+		double height = m_Controller->CenterFloor () + m_Controller->CenterCeiling ();
 		double delta = height - m_LastHeight;
 		m_LastHeight = height;
 		dx *= delta;
@@ -224,40 +224,39 @@ void DScroller::Tick ()
 		case EScroll::sc_side:					// killough 3/7/98: Scroll wall texture
 			if (m_Parts & EScrollPos::scw_top)
 			{
-				level.sides[m_Affectee].AddTextureXOffset(side_t::top, dx);
-				level.sides[m_Affectee].AddTextureYOffset(side_t::top, dy);
+				m_Side->AddTextureXOffset(side_t::top, dx);
+				m_Side->AddTextureYOffset(side_t::top, dy);
 			}
-			if (m_Parts & EScrollPos::scw_mid && (level.sides[m_Affectee].linedef->backsector == NULL ||
-				!(level.sides[m_Affectee].linedef->flags&ML_3DMIDTEX)))
+			if (m_Parts & EScrollPos::scw_mid && (m_Side->linedef->backsector == nullptr ||
+				!(m_Side->linedef->flags&ML_3DMIDTEX)))
 			{
-				level.sides[m_Affectee].AddTextureXOffset(side_t::mid, dx);
-				level.sides[m_Affectee].AddTextureYOffset(side_t::mid, dy);
+				m_Side->AddTextureXOffset(side_t::mid, dx);
+				m_Side->AddTextureYOffset(side_t::mid, dy);
 			}
 			if (m_Parts & EScrollPos::scw_bottom)
 			{
-				level.sides[m_Affectee].AddTextureXOffset(side_t::bottom, dx);
-				level.sides[m_Affectee].AddTextureYOffset(side_t::bottom, dy);
+				m_Side->AddTextureXOffset(side_t::bottom, dx);
+				m_Side->AddTextureYOffset(side_t::bottom, dy);
 			}
 			break;
 
 		case EScroll::sc_floor:						// killough 3/7/98: Scroll floor texture
-			RotationComp(&level.sectors[m_Affectee], sector_t::floor, dx, dy, tdx, tdy);
-			level.sectors[m_Affectee].AddXOffset(sector_t::floor, tdx);
-			level.sectors[m_Affectee].AddYOffset(sector_t::floor, tdy);
+			RotationComp(m_Sector, sector_t::floor, dx, dy, tdx, tdy);
+			m_Sector->AddXOffset(sector_t::floor, tdx);
+			m_Sector->AddYOffset(sector_t::floor, tdy);
 			break;
 
 		case EScroll::sc_ceiling:					// killough 3/7/98: Scroll ceiling texture
-			RotationComp(&level.sectors[m_Affectee], sector_t::ceiling, dx, dy, tdx, tdy);
-			level.sectors[m_Affectee].AddXOffset(sector_t::ceiling, tdx);
-			level.sectors[m_Affectee].AddYOffset(sector_t::ceiling, tdy);
+			RotationComp(m_Sector, sector_t::ceiling, dx, dy, tdx, tdy);
+			m_Sector->AddXOffset(sector_t::ceiling, tdx);
+			m_Sector->AddYOffset(sector_t::ceiling, tdy);
 			break;
 
 		// [RH] Don't actually carry anything here. That happens later.
 		case EScroll::sc_carry:
-			level.Scrolls[m_Affectee].X += dx;
-			level.Scrolls[m_Affectee].Y += dy;
+			Level->Scrolls[m_Sector->Index()] += { dx, dy };
 			// mark all potentially affected things here so that the very expensive calculation loop in AActor::Tick does not need to run for actors which do not touch a scrolling sector.
-			for (auto n = level.sectors[m_Affectee].touching_thinglist; n; n = n->m_snext)
+			for (auto n = m_Sector->touching_thinglist; n; n = n->m_snext)
 			{
 				n->m_thing->flags8 |= MF8_INSCROLLSEC;
 			}
@@ -288,9 +287,8 @@ void DScroller::Tick ()
 //
 //-----------------------------------------------------------------------------
 
-DScroller::DScroller (EScroll type, double dx, double dy,
-					  int control, int affectee, int accel, EScrollPos scrollpos)
-	: DThinker (STAT_SCROLLER)
+DScroller::DScroller (EScroll type, double dx, double dy,  sector_t *ctrl, sector_t *sec, side_t *side, int accel, EScrollPos scrollpos)
+	: DThinker(type == EScroll::sc_side? side->sector->Level : sec->Level)
 {
 	m_Type = type;
 	m_dx = dx;
@@ -299,43 +297,47 @@ DScroller::DScroller (EScroll type, double dx, double dy,
 	m_Parts = scrollpos;
 	m_vdx = m_vdy = 0;
 	m_LastHeight = 0;
-	if ((m_Control = control) != -1)
+	if ((m_Controller = ctrl) != nullptr)
 	{
-		m_LastHeight =
-			level.sectors[control].CenterFloor() + level.sectors[control].CenterCeiling();
+		m_LastHeight = m_Controller->CenterFloor() + m_Controller->CenterCeiling();
 	}
-	m_Affectee = affectee;
-	m_Interpolations[0] = m_Interpolations[1] = m_Interpolations[2] = NULL;
+	m_Side = side;
+	m_Sector = sec;
+	m_Interpolations[0] = m_Interpolations[1] = m_Interpolations[2] = nullptr;
 
 	switch (type)
 	{
 	case EScroll::sc_carry:
-		level.AddScroller (affectee);
+		assert(sec != nullptr);
+		Level->AddScroller (sec->Index());
 		break;
 
 	case EScroll::sc_side:
-		level.sides[affectee].Flags |= WALLF_NOAUTODECALS;
+		assert(side != nullptr);
+		side->Flags |= WALLF_NOAUTODECALS;
 		if (m_Parts & EScrollPos::scw_top)
 		{
-			m_Interpolations[0] = level.sides[m_Affectee].SetInterpolation(side_t::top);
+			m_Interpolations[0] = m_Side->SetInterpolation(side_t::top);
 		}
-		if (m_Parts & EScrollPos::scw_mid && (level.sides[m_Affectee].linedef->backsector == nullptr ||
-			!(level.sides[m_Affectee].linedef->flags&ML_3DMIDTEX)))
+		if (m_Parts & EScrollPos::scw_mid && (m_Side->linedef->backsector == nullptr ||
+			!(m_Side->linedef->flags&ML_3DMIDTEX)))
 		{
-			m_Interpolations[1] = level.sides[m_Affectee].SetInterpolation(side_t::mid);
+			m_Interpolations[1] = m_Side->SetInterpolation(side_t::mid);
 		}
 		if (m_Parts & EScrollPos::scw_bottom)
 		{
-			m_Interpolations[2] = level.sides[m_Affectee].SetInterpolation(side_t::bottom);
+			m_Interpolations[2] = m_Side->SetInterpolation(side_t::bottom);
 		}
 		break;
 
 	case EScroll::sc_floor:
-		m_Interpolations[0] = level.sectors[affectee].SetInterpolation(sector_t::FloorScroll, false);
+		assert(sec != nullptr);
+		m_Interpolations[0] = m_Sector->SetInterpolation(sector_t::FloorScroll, false);
 		break;
 
 	case EScroll::sc_ceiling:
-		m_Interpolations[0] = level.sectors[affectee].SetInterpolation(sector_t::CeilingScroll, false);
+		assert(sec != nullptr);
+		m_Interpolations[0] = m_Sector->SetInterpolation(sector_t::CeilingScroll, false);
 		break;
 
 	default:
@@ -347,10 +349,10 @@ void DScroller::OnDestroy ()
 {
 	for(int i=0;i<3;i++)
 	{
-		if (m_Interpolations[i] != NULL)
+		if (m_Interpolations[i] != nullptr)
 		{
 			m_Interpolations[i]->DelRef();
-			m_Interpolations[i] = NULL;
+			m_Interpolations[i] = nullptr;
 		}
 	}
 	Super::OnDestroy();
@@ -367,9 +369,8 @@ void DScroller::OnDestroy ()
 //
 //-----------------------------------------------------------------------------
 
-DScroller::DScroller (double dx, double dy, const line_t *l,
-					 int control, int accel, EScrollPos scrollpos)
-	: DThinker (STAT_SCROLLER)
+DScroller::DScroller (double dx, double dy, const line_t *l, sector_t * control, int accel, EScrollPos scrollpos)
+	: DThinker(l->GetLevel())
 {
 	double x = fabs(l->Delta().X), y = fabs(l->Delta().Y), d;
 	if (y > x) d = x, x = y, y = d;
@@ -385,24 +386,27 @@ DScroller::DScroller (double dx, double dy, const line_t *l,
 	m_Accel = accel;
 	m_Parts = scrollpos;
 	m_LastHeight = 0;
-	if ((m_Control = control) != -1)
-		m_LastHeight = level.sectors[control].CenterFloor() + level.sectors[control].CenterCeiling();
-	m_Affectee = l->sidedef[0]->Index();
-	level.sides[m_Affectee].Flags |= WALLF_NOAUTODECALS;
-	m_Interpolations[0] = m_Interpolations[1] = m_Interpolations[2] = NULL;
+	if ((m_Controller = control) != nullptr)
+	{
+		m_LastHeight = m_Controller->CenterFloor() + m_Controller->CenterCeiling();
+	}
+	m_Sector = nullptr;
+	m_Side = l->sidedef[0];
+	m_Side->Flags |= WALLF_NOAUTODECALS;
+	m_Interpolations[0] = m_Interpolations[1] = m_Interpolations[2] = nullptr;
 
 	if (m_Parts & EScrollPos::scw_top)
 	{
-		m_Interpolations[0] = level.sides[m_Affectee].SetInterpolation(side_t::top);
+		m_Interpolations[0] = m_Side->SetInterpolation(side_t::top);
 	}
-	if (m_Parts & EScrollPos::scw_mid && (level.sides[m_Affectee].linedef->backsector == NULL ||
-		!(level.sides[m_Affectee].linedef->flags&ML_3DMIDTEX)))
+	if (m_Parts & EScrollPos::scw_mid && (m_Side->linedef->backsector == nullptr ||
+		!(m_Side->linedef->flags&ML_3DMIDTEX)))
 	{
-		m_Interpolations[1] = level.sides[m_Affectee].SetInterpolation(side_t::mid);
+		m_Interpolations[1] = m_Side->SetInterpolation(side_t::mid);
 	}
 	if (m_Parts & EScrollPos::scw_bottom)
 	{
-		m_Interpolations[2] = level.sides[m_Affectee].SetInterpolation(side_t::bottom);
+		m_Interpolations[2] = m_Side->SetInterpolation(side_t::bottom);
 	}
 }
 
@@ -416,17 +420,18 @@ DScroller::DScroller (double dx, double dy, const line_t *l,
 //
 //-----------------------------------------------------------------------------
 
-void P_SpawnScrollers(void)
+void P_SpawnScrollers(FLevelLocals *Level)
 {
-	line_t *l = &level.lines[0];
+	line_t *l = &Level->lines[0];
+	side_t *side;
 	TArray<int> copyscrollers;
 
-	for (auto &line : level.lines)
+	for (auto &line : Level->lines)
 	{
 		if (line.special == Sector_CopyScroller)
 		{
 			// don't allow copying the scroller if the sector has the same tag as it would just duplicate it.
-			if (!tagManager.SectorHasTag(line.frontsector, line.args[0]))
+			if (!Level->tagManager.SectorHasTag(line.frontsector, line.args[0]))
 			{
 				copyscrollers.Push(line.Index());
 			}
@@ -434,17 +439,18 @@ void P_SpawnScrollers(void)
 		}
 	}
 
-	for (unsigned i = 0; i < level.lines.Size(); i++, l++)
+	for (unsigned i = 0; i < Level->lines.Size(); i++, l++)
 	{
 		double dx;	// direction and speed of scrolling
 		double dy;
-		int control = -1, accel = 0;		// no control sector or acceleration
+		sector_t *control = nullptr;
+		int accel = 0;		// no control sector or acceleration
 		int special = l->special;
 
 		// Check for undefined parameters that are non-zero and output messages for them.
 		// We don't report for specials we don't understand.
 		FLineSpecial *spec = P_GetLineSpecialInfo(special);
-		if (spec != NULL)
+		if (spec != nullptr)
 		{
 			int max = spec->map_args;
 			for (unsigned arg = max; arg < countof(l->args); ++arg)
@@ -478,12 +484,11 @@ void P_SpawnScrollers(void)
 			{
 				// if 1, then displacement
 				// if 2, then accelerative (also if 3)
-				control = l->sidedef[0]->sector->Index();
+				control = l->sidedef[0]->sector;
 				if (l->args[1] & 2)
 					accel = 1;
 			}
-			if (special == Scroll_Texture_Model ||
-				l->args[1] & 4)
+			if (special == Scroll_Texture_Model || l->args[1] & 4)
 			{
 				// The line housing the special controls the
 				// direction and speed of scrolling.
@@ -504,18 +509,18 @@ void P_SpawnScrollers(void)
 
 		case Scroll_Ceiling:
 		{
-			FSectorTagIterator itr(l->args[0]);
+			FSectorTagIterator itr(Level->tagManager, l->args[0]);
 			while ((s = itr.Next()) >= 0)
 			{
-				Create<DScroller>(EScroll::sc_ceiling, -dx, dy, control, s, accel);
+				CreateThinker<DScroller>(EScroll::sc_ceiling, -dx, dy, control, &Level->sectors[s], nullptr, accel);
 			}
 			for (unsigned j = 0; j < copyscrollers.Size(); j++)
 			{
-				line_t *line = &level.lines[copyscrollers[j]];
+				line_t *line = &Level->lines[copyscrollers[j]];
 
 				if (line->args[0] == l->args[0] && (line->args[1] & 1))
 				{
-					Create<DScroller>(EScroll::sc_ceiling, -dx, dy, control, line->frontsector->Index(), accel);
+					CreateThinker<DScroller>(EScroll::sc_ceiling, -dx, dy, control, line->frontsector, nullptr, accel);
 				}
 			}
 			break;
@@ -524,36 +529,36 @@ void P_SpawnScrollers(void)
 		case Scroll_Floor:
 			if (l->args[2] != 1)
 			{ // scroll the floor texture
-				FSectorTagIterator itr(l->args[0]);
+				FSectorTagIterator itr(Level->tagManager, l->args[0]);
 				while ((s = itr.Next()) >= 0)
 				{
-					Create<DScroller> (EScroll::sc_floor, -dx, dy, control, s, accel);
+					CreateThinker<DScroller>(EScroll::sc_floor, -dx, dy, control, &Level->sectors[s], nullptr, accel);
 				}
 				for(unsigned j = 0;j < copyscrollers.Size(); j++)
 				{
-					line_t *line = &level.lines[copyscrollers[j]];
+					line_t *line = &Level->lines[copyscrollers[j]];
 
 					if (line->args[0] == l->args[0] && (line->args[1] & 2))
 					{
-						Create<DScroller>(EScroll::sc_floor, -dx, dy, control, line->frontsector->Index(), accel);
+						CreateThinker<DScroller>(EScroll::sc_floor, -dx, dy, control, line->frontsector, nullptr, accel);
 					}
 				}
 			}
 
 			if (l->args[2] > 0)
 			{ // carry objects on the floor
-				FSectorTagIterator itr(l->args[0]);
+				FSectorTagIterator itr(Level->tagManager, l->args[0]);
 				while ((s = itr.Next()) >= 0)
 				{
-					Create<DScroller> (EScroll::sc_carry, dx, dy, control, s, accel);
+					CreateThinker<DScroller>(EScroll::sc_carry, dx, dy, control, &Level->sectors[s], nullptr, accel);
 				}
 				for(unsigned j = 0;j < copyscrollers.Size(); j++)
 				{
-					line_t *line = &level.lines[copyscrollers[j]];
+					line_t *line = &Level->lines[copyscrollers[j]];
 
 					if (line->args[0] == l->args[0] && (line->args[1] & 4))
 					{
-						Create<DScroller> (EScroll::sc_carry, dx, dy, control, line->frontsector->Index(), accel);
+						CreateThinker<DScroller>(EScroll::sc_carry, dx, dy, control, line->frontsector, nullptr, accel);
 					}
 				}
 			}
@@ -563,56 +568,52 @@ void P_SpawnScrollers(void)
 		// (same direction and speed as scrolling floors)
 		case Scroll_Texture_Model:
 		{
-			FLineIdIterator itr(l->args[0]);
+			FLineIdIterator itr(Level->tagManager, l->args[0]);
 			while ((s = itr.Next()) >= 0)
 			{
 				if (s != (int)i)
-					Create<DScroller>(dx, dy, &level.lines[s], control, accel);
+					CreateThinker<DScroller>(dx, dy, &Level->lines[s], control, accel);
 			}
 			break;
 		}
 
 		case Scroll_Texture_Offsets:
 			// killough 3/2/98: scroll according to sidedef offsets
-			s = level.lines[i].sidedef[0]->Index();
-			Create<DScroller> (EScroll::sc_side, -level.sides[s].GetTextureXOffset(side_t::mid),
-				level.sides[s].GetTextureYOffset(side_t::mid), -1, s, accel, SCROLLTYPE(l->args[0]));
+			side = Level->lines[i].sidedef[0];
+			CreateThinker<DScroller>(EScroll::sc_side, -side->GetTextureXOffset(side_t::mid),
+				side->GetTextureYOffset(side_t::mid), nullptr, nullptr, side, accel, SCROLLTYPE(l->args[0]));
 			break;
 
 		case Scroll_Texture_Left:
 			l->special = special;	// Restore the special, for compat_useblocking's benefit.
-			s = level.lines[i].sidedef[0]->Index();
-			Create<DScroller> (EScroll::sc_side, l->args[0] / 64., 0,
-						   -1, s, accel, SCROLLTYPE(l->args[1]));
+			side = Level->lines[i].sidedef[0];
+			CreateThinker<DScroller>(EScroll::sc_side, l->args[0] / 64., 0, nullptr, nullptr, side, accel, SCROLLTYPE(l->args[1]));
 			break;
 
 		case Scroll_Texture_Right:
 			l->special = special;
-			s = level.lines[i].sidedef[0]->Index();
-			Create<DScroller> (EScroll::sc_side, -l->args[0] / 64., 0,
-						   -1, s, accel, SCROLLTYPE(l->args[1]));
+			side = Level->lines[i].sidedef[0];
+			CreateThinker<DScroller>(EScroll::sc_side, -l->args[0] / 64., 0, nullptr, nullptr, side, accel, SCROLLTYPE(l->args[1]));
 			break;
 
 		case Scroll_Texture_Up:
 			l->special = special;
-			s = level.lines[i].sidedef[0]->Index();
-			Create<DScroller> (EScroll::sc_side, 0, l->args[0] / 64.,
-						   -1, s, accel, SCROLLTYPE(l->args[1]));
+			side = Level->lines[i].sidedef[0];
+			CreateThinker<DScroller>(EScroll::sc_side, 0, l->args[0] / 64., nullptr, nullptr, side, accel, SCROLLTYPE(l->args[1]));
 			break;
 
 		case Scroll_Texture_Down:
 			l->special = special;
-			s = level.lines[i].sidedef[0]->Index();
-			Create<DScroller> (EScroll::sc_side, 0, -l->args[0] / 64.,
-						   -1, s, accel, SCROLLTYPE(l->args[1]));
+			side = Level->lines[i].sidedef[0];
+			CreateThinker<DScroller>(EScroll::sc_side, 0, -l->args[0] / 64., nullptr, nullptr, side, accel, SCROLLTYPE(l->args[1]));
 			break;
 
 		case Scroll_Texture_Both:
-			s = level.lines[i].sidedef[0]->Index();
+			side = Level->lines[i].sidedef[0];
 			if (l->args[0] == 0) {
 				dx = (l->args[1] - l->args[2]) / 64.;
 				dy = (l->args[4] - l->args[3]) / 64.;
-				Create<DScroller> (EScroll::sc_side, dx, dy, -1, s, accel);
+				CreateThinker<DScroller>(EScroll::sc_side, dx, dy, nullptr, nullptr, side, accel);
 			}
 			break;
 
@@ -630,7 +631,7 @@ void P_SpawnScrollers(void)
 //
 //-----------------------------------------------------------------------------
 
-void SetWallScroller (int id, int sidechoice, double dx, double dy, EScrollPos Where)
+void SetWallScroller (FLevelLocals *Level, int id, int sidechoice, double dx, double dy, EScrollPos Where)
 {
 	Where = Where & scw_all;
 	if (Where == 0) return;
@@ -638,16 +639,14 @@ void SetWallScroller (int id, int sidechoice, double dx, double dy, EScrollPos W
 	if (dx == 0 && dy == 0)
 	{
 		// Special case: Remove the scroller, because the deltas are both 0.
-		TThinkerIterator<DScroller> iterator (STAT_SCROLLER);
+		TThinkerIterator<DScroller> iterator (Level, STAT_SCROLLER);
 		DScroller *scroller;
 
 		while ( (scroller = iterator.Next ()) )
 		{
-			int wallnum = scroller->GetWallNum ();
+			auto wall = scroller->GetWall ();
 
-			if (wallnum >= 0 && tagManager.LineHasID(level.sides[wallnum].linedef, id) &&
-				level.sides[wallnum].linedef->sidedef[sidechoice]->Index() == wallnum &&
-				Where == scroller->GetScrollParts())
+			if (wall != nullptr && Level->tagManager.LineHasID(wall->linedef, id) && wall->linedef->sidedef[sidechoice] == wall && Where == scroller->GetScrollParts())
 			{
 				scroller->Destroy ();
 			}
@@ -657,20 +656,22 @@ void SetWallScroller (int id, int sidechoice, double dx, double dy, EScrollPos W
 	{
 		// Find scrollers already attached to the matching walls, and change
 		// their rates.
-		TArray<FThinkerCollection> Collection;
+		TArray<DScroller *> Collection;
 		{
-			TThinkerIterator<DScroller> iterator (STAT_SCROLLER);
-			FThinkerCollection collect;
+			TThinkerIterator<DScroller> iterator (Level, STAT_SCROLLER);
+			DScroller *scroll;
 
-			while ( (collect.Obj = iterator.Next ()) )
+			while ( (scroll = iterator.Next ()) )
 			{
-				if ((collect.RefNum = ((DScroller *)collect.Obj)->GetWallNum ()) != -1 &&
-					tagManager.LineHasID(level.sides[collect.RefNum].linedef, id) &&
-					level.sides[collect.RefNum].linedef->sidedef[sidechoice]->Index() == collect.RefNum &&
-					Where == ((DScroller *)collect.Obj)->GetScrollParts())
+				auto wall = scroll->GetWall();
+				if (wall != nullptr)
 				{
-					((DScroller *)collect.Obj)->SetRate (dx, dy);
-					Collection.Push (collect);
+					auto line = wall->linedef;
+					if (Level->tagManager.LineHasID(line, id) && line->sidedef[sidechoice] == wall && Where == scroll->GetScrollParts())
+					{
+						scroll->SetRate(dx, dy);
+						Collection.Push(scroll);
+					}
 				}
 			}
 		}
@@ -679,30 +680,24 @@ void SetWallScroller (int id, int sidechoice, double dx, double dy, EScrollPos W
 		int linenum;
 
 		// Now create scrollers for any walls that don't already have them.
-		FLineIdIterator itr(id);
+		FLineIdIterator itr(Level->tagManager, id);
 		while ((linenum = itr.Next()) >= 0)
 		{
-			if (level.lines[linenum].sidedef[sidechoice] != NULL)
+			side_t *side = Level->lines[linenum].sidedef[sidechoice];
+			if (side != nullptr)
 			{
-				int sidenum = level.lines[linenum].sidedef[sidechoice]->Index();
-				unsigned int i;
-				for (i = 0; i < numcollected; i++)
+				if (Collection.FindEx([=](const DScroller *element) { return element->GetWall() == side; }) == Collection.Size())
 				{
-					if (Collection[i].RefNum == sidenum)
-						break;
-				}
-				if (i == numcollected)
-				{
-					Create<DScroller> (EScroll::sc_side, dx, dy, -1, sidenum, 0, Where);
+					CreateThinker<DScroller>(EScroll::sc_side, dx, dy, nullptr, nullptr, side, 0, Where);
 				}
 			}
 		}
 	}
 }
 
-void SetScroller (int tag, EScroll type, double dx, double dy)
+void SetScroller (FLevelLocals *Level, int tag, EScroll type, double dx, double dy)
 {
-	TThinkerIterator<DScroller> iterator (STAT_SCROLLER);
+	TThinkerIterator<DScroller> iterator (Level, STAT_SCROLLER);
 	DScroller *scroller;
 	int i;
 
@@ -716,7 +711,7 @@ void SetScroller (int tag, EScroll type, double dx, double dy)
 	{
 		if (scroller->IsType (type))
 		{
-			if (tagManager.SectorHasTag(scroller->GetAffectee (), tag))
+			if (Level->tagManager.SectorHasTag(scroller->GetSector(), tag))
 			{
 				i++;
 				scroller->SetRate (dx, dy);
@@ -730,14 +725,14 @@ void SetScroller (int tag, EScroll type, double dx, double dy)
 	}
 
 	// Need to create scrollers for the sector(s)
-	FSectorTagIterator itr(tag);
+	FSectorTagIterator itr(Level->tagManager, tag);
 	while ((i = itr.Next()) >= 0)
 	{
-		Create<DScroller> (type, dx, dy, -1, i, 0);
+		CreateThinker<DScroller>(type, dx, dy, nullptr, &Level->sectors[i], nullptr, 0);
 	}
 }
 
-void P_CreateScroller(EScroll type, double dx, double dy, int control, int affectee, int accel, EScrollPos scrollpos)
+void P_CreateScroller(EScroll type, double dx, double dy, sector_t *affectee, int accel, EScrollPos scrollpos)
 {
-	Create<DScroller>(type, dx, dy, control, affectee, accel, scrollpos);
+	CreateThinker<DScroller>(type, dx, dy, nullptr, affectee, nullptr, accel, scrollpos);
 }

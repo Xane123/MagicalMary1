@@ -39,8 +39,6 @@
 #include "g_levellocals.h"
 #include "vm.h"
 
-FTagManager tagManager;
-
 //-----------------------------------------------------------------------------
 //
 //
@@ -196,6 +194,12 @@ int FTagManager::GetFirstSectorTag(const sector_t *sect) const
 	return SectorHasTags(i) ? allTags[startForSector[i]].tag : 0;
 }
 
+int FTagManager::GetFirstSectorTag(int i) const
+{
+	return SectorHasTags(i) ? allTags[startForSector[i]].tag : 0;
+}
+
+
 //-----------------------------------------------------------------------------
 //
 //
@@ -290,7 +294,11 @@ void FTagManager::DumpTags()
 
 CCMD(dumptags)
 {
-	tagManager.DumpTags();
+	ForAllLevels([](FLevelLocals *Level)
+	{
+		Printf("%s - %s\n", Level->MapName.GetChars(), Level->LevelName.GetChars());
+		Level->tagManager.DumpTags();
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -320,11 +328,11 @@ int FSectorTagIterator::Next()
 	else
 	{
 		// with the tag manager, searching for tag 0 has to be different, because it won't create entries for untagged sectors.
-		while (start < (int)level.sectors.Size() && tagManager.SectorHasTags(start))
+		while (start < (int)tagManager.Level->sectors.Size() && tagManager.SectorHasTags(start))
 		{
 			start++;
 		}
-		if (start == (int)level.sectors.Size()) return -1;
+		if (start == (int)tagManager.Level->sectors.Size()) return -1;
 		ret = start;
 		start++;
 	}
@@ -341,7 +349,7 @@ int FSectorTagIterator::NextCompat(bool compat, int start)
 {
 	if (!compat) return Next();
 
-	for (unsigned i = start + 1; i < level.sectors.Size(); i++)
+	for (unsigned i = start + 1; i < tagManager.Level->sectors.Size(); i++)
 	{
 		if (tagManager.SectorHasTag(i, searchtag)) return i;
 	}
@@ -362,66 +370,5 @@ int FLineIdIterator::Next()
 	int ret = tagManager.allIDs[start].target;
 	start = tagManager.allIDs[start].nexttag;
 	return ret;
-}
-
-class DSectorTagIterator : public DObject, public FSectorTagIterator
-{
-	DECLARE_ABSTRACT_CLASS(DSectorTagIterator, DObject);
-public:
-	DSectorTagIterator(int tag, line_t *line)
-	{
-		if (line == nullptr) Init(tag);
-		else Init(tag, line);
-	}
-};
-
-IMPLEMENT_CLASS(DSectorTagIterator, true, false);
-
-DEFINE_ACTION_FUNCTION(DSectorTagIterator, Create)
-{
-	PARAM_PROLOGUE;
-	PARAM_INT(tag);
-	PARAM_POINTER_DEF(line, line_t);
-	ACTION_RETURN_POINTER(Create<DSectorTagIterator>(tag, line));
-}
-
-DEFINE_ACTION_FUNCTION(DSectorTagIterator, Next)
-{
-	PARAM_SELF_PROLOGUE(DSectorTagIterator);
-	ACTION_RETURN_INT(self->Next());
-}
-
-DEFINE_ACTION_FUNCTION(DSectorTagIterator, NextCompat)
-{
-	PARAM_SELF_PROLOGUE(DSectorTagIterator);
-	PARAM_BOOL(compat);
-	PARAM_INT(secnum);
-	ACTION_RETURN_INT(self->NextCompat(compat, secnum));
-}
-
-
-class DLineIdIterator : public DObject, public FLineIdIterator
-{
-	DECLARE_ABSTRACT_CLASS(DLineIdIterator, DObject);
-public:
-	DLineIdIterator(int tag)
-		: FLineIdIterator(tag)
-	{
-	}
-};
-
-IMPLEMENT_CLASS(DLineIdIterator, true, false);
-
-DEFINE_ACTION_FUNCTION(DLineIdIterator, Create)
-{
-	PARAM_PROLOGUE;
-	PARAM_INT(tag);
-	ACTION_RETURN_POINTER(Create<DLineIdIterator>(tag));
-}
-
-DEFINE_ACTION_FUNCTION(DLineIdIterator, Next)
-{
-	PARAM_SELF_PROLOGUE(DLineIdIterator);
-	ACTION_RETURN_INT(self->Next());
 }
 

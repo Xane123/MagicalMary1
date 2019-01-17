@@ -46,7 +46,7 @@ class BridgeBall : Actor
 	{
 		if (target == NULL)
 		{ // Don't crash if somebody spawned this into the world
-		  // independantly of a Bridge actor.
+		  // independently of a Bridge actor.
 			return;
 		}
 		// Set default values
@@ -121,7 +121,7 @@ class CustomBridge : Actor
 		// But this is not safe with custom bridge balls that do not necessarily call that function.
 		// So the best course of action is to look for all bridge balls here and destroy them ourselves.
 		
-		let it = ThinkerIterator.Create("Actor");
+		let it = Level.CreateThinkerIterator("Actor");
 		Actor thing;
 		
 		while ((thing = Actor(it.Next())))

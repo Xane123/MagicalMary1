@@ -180,6 +180,28 @@ public:
 		return *this;
 	}
 
+	T operator=(std::nullptr_t nul)
+	{
+		o = nullptr;
+		return *this;
+	}
+
+	// To allow NULL, too.
+	T operator=(const int val)
+	{
+		assert(val == 0);
+		o = nullptr;
+		return *this;
+	}
+
+	// To allow NULL, too. In Clang NULL is a long.
+	T operator=(const long val)
+	{
+		assert(val == 0);
+		o = nullptr;
+		return *this;
+	}
+	
 	operator T() throw()
 	{
 		return GC::ReadBarrier(pp);
@@ -189,13 +211,6 @@ public:
 		T q = GC::ReadBarrier(pp);
 		assert(q != NULL);
 		return *q;
-	}
-	T *operator&() throw()
-	{
-		// Does not perform a read barrier. The only real use for this is with
-		// the DECLARE_POINTER macro, where a read barrier would be a very bad
-		// thing.
-		return &pp;
 	}
 	T operator->() throw()
 	{
@@ -224,7 +239,10 @@ template<class T,class U> inline T barrier_cast(TObjPtr<U> &o)
 	return static_cast<T>(static_cast<U>(o));
 }
 
-template<class T> inline void GC::Mark(TObjPtr<T> &obj)
+namespace GC
 {
-	GC::Mark(&obj.o);
+	template<class T> inline void Mark(TObjPtr<T> &obj)
+	{
+		GC::Mark(&obj.o);
+	}
 }

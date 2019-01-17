@@ -29,6 +29,7 @@
 #include "r_sky.h"
 #include "g_levellocals.h"
 #include "hw_lighting.h"
+#include "hwrenderer/scene/hw_drawinfo.h"
 
 // externally settable lighting properties
 static float distfogtable[2][256];	// light to fog conversion table for black fog
@@ -82,13 +83,15 @@ CUSTOM_CVAR(Int,gl_fogmode,1,CVAR_ARCHIVE|CVAR_NOINITCALL)
 //
 //==========================================================================
 
-int hw_CalcLightLevel(int lightlevel, int rellight, bool weapon)
+int HWDrawInfo::CalcLightLevel(int lightlevel, int rellight, bool weapon, int blendfactor)
 {
 	int light;
 
 	if (lightlevel == 0) return 0;
 
-	if ((level.lightmode & 2) && lightlevel < 192 && !weapon) 
+	bool darklightmode = (isDarkLightMode()) || (isSoftwareLighting() && blendfactor > 0);
+
+	if (darklightmode && lightlevel < 192 && !weapon) 
 	{
 		if (lightlevel > 100)
 		{
@@ -122,16 +125,17 @@ int hw_CalcLightLevel(int lightlevel, int rellight, bool weapon)
 //
 //==========================================================================
 
-PalEntry hw_CalcLightColor(int light, PalEntry pe, int blendfactor)
+PalEntry HWDrawInfo::CalcLightColor(int light, PalEntry pe, int blendfactor)
 {
 	int r,g,b;
 
-	if (level.lightmode == 8)
+	if (blendfactor == 0)
 	{
-		return pe;
-	}
-	else if (blendfactor == 0)
-	{
+		if (isSoftwareLighting())
+		{
+			return pe;
+		}
+
 		r = pe.r * light / 255;
 		g = pe.g * light / 255;
 		b = pe.b * light / 255;
@@ -159,7 +163,7 @@ PalEntry hw_CalcLightColor(int light, PalEntry pe, int blendfactor)
 //     This is what Legacy's GL render does.
 //	2. black fog means no fog and always uses the distfogtable based on the level's fog density setting
 //	3. If outside fog is defined and the current fog color is the same as the outside fog
-//	   the engine always uses the outside fog density to make the fog uniform across the level.
+//	   the engine always uses the outside fog density to make the fog uniform across the map.
 //	   If the outside fog's density is undefined it uses the level's fog density and if that is
 //	   not defined it uses a default of 70.
 //	4. If a global fog density is specified it is being used for all fog on the level
@@ -167,14 +171,17 @@ PalEntry hw_CalcLightColor(int light, PalEntry pe, int blendfactor)
 //
 //==========================================================================
 
-float hw_GetFogDensity(int lightlevel, PalEntry fogcolor, int sectorfogdensity)
+float HWDrawInfo::GetFogDensity(int lightlevel, PalEntry fogcolor, int sectorfogdensity, int blendfactor)
 {
 	float density;
 
-	if (level.lightmode & 4)
+	auto oldlightmode = lightmode;
+	if (isSoftwareLighting() && blendfactor > 0) lightmode = ELightMode::Doom;	// The blendfactor feature does not work with software-style lighting.
+
+	if (lightmode == ELightMode::DoomLegacy)
 	{
 		// uses approximations of Legacy's default settings.
-		density = level.fogdensity ? (float)level.fogdensity : 18;
+		density = Level->fogdensity ? (float)Level->fogdensity : 18;
 	}
 	else if (sectorfogdensity != 0)
 	{
@@ -184,24 +191,24 @@ float hw_GetFogDensity(int lightlevel, PalEntry fogcolor, int sectorfogdensity)
 	else if ((fogcolor.d & 0xffffff) == 0)
 	{
 		// case 2: black fog
-		if (level.lightmode != 8 && !(level.flags3 & LEVEL3_NOLIGHTFADE))
+		if ((!isSoftwareLighting() || blendfactor > 0) && !(Level->flags3 & LEVEL3_NOLIGHTFADE))
 		{
-			density = distfogtable[level.lightmode != 0][hw_ClampLight(lightlevel)];
+			density = distfogtable[lightmode != ELightMode::LinearStandard][hw_ClampLight(lightlevel)];
 		}
 		else
 		{
 			density = 0;
 		}
 	}
-	else if (level.outsidefogdensity != 0 && APART(level.info->outsidefog) != 0xff && (fogcolor.d & 0xffffff) == (level.info->outsidefog & 0xffffff))
+	else if (Level->outsidefogdensity != 0 && APART(Level->outsidefog) != 0xff && (fogcolor.d & 0xffffff) == (Level->outsidefog & 0xffffff))
 	{
 		// case 3. outsidefogdensity has already been set as needed
-		density = (float)level.outsidefogdensity;
+		density = (float)Level->outsidefogdensity;
 	}
-	else  if (level.fogdensity != 0)
+	else  if (Level->fogdensity != 0)
 	{
 		// case 4: level has fog density set
-		density = (float)level.fogdensity;
+		density = (float)Level->fogdensity;
 	}
 	else if (lightlevel < 248)
 	{
@@ -226,7 +233,7 @@ float hw_GetFogDensity(int lightlevel, PalEntry fogcolor, int sectorfogdensity)
 //
 //==========================================================================
 
-bool hw_CheckFog(sector_t *frontsector, sector_t *backsector)
+bool HWDrawInfo::CheckFog(sector_t *frontsector, sector_t *backsector)
 {
 	if (frontsector == backsector) return false;	// there can't be a boundary if both sides are in the same sector.
 
@@ -241,10 +248,10 @@ bool hw_CheckFog(sector_t *frontsector, sector_t *backsector)
 	else if (fogcolor.a != 0)
 	{
 	}
-	else if (level.outsidefogdensity != 0 && APART(level.info->outsidefog) != 0xff && (fogcolor.d & 0xffffff) == (level.info->outsidefog & 0xffffff))
+	else if (Level->outsidefogdensity != 0 && APART(Level->outsidefog) != 0xff && (fogcolor.d & 0xffffff) == (Level->outsidefog & 0xffffff))
 	{
 	}
-	else  if (level.fogdensity!=0 || (level.lightmode & 4))
+	else  if (Level->fogdensity!=0 || lightmode == ELightMode::DoomLegacy)
 	{
 		// case 3: level has fog density set
 	}
@@ -259,11 +266,11 @@ bool hw_CheckFog(sector_t *frontsector, sector_t *backsector)
 	if ((fogcolor.d & 0xffffff) == 0)
 	{
 	}
-	else if (level.outsidefogdensity != 0 && APART(level.info->outsidefog) != 0xff && (fogcolor.d & 0xffffff) == (level.info->outsidefog & 0xffffff))
+	else if (Level->outsidefogdensity != 0 && APART(Level->outsidefog) != 0xff && (fogcolor.d & 0xffffff) == (Level->outsidefog & 0xffffff))
 	{
 		return false;
 	}
-	else  if (level.fogdensity!=0 || (level.lightmode & 4))
+	else  if (Level->fogdensity!=0 || lightmode == ELightMode::DoomLegacy)
 	{
 		// case 3: level has fog density set
 		return false;

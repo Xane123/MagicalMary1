@@ -28,7 +28,7 @@
 class DrawerCommandQueue;
 typedef std::shared_ptr<DrawerCommandQueue> DrawerCommandQueuePtr;
 class RenderMemory;
-class ADynamicLight;
+struct FDynamicLight;
 
 EXTERN_CVAR(Bool, r_models);
 extern bool r_modelscene;
@@ -77,7 +77,7 @@ namespace swrenderer
 		std::unique_ptr<LightVisibility> Light;
 		DrawerCommandQueuePtr DrawQueue;
 
-		TArray<ADynamicLight*> AddedLightsArray;
+		TArray<FDynamicLight*> AddedLightsArray;
 
 		std::thread thread;
 
@@ -88,7 +88,7 @@ namespace swrenderer
 		SWPixelFormatDrawers *Drawers(RenderViewport *viewport);
 
 		// Make sure texture can accessed safely
-		void PrepareTexture(FTexture *texture, FRenderStyle style);
+		void PrepareTexture(FSoftwareTexture *texture, FRenderStyle style);
 
 		// Setup poly object in a threadsafe manner
 		void PreparePolyObject(subsector_t *sub);

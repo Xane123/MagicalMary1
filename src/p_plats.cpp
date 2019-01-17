@@ -41,10 +41,6 @@ static FRandom pr_doplat ("DoPlat");
 
 IMPLEMENT_CLASS(DPlat, false, false)
 
-DPlat::DPlat ()
-{
-}
-
 void DPlat::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -214,7 +210,7 @@ DPlat::DPlat (sector_t *sector)
 //	[RH] Changed amount to height and added delay,
 //		 lip, change, tag, and speed parameters.
 //
-bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
+bool EV_DoPlat (FLevelLocals *Level, int tag, line_t *line, DPlat::EPlatType type, double height,
 				double speed, int delay, int lip, int change)
 {
 	DPlat *plat;
@@ -233,7 +229,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 		case DPlat::platToggle:
 			rtn = true;
 		case DPlat::platPerpetualRaise:
-			P_ActivateInStasis (tag);
+			P_ActivateInStasis (Level, tag);
 			break;
 
 		default:
@@ -244,10 +240,10 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 
 	// [RH] If tag is zero, use the sector on the back side
 	//		of the activating line (if any).
-	FSectorTagIterator itr(tag, line);
+	FSectorTagIterator itr(Level->tagManager, tag, line);
 	while ((secnum = itr.Next()) >= 0)
 	{
-		sec = &level.sectors[secnum];
+		sec = &Level->sectors[secnum];
 
 		if (sec->PlaneMoving(sector_t::floor))
 		{
@@ -256,7 +252,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 
 		// Find lowest & highest floors around sector
 		rtn = true;
-		plat = Create<DPlat> (sec);
+		plat = CreateThinker<DPlat>(sec);
 
 		plat->m_Type = type;
 		plat->m_Crush = -1;
@@ -279,7 +275,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 		{
 		case DPlat::platRaiseAndStay:
 		case DPlat::platRaiseAndStayLockout:
-			newheight = sec->FindNextHighestFloor (&spot);
+			newheight = FindNextHighestFloor (sec, &spot);
 			plat->m_High = sec->floorplane.PointToDist (spot, newheight);
 			plat->m_Low = sec->floorplane.fD();
 			plat->m_Status = DPlat::up;
@@ -306,7 +302,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 
 		case DPlat::platDownWaitUpStay:
 		case DPlat::platDownWaitUpStayStone:
-			newheight = sec->FindLowestFloorSurrounding (&spot) + lip;
+			newheight = FindLowestFloorSurrounding (sec, &spot) + lip;
 			plat->m_Low = sec->floorplane.PointToDist (spot, newheight);
 
 			if (plat->m_Low < sec->floorplane.fD())
@@ -318,13 +314,13 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 			break;
 		
 		case DPlat::platUpNearestWaitDownStay:
-			newheight = sec->FindNextHighestFloor (&spot);
+			newheight = FindNextHighestFloor (sec, &spot);
 			// Intentional fall-through
 
 		case DPlat::platUpWaitDownStay:
 			if (type == DPlat::platUpWaitDownStay)
 			{
-				newheight = sec->FindHighestFloorSurrounding (&spot);
+				newheight = FindHighestFloorSurrounding (sec, &spot);
 			}
 			plat->m_High = sec->floorplane.PointToDist (spot, newheight);
 			plat->m_Low = sec->floorplane.fD();
@@ -337,13 +333,13 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 			break;
 
 		case DPlat::platPerpetualRaise:
-			newheight = sec->FindLowestFloorSurrounding (&spot) + lip;
+			newheight = FindLowestFloorSurrounding (sec, &spot) + lip;
 			plat->m_Low =  sec->floorplane.PointToDist (spot, newheight);
 
 			if (plat->m_Low < sec->floorplane.fD())
 				plat->m_Low = sec->floorplane.fD();
 
-			newheight = sec->FindHighestFloorSurrounding (&spot);
+			newheight = FindHighestFloorSurrounding (sec, &spot);
 			plat->m_High =  sec->floorplane.PointToDist (spot, newheight);
 
 			if (plat->m_High > sec->floorplane.fD())
@@ -358,7 +354,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 			plat->m_Crush = 10;	//jff 3/14/98 crush anything in the way
 
 			// set up toggling between ceiling, floor inclusive
-			newheight = sec->FindLowestCeilingPoint (&spot);
+			newheight = FindLowestCeilingPoint(sec, &spot);
 			plat->m_Low = sec->floorplane.PointToDist (spot, newheight);
 			plat->m_High = sec->floorplane.fD();
 			plat->m_Status = DPlat::down;
@@ -366,7 +362,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 			break;
 
 		case DPlat::platDownToNearestFloor:
-			newheight = sec->FindNextLowestFloor (&spot) + lip;
+			newheight = FindNextLowestFloor (sec, &spot) + lip;
 			plat->m_Low = sec->floorplane.PointToDist (spot, newheight);
 			plat->m_Status = DPlat::down;
 			plat->m_High = sec->floorplane.fD();
@@ -374,7 +370,7 @@ bool EV_DoPlat (int tag, line_t *line, DPlat::EPlatType type, double height,
 			break;
 
 		case DPlat::platDownToLowestCeiling:
-			newheight = sec->FindLowestCeilingSurrounding (&spot);
+			newheight = FindLowestCeilingSurrounding (sec, &spot);
 		    plat->m_Low = sec->floorplane.PointToDist (spot, newheight);
 			plat->m_High = sec->floorplane.fD();
 
@@ -400,10 +396,10 @@ void DPlat::Reactivate ()
 		m_Status = m_OldStatus;
 }
 
-void P_ActivateInStasis (int tag)
+void P_ActivateInStasis (FLevelLocals *Level, int tag)
 {
 	DPlat *scan;
-	TThinkerIterator<DPlat> iterator;
+	TThinkerIterator<DPlat> iterator(Level);
 
 	while ( (scan = iterator.Next ()) )
 	{
@@ -418,10 +414,10 @@ void DPlat::Stop ()
 	m_Status = in_stasis;
 }
 
-void EV_StopPlat (int tag, bool remove)
+void EV_StopPlat (FLevelLocals *Level, int tag, bool remove)
 {
 	DPlat *scan;
-	TThinkerIterator<DPlat> iterator;
+	TThinkerIterator<DPlat> iterator(Level);
 
 	scan = iterator.Next();
 	while (scan != nullptr)

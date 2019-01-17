@@ -228,17 +228,17 @@ class HolyMissile : Actor
 			{ // float bob index
 
 				case 0:
-					mo.WeaveIndexZ = random[HolyAtk2]() & 7; // upper-left
+					mo.WeaveIndexZ = random[HolyAtk2](0, 7); // upper-left
 					break;
 				case 1:
-					mo.WeaveIndexZ = 32 + (random[HolyAtk2]() & 7); // upper-right
+					mo.WeaveIndexZ = random[HolyAtk2](32, 39); // upper-right
 					break;
 				case 2:
-					mo.WeaveIndexXY = 32 + (random[HolyAtk2]() & 7); // lower-left
+					mo.WeaveIndexXY = random[HolyAtk2](32, 39); // lower-left
 					break;
 				case 3:
-					mo.WeaveIndexXY = 32 + (random[HolyAtk2]() & 7);
-					mo.WeaveIndexZ = 32 + (random[HolyAtk2]() & 7);
+					mo.WeaveIndexXY = random[HolyAtk2](32, 39);
+					mo.WeaveIndexZ = random[HolyAtk2](32, 39);
 					break;
 			}
 			mo.SetZ(pos.z);
@@ -258,7 +258,7 @@ class HolyMissile : Actor
 				mo.bSkullFly = true;
 				mo.bMissile = false;
 			}
-			HolyTail.SpawnSpiritTail (mo);
+			SpawnSpiritTail (mo);
 		}
 	}
 }
@@ -461,7 +461,7 @@ class HolySpirit : Actor
 		}
 		VelFromAngle();
 
-		if (!(level.time&15) 
+		if (!(Level.maptime&15) 
 			|| pos.z > target.pos.z + target.height
 			|| pos.z + height < target.pos.z)
 		{
@@ -497,20 +497,20 @@ class HolySpirit : Actor
 			Vel.Y /= 4;
 			Vel.Z = 0;
 			SetStateLabel ("Death");
-			tics -= random[HolySeeker]()&3;
+			tics -= random[HolySeeker](0, 3);
 			return;
 		}
 		if (tracer)
 		{
 			CHolySeekerMissile (args[0], args[0]*2.);
-			if (!((level.time+7)&15))
+			if (!((Level.maptime+7)&15))
 			{
 				args[0] = 5+(random[HolySeeker]()/20);
 			}
 		}
 
-		int xyspeed = (random[HolySeeker]() % 5);
-		int zspeed = (random[HolySeeker]() % 5);
+		int xyspeed = random[HolySeeker](0, 4);
+		int zspeed = random[HolySeeker](0, 4);
 		A_Weave(xyspeed, zspeed, 4., 2.);
 	}
 
@@ -558,28 +558,6 @@ class HolyTail : Actor
 		Stop;
 	}
 	
-	//============================================================================
-	//
-	// SpawnSpiritTail
-	//
-	//============================================================================
-
-	static void SpawnSpiritTail (Actor spirit)
-	{
-		Actor tail = Spawn ("HolyTail", spirit.Pos, ALLOW_REPLACE);
-		if (tail != null)
-		{
-			tail.target = spirit; // parent
-			for (int i = 1; i < 3; i++)
-			{
-				Actor next = Spawn ("HolyTailTrail", spirit.Pos, ALLOW_REPLACE);
-				tail.tracer = next;
-				tail = next;
-			}
-			tail.tracer = null; // last tail bit
-		}
-	}
-
 	//============================================================================
 	//
 	// CHolyTailFollow
@@ -673,4 +651,30 @@ class HolyTailTrail : HolyTail
 	Spawn:
 		Goto TailTrail;
 	}
+}
+
+extend class Actor
+{
+	//============================================================================
+	//
+	// SpawnSpiritTail
+	//
+	//============================================================================
+
+	void SpawnSpiritTail (Actor spirit)
+	{
+		Actor tail = Spawn ("HolyTail", spirit.Pos, ALLOW_REPLACE);
+		if (tail != null)
+		{
+			tail.target = spirit; // parent
+			for (int i = 1; i < 3; i++)
+			{
+				Actor next = Spawn ("HolyTailTrail", spirit.Pos, ALLOW_REPLACE);
+				tail.tracer = next;
+				tail = next;
+			}
+			tail.tracer = null; // last tail bit
+		}
+	}
+
 }

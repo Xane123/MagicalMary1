@@ -47,10 +47,6 @@
 
 IMPLEMENT_CLASS(DCeiling, false, false)
 
-DCeiling::DCeiling ()
-{
-}
-
 //============================================================================
 //
 // 
@@ -248,7 +244,7 @@ bool P_CreateCeiling(sector_t *sec, DCeiling::ECeiling type, line_t *line, int t
 	}
 	
 	// new door thinker
-	DCeiling *ceiling = Create<DCeiling> (sec, speed, speed2, silent & ~4);
+	DCeiling *ceiling = CreateThinker<DCeiling> (sec, speed, speed2, silent & ~4);
 	vertex_t *spot = sec->Lines[0]->v1;
 
 	switch (type)
@@ -257,14 +253,14 @@ bool P_CreateCeiling(sector_t *sec, DCeiling::ECeiling type, line_t *line, int t
 	case DCeiling::ceilCrushRaiseAndStay:
 		ceiling->m_TopHeight = sec->ceilingplane.fD();
 	case DCeiling::ceilLowerAndCrush:
-		targheight = sec->FindHighestFloorPoint (&spot);
+		targheight = FindHighestFloorPoint (sec, &spot);
 		targheight += height;
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilRaiseToHighest:
-		targheight = sec->FindHighestCeilingSurrounding (&spot);
+		targheight = FindHighestCeilingSurrounding (sec, &spot);
 		ceiling->m_TopHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = 1;
 		break;
@@ -300,13 +296,13 @@ bool P_CreateCeiling(sector_t *sec, DCeiling::ECeiling type, line_t *line, int t
 		break;
 
 	case DCeiling::ceilLowerToHighestFloor:
-		targheight = sec->FindHighestFloorSurrounding (&spot) + height;
+		targheight = FindHighestFloorSurrounding (sec, &spot) + height;
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilRaiseToHighestFloor:
-		targheight = sec->FindHighestFloorSurrounding (&spot);
+		targheight = FindHighestFloorSurrounding (sec, &spot);
 		ceiling->m_TopHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = 1;
 		break;
@@ -326,55 +322,55 @@ bool P_CreateCeiling(sector_t *sec, DCeiling::ECeiling type, line_t *line, int t
 		break;
 
 	case DCeiling::ceilLowerToNearest:
-		targheight = sec->FindNextLowestCeiling (&spot);
+		targheight = FindNextLowestCeiling (sec, &spot);
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilRaiseToNearest:
-		targheight = sec->FindNextHighestCeiling (&spot);
+		targheight = FindNextHighestCeiling (sec, &spot);
 		ceiling->m_TopHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = 1;
 		break;
 
 	case DCeiling::ceilLowerToLowest:
-		targheight = sec->FindLowestCeilingSurrounding (&spot);
+		targheight = FindLowestCeilingSurrounding (sec, &spot);
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilRaiseToLowest:
-		targheight = sec->FindLowestCeilingSurrounding (&spot);
+		targheight = FindLowestCeilingSurrounding (sec, &spot);
 		ceiling->m_TopHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = 1;
 		break;
 
 	case DCeiling::ceilLowerToFloor:
-		targheight = sec->FindHighestFloorPoint (&spot) + height;
+		targheight = FindHighestFloorPoint (sec, &spot) + height;
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilRaiseToFloor:	// [RH] What's this for?
-		targheight = sec->FindHighestFloorPoint (&spot) + height;
+		targheight = FindHighestFloorPoint (sec, &spot) + height;
 		ceiling->m_TopHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = 1;
 		break;
 
 	case DCeiling::ceilLowerToHighest:
-		targheight = sec->FindHighestCeilingSurrounding (&spot);
+		targheight = FindHighestCeilingSurrounding (sec, &spot);
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilLowerByTexture:
-		targheight = sec->ceilingplane.ZatPoint (spot) - sec->FindShortestUpperAround ();
+		targheight = sec->ceilingplane.ZatPoint (spot) - FindShortestUpperAround (sec);
 		ceiling->m_BottomHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = -1;
 		break;
 
 	case DCeiling::ceilRaiseByTexture:
-		targheight = sec->ceilingplane.ZatPoint (spot) + sec->FindShortestUpperAround ();
+		targheight = sec->ceilingplane.ZatPoint (spot) + FindShortestUpperAround (sec);
 		ceiling->m_TopHeight = sec->ceilingplane.PointToDist (spot, targheight);
 		ceiling->m_Direction = 1;
 		break;
@@ -420,15 +416,15 @@ bool P_CreateCeiling(sector_t *sec, DCeiling::ECeiling type, line_t *line, int t
 				   type == DCeiling::ceilRaiseToFloor ||
 				   /*type == ceilLowerToHighest ||*/
 				   type == DCeiling::ceilLowerToFloor) ?
-				sec->FindModelFloorSector (targheight) :
-				sec->FindModelCeilingSector (targheight);
+				FindModelFloorSector(sec, targheight) :
+				FindModelCeilingSector(sec, targheight);
 			if (modelsec != NULL)
 			{
 				ceiling->m_Texture = modelsec->GetTexture(sector_t::ceiling);
 				switch (change & 3)
 				{
 					case 1:		// type is zeroed
-						ceiling->m_NewSpecial.Clear();
+						ceiling->m_NewSpecial = {};
 						ceiling->m_Type = DCeiling::genCeilingChg0;
 						break;
 					case 2:		// type is copied
@@ -447,7 +443,7 @@ bool P_CreateCeiling(sector_t *sec, DCeiling::ECeiling type, line_t *line, int t
 			switch (change & 3)
 			{
 				case 1:		// type is zeroed
-					ceiling->m_NewSpecial.Clear();
+					ceiling->m_NewSpecial = {};
 					ceiling->m_Type = DCeiling::genCeilingChg0;
 					break;
 				case 2:		// type is copied
@@ -473,11 +469,11 @@ DEFINE_ACTION_FUNCTION(DCeiling, CreateCeiling)
 	PARAM_POINTER(ln, line_t);
 	PARAM_FLOAT(speed);
 	PARAM_FLOAT(speed2);
-	PARAM_FLOAT_DEF(height);
-	PARAM_INT_DEF(crush);
-	PARAM_INT_DEF(silent);
-	PARAM_INT_DEF(change);
-	PARAM_INT_DEF(crushmode);
+	PARAM_FLOAT(height);
+	PARAM_INT(crush);
+	PARAM_INT(silent);
+	PARAM_INT(change);
+	PARAM_INT(crushmode);
 	ACTION_RETURN_BOOL(P_CreateCeiling(sec, (DCeiling::ECeiling)type, ln, 0, speed, speed2, height, crush, silent, change, (DCeiling::ECrushMode)crushmode));
 }
 
@@ -490,7 +486,7 @@ DEFINE_ACTION_FUNCTION(DCeiling, CreateCeiling)
 //
 //============================================================================
 
-bool EV_DoCeiling (DCeiling::ECeiling type, line_t *line,
+bool EV_DoCeiling (FLevelLocals *Level, DCeiling::ECeiling type, line_t *line,
 				   int tag, double speed, double speed2, double height,
 				   int crush, int silent, int change, DCeiling::ECrushMode hexencrush)
 {
@@ -508,7 +504,7 @@ bool EV_DoCeiling (DCeiling::ECeiling type, line_t *line,
 		secnum = sec->sectornum;
 		// [RH] Hack to let manual crushers be retriggerable, too
 		tag ^= secnum | 0x1000000;
-		P_ActivateInStasisCeiling (tag);
+		P_ActivateInStasisCeiling (Level, tag);
 		return P_CreateCeiling(sec, type, line, tag, speed, speed2, height, crush, silent, change, hexencrush);
 	}
 	
@@ -516,14 +512,14 @@ bool EV_DoCeiling (DCeiling::ECeiling type, line_t *line,
 	// This restarts a crusher after it has been stopped
 	if (type == DCeiling::ceilCrushAndRaise)
 	{
-		P_ActivateInStasisCeiling (tag);
+		P_ActivateInStasisCeiling (Level, tag);
 	}
 
 	// affects all sectors with the same tag as the linedef
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		rtn |= P_CreateCeiling(&level.sectors[secnum], type, line, tag, speed, speed2, height, crush, silent, change, hexencrush);
+		rtn |= P_CreateCeiling(&Level->sectors[secnum], type, line, tag, speed, speed2, height, crush, silent, change, hexencrush);
 	}
 	return rtn;
 }
@@ -536,10 +532,10 @@ bool EV_DoCeiling (DCeiling::ECeiling type, line_t *line,
 //
 //============================================================================
 
-void P_ActivateInStasisCeiling (int tag)
+void P_ActivateInStasisCeiling (FLevelLocals *Level, int tag)
 {
 	DCeiling *scan;
-	TThinkerIterator<DCeiling> iterator;
+	TThinkerIterator<DCeiling> iterator(Level);
 
 	while ( (scan = iterator.Next ()) )
 	{
@@ -559,11 +555,11 @@ void P_ActivateInStasisCeiling (int tag)
 //
 //============================================================================
 
-bool EV_CeilingCrushStop (int tag, bool remove)
+bool EV_CeilingCrushStop (FLevelLocals *Level, int tag, bool remove)
 {
 	bool rtn = false;
 	DCeiling *scan;
-	TThinkerIterator<DCeiling> iterator;
+	TThinkerIterator<DCeiling> iterator(Level);
 
 	scan = iterator.Next();
 	while (scan != nullptr)
@@ -589,17 +585,17 @@ bool EV_CeilingCrushStop (int tag, bool remove)
 	return rtn;
 }
 
-bool EV_StopCeiling(int tag, line_t *line)
+bool EV_StopCeiling(FLevelLocals *Level, int tag, line_t *line)
 {
 	int sec;
-	FSectorTagIterator it(tag, line);
+	FSectorTagIterator it(Level->tagManager, tag, line);
 	while ((sec = it.Next()) >= 0)
 	{
-		if (level.sectors[sec].ceilingdata)
+		if (Level->sectors[sec].ceilingdata)
 		{
-			SN_StopSequence(&level.sectors[sec], CHAN_CEILING);
-			level.sectors[sec].ceilingdata->Destroy();
-			level.sectors[sec].ceilingdata = nullptr;
+			SN_StopSequence(&Level->sectors[sec], CHAN_CEILING);
+			Level->sectors[sec].ceilingdata->Destroy();
+			Level->sectors[sec].ceilingdata = nullptr;
 		}
 	}
 	return true;

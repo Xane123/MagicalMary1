@@ -48,21 +48,17 @@ IMPLEMENT_POINTERS_START(DPillar)
 	IMPLEMENT_POINTER(m_Interp_Ceiling)
 IMPLEMENT_POINTERS_END
 
-DPillar::DPillar ()
-{
-}
-
 void DPillar::OnDestroy()
 {
-	if (m_Interp_Ceiling != NULL)
+	if (m_Interp_Ceiling != nullptr)
 	{
 		m_Interp_Ceiling->DelRef();
-		m_Interp_Ceiling = NULL;
+		m_Interp_Ceiling = nullptr;
 	}
-	if (m_Interp_Floor != NULL)
+	if (m_Interp_Floor != nullptr)
 	{
 		m_Interp_Floor->DelRef();
-		m_Interp_Floor = NULL;
+		m_Interp_Floor = nullptr;
 	}
 	Super::OnDestroy();
 }
@@ -157,7 +153,7 @@ DPillar::DPillar (sector_t *sector, EPillar type, double speed,
 		// surrounding sectors
 		if (floordist == 0)
 		{
-			newheight = sector->FindLowestFloorSurrounding (&spot);
+			newheight = FindLowestFloorSurrounding (sector, &spot);
 			m_FloorTarget = sector->floorplane.PointToDist (spot, newheight);
 			floordist = sector->floorplane.ZatPoint (spot) - newheight;
 		}
@@ -168,7 +164,7 @@ DPillar::DPillar (sector_t *sector, EPillar type, double speed,
 		}
 		if (ceilingdist == 0)
 		{
-			newheight = sector->FindHighestCeilingSurrounding (&spot);
+			newheight = FindHighestCeilingSurrounding (sector, &spot);
 			m_CeilingTarget = sector->ceilingplane.PointToDist (spot, newheight);
 			ceilingdist = newheight - sector->ceilingplane.ZatPoint (spot);
 		}
@@ -210,7 +206,7 @@ DPillar::DPillar (sector_t *sector, EPillar type, double speed,
 	}
 }
 
-bool EV_DoPillar (DPillar::EPillar type, line_t *line, int tag,
+bool EV_DoPillar (FLevelLocals *Level, DPillar::EPillar type, line_t *line, int tag,
 				  double speed, double height, double height2, int crush, bool hexencrush)
 {
 	int secnum;
@@ -218,10 +214,10 @@ bool EV_DoPillar (DPillar::EPillar type, line_t *line, int tag,
 	bool rtn = false;
 
 	// check if a manual trigger; if so do just the sector on the backside
-	FSectorTagIterator itr(tag, line);
+	FSectorTagIterator itr(Level->tagManager, tag, line);
 	while ((secnum = itr.Next()) >= 0)
 	{
-		sec = &level.sectors[secnum];
+		sec = &Level->sectors[secnum];
 
 		if (sec->PlaneMoving(sector_t::floor) || sec->PlaneMoving(sector_t::ceiling))
 			continue;
@@ -238,7 +234,7 @@ bool EV_DoPillar (DPillar::EPillar type, line_t *line, int tag,
 			continue;
 
 		rtn = true;
-		Create<DPillar> (sec, type, speed, height, height2, crush, hexencrush);
+		CreateThinker<DPillar>(sec, type, speed, height, height2, crush, hexencrush);
 	}
 	return rtn;
 }

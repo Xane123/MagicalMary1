@@ -21,7 +21,7 @@
 //
 /*
 ** gl_light.cpp
-** Light level / fog management / dynamic lights
+** Light Level-> / fog management / dynamic lights
 **
 */
 
@@ -51,7 +51,7 @@ T smoothstep(const T edge0, const T edge1, const T x)
 
 void HWDrawInfo::GetDynSpriteLight(AActor *self, float x, float y, float z, FLightNode *node, int portalgroup, float *out)
 {
-	ADynamicLight *light;
+	FDynamicLight *light;
 	float frac, lr, lg, lb;
 	float radius;
 	
@@ -60,20 +60,20 @@ void HWDrawInfo::GetDynSpriteLight(AActor *self, float x, float y, float z, FLig
 	while (node)
 	{
 		light=node->lightsource;
-		if (light->visibletoplayer && !(light->flags2&MF2_DORMANT) && (!(light->lightflags&LF_DONTLIGHTSELF) || light->target != self || !self) && !(light->lightflags&LF_DONTLIGHTACTORS))
+		if (light->ShouldLightActor(self))
 		{
 			float dist;
 			FVector3 L;
 
 			// This is a performance critical section of code where we cannot afford to let the compiler decide whether to inline the function or not.
 			// This will do the calculations explicitly rather than calling one of AActor's utility functions.
-			if (level.Displacements.size > 0)
+			if (Level->Displacements.size > 0)
 			{
 				int fromgroup = light->Sector->PortalGroup;
 				int togroup = portalgroup;
 				if (fromgroup == togroup || fromgroup == 0 || togroup == 0) goto direct;
 
-				DVector2 offset = level.Displacements.getOffset(fromgroup, togroup);
+				DVector2 offset = Level->Displacements.getOffset(fromgroup, togroup);
 				L = FVector3(x - (float)(light->X() + offset.X), y - (float)(light->Y() + offset.Y), z - (float)light->Z());
 			}
 			else
@@ -94,16 +94,17 @@ void HWDrawInfo::GetDynSpriteLight(AActor *self, float x, float y, float z, FLig
 				if (light->IsSpot())
 				{
 					L *= -1.0f / dist;
-					DAngle negPitch = -light->Angles.Pitch;
+					DAngle negPitch = -*light->pPitch;
+					DAngle Angle = light->target->Angles.Yaw;
 					double xyLen = negPitch.Cos();
-					double spotDirX = -light->Angles.Yaw.Cos() * xyLen;
-					double spotDirY = -light->Angles.Yaw.Sin() * xyLen;
+					double spotDirX = -Angle.Cos() * xyLen;
+					double spotDirY = -Angle.Sin() * xyLen;
 					double spotDirZ = -negPitch.Sin();
 					double cosDir = L.X * spotDirX + L.Y * spotDirY + L.Z * spotDirZ;
-					frac *= (float)smoothstep(light->SpotOuterAngle.Cos(), light->SpotInnerAngle.Cos(), cosDir);
+					frac *= (float)smoothstep(light->pSpotOuterAngle->Cos(), light->pSpotInnerAngle->Cos(), cosDir);
 				}
 
-				if (frac > 0 && (!light->shadowmapped || mShadowMap->ShadowTest(light, { x, y, z })))
+				if (frac > 0 && (!light->shadowmapped || screen->mShadowMap.ShadowTest(light, { x, y, z })))
 				{
 					lr = light->GetRed() / 255.0f;
 					lg = light->GetGreen() / 255.0f;
@@ -131,17 +132,17 @@ void HWDrawInfo::GetDynSpriteLight(AActor *thing, particle_t *particle, float *o
 {
 	if (thing != NULL)
 	{
-		GetDynSpriteLight(thing, (float)thing->X(), (float)thing->Y(), (float)thing->Center(), thing->subsector->lighthead, thing->Sector->PortalGroup, out);
+		GetDynSpriteLight(thing, (float)thing->X(), (float)thing->Y(), (float)thing->Center(), thing->section->lighthead, thing->Sector->PortalGroup, out);
 	}
 	else if (particle != NULL)
 	{
-		GetDynSpriteLight(NULL, (float)particle->Pos.X, (float)particle->Pos.Y, (float)particle->Pos.Z, particle->subsector->lighthead, particle->subsector->sector->PortalGroup, out);
+		GetDynSpriteLight(NULL, (float)particle->Pos.X, (float)particle->Pos.Y, (float)particle->Pos.Z, particle->subsector->section->lighthead, particle->subsector->sector->PortalGroup, out);
 	}
 }
 
 // static so that we build up a reserve (memory allocations stop)
 // For multithread processing each worker thread needs its own copy, though.
-static thread_local TArray<ADynamicLight*> addedLightsArray; 
+static thread_local TArray<FDynamicLight*> addedLightsArray; 
 
 void hw_GetDynModelLight(AActor *self, FDynLightData &modellightdata)
 {
@@ -157,14 +158,17 @@ void hw_GetDynModelLight(AActor *self, FDynLightData &modellightdata)
 		float y = (float)self->Y();
 		float z = (float)self->Center();
 		float radiusSquared = (float)(self->renderradius * self->renderradius);
+		dl_validcount++;
 
-		BSPWalkCircle(x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
+		BSPWalkCircle(self->Level, x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
 		{
-			FLightNode * node = subsector->lighthead;
+			auto section = subsector->section;
+			if (section->validcount == dl_validcount) return;	// already done from a previous subsector.
+			FLightNode * node = section->lighthead;
 			while (node) // check all lights touching a subsector
 			{
-				ADynamicLight *light = node->lightsource;
-				if (light->visibletoplayer && !(light->flags2&MF2_DORMANT) && (!(light->lightflags&LF_DONTLIGHTSELF) || light->target != self) && !(light->lightflags&LF_DONTLIGHTACTORS))
+				FDynamicLight *light = node->lightsource;
+				if (light->ShouldLightActor(self))
 				{
 					int group = subsector->sector->PortalGroup;
 					DVector3 pos = light->PosRelative(group);

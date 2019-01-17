@@ -31,6 +31,7 @@
 #include "resourcefiles/resourcefile.h"
 #include "doomdata.h"
 #include "r_defs.h"
+#include "nodebuild.h"
 
 
 struct MapData
@@ -104,6 +105,13 @@ public:
 		}
 	}
 
+	TArray<uint8_t> Read(unsigned lumpindex)
+	{
+		TArray<uint8_t> buffer(Size(lumpindex), true);
+ 		Read(lumpindex, buffer.Data(), (int)buffer.Size());
+		return buffer;
+	}
+
 	uint32_t Size(unsigned int lumpindex)
 	{
 		if (lumpindex<countof(MapLumps) && MapLumps[lumpindex].Reader.isOpen())
@@ -124,7 +132,7 @@ public:
 
 	void GetChecksum(uint8_t cksum[16]);
 
-	friend bool P_LoadGLNodes(MapData * map);
+	friend class MapLoader;
 	friend MapData *P_OpenMapData(const char * mapname, bool justcheck);
 
 };
@@ -137,11 +145,10 @@ bool P_CheckMapData(const char * mapname);
 //
 // [RH] The only parameter used is mapname, so I removed playermask and skill.
 //		On September 1, 1998, I added the position to indicate which set
-//		of single-player start spots should be spawned in the level.
-void P_SetupLevel (const char *mapname, int position);
+//		of single-player start spots should be spawned in the level
+void P_SetupLevel (FLevelLocals *Level, const char *mapname, int position, bool newGame);
 
 void P_FreeLevelData();
-void P_FreeExtraLevelData();
 
 // Called by startup code.
 void P_Init (void);
@@ -153,48 +160,12 @@ void P_LoadTranslator(const char *lumpname);
 void P_TranslateLineDef (line_t *ld, maplinedef_t *mld, int lineindexforid = -1);
 int P_TranslateSectorSpecial (int);
 
-int GetUDMFInt(int type, int index, FName key);
-double GetUDMFFloat(int type, int index, FName key);
+int GetUDMFInt(FLevelLocals *Level, int type, int index, FName key);
+double GetUDMFFloat(FLevelLocals *Level, int type, int index, FName key);
+FString GetUDMFString(FLevelLocals *Level, int type, int index, FName key);
 
-bool P_LoadGLNodes(MapData * map);
-bool P_CheckNodes(MapData * map, bool rebuilt, int buildtime);
-bool P_CheckForGLNodes();
-void P_SetRenderSector();
-
-
-struct sidei_t	// [RH] Only keep BOOM sidedef init stuff around for init
-{
-	union
-	{
-		// Used when unpacking sidedefs and assigning
-		// properties based on linedefs.
-		struct
-		{
-			short tag, special;
-			short alpha;
-			uint32_t map;
-		} a;
-
-		// Used when grouping sidedefs into loops.
-		struct
-		{
-			uint32_t first, next;
-			char lineside;
-		} b;
-	};
-};
-extern sidei_t *sidetemp;
-extern bool hasglnodes;
-
-struct FMissingCount
-{
-	FMissingCount() : Count(0) {}
-	int Count;
-};
-typedef TMap<FString,FMissingCount> FMissingTextureTracker;
-
-extern TMap<unsigned,unsigned> MapThingsUserDataIndex;	// from mapthing idx -> user data idx
-extern TArray<FUDMFKey> MapThingsUserData;
-
+void FixMinisegReferences();
+void FixHoles();
+void ReportUnpairedMinisegs();
 
 #endif

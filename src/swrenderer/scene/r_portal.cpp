@@ -167,8 +167,10 @@ namespace swrenderer
 				continue;
 			}
 
+			auto Level = Thread->Viewport->GetLevel();
+
 			SetInSkyBox(port);
-			if (port->mPartner > 0) SetInSkyBox(&level.sectorPortals[port->mPartner]);
+			if (port->mPartner > 0) SetInSkyBox(&Level->sectorPortals[port->mPartner]);
 			Thread->Viewport->viewpoint.camera = nullptr;
 			Thread->Viewport->viewpoint.sector = port->mDestination;
 			assert(Thread->Viewport->viewpoint.sector != nullptr);
@@ -206,10 +208,8 @@ namespace swrenderer
 			// Create a drawseg to clip sprites to the sky plane
 			DrawSegment *draw_segment = Thread->FrameMemory->NewObject<DrawSegment>();
 			draw_segment->CurrentPortalUniq = CurrentPortalUniq;
-			draw_segment->siz1 = INT_MAX;
-			draw_segment->siz2 = INT_MAX;
-			draw_segment->sz1 = 0;
-			draw_segment->sz2 = 0;
+			draw_segment->WallC.sz1 = 0;
+			draw_segment->WallC.sz2 = 0;
 			draw_segment->x1 = pl->left;
 			draw_segment->x2 = pl->right;
 			draw_segment->silhouette = SIL_BOTH;
@@ -219,17 +219,16 @@ namespace swrenderer
 			draw_segment->swall = nullptr;
 			draw_segment->bFogBoundary = false;
 			draw_segment->curline = nullptr;
-			draw_segment->foggy = false;
 			memcpy(draw_segment->sprbottomclip, floorclip + pl->left, (pl->right - pl->left) * sizeof(short));
 			memcpy(draw_segment->sprtopclip, ceilingclip + pl->left, (pl->right - pl->left) * sizeof(short));
 			drawseglist->Push(draw_segment);
 
-			Thread->OpaquePass->RenderScene();
+			Thread->OpaquePass->RenderScene(Thread->Viewport->GetLevel());
 			Thread->Clip3D->ResetClip(); // reset clips (floor/ceiling)
 			planes->Render();
 
 			ClearInSkyBox(port);
-			if (port->mPartner > 0) SetInSkyBox(&level.sectorPortals[port->mPartner]);
+			if (port->mPartner > 0) SetInSkyBox(&Level->sectorPortals[port->mPartner]);
 		}
 
 		// Draw all the masked textures in a second pass, in the reverse order they
@@ -441,7 +440,7 @@ namespace swrenderer
 		memcpy(ceilingclip + pds->x1, &pds->ceilingclip[0], pds->len * sizeof(*ceilingclip));
 		memcpy(floorclip + pds->x1, &pds->floorclip[0], pds->len * sizeof(*floorclip));
 
-		Thread->OpaquePass->RenderScene();
+		Thread->OpaquePass->RenderScene(Thread->Viewport->GetLevel());
 		Thread->Clip3D->ResetClip(); // reset clips (floor/ceiling)
 		if (!savedvisibility && viewpoint.camera) viewpoint.camera->renderflags &= ~RF_INVISIBLE;
 

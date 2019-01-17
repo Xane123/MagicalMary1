@@ -42,6 +42,7 @@
 #include "t_script.h"
 #include "a_pickups.h"
 #include "serializer.h"
+#include "g_levellocals.h"
 
 
 //==========================================================================
@@ -122,16 +123,14 @@ const char *stringvalue(const svalue_t & v)
 //
 //==========================================================================
 
-AActor* actorvalue(const svalue_t &svalue)
+AActor* actorvalue(FLevelLocals *Level, const svalue_t &svalue)
 {
 	int intval;
 
 	if(svalue.type == svt_mobj) 
 	{
 		// Inventory items in the player's inventory have to be considered non-present.
-		if (svalue.value.mobj != NULL && 
-			svalue.value.mobj->IsKindOf(RUNTIME_CLASS(AInventory)) && 
-			static_cast<AInventory*>(svalue.value.mobj)->Owner != NULL)
+		if (svalue.value.mobj == NULL || !svalue.value.mobj->IsMapActor())
 		{
 			return NULL;
 		}
@@ -140,9 +139,9 @@ AActor* actorvalue(const svalue_t &svalue)
 	}
 	else
 	{
-		auto &SpawnedThings = DFraggleThinker::ActiveThinker->SpawnedThings;
+		auto &SpawnedThings = Level->FraggleScriptThinker->SpawnedThings;
 		// this requires some creativity. We use the intvalue
-		// as the thing number of a thing in the level.
+		// as the thing number of a thing in the level
 		intval = intvalue(svalue);
 		
 		if(intval < 0 || intval >= (int)SpawnedThings.Size())
@@ -150,9 +149,7 @@ AActor* actorvalue(const svalue_t &svalue)
 			return NULL;
 		}
 		// Inventory items in the player's inventory have to be considered non-present.
-		if (SpawnedThings[intval] != NULL &&
-			SpawnedThings[intval]->IsKindOf(RUNTIME_CLASS(AInventory)) && 
-			barrier_cast<AInventory*>(SpawnedThings[intval])->Owner != NULL)
+		if (SpawnedThings[intval] == nullptr || !SpawnedThings[intval]->IsMapActor())
 		{
 			return NULL;
 		}
@@ -182,9 +179,9 @@ DFsVariable::DFsVariable(const char * _name)
 {
 	Name=_name;
 	type=svt_int;
-	actor = NULL;
+	actor = nullptr;
 	value.i=0;
-	next=NULL;
+	next = nullptr;
 }
 
 //==========================================================================
@@ -238,7 +235,7 @@ void DFsVariable::GetValue(svalue_t &returnvar)
 //
 //==========================================================================
 
-void DFsVariable::SetValue(const svalue_t &newvalue)
+void DFsVariable::SetValue(FLevelLocals *Level, const svalue_t &newvalue)
 {
 	if(type == svt_const)
     {
@@ -268,7 +265,7 @@ void DFsVariable::SetValue(const svalue_t &newvalue)
 		break;
 	
 	case svt_mobj:
-		actor = actorvalue(newvalue);
+		actor = actorvalue(Level, newvalue);
 		break;
 	
 	case svt_pInt:
@@ -276,7 +273,7 @@ void DFsVariable::SetValue(const svalue_t &newvalue)
 		break;
 	
 	case svt_pMobj:
-		*value.pMobj = actorvalue(newvalue);
+		*value.pMobj = actorvalue(Level, newvalue);
 		break;
 	
 	case svt_function:

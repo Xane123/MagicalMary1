@@ -477,7 +477,7 @@ static void ParseListMenuBody(FScanner &sc, DListMenuDescriptor *desc)
 					}
 					DMenuItemBase *item = (DMenuItemBase*)cls->CreateNew();
 					params[0] = item;
-					VMCall(func->Variants[0].Implementation, &params[0], params.Size(), nullptr, 0);
+					VMCallWithDefaults(func->Variants[0].Implementation, params, nullptr, 0);
 					desc->mItems.Push((DMenuItemBase*)item);
 
 					if (cls->IsDescendantOf("ListMenuItemSelectable"))
@@ -917,7 +917,7 @@ static void ParseOptionMenuBody(FScanner &sc, DOptionMenuDescriptor *desc)
 
 					DMenuItemBase *item = (DMenuItemBase*)cls->CreateNew();
 					params[0] = item;
-					VMCall(func->Variants[0].Implementation, &params[0], params.Size(), nullptr, 0);
+					VMCallWithDefaults(func->Variants[0].Implementation, params, nullptr, 0);
 					desc->mItems.Push((DMenuItemBase*)item);
 
 					success = true;
@@ -1383,10 +1383,12 @@ static void InitMusicMenus()
 {
 	DMenuDescriptor **advmenu = MenuDescriptors.CheckKey("AdvSoundOptions");
 	auto soundfonts = sfmanager.GetList();
-	std::tuple<const char *, int, const char *> sfmenus[] = { std::make_tuple("GusConfigMenu", SF_SF2 | SF_GUS, "midi_config"), 
-																std::make_tuple("WildMidiConfigMenu", SF_GUS, "wildmidi_config"), 
-																std::make_tuple("TimidityConfigMenu", SF_SF2 | SF_GUS, "timidity_config"), 
-																std::make_tuple("FluidPatchsetMenu", SF_SF2, "fluid_patchset") };
+	std::tuple<const char *, int, const char *> sfmenus[] = { std::make_tuple("GusConfigMenu", SF_SF2 | SF_GUS, "midi_config"),
+																std::make_tuple("WildMidiConfigMenu", SF_GUS, "wildmidi_config"),
+																std::make_tuple("TimidityConfigMenu", SF_SF2 | SF_GUS, "timidity_config"),
+																std::make_tuple("FluidPatchsetMenu", SF_SF2, "fluid_patchset"),
+																std::make_tuple("ADLMIDICustomBanksMenu", SF_WOPL, "adl_custom_bank"),
+																std::make_tuple("OPNMIDICustomBanksMenu", SF_WOPN, "opn_custom_bank")};
 
 	for (auto &p : sfmenus)
 	{

@@ -207,17 +207,18 @@ void HU_GetPlayerWidths(int &maxnamewidth, int &maxscorewidth, int &maxiconheigh
 			{
 				maxnamewidth = width;
 			}
-			if (players[i].mo->ScoreIcon.isValid())
+			auto icon = FSetTextureID(players[i].mo->IntVar(NAME_ScoreIcon));
+			if (icon.isValid())
 			{
-				FTexture *pic = TexMan[players[i].mo->ScoreIcon];
-				width = pic->GetScaledWidth() - pic->GetScaledLeftOffset(0) + 2;
+				FTexture *pic = TexMan.GetTexture(icon);
+				width = pic->GetDisplayWidth() - pic->GetDisplayLeftOffset() + 2;
 				if (width > maxscorewidth)
 				{
 					maxscorewidth = width;
 				}
 				// The icon's top offset does not count toward its height, because
 				// zdoom.pk3's standard Hexen class icons are designed that way.
-				int height = pic->GetScaledHeight() - pic->GetScaledTopOffset(0);
+				int height = pic->GetDisplayHeight() - pic->GetDisplayTopOffset();
 				if (height > maxiconheight)
 				{
 					maxiconheight = height;
@@ -367,7 +368,7 @@ static void HU_DrawTimeRemaining (int y)
 	if (deathmatch && timelimit && gamestate == GS_LEVEL)
 	{
 		char str[80];
-		int timeleft = (int)(timelimit * TICRATE * 60) - level.maptime;
+		int timeleft = (int)(timelimit * TICRATE * 60) - currentSession->Levelinfo[0]->maptime;
 		int hours, minutes, seconds;
 
 		if (timeleft < 0)
@@ -420,9 +421,10 @@ static void HU_DrawPlayer (player_t *player, bool highlight, int col1, int col2,
 	screen->DrawText (SmallFont, color, col2, y + ypadding, player->playerstate == PST_DEAD && !deathmatch ? "DEAD" : str,
 		DTA_CleanNoMove, true, TAG_DONE);
 
-	if (player->mo->ScoreIcon.isValid())
+	auto icon = FSetTextureID(player->mo->IntVar(NAME_ScoreIcon));
+	if (icon.isValid())
 	{
-		FTexture *pic = TexMan[player->mo->ScoreIcon];
+		FTexture *pic = TexMan.GetTexture(icon);
 		screen->DrawTexture (pic, col3, y,
 			DTA_CleanNoMove, true,
 			TAG_DONE);
@@ -445,8 +447,8 @@ static void HU_DrawPlayer (player_t *player, bool highlight, int col1, int col2,
 
 	if (teamplay && Teams[player->userinfo.GetTeam()].GetLogo().IsNotEmpty ())
 	{
-		FTexture *pic = TexMan[Teams[player->userinfo.GetTeam()].GetLogo().GetChars ()];
-		screen->DrawTexture (pic, col1 - (pic->GetScaledWidth() + 2) * CleanXfac, y,
+		FTexture *pic = TexMan.GetTextureByName(Teams[player->userinfo.GetTeam()].GetLogo().GetChars ());
+		screen->DrawTexture (pic, col1 - (pic->GetDisplayWidth() + 2) * CleanXfac, y,
 			DTA_CleanNoMove, true, TAG_DONE);
 	}
 }

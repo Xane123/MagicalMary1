@@ -1,6 +1,8 @@
 #ifndef __SC_MAN_H__
 #define __SC_MAN_H__
 
+#include "doomtype.h"
+
 class FScanner
 {
 public:
@@ -21,6 +23,10 @@ public:
 	void Open(const char *lumpname);
 	bool OpenFile(const char *filename);
 	void OpenMem(const char *name, const char *buffer, int size);
+	void OpenMem(const char *name, const TArray<uint8_t> &buffer)
+	{
+		OpenMem(name, (const char*)buffer.Data(), buffer.Size());
+	}
 	void OpenString(const char *name, FString buffer);
 	void OpenLumpNum(int lump);
 	void Close();
@@ -158,7 +164,7 @@ struct FScriptPosition
 	static int ErrorCounter;
 	static bool StrictErrors;
 	static bool errorout;
-	FString FileName;
+	FName FileName;
 	int ScriptLine;
 
 	FScriptPosition()

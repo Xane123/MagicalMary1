@@ -4,6 +4,10 @@
 #include "r_data/matrix.h"
 
 class FMaterial;
+class FRenderState;
+class IVertexBuffer;
+struct HWSkyPortal;
+struct HWDrawInfo;
 
 struct FSkyVertex
 {
@@ -32,8 +36,9 @@ struct FSkyVertex
 
 };
 
-class FSkyDomeCreator
+class FSkyVertexBuffer
 {
+	friend struct HWSkyPortal;
 public:
 	static const int SKYHEMI_UPPER = 1;
 	static const int SKYHEMI_LOWER = 2;
@@ -45,7 +50,8 @@ public:
 		SKYMODE_FOGLAYER = 2
 	};
 
-protected:
+	IVertexBuffer *mVertexBuffer;
+
 	TArray<FSkyVertex> mVertices;
 	TArray<unsigned int> mPrimStart;
 
@@ -61,9 +67,13 @@ protected:
 
 public:
 
-	FSkyDomeCreator();
-	virtual ~FSkyDomeCreator();
-	void SetupMatrices(FMaterial *tex, float x_offset, float y_offset, bool mirror, int mode, VSMatrix &modelmatrix, VSMatrix &textureMatrix);
+	FSkyVertexBuffer();
+	~FSkyVertexBuffer();
+	void SetupMatrices(HWDrawInfo *di, FMaterial *tex, float x_offset, float y_offset, bool mirror, int mode, VSMatrix &modelmatrix, VSMatrix &textureMatrix);
+	std::pair<IVertexBuffer *, IIndexBuffer *> GetBufferObjects() const
+	{
+		return std::make_pair(mVertexBuffer, nullptr);
+	}
 
 	int FaceStart(int i)
 	{

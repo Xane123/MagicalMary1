@@ -76,7 +76,7 @@ namespace swrenderer
 
 		while (node)
 		{
-			if (!(node->lightsource->flags2&MF2_DORMANT) && (height.PointOnSide(node->lightsource->Pos()) > 0))
+			if (node->lightsource->IsActive() && (height.PointOnSide(node->lightsource->Pos) > 0))
 			{
 				bool found = false;
 				VisiblePlaneLight *light_node = lights;
@@ -113,23 +113,24 @@ namespace swrenderer
 		}
 		else // regular flat
 		{
-			FTexture *tex = TexMan(picnum, true);
+			FTexture *ttex = TexMan.GetPalettedTexture(picnum, true);
 
-			if (tex->UseType == ETextureType::Null)
+			if (!ttex->isValid())
 			{
 				return;
 			}
+			FSoftwareTexture *tex = ttex->GetSoftwareTexture();
 
 			if (!masked && !additive)
 			{ // If we're not supposed to see through this plane, draw it opaque.
 				alpha = OPAQUE;
 			}
-			else if (!tex->bMasked)
+			else if (!tex->isMasked())
 			{ // Don't waste time on a masked texture if it isn't really masked.
 				masked = false;
 			}
-			double xscale = xform.xScale * tex->Scale.X;
-			double yscale = xform.yScale * tex->Scale.Y;
+			double xscale = xform.xScale * tex->GetScale().X;
+			double yscale = xform.yScale * tex->GetScale().Y;
 
 			if (!height.isSlope() && !tilt)
 			{

@@ -78,7 +78,7 @@ SPREE15 = "%k is dominating!";
 SPREE20 = "%k is unstoppable!";
 SPREE25 = "%k is Godlike!";
 
-// Mulitkill messages
+// Multikill messages
 MULTI2 = "Double kill!";
 MULTI3 = "Multi kill!";
 MULTI4 = "Ultra kill!";
@@ -98,6 +98,7 @@ OB_SPLASH = "%o stood in the wrong spot.";
 OB_R_SPLASH = "%o should have stood back.";
 OB_ROCKET = "%o should have stood back.";
 OB_KILLEDSELF = "%o hurt %hself too much.";
+OB_VOODOO = "%o was killed by the power of voodoo.";
 
 // Same as OB_MPTELEFRAG, but shown when a monster telefrags you
 OB_MONTELEFRAG = "%o should've avoided standing there.";
@@ -328,12 +329,12 @@ DSPLYMNU_VSYNC					= "Vertical Sync";
 DSPLYMNU_CAPFPS					= "Rendering Interpolation";
 DSPLYMNU_COLUMNMETHOD			= "Column render mode";
 DSPLYMNU_BLENDMETHOD			= "Transparency render mode";
+DSPLYMNU_LEPRESET				= "Low-end presets";
 DSPLYMNU_LEADDLINE				= "Additive-rendered lines";
 DSPLYMNU_LEBLOCKVIS				= "Block distant rendering";
 DSPLYMNU_LEEFFECTS				= "Effects";
 DSPLYMNU_LEDRAWDIST				= "Draw distance";
 DSPLYMNU_LESKYOFF				= "Moving Skybox";
-OPTVAL_CUSTOM					= "Custom";
 
 DSPLYMNU_WIPETYPE				= "Screen wipe style";
 DSPLYMNU_SHOWENDOOM				= "Show ENDOOM screen";
@@ -367,6 +368,12 @@ DSPLYMNU_MOVEBOB 				= "View bob amount while moving";
 DSPLYMNU_STILLBOB 				= "View bob amount while not moving";
 DSPLYMNU_BOBSPEED				= "Weapon bob speed";
 DSPLYMNU_GPUSWITCH				= "Notebook Switchable GPU";
+
+//Low-end presets
+OPTVAL_HIGH						= "Perfect";
+OPTVAL_MEDIUM					= "Decent";
+OPTVAL_LOW						= "Average";
+OPTVAL_CRAP						= "Crappy";
 
 // HUD Options
 HUDMNU_TITLE					= "HUD Options";
@@ -672,6 +679,10 @@ ADVSNDMNU_RUNPCMRATE		= "Run emulator at PCM rate";
 ADVSNDMNU_ADLNUMCHIPS		= "Number of emulated OPL chips";
 ADVSNDMNU_VLMODEL			= "Volume model";
 ADVSNDMNU_OPNNUMCHIPS		= "Number of emulated OPN chips";
+ADVSNDMNU_ADLCUSTOMBANK 	= "Use custom WOPL bank";
+ADVSNDMNU_OPLBANKFILE       = "WOPL Bank file";
+ADVSNDMNU_OPNCUSTOMBANK 	= "Use custom WOPN bank";
+ADVSNDMNU_OPNBANKFILE       = "WOPN Bank file";
 
 // ADLMIDI's emulation cores
 
@@ -757,7 +768,7 @@ JOYMNU_NOAXES = "No configurable axes";
 
 // Option Values
 OPTVAL_OFF					= "Off";
-OPTVAL_IMPORTANT			= "Bounds only";
+OPTVAL_IMPORTANT			= "Important only";
 OPTVAL_REDUCED				= "Reduced";
 OPTVAL_ON					= "On";
 OPTVAL_SMALL				= "Small";
@@ -766,7 +777,8 @@ OPTVAL_FULL					= "Full";
 OPTVAL_AUTO					= "Auto";
 OPTVAL_MALE					= "Male";
 OPTVAL_FEMALE				= "Female";
-OPTVAL_OTHER				= "Other";
+OPTVAL_NEUTRAL				= "Neutral";
+OPTVAL_OTHER				= "Object";
 OPTVAL_UPPERLEFT			= "Upper left";
 OPTVAL_UPPERRIGHT			= "Upper right";
 OPTVAL_LOWERLEFT			= "Lower left";
@@ -890,6 +902,10 @@ OPTVAL_SOUNDSYSTEM			= "Sound System";
 OPTVAL_FOO_DUMB				= "foo_dumb";
 OPTVAL_ALIASING				= "Aliasing";
 OPTVAL_LINEAR				= "Linear";
+OPTVAL_NEAREST				= "Nearest";
+OPTVAL_PCF_LOW				= "PCF (Low)";
+OPTVAL_PCF_MEDIUM			= "PCF (Medium)";
+OPTVAL_PCF_HIGH				= "PCF (High)";
 OPTVAL_CUBIC				= "Cubic";
 OPTVAL_BLEP					= "Band-limited step";
 OPTVAL_LINEARSLOW			= "Linear (Slower)";
@@ -956,22 +972,8 @@ OPTSTR_SIMPLEARROW			= "Simple arrow";
 OPTSTR_HERETIC				= "Heretic";
 OPTSTR_CHEX					= "Chex";
 OPTSTR_SYSTEMCURSOR			= "System cursor";
-OPTSTR_DIRECTSOUND			= "DirectSound";
-OPTSTR_WASAPI				= "Vista WASAPI";
-OPTSTR_ASIO					= "ASIO";
-OPTSTR_WAVEOUT				= "WaveOut";
-OPTSTR_NOSOUND				= "Disabled";
-OPTSTR_OSS					= "OSS";
-OPTSTR_ALSA					= "ALSA";
-OPTSTR_SDL					= "SDL";
-OPTSTR_ESD					= "ESD";
-OPTSTR_PULSEAUDIO			= "PulseAudio";
-OPTSTR_COREAUDIO			= "Core Audio";
-OPTSTR_PCM8BIT				= "8-bit";
-OPTSTR_PCM16BIT				= "16-bit";
-OPTSTR_PCM24BIT				= "24-bit";
-OPTSTR_PCM32BIT				= "32-bit";
-OPTSTR_PCMFLOAT				= "32-bit float";
+
+OPTSTR_NOSOUND				= "No Sound";
 OPTSTR_AUTO					= "Auto";
 OPTSTR_MONO					= "Mono";
 OPTSTR_STEREO				= "Stereo";
@@ -987,6 +989,13 @@ OPTSTR_OPENAL				= "Enabled";	//FMod is no more, so what's the point of naming O
 NOTSET				= "Not set";
 SAFEMESSAGE			= "Do you really want to do this?";
 MNU_COLORPICKER		= "SELECT COLOR";
+
+WI_FINISHED			= "finished";
+WI_ENTERING			= "Now entering:";
+
+AM_MONSTERS			= "Monsters:";
+AM_SECRETS			= "Secrets:";
+AM_ITEMS			= "Items:";
 
 // GZDoom exclusive:
 
@@ -1011,6 +1020,8 @@ GLTEXMNU_ANISOTROPIC	= "Anisotropic filter";
 GLTEXMNU_TEXFORMAT 		= "Texture Format";
 GLTEXMNU_ENABLEHIRES 	= "Enable hires textures";
 GLTEXMNU_HQRESIZE 		= "High Quality Resize mode";
+GLTEXMNU_HQRESIZEMULT	= "High Quality Resize multiplier";
+GLTEXMNU_HQRESIZEWARN	= "This mode requires %d times more video memory";
 GLTEXMNU_RESIZETEX 		= "Resize textures";
 GLTEXMNU_RESIZESPR 		= "Resize sprites";
 GLTEXMNU_RESIZEFNT 		= "Resize fonts";
@@ -1027,6 +1038,7 @@ GLLIGHTMNU_LIGHTSPRITES				= "Lights affect sprites";
 GLLIGHTMNU_LIGHTPARTICLES			= "Lights affect particles";
 GLLIGHTMNU_LIGHTSHADOWMAP			= "Light shadowmaps";
 GLLIGHTMNU_LIGHTSHADOWMAPQUALITY	= "Shadowmap quality";
+GLLIGHTMNU_LIGHTSHADOWMAPFILTER		= "Shadowmap filter";
 
 // OpenGL Preferences
 GLPREFMNU_TITLE 				= "OPENGL PREFERENCES";
@@ -1107,15 +1119,12 @@ OPTVAL_YAXIS 				= "Y Axis";
 OPTVAL_XYAXIS 				= "X/Y Axis";
 OPTVAL_SQUARE 				= "Square";
 OPTVAL_ROUND 				= "Round";
-OPTVAL_SCALE2X 				= "Scale2x";
-OPTVAL_SCALE3X 				= "Scale3x";
-OPTVAL_SCALE4X 				= "Scale4x";
-OPTVAL_HQ2X 				= "hq2x";
-OPTVAL_HQ3X 				= "hq3x";
-OPTVAL_HQ4X 				= "hq4x";
-OPTVAL_HQ2XMMX 				= "hq2x MMX";
-OPTVAL_HQ3XMMX 				= "hq3x MMX";
-OPTVAL_HQ4XMMX 				= "hq4x MMX";
+OPTVAL_SCALENX 				= "ScaleNx";
+OPTVAL_NORMALNX				= "NormalNx";
+OPTVAL_HQNX 				= "hqNx";
+OPTVAL_HQNXMMX 				= "hqNx MMX";
+OPTVAL_NXBRZ 				= "xBRZ";
+OPTVAL_OLD_NXBRZ 			= "Old xBRZ";
 OPTVAL_RADIAL 				= "Radial";
 OPTVAL_PIXELFUZZ 			= "Pixel fuzz";
 OPTVAL_SMOOTHFUZZ 			= "Smooth fuzz";

@@ -53,6 +53,8 @@ struct FBlockNode;
 struct FPortalGroupArray;
 struct visstyle_t;
 class FLightDefaults;
+struct FSection;
+struct FLevelLocals;
 //
 // NOTES: AActor
 //
@@ -102,7 +104,7 @@ class FLightDefaults;
 // things, but nothing can run into a missile).
 // Each block in the grid is 128*128 units, and knows about
 // every line_t that it contains a piece of, and every
-// interactable actor that has its origin contained.  
+// interactable actor that has its origin contained.
 //
 // A valid actor is an actor that has the proper subsector_t
 // filled in for its xy coordinates and is linked into the
@@ -150,7 +152,7 @@ enum ActorFlag
 	MF_CORPSE			= 0x00100000,	// don't stop moving halfway off a step
 	MF_INFLOAT			= 0x00200000,	// floating to a height for a move, don't
 										// auto float to target's height
-	MF_INBOUNCE			= 0x00200000,	// used by Heretic bouncing missiles 
+	MF_INBOUNCE			= 0x00200000,	// used by Heretic bouncing missiles
 
 	MF_COUNTKILL		= 0x00400000,	// count towards intermission kill total
 	MF_COUNTITEM		= 0x00800000,	// count towards intermission item total
@@ -201,11 +203,11 @@ enum ActorFlag2
 	MF2_MCROSS			= 0x00800000,	// can activate monster cross lines
 	MF2_PCROSS			= 0x01000000,	// can activate projectile cross lines
 	MF2_CANTLEAVEFLOORPIC=0x02000000,	// stay within a certain floor type
-	MF2_NONSHOOTABLE	= 0x04000000,	// mobj is totally non-shootable, 
+	MF2_NONSHOOTABLE	= 0x04000000,	// mobj is totally non-shootable,
 										// but still considered solid
 	MF2_INVULNERABLE	= 0x08000000,	// mobj is invulnerable
 	MF2_DORMANT			= 0x10000000,	// thing is dormant
-	MF2_ARGSDEFINED		= 0x20000000,	// Internal flag used by DECORATE to signal that the 
+	MF2_ARGSDEFINED		= 0x20000000,	// Internal flag used by DECORATE to signal that the
 										// args should not be taken from the mapthing definition
 	MF2_SEEKERMISSILE	= 0x40000000,	// is a seeker (for reflection)
 	MF2_REFLECTIVE		= 0x80000000,	// reflects missiles
@@ -310,7 +312,7 @@ enum ActorFlag5
 	MF5_ALWAYSRESPAWN	= 0x00020000,	// always respawns, regardless of skill setting
 	MF5_NEVERRESPAWN	= 0x00040000,	// never respawns, regardless of skill setting
 	MF5_DONTRIP			= 0x00080000,	// Ripping projectiles explode when hitting this actor
-	MF5_NOINFIGHTING	= 0x00100000,	// This actor doesn't switch target when it's hurt 
+	MF5_NOINFIGHTING	= 0x00100000,	// This actor doesn't switch target when it's hurt
 	MF5_NOINTERACTION	= 0x00200000,	// Thing is completely excluded from any gameplay related checks
 	MF5_NOTIMEFREEZE	= 0x00400000,	// Actor is not affected by time freezer
 	MF5_PUFFGETSOWNER	= 0x00800000,	// [BB] Sets the owner of the puff to the player who fired it
@@ -371,7 +373,7 @@ enum ActorFlag7
 	MF7_HANDLENODELAY	= 0x00000008,	// respect NoDelay state flag
 	MF7_WEAPONSPAWN		= 0x00000010,	// subject to DF_NO_COOP_WEAPON_SPAWN dmflag
 	MF7_HARMFRIENDS		= 0x00000020,	// is allowed to harm friendly monsters.
-	MF7_BUDDHA			= 0x00000040,	// Behaves just like the buddha cheat. 
+	MF7_BUDDHA			= 0x00000040,	// Behaves just like the buddha cheat.
 	MF7_FOILBUDDHA		= 0x00000080,	// Similar to FOILINVUL, foils buddha mode.
 	MF7_DONTTHRUST		= 0x00000100,	// Thrusting functions do not take, and do not give thrust (damage) to actors with this flag.
 	MF7_ALLOWPAIN		= 0x00000200,	// Invulnerable or immune (via damagefactors) actors can still react to taking damage even if they don't.
@@ -404,6 +406,8 @@ enum ActorFlag8
 	MF8_BLOCKASPLAYER	= 0x00000004,	// actor is blocked by player-blocking lines even if not a player
 	MF8_DONTFACETALKER	= 0x00000008,	// don't alter the angle to face the player in conversations
 	MF8_HITOWNER		= 0x00000010,	// projectile can hit the actor that fired it
+	MF8_NOFRICTION		= 0x00000020,	// friction doesn't apply to the actor at all
+	MF8_NOFRICTIONBOUNCE	= 0x00000040,	// don't bounce off walls when on icy floors
 };
 
 // --- mobj.renderflags ---
@@ -486,6 +490,8 @@ enum ActorBounceFlag
 	BOUNCE_AutoOffFloorOnly = 1<<13,		// like BOUNCE_AutoOff, but only on floors
 	BOUNCE_UseBounceState = 1<<14,	// Use Bounce[.*] states
 	BOUNCE_NotOnShootables = 1<<15,	// do not bounce off shootable actors if we are a projectile. Explode instead.
+	BOUNCE_BounceOnUnrips = 1<<16,	// projectile bounces on actors with DONTRIP
+	BOUNCE_NotOnSky = 1<<17,		// Don't bounce on sky floors / ceilings / walls
 
 	BOUNCE_TypeMask = BOUNCE_Walls | BOUNCE_Floors | BOUNCE_Ceilings | BOUNCE_Actors | BOUNCE_AutoOff | BOUNCE_HereticType | BOUNCE_MBF,
 
@@ -500,7 +506,7 @@ enum ActorBounceFlag
 	BOUNCE_Doom = BOUNCE_Walls | BOUNCE_Floors | BOUNCE_Ceilings | BOUNCE_Actors | BOUNCE_AutoOff,
 	BOUNCE_Hexen = BOUNCE_Walls | BOUNCE_Floors | BOUNCE_Ceilings | BOUNCE_Actors,
 	BOUNCE_Grenade = BOUNCE_MBF | BOUNCE_Doom,		// Bounces on walls and flats like ZDoom bounce.
-	BOUNCE_Classic = BOUNCE_MBF | BOUNCE_Floors | BOUNCE_Ceilings,	// Bounces on flats only, but 
+	BOUNCE_Classic = BOUNCE_MBF | BOUNCE_Floors | BOUNCE_Ceilings,	// Bounces on flats only, but
 																	// does not die when bouncing.
 
 	// combined types
@@ -549,7 +555,7 @@ typedef TFlags<ActorFlag6> ActorFlags6;
 typedef TFlags<ActorFlag7> ActorFlags7;
 typedef TFlags<ActorFlag8> ActorFlags8;
 typedef TFlags<ActorRenderFlag> ActorRenderFlags;
-typedef TFlags<ActorBounceFlag, uint16_t> ActorBounceFlags;
+typedef TFlags<ActorBounceFlag> ActorBounceFlags;
 typedef TFlags<ActorRenderFeatureFlag> ActorRenderFeatureFlags;
 DEFINE_TFLAGS_OPERATORS (ActorFlags)
 DEFINE_TFLAGS_OPERATORS (ActorFlags2)
@@ -588,7 +594,6 @@ enum EThingSpecialActivationType
 
 
 class FDecalBase;
-class AInventory;
 
 inline AActor *GetDefaultByName (const char *name)
 {
@@ -633,19 +638,18 @@ class AActor : public DThinker
 	DECLARE_CLASS_WITH_META (AActor, DThinker, PClassActor)
 	HAS_OBJECT_POINTERS
 public:
-	AActor () throw();
-	AActor (const AActor &other) throw();
+	AActor() = default;
+	AActor(const AActor &other) = delete;	// Calling this would be disastrous.
 	AActor &operator= (const AActor &other);
 	~AActor ();
 
-	virtual void Finalize(FStateDefinitions &statedef);
 	virtual void OnDestroy() override;
 	virtual void Serialize(FSerializer &arc) override;
 	virtual void PostSerialize() override;
 	virtual void PostBeginPlay() override;		// Called immediately before the actor's first tick
 	virtual void Tick() override;
 
-	static AActor *StaticSpawn (PClassActor *type, const DVector3 &pos, replace_t allowreplacement, bool SpawningMapThing = false);
+	static AActor *StaticSpawn (FLevelLocals *Level, PClassActor *type, const DVector3 &pos, replace_t allowreplacement, bool SpawningMapThing = false);
 
 	inline AActor *GetDefault () const
 	{
@@ -682,8 +686,6 @@ public:
 
 	void LevelSpawned();				// Called after BeginPlay if this actor was spawned by the world
 	void HandleSpawnFlags();	// Translates SpawnFlags into in-game flags.
-
-	virtual void MarkPrecacheSounds() const;	// Marks sounds used by this actor for precaching.
 
 	virtual void Activate (AActor *activator);
 	void CallActivate(AActor *activator);
@@ -741,33 +743,11 @@ public:
 	bool CallOkayToSwitchTarget(AActor *other);
 	bool OkayToSwitchTarget (AActor *other);
 
-	// Note: Although some of the inventory functions are virtual, this
-	// is not exposed to scripts, as the only class overriding them is 
-	// APlayerPawn for some specific handling for players. None of this
-	// should ever be overridden by custom classes.
-
-	// Adds the item to this actor's inventory and sets its Owner.
-	virtual void AddInventory (AInventory *item);
-
-	// Give an item to the actor and pick it up.
-	// Returns true if the item pickup succeeded.
-	bool GiveInventory (PClassActor *type, int amount, bool givecheat = false);
-
-	// Removes the item from the inventory list.
-	virtual void RemoveInventory (AInventory *item);
-
-	// Take the amount value of an item from the inventory list.
-	// If nothing is left, the item may be destroyed.
-	// Returns true if the initial item count is positive.
-	virtual bool TakeInventory (PClassActor *itemclass, int amount, bool fromdecorate = false, bool notakeinfinite = false);
-
-	bool SetInventory(PClassActor *itemclass, int amount, bool beyondMax);
-
 	// Uses an item and removes it from the inventory.
-	virtual bool UseInventory (AInventory *item);
+	bool UseInventory (AActor *item);
 
 	// Tosses an item out of the inventory.
-	AInventory *DropInventory (AInventory *item, int amt = -1);
+	AActor *DropInventory (AActor *item, int amt = -1);
 
 	// Removes all items from the inventory.
 	void ClearInventory();
@@ -776,21 +756,15 @@ public:
 	bool CheckLocalView (int playernum) const;
 
 	// Finds the first item of a particular type.
-	AInventory *FindInventory (PClassActor *type, bool subclass=false);
-	AInventory *FindInventory (FName type, bool subclass = false);
+	AActor *FindInventory (PClassActor *type, bool subclass=false);
+	AActor *FindInventory (FName type, bool subclass = false);
 	template<class T> T *FindInventory ()
 	{
 		return static_cast<T *> (FindInventory (RUNTIME_CLASS(T)));
 	}
 
 	// Adds one item of a particular type. Returns NULL if it could not be added.
-	AInventory *GiveInventoryType (PClassActor *type);
-
-	// Returns the first item held with IF_INVBAR set.
-	AInventory *FirstInv ();
-
-	// Tries to give the actor some ammo.
-	bool GiveAmmo (PClassActor *type, int amount);
+	AActor *GiveInventoryType (PClassActor *type);
 
 	// Destroys all the inventory the actor is holding.
 	void DestroyAllInventory ();
@@ -809,10 +783,11 @@ public:
 	void ObtainInventory (AActor *other);
 
 	// Die. Now.
-	virtual bool Massacre ();
+	bool Massacre ();
 
 	// Transforms the actor into a finely-ground paste
-	virtual bool Grind(bool items);
+	bool Grind(bool items);
+	bool CallGrind(bool items);
 
 	// Get this actor's team
 	int GetTeam();
@@ -842,7 +817,9 @@ public:
 	void Crash();
 
 	// Return starting health adjusted by skill level
+	double AttackOffset(double offset = 0);
 	int SpawnHealth() const;
+	virtual int GetMaxHealth(bool withupgrades = false) const;
 	int GetGibHealth() const;
 	double GetCameraHeight() const;
 
@@ -931,7 +908,7 @@ public:
 		}
 		else
 		{
-			return P_GetOffsetPosition(X(), Y(), dx, dy);
+			return P_GetOffsetPosition(Level, X(), Y(), dx, dy);
 		}
 	}
 
@@ -944,7 +921,7 @@ public:
 		}
 		else
 		{
-			DVector2 v = P_GetOffsetPosition(X(), Y(), dx, dy);
+			DVector2 v = P_GetOffsetPosition(Level, X(), Y(), dx, dy);
 			return DVector3(v, atz);
 		}
 	}
@@ -957,7 +934,7 @@ public:
 		}
 		else
 		{
-			return P_GetOffsetPosition(X(), Y(), length*angle.Cos(), length*angle.Sin());
+			return P_GetOffsetPosition(Level, X(), Y(), length*angle.Cos(), length*angle.Sin());
 		}
 	}
 
@@ -969,7 +946,7 @@ public:
 		}
 		else
 		{
-			DVector2 v = P_GetOffsetPosition(X(), Y(), dx, dy);
+			DVector2 v = P_GetOffsetPosition(Level, X(), Y(), dx, dy);
 			return DVector3(v, Z() + dz);
 		}
 	}
@@ -987,14 +964,9 @@ public:
 		}
 		else
 		{
-			DVector2 v = P_GetOffsetPosition(X(), Y(), length*angle.Cos(), length*angle.Sin());
+			DVector2 v = P_GetOffsetPosition(Level, X(), Y(), length*angle.Cos(), length*angle.Sin());
 			return DVector3(v, Z() + dz);
 		}
-	}
-
-	double AccuracyFactor()
-	{
-		return 1. / (1 << (accuracy * 5 / 100));
 	}
 
 	void ClearInterpolation();
@@ -1032,7 +1004,6 @@ public:
 
 	void AttachLight(unsigned int count, const FLightDefaults *lightdef);
 	void SetDynamicLights();
-
 
 // info for drawing
 // NOTE: The first member variable *must* be snext.
@@ -1083,6 +1054,7 @@ public:
 	FBlockNode		*BlockNode;			// links in blocks (if needed)
 	struct sector_t	*Sector;
 	subsector_t *		subsector;
+	FSection *			section;
 	double			floorz, ceilingz;	// closest together of contacted secs
 	double			dropoffz;		// killough 11/98: the lowest floor over all contacted Sectors.
 
@@ -1132,7 +1104,7 @@ public:
 	int32_t			threshold;		// if > 0, the target will be chased
 	int32_t			DefThreshold;	// [MC] Default threshold which the actor will reset its threshold to after switching targets
 									// no matter what (even if shot)
-	player_t		*player;		// only valid if type of APlayerPawn
+	player_t		*player;		// only valid if type of PlayerPawn
 	TObjPtr<AActor*>	LastLookActor;	// Actor last looked for (if TIDtoHate != 0)
 	DVector3		SpawnPoint; 	// For nightmare respawn
 	uint16_t			SpawnAngle;
@@ -1182,6 +1154,9 @@ public:
 
 	AActor			*BlockingMobj;	// Actor that blocked the last move
 	line_t			*BlockingLine;	// Line that blocked the last move
+	sector_t		*Blocking3DFloor;	// 3D floor that blocked the last move (if any)
+	sector_t		*BlockingCeiling;	// Sector that blocked the last move (ceiling plane slope)
+	sector_t		*BlockingFloor;		// Sector that blocked the last move (floor plane slope)
 
 	int PoisonDamage; // Damage received per tic from poison.
 	FName PoisonDamageType; // Damage type dealt by poison.
@@ -1202,7 +1177,7 @@ public:
 	int validcount;
 
 
-	TObjPtr<AInventory*>	Inventory;		// [RH] This actor's inventory
+	TObjPtr<AActor*>	Inventory;		// [RH] This actor's inventory
 	uint32_t			InventoryID;	// A unique ID to keep track of inventory items
 
 	uint8_t smokecounter;
@@ -1247,7 +1222,7 @@ public:
 	FState *MeleeState;
 	FState *MissileState;
 
-	
+
 	int ConversationRoot;				// THe root of the current dialogue
 	FStrifeDialogueNode *Conversation;	// [RH] The dialogue to show when this actor is "used."
 
@@ -1258,22 +1233,24 @@ public:
 	DVector3 Prev;
 	DRotator PrevAngles;
 	int PrevPortalGroup;
-	TArray<TObjPtr<AActor*> > AttachedLights;
+	TArray<FDynamicLight *> AttachedLights;
+
+	// When was this actor spawned?
+	int SpawnTime;
+	uint32_t SpawnOrder;
+
 
 	// ThingIDs
-	static void ClearTIDHashes ();
 	void AddToHash ();
 	void RemoveFromHash ();
 
 
 private:
-	static AActor *TIDHash[128];
 	static inline int TIDHASH (int key) { return key & 127; }
 public:
 	static FSharedStringArena mStringPropertyData;
 private:
 	friend class FActorIterator;
-	friend bool P_IsTIDUsed(int tid);
 
 	bool FixMapthingPos();
 
@@ -1281,7 +1258,7 @@ public:
 	void LinkToWorld (FLinkContext *ctx, bool spawningmapthing=false, sector_t *sector = NULL);
 	void UnlinkFromWorld(FLinkContext *ctx);
 	void AdjustFloorClip ();
-	bool InStateSequence(FState * newstate, FState * basestate);
+	bool IsMapActor();
 	int GetTics(FState * newstate);
 	bool SetState (FState *newstate, bool nofunction=false);
 	virtual void SplashCheck();
@@ -1302,12 +1279,6 @@ public:
 	bool IsZeroDamage() const
 	{
 		return DamageVal == 0 && DamageFunc == nullptr;
-	}
-
-	void RestoreDamage()
-	{
-		DamageVal = GetDefault()->DamageVal;
-		DamageFunc = GetDefault()->DamageFunc;
 	}
 
 	FState *FindState (FName label) const
@@ -1362,7 +1333,7 @@ public:
 	DVector3 PosRelative(int grp) const;
 	DVector3 PosRelative(const AActor *other) const;
 	DVector3 PosRelative(sector_t *sec) const;
-	DVector3 PosRelative(line_t *line) const;
+	DVector3 PosRelative(const line_t *line) const;
 
 	FVector3 SoundPos() const
 	{
@@ -1513,116 +1484,44 @@ public:
 
 	int ApplyDamageFactor(FName damagetype, int damage) const;
 	int GetModifiedDamage(FName damagetype, int damage, bool passive);
-
+	void DeleteAttachedLights();
 	static void DeleteAllAttachedLights();
 	static void RecreateAllAttachedLights();
+	bool isFrozen();
 
 	bool				hasmodel;
-
-	size_t PropagateMark();
 };
-
-class FActorIterator
-{
-public:
-	FActorIterator (int i) : base (NULL), id (i)
-	{
-	}
-	FActorIterator (int i, AActor *start) : base (start), id (i)
-	{
-	}
-	AActor *Next ()
-	{
-		if (id == 0)
-			return NULL;
-		if (!base)
-			base = AActor::TIDHash[id & 127];
-		else
-			base = base->inext;
-
-		while (base && base->tid != id)
-			base = base->inext;
-
-		return base;
-	}
-	void Reinit()
-	{
-		base = nullptr;
-	}
-
-private:
-	AActor *base;
-	int id;
-};
-
-template<class T>
-class TActorIterator : public FActorIterator
-{
-public:
-	TActorIterator (int id) : FActorIterator (id) {}
-	T *Next ()
-	{
-		AActor *actor;
-		do
-		{
-			actor = FActorIterator::Next ();
-		} while (actor && !actor->IsKindOf (RUNTIME_CLASS(T)));
-		return static_cast<T *>(actor);
-	}
-};
-
-class NActorIterator : public FActorIterator
-{
-	const PClass *type;
-public:
-	NActorIterator (const PClass *cls, int id) : FActorIterator (id) { type = cls; }
-	NActorIterator (FName cls, int id) : FActorIterator (id) { type = PClass::FindClass(cls); }
-	NActorIterator (const char *cls, int id) : FActorIterator (id) { type = PClass::FindClass(cls); }
-	AActor *Next ()
-	{
-		AActor *actor;
-		if (type == NULL) return NULL;
-		do
-		{
-			actor = FActorIterator::Next ();
-		} while (actor && !actor->IsKindOf (type));
-		return actor;
-	}
-};
-
-bool P_IsTIDUsed(int tid);
-int P_FindUniqueTID(int start_tid, int limit);
 
 PClassActor *ClassForSpawn(FName classname);
 
-inline AActor *Spawn(PClassActor *type)
+inline AActor *Spawn(FLevelLocals *l, PClassActor *type)
 {
-	return AActor::StaticSpawn(type, DVector3(0, 0, 0), NO_REPLACE);
+	return AActor::StaticSpawn(l, type, DVector3(0, 0, 0), NO_REPLACE);
 }
 
-inline AActor *Spawn(PClassActor *type, const DVector3 &pos, replace_t allowreplacement)
+inline AActor *Spawn(FLevelLocals *l, PClassActor *type, const DVector3 &pos, replace_t allowreplacement)
 {
-	return AActor::StaticSpawn(type, pos, allowreplacement);
+	return AActor::StaticSpawn(l, type, pos, allowreplacement);
 }
 
-inline AActor *Spawn(FName type)
+inline AActor *Spawn(FLevelLocals *l, FName type)
 {
-	return AActor::StaticSpawn(ClassForSpawn(type), DVector3(0, 0, 0), NO_REPLACE);
+	return AActor::StaticSpawn(l, ClassForSpawn(type), DVector3(0, 0, 0), NO_REPLACE);
 }
 
-inline AActor *Spawn(FName type, const DVector3 &pos, replace_t allowreplacement)
+inline AActor *Spawn(FLevelLocals *l, FName type, const DVector3 &pos, replace_t allowreplacement)
 {
-	return AActor::StaticSpawn(ClassForSpawn(type), pos, allowreplacement);
+	return AActor::StaticSpawn(l, ClassForSpawn(type), pos, allowreplacement);
 }
 
-template<class T> inline T *Spawn(const DVector3 &pos, replace_t allowreplacement)
+template<class T> inline T *Spawn(FLevelLocals *l, const DVector3 &pos, replace_t allowreplacement)
 {
-	return static_cast<T *>(AActor::StaticSpawn(RUNTIME_CLASS(T), pos, allowreplacement));
+	return static_cast<T *>(AActor::StaticSpawn(l, RUNTIME_CLASS(T), pos, allowreplacement));
 }
 
-template<class T> inline T *Spawn()	// for inventory items we do not need coordinates and replacement info.
+template<class T> inline T *Spawn(FLevelLocals *l)	// for inventory items we do not need coordinates and replacement info.
 {
-	return static_cast<T *>(AActor::StaticSpawn(RUNTIME_CLASS(T), DVector3(0, 0, 0), NO_REPLACE));
+	return static_cast<T *>(AActor::StaticSpawn(l, RUNTIME_CLASS(T), DVector3(0, 0, 0), NO_REPLACE));
 }
 
 inline PClassActor *PClass::FindActor(FName name)

@@ -70,12 +70,12 @@ TArray<FSWColormap> SpecialSWColormaps;
 // Colored Lighting Stuffs
 //
 //==========================================================================
+static std::mutex buildmapmutex;
 
 static FDynamicColormap *CreateSpecialLights (PalEntry color, PalEntry fade, int desaturate)
 {
 	// GetSpecialLights is called by the scene worker threads.
 	// If we didn't find the colormap, search again, but this time one thread at a time
-	static std::mutex buildmapmutex;
 	std::unique_lock<std::mutex> lock(buildmapmutex);
 
 	// If this colormap has already been created, just return it
@@ -524,7 +524,10 @@ CCMD (testfade)
 		{
 			color = V_GetColorFromString (NULL, argv[1]);
 		}
-		level.fadeto = color;
+		ForAllLevels([&](FLevelLocals *Level)
+		{
+			Level->fadeto = color;
+		});
 		NormalLight.ChangeFade (color);
 	}
 }

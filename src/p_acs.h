@@ -36,6 +36,7 @@
 #define __P_ACS_H__
 
 #include "doomtype.h"
+#include "dthinker.h"
 
 #define LOCAL_SIZE				20
 #define NUM_MAPVARS				128
@@ -43,6 +44,8 @@
 class FFont;
 class FileReader;
 struct line_t;
+class FSerializer;
+struct FLevelLocals;
 
 
 enum
@@ -101,12 +104,10 @@ public:
 	int AddString(const char *str);
 	int AddString(FString &str);
 	const char *GetString(int strnum);
-	void LockString(int strnum);
-	void UnlockString(int strnum);
+	void LockString(int levelnum, int strnum);
 	void UnlockAll();
 	void MarkString(int strnum);
-	void LockStringArray(const int *strnum, unsigned int count);
-	void UnlockStringArray(const int *strnum, unsigned int count);
+	void LockStringArray(int levelnum, const int *strnum, unsigned int count);
 	void MarkStringArray(const int *strnum, unsigned int count);
 	void MarkStringMap(const FWorldGlobalArray &array);
 	void PurgeStrings();
@@ -133,8 +134,8 @@ private:
 		bool Mark;
 		TArray<int> Locks;
 
-		void Lock();
-		void Unlock();
+		void Lock(int levelnum);
+		void Unlock(int levelnum);
 	};
 	TArray<PoolEntry> Pool;
 	unsigned int PoolBuckets[NUM_BUCKETS];
@@ -343,18 +344,19 @@ enum
 
 enum ACSFormat { ACS_Old, ACS_Enhanced, ACS_LittleEnhanced, ACS_Unknown };
 
+
 class FBehavior
 {
 public:
 	FBehavior ();
 	~FBehavior ();
-	bool Init(int lumpnum, FileReader * fr = NULL, int len = 0);
+	bool Init(FLevelLocals *Level, int lumpnum, FileReader * fr = NULL, int len = 0);
 
 	bool IsGood ();
 	uint8_t *FindChunk (uint32_t id) const;
 	uint8_t *NextChunk (uint8_t *chunk) const;
 	const ScriptPtr *FindScript (int number) const;
-	void StartTypedScripts (uint16_t type, AActor *activator, bool always, int arg1, bool runNow);
+	void StartTypedScripts (FLevelLocals *Level, int type, AActor *activator, bool always, int arg1, bool runNow);
 	uint32_t PC2Ofs (int *pc) const { return (uint32_t)((uint8_t *)pc - Data); }
 	int *Ofs2PC (uint32_t ofs) const {	return (int *)(Data + ofs); }
 	int *Jump2PC (uint32_t jumpPoint) const { return Ofs2PC(JumpPoints[jumpPoint]); }
@@ -380,20 +382,6 @@ public:
 
 	BoundsCheckingArray<int32_t *, NUM_MAPVARS> MapVars;
 
-	static FBehavior *StaticLoadModule (int lumpnum, FileReader *fr = nullptr, int len=0);
-	static void StaticLoadDefaultModules ();
-	static void StaticUnloadModules ();
-	static bool StaticCheckAllGood ();
-	static FBehavior *StaticGetModule (int lib);
-	static void StaticSerializeModuleStates (FSerializer &arc);
-	static void StaticMarkLevelVarStrings();
-	static void StaticLockLevelVarStrings();
-	static void StaticUnlockLevelVarStrings();
-
-	static const ScriptPtr *StaticFindScript (int script, FBehavior *&module);
-	static const char *StaticLookupString (uint32_t index);
-	static void StaticStartTypedScripts (uint16_t type, AActor *activator, bool always, int arg1=0, bool runNow=false);
-	static void StaticStopMyScripts (AActor *actor);
 
 private:
 	struct ArrayInfo;
@@ -420,8 +408,6 @@ private:
 	char ModuleName[9];
 	TArray<int> JumpPoints;
 
-	static TArray<FBehavior *> StaticModules;
-
 	void LoadScriptsDirectory ();
 
 	static int SortScripts (const void *a, const void *b);
@@ -433,11 +419,65 @@ private:
 	void SerializeVarSet (FSerializer &arc, int32_t *vars, int max);
 
 	void MarkMapVarStrings() const;
-	void LockMapVarStrings() const;
-	void UnlockMapVarStrings() const;
+	void LockMapVarStrings(int levelnum) const;
 
-	friend void ArrangeScriptProfiles(TArray<ProfileCollector> &profiles);
-	friend void ArrangeFunctionProfiles(TArray<ProfileCollector> &profiles);
+	friend void ArrangeScriptProfiles(FLevelLocals *Level, TArray<ProfileCollector> &profiles);
+	friend void ArrangeFunctionProfiles(FLevelLocals *Level, TArray<ProfileCollector> &profiles);
+	friend struct FBehaviorContainer;
 };
+
+struct FBehaviorContainer
+{
+	TDeletingArray<FBehavior *> StaticModules;
+	
+	FBehavior *LoadModule(FLevelLocals *Level, int lumpnum, FileReader *fr = nullptr, int len = 0);
+	void LoadDefaultModules(FLevelLocals *Level);
+	void UnloadModules();
+	bool CheckAllGood();
+	FBehavior *GetModule(int lib);
+	void SerializeModuleStates(FSerializer &arc);
+	void MarkLevelVarStrings(FLevelLocals *Level);
+	void LockLevelVarStrings(FLevelLocals *Level);
+	void UnlockLevelVarStrings(int levelnum);
+
+	const ScriptPtr *FindScript(int script, FBehavior *&module);
+	const char *LookupString(uint32_t index);
+	void StartTypedScripts(FLevelLocals *Level, uint16_t type, AActor *activator, bool always, int arg1 = 0, bool runNow = false);
+	void StopMyScripts(AActor *actor);
+
+};
+
+class DLevelScript;
+
+class DACSThinker : public DThinker
+{
+	DECLARE_CLASS(DACSThinker, DThinker)
+	HAS_OBJECT_POINTERS
+public:
+	static const int DEFAULT_STAT = STAT_SCRIPTS;
+	DACSThinker(FLevelLocals *Level);
+	~DACSThinker();
+
+	void Serialize(FSerializer &arc);
+	void Tick();
+
+	typedef TMap<int, DLevelScript *> ScriptMap;
+	ScriptMap RunningScripts;	// Array of all synchronous scripts
+
+	void DumpScriptStatus();
+	void StopScriptsFor(AActor *actor);
+
+private:
+	DACSThinker() = default;
+	DLevelScript *LastScript;
+	DLevelScript *Scripts;				// List of all running scripts
+
+	friend class DLevelScript;
+	friend class FBehavior;
+	friend struct FBehaviorContainer;
+};
+
+
+
 
 #endif //__P_ACS_H__

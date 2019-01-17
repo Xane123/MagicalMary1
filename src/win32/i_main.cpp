@@ -71,6 +71,7 @@
 #include "r_utility.h"
 #include "g_levellocals.h"
 #include "s_sound.h"
+#include "vm.h"
 
 #include "stats.h"
 #include "st_start.h"
@@ -1048,21 +1049,27 @@ void DoMain (HINSTANCE hInstance)
 		}
 		exit(0);
 	}
-	catch (class CDoomError &error)
+	catch (std::exception &error)
 	{
 		I_ShutdownGraphics ();
 		RestoreConView ();
 		S_StopMusic(true);
 		I_FlushBufferedConsoleStuff();
-		if (error.GetMessage ())
+		auto msg = error.what();
+		if (strcmp(msg, "NoRunExit"))
 		{
+			if (CVMAbortException::stacktrace.IsNotEmpty())
+			{
+				Printf("%s", CVMAbortException::stacktrace.GetChars());
+			}
+
 			if (!batchrun)
 			{
-				ShowErrorPane(error.GetMessage());
+				ShowErrorPane(msg);
 			}
 			else
 			{
-				Printf("%s\n", error.GetMessage());
+				Printf("%s\n", msg);
 			}
 		}
 		exit (-1);
@@ -1091,13 +1098,14 @@ void DoomSpecificInfo (char *buffer, size_t bufflen)
 		buffer += mysnprintf (buffer, buffend - buffer, "\r\nWad %d: %s", i, arg);
 	}
 
+	auto &vp = r_viewpoint;
 	if (gamestate != GS_LEVEL && gamestate != GS_TITLELEVEL)
 	{
-		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nNot in a level.");
+		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nNot in a map.");
 	}
 	else
 	{
-		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nCurrent map: %s", level.MapName.GetChars());
+		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nCurrent map: %s", vp.camera->Level->MapName.GetChars());
 
 		if (!viewactive)
 		{
@@ -1105,7 +1113,6 @@ void DoomSpecificInfo (char *buffer, size_t bufflen)
 		}
 		else
 		{
-			auto &vp = r_viewpoint;
 			buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nviewx = %f", vp.Pos.X);
 			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewy = %f", vp.Pos.Y);
 			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewz = %f", vp.Pos.Z);
@@ -1336,7 +1343,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE nothing, LPSTR cmdline, int n
 	_CrtSetDbgFlag (_CrtSetDbgFlag(0) | _CRTDBG_LEAK_CHECK_DF);
 
 	// Use this to break at a specific allocation number.
-	//_crtBreakAlloc = 177312;
+	//_crtBreakAlloc = 227524;
 #endif
 
 	DoMain (hInstance);

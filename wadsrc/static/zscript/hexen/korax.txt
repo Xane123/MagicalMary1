@@ -60,6 +60,7 @@ class Korax : Actor
 		DeathSound "KoraxDeath";
 		ActiveSound "KoraxActive";
 		Obituary "$OB_KORAX";
+		Tag "$FN_KORAX";
 	}
 
 	States
@@ -128,7 +129,7 @@ class Korax : Actor
 	{
 		if ((!special2) && (health <= (SpawnHealth()/2)))
 		{
-			ActorIterator it = ActorIterator.Create(KORAX_FIRST_TELEPORT_TID);
+			ActorIterator it = Level.CreateActorIterator(KORAX_FIRST_TELEPORT_TID);
 			Actor spot = it.Next ();
 			if (spot != null)
 			{
@@ -157,7 +158,7 @@ class Korax : Actor
 		{
 			if (random[KoraxChase]() < 10)
 			{
-				ActorIterator it = ActorIterator.Create(KORAX_TELEPORT_TID);
+				ActorIterator it = Level.CreateActorIterator(KORAX_TELEPORT_TID);
 				Actor spot;
 
 				if (tracer != null)
@@ -228,12 +229,12 @@ class Korax : Actor
 		spirit.health = KORAX_SPIRIT_LIFETIME;
 
 		spirit.tracer = self;						// Swarm around korax
-		spirit.WeaveIndexZ = 32 + (random[Kspiritnit]() & 7);	// Float bob index
+		spirit.WeaveIndexZ = random[Kspiritnit](32, 39);	// Float bob index
 		spirit.args[0] = 10; 						// initial turn value
 		spirit.args[1] = 0; 						// initial look angle
 
 		// Spawn a tail for spirit
-		HolyTail.SpawnSpiritTail (spirit);
+		SpawnSpiritTail (spirit);
 	}
 
 	//============================================================================
@@ -257,7 +258,7 @@ class Korax : Actor
 		{
 			"WraithMissileFire", "DemonMissileFire", "DemonMissileFire", "FireDemonAttack", "CentaurLeaderAttack", "SerpentLeaderAttack"
 		};
-		int type = random[KoraxMissile]() % 6;
+		int type = random[KoraxMissile](0, 5);
 
 		A_PlaySound("KoraxAttack", CHAN_VOICE);
 
@@ -369,7 +370,7 @@ class Korax : Actor
 			numcommands = 4;
 		}
 
-		ACS_Execute(250 + (random[KoraxCommand]()%numcommands), 0);
+		ACS_Execute(250 + (random[KoraxCommand](0, numcommands)), 0);
 	}
 }
 
@@ -429,7 +430,7 @@ class KoraxSpirit : Actor
 		}
 		VelFromAngle();
 
-		if (!(level.time&15) 
+		if (!(Level.maptime&15) 
 			|| pos.z > target.pos.z + target.Default.Height
 			|| pos.z + height < target.pos.z)
 		{
@@ -470,8 +471,8 @@ class KoraxSpirit : Actor
 			{
 				KSpiritSeeker(args[0], args[0] * 2.);
 			}
-			int xyspeed = (random[KoraxRoam]() % 5);
-			int zspeed = (random[KoraxRoam]() % 5);
+			int xyspeed = random[KoraxRoam](0, 4);
+			int zspeed = random[KoraxRoam](0, 4);
 			A_Weave(xyspeed, zspeed, 4., 2.);
 
 			if (random[KoraxRoam]() < 50)

@@ -68,6 +68,7 @@
 #include "r_utility.h"
 #include "c_functions.h"
 #include "g_levellocals.h"
+#include "actorinlines.h"
 
 extern FILE *Logfile;
 extern bool insave;
@@ -360,7 +361,7 @@ CCMD (changemap)
 	if (argv.argc() > 1)
 	{
 		const char *mapname = argv[1];
-		if (!strcmp(mapname, "*")) mapname = level.MapName.GetChars();
+		if (!strcmp(mapname, "*") && currentSession) mapname = currentSession->Levelinfo[0]->MapName.GetChars();
 
 		try
 		{
@@ -903,31 +904,29 @@ static bool IsActorAMonster(AActor *mo)
 
 static bool IsActorAnItem(AActor *mo)
 {
-	return mo->IsKindOf(RUNTIME_CLASS(AInventory)) && mo->flags&MF_SPECIAL;
+	return mo->IsKindOf(NAME_Inventory) && mo->flags&MF_SPECIAL;
 }
 
 static bool IsActorACountItem(AActor *mo)
 {
-	return mo->IsKindOf(RUNTIME_CLASS(AInventory)) && mo->flags&MF_SPECIAL && mo->flags&MF_COUNTITEM;
+	return mo->IsKindOf(NAME_Inventory) && mo->flags&MF_SPECIAL && mo->flags&MF_COUNTITEM;
 }
 
 // [SP] for all actors
 static bool IsActor(AActor *mo)
 {
-	if (mo->IsKindOf(RUNTIME_CLASS(AInventory)))
-		return static_cast<AInventory *>(mo)->Owner == NULL; // [SP] Exclude inventory-owned items
-	else
-		return true;
+	return mo->IsMapActor();
 }
 
 // [SP] modified - now allows showing count only, new arg must be passed. Also now still counts regardless, if lists are printed.
-static void PrintFilteredActorList(const ActorTypeChecker IsActorType, const char *FilterName, bool countOnly)
+static void PrintFilteredActorList(FLevelLocals *Level, const ActorTypeChecker IsActorType, const char *FilterName, bool countOnly)
 {
 	AActor *mo;
 	const PClass *FilterClass = NULL;
 	int counter = 0;
 	int tid = 0;
 
+	Printf("%s:\n", Level->MapName.GetChars());
 	if (FilterName != NULL)
 	{
 		FilterClass = PClass::FindActor(FilterName);
@@ -942,7 +941,7 @@ static void PrintFilteredActorList(const ActorTypeChecker IsActorType, const cha
 			}
 		}
 	}
-	TThinkerIterator<AActor> it;
+	TThinkerIterator<AActor> it(Level);
 
 	while ( (mo = it.Next()) )
 	{
@@ -974,14 +973,20 @@ CCMD(actorlist) // [SP] print all actors (this can get quite big?)
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActor, argv.argc() > 1 ? argv[1] : NULL, false);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActor, argv.argc() > 1 ? argv[1] : NULL, false);
+	});
 }
 
 CCMD(actornum) // [SP] count all actors
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActor, argv.argc() > 1 ? argv[1] : NULL, true);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActor, argv.argc() > 1 ? argv[1] : NULL, true);
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -993,14 +998,20 @@ CCMD(monster)
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActorAMonster, argv.argc() > 1 ? argv[1] : NULL, false);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActorAMonster, argv.argc() > 1 ? argv[1] : NULL, false);
+	});
 }
 
 CCMD(monsternum) // [SP] count monsters
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActorAMonster, argv.argc() > 1 ? argv[1] : NULL, true);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActorAMonster, argv.argc() > 1 ? argv[1] : NULL, true);
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -1012,14 +1023,20 @@ CCMD(items)
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActorAnItem, argv.argc() > 1 ? argv[1] : NULL, false);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActorAnItem, argv.argc() > 1 ? argv[1] : NULL, false);
+	}); 
 }
 
 CCMD(itemsnum) // [SP] # of any items
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActorAnItem, argv.argc() > 1 ? argv[1] : NULL, true);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActorAnItem, argv.argc() > 1 ? argv[1] : NULL, true);
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -1031,14 +1048,20 @@ CCMD(countitems)
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActorACountItem, argv.argc() > 1 ? argv[1] : NULL, false);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActorACountItem, argv.argc() > 1 ? argv[1] : NULL, false);
+	});
 }
 
 CCMD(countitemsnum) // [SP] # of counted items
 {
 	if (CheckCheatmode ()) return;
 
-	PrintFilteredActorList(IsActorACountItem, argv.argc() > 1 ? argv[1] : NULL, true);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		PrintFilteredActorList(Level, IsActorACountItem, argv.argc() > 1 ? argv[1] : NULL, true);
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -1048,24 +1071,25 @@ CCMD(countitemsnum) // [SP] # of counted items
 //-----------------------------------------------------------------------------
 CCMD(changesky)
 {
-	const char *sky1name;
-
 	if (netgame || argv.argc()<2) return;
 
-	sky1name = argv[1];
-	if (sky1name[0] != 0)
+	const char *sky1name = argv[1];
+	ForAllLevels([=](FLevelLocals *Level)
 	{
-		FTextureID newsky = TexMan.GetTexture(sky1name, ETextureType::Wall, FTextureManager::TEXMAN_Overridable | FTextureManager::TEXMAN_ReturnFirst);
-		if (newsky.Exists())
+		if (sky1name[0] != 0)
 		{
-			sky1texture = level.skytexture1 = newsky;
+			FTextureID newsky = TexMan.GetTextureID(sky1name, ETextureType::Wall, FTextureManager::TEXMAN_Overridable | FTextureManager::TEXMAN_ReturnFirst);
+			if (newsky.Exists())
+			{
+				Level->skytexture1 = newsky;
+			}
+			else
+			{
+				Printf("changesky: Texture '%s' not found\n", sky1name);
+			}
 		}
-		else
-		{
-			Printf("changesky: Texture '%s' not found\n", sky1name);
-		}
-	}
-	R_InitSkyMap ();
+		InitSkyMap(Level);
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -1095,10 +1119,11 @@ CCMD(nextmap)
 				TEXTCOLOR_NORMAL " is for single-player only.\n");
 		return;
 	}
+	auto Level = who->Level;
 	
-	if (level.NextMap.Len() > 0 && level.NextMap.Compare("enDSeQ", 6))
+	if (Level->NextMap.Len() > 0 && Level->NextMap.Compare("enDSeQ", 6))
 	{
-		G_DeferedInitNew(level.NextMap);
+		G_DeferedInitNew(Level->NextMap);
 	}
 	else
 	{
@@ -1119,10 +1144,11 @@ CCMD(nextsecret)
 				TEXTCOLOR_NORMAL " is for single-player only.\n");
 		return;
 	}
+	auto Level = who->Level;
 
-	if (level.NextSecretMap.Len() > 0 && level.NextSecretMap.Compare("enDSeQ", 6))
+	if (Level->NextSecretMap.Len() > 0 && Level->NextSecretMap.Compare("enDSeQ", 6))
 	{
-		G_DeferedInitNew(level.NextSecretMap);
+		G_DeferedInitNew(Level->NextSecretMap);
 	}
 	else
 	{
@@ -1156,9 +1182,9 @@ CCMD(currentpos)
 //
 //-----------------------------------------------------------------------------
 
-static void PrintSecretString(const char *string, bool thislevel)
+static void PrintSecretString(const char *string, FLevelLocals *Level)
 {
-	const char *colstr = thislevel? TEXTCOLOR_YELLOW : TEXTCOLOR_CYAN;
+	const char *colstr = Level? TEXTCOLOR_YELLOW : TEXTCOLOR_CYAN;
 	if (string != NULL)
 	{
 		if (*string == '$')
@@ -1167,10 +1193,10 @@ static void PrintSecretString(const char *string, bool thislevel)
 			{
 				auto secnum = (unsigned)strtoull(string+2, (char**)&string, 10);
 				if (*string == ';') string++;
-				if (thislevel && secnum < level.sectors.Size())
+				if (Level && secnum < Level->sectors.Size())
 				{
-					if (level.sectors[secnum].isSecret()) colstr = TEXTCOLOR_RED;
-					else if (level.sectors[secnum].wasSecret()) colstr = TEXTCOLOR_GREEN;
+					if (Level->sectors[secnum].isSecret()) colstr = TEXTCOLOR_RED;
+					else if (Level->sectors[secnum].wasSecret()) colstr = TEXTCOLOR_GREEN;
 					else colstr = TEXTCOLOR_ORANGE;
 				}
 			}
@@ -1178,11 +1204,11 @@ static void PrintSecretString(const char *string, bool thislevel)
 			{
 				long tid = (long)strtoll(string+2, (char**)&string, 10);
 				if (*string == ';') string++;
-				FActorIterator it(tid);
-				AActor *actor;
 				bool foundone = false;
-				if (thislevel)
+				if (Level)
 				{
+					FActorIterator it(Level, tid);
+					AActor *actor;
 					while ((actor = it.Next()))
 					{
 						if (!actor->IsKindOf("SecretTrigger")) continue;
@@ -1194,39 +1220,30 @@ static void PrintSecretString(const char *string, bool thislevel)
 				else colstr = TEXTCOLOR_GREEN;
 			}
 		}
-		FBrokenLines *brok = V_BreakLines(ConFont, screen->GetWidth()*95/100, string);
+		auto brok = V_BreakLines(ConFont, screen->GetWidth()*95/100, string);
 
-		for (int k = 0; brok[k].Width >= 0; k++)
+		for (auto &line : brok)
 		{
-			Printf("%s%s\n", colstr, brok[k].Text.GetChars());
+			Printf("%s%s\n", colstr, line.Text.GetChars());
 		}
-		V_FreeBrokenLines(brok);
 	}
 }
 
-//============================================================================
-//
-// Print secret hints
-//
-//============================================================================
-
-CCMD(secret)
+static void PrintSecretsForLevel(const FString &mapname, FLevelLocals *Level)
 {
-	const char *mapname = argv.argc() < 2? level.MapName.GetChars() : argv[1];
-	bool thislevel = !stricmp(mapname, level.MapName);
 	bool foundsome = false;
-
+	
 	int lumpno=Wads.CheckNumForName("SECRETS");
 	if (lumpno < 0) return;
-
+	
 	auto lump = Wads.OpenLumpReader(lumpno);
 	FString maphdr;
-	maphdr.Format("[%s]", mapname);
-
+	maphdr.Format("[%s]", mapname.GetChars());
+	
 	FString linebuild;
 	char readbuffer[1024];
 	bool inlevel = false;
-
+	
 	while (lump.Gets(readbuffer, 1024))
 	{
 		if (!inlevel)
@@ -1239,7 +1256,7 @@ CCMD(secret)
 					FString levelname;
 					level_info_t *info = FindLevelInfo(mapname);
 					const char *ln = !(info->flags & LEVEL_LOOKUPLEVELNAME)? info->LevelName.GetChars() : GStrings[info->LevelName.GetChars()];
-					levelname.Format("%s - %s\n", mapname, ln);
+					levelname.Format("%s - %s\n", mapname.GetChars(), ln);
 					size_t llen = levelname.Len() - 1;
 					for(size_t ii=0; ii<llen; ii++) levelname += '-';
 					Printf(TEXTCOLOR_YELLOW"%s\n", levelname.GetChars());
@@ -1258,7 +1275,7 @@ CCMD(secret)
 					// line complete so print it.
 					linebuild.Substitute("\r", "");
 					linebuild.StripRight(" \t\n");
-					PrintSecretString(linebuild, thislevel);
+					PrintSecretString(linebuild, Level);
 					linebuild = "";
 				}
 			}
@@ -1266,6 +1283,45 @@ CCMD(secret)
 		}
 	}
 }
+
+//============================================================================
+//
+// Print secret hints
+//
+//============================================================================
+
+CCMD(secret)
+{
+	TArray<std::pair<FString, FLevelLocals *>> levelList;	TMap<FString, FLevelLocals *> levelMap;
+	
+	ForAllLevels([&](FLevelLocals *Level) {
+		if (argv.argc() < 2 || Level->MapName.CompareNoCase(argv[1]) == 0)
+		{
+			levelList.Push(std::make_pair(Level->MapName, Level));
+		}
+	});
+	
+	if (levelMap.CountUsed() == 0)
+	{
+		if (argv.argc() < 2)
+		{
+			return;
+		}
+		level_info_t *info = FindLevelInfo(argv[1]);
+		if (info == nullptr)
+		{
+			Printf("%s: Map does not exist", argv[1]);
+			return;
+		}
+		levelList.Push(std::make_pair(argv[1], nullptr));
+	}
+	
+	for (auto &entry : levelList)
+	{
+		PrintSecretsForLevel(entry.first, entry.second);
+	}
+}
+	
 
 CCMD(angleconvtest)
 {

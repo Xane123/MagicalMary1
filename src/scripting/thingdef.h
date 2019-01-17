@@ -68,14 +68,15 @@ struct FFlagDef
 	int varflags;
 };
 
+void FinalizeClass(PClass *cls, FStateDefinitions &statedef);
 FFlagDef *FindFlag (const PClass *type, const char *part1, const char *part2, bool strict = false);
 void HandleDeprecatedFlags(AActor *defaults, PClassActor *info, bool set, int index);
-bool CheckDeprecatedFlags(const AActor *actor, PClassActor *info, int index);
+bool CheckDeprecatedFlags(AActor *actor, PClassActor *info, int index);
 const char *GetFlagName(unsigned int flagnum, int flagoffset);
 void ModActorFlag(AActor *actor, FFlagDef *fd, bool set);
-bool ModActorFlag(AActor *actor, FString &flagname, bool set, bool printerror = true);
-INTBOOL CheckActorFlag(const AActor *actor, FFlagDef *fd);
-INTBOOL CheckActorFlag(const AActor *owner, const char *flagname, bool printerror = true);
+bool ModActorFlag(AActor *actor, const FString &flagname, bool set, bool printerror = true);
+INTBOOL CheckActorFlag(AActor *actor, FFlagDef *fd);
+INTBOOL CheckActorFlag(AActor *owner, const char *flagname, bool printerror = true);
 
 #define FLAG_NAME(flagnum, flagvar) GetFlagName(flagnum, myoffsetof(AActor, flagvar))
 
@@ -203,7 +204,7 @@ class FxVMFunctionCall *ParseAction(FScanner &sc, FState state, FString statestr
 FName CheckCastKludges(FName in);
 void SetImplicitArgs(TArray<PType *> *args, TArray<uint32_t> *argflags, TArray<FName> *argnames, PContainerType *cls, uint32_t funcflags, int useflags);
 PFunction *CreateAnonymousFunction(PContainerType *containingclass, PType *returntype, int flags);
-PFunction *FindClassMemberFunction(PContainerType *cls, PContainerType *funccls, FName name, FScriptPosition &sc, bool *error);
+PFunction *FindClassMemberFunction(PContainerType *cls, PContainerType *funccls, FName name, FScriptPosition &sc, bool *error, const VersionInfo &version, bool nodeprecated = false);
 void CreateDamageFunction(PNamespace *ns, const VersionInfo &ver, PClassActor *info, AActor *defaults, FxExpression *id, bool fromDecorate, int lumpnum);
 
 //==========================================================================
@@ -218,20 +219,19 @@ FxExpression *ParseParameter(FScanner &sc, PClassActor *cls, PType *type);
 
 enum 
 {
-	DEPF_UNUSED,
-	DEPF_FIREDAMAGE,
-	DEPF_ICEDAMAGE,
-	DEPF_LOWGRAVITY,
-	DEPF_LONGMELEERANGE,
-	DEPF_SHORTMISSILERANGE,
-	DEPF_PICKUPFLASH,
-	DEPF_QUARTERGRAVITY,
-	DEPF_FIRERESIST,
-	DEPF_HERETICBOUNCE,
-	DEPF_HEXENBOUNCE,
-	DEPF_DOOMBOUNCE,
-	DEPF_INTERHUBSTRIP,
-	DEPF_NOTRAIL,
+	DEPF_UNUSED = 0,
+	DEPF_FIREDAMAGE = 1,
+	DEPF_ICEDAMAGE = 2,
+	DEPF_LOWGRAVITY = 3,
+	DEPF_LONGMELEERANGE = 4,
+	DEPF_SHORTMISSILERANGE = 5,
+	DEPF_PICKUPFLASH = 6,
+	DEPF_QUARTERGRAVITY = 7,
+	DEPF_FIRERESIST = 8,
+	DEPF_HERETICBOUNCE = 9,
+	DEPF_HEXENBOUNCE = 10,
+	DEPF_DOOMBOUNCE = 11,
+	DEPF_INTERHUBSTRIP = 12,
 };
 
 // Types of old style decorations
@@ -308,11 +308,8 @@ int MatchString (const char *in, const char **strings);
 #define DEFINE_PROPERTY(name, paramlist, clas) DEFINE_PROPERTY_BASE(name, paramlist, clas, CAT_PROPERTY)
 #define DEFINE_INFO_PROPERTY(name, paramlist, clas) DEFINE_PROPERTY_BASE(name, paramlist, clas, CAT_INFO)
 
-#define DEFINE_CLASS_PROPERTY(name, paramlist, clas) DEFINE_PREFIXED_PROPERTY_BASE(clas, name, paramlist, clas, CAT_PROPERTY)
-#define DEFINE_CLASS_PROPERTY_PREFIX(prefix, name, paramlist, clas) DEFINE_PREFIXED_PROPERTY_BASE(prefix, name, paramlist, clas, CAT_PROPERTY)
-
-#define DEFINE_SCRIPTED_PROPERTY(name, paramlist, clas) DEFINE_PREFIXED_SCRIPTED_PROPERTY_BASE(clas, name, paramlist, clas, CAT_PROPERTY)
-#define DEFINE_SCRIPTED_PROPERTY_PREFIX(prefix, name, paramlist, clas) DEFINE_PREFIXED_SCRIPTED_PROPERTY_BASE(prefix, name, paramlist, clas, CAT_PROPERTY)
+#define DEFINE_CLASS_PROPERTY(name, paramlist, clas) DEFINE_PREFIXED_SCRIPTED_PROPERTY_BASE(clas, name, paramlist, clas, CAT_PROPERTY)
+#define DEFINE_CLASS_PROPERTY_PREFIX(prefix, name, paramlist, clas) DEFINE_PREFIXED_SCRIPTED_PROPERTY_BASE(prefix, name, paramlist, clas, CAT_PROPERTY)
 
 #define PROP_PARM_COUNT (params[0].i)
 

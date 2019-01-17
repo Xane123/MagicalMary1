@@ -151,9 +151,9 @@ extend class Actor
 		A_PlaySound("brain/pain", CHAN_VOICE, 1, false, ATTN_NONE);
 	}
 
-	private static void BrainishExplosion(vector3 pos)
+	private void BrainishExplosion(vector3 pos)
 	{
-		Actor boom = Actor.Spawn("Rocket", pos, NO_REPLACE);
+		Actor boom = Spawn("Rocket", pos, NO_REPLACE);
 		if (boom)
 		{
 			boom.DeathSound = "misc/brainexplode";
@@ -186,15 +186,15 @@ extend class Actor
 
 	void A_BrainDie()
 	{
-		// [RH] If noexit, then don't end the level.
+		// [RH] If noexit, then don't end the Level.
 		if ((deathmatch || alwaysapplydmflags) && sv_noexit)
 			return;
 
-		// New dmflag: Kill all boss spawned monsters before ending the level.
+		// New dmflag: Kill all boss spawned monsters before ending the map.
 		if (sv_killbossmonst)
 		{
 			int count;	// Repeat until we have no more boss-spawned monsters.
-			ThinkerIterator it = ThinkerIterator.Create("Actor");
+			ThinkerIterator it = Level.CreateThinkerIterator("Actor");
 			do			// (e.g. Pain Elementals can spawn more to kill upon death.)
 			{
 				Actor mo;
@@ -219,7 +219,7 @@ extend class Actor
 
 	void A_BrainSpit(class<Actor> spawntype = null)
 	{
-		SpotState spstate = SpotState.GetSpotState();
+		SpotState spstate = Level.GetSpotState();
 		Actor targ;
 		Actor spit;
 		bool isdefault = false;
@@ -261,7 +261,7 @@ extend class Actor
 					spit.special2 = int((targ.pos.x - pos.x) / spit.Vel.x);
 				}
 				// [GZ] Calculates when the projectile will have reached destination
-				spit.special2 += level.maptime;
+				spit.special2 += Level.maptime;
 				spit.bBossCube = true;
 			}
 
@@ -294,7 +294,7 @@ extend class Actor
 		// [GZ] Should be more viable than a countdown...
 		if (special2 != 0)
 		{
-			if (special2 > level.maptime)
+			if (special2 > Level.maptime)
 				return;		// still flying
 		}
 		else

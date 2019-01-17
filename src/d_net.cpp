@@ -52,6 +52,7 @@
 #include "teaminfo.h"
 #include "p_conversation.h"
 #include "d_event.h"
+#include "p_enemy.h"
 #include "m_argv.h"
 #include "p_lnspec.h"
 #include "p_spec.h"
@@ -62,6 +63,8 @@
 #include "g_levellocals.h"
 #include "events.h"
 #include "i_time.h"
+#include "vm.h"
+#include "actorinlines.h"
 
 EXTERN_CVAR (Int, disableautosave)
 EXTERN_CVAR (Int, autosavecount)
@@ -125,7 +128,7 @@ void G_BuildTiccmd (ticcmd_t *cmd);
 void D_DoAdvanceDemo (void);
 
 static void SendSetup (uint32_t playersdetected[MAXNETNODES], uint8_t gotsetup[MAXNETNODES], int len);
-static void RunScript(uint8_t **stream, APlayerPawn *pawn, int snum, int argn, int always);
+static void RunScript(uint8_t **stream, AActor *pawn, int snum, int argn, int always);
 
 int		reboundpacket;
 uint8_t	reboundstore[MAX_MSGLEN];
@@ -2079,27 +2082,15 @@ uint8_t *FDynamicBuffer::GetData (int *len)
 
 static int KillAll(PClassActor *cls)
 {
-	AActor *actor;
-	int killcount = 0;
-	TThinkerIterator<AActor> iterator(cls);
-	while ( (actor = iterator.Next ()) )
-	{
-		if (actor->IsA(cls))
-		{
-			if (!(actor->flags2 & MF2_DORMANT) && (actor->flags3 & MF3_ISMONSTER))
-					killcount += actor->Massacre ();
-		}
-	}
-	return killcount;
-
+	return P_Massacre(false, cls);
 }
 
-static int RemoveClass(const PClass *cls)
+static int RemoveClass(FLevelLocals *Level, const PClass *cls)
 {
 	AActor *actor;
 	int removecount = 0;
 	bool player = false;
-	TThinkerIterator<AActor> iterator(cls);
+	TThinkerIterator<AActor> iterator(Level, cls);
 	while ((actor = iterator.Next()))
 	{
 		if (actor->IsA(cls))
@@ -2111,7 +2102,7 @@ static int RemoveClass(const PClass *cls)
 				continue;
 			}
 			// [SP] Don't remove owned inventory objects.
-			if (actor->IsKindOf(RUNTIME_CLASS(AInventory)) && static_cast<AInventory *>(actor)->Owner != NULL)
+			if (!actor->IsMapActor())
 			{
 				continue;
 			}
@@ -2235,8 +2226,12 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 		s = ReadString (stream);
 		// Using LEVEL_NOINTERMISSION tends to throw the game out of sync.
 		// That was a long time ago. Maybe it works now?
-		level.flags |= LEVEL_CHANGEMAPCHEAT;
-		G_ChangeLevel(s, pos, 0);
+		if (currentSession)
+		{
+			auto Level = currentSession->Levelinfo[0];
+			Level->flags |= LEVEL_CHANGEMAPCHEAT;
+			G_ChangeLevel(Level, s, pos, 0);
+		}
 		break;
 
 	case DEM_SUICIDE:
@@ -2244,7 +2239,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 		break;
 
 	case DEM_ADDBOT:
-		bglobal.TryAddBot (stream, player);
+		bglobal.TryAddBot (currentSession->Levelinfo[0], stream, player);
 		break;
 
 	case DEM_KILLBOTS:
@@ -2259,14 +2254,15 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 	case DEM_INVUSEALL:
 		if (gamestate == GS_LEVEL && !paused)
 		{
-			AInventory *item = players[player].mo->Inventory;
+			AActor *item = players[player].mo->Inventory;
 			auto pitype = PClass::FindActor(NAME_PuzzleItem);
-			while (item != NULL)
+			while (item != nullptr)
 			{
-				AInventory *next = item->Inventory;
-				if (item->ItemFlags & IF_INVBAR && !(item->IsKindOf(pitype)))
+				AActor *next = item->Inventory;
+				IFVIRTUALPTRNAME(item, NAME_Inventory, UseAll)
 				{
-					players[player].mo->UseInventory (item);
+					VMValue param[] = { item, players[player].mo };
+					VMCall(func, param, 2, nullptr, 0);
 				}
 				item = next;
 			}
@@ -2284,7 +2280,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 			if (gamestate == GS_LEVEL && !paused
 				&& players[player].playerstate != PST_DEAD)
 			{
-				AInventory *item = players[player].mo->Inventory;
+				auto item = players[player].mo->Inventory;
 				while (item != NULL && item->InventoryID != which)
 				{
 					item = item->Inventory;
@@ -2335,21 +2331,21 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 				{
 					if (GetDefaultByType (typeinfo)->flags & MF_MISSILE)
 					{
-						P_SpawnPlayerMissile (source, typeinfo);
+						P_SpawnPlayerMissile (source, 0, 0, 0, typeinfo, source->Angles.Yaw);
 					}
 					else
 					{
 						const AActor *def = GetDefaultByType (typeinfo);
 						DVector3 spawnpos = source->Vec3Angle(def->radius * 2 + source->radius, source->Angles.Yaw, 8.);
 
-						AActor *spawned = Spawn (typeinfo, spawnpos, ALLOW_REPLACE);
+						AActor *spawned = Spawn (source->Level, typeinfo, spawnpos, ALLOW_REPLACE);
 						if (spawned != NULL)
 						{
 							if (type == DEM_SUMMONFRIEND || type == DEM_SUMMONFRIEND2 || type == DEM_SUMMONMBF)
 							{
 								if (spawned->CountsAsKill()) 
 								{
-									level.total_monsters--;
+									source->Level->total_monsters--;
 								}
 								spawned->FriendPlayer = player + 1;
 								spawned->flags |= MF_FRIENDLY;
@@ -2496,10 +2492,10 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 
 	case DEM_RUNNAMEDSCRIPT:
 		{
-			char *sname = ReadString(stream);
+			s = ReadString(stream);
 			int argn = ReadByte(stream);
 
-			RunScript(stream, players[player].mo, -FName(sname), argn & 127, (argn & 128) ? ACS_ALWAYS : 0);
+			RunScript(stream, players[player].mo, -FName(s), argn & 127, (argn & 128) ? ACS_ALWAYS : 0);
 		}
 		break;
 
@@ -2519,7 +2515,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 			}
 			if (!CheckCheatmode(player == consoleplayer))
 			{
-				P_ExecuteSpecial(snum, NULL, players[player].mo, false, arg[0], arg[1], arg[2], arg[3], arg[4]);
+				P_ExecuteSpecial(players[player].mo->Level, snum, NULL, players[player].mo, false, arg[0], arg[1], arg[2], arg[3], arg[4]);
 			}
 		}
 		break;
@@ -2536,10 +2532,10 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 	case DEM_MORPHEX:
 		{
 			s = ReadString (stream);
-			const char *msg = cht_Morph (players + player, PClass::FindActor (s), false);
+			FString msg = cht_Morph (players + player, PClass::FindActor (s), false);
 			if (player == consoleplayer)
 			{
-				Printf ("%s\n", *msg != '\0' ? msg : "Morph failed.");
+				Printf ("%s\n", msg[0] != '\0' ? msg.GetChars() : "Morph failed.");
 			}
 		}
 		break;
@@ -2566,9 +2562,9 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 
 	case DEM_KILLCLASSCHEAT:
 		{
-			char *classname = ReadString (stream);
+			s = ReadString (stream);
 			int killcount = 0;
-			PClassActor *cls = PClass::FindActor(classname);
+			PClassActor *cls = PClass::FindActor(s);
 
 			if (cls != NULL)
 			{
@@ -2578,33 +2574,33 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 				{
 					killcount += KillAll(cls_rep);
 				}
-				Printf ("Killed %d monsters of type %s.\n",killcount, classname);
+				Printf ("Killed %d monsters of type %s.\n",killcount, s);
 			}
 			else
 			{
-				Printf ("%s is not an actor class.\n", classname);
+				Printf ("%s is not an actor class.\n", s);
 			}
 
 		}
 		break;
 	case DEM_REMOVE:
 	{
-		char *classname = ReadString(stream);
+		s = ReadString(stream);
 		int removecount = 0;
-		PClassActor *cls = PClass::FindActor(classname);
+		PClassActor *cls = PClass::FindActor(s);
 		if (cls != NULL && cls->IsDescendantOf(RUNTIME_CLASS(AActor)))
 		{
-			removecount = RemoveClass(cls);
+			removecount = RemoveClass(players[player].mo->Level, cls);
 			const PClass *cls_rep = cls->GetReplacement();
 			if (cls != cls_rep)
 			{
-				removecount += RemoveClass(cls_rep);
+				removecount += RemoveClass(players[player].mo->Level, cls_rep);
 			}
-			Printf("Removed %d actors of type %s.\n", removecount, classname);
+			Printf("Removed %d actors of type %s.\n", removecount, s);
 		}
 		else
 		{
-			Printf("%s is not an actor class.\n", classname);
+			Printf("%s is not an actor class.\n", s);
 		}
 	}
 		break;
@@ -2631,7 +2627,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 			int count = ReadByte(stream);
 			if (slot < NUM_WEAPON_SLOTS)
 			{
-				players[pnum].weapons.Slots[slot].Clear();
+				players[pnum].weapons.ClearSlot(slot);
 			}
 			for(i = 0; i < count; ++i)
 			{
@@ -2672,7 +2668,11 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 
 	case DEM_FINISHGAME:
 		// Simulate an end-of-game action
-		G_ChangeLevel(NULL, 0, 0);
+		if (currentSession)
+		{
+			auto Level = currentSession->Levelinfo[0];
+			G_ChangeLevel(Level, nullptr, 0, 0);
+		}
 		break;
 
 	case DEM_NETEVENT:
@@ -2697,7 +2697,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 }
 
 // Used by DEM_RUNSCRIPT, DEM_RUNSCRIPT2, and DEM_RUNNAMEDSCRIPT
-static void RunScript(uint8_t **stream, APlayerPawn *pawn, int snum, int argn, int always)
+static void RunScript(uint8_t **stream, AActor *pawn, int snum, int argn, int always)
 {
 	int arg[4] = { 0, 0, 0, 0 };
 	int i;
@@ -2710,7 +2710,7 @@ static void RunScript(uint8_t **stream, APlayerPawn *pawn, int snum, int argn, i
 			arg[i] = argval;
 		}
 	}
-	P_StartScript(pawn, NULL, snum, level.MapName, arg, MIN<int>(countof(arg), argn), ACS_NET | always);
+	P_StartScript(pawn->Level, pawn, NULL, snum, pawn->Level->MapName, arg, MIN<int>(countof(arg), argn), ACS_NET | always);
 }
 
 void Net_SkipCommand (int type, uint8_t **stream)
@@ -2860,6 +2860,34 @@ void Net_SkipCommand (int type, uint8_t **stream)
 	}
 
 	*stream += skip;
+}
+
+// This was taken out of shared_hud, because UI code shouldn't do low level calculations that may change if the backing implementation changes.
+int Net_GetLatency(int *ld, int *ad)
+{
+	int i, localdelay = 0, arbitratordelay = 0;
+
+	for (i = 0; i < BACKUPTICS; i++) localdelay += netdelay[0][i];
+	for (i = 0; i < BACKUPTICS; i++) arbitratordelay += netdelay[nodeforplayer[Net_Arbitrator]][i];
+	arbitratordelay = ((arbitratordelay / BACKUPTICS) * ticdup) * (1000 / TICRATE);
+	localdelay = ((localdelay / BACKUPTICS) * ticdup) * (1000 / TICRATE);
+	int severity = 0;
+
+	if (MAX(localdelay, arbitratordelay) > 200)
+	{
+		severity = 1;
+	}
+	if (MAX(localdelay, arbitratordelay) > 400)
+	{
+		severity = 2;
+	}
+	if (MAX(localdelay, arbitratordelay) >= ((BACKUPTICS / 2 - 1) * ticdup) * (1000 / TICRATE))
+	{
+		severity = 3;
+	}
+	*ld = localdelay;
+	*ad = arbitratordelay;
+	return severity;
 }
 
 // [RH] List "ping" times

@@ -6,12 +6,15 @@
 #include "m_bbox.h"
 #include "dthinker.h"
 
+struct FPolyObj;
+
 class DPolyAction : public DThinker
 {
 	DECLARE_CLASS(DPolyAction, DThinker)
 	HAS_OBJECT_POINTERS
 public:
-	DPolyAction(int polyNum);
+	static const int DEFAULT_STAT = STAT_SECTOREFFECT;
+	DPolyAction(FPolyObj *polyNum);
 	void Serialize(FSerializer &arc);
 	void OnDestroy() override;
 	void Stop();
@@ -19,8 +22,8 @@ public:
 
 	void StopInterpolation();
 protected:
-	DPolyAction();
-	int m_PolyObj;
+	DPolyAction() = default;
+	FPolyObj *m_PolyObj;
 	double m_Speed;
 	double m_Dist;
 	TObjPtr<DInterpolation*> m_Interpolation;
@@ -107,6 +110,11 @@ struct FPolyObj
 	void UpdateLinks();
 	static void ClearAllSubsectorLinks();
 
+	FLevelLocals *GetLevel() const
+	{
+		return CenterSubsector->sector->Level;
+	}
+
 private:
 
 	void ThrustMobj (AActor *actor, side_t *side);
@@ -116,7 +124,6 @@ private:
 	bool CheckMobjBlocking (side_t *sd);
 
 };
-extern FPolyObj *polyobjs;		// list of all poly-objects on the level
 
 struct polyblock_t
 {
@@ -126,7 +133,7 @@ struct polyblock_t
 };
 
 
-void PO_LinkToSubsectors();
+void PO_LinkToSubsectors(FLevelLocals *Level);
 
 
 // ===== PO_MAN =====
@@ -138,30 +145,14 @@ typedef enum
 	PODOOR_SWING,
 } podoortype_t;
 
-bool EV_RotatePoly (line_t *line, int polyNum, int speed, int byteAngle, int direction, bool overRide);
-bool EV_MovePoly (line_t *line, int polyNum, double speed, DAngle angle, double dist, bool overRide);
-bool EV_MovePolyTo (line_t *line, int polyNum, double speed, const DVector2 &pos, bool overRide);
-bool EV_OpenPolyDoor (line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type);
-bool EV_StopPoly (int polyNum);
+bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, int byteAngle, int direction, bool overRide);
+bool EV_MovePoly (FLevelLocals *Level, line_t *line, int polyNum, double speed, DAngle angle, double dist, bool overRide);
+bool EV_MovePolyTo (FLevelLocals *Level, line_t *line, int polyNum, double speed, const DVector2 &pos, bool overRide);
+bool EV_OpenPolyDoor (FLevelLocals *Level, line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type);
+bool EV_StopPoly (FLevelLocals *Level, int polyNum);
 
-
-// [RH] Data structure for P_SpawnMapThing() to keep track
-//		of polyobject-related things.
-struct polyspawns_t
-{
-	polyspawns_t *next;
-	DVector2 pos;
-	short angle;
-	short type;
-};
-
-extern int po_NumPolyobjs;
-extern polyspawns_t *polyspawns;	// [RH] list of polyobject things to spawn
-
-
-void PO_Init ();
-bool PO_Busy (int polyobj);
-FPolyObj *PO_GetPolyobj(int polyNum);
+bool PO_Busy (FLevelLocals *Level, int polyobj);
+FPolyObj *PO_GetPolyobj(FLevelLocals *Level, int polyNum);
 
 
 #endif

@@ -63,9 +63,7 @@ struct OneKey
 		if (owner->IsA(key) || owner->GetSpecies() == key->TypeName) return true;
 
 		// Other calls check an actor that may have a key in its inventory.
-		AInventory *item;
-
-		for (item = owner->Inventory; item != NULL; item = item->Inventory)
+		for (AActor *item = owner->Inventory; item != NULL; item = item->Inventory)
 		{
 			if (item->IsA(key))
 			{
@@ -106,22 +104,11 @@ struct Keygroup
 
 struct Lock
 {
-	TArray<Keygroup *> keylist;
+	TArray<Keygroup> keylist;
 	TArray<FSoundID> locksound;
 	FString Message;
 	FString RemoteMsg;
-	int	rgb;
-
-	Lock()
-	{
-		rgb=0;
-	}
-
-	~Lock()
-	{
-		for(unsigned int i=0;i<keylist.Size();i++) delete keylist[i];
-		keylist.Clear();
-	}
+	int	rgb = 0;
 
 	bool check(AActor * owner)
 	{
@@ -129,7 +116,7 @@ struct Lock
 		if (!keylist.Size())
 		{
 			auto kt = PClass::FindActor(NAME_Key);
-			for (AInventory * item = owner->Inventory; item != NULL; item = item->Inventory)
+			for (AActor *item = owner->Inventory; item != NULL; item = item->Inventory)
 			{
 				if (item->IsKindOf (kt))
 				{
@@ -140,23 +127,20 @@ struct Lock
 		}
 		else for(unsigned int i=0;i<keylist.Size();i++)
 		{
-			if (!keylist[i]->check(owner)) return false;
+			if (!keylist[i].check(owner)) return false;
 		}
 		return true;
 	}
 };
 
+static TMap<int, Lock> Locks;
+static bool keysdone = false;		// have the locks been initialized?
+static TArray<PClassActor *> KeyTypes;	// List of all keys sorted by lock. This is for use by the status bar to draw ordered key lists.
+
 //===========================================================================
 //
 //
 //===========================================================================
-
-static Lock *locks[256];		// all valid locks
-static bool keysdone=false;		// have the locks been initialized?
-static int currentnumber;		// number to be assigned to next key
-static bool ignorekey;			// set to true when the current lock is not being used
-
-static void ClearLocks();
 
 static const char * keywords_lock[]={
 	"ANY",
@@ -172,12 +156,12 @@ static const char * keywords_lock[]={
 //
 //===========================================================================
 
-static void AddOneKey(Keygroup *keygroup, PClassActor *mi, FScanner &sc)
+static void AddOneKey(Keygroup *keygroup, PClassActor *mi, FScanner &sc, bool ignorekey, int &currentnumber)
 {
 	if (mi)
 	{
 		// Any inventory item can be used to unlock a door
-		if (mi->IsDescendantOf(RUNTIME_CLASS(AInventory)))
+		if (mi->IsDescendantOf(NAME_Inventory))
 		{
 			OneKey k = {mi,1};
 			keygroup->anykeylist.Push (k);
@@ -209,26 +193,18 @@ static void AddOneKey(Keygroup *keygroup, PClassActor *mi, FScanner &sc)
 //
 //===========================================================================
 
-static Keygroup *ParseKeygroup(FScanner &sc)
+static void ParseKeygroup(Keygroup *keygroup, FScanner &sc, bool ignorekey, int &currentnumber)
 {
-	Keygroup *keygroup;
 	PClassActor *mi;
 
 	sc.MustGetStringName("{");
-	keygroup = new Keygroup;
 	while (!sc.CheckString("}"))
 	{
 		sc.MustGetString();
 		mi = PClass::FindActor(sc.String);
-		AddOneKey(keygroup, mi, sc);
-	}
-	if (keygroup->anykeylist.Size() == 0)
-	{
-		delete keygroup;
-		return NULL;
+		AddOneKey(keygroup, mi, sc, ignorekey, currentnumber);
 	}
 	keygroup->anykeylist.ShrinkToFit();
-	return keygroup;
 }
 
 //===========================================================================
@@ -253,13 +229,11 @@ static void PrintMessage (const char *str)
 //
 //===========================================================================
 
-static void ParseLock(FScanner &sc)
+static void ParseLock(FScanner &sc, int &currentnumber)
 {
 	int i,r,g,b;
 	int keynum;
 	Lock sink;
-	Lock *lock = &sink;
-	Keygroup *keygroup;
 	PClassActor *mi;
 
 	sc.MustGetNumber();
@@ -272,23 +246,16 @@ static void ParseLock(FScanner &sc)
 		sc.MustGetStringName("{");
 	}
 
-	ignorekey = true;
-	if (keynum > 0 && keynum <= 255) 
-	{
-		lock = new Lock;
-		if (locks[keynum])
-		{
-			delete locks[keynum];
-		}
-		locks[keynum] = lock;
-		locks[keynum]->locksound.Push("*keytry");
-		locks[keynum]->locksound.Push("misc/keytry");
-		ignorekey=false;
-	}
-	else if (keynum != -1)
+	if (keynum == 0 || keynum < -1)
 	{
 		sc.ScriptError("Lock index %d out of range", keynum);
 	}
+	bool ignorekey = keynum == -1;	// tell the parsing functions to ignore what they read for other games' keys.
+
+	auto lock = keynum == -1? &sink : &Locks.InsertNew(keynum);
+
+	lock->locksound.Push("*keytry");
+	lock->locksound.Push("misc/keytry");
 
 	while (!sc.CheckString("}"))
 	{
@@ -296,12 +263,15 @@ static void ParseLock(FScanner &sc)
 		switch(i = sc.MatchString(keywords_lock))
 		{
 		case 0:	// Any
-			keygroup = ParseKeygroup(sc);
-			if (keygroup)
+		{
+			lock->keylist.Reserve(1);
+			ParseKeygroup(&lock->keylist.Last(), sc, ignorekey, currentnumber);
+			if (lock->keylist.Last().anykeylist.Size() == 0)
 			{
-				lock->keylist.Push(keygroup);
+				lock->keylist.Pop();
 			}
 			break;
+		}
 
 		case 1:	// message
 			sc.MustGetString();
@@ -345,12 +315,11 @@ static void ParseLock(FScanner &sc)
 			mi = PClass::FindActor(sc.String);
 			if (mi) 
 			{
-				keygroup = new Keygroup;
-				AddOneKey(keygroup, mi, sc);
-				if (keygroup) 
+				lock->keylist.Reserve(1);
+				AddOneKey(&lock->keylist.Last(), mi, sc, ignorekey, currentnumber);
+				if (lock->keylist.Last().anykeylist.Size() == 0)
 				{
-					keygroup->anykeylist.ShrinkToFit();
-					lock->keylist.Push(keygroup);
+					lock->keylist.Pop();
 				}
 			}
 			break;
@@ -390,16 +359,54 @@ static void ClearLocks()
 			}
 		}
 	}
-	for(i = 0; i < 256; i++)
+	Locks.Clear();
+	keysdone = false;
+}
+
+//---------------------------------------------------------------------------
+//
+// create a sorted list of the defined keys so 
+// this doesn't have to be done each frame
+//
+// For use by the HUD and statusbar code to get a consistent order.
+//
+//---------------------------------------------------------------------------
+
+static int ktcmp(const void * a, const void * b)
+{
+	auto key1 = GetDefaultByType(*(PClassActor **)a);
+	auto key2 = GetDefaultByType(*(PClassActor **)b);
+	return key1->special1 - key2->special1;
+}
+
+static void CreateSortedKeyList()
+{
+	TArray<PClassActor *> UnassignedKeyTypes;
+	KeyTypes.Clear();
+	for (unsigned int i = 0; i < PClassActor::AllActorClasses.Size(); i++)
 	{
-		if (locks[i] != NULL) 
+		PClassActor *ti = PClassActor::AllActorClasses[i];
+		auto kt = PClass::FindActor(NAME_Key);
+
+		if (ti->IsDescendantOf(kt))
 		{
-			delete locks[i];
-			locks[i] = NULL;
+			auto key = GetDefaultByType(ti);
+
+			if (key->special1 > 0)
+			{
+				KeyTypes.Push(ti);
+			}
+			else
+			{
+				UnassignedKeyTypes.Push(ti);
+			}
 		}
 	}
-	currentnumber = 0;
-	keysdone = false;
+	if (KeyTypes.Size())
+	{
+		qsort(&KeyTypes[0], KeyTypes.Size(), sizeof(KeyTypes[0]), ktcmp);
+	}
+	KeyTypes.Append(UnassignedKeyTypes);
 }
 
 //===========================================================================
@@ -410,7 +417,7 @@ static void ClearLocks()
 
 void P_InitKeyMessages()
 {
-	int lastlump, lump;
+	int lastlump, lump, currentnumber = 0;
 
 	lastlump = 0;
 
@@ -422,12 +429,13 @@ void P_InitKeyMessages()
 		{
 			if (sc.Compare("LOCK")) 
 			{
-				ParseLock(sc);
+				ParseLock(sc, currentnumber);
 			}
 			else if (sc.Compare("CLEARLOCKS"))
 			{
 				// clear all existing lock definitions and key numbers
 				ClearLocks();
+				currentnumber = 0;
 			}
 			else
 			{
@@ -436,18 +444,8 @@ void P_InitKeyMessages()
 		}
 		sc.Close();
 	}
+	CreateSortedKeyList();
 	keysdone = true;
-}
-
-//===========================================================================
-//
-// P_DeinitKeyMessages
-//
-//===========================================================================
-
-void P_DeinitKeyMessages()
-{
-	ClearLocks();
 }
 
 //===========================================================================
@@ -460,20 +458,21 @@ void P_DeinitKeyMessages()
 //
 //===========================================================================
 
-bool P_CheckKeys (AActor *owner, int keynum, bool remote, bool quiet)
+int P_CheckKeys (AActor *owner, int keynum, bool remote, bool quiet)
 {
 	const char *failtext = NULL;
 	FSoundID *failsound;
 	int numfailsounds;
 
 	if (owner == NULL) return false;
-	if (keynum<=0 || keynum>255) return true;
+	if (keynum<=0) return true;
 	// Just a safety precaution. The messages should have been initialized upon game start.
 	if (!keysdone) P_InitKeyMessages();
 
 	FSoundID failage[2] = { "*keytry", "misc/keytry" };
 
-	if (!locks[keynum]) 
+	auto lock = Locks.CheckKey(keynum);
+	if (!lock) 
 	{
 		if (quiet) return false;
 		if (keynum == 103 && (gameinfo.flags & GI_SHAREWARE))
@@ -486,11 +485,11 @@ bool P_CheckKeys (AActor *owner, int keynum, bool remote, bool quiet)
 	}
 	else
 	{
-		if (locks[keynum]->check(owner)) return true;
+		if (lock->check(owner)) return true;
 		if (quiet) return false;
-		failtext = remote? locks[keynum]->RemoteMsg : locks[keynum]->Message;
-		failsound = &locks[keynum]->locksound[0];
-		numfailsounds = locks[keynum]->locksound.Size();
+		failtext = remote? lock->RemoteMsg : lock->Message;
+		failsound = &lock->locksound[0];
+		numfailsounds = lock->locksound.Size();
 	}
 
 	// If we get here, that means the actor isn't holding an appropriate key.
@@ -517,15 +516,6 @@ bool P_CheckKeys (AActor *owner, int keynum, bool remote, bool quiet)
 	return false;
 }
 
-DEFINE_ACTION_FUNCTION(AActor, CheckKeys)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	PARAM_INT(locknum);
-	PARAM_BOOL(remote);
-	PARAM_BOOL_DEF(quiet);
-	ACTION_RETURN_BOOL(P_CheckKeys(self, locknum, remote, quiet));
-}
-
 //==========================================================================
 //
 // These functions can be used to get color information for
@@ -533,11 +523,13 @@ DEFINE_ACTION_FUNCTION(AActor, CheckKeys)
 //
 //==========================================================================
 
-int P_GetMapColorForLock (int lock)
+int P_GetMapColorForLock (int locknum)
 {
-	if (lock > 0 && lock < 256)
+	if (locknum > 0)
 	{
-		if (locks[lock]) return locks[lock]->rgb;
+		auto lock = Locks.CheckKey(locknum);
+
+		if (lock) return lock->rgb;
 	}
 	return -1;
 }
@@ -548,13 +540,32 @@ int P_GetMapColorForLock (int lock)
 //
 //==========================================================================
 
-int P_GetMapColorForKey (AInventory * key)
+int P_GetMapColorForKey (AActor * key)
 {
-	int i;
+	decltype(Locks)::Iterator it(Locks);
+	decltype(Locks)::Pair *pair;
 
-	for (i = 0; i < 256; i++)
+	int foundlock = INT_MAX;
+	int rgb = 0;
+	while (it.NextPair(pair))
 	{
-		if (locks[i] && locks[i]->check(key)) return locks[i]->rgb;
+		if (pair->Key < foundlock && pair->Value.check(key))
+		{
+			rgb = pair->Value.rgb;
+			foundlock = pair->Key;
+		}
 	}
 	return 0;
+}
+
+
+int P_GetKeyTypeCount()
+{
+	return KeyTypes.Size();
+}
+
+PClassActor *P_GetKeyType(int num)
+{
+	if ((unsigned)num >= KeyTypes.Size()) return nullptr;
+	return KeyTypes[num];
 }

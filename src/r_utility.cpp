@@ -61,6 +61,7 @@
 #include "sbar.h"
 #include "vm.h"
 #include "i_time.h"
+#include "actorinlines.h"
 
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
@@ -142,7 +143,8 @@ bool			setsizeneeded;
 
 unsigned int	R_OldBlend = ~0;
 int 			validcount = 1; 	// increment every time a check is made
-FCanvasTextureInfo *FCanvasTextureInfo::List;
+int 			dl_validcount = 1; 	// increment every time a check is made
+int			freelookviewheight;
 
 DVector3a view;
 DAngle viewpitch;
@@ -365,16 +367,16 @@ CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 //
 //==========================================================================
 
-subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
+subsector_t *R_PointInSubsector (FLevelLocals *Level, fixed_t x, fixed_t y)
 {
 	node_t *node;
 	int side;
 
 	// single subsector is a special case
-	if (level.nodes.Size() == 0)
-		return &level.subsectors[0];
+	if (Level->nodes.Size() == 0)
+		return &Level->subsectors[0];
 				
-	node = level.HeadNode();
+	node = Level->HeadNode();
 
 	do
 	{
@@ -429,7 +431,6 @@ static void R_Shutdown ()
 	SWRenderer = nullptr;
 	R_DeinitTranslationTables();
 	R_DeinitColormaps ();
-	FCanvasTextureInfo::EmptyList();
 }
 
 //==========================================================================
@@ -449,8 +450,9 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 		NoInterpolateView = false;
 		iview->Old = iview->New;
 	}
-	int oldgroup = R_PointInSubsector(iview->Old.Pos)->sector->PortalGroup;
-	int newgroup = R_PointInSubsector(iview->New.Pos)->sector->PortalGroup;
+	auto Level = viewpoint.camera->Level;
+	int oldgroup = R_PointInSubsector(Level, iview->Old.Pos)->sector->PortalGroup;
+	int newgroup = R_PointInSubsector(Level, iview->New.Pos)->sector->PortalGroup;
 
 	DAngle oviewangle = iview->Old.Angles.Yaw;
 	DAngle nviewangle = iview->New.Angles.Yaw;
@@ -517,7 +519,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 		}
 		else
 		{
-			DVector2 disp = level.Displacements.getOffset(oldgroup, newgroup);
+			DVector2 disp = Level->Displacements.getOffset(oldgroup, newgroup);
 			viewpoint.Pos = iview->Old.Pos + (iview->New.Pos - iview->Old.Pos - disp) * Frac;
 			viewpoint.Path[0] = viewpoint.Path[1] = iview->New.Pos;
 		}
@@ -555,7 +557,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 	}
 	
 	// Due to interpolation this is not necessarily the same as the sector the camera is in.
-	viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
+	viewpoint.sector = R_PointInSubsector(Level, viewpoint.Pos)->sector;
 	bool moved = false;
 	while (!viewpoint.sector->PortalBlocksMovement(sector_t::ceiling))
 	{
@@ -563,7 +565,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 		{
 			viewpoint.Pos += viewpoint.sector->GetPortalDisplacement(sector_t::ceiling);
 			viewpoint.ActorPos += viewpoint.sector->GetPortalDisplacement(sector_t::ceiling);
-			viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
+			viewpoint.sector = R_PointInSubsector(Level, viewpoint.Pos)->sector;
 			moved = true;
 		}
 		else break;
@@ -576,7 +578,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 			{
 				viewpoint.Pos += viewpoint.sector->GetPortalDisplacement(sector_t::floor);
 				viewpoint.ActorPos += viewpoint.sector->GetPortalDisplacement(sector_t::floor);
-				viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
+				viewpoint.sector = R_PointInSubsector(Level, viewpoint.Pos)->sector;
 				moved = true;
 			}
 			else break;
@@ -806,7 +808,7 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 	if (player != NULL && gamestate != GS_TITLELEVEL &&
 		((player->cheats & CF_CHASECAM) || (r_deathcamera && viewpoint.camera->health <= 0)))
 	{
-		sector_t *oldsector = R_PointInSubsector(iview->Old.Pos)->sector;
+		sector_t *oldsector = R_PointInSubsector(actor->Level, iview->Old.Pos)->sector;
 		// [RH] Use chasecam view
 		DVector3 campos;
 		DAngle camangle;
@@ -853,7 +855,10 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 
 	viewpoint.SetViewAngle (viewwindow);
 
-	interpolator.DoInterpolations (viewpoint.TicFrac);
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		Level->interpolator.DoInterpolations(viewpoint.TicFrac);
+	});
 
 	// Keep the view within the sector's floor and ceiling
 	if (viewpoint.sector->PortalBlocksMovement(sector_t::ceiling))
@@ -1028,7 +1033,7 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 	// However, to set up a projection matrix this needs to be adjusted.
 	double radPitch = viewpoint.Angles.Pitch.Normalized180().Radians();
 	double angx = cos(radPitch);
-	double angy = sin(radPitch) * level.info->pixelstretch;
+	double angy = sin(radPitch) * actor->Level->info->pixelstretch;
 	double alen = sqrt(angx*angx + angy*angy);
 	viewpoint.HWAngles.Pitch = RAD2DEG((float)asin(angy / alen));
 	
@@ -1045,183 +1050,6 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 		viewpoint.ViewActor = actor;
 	}
 	
-}
-
-
-//==========================================================================
-//
-// FCanvasTextureInfo :: Add
-//
-// Assigns a camera to a canvas texture.
-//
-//==========================================================================
-
-void FCanvasTextureInfo::Add (AActor *viewpoint, FTextureID picnum, double fov)
-{
-	FCanvasTextureInfo *probe;
-	FCanvasTexture *texture;
-
-	if (!picnum.isValid())
-	{
-		return;
-	}
-	texture = static_cast<FCanvasTexture *>(TexMan[picnum]);
-	if (!texture->bHasCanvas)
-	{
-		Printf ("%s is not a valid target for a camera\n", texture->Name.GetChars());
-		return;
-	}
-
-	// Is this texture already assigned to a camera?
-	for (probe = List; probe != NULL; probe = probe->Next)
-	{
-		if (probe->Texture == texture)
-		{
-			// Yes, change its assignment to this new camera
-			if (probe->Viewpoint != viewpoint || probe->FOV != fov)
-			{
-				texture->bFirstUpdate = true;
-			}
-			probe->Viewpoint = viewpoint;
-			probe->FOV = fov;
-			return;
-		}
-	}
-	// No, create a new assignment
-	probe = new FCanvasTextureInfo;
-	probe->Viewpoint = viewpoint;
-	probe->Texture = texture;
-	probe->PicNum = picnum;
-	probe->FOV = fov;
-	probe->Next = List;
-	texture->bFirstUpdate = true;
-	List = probe;
-}
-
-// [ZZ] expose this to ZScript
-DEFINE_ACTION_FUNCTION(_TexMan, SetCameraToTexture)
-{
-	PARAM_PROLOGUE;
-	PARAM_OBJECT(viewpoint, AActor);
-	PARAM_STRING(texturename); // [ZZ] there is no point in having this as FTextureID because it's easier to refer to a cameratexture by name and it isn't executed too often to cache it.
-	PARAM_FLOAT(fov);
-	FTextureID textureid = TexMan.CheckForTexture(texturename, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
-	if (textureid.isValid())
-		FCanvasTextureInfo::Add(viewpoint, textureid, fov);
-	return 0;
-}
-
-//==========================================================================
-//
-// FCanvasTextureInfo :: UpdateAll
-//
-// Updates all canvas textures that were visible in the last frame.
-//
-//==========================================================================
-
-void FCanvasTextureInfo::UpdateAll ()
-{
-	FCanvasTextureInfo *probe;
-
-	for (probe = List; probe != NULL; probe = probe->Next)
-	{
-		if (probe->Viewpoint != NULL && probe->Texture->bNeedsUpdate)
-		{
-			screen->RenderTextureView(probe->Texture, probe->Viewpoint, probe->FOV);
-		}
-	}
-}
-
-//==========================================================================
-//
-// FCanvasTextureInfo :: EmptyList
-//
-// Removes all camera->texture assignments.
-//
-//==========================================================================
-
-void FCanvasTextureInfo::EmptyList ()
-{
-	FCanvasTextureInfo *probe, *next;
-
-	for (probe = List; probe != NULL; probe = next)
-	{
-		next = probe->Next;
-		probe->Texture->Unload();
-		delete probe;
-	}
-	List = NULL;
-}
-
-//==========================================================================
-//
-// FCanvasTextureInfo :: Serialize
-//
-// Reads or writes the current set of mappings in an archive.
-//
-//==========================================================================
-
-void FCanvasTextureInfo::Serialize(FSerializer &arc)
-{
-	if (arc.isWriting())
-	{
-		if (List != nullptr)
-		{
-			if (arc.BeginArray("canvastextures"))
-			{
-				FCanvasTextureInfo *probe;
-
-				for (probe = List; probe != nullptr; probe = probe->Next)
-				{
-					if (probe->Texture != nullptr && probe->Viewpoint != nullptr)
-					{
-						if (arc.BeginObject(nullptr))
-						{
-							arc("viewpoint", probe->Viewpoint)
-								("fov", probe->FOV)
-								("texture", probe->PicNum)
-								.EndObject();
-						}
-					}
-				}
-				arc.EndArray();
-			}
-		}
-	}
-	else
-	{
-		if (arc.BeginArray("canvastextures"))
-		{
-			AActor *viewpoint = nullptr;
-			double fov;
-			FTextureID picnum;
-			while (arc.BeginObject(nullptr))
-			{
-				arc("viewpoint", viewpoint)
-					("fov", fov)
-					("texture", picnum)
-					.EndObject();
-				Add(viewpoint, picnum, fov);
-			}
-			arc.EndArray();
-		}
-	}
-}
-
-//==========================================================================
-//
-// FCanvasTextureInfo :: Mark
-//
-// Marks all viewpoints in the list for the collector.
-//
-//==========================================================================
-
-void FCanvasTextureInfo::Mark()
-{
-	for (FCanvasTextureInfo *probe = List; probe != NULL; probe = probe->Next)
-	{
-		GC::Mark(probe->Viewpoint);
-	}
 }
 
 

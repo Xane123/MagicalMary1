@@ -34,6 +34,7 @@
 class AActor;
 class FScanner;
 class FSerializer;
+struct FLevelLocals;
 
 //
 // SoundFX struct.
@@ -165,8 +166,8 @@ public:
 };
 
 extern FRolloffInfo S_Rolloff;
-extern uint8_t *S_SoundCurve;
-extern int S_SoundCurveSize;
+extern TArray<uint8_t> S_SoundCurve;
+
 
 // Information about one playing sound.
 struct sector_t;
@@ -214,10 +215,10 @@ void S_Shutdown ();
 // Per level startup code.
 // Kills playing sounds at start of level and starts new music.
 //
-void S_Start ();
+void S_Start (FLevelLocals *Level);
 
 // Called after a level is loaded. Ensures that most sounds are loaded.
-void S_PrecacheLevel ();
+void S_PrecacheLevel (const TArray<int> &levelsounds);
 
 // Loads a sound, including any random sounds it might reference.
 void S_CacheSound (sfxinfo_t *sfx);
@@ -228,7 +229,7 @@ void S_Sound (AActor *ent, int channel, FSoundID sfxid, float volume, float atte
 void S_SoundMinMaxDist (AActor *ent, int channel, FSoundID sfxid, float volume, float mindist, float maxdist);
 void S_Sound (const FPolyObj *poly, int channel, FSoundID sfxid, float volume, float attenuation);
 void S_Sound (const sector_t *sec, int channel, FSoundID sfxid, float volume, float attenuation);
-void S_Sound(const DVector3 &pos, int channel, FSoundID sfxid, float volume, float attenuation);
+void S_Sound(FLevelLocals *Level, const DVector3 &pos, int channel, FSoundID sfxid, float volume, float attenuation);
 
 // [Nash] Used by ACS and DECORATE
 void S_PlaySound(AActor *a, int chan, FSoundID sid, float vol, float atten, bool local);
@@ -307,13 +308,13 @@ bool S_GetSoundPlayingInfo (const FPolyObj *poly, int sound_id);
 bool S_IsActorPlayingSomething (AActor *actor, int channel, int sound_id);
 
 // Change a playing sound's volume
-bool S_ChangeSoundVolume(AActor *actor, int channel, float volume);
+void S_ChangeSoundVolume(AActor *actor, int channel, double volume);
 
 // Moves all sounds from one mobj to another
 void S_RelinkSound (AActor *from, AActor *to);
 
 // Stores/retrieves playing channel information in an archive.
-void S_SerializeSounds(FSerializer &arc);
+void S_SerializeSounds(FSerializer &arc, FLevelLocals *Level);
 
 // Start music using <music_name>
 bool S_StartMusic (const char *music_name);
@@ -364,13 +365,14 @@ int S_AddSoundLump (const char *logicalname, int lump);	// Add sound by lump ind
 int S_AddPlayerSound (const char *playerclass, const int gender, int refid, const char *lumpname);
 int S_AddPlayerSound (const char *playerclass, const int gender, int refid, int lumpnum, bool fromskin=false);
 int S_AddPlayerSoundExisting (const char *playerclass, const int gender, int refid, int aliasto, bool fromskin=false);
-void S_MarkPlayerSounds (const char *playerclass);
+void S_MarkPlayerSounds (AActor *player);
 void S_ShrinkPlayerSoundLists ();
 void S_UnloadSound (sfxinfo_t *sfx);
 sfxinfo_t *S_LoadSound(sfxinfo_t *sfx, FSoundLoadBuffer *pBuffer = nullptr);
 unsigned int S_GetMSLength(FSoundID sound);
 void S_ParseMusInfo();
 bool S_ParseTimeTag(const char *tag, bool *as_samples, unsigned int *time);
+void A_PlaySound(AActor *self, int soundid, int channel, double volume, int looping, double attenuation, int local);
 
 // [RH] Prints sound debug info to the screen.
 //		Modelled after Hexen's noise cheat.

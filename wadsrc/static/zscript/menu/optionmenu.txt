@@ -536,3 +536,58 @@ class CompatibilityMenu : OptionMenu
 			DTA_CleanNoMove_1, true);
 	}
 }
+
+class GLTextureGLOptions : OptionMenu
+{
+	private int mWarningIndex;
+	private string mWarningLabel;
+
+	override void Init(Menu parent, OptionMenuDescriptor desc)
+	{
+		super.Init(parent, desc);
+
+		// Find index of warning item placeholder
+		mWarningIndex = -1;
+		mWarningLabel = "!HQRESIZE_WARNING!";
+
+		for (int i=0; i < mDesc.mItems.Size(); ++i)
+		{
+			if (mDesc.mItems[i].mLabel == mWarningLabel)
+			{
+				mWarningIndex = i;
+				break;
+			}
+		}
+	}
+
+	override void OnDestroy()
+	{
+		// Restore warning item placeholder
+		if (mWarningIndex >= 0)
+		{
+			mDesc.mItems[mWarningIndex].mLabel = mWarningLabel;
+		}
+
+		Super.OnDestroy();
+	}
+
+	override void Ticker()
+	{
+		Super.Ticker();
+
+		if (mWarningIndex >= 0)
+		{
+			string message;
+
+			if (gl_texture_hqresizemult > 1 && gl_texture_hqresizemode > 0)
+			{
+				int multiplier = gl_texture_hqresizemult * gl_texture_hqresizemult;
+
+				string localized = StringTable.Localize("$GLTEXMNU_HQRESIZEWARN");
+				message = String.Format(localized, multiplier);
+			}
+
+			mDesc.mItems[mWarningIndex].mLabel = message;
+		}
+	}
+}

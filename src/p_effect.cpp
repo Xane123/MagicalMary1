@@ -46,6 +46,7 @@
 #include "d_player.h"
 #include "r_utility.h"
 #include "g_levellocals.h"
+#include "actorinlines.h"
 #include "vm.h"
 
 CVAR (Int, cl_rockettrails, 1, CVAR_ARCHIVE);
@@ -57,13 +58,6 @@ CVAR (Bool, r_particles, true, 0);
 FRandom pr_railtrail("RailTrail");
 
 #define FADEFROMTTL(a)	(1.f/(a))
-
-// [RH] particle globals
-uint16_t			NumParticles;
-uint16_t			ActiveParticles;
-uint16_t			InactiveParticles;
-particle_t		*Particles;
-TArray<uint16_t>	ParticlesInSubsec;
 
 static int grey1, grey2, grey3, grey4, red, green, blue, yellow, black,
 		   red1, green1, blue1, yellow1, purple, purple1, white,
@@ -103,15 +97,15 @@ static const struct ColorList {
 	{NULL, 0, 0, 0 }
 };
 
-inline particle_t *NewParticle (void)
+inline particle_t *NewParticle (FLevelLocals *Level)
 {
-	particle_t *result = NULL;
-	if (InactiveParticles != NO_PARTICLE)
+	particle_t *result = nullptr;
+	if (Level->InactiveParticles != NO_PARTICLE)
 	{
-		result = Particles + InactiveParticles;
-		InactiveParticles = result->tnext;
-		result->tnext = ActiveParticles;
-		ActiveParticles = uint16_t(result - Particles);
+		result = &Level->Particles[Level->InactiveParticles];
+		Level->InactiveParticles = result->tnext;
+		result->tnext = Level->ActiveParticles;
+		Level->ActiveParticles = uint32_t(result - Level->Particles.Data());
 	}
 	return result;
 }
@@ -119,8 +113,7 @@ inline particle_t *NewParticle (void)
 //
 // [RH] Particle functions
 //
-void P_InitParticles ();
-void P_DeinitParticles ();
+void P_InitParticles (FLevelLocals *);
 
 // [BC] Allow the maximum number of particles to be specified by a cvar (so people
 // with lots of nice hardware can have lots of particles!).
@@ -135,12 +128,11 @@ CUSTOM_CVAR( Int, r_maxparticles, 4000, CVAR_ARCHIVE )
 
 	if ( gamestate != GS_STARTUP )
 	{
-		P_DeinitParticles( );
-		P_InitParticles( );
+		ForAllLevels(P_InitParticles);
 	}
 }
 
-void P_InitParticles ()
+void P_InitParticles (FLevelLocals *Level)
 {
 	const char *i;
 	int num;
@@ -152,59 +144,47 @@ void P_InitParticles ()
 		num = r_maxparticles;
 
 	// This should be good, but eh...
-	NumParticles = (uint16_t)clamp<int>(num, 100, 65535);
+	int NumParticles = clamp<int>(num, 100, 65535);
 
-	P_DeinitParticles();
-	Particles = new particle_t[NumParticles];
-	P_ClearParticles ();
-	atterm (P_DeinitParticles);
+	Level->Particles.Resize(NumParticles);
+	P_ClearParticles (Level);
 }
 
-void P_DeinitParticles()
+void P_ClearParticles (FLevelLocals *Level)
 {
-	if (Particles != NULL)
-	{
-		delete[] Particles;
-		Particles = NULL;
-	}
-}
-
-void P_ClearParticles ()
-{
-	int i;
-
-	memset (Particles, 0, NumParticles * sizeof(particle_t));
-	ActiveParticles = NO_PARTICLE;
-	InactiveParticles = 0;
-	for (i = 0; i < NumParticles-1; i++)
-		Particles[i].tnext = i + 1;
-	Particles[i].tnext = NO_PARTICLE;
+	int i = 0;
+	memset (Level->Particles.Data(), 0, Level->Particles.Size() * sizeof(particle_t));
+	Level->ActiveParticles = NO_PARTICLE;
+	Level->InactiveParticles = 0;
+	for (auto &p : Level->Particles)
+		p.tnext = ++i;
+	Level->Particles.Last().tnext = NO_PARTICLE;
 }
 
 // Group particles by subsectors. Because particles are always
 // in motion, there is little benefit to caching this information
 // from one frame to the next.
 
-void P_FindParticleSubsectors ()
+void P_FindParticleSubsectors (FLevelLocals *Level)
 {
-	if (ParticlesInSubsec.Size() < level.subsectors.Size())
+	if (Level->ParticlesInSubsec.Size() < Level->subsectors.Size())
 	{
-		ParticlesInSubsec.Reserve (level.subsectors.Size() - ParticlesInSubsec.Size());
+		Level->ParticlesInSubsec.Reserve (Level->subsectors.Size() - Level->ParticlesInSubsec.Size());
 	}
 
-	fillshort (&ParticlesInSubsec[0], level.subsectors.Size(), NO_PARTICLE);
+	fillshort (&Level->ParticlesInSubsec[0], Level->subsectors.Size(), NO_PARTICLE);
 
 	if (!r_particles)
 	{
 		return;
 	}
-	for (uint16_t i = ActiveParticles; i != NO_PARTICLE; i = Particles[i].tnext)
+	for (uint16_t i = Level->ActiveParticles; i != NO_PARTICLE; i = Level->Particles[i].tnext)
 	{
 		 // Try to reuse the subsector from the last portal check, if still valid.
-		if (Particles[i].subsector == NULL) Particles[i].subsector = R_PointInSubsector(Particles[i].Pos);
-		int ssnum = Particles[i].subsector->Index();
-		Particles[i].snext = ParticlesInSubsec[ssnum];
-		ParticlesInSubsec[ssnum] = i;
+		if (Level->Particles[i].subsector == NULL) Level->Particles[i].subsector = R_PointInSubsector(Level, Level->Particles[i].Pos);
+		int ssnum = Level->Particles[i].subsector->Index();
+		Level->Particles[i].snext = Level->ParticlesInSubsec[ssnum];
+		Level->ParticlesInSubsec[ssnum] = i;
 	}
 }
 
@@ -234,7 +214,6 @@ void P_InitEffects ()
 {
 	const struct ColorList *color = Colors;
 
-	P_InitParticles();
 	while (color->color)
 	{
 		*(color->color) = ParticleColor(color->r, color->g, color->b);
@@ -246,18 +225,18 @@ void P_InitEffects ()
 	blood2 = ParticleColor(RPART(kind)/3, GPART(kind)/3, BPART(kind)/3);
 }
 
-void P_ThinkParticles ()
+void P_ThinkParticles (FLevelLocals *Level)
 {
 	int i;
 	particle_t *particle, *prev;
 
-	i = ActiveParticles;
+	i = Level->ActiveParticles;
 	prev = NULL;
 	while (i != NO_PARTICLE)
 	{
-		particle = Particles + i;
+		particle = &Level->Particles[i];
 		i = particle->tnext;
-		if (!particle->notimefreeze && ((bglobal.freeze) || (level.flags2 & LEVEL2_FROZEN)))
+		if (!particle->notimefreeze && currentSession->isFrozen())
 		{
 			prev = particle;
 			continue;
@@ -272,20 +251,20 @@ void P_ThinkParticles ()
 			if (prev)
 				prev->tnext = i;
 			else
-				ActiveParticles = i;
-			particle->tnext = InactiveParticles;
-			InactiveParticles = (int)(particle - Particles);
+				Level->ActiveParticles = i;
+			particle->tnext = Level->InactiveParticles;
+			Level->InactiveParticles = (int)(particle - Level->Particles.Data());
 			continue;
 		}
 
 		// Handle crossing a line portal
-		DVector2 newxy = P_GetOffsetPosition(particle->Pos.X, particle->Pos.Y, particle->Vel.X, particle->Vel.Y);
+		DVector2 newxy = P_GetOffsetPosition(Level, particle->Pos.X, particle->Pos.Y, particle->Vel.X, particle->Vel.Y);
 		particle->Pos.X = newxy.X;
 		particle->Pos.Y = newxy.Y;
 		particle->Pos.Z += particle->Vel.Z;
 		particle->Vel += particle->Acc;
-		particle->subsector = R_PointInSubsector(particle->Pos);
 		sector_t *s = particle->subsector->sector;
+		particle->subsector = R_PointInSubsector(s->Level, particle->Pos);
 		// Handle crossing a sector portal.
 		if (!s->PortalBlocksMovement(sector_t::ceiling))
 		{
@@ -313,10 +292,10 @@ enum PSFlag
 	PS_NOTIMEFREEZE =	1 << 5,
 };
 
-void P_SpawnParticle(const DVector3 &pos, const DVector3 &vel, const DVector3 &accel, PalEntry color, double startalpha, int lifetime, double size, 
+void P_SpawnParticle(FLevelLocals *Level, const DVector3 &pos, const DVector3 &vel, const DVector3 &accel, PalEntry color, double startalpha, int lifetime, double size,
 	double fadestep, double sizestep, int flags)
 {
-	particle_t *particle = NewParticle();
+	particle_t *particle = NewParticle(Level);
 
 	if (particle)
 	{
@@ -340,23 +319,20 @@ void P_SpawnParticle(const DVector3 &pos, const DVector3 &vel, const DVector3 &a
 //
 // Run effects on all actors in the world
 //
-void P_RunEffects ()
+void P_RunEffects (FLevelLocals *Level)
 {
 	if (players[consoleplayer].camera == NULL) return;
 
-	int	pnum = players[consoleplayer].camera->Sector->Index() * level.sectors.Size();
+	int	pnum = players[consoleplayer].camera->Sector->Index() * Level->sectors.Size();
 
 	AActor *actor;
-	TThinkerIterator<AActor> iterator;
+	TThinkerIterator<AActor> iterator(Level);
 
 	while ( (actor = iterator.Next ()) )
 	{
 		if (actor->effects || actor->fountaincolor)
 		{
-			// Only run the effect if the actor is potentially visible
-			int rnum = pnum + actor->Sector->Index();
-			if (level.rejectmatrix.Size() == 0 || !(level.rejectmatrix[rnum>>3] & (1 << (rnum & 7))))
-				P_RunEffect (actor, actor->effects);
+			P_RunEffect (actor, actor->effects);
 		}
 	}
 }
@@ -366,14 +342,14 @@ void P_RunEffects ()
 //
 // Creates a particle with "jitter"
 //
-particle_t *JitterParticle (int ttl)
+particle_t *JitterParticle (FLevelLocals *Level, int ttl)
 {
-	return JitterParticle (ttl, 1.0);
+	return JitterParticle (Level, ttl, 1.0);
 }
 // [XA] Added "drift speed" multiplier setting for enhanced railgun stuffs.
-particle_t *JitterParticle (int ttl, double drift)
+particle_t *JitterParticle (FLevelLocals *Level, int ttl, double drift)
 {
-	particle_t *particle = NewParticle ();
+	particle_t *particle = NewParticle (Level);
 
 	if (particle) {
 		int i;
@@ -396,10 +372,10 @@ static void MakeFountain (AActor *actor, int color1, int color2)
 {
 	particle_t *particle;
 
-	if (!(level.time & 1))
+	if (!(actor->Level->maptime & 1))
 		return;
 
-	particle = JitterParticle (51);
+	particle = JitterParticle (actor->Level, 51);
 
 	if (particle)
 	{
@@ -439,7 +415,7 @@ void P_RunEffect (AActor *actor, int effects)
 		DAngle an = moveangle + 90.;
 		double speed;
 
-		particle = JitterParticle (3 + (M_Random() & 31));
+		particle = JitterParticle (actor->Level, 3 + (M_Random() & 31));
 		if (particle) {
 			double pathdist = M_Random() / 256.;
 			DVector3 pos = actor->Vec3Offset(
@@ -456,7 +432,7 @@ void P_RunEffect (AActor *actor, int effects)
 			particle->size = 2;
 		}
 		for (i = 6; i; i--) {
-			particle_t *particle = JitterParticle (3 + (M_Random() & 31));
+			particle_t *particle = JitterParticle (actor->Level, 3 + (M_Random() & 31));
 			if (particle) {
 				double pathdist = M_Random() / 256.;
 				DVector3 pos = actor->Vec3Offset(
@@ -485,7 +461,7 @@ void P_RunEffect (AActor *actor, int effects)
 
 		DVector3 pos = actor->Vec3Angle(-actor->radius * 2, moveangle, -actor->Height * actor->Vel.Z / 8 + actor->Height * (2. / 3));
 
-		P_DrawSplash2 (6, pos, moveangle + 180, 2, 2);
+		P_DrawSplash2 (actor->Level, 6, pos, moveangle + 180, 2, 2);
 	}
 	if (actor->fountaincolor)
 	{
@@ -512,7 +488,7 @@ void P_RunEffect (AActor *actor, int effects)
 
 		for (i = 3; i > 0; i--)
 		{
-			particle = JitterParticle (16);
+			particle = JitterParticle (actor->Level, 16);
 			if (particle != NULL)
 			{
 				DAngle ang = M_Random() * (360 / 256.);
@@ -533,7 +509,7 @@ void P_RunEffect (AActor *actor, int effects)
 	}
 }
 
-void P_DrawSplash (int count, const DVector3 &pos, DAngle angle, int kind)
+void P_DrawSplash (FLevelLocals *Level, int count, const DVector3 &pos, DAngle angle, int kind)
 {
 	int color1, color2;
 
@@ -549,7 +525,7 @@ void P_DrawSplash (int count, const DVector3 &pos, DAngle angle, int kind)
 
 	for (; count; count--)
 	{
-		particle_t *p = JitterParticle (10);
+		particle_t *p = JitterParticle (Level, 10);
 
 		if (!p)
 			break;
@@ -567,17 +543,7 @@ void P_DrawSplash (int count, const DVector3 &pos, DAngle angle, int kind)
 	}
 }
 
-DEFINE_ACTION_FUNCTION(AActor, DrawSplash)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	PARAM_INT(count);
-	PARAM_FLOAT(angle);
-	PARAM_INT(kind);
-	P_DrawSplash(count, self->Pos(), angle, kind);
-	return 0;
-}
-
-void P_DrawSplash2 (int count, const DVector3 &pos, DAngle angle, int updown, int kind)
+void P_DrawSplash2 (FLevelLocals *Level, int count, const DVector3 &pos, DAngle angle, int updown, int kind)
 {
 	int color1, color2, zadd;
 	double zvel, zspread;
@@ -608,7 +574,7 @@ void P_DrawSplash2 (int count, const DVector3 &pos, DAngle angle, int updown, in
 
 	for (; count; count--)
 	{
-		particle_t *p = NewParticle ();
+		particle_t *p = NewParticle (Level);
 		DAngle an;
 
 		if (!p)
@@ -725,7 +691,7 @@ void P_DrawRailTrail(AActor *source, TArray<SPortalHit> &portalhits, int color1,
 				{
 					if (shortest == NULL || shortest->sounddist > seg.sounddist) shortest = &seg;
 				}
-				S_Sound (DVector3(shortest->soundpos, r_viewpoint.Pos.Z), CHAN_WEAPON, sound, 1, ATTN_NORM);
+				S_Sound (mo->Level, DVector3(shortest->soundpos, r_viewpoint.Pos.Z), CHAN_WEAPON, sound, 1, ATTN_NORM);
 			}
 		}
 	}
@@ -748,7 +714,7 @@ void P_DrawRailTrail(AActor *source, TArray<SPortalHit> &portalhits, int color1,
 		deg = (double)SpiralOffset;
 		for (i = spiral_steps; i; i--)
 		{
-			particle_t *p = NewParticle ();
+			particle_t *p = NewParticle (source->Level);
 			DVector3 tempvec;
 
 			if (!p)
@@ -819,7 +785,7 @@ void P_DrawRailTrail(AActor *source, TArray<SPortalHit> &portalhits, int color1,
 		{
 			// [XA] inner trail uses a different default duration (33).
 			int innerduration = (duration == 0) ? 33 : duration;
-			particle_t *p = JitterParticle (innerduration, (float)drift);
+			particle_t *p = JitterParticle (source->Level, innerduration, (float)drift);
 
 			if (!p)
 				return;
@@ -903,7 +869,7 @@ void P_DrawRailTrail(AActor *source, TArray<SPortalHit> &portalhits, int color1,
 				if (rnd & 4)
 					diff.Z = clamp<double>(diff.Z + ((rnd & 32) ? 1 : -1), -maxdiff, maxdiff);
 			}			
-			AActor *thing = Spawn (spawnclass, pos + diff, ALLOW_REPLACE);
+			AActor *thing = Spawn (source->Level, spawnclass, pos + diff, ALLOW_REPLACE);
 			if (thing)
 			{
 				if (source)	thing->target = source;
@@ -939,7 +905,7 @@ void P_DisconnectEffect (AActor *actor)
 
 	for (i = 64; i; i--)
 	{
-		particle_t *p = JitterParticle (TICRATE*2);
+		particle_t *p = JitterParticle (actor->Level, TICRATE*2);
 
 		if (!p)
 			break;

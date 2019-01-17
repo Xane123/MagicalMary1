@@ -211,11 +211,12 @@ static int P_Set3DFloor(line_t * line, int param, int param2, int alpha)
 	int flags;
 	int tag = line->args[0];
 	sector_t * sec = line->frontsector, *ss;
+	auto Level = sec->Level;
 
-	FSectorTagIterator itr(tag);
+	FSectorTagIterator itr(Level->tagManager, tag);
 	while ((s = itr.Next()) >= 0)
 	{
-		ss = &level.sectors[s];
+		ss = &Level->sectors[s];
 
 		if (param == 0)
 		{
@@ -332,8 +333,7 @@ void P_PlayerOnSpecial3DFloor(player_t* player)
 		P_PlayerInSpecialSector(player, rover->model);
 
 		// Apply flat specials (using the ceiling!)
-		P_PlayerOnSpecialFlat(
-			player, rover->model->GetTerrain(rover->top.isceiling));
+		P_PlayerOnSpecialFlat(player, rover->model->GetTerrain(rover->top.isceiling));
 
 		break;
 	}
@@ -345,7 +345,7 @@ void P_PlayerOnSpecial3DFloor(player_t* player)
 // Checks whether the player's feet touch a solid 3D floor in the sector
 //
 //==========================================================================
-bool P_CheckFor3DFloorHit(AActor * mo, double z)
+bool P_CheckFor3DFloorHit(AActor * mo, double z, bool trigger)
 {
 	if ((mo->player && (mo->player->cheats & CF_PREDICTING))) return false;
 
@@ -357,7 +357,9 @@ bool P_CheckFor3DFloorHit(AActor * mo, double z)
 		{
 			if (fabs(z - rover->top.plane->ZatPoint(mo)) < EQUAL_EPSILON) 
 			{
-				rover->model->TriggerSectorActions (mo, SECSPAC_HitFloor);
+				mo->BlockingFloor = rover->model;
+				mo->Blocking3DFloor = rover->model;
+				if (trigger) rover->model->TriggerSectorActions (mo, SECSPAC_HitFloor);
 				return true;
 			}
 		}
@@ -371,7 +373,7 @@ bool P_CheckFor3DFloorHit(AActor * mo, double z)
 // Checks whether the player's head touches a solid 3D floor in the sector
 //
 //==========================================================================
-bool P_CheckFor3DCeilingHit(AActor * mo, double z)
+bool P_CheckFor3DCeilingHit(AActor * mo, double z, bool trigger)
 {
 	if ((mo->player && (mo->player->cheats & CF_PREDICTING))) return false;
 
@@ -383,7 +385,9 @@ bool P_CheckFor3DCeilingHit(AActor * mo, double z)
 		{
 			if(fabs(z - rover->bottom.plane->ZatPoint(mo)) < EQUAL_EPSILON)
 			{
-				rover->model->TriggerSectorActions (mo, SECSPAC_HitCeiling);
+				mo->BlockingCeiling = rover->model;
+				mo->Blocking3DFloor = rover->model;
+				if (trigger) rover->model->TriggerSectorActions (mo, SECSPAC_HitCeiling);
 				return true;
 			}
 		}
@@ -422,10 +426,7 @@ void P_Recalculate3DFloors(sector_t * sector)
 	// Translucent and swimmable floors are split if they overlap with solid ones.
 	if (ffloors.Size()>1)
 	{
-		TArray<F3DFloor*> oldlist;
-		
-		oldlist = ffloors;
-		ffloors.Clear();
+		TArray<F3DFloor*> oldlist = std::move(ffloors);
 
 		// first delete the old dynamic stuff
 		for(i=0;i<oldlist.Size();i++)
@@ -651,6 +652,40 @@ void P_Recalculate3DFloors(sector_t * sector)
 
 //==========================================================================
 //
+// removes all dynamic data. This needs to be done once before creating
+// the vertex buffer.
+//
+//==========================================================================
+
+void P_ClearDynamic3DFloorData(FLevelLocals *Level)
+{
+	for (auto &sec : Level->sectors)
+	{
+		TArray<F3DFloor*> & ffloors = sec.e->XFloor.ffloors;
+
+		// delete the dynamic stuff
+		for (unsigned i = 0; i < ffloors.Size(); i++)
+		{
+			F3DFloor * rover = ffloors[i];
+
+			if (rover->flags&FF_DYNAMIC)
+			{
+				delete rover;
+				ffloors.Delete(i);
+				i--;
+				continue;
+			}
+			if (rover->flags&FF_CLIPPED)
+			{
+				rover->flags &= ~FF_CLIPPED;
+				rover->flags |= FF_EXISTS;
+			}
+		}
+	}
+}
+
+//==========================================================================
+//
 // recalculates 3D floors for all attached sectors
 //
 //==========================================================================
@@ -760,8 +795,10 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 			FTextureID highestfloorpic;
 			int highestfloorterrain = -1;
 			FTextureID lowestceilingpic;
-			sector_t *lowestceilingsec = NULL, *highestfloorsec = NULL;
+			sector_t *lowestceilingsec = nullptr, *highestfloorsec = nullptr;
 			secplane_t *highestfloorplanes[2] = { &open.frontfloorplane, &open.backfloorplane };
+			F3DFloor *lowestceilingffloor = nullptr;
+			F3DFloor *highestfloorffloor = nullptr;
 			
 			highestfloorpic.SetInvalid();
 			lowestceilingpic.SetInvalid();
@@ -786,6 +823,7 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 						lowestceiling = ff_bottom;
 						lowestceilingpic = *rover->bottom.texture;
 						lowestceilingsec = j == 0 ? linedef->frontsector : linedef->backsector;
+						lowestceilingffloor = rover;
 					}
 					
 					if(delta1 <= delta2 && (!restrict || thing->Z() >= ff_top))
@@ -796,6 +834,7 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 							highestfloorpic = *rover->top.texture;
 							highestfloorterrain = rover->model->GetTerrain(rover->top.isceiling);
 							highestfloorsec = j == 0 ? linedef->frontsector : linedef->backsector;
+							highestfloorffloor = rover;
 						}
 						if (ff_top > highestfloorplanes[j]->ZatPoint(x, y))
 						{
@@ -812,6 +851,7 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 				open.floorpic = highestfloorpic;
 				open.floorterrain = highestfloorterrain;
 				open.bottomsec = highestfloorsec;
+				open.bottomffloor = highestfloorffloor;
 			}
 			if (highestfloorplanes[0] != &open.frontfloorplane)
 			{
@@ -829,6 +869,7 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 				open.top = lowestceiling;
 				open.ceilingpic = lowestceilingpic;
 				open.topsec = lowestceilingsec;
+				open.topffloor = lowestceilingffloor;
 			}
 			
 			open.lowfloor = MIN(lowestfloor[0], lowestfloor[1]);
@@ -842,11 +883,11 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 // Spawns 3D floors
 //
 //==========================================================================
-void P_Spawn3DFloors (void)
+void P_Spawn3DFloors (FLevelLocals *Level)
 {
 	static int flagvals[] = {512, 2+512, 512+1024};
 
-	for (auto &line : level.lines)
+	for (auto &line : Level->lines)
 	{
 		switch(line.special)
 		{
@@ -860,11 +901,11 @@ void P_Spawn3DFloors (void)
 			// The flag high-byte/line id is only needed in Hexen format.
 			// UDMF can set both of these parameters without any restriction of the usable values.
 			// In Doom format the translators can take full integers for the tag and the line ID always is the same as the tag.
-			if (level.maptype == MAPTYPE_HEXEN)	
+			if (Level->maptype == MAPTYPE_HEXEN)	
 			{
 				if (line.args[1]&8)
 				{
-					tagManager.AddLineID(line.Index(), line.args[4]);
+					Level->tagManager.AddLineID(line.Index(), line.args[4]);
 				}
 				else
 				{
@@ -881,8 +922,8 @@ void P_Spawn3DFloors (void)
 		line.special=0;
 		line.args[0] = line.args[1] = line.args[2] = line.args[3] = line.args[4] = 0;
 	}
-	// kg3D - do it in software
-	for (auto &sec : level.sectors)
+
+	for (auto &sec : Level->sectors)
 	{
 		P_Recalculate3DFloors(&sec);
 	}
@@ -924,10 +965,6 @@ secplane_t P_FindFloorPlane(sector_t * sector, const DVector3 &pos)
 
 int	P_Find3DFloor(sector_t * sec, const DVector3 &pos, bool above, bool floor, double &cmpz)
 {
-	// If no sector given, find the one appropriate
-	if (sec == NULL)
-		sec = P_PointInSector(pos);
-
 	// Above normal ceiling
 	cmpz = sec->ceilingplane.ZatPoint(pos);
 	if (pos.Z >= cmpz)
@@ -975,28 +1012,25 @@ int	P_Find3DFloor(sector_t * sec, const DVector3 &pos, bool above, bool floor, d
 
 CCMD (dump3df)
 {
-	if (argv.argc() > 1) 
+	ForAllLevels([](FLevelLocals *Level)
 	{
-		int sec = (int)strtoll(argv[1], NULL, 10);
-		if ((unsigned)sec >= level.sectors.Size())
+		Printf("%s - %s\n", Level->MapName.GetChars(), Level->LevelName.GetChars());
+		for (auto &sec : Level->sectors)
 		{
-			Printf("Sector %d does not exist.\n", sec);
-			return;
-		}
-		sector_t *sector = &level.sectors[sec];
-		TArray<F3DFloor*> & ffloors=sector->e->XFloor.ffloors;
+			TArray<F3DFloor*> & ffloors = sec.e->XFloor.ffloors;
 
-		for (unsigned int i = 0; i < ffloors.Size(); i++)
-		{
-			double height=ffloors[i]->top.plane->ZatPoint(sector->centerspot);
-			double bheight=ffloors[i]->bottom.plane->ZatPoint(sector->centerspot);
+			for (unsigned int i = 0; i < ffloors.Size(); i++)
+			{
+				double height = ffloors[i]->top.plane->ZatPoint(sec.centerspot);
+				double bheight = ffloors[i]->bottom.plane->ZatPoint(sec.centerspot);
 
-			IGNORE_FORMAT_PRE
-			Printf("FFloor %d @ top = %f (model = %d), bottom = %f (model = %d), flags = %B, alpha = %d %s %s\n", 
-				i, height, ffloors[i]->top.model->sectornum, 
-				bheight, ffloors[i]->bottom.model->sectornum,
-				ffloors[i]->flags, ffloors[i]->alpha, (ffloors[i]->flags&FF_EXISTS)? "Exists":"", (ffloors[i]->flags&FF_DYNAMIC)? "Dynamic":"");
-			IGNORE_FORMAT_POST
+				IGNORE_FORMAT_PRE
+					Printf("FFloor %d @ top = %f (model = %d), bottom = %f (model = %d), flags = %B, alpha = %d %s %s\n",
+						i, height, ffloors[i]->top.model->sectornum,
+						bheight, ffloors[i]->bottom.model->sectornum,
+						ffloors[i]->flags, ffloors[i]->alpha, (ffloors[i]->flags&FF_EXISTS) ? "Exists" : "", (ffloors[i]->flags&FF_DYNAMIC) ? "Dynamic" : "");
+				IGNORE_FORMAT_POST
+			}
 		}
-	}
+	});
 }

@@ -367,7 +367,8 @@ OptionValue "Gender"
 {
 	0, "$OPTVAL_MALE"
 	1, "$OPTVAL_FEMALE"
-	2, "$OPTVAL_OTHER"
+	2, "$OPTVAL_NEUTRAL"
+	3, "$OPTVAL_OTHER"
 }
 
 ListMenu "PlayerMenu"
@@ -625,6 +626,14 @@ OptionValue BlendMethods
 	1.0, "$OPTVAL_PRECISE"
 }
 
+OptionValue LEPresets
+{
+	0, "$OPTVAL_HIGH"
+	1, "$OPTVAL_MEDIUM"
+	2, "$OPTVAL_LOW"
+	3, "$OPTVAL_CRAP"
+}
+
 OptionValue LEAddLineOpt
 {
 	0, "$OPTVAL_ON"
@@ -766,6 +775,7 @@ OptionMenu "VideoOptions"
 	Slider "$DSPLYMNU_WATERFADE",				"underwater_fade_scalar", 0.0, 1.0, 0.05, 2
 	
 	StaticText " "
+	Option "$DSPLYMNU_LEPRESET",				"le_preset",		"LEPresets"
 	Option "$DSPLYMNU_LEADDLINE",				"le_addlines",		"LEAddLineOpt"
 	Option "$DSPLYMNU_LEBLOCKVIS",				"le_blockvis",		"OnOff"
 	Option "$DSPLYMNU_LEEFFECTS",				"le_effects",		"LEEffectsOpt"
@@ -1576,16 +1586,6 @@ OptionString ALResamplers
 	// filled in by the sound code
 }
 
-OptionString OutputFormats
-{
-	"PCM-8",		"$OPTSTR_PCM8BIT"
-	"PCM-16",		"$OPTSTR_PCM16BIT"
-	"PCM-24",		"$OPTSTR_PCM24BIT"
-	"PCM-32",		"$OPTSTR_PCM32BIT"
-	"PCM-Float",	"$OPTSTR_PCMFLOAT"
-}
-
-
 OptionString SpeakerModes
 {
 	"Auto",		"$OPTSTR_AUTO"
@@ -1607,14 +1607,7 @@ OptionString Resamplers
 	"Spline",		"$OPTSTR_SPLINE"
 }
 
-
-OptionString SoundBackendsOpenALOnly
-{
-	"openal",	"$OPTSTR_OPENAL"
-	"null",		"$OPTSTR_NOSOUND"
-}
-
-OptionMenu OpenALSoundItems
+OptionMenu OpenALSoundItems protected
 {
 	Title "$OPENALMNU_TITLE"
 	Option "$OPENALMNU_PLAYBACKDEVICE",		"snd_aldevice",		"ALDevices"
@@ -1637,16 +1630,6 @@ OptionMenu SoundOptions
 	Option "$SNDMNU_MIDIDEVICE",		"snd_mididevice", "MidiDevices"
 	Option "$SNDMNU_RANDOMIZEPITCHES",	"snd_pitched", "OnOff"
 	Slider "$SNDMNU_CHANNELS",			"snd_channels", 64, 256, 8, 0
-	Option "$SNDMNU_BACKGROUND",		"i_soundinbackground", "OnOff"
-	StaticText " "
-
-	ifoption(openal)
-	{
-		Option "$SNDMNU_BACKEND",		"snd_backend", "SoundBackendsOpenALOnly"
-		Submenu "$SNDMNU_OPENAL",		"OpenALSoundItems"
-	}
-	StaticText " "
-	Command "$SNDMNU_RESTART",			"snd_reset"
 
 	StaticText " "
 	Option "$SNDMNU_SOUNDTRACK",		"snd_soundtrack", "SoundtrackList"
@@ -1655,9 +1638,6 @@ OptionMenu SoundOptions
 
 	StaticText " "
 	Submenu "$SNDMNU_ADVANCED",			"AdvSoundOptions"
-	Submenu "$SNDMNU_MIDIPLAYER",		"MidiPlayerOptions"
-	Submenu "$SNDMNU_MODREPLAYER",		"ModReplayerOptions"
-	StaticText " "
 	Submenu "$OPTMNU_REVERB",			"ReverbEdit"
 }
 
@@ -1696,6 +1676,21 @@ OptionMenu AdvSoundOptions
 	Title "$ADVSNDMNU_TITLE"
 	Option "$ADVSNDMNU_SAMPLERATE",			"snd_samplerate", "SampleRates"
 	Option "$ADVSNDMNU_HRTF",				"snd_hrtf", "AutoOffOn"
+	StaticText " "
+	Option "$SNDMNU_BACKGROUND",			"i_soundinbackground", "OnOff"
+	StaticText " "
+
+	ifoption(openal)
+	{
+	StaticText " "
+		Submenu "$SNDMNU_OPENAL",		"OpenALSoundItems"
+	}
+
+	StaticText " "
+	Submenu "$SNDMNU_MIDIPLAYER",		"MidiPlayerOptions"
+	Submenu "$SNDMNU_MODREPLAYER",		"ModReplayerOptions"
+	StaticText " "
+	Command "$SNDMNU_RESTART",			"snd_reset"
 }
 
 OptionMenu GusConfigMenu
@@ -1722,6 +1717,17 @@ OptionMenu ADLBankMenu
 {
 	Title "$ADVSNDMNU_OPLBANK"
 }
+
+OptionMenu ADLMIDICustomBanksMenu protected
+{
+	Title "$ADVSNDMNU_OPLBANKFILE"
+}
+
+OptionMenu OPNMIDICustomBanksMenu protected
+{
+	Title "$ADVSNDMNU_OPNBANKFILE"
+}
+
 
 /*=======================================
  *
@@ -1872,11 +1878,16 @@ OptionMenu ModReplayerOptions
  OptionMenu ADLOptions
  {
 	Title "$ADVSNDMNU_ADLMIDI"
-	LabeledSubmenu "$ADVSNDMNU_OPLBANK", "adl_bank", "ADLBankMenu"
 	Option "$ADVSNDMNU_OPLCORES",		 "adl_emulator_id", "ADLOplCores"
 	Option "$ADVSNDMNU_RUNPCMRATE",		 "adl_run_at_pcm_rate", "OnOff"
 	Slider "$ADVSNDMNU_ADLNUMCHIPS", 	 "adl_chips_count", 1, 32, 1, 0
+	Option "$ADVSNDMNU_OPLFULLPAN", 	 "adl_fullpan", "OnOff"
 	Option "$ADVSNDMNU_VLMODEL",		 "adl_volume_model", "AdlVolumeModels"
+	StaticText ""
+	LabeledSubmenu "$ADVSNDMNU_OPLBANK", "adl_bank", "ADLBankMenu"
+	StaticText ""
+	Option "$ADVSNDMNU_ADLCUSTOMBANK", 	 "adl_use_custom_bank", "OnOff"
+	LabeledSubmenu "$ADVSNDMNU_OPLBANKFILE", "adl_custom_bank", "ADLMIDICustomBanksMenu"
  }
 
  OptionMenu OPNOptions
@@ -1885,6 +1896,10 @@ OptionMenu ModReplayerOptions
 	Option "$ADVSNDMNU_OPNCORES",		 "opn_emulator_id", "OpnCores"
 	Option "$ADVSNDMNU_RUNPCMRATE",		 "opn_run_at_pcm_rate", "OnOff"
 	Slider "$ADVSNDMNU_OPNNUMCHIPS", 	 "opn_chips_count", 1, 32, 1, 0
+	Option "$ADVSNDMNU_OPLFULLPAN", 	 "opn_fullpan", "OnOff"
+	StaticText ""
+	Option "$ADVSNDMNU_OPNCUSTOMBANK", 	 "opn_use_custom_bank", "OnOff"
+	LabeledSubmenu "$ADVSNDMNU_OPNBANKFILE", "opn_custom_bank", "OPNMIDICustomBanksMenu"
  }
 
 /*=======================================
@@ -1976,7 +1991,7 @@ OptionMenu VideoModeMenu
 OptionMenu CustomResolutionMenu
 {
 	Title "$VIDMNU_RESPRESETTTL"
-	
+
 	StaticText "$VIDMNU_RESPRESETHEAD"
 	StaticText ""
 	StaticText "$VIDMNU_ASPECT43"
@@ -2132,6 +2147,7 @@ OptionValue "LightingModes"
 	3, "$OPTVAL_DARK"
 	4, "$OPTVAL_LEGACY"
 	8, "$OPTVAL_SOFTWARE"
+	16, "$OPTVAL_VANILLA"
 }
 
 OptionValue "Precision"
@@ -2178,38 +2194,32 @@ OptionValue "Particles"
 OptionValue "HqResizeModes"
 {
    0, "$OPTVAL_OFF"
-   1, "$OPTVAL_SCALE2X"
-   2, "$OPTVAL_SCALE3X"
-   3, "$OPTVAL_SCALE4X"
-   4, "$OPTVAL_HQ2X"
-   5, "$OPTVAL_HQ3X"
-   6, "$OPTVAL_HQ4X"
-   7, "$OPTVAL_HQ2XMMX"
-   8, "$OPTVAL_HQ3XMMX"
-   9, "$OPTVAL_HQ4XMMX"
-   10, "xBRZ 2x"
-   11, "xBRZ 3x"
-   12, "xBRZ 4x"
-   13, "xBRZ_old 2x"
-   14, "xBRZ_old 3x"
-   15, "xBRZ_old 4x"
+   1, "$OPTVAL_SCALENX"
+   2, "$OPTVAL_HQNX"
+   3, "$OPTVAL_HQNXMMX"
+   4, "$OPTVAL_NXBRZ"
+   5, "$OPTVAL_OLD_NXBRZ"
+   6, "$OPTVAL_NORMALNX"
+}
+
+OptionValue "HqResizeMultipliers"
+{
+   1, "$OPTVAL_OFF"
+   2, "2x"
+   3, "3x"
+   4, "4x"
+   5, "5x"
+   6, "6x"
 }
 
 OptionValue "HqResizeModesNoMMX"
 {
    0, "$OPTVAL_OFF"
-   1, "$OPTVAL_SCALE2X"
-   2, "$OPTVAL_SCALE3X"
-   3, "$OPTVAL_SCALE4X"
-   4, "$OPTVAL_HQ2X"
-   5, "$OPTVAL_HQ3X"
-   6, "$OPTVAL_HQ4X"
-   10, "xBRZ 2x"
-   11, "xBRZ 3x"
-   12, "xBRZ 4x"
-   13, "xBRZ_old 2x"
-   14, "xBRZ_old 3x"
-   15, "xBRZ_old 4x"
+   1, "$OPTVAL_SCALENX"
+   2, "$OPTVAL_HQNX"
+   4, "$OPTVAL_NXBRZ"
+   5, "$OPTVAL_OLD_NXBRZ"
+   6, "$OPTVAL_NORMALNX"
 }
 
 OptionValue "FogMode"
@@ -2257,28 +2267,41 @@ OptionValue ShadowMapQuality
 	1024, "1024"
 }
 
-OptionMenu "GLTextureGLOptions"
+OptionValue ShadowMapFilter
+{
+	0, "$OPTVAL_NEAREST"
+	1, "$OPTVAL_PCF_LOW"
+	2, "$OPTVAL_PCF_MEDIUM"
+	3, "$OPTVAL_PCF_HIGH"
+}
+
+
+OptionMenu "GLTextureGLOptions" protected
 {
 	Title "$GLTEXMNU_TITLE"
 	Option "$GLTEXMNU_TEXENABLED",		gl_texture,						"YesNo"
 	Option "$GLTEXMNU_TEXFILTER",		gl_texture_filter,				"FilterModes"
 	Option "$GLTEXMNU_ANISOTROPIC",		gl_texture_filter_anisotropic,	"Anisotropy"
 	Option "$GLTEXMNU_ENABLEHIRES",		gl_texture_usehires,			"YesNo"
-	
+
 	ifOption(MMX)
 	{
-		Option "$GLTEXMNU_HQRESIZE",		gl_texture_hqresize,			"HqResizeModes"
+		Option "$GLTEXMNU_HQRESIZE",		gl_texture_hqresizemode,		"HqResizeModes"
 	}
 	else
 	{
-		Option "$GLTEXMNU_HQRESIZE",		gl_texture_hqresize,			"HqResizeModesNoMMX"
+		Option "$GLTEXMNU_HQRESIZE",		gl_texture_hqresizemode,		"HqResizeModesNoMMX"
 	}
+	Option "$GLTEXMNU_HQRESIZEMULT",	gl_texture_hqresizemult,		"HqResizeMultipliers"
+	StaticText "!HQRESIZE_WARNING!"
+
 	Option "$GLTEXMNU_RESIZETEX",		gl_texture_hqresize_textures,	"OnOff"
 	Option "$GLTEXMNU_RESIZESPR",		gl_texture_hqresize_sprites,	"OnOff"
 	Option "$GLTEXMNU_RESIZEFNT",		gl_texture_hqresize_fonts,		"OnOff"
 	Option "$GLTEXMNU_PRECACHETEX",		gl_precache,					"YesNo"
 	Option "$GLTEXMNU_TRIMSPREDGE",		gl_trimsprites,					"OnOff"
 	Option "$GLTEXMNU_SORTDRAWLIST", 	gl_sort_textures,				"YesNo"
+	Class "GLTextureGLOptions"
 }
 
 OptionMenu "GLLightOptions"
@@ -2291,6 +2314,7 @@ OptionMenu "GLLightOptions"
 	Option "$GLLIGHTMNU_LIGHTPARTICLES",		gl_light_particles,		"YesNo"
 	Option "$GLLIGHTMNU_LIGHTSHADOWMAP",		gl_light_shadowmap,		"YesNo"
 	Option "$GLLIGHTMNU_LIGHTSHADOWMAPQUALITY", gl_shadowmap_quality,	"ShadowMapQuality"
+	Option "$GLLIGHTMNU_LIGHTSHADOWMAPFILTER", 	gl_shadowmap_filter,	"ShadowMapFilter"
 }
 
 OptionMenu "OpenGLOptions"

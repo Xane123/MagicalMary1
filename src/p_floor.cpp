@@ -73,10 +73,6 @@ static void StartFloorSound (sector_t *sec)
 
 IMPLEMENT_CLASS(DFloor, false, false)
 
-DFloor::DFloor ()
-{
-}
-
 void DFloor::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -181,7 +177,7 @@ void DFloor::Tick ()
 				}
 			}
 
-			m_Sector->floordata = NULL; //jff 2/22/98
+			m_Sector->floordata = nullptr; //jff 2/22/98
 			StopInterpolation();
 
 			//jff 2/26/98 implement stair retrigger lockout while still building
@@ -192,19 +188,19 @@ void DFloor::Tick ()
 				sector_t *sec = m_Sector;
 				sec->stairlock = -1;				// thinker done, promote lock to -1
 
-				while (sec->prevsec != -1 && level.sectors[sec->prevsec].stairlock != -2)
-					sec = &level.sectors[sec->prevsec];	// search for a non-done thinker
+				while (sec->prevsec != -1 && Level->sectors[sec->prevsec].stairlock != -2)
+					sec = &Level->sectors[sec->prevsec];	// search for a non-done thinker
 				if (sec->prevsec == -1)				// if all thinkers previous are done
 				{
 					sec = m_Sector;			// search forward
-					while (sec->nextsec != -1 && level.sectors[sec->nextsec].stairlock != -2)
-						sec = &level.sectors[sec->nextsec];
+					while (sec->nextsec != -1 && Level->sectors[sec->nextsec].stairlock != -2)
+						sec = &Level->sectors[sec->nextsec];
 					if (sec->nextsec == -1)			// if all thinkers ahead are done too
 					{
 						while (sec->prevsec != -1)	// clear all locks
 						{
 							sec->stairlock = 0;
-							sec = &level.sectors[sec->prevsec];
+							sec = &Level->sectors[sec->prevsec];
 						}
 						sec->stairlock = 0;
 					}
@@ -229,7 +225,7 @@ void DFloor::SetFloorChangeType (sector_t *sec, int change)
 	switch (change & 3)
 	{
 	case 1:
-		m_NewSpecial.Clear();
+		m_NewSpecial = {};
 		m_Type = DFloor::genFloorChg0;
 		break;
 	case 2:
@@ -287,7 +283,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 
 	// new floor thinker
 	rtn = true;
-	floor = Create<DFloor>(sec);
+	floor = CreateThinker<DFloor>(sec);
 	floor->m_Type = floortype;
 	floor->m_Crush = crush;
 	floor->m_Hexencrush = hexencrush;
@@ -300,7 +296,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 	{
 	case DFloor::floorLowerToHighest:
 		floor->m_Direction = -1;
-		newheight = sec->FindHighestFloorSurrounding(&spot);
+		newheight = FindHighestFloorSurrounding(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		// [RH] DOOM's turboLower type did this. I've just extended it
 		//		to be applicable to all LowerToHighest types.
@@ -310,14 +306,14 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 
 	case DFloor::floorLowerToLowest:
 		floor->m_Direction = -1;
-		newheight = sec->FindLowestFloorSurrounding(&spot);
+		newheight = FindLowestFloorSurrounding(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorLowerToNearest:
 		//jff 02/03/30 support lowering floor to next lowest floor
 		floor->m_Direction = -1;
-		newheight = sec->FindNextLowestFloor(&spot);
+		newheight = FindNextLowestFloor(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
@@ -338,7 +334,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 		break;
 
 	case DFloor::floorMoveToValue:
-		sec->FindHighestFloorPoint(&spot);
+		FindHighestFloorPoint(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, height);
 		floor->m_Direction = (floor->m_FloorDestDist > sec->floorplane.fD()) ? -1 : 1;
 		break;
@@ -347,8 +343,8 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 		height = 8;
 	case DFloor::floorRaiseToLowestCeiling:
 		floor->m_Direction = 1;
-		newheight = sec->FindLowestCeilingSurrounding(&spot) - height;
-		ceilingheight = sec->FindLowestCeilingPoint(&spot2);
+		newheight = FindLowestCeilingSurrounding(sec, &spot) - height;
+		ceilingheight = FindLowestCeilingPoint(sec, &spot2);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		if (sec->floorplane.ZatPointDist(spot2, floor->m_FloorDestDist) > ceilingheight)
 			floor->m_FloorDestDist = sec->floorplane.PointToDist(spot2,	ceilingheight - height);
@@ -356,50 +352,50 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 
 	case DFloor::floorRaiseToHighest:
 		floor->m_Direction = 1;
-		newheight = sec->FindHighestFloorSurrounding(&spot);
+		newheight = FindHighestFloorSurrounding(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorRaiseToNearest:
 		floor->m_Direction = 1;
-		newheight = sec->FindNextHighestFloor(&spot);
+		newheight = FindNextHighestFloor(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorRaiseToLowest:
 		floor->m_Direction = 1;
-		newheight = sec->FindLowestFloorSurrounding(&spot);
+		newheight = FindLowestFloorSurrounding(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorRaiseAndCrush:
 		floor->m_Direction = 1;
-		newheight = sec->FindLowestCeilingPoint(&spot) - 8;
+		newheight = FindLowestCeilingPoint(sec, &spot) - 8;
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorRaiseToCeiling:
 		floor->m_Direction = 1;
-		newheight = sec->FindLowestCeilingPoint(&spot) - height;
+		newheight = FindLowestCeilingPoint(sec, &spot) - height;
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorLowerToLowestCeiling:
 		floor->m_Direction = -1;
-		newheight = sec->FindLowestCeilingSurrounding(&spot);
+		newheight = FindLowestCeilingSurrounding(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
 	case DFloor::floorLowerByTexture:
 		floor->m_Direction = -1;
-		newheight = sec->CenterFloor() - sec->FindShortestTextureAround();
+		newheight = sec->CenterFloor() - FindShortestTextureAround(sec);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(sec->centerspot, newheight);
 		break;
 
 	case DFloor::floorLowerToCeiling:
 		// [RH] Essentially instantly raises the floor to the ceiling
 		floor->m_Direction = -1;
-		newheight = sec->FindLowestCeilingPoint(&spot) - height;
+		newheight = FindLowestCeilingPoint(sec, &spot) - height;
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		break;
 
@@ -409,7 +405,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 		//		since the code is identical to what was here. (Oddly
 		//		enough, BOOM preserved the code here even though it
 		//		also had this function.)
-		newheight = sec->CenterFloor() + sec->FindShortestTextureAround();
+		newheight = sec->CenterFloor() + FindShortestTextureAround(sec);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(sec->centerspot, newheight);
 		break;
 
@@ -431,7 +427,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 
 	case DFloor::floorLowerAndChange:
 		floor->m_Direction = -1;
-		newheight = sec->FindLowestFloorSurrounding(&spot);
+		newheight = FindLowestFloorSurrounding(sec, &spot);
 		floor->m_FloorDestDist = sec->floorplane.PointToDist(spot, newheight);
 		floor->m_Texture = sec->GetTexture(sector_t::floor);
 		// jff 1/24/98 make sure floor->m_NewSpecial gets initialized
@@ -440,7 +436,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 
 		//jff 5/23/98 use model subroutine to unify fixes and handling
 		sector_t *modelsec;
-		modelsec = sec->FindModelFloorSector(newheight);
+		modelsec = FindModelFloorSector(sec, newheight);
 		if (modelsec != NULL)
 		{
 			floor->m_Texture = modelsec->GetTexture(sector_t::floor);
@@ -465,7 +461,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 		// [Graf Zahl]
 		// Don't make sounds for instant movement hacks but make an exception for
 		// switches that activate their own back side. 
-		if (!(i_compatflags & COMPATF_SILENT_INSTANT_FLOORS))
+		if (!(sec->Level->i_compatflags & COMPATF_SILENT_INSTANT_FLOORS))
 		{
 			if (!line || !(line->activation & (SPAC_Use | SPAC_Push)) || line->backsector != sec)
 				silent = true;
@@ -485,8 +481,8 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 				floortype == DFloor::floorLowerToLowestCeiling ||
 				floortype == DFloor::floorRaiseToCeiling ||
 				floortype == DFloor::floorLowerToCeiling) ?
-				sec->FindModelCeilingSector(-floor->m_FloorDestDist) :
-				sec->FindModelFloorSector(-floor->m_FloorDestDist);
+				FindModelCeilingSector(sec, -floor->m_FloorDestDist) :
+				FindModelFloorSector(sec, -floor->m_FloorDestDist);
 
 			if (modelsec != NULL)
 			{
@@ -509,11 +505,11 @@ DEFINE_ACTION_FUNCTION(DFloor, CreateFloor)
 	PARAM_INT(floortype);
 	PARAM_POINTER(ln, line_t);
 	PARAM_FLOAT(speed);
-	PARAM_FLOAT_DEF(height);
-	PARAM_INT_DEF(crush);
-	PARAM_INT_DEF(change);
-	PARAM_BOOL_DEF(hereticlower);
-	PARAM_BOOL_DEF(hexencrush);
+	PARAM_FLOAT(height);
+	PARAM_INT(crush);
+	PARAM_INT(change);
+	PARAM_BOOL(hereticlower);
+	PARAM_BOOL(hexencrush);
 	ACTION_RETURN_BOOL(P_CreateFloor(sec, (DFloor::EFloor)floortype, ln, speed, height, crush, change, hexencrush, hereticlower));
 }
 
@@ -525,17 +521,17 @@ DEFINE_ACTION_FUNCTION(DFloor, CreateFloor)
 //
 //==========================================================================
 
-bool EV_DoFloor (DFloor::EFloor floortype, line_t *line, int tag,
+bool EV_DoFloor (FLevelLocals *Level, DFloor::EFloor floortype, line_t *line, int tag,
 				 double speed, double height, int crush, int change, bool hexencrush, bool hereticlower)
 {
 	int 		secnum;
 	bool 		rtn = false;
 
 	// check if a manual trigger; if so do just the sector on the backside
-	FSectorTagIterator it(tag, line);
+	FSectorTagIterator it(Level->tagManager, tag, line);
 	while ((secnum = it.Next()) >= 0)
 	{
-		rtn |= P_CreateFloor(&level.sectors[secnum], floortype, line, speed, height, crush, change, hexencrush, hereticlower);
+		rtn |= P_CreateFloor(&Level->sectors[secnum], floortype, line, speed, height, crush, change, hexencrush, hereticlower);
 	}
 	return rtn;
 }
@@ -548,37 +544,37 @@ bool EV_DoFloor (DFloor::EFloor floortype, line_t *line, int tag,
 //
 //==========================================================================
 
-bool EV_FloorCrushStop (int tag, line_t *line)
+bool EV_FloorCrushStop (FLevelLocals *Level, int tag, line_t *line)
 {
 	int secnum;
-	FSectorTagIterator it(tag, line);
+	FSectorTagIterator it(Level->tagManager, tag, line);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sec = &level.sectors[secnum];
+		sector_t *sec = &Level->sectors[secnum];
 
 		if (sec->floordata && sec->floordata->IsKindOf (RUNTIME_CLASS(DFloor)) &&
 			barrier_cast<DFloor *>(sec->floordata)->m_Type == DFloor::floorRaiseAndCrush)
 		{
 			SN_StopSequence (sec, CHAN_FLOOR);
 			sec->floordata->Destroy ();
-			sec->floordata = NULL;
+			sec->floordata = nullptr;
 		}
 	}
 	return true;
 }
 
 // same as above but stops any floor mover that was active on the given sector.
-bool EV_StopFloor(int tag, line_t *line)
+bool EV_StopFloor(FLevelLocals *Level, int tag, line_t *line)
 {
 	int sec;
-	FSectorTagIterator it(tag, line);
+	FSectorTagIterator it(Level->tagManager, tag, line);
 	while ((sec = it.Next()) >= 0)
 	{
-		if (level.sectors[sec].floordata)
+		if (Level->sectors[sec].floordata)
 		{
-			SN_StopSequence(&level.sectors[sec], CHAN_FLOOR);
-			level.sectors[sec].floordata->Destroy();
-			level.sectors[sec].floordata = nullptr;
+			SN_StopSequence(&Level->sectors[sec], CHAN_FLOOR);
+			Level->sectors[sec].floordata->Destroy();
+			Level->sectors[sec].floordata = nullptr;
 		}
 	}
 	return true;
@@ -593,7 +589,7 @@ bool EV_StopFloor(int tag, line_t *line)
 //
 //==========================================================================
 
-bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
+bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *line,
 					 double stairsize, double speed, int delay, int reset, int igntxt,
 					 int usespecials)
 {
@@ -619,13 +615,13 @@ bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 	persteptime = int(stairsize / speed);
 
 	// check if a manual trigger, if so do just the sector on the backside
-	FSectorTagIterator itr(tag, line);
+	FSectorTagIterator itr(Level->tagManager, tag, line);
 	// The compatibility mode doesn't work with a hashing algorithm.
 	// It needs the original linear search method. This was broken in Boom.
-	bool compatible = tag != 0 && (i_compatflags & COMPATF_STAIRINDEX);
+	bool compatible = tag != 0 && (Level->i_compatflags & COMPATF_STAIRINDEX);
 	while ((secnum = itr.NextCompat(compatible, secnum)) >= 0)
 	{
-		sec = &level.sectors[secnum];
+		sec = &Level->sectors[secnum];
 
 		// ALREADY MOVING?	IF SO, KEEP GOING...
 		//jff 2/26/98 add special lockout condition to wait for entire
@@ -637,7 +633,7 @@ bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 		
 		// new floor thinker
 		rtn = true;
-		floor = Create<DFloor> (sec);
+		floor = CreateThinker<DFloor>(sec);
 		floor->m_Direction = (type == DFloor::buildUp) ? 1 : -1;
 		stairstep = stairsize * floor->m_Direction;
 		floor->m_Type = DFloor::buildStair;	//jff 3/31/98 do not leave uninited
@@ -711,14 +707,14 @@ bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 
 					// Doom bug: Height was changed before discarding the sector as part of the stairs.
 					// Needs to be compatibility optioned because some maps (Eternall MAP25) depend on it.
-					if (i_compatflags & COMPATF_STAIRINDEX) height += stairstep;
+					if (Level->i_compatflags & COMPATF_STAIRINDEX) height += stairstep;
 
 					// if sector's floor already moving, look for another
 					//jff 2/26/98 special lockout condition for retriggering
 					if (tsec->PlaneMoving(sector_t::floor) || tsec->stairlock)
 						continue;
 
-					if (!(i_compatflags & COMPATF_STAIRINDEX)) height += stairstep;
+					if (!(Level->i_compatflags & COMPATF_STAIRINDEX)) height += stairstep;
 
 					ok = true;
 					break;
@@ -740,7 +736,7 @@ bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 				secnum = newsecnum;
 
 				// create and initialize a thinker for the next step
-				floor = Create<DFloor> (sec);
+				floor = CreateThinker<DFloor>(sec);
 				floor->StartFloorSound ();
 				floor->m_Direction = (type == DFloor::buildUp) ? 1 : -1;
 				floor->m_FloorDestDist = sec->floorplane.PointToDist (DVector2(0, 0), height);
@@ -770,7 +766,7 @@ bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 		} while (ok);
 		// [RH] make sure the first sector doesn't point to a previous one, otherwise
 		// it can infinite loop when the first sector stops moving.
-		level.sectors[osecnum].prevsec = -1;
+		Level->sectors[osecnum].prevsec = -1;
 	}
 	return rtn;
 }
@@ -781,7 +777,7 @@ bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 //
 //==========================================================================
 
-bool EV_DoDonut (int tag, line_t *line, double pillarspeed, double slimespeed)
+bool EV_DoDonut (FLevelLocals *Level, int tag, line_t *line, double pillarspeed, double slimespeed)
 {
 	sector_t*			s1;
 	sector_t*			s2;
@@ -794,10 +790,10 @@ bool EV_DoDonut (int tag, line_t *line, double pillarspeed, double slimespeed)
 		
 	rtn = false;
 
-	FSectorTagIterator itr(tag, line);
+	FSectorTagIterator itr(Level->tagManager, tag, line);
 	while ((secnum = itr.Next()) >= 0)
 	{
-		s1 = &level.sectors[secnum];					// s1 is pillar's sector
+		s1 = &Level->sectors[secnum];					// s1 is pillar's sector
 
 		// ALREADY MOVING?	IF SO, KEEP GOING...
 		if (s1->PlaneMoving(sector_t::floor))
@@ -819,7 +815,7 @@ bool EV_DoDonut (int tag, line_t *line, double pillarspeed, double slimespeed)
 			s3 = ln->backsector;
 			
 			//	Spawn rising slime
-			floor = Create<DFloor> (s2);
+			floor = CreateThinker<DFloor>(s2);
 			floor->m_Type = DFloor::donutRaise;
 			floor->m_Crush = -1;
 			floor->m_Hexencrush = false;
@@ -828,13 +824,13 @@ bool EV_DoDonut (int tag, line_t *line, double pillarspeed, double slimespeed)
 			floor->m_Speed = slimespeed;
 			floor->m_Instant = false;
 			floor->m_Texture = s3->GetTexture(sector_t::floor);
-			floor->m_NewSpecial.Clear();
-			height = s3->FindHighestFloorPoint (&spot);
+			floor->m_NewSpecial = {};
+			height = FindHighestFloorPoint (s3, &spot);
 			floor->m_FloorDestDist = s2->floorplane.PointToDist (spot, height);
 			floor->StartFloorSound ();
 			
 			//	Spawn lowering donut-hole
-			floor = Create<DFloor> (s1);
+			floor = CreateThinker<DFloor>(s1);
 			floor->m_Type = DFloor::floorLowerToNearest;
 			floor->m_Crush = -1;
 			floor->m_Hexencrush = false;
@@ -842,7 +838,7 @@ bool EV_DoDonut (int tag, line_t *line, double pillarspeed, double slimespeed)
 			floor->m_Sector = s1;
 			floor->m_Speed = pillarspeed;
 			floor->m_Instant = false;
-			height = s3->FindHighestFloorPoint (&spot);
+			height = FindHighestFloorPoint (s3, &spot);
 			floor->m_FloorDestDist = s1->floorplane.PointToDist (spot, height);
 			floor->StartFloorSound ();
 			break;
@@ -863,10 +859,6 @@ IMPLEMENT_POINTERS_START(DElevator)
 	IMPLEMENT_POINTER(m_Interp_Floor)
 	IMPLEMENT_POINTER(m_Interp_Ceiling)
 IMPLEMENT_POINTERS_END
-
-DElevator::DElevator ()
-{
-}
 
 DElevator::DElevator (sector_t *sec)
 	: Super (sec)
@@ -900,12 +892,12 @@ void DElevator::OnDestroy()
 	if (m_Interp_Ceiling != NULL)
 	{
 		m_Interp_Ceiling->DelRef();
-		m_Interp_Ceiling = NULL;
+		m_Interp_Ceiling = nullptr;
 	}
 	if (m_Interp_Floor != NULL)
 	{
 		m_Interp_Floor->DelRef();
-		m_Interp_Floor = NULL;
+		m_Interp_Floor = nullptr;
 	}
 	Super::OnDestroy();
 }
@@ -964,8 +956,8 @@ void DElevator::Tick ()
 		// make floor stop sound
 		SN_StopSequence (m_Sector, CHAN_FLOOR);
 
-		m_Sector->floordata = NULL;		//jff 2/22/98
-		m_Sector->ceilingdata = NULL;	//jff 2/22/98
+		m_Sector->floordata = nullptr;		//jff 2/22/98
+		m_Sector->ceilingdata = nullptr;	//jff 2/22/98
 		Destroy ();		// remove elevator from actives
 	}
 }
@@ -994,7 +986,7 @@ void DElevator::StartFloorSound ()
 //
 //==========================================================================
 
-bool EV_DoElevator (line_t *line, DElevator::EElevator elevtype,
+bool EV_DoElevator (FLevelLocals *Level, line_t *line, DElevator::EElevator elevtype,
 					double speed, double height, int tag)
 {
 	int			secnum;
@@ -1011,19 +1003,19 @@ bool EV_DoElevator (line_t *line, DElevator::EElevator elevtype,
 	secnum = -1;
 	rtn = false;
 
-	FSectorTagIterator itr(tag, line);
+	FSectorTagIterator itr(Level->tagManager, tag, line);
 
 	// act on all sectors with the same tag as the triggering linedef
 	while ((secnum = itr.Next()) >= 0)
 	{
-		sec = &level.sectors[secnum];
+		sec = &Level->sectors[secnum];
 		// If either floor or ceiling is already activated, skip it
 		if (sec->PlaneMoving(sector_t::floor) || sec->ceilingdata) //jff 2/22/98
 			continue; // the loop used to break at the end if tag were 0, but would miss that step if "continue" occured [FDARI]
 
 		// create and initialize new elevator thinker
 		rtn = true;
-		elevator = Create<DElevator> (sec);
+		elevator = CreateThinker<DElevator>(sec);
 		elevator->m_Type = elevtype;
 		elevator->m_Speed = speed;
 		elevator->StartFloorSound ();
@@ -1037,7 +1029,7 @@ bool EV_DoElevator (line_t *line, DElevator::EElevator elevtype,
 		// elevator down to next floor
 		case DElevator::elevateDown:
 			elevator->m_Direction = -1;
-			newheight = sec->FindNextLowestFloor (&spot);
+			newheight = FindNextLowestFloor (sec, &spot);
 			elevator->m_FloorDestDist = sec->floorplane.PointToDist (spot, newheight);
 			newheight += sec->ceilingplane.ZatPoint(spot) - sec->floorplane.ZatPoint(spot);
 			elevator->m_CeilingDestDist = sec->ceilingplane.PointToDist (spot, newheight);
@@ -1046,7 +1038,7 @@ bool EV_DoElevator (line_t *line, DElevator::EElevator elevtype,
 		// elevator up to next floor
 		case DElevator::elevateUp:
 			elevator->m_Direction = 1;
-			newheight = sec->FindNextHighestFloor (&spot);
+			newheight = FindNextHighestFloor (sec, &spot);
 			elevator->m_FloorDestDist = sec->floorplane.PointToDist (spot, newheight);
 			newheight += sec->ceilingplane.ZatPoint(spot) - sec->floorplane.ZatPoint(spot);
 			elevator->m_CeilingDestDist = sec->ceilingplane.PointToDist (spot, newheight);
@@ -1097,7 +1089,7 @@ bool EV_DoElevator (line_t *line, DElevator::EElevator elevtype,
 //
 //==========================================================================
 
-bool EV_DoChange (line_t *line, EChange changetype, int tag)
+bool EV_DoChange (FLevelLocals *Level, line_t *line, EChange changetype, int tag)
 {
 	int			secnum;
 	bool		rtn;
@@ -1106,10 +1098,10 @@ bool EV_DoChange (line_t *line, EChange changetype, int tag)
 
 	rtn = false;
 	// change all sectors with the same tag as the linedef
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sec = &level.sectors[secnum];
+		sec = &Level->sectors[secnum];
               
 		rtn = true;
 
@@ -1126,7 +1118,7 @@ bool EV_DoChange (line_t *line, EChange changetype, int tag)
 			}
 			break;
 		case numChangeOnly:
-			secm = sec->FindModelFloorSector (sec->CenterFloor());
+			secm = FindModelFloorSector(sec, sec->CenterFloor());
 			if (secm)
 			{ // if no model, no change
 				sec->SetTexture(sector_t::floor, secm->GetTexture(sector_t::floor));
@@ -1150,10 +1142,6 @@ bool EV_DoChange (line_t *line, EChange changetype, int tag)
 IMPLEMENT_CLASS(DWaggleBase, false, false)
 IMPLEMENT_CLASS(DFloorWaggle, false, false)
 IMPLEMENT_CLASS(DCeilingWaggle, false, false)
-
-DWaggleBase::DWaggleBase ()
-{
-}
 
 void DWaggleBase::Serialize(FSerializer &arc)
 {
@@ -1225,11 +1213,11 @@ void DWaggleBase::DoWaggle (bool ceiling)
 			P_ChangeSector (m_Sector, true, dist, ceiling, false);
 			if (ceiling)
 			{
-				m_Sector->ceilingdata = NULL;
+				m_Sector->ceilingdata = nullptr;
 			}
 			else
 			{
-				m_Sector->floordata = NULL;
+				m_Sector->floordata = nullptr;
 			}
 			Destroy ();
 			return;
@@ -1266,10 +1254,6 @@ void DWaggleBase::DoWaggle (bool ceiling)
 //
 //==========================================================================
 
-DFloorWaggle::DFloorWaggle ()
-{
-}
-
 DFloorWaggle::DFloorWaggle (sector_t *sec)
 	: Super (sec)
 {
@@ -1287,10 +1271,6 @@ void DFloorWaggle::Tick ()
 // CeilingWaggle
 //
 //==========================================================================
-
-DCeilingWaggle::DCeilingWaggle ()
-{
-}
 
 DCeilingWaggle::DCeilingWaggle (sector_t *sec)
 	: Super (sec)
@@ -1310,7 +1290,7 @@ void DCeilingWaggle::Tick ()
 //
 //==========================================================================
 
-bool EV_StartWaggle (int tag, line_t *line, int height, int speed, int offset,
+bool EV_StartWaggle (FLevelLocals *Level, int tag, line_t *line, int height, int speed, int offset,
 	int timer, bool ceiling)
 {
 	int sectorIndex;
@@ -1320,11 +1300,11 @@ bool EV_StartWaggle (int tag, line_t *line, int height, int speed, int offset,
 
 	retCode = false;
 
-	FSectorTagIterator itr(tag, line);
+	FSectorTagIterator itr(Level->tagManager, tag, line);
 
 	while ((sectorIndex = itr.Next()) >= 0)
 	{
-		sector = &level.sectors[sectorIndex];
+		sector = &Level->sectors[sectorIndex];
 		if ((!ceiling && sector->PlaneMoving(sector_t::floor)) || 
 			(ceiling && sector->PlaneMoving(sector_t::ceiling)))
 		{ // Already busy with another thinker
@@ -1333,12 +1313,12 @@ bool EV_StartWaggle (int tag, line_t *line, int height, int speed, int offset,
 		retCode = true;
 		if (ceiling)
 		{
-			waggle = Create<DCeilingWaggle> (sector);
+			waggle = CreateThinker<DCeilingWaggle>(sector);
 			waggle->m_OriginalDist = sector->ceilingplane.fD();
 		}
 		else
 		{
-			waggle = Create<DFloorWaggle> (sector);
+			waggle = CreateThinker<DFloorWaggle>(sector);
 			waggle->m_OriginalDist = sector->floorplane.fD();
 		}
 		waggle->m_Accumulator = offset;

@@ -60,7 +60,7 @@ protected:
 	int 		m_MaxLight;
 	int 		m_MinLight;
 private:
-	DFireFlicker();
+	DFireFlicker() = default;
 };
 
 class DFlicker : public DLighting
@@ -75,7 +75,7 @@ protected:
 	int 		m_MaxLight;
 	int 		m_MinLight;
 private:
-	DFlicker();
+	DFlicker() = default;
 };
 
 class DLightFlash : public DLighting
@@ -93,7 +93,7 @@ protected:
 	int 		m_MaxTime;
 	int 		m_MinTime;
 private:
-	DLightFlash();
+	DLightFlash() = default;
 };
 
 class DStrobe : public DLighting
@@ -111,7 +111,7 @@ protected:
 	int 		m_DarkTime;
 	int 		m_BrightTime;
 private:
-	DStrobe();
+	DStrobe() = default;
 };
 
 class DGlow : public DLighting
@@ -126,7 +126,7 @@ protected:
 	int 		m_MaxLight;
 	int 		m_Direction;
 private:
-	DGlow();
+	DGlow() = default;
 };
 
 // [RH] Glow from Light_Glow and Light_Fade specials
@@ -144,7 +144,7 @@ protected:
 	int			m_Tics;
 	bool		m_OneShot;
 private:
-	DGlow2();
+	DGlow2() = default;
 };
 
 // [RH] Phased light thinker
@@ -155,7 +155,6 @@ public:
 	DPhased(sector_t *sector);
 	DPhased(sector_t *sector, int baselevel, int phase);
 	// These are for internal use only but the Create template needs access to them.
-	DPhased();
 	DPhased(sector_t *sector, int baselevel);
 
 	void		Serialize(FSerializer &arc);
@@ -164,6 +163,7 @@ protected:
 	uint8_t		m_BaseLevel;
 	uint8_t		m_Phase;
 private:
+	DPhased() = default;
 	int PhaseHelper(sector_t *sector, int index, int light, sector_t *prev);
 };
 
@@ -181,14 +181,9 @@ private:
 
 IMPLEMENT_CLASS(DLighting, false, false)
 
-DLighting::DLighting ()
-{
-}
-
 DLighting::DLighting (sector_t *sector)
 	: DSectorEffect (sector)
 {
-	ChangeStatNum (STAT_LIGHT);
 }
 
 //-----------------------------------------------------------------------------
@@ -198,10 +193,6 @@ DLighting::DLighting (sector_t *sector)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DFireFlicker, false, false)
-
-DFireFlicker::DFireFlicker ()
-{
-}
 
 void DFireFlicker::Serialize(FSerializer &arc)
 {
@@ -246,7 +237,7 @@ DFireFlicker::DFireFlicker (sector_t *sector)
 	: DLighting (sector)
 {
 	m_MaxLight = sector->lightlevel;
-	m_MinLight = sector_t::ClampLight(sector->FindMinSurroundingLight(sector->lightlevel) + 16);
+	m_MinLight = sector_t::ClampLight(FindMinSurroundingLight(sector, sector->lightlevel) + 16);
 	m_Count = 4;
 }
 
@@ -265,10 +256,6 @@ DFireFlicker::DFireFlicker (sector_t *sector, int upper, int lower)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DFlicker, false, false)
-
-DFlicker::DFlicker ()
-{
-}
 
 void DFlicker::Serialize(FSerializer &arc)
 {
@@ -323,13 +310,13 @@ DFlicker::DFlicker (sector_t *sector, int upper, int lower)
 //
 //-----------------------------------------------------------------------------
 
-void EV_StartLightFlickering (int tag, int upper, int lower)
+void EV_StartLightFlickering (FLevelLocals *Level, int tag, int upper, int lower)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		Create<DFlicker> (&level.sectors[secnum], upper, lower);
+		CreateThinker<DFlicker>(&Level->sectors[secnum], upper, lower);
 	}
 }
 
@@ -341,10 +328,6 @@ void EV_StartLightFlickering (int tag, int upper, int lower)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DLightFlash, false, false)
-
-DLightFlash::DLightFlash ()
-{
-}
 
 void DLightFlash::Serialize(FSerializer &arc)
 {
@@ -391,7 +374,7 @@ DLightFlash::DLightFlash (sector_t *sector)
 {
 	// Find light levels like Doom.
 	m_MaxLight = sector->lightlevel;
-	m_MinLight = sector->FindMinSurroundingLight (sector->lightlevel);
+	m_MinLight = FindMinSurroundingLight (sector, sector->lightlevel);
 	m_MaxTime = 64;
 	m_MinTime = 7;
 	m_Count = (pr_lightflash() & m_MaxTime) + 1;
@@ -416,10 +399,6 @@ DLightFlash::DLightFlash (sector_t *sector, int min, int max)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DStrobe, false, false)
-
-DStrobe::DStrobe ()
-{
-}
 
 void DStrobe::Serialize(FSerializer &arc)
 {
@@ -483,7 +462,7 @@ DStrobe::DStrobe (sector_t *sector, int utics, int ltics, bool inSync)
 	m_BrightTime = utics;
 
 	m_MaxLight = sector->lightlevel;
-	m_MinLight = sector->FindMinSurroundingLight (sector->lightlevel);
+	m_MinLight = FindMinSurroundingLight (sector, sector->lightlevel);
 
 	if (m_MinLight == m_MaxLight)
 		m_MinLight = 0;
@@ -500,31 +479,31 @@ DStrobe::DStrobe (sector_t *sector, int utics, int ltics, bool inSync)
 //
 //-----------------------------------------------------------------------------
 
-void EV_StartLightStrobing (int tag, int upper, int lower, int utics, int ltics)
+void EV_StartLightStrobing (FLevelLocals *Level, int tag, int upper, int lower, int utics, int ltics)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sec = &level.sectors[secnum];
+		sector_t *sec = &Level->sectors[secnum];
 		if (sec->lightingdata)
 			continue;
 		
-		Create<DStrobe> (sec, upper, lower, utics, ltics);
+		CreateThinker<DStrobe>(sec, upper, lower, utics, ltics);
 	}
 }
 
-void EV_StartLightStrobing (int tag, int utics, int ltics)
+void EV_StartLightStrobing (FLevelLocals *Level, int tag, int utics, int ltics)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sec = &level.sectors[secnum];
+		sector_t *sec = &Level->sectors[secnum];
 		if (sec->lightingdata)
 			continue;
 		
-		Create<DStrobe> (sec, utics, ltics, false);
+		CreateThinker<DStrobe>(sec, utics, ltics, false);
 	}
 }
 
@@ -536,13 +515,13 @@ void EV_StartLightStrobing (int tag, int utics, int ltics)
 //
 //-----------------------------------------------------------------------------
 
-void EV_TurnTagLightsOff (int tag)
+void EV_TurnTagLightsOff (FLevelLocals *Level, int tag)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sector = &level.sectors[secnum];
+		sector_t *sector = &Level->sectors[secnum];
 		int min = sector->lightlevel;
 
 		for (auto ln : sector->Lines)
@@ -565,13 +544,13 @@ void EV_TurnTagLightsOff (int tag)
 //
 //-----------------------------------------------------------------------------
 
-void EV_LightTurnOn (int tag, int bright)
+void EV_LightTurnOn (FLevelLocals *Level, int tag, int bright)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sector = &level.sectors[secnum];
+		sector_t *sector = &Level->sectors[secnum];
 		int tbright = bright; //jff 5/17/98 search for maximum PER sector
 
 		// bright = -1 means to search ([RH] Not 0)
@@ -594,7 +573,7 @@ void EV_LightTurnOn (int tag, int bright)
 
 		//jff 5/17/98 unless compatibility optioned
 		//then maximum near ANY tagged sector
-		if (i_compatflags & COMPATF_LIGHT)
+		if (Level->i_compatflags & COMPATF_LIGHT)
 		{
 			bright = tbright;
 		}
@@ -615,16 +594,16 @@ void EV_LightTurnOn (int tag, int bright)
 //
 //-----------------------------------------------------------------------------
 
-void EV_LightTurnOnPartway (int tag, double frac)
+void EV_LightTurnOnPartway (FLevelLocals *Level, int tag, double frac)
 {
 	frac = clamp(frac, 0., 1.);
 
 	// Search all sectors for ones with same tag as activating line
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *temp, *sector = &level.sectors[secnum];
+		sector_t *temp, *sector = &Level->sectors[secnum];
 		int bright = 0, min = sector->lightlevel;
 
 		for (auto ln : sector->Lines)
@@ -650,17 +629,17 @@ void EV_LightTurnOnPartway (int tag, double frac)
 //
 // [RH] New function to adjust tagged sectors' light levels
 //		by a relative amount. Light levels are clipped to
-//		be within range for sector_t::lightlevel.
+//		be within range for sector_t::lightLevel->
 //
 //-----------------------------------------------------------------------------
 
-void EV_LightChange (int tag, int value)
+void EV_LightChange (FLevelLocals *Level, int tag, int value)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		level.sectors[secnum].SetLightLevel(level.sectors[secnum].lightlevel + value);
+		Level->sectors[secnum].SetLightLevel(Level->sectors[secnum].lightlevel + value);
 	}
 }
 
@@ -672,10 +651,6 @@ void EV_LightChange (int tag, int value)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DGlow, false, false)
-
-DGlow::DGlow ()
-{
-}
 
 void DGlow::Serialize(FSerializer &arc)
 {
@@ -729,7 +704,7 @@ void DGlow::Tick ()
 DGlow::DGlow (sector_t *sector)
 	: DLighting (sector)
 {
-	m_MinLight = sector->FindMinSurroundingLight (sector->lightlevel);
+	m_MinLight = FindMinSurroundingLight (sector, sector->lightlevel);
 	m_MaxLight = sector->lightlevel;
 	m_Direction = -1;
 }
@@ -741,10 +716,6 @@ DGlow::DGlow (sector_t *sector)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DGlow2, false, false)
-
-DGlow2::DGlow2 ()
-{
-}
 
 void DGlow2::Serialize(FSerializer &arc)
 {
@@ -806,7 +777,7 @@ DGlow2::DGlow2 (sector_t *sector, int start, int end, int tics, bool oneshot)
 //
 //-----------------------------------------------------------------------------
 
-void EV_StartLightGlowing (int tag, int upper, int lower, int tics)
+void EV_StartLightGlowing (FLevelLocals *Level, int tag, int upper, int lower, int tics)
 {
 	int secnum;
 
@@ -823,14 +794,14 @@ void EV_StartLightGlowing (int tag, int upper, int lower, int tics)
 		lower = temp;
 	}
 
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sec = &level.sectors[secnum];
+		sector_t *sec = &Level->sectors[secnum];
 		if (sec->lightingdata)
 			continue;
 		
-		Create<DGlow2> (sec, upper, lower, tics, false);
+		CreateThinker<DGlow2>(sec, upper, lower, tics, false);
 	}
 }
 
@@ -840,13 +811,13 @@ void EV_StartLightGlowing (int tag, int upper, int lower, int tics)
 //
 //-----------------------------------------------------------------------------
 
-void EV_StartLightFading (int tag, int value, int tics)
+void EV_StartLightFading (FLevelLocals *Level, int tag, int value, int tics)
 {
 	int secnum;
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sec = &level.sectors[secnum];
+		sector_t *sec = &Level->sectors[secnum];
 		if (sec->lightingdata)
 			continue;
 
@@ -860,7 +831,7 @@ void EV_StartLightFading (int tag, int value, int tics)
 			if (sec->lightlevel == value)
 				continue;
 
-			Create<DGlow2> (sec, sec->lightlevel, value, tics, true);
+			CreateThinker<DGlow2>(sec, sec->lightlevel, value, tics, true);
 		}
 	}
 }
@@ -874,10 +845,6 @@ void EV_StartLightFading (int tag, int value, int tics)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(DPhased, false, false)
-
-DPhased::DPhased ()
-{
-}
 
 void DPhased::Serialize(FSerializer &arc)
 {
@@ -934,7 +901,7 @@ int DPhased::PhaseHelper (sector_t *sector, int index, int light, sector_t *prev
 			m_BaseLevel = baselevel;
 		}
 		else
-			l = Create<DPhased> (sector, baselevel);
+			l = CreateThinker<DPhased>(sector, baselevel);
 
 		int numsteps = PhaseHelper (sector->NextSpecialSector (
 				sector->special == LightSequenceSpecial1 ?
@@ -982,14 +949,14 @@ DPhased::DPhased (sector_t *sector, int baselevel, int phase)
 //
 //============================================================================
 
-void EV_StopLightEffect (int tag)
+void EV_StopLightEffect (FLevelLocals *Level, int tag)
 {
-	TThinkerIterator<DLighting> iterator;
+	TThinkerIterator<DLighting> iterator(Level);
 	DLighting *effect;
 
 	while ((effect = iterator.Next()) != NULL)
 	{
-		if (tagManager.SectorHasTag(effect->GetSector(), tag))
+		if (Level->tagManager.SectorHasTag(effect->GetSector(), tag))
 		{
 			effect->Destroy();
 		}
@@ -999,55 +966,56 @@ void EV_StopLightEffect (int tag)
 
 void P_SpawnLights(sector_t *sector)
 {
+	auto Level = sector->Level;
 	switch (sector->special)
 	{
 	case Light_Phased:
-		Create<DPhased>(sector, 48, 63 - (sector->lightlevel & 63));
+		CreateThinker<DPhased>(sector, 48, 63 - (sector->lightlevel & 63));
 		break;
 
 		// [RH] Hexen-like phased lighting
 	case LightSequenceStart:
-		Create<DPhased>(sector);
+		CreateThinker<DPhased>(sector);
 		break;
 
 	case dLight_Flicker:
-		Create<DLightFlash>(sector);
+		CreateThinker<DLightFlash>(sector);
 		break;
 
 	case dLight_StrobeFast:
-		Create<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
 		break;
 
 	case dLight_StrobeSlow:
-		Create<DStrobe>(sector, STROBEBRIGHT, SLOWDARK, false);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, SLOWDARK, false);
 		break;
 
 	case dLight_Strobe_Hurt:
-		Create<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
 		break;
 
 	case dLight_Glow:
-		Create<DGlow>(sector);
+		CreateThinker<DGlow>(sector);
 		break;
 
 	case dLight_StrobeSlowSync:
-		Create<DStrobe>(sector, STROBEBRIGHT, SLOWDARK, true);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, SLOWDARK, true);
 		break;
 
 	case dLight_StrobeFastSync:
-		Create<DStrobe>(sector, STROBEBRIGHT, FASTDARK, true);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, FASTDARK, true);
 		break;
 
 	case dLight_FireFlicker:
-		Create<DFireFlicker>(sector);
+		CreateThinker<DFireFlicker>(sector);
 		break;
 
 	case dScroll_EastLavaDamage:
-		Create<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
 		break;
 
 	case sLight_Strobe_Hurt:
-		Create<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
+		CreateThinker<DStrobe>(sector, STROBEBRIGHT, FASTDARK, false);
 		break;
 
 	default:

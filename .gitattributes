@@ -17,7 +17,6 @@
 *.bat		text eol=crlf
 *.rc		text eol=crlf
 
-*.acs		text
 *.txt		text
 language.*	text
 

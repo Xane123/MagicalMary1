@@ -52,11 +52,6 @@ enum EHudState
 	HUD_AltHud // Used for passing through popups to the alt hud
 };
 
-class AWeapon;
-
-bool ST_IsTimeVisible();
-bool ST_IsLatencyVisible();
-
 // HUD Message base object --------------------------------------------------
 
 // This is a mo-op base class to allow derived ZScript message types that can be managed by the status bar.
@@ -133,7 +128,7 @@ public:
 	}
 
 protected:
-	FBrokenLines *Lines;
+	TArray<FBrokenLines> Lines;
 	int Width, Height, NumLines;
 	float Left, Top;
 	bool CenterX, NoWrap;
@@ -256,7 +251,6 @@ struct FMugShotState
 	TArray<FMugShotFrame> Frames;
 
 	FMugShotState(FName name);
-	~FMugShotState();
 	void Tick();
 	void Reset();
 	FMugShotFrame &GetCurrentFrame() { return Frames[Position]; }
@@ -322,6 +316,31 @@ enum
 	NUM_HUDMSGLAYERS,
 	HUDMSGLayer_Default = HUDMSGLayer_OverHUD,
 };
+
+
+//============================================================================
+//
+// encapsulates all settings a HUD font may need
+//
+//============================================================================
+
+class DHUDFont : public DObject
+{
+	// this blocks CreateNew on this class which is the intent here.
+	DECLARE_ABSTRACT_CLASS(DHUDFont, DObject);
+
+public:
+	FFont *mFont;
+	int mSpacing;
+	bool mMonospaced;
+	int mShadowX;
+	int mShadowY;
+
+	DHUDFont(FFont *f, int sp, bool ms, int sx, int sy)
+		: mFont(f), mSpacing(sp), mMonospaced(ms), mShadowX(sx), mShadowY(sy)
+	{}
+};
+
 
 class DBaseStatusBar : public DObject
 {
@@ -401,7 +420,6 @@ public:
 	void CallDraw(EHudState state, double ticFrac);
     void DrawBottomStuff (EHudState state);
     void DrawTopStuff (EHudState state);
-	void FlashItem (const PClass *itemtype);
 	void AttachToPlayer(player_t *player);
 	DVector2 GetHUDScale() const;
 	virtual void FlashCrosshair ();
@@ -413,6 +431,9 @@ public:
 	virtual void SetMugShotState (const char *state_name, bool wait_till_done=false, bool reset=false);
 	void DrawLog();
 	uint32_t GetTranslation() const;
+	void DrawAltHUD();
+
+	void SetLevel(FLevelLocals *l) { Level = l; }
 
 	void DrawGraphic(FTextureID texture, double x, double y, int flags, double Alpha, double boxwidth, double boxheight, double scaleX, double scaleY);
 	void DrawString(FFont *font, const FString &cstring, double x, double y, int flags, double Alpha, int translation, int spacing, bool monospaced, int shadowX, int shadowY);
@@ -434,11 +455,18 @@ public:
 
 	
 	void RefreshBackground () const;
+	void RefreshViewBorder ();
+
+private:
+	DObject *AltHud = nullptr;
 
 public:
 
-	AInventory *ValidateInvFirst (int numVisible) const;
+	AActor *ValidateInvFirst (int numVisible) const;
 	void DrawCrosshair ();
+
+	FLevelLocals *Level;	// the level whose information should be shown. Will be set each frame before drawing.
+	void *level;
 
 	// Sizing info for ths status bar.
 	int ST_X;
@@ -499,7 +527,7 @@ void ST_Clear();
 void ST_CreateStatusBar(bool bTitleLevel);
 extern FTexture *CrosshairImage;
 
-FTextureID GetInventoryIcon(AInventory *item, uint32_t flags, bool *applyscale);
+int GetInventoryIcon(AActor *item, uint32_t flags, int *applyscale = nullptr);
 
 
 enum DI_Flags

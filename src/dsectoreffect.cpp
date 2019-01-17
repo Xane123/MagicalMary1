@@ -36,34 +36,28 @@
 
 IMPLEMENT_CLASS(DSectorEffect, false, false)
 
-DSectorEffect::DSectorEffect ()
-: DThinker(STAT_SECTOREFFECT)
-{
-	m_Sector = NULL;
-}
-
 void DSectorEffect::OnDestroy()
 {
 	if (m_Sector)
 	{
 		if (m_Sector->floordata == this)
 		{
-			m_Sector->floordata = NULL;
+			m_Sector->floordata = nullptr;
 		}
 		if (m_Sector->ceilingdata == this)
 		{
-			m_Sector->ceilingdata = NULL;
+			m_Sector->ceilingdata = nullptr;
 		}
 		if (m_Sector->lightingdata == this)
 		{
-			m_Sector->lightingdata = NULL;
+			m_Sector->lightingdata = nullptr;
 		}
 	}
 	Super::OnDestroy();
 }
 
 DSectorEffect::DSectorEffect (sector_t *sector)
-	: DThinker(STAT_SECTOREFFECT)
+	: DThinker(sector->Level)
 {
 	m_Sector = sector;
 }
@@ -91,7 +85,7 @@ IMPLEMENT_POINTERS_END
 DMover::DMover (sector_t *sector)
 	: DSectorEffect (sector)
 {
-	interpolation = NULL;
+	interpolation = nullptr;
 }
 
 void DMover::OnDestroy()
@@ -108,10 +102,10 @@ void DMover::Serialize(FSerializer &arc)
 
 void DMover::StopInterpolation(bool force)
 {
-	if (interpolation != NULL)
+	if (interpolation != nullptr)
 	{
 		interpolation->DelRef(force);
-		interpolation = NULL;
+		interpolation = nullptr;
 	}
 }
 
@@ -221,7 +215,7 @@ EMoveResult sector_t::MoveFloor(double speed, double dest, int crush, int direct
 		//destheight = (dest < ceilingheight) ? dest : ceilingheight;
 		if (!ceilingplane.isSlope() && !floorplane.isSlope() &&
 			!PortalIsLinked(sector_t::ceiling) &&
-			(!(i_compatflags2 & COMPATF2_FLOORMOVE) && -dest > ceilingplane.fD()))
+			(!(Level->i_compatflags2 & COMPATF2_FLOORMOVE) && -dest > ceilingplane.fD()))
 		{
 			dest = -ceilingplane.fD();
 		}
@@ -287,7 +281,7 @@ DEFINE_ACTION_FUNCTION(_Sector, MoveFloor)
 	PARAM_INT(crush);
 	PARAM_INT(dir);
 	PARAM_BOOL(hex);
-	PARAM_BOOL_DEF(inst);
+	PARAM_BOOL(inst);
 	ACTION_RETURN_INT((int)self->MoveFloor(speed, dest, crush, dir, hex, inst));
 }
 
@@ -311,7 +305,7 @@ EMoveResult sector_t::MoveCeiling(double speed, double dest, int crush, int dire
 		//destheight = (dest > floorheight) ? dest : floorheight;
 		if (!ceilingplane.isSlope() && !floorplane.isSlope() &&
 			!PortalIsLinked(sector_t::floor) &&
-			(!(i_compatflags2 & COMPATF2_FLOORMOVE) && dest < -floorplane.fD()))
+			(!(Level->i_compatflags2 & COMPATF2_FLOORMOVE) && dest < -floorplane.fD()))
 		{
 			dest = -floorplane.fD();
 		}

@@ -22,7 +22,7 @@ struct subsector_t;
 //   have to be traversed to connect the two
 //
 // - any sector not connected to any portal is assigned to group 0
-//   Group 0 has no displacement to any other group in the level.
+//   Group 0 has no displacement to any other group in the level
 //
 //============================================================================
 
@@ -100,7 +100,7 @@ struct FPortalBlock
 struct FPortalBlockmap
 {
 	TArray<FPortalBlock> data;
-	int dx, dy;
+	int dx = 0, dy = 0;
 	bool containsLines;
 	bool hasLinkedSectorPortals;	// global flag to shortcut portal checks if the map has none.
 	bool hasLinkedPolyPortals;	// this means that any early-outs in P_CheckSight need to be disabled if a block contains polyobjects.
@@ -249,7 +249,6 @@ struct FSectorPortal
 //
 //============================================================================
 
-struct GLSectorStackPortal;
 struct FSectorPortalGroup
 {
 	DVector2 mDisplacement;
@@ -264,13 +263,12 @@ struct FSectorPortalGroup
 //
 //============================================================================
 
-void P_ClearPortals();
 void P_SpawnLinePortal(line_t* line);
-void P_FinalizePortals();
-bool P_ChangePortal(line_t *ln, int thisid, int destid);
-void P_CreateLinkedPortals();
-bool P_CollectConnectedGroups(int startgroup, const DVector3 &position, double upperz, double checkradius, FPortalGroupArray &out);
-void P_CollectLinkedPortals();
+void P_FinalizePortals(FLevelLocals *Level);
+bool P_ChangePortal(FLevelLocals *Level, line_t *ln, int thisid, int destid);
+void P_CreateLinkedPortals(FLevelLocals *Level);
+bool P_CollectConnectedGroups(FLevelLocals *Level, int startgroup, const DVector3 &position, double upperz, double checkradius, FPortalGroupArray &out);
+void P_CollectLinkedPortals(FLevelLocals *Level);
 unsigned P_GetSkyboxPortal(AActor *actor);
 unsigned P_GetPortal(int type, int plane, sector_t *orgsec, sector_t *destsec, const DVector2 &displacement);
 unsigned P_GetStackPortal(AActor *point, int plane);
@@ -282,8 +280,9 @@ void P_TranslatePortalXY(line_t* src, double& vx, double& vy);
 void P_TranslatePortalVXVY(line_t* src, double &velx, double &vely);
 void P_TranslatePortalAngle(line_t* src, DAngle& angle);
 void P_TranslatePortalZ(line_t* src, double& vz);
-DVector2 P_GetOffsetPosition(double x, double y, double dx, double dy);
-void InitPortalGroups();
+DVector2 P_GetOffsetPosition(FLevelLocals *Level, double x, double y, double dx, double dy);
+struct FLevelLocals;
+void InitPortalGroups(FLevelLocals *Level);
 
 
 #endif

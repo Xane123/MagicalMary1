@@ -66,6 +66,7 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 
 	FDynamicColormap *basecolormap;
 	PolyCameraLight *cameraLight = PolyCameraLight::Instance();
+	bool nc = !!(viewpoint.camera->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
 	if (cameraLight->FixedLightLevel() < 0 && viewpoint.sector->e && viewpoint.sector->e->XFloor.lightlist.Size())
 	{
 		for (i = viewpoint.sector->e->XFloor.lightlist.Size() - 1; i >= 0; i--)
@@ -79,9 +80,9 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 						break;
 					sec = rover->model;
 					if (rover->flags & FF_FADEWALLS)
-						basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
+						basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
 					else
-						basecolormap = GetColorTable(viewpoint.sector->e->XFloor.lightlist[i].extra_colormap, sec->SpecialColors[sector_t::sprites], true);
+						basecolormap = GetSpriteColorTable(viewpoint.sector->e->XFloor.lightlist[i].extra_colormap, sec->SpecialColors[sector_t::sprites], nc);
 				}
 				break;
 			}
@@ -89,7 +90,7 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 		if (!sec)
 		{
 			sec = viewpoint.sector;
-			basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
+			basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
 		}
 		floorlight = ceilinglight = sec->lightlevel;
 	}
@@ -102,11 +103,11 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 		ceilinglight = fakeflat.CeilingLightLevel;
 
 		// [RH] set basecolormap
-		basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
+		basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
 	}
 
 	// [RH] set foggy flag
-	bool foggy = (level.fadeto || basecolormap->Fade || (level.flags & LEVEL_HASFADETABLE));
+	bool foggy = (PolyRenderer::Instance()->Level->fadeto || basecolormap->Fade || (PolyRenderer::Instance()->Level->flags & LEVEL_HASFADETABLE));
 
 	// get light level
 	lightnum = ((floorlight + ceilinglight) >> 1) + (foggy ? 0 : viewpoint.extralight << 4);
@@ -162,7 +163,7 @@ void RenderPolyPlayerSprites::RenderRemainingSprites()
 {
 	for (const PolyHWAccelPlayerSprite &sprite : AcceleratedSprites)
 	{
-		screen->DrawTexture(sprite.pic,
+		screen->DrawTexture(sprite.pic->GetTexture(),
 			viewwindowx + sprite.x1,
 			viewwindowy + viewheight / 2 - sprite.texturemid * sprite.yscale - 0.5,
 			DTA_DestWidthF, FIXED2DBL(sprite.pic->GetWidth() * sprite.xscale),
@@ -198,7 +199,8 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 	spriteframe_t*		sprframe;
 	FTextureID			picnum;
 	uint16_t				flip;
-	FTexture*			tex;
+	FTexture*			ttex;
+	FSoftwareTexture*			tex;
 	bool				noaccel;
 	double				alpha = owner->Alpha;
 
@@ -226,10 +228,12 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 
 	picnum = sprframe->Texture[0];
 	flip = sprframe->Flip & 1;
-	tex = TexMan(picnum);
+	ttex = TexMan.GetTexture(picnum);
 
-	if (tex->UseType == ETextureType::Null)
+	if (!ttex->isValid())
 		return;
+	
+	tex = ttex->GetSoftwareTexture();
 
 	if (pspr->firstTic)
 	{ // Can't interpolate the first tic.
@@ -290,24 +294,13 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 
 	vis.renderflags = owner->renderflags;
 
-	vis.texturemid = (BASEYCENTER - sy) * tex->Scale.Y + tex->GetTopOffsetPo();
+	vis.texturemid = (BASEYCENTER - sy) * tex->GetScale().Y + tex->GetTopOffsetPo();
 
 	if (viewpoint.camera->player && (renderToCanvas ||
 		viewheight == renderTarget->GetHeight() ||
 		(renderTarget->GetWidth() > (BASEXCENTER * 2))))
 	{	// Adjust PSprite for fullscreen views
-		AWeapon *weapon = dyn_cast<AWeapon>(pspr->GetCaller());
-		if (weapon != nullptr && weapon->YAdjust != 0)
-		{
-			if (renderToCanvas || viewheight == renderTarget->GetHeight())
-			{
-				vis.texturemid -= weapon->YAdjust;
-			}
-			else
-			{
-				vis.texturemid -= StatusBar->GetDisplacement() * weapon->YAdjust;
-			}
-		}
+		vis.texturemid -= pspr->GetYAdjust(renderToCanvas || viewheight == renderTarget->GetHeight());
 	}
 	if (pspr->GetID() < PSP_TARGETCENTER)
 	{ // Move the weapon down for 1280x1024.
@@ -315,20 +308,20 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 	}
 	vis.x1 = x1 < 0 ? 0 : x1;
 	vis.x2 = x2 >= viewwidth ? viewwidth : x2;
-	vis.xscale = FLOAT2FIXED(pspritexscale / tex->Scale.X);
-	vis.yscale = float(pspriteyscale / tex->Scale.Y);
+	vis.xscale = FLOAT2FIXED(pspritexscale / tex->GetScale().X);
+	vis.yscale = float(pspriteyscale / tex->GetScale().Y);
 	vis.pic = tex;
 
 	// If flip is used, provided that it's not already flipped (that would just invert itself)
 	// (It's an XOR...)
 	if (!(flip) != !(pspr->Flags & PSPF_FLIP))
 	{
-		vis.xiscale = -FLOAT2FIXED(pspritexiscale * tex->Scale.X);
+		vis.xiscale = -FLOAT2FIXED(pspritexiscale * tex->GetScale().X);
 		vis.startfrac = (tex->GetWidth() << FRACBITS) - 1;
 	}
 	else
 	{
-		vis.xiscale = FLOAT2FIXED(pspritexiscale * tex->Scale.X);
+		vis.xiscale = FLOAT2FIXED(pspritexiscale * tex->GetScale().X);
 		vis.startfrac = 0;
 	}
 
@@ -394,6 +387,8 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 		{
 			noaccel = true;
 		}
+#if 0
+		// The HW 2D drawer should be able to handle this without problems
 		// If the main colormap has fixed lights, and this sprite is being drawn with that
 		// colormap, disable acceleration so that the lights can remain fixed.
 		PolyCameraLight *cameraLight = PolyCameraLight::Instance();
@@ -403,6 +398,7 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 		{
 			noaccel = true;
 		}
+#endif
 	}
 	else
 	{
@@ -463,7 +459,7 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 
 fixed_t RenderPolyPlayerSprites::LightLevelToShade(int lightlevel, bool foggy)
 {
-	bool nolightfade = !foggy && ((level.flags3 & LEVEL3_NOLIGHTFADE));
+	bool nolightfade = !foggy && ((PolyRenderer::Instance()->Level->flags3 & LEVEL3_NOLIGHTFADE));
 	if (nolightfade)
 	{
 		return (MAX(255 - lightlevel, 0) * NUMCOLORMAPS) << (FRACBITS - 8);

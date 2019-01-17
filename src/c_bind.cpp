@@ -45,6 +45,7 @@
 #include "dobject.h"
 #include "vm.h"
 #include "i_time.h"
+#include "menu/menu.h"
 
 const char *KeyNames[NUM_KEYS] =
 {
@@ -267,6 +268,14 @@ DEFINE_ACTION_FUNCTION(FKeyBindings, SetBind)
 	PARAM_SELF_STRUCT_PROLOGUE(FKeyBindings);
 	PARAM_INT(k);
 	PARAM_STRING(cmd);
+
+	// Only menus are allowed to change bindings.
+	if (DMenu::InMenu == 0)
+	{
+		I_FatalError("Attempt to change key bindings outside of menu code to '%s'", cmd.GetChars());
+	}
+
+
 	self->SetBind(k, cmd);
 	return 0;
 }
@@ -506,6 +515,13 @@ DEFINE_ACTION_FUNCTION(FKeyBindings, UnbindACommand)
 {
 	PARAM_SELF_STRUCT_PROLOGUE(FKeyBindings);
 	PARAM_STRING(cmd);
+
+	// Only menus are allowed to change bindings.
+	if (DMenu::InMenu == 0)
+	{
+		I_FatalError("Attempt to unbind key bindings for '%s' outside of menu code", cmd.GetChars());
+	}
+
 	self->UnbindACommand(cmd);
 	return 0;
 }
@@ -737,7 +753,6 @@ bool C_DoKey (event_t *ev, FKeyBindings *binds, FKeyBindings *doublebinds)
 	dclickmask = 1 << (ev->data1 & 7);
 	dclick = false;
 
-	// This used level.time which didn't work outside a level.
 	nowtime = (unsigned)I_msTime();
 	if (doublebinds != NULL && int(DClickTime[ev->data1] - nowtime) > 0 && ev->type == EV_KeyDown)
 	{

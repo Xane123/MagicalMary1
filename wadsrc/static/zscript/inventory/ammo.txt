@@ -66,7 +66,7 @@ class Ammo : Inventory
 	//
 	//===========================================================================
 
-	Class<Ammo> GetParentAmmo ()
+	virtual Class<Ammo> GetParentAmmo ()
 	{
 		class<Object> type = GetClass();
 
@@ -184,6 +184,48 @@ class Ammo : Inventory
 		return copy;
 	}
 
+	//---------------------------------------------------------------------------
+	//
+	// Modifies the drop amount of this item according to the current skill's
+	// settings (also called by ADehackedPickup::TryPickup)
+	//
+	//---------------------------------------------------------------------------
+	
+	override void ModifyDropAmount(int dropamount)
+	{
+		bool ignoreskill = true;
+		double dropammofactor = G_SkillPropertyFloat(SKILLP_DropAmmoFactor);
+		// Default drop amount is half of regular amount * regular ammo multiplication
+		if (dropammofactor == -1) 
+		{
+			dropammofactor = 0.5;
+			ignoreskill = false;
+		}
+
+		if (dropamount > 0)
+		{
+			if (ignoreskill)
+			{
+				self.Amount = int(dropamount * dropammofactor);
+				bIgnoreSkill = true;
+			}
+			else
+			{
+				self.Amount = dropamount;
+			}
+		}
+		else
+		{
+			// Half ammo when dropped by bad guys.
+			int amount = self.DropAmount;
+			if (amount <= 0)
+			{
+				amount = MAX(1, int(self.Amount * dropammofactor));
+			}
+			self.Amount = amount;
+			bIgnoreSkill = ignoreskill;
+		}
+	}
 	
 }
 
@@ -207,11 +249,10 @@ class BackpackItem : Inventory
 		uint end = AllActorClasses.Size();
 		for (uint i = 0; i < end; ++i)
 		{
-			let type = AllActorClasses[i];
+			let ammotype = (class<Ammo>)(AllActorClasses[i]);
 
-			if (type.GetParentClass() == 'Ammo')
+			if (ammotype && GetDefaultByType(ammotype).GetParentAmmo() == ammotype)
 			{
-				let ammotype = (class<Ammo>)(type);
 				let ammoitem = Ammo(other.FindInventory(ammotype));
 				int amount = GetDefaultByType(ammotype).BackpackAmount;
 				// extra ammo in baby mode and nightmare mode
@@ -272,20 +313,22 @@ class BackpackItem : Inventory
 		{
 			for (let probe = Owner.Inv; probe != NULL; probe = probe.Inv)
 			{
-				if (probe.GetParentClass() == 'Ammo')
+				let ammoitem = Ammo(probe);
+
+				if (ammoitem && ammoitem.GetParentAmmo() == ammoitem.GetClass())
 				{
-					if (probe.Amount < probe.MaxAmount || sv_unlimited_pickup)
+					if (ammoitem.Amount < ammoitem.MaxAmount || sv_unlimited_pickup)
 					{
-						int amount = Ammo(probe).Default.BackpackAmount;
+						int amount = ammoitem.Default.BackpackAmount;
 						// extra ammo in baby mode and nightmare mode
 						if (!bIgnoreSkill)
 						{
 							amount = int(amount * G_SkillPropertyFloat(SKILLP_AmmoFactor));
 						}
-						probe.Amount += amount;
-						if (probe.Amount > probe.MaxAmount && !sv_unlimited_pickup)
+						ammoitem.Amount += amount;
+						if (ammoitem.Amount > ammoitem.MaxAmount && !sv_unlimited_pickup)
 						{
-							probe.Amount = probe.MaxAmount;
+							ammoitem.Amount = ammoitem.MaxAmount;
 						}
 					}
 				}

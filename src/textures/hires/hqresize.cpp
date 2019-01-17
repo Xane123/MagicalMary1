@@ -45,30 +45,34 @@
 #include "parallel_for.h"
 #include "hwrenderer/textures/hw_material.h"
 
-CUSTOM_CVAR(Int, gl_texture_hqresize, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
+EXTERN_CVAR(Int, gl_texture_hqresizemult)
+CUSTOM_CVAR(Int, gl_texture_hqresizemode, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
-	if (self < 0 || self > 16)
-	{
+	if (self < 0 || self > 6)
 		self = 0;
-	}
-	#ifndef HAVE_MMX
-		// This is to allow the menu option to work properly so that these filters can be skipped while cycling through them.
-		if (self == 7) self = 10;
-		if (self == 8) self = 10;
-		if (self == 9) self = 6;
-	#endif
-	FMaterial::FlushAll();
+	if ((gl_texture_hqresizemult > 4) && (self < 4) && (self > 0))
+		gl_texture_hqresizemult = 4;
+	TexMan.FlushAll();
+}
+
+CUSTOM_CVAR(Int, gl_texture_hqresizemult, 1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
+{
+	if (self < 1 || self > 6)
+		self = 1;
+	if ((self > 4) && (gl_texture_hqresizemode < 4) && (gl_texture_hqresizemode > 0))
+		self = 4;
+	TexMan.FlushAll();
 }
 
 CUSTOM_CVAR(Int, gl_texture_hqresize_maxinputsize, 512, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
 	if (self > 1024) self = 1024;
-	FMaterial::FlushAll();
+	TexMan.FlushAll();
 }
 
 CUSTOM_CVAR(Int, gl_texture_hqresize_targets, 7, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
 {
-	FMaterial::FlushAll();
+	TexMan.FlushAll();
 }
 
 CVAR (Flag, gl_texture_hqresize_textures, gl_texture_hqresize_targets, 1);
@@ -187,7 +191,6 @@ static void scale4x ( uint32_t* inputBuffer, uint32_t* outputBuffer, int inWidth
 	delete[] buffer2x;
 }
 
-
 static unsigned char *scaleNxHelper( void (*scaleNxFunction) ( uint32_t* , uint32_t* , int , int),
 							  const int N,
 							  unsigned char *inputBuffer,
@@ -201,6 +204,44 @@ static unsigned char *scaleNxHelper( void (*scaleNxFunction) ( uint32_t* , uint3
 	unsigned char * newBuffer = new unsigned char[outWidth*outHeight*4];
 
 	scaleNxFunction ( reinterpret_cast<uint32_t*> ( inputBuffer ), reinterpret_cast<uint32_t*> ( newBuffer ), inWidth, inHeight );
+	delete[] inputBuffer;
+	return newBuffer;
+}
+
+static void normalNx ( uint32_t* inputBuffer, uint32_t* outputBuffer, int inWidth, int inHeight, int size )
+{
+	const int width = size * inWidth;
+	const int height = size * inHeight;
+
+	for ( int i = 0; i < inWidth; ++i )
+	{
+		for ( int j = 0; j < inHeight; ++j )
+		{
+			const uint32_t E = inputBuffer[ i     +inWidth*j    ];
+			for ( int k = 0; k < size; k++ )
+			{
+				for ( int l = 0; l < size; l++ )
+				{
+					outputBuffer[size*i+k + width*(size*j+l)] = E;
+				}
+			}
+		}
+	}
+}
+
+static unsigned char *normalNxHelper( void (normalNxFunction) ( uint32_t* , uint32_t* , int , int, int),
+							  const int N,
+							  unsigned char *inputBuffer,
+							  const int inWidth,
+							  const int inHeight,
+							  int &outWidth,
+							  int &outHeight )
+{
+	outWidth = N * inWidth;
+	outHeight = N *inHeight;
+	unsigned char * newBuffer = new unsigned char[outWidth*outHeight*4];
+
+	normalNxFunction ( reinterpret_cast<uint32_t*> ( inputBuffer ), reinterpret_cast<uint32_t*> ( newBuffer ), inWidth, inHeight, N );
 	delete[] inputBuffer;
 	return newBuffer;
 }
@@ -285,13 +326,13 @@ static unsigned char *xbrzHelper( void (*xbrzFunction) ( size_t, const uint32_t*
 		parallel_for(inHeight, thresholdHeight, [=](int sliceY)
 		{
 			xbrzFunction(N, reinterpret_cast<uint32_t*>(inputBuffer), reinterpret_cast<uint32_t*>(newBuffer),
-				inWidth, inHeight, xbrz::ARGB, xbrz::ScalerCfg(), sliceY, sliceY + thresholdHeight);
+				inWidth, inHeight, xbrz::ColorFormat::ARGB, xbrz::ScalerCfg(), sliceY, sliceY + thresholdHeight);
 		});
 	}
 	else
 	{
 		xbrzFunction(N, reinterpret_cast<uint32_t*>(inputBuffer), reinterpret_cast<uint32_t*>(newBuffer),
-			inWidth, inHeight, xbrz::ARGB, xbrz::ScalerCfg(), 0, std::numeric_limits<int>::max());
+			inWidth, inHeight, xbrz::ColorFormat::ARGB, xbrz::ScalerCfg(), 0, std::numeric_limits<int>::max());
 	}
 
 	delete[] inputBuffer;
@@ -307,91 +348,110 @@ static void xbrzOldScale(size_t factor, const uint32_t* src, uint32_t* trg, int 
 
 //===========================================================================
 // 
-// [BB] Upsamples the texture in inputBuffer, frees inputBuffer and returns
+// [BB] Upsamples the texture in texbuffer.mBuffer, frees texbuffer.mBuffer and returns
 //  the upsampled buffer.
 //
 //===========================================================================
-unsigned char *FTexture::CreateUpsampledTextureBuffer (unsigned char *inputBuffer, const int inWidth, const int inHeight, int &outWidth, int &outHeight, bool hasAlpha )
+void FTexture::CreateUpsampledTextureBuffer(FTextureBuffer &texbuffer, bool hasAlpha, bool checkonly)
 {
-	// [BB] Make sure that outWidth and outHeight denote the size of
+	// [BB] Make sure that inWidth and inHeight denote the size of
 	// the returned buffer even if we don't upsample the input buffer.
-	outWidth = inWidth;
-	outHeight = inHeight;
+	int inWidth = texbuffer.mWidth;
+	int inHeight = texbuffer.mHeight;
 
 	// [BB] Don't resample if the width or height of the input texture is bigger than gl_texture_hqresize_maxinputsize.
-	if ( ( inWidth > gl_texture_hqresize_maxinputsize ) || ( inHeight > gl_texture_hqresize_maxinputsize ) )
-		return inputBuffer;
+	if ((inWidth > gl_texture_hqresize_maxinputsize) || (inHeight > gl_texture_hqresize_maxinputsize))
+		return;
 
-	// [BB] Don't try to upsample textures based off FCanvasTexture.
-	if ( bHasCanvas )
-		return inputBuffer;
+	// [BB] Don't try to upsample textures based off FCanvasTexture. (This should never get here in the first place!)
+	if (bHasCanvas)
+		return;
 
 	// already scaled?
 	if (Scale.X >= 2 && Scale.Y >= 2)
-		return inputBuffer;
+		return;
 
 	switch (UseType)
 	{
 	case ETextureType::Sprite:
 	case ETextureType::SkinSprite:
-		if (!(gl_texture_hqresize_targets & 2)) return inputBuffer;
+		if (!(gl_texture_hqresize_targets & 2)) return;
 		break;
 
 	case ETextureType::FontChar:
-		if (!(gl_texture_hqresize_targets & 4)) return inputBuffer;
+		if (!(gl_texture_hqresize_targets & 4)) return;
 		break;
 
 	default:
-		if (!(gl_texture_hqresize_targets & 1)) return inputBuffer;
+		if (!(gl_texture_hqresize_targets & 1)) return;
 		break;
 	}
 
-	if (inputBuffer)
+	int type = gl_texture_hqresizemode;
+	int mult = gl_texture_hqresizemult;
+#ifdef HAVE_MMX
+	// hqNx MMX does not preserve the alpha channel so fall back to C-version for such textures
+	if (hasAlpha && type == 3)
 	{
-		int type = gl_texture_hqresize;
-		outWidth = inWidth;
-		outHeight = inHeight;
-#ifdef HAVE_MMX
-		// hqNx MMX does not preserve the alpha channel so fall back to C-version for such textures
-		if (hasAlpha && type > 6 && type <= 9)
-		{
-			type -= 3;
-		}
-#endif
-
-		switch (type)
-		{
-		case 1:
-			return scaleNxHelper( &scale2x, 2, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 2:
-			return scaleNxHelper( &scale3x, 3, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 3:
-			return scaleNxHelper( &scale4x, 4, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 4:
-			return hqNxHelper( &hq2x_32, 2, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 5:
-			return hqNxHelper( &hq3x_32, 3, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 6:
-			return hqNxHelper( &hq4x_32, 4, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-#ifdef HAVE_MMX
-		case 7:
-			return hqNxAsmHelper( &HQnX_asm::hq2x_32, 2, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 8:
-			return hqNxAsmHelper( &HQnX_asm::hq3x_32, 3, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-		case 9:
-			return hqNxAsmHelper( &HQnX_asm::hq4x_32, 4, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-#endif
-		case 10:
-		case 11:
-		case 12:
-			return xbrzHelper(xbrz::scale, type - 8, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-			
-		case 13:
-		case 14:
-		case 15:
-			return xbrzHelper(xbrzOldScale, type - 11, inputBuffer, inWidth, inHeight, outWidth, outHeight );
-			
-		}
+		type = 2;
 	}
-	return inputBuffer;
+#endif
+	// These checks are to ensure consistency of the content ID.
+	if (mult < 2 || mult > 6 || type < 1 || type > 6) return;
+	if (type < 4 && mult > 4) mult = 4;
+
+	if (!checkonly)
+	{
+		if (type == 1)
+		{
+			if (mult == 2)
+				texbuffer.mBuffer = scaleNxHelper(&scale2x, 2, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else if (mult == 3)
+				texbuffer.mBuffer = scaleNxHelper(&scale3x, 3, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else if (mult == 4)
+				texbuffer.mBuffer = scaleNxHelper(&scale4x, 4, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else return;
+		}
+		else if (type == 2)
+		{
+			if (mult == 2)
+				texbuffer.mBuffer = hqNxHelper(&hq2x_32, 2, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else if (mult == 3)
+				texbuffer.mBuffer = hqNxHelper(&hq3x_32, 3, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else if (mult == 4)
+				texbuffer.mBuffer = hqNxHelper(&hq4x_32, 4, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else return;
+		}
+#ifdef HAVE_MMX
+		else if (type == 3)
+		{
+			if (mult == 2)
+				texbuffer.mBuffer = hqNxAsmHelper(&HQnX_asm::hq2x_32, 2, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else if (mult == 3)
+				texbuffer.mBuffer = hqNxAsmHelper(&HQnX_asm::hq3x_32, 3, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else if (mult == 4)
+				texbuffer.mBuffer = hqNxAsmHelper(&HQnX_asm::hq4x_32, 4, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+			else return;
+		}
+#endif
+		else if (type == 4)
+			texbuffer.mBuffer = xbrzHelper(xbrz::scale, mult, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+		else if (type == 5)
+			texbuffer.mBuffer = xbrzHelper(xbrzOldScale, mult, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+		else if (type == 6)
+			texbuffer.mBuffer = normalNxHelper(&normalNx, mult, texbuffer.mBuffer, inWidth, inHeight, texbuffer.mWidth, texbuffer.mHeight);
+		else
+			return;
+	}
+	else
+	{
+		texbuffer.mWidth *= mult;
+		texbuffer.mHeight *= mult;
+	}
+	// Encode the scaling method in the content ID.
+	FContentIdBuilder contentId;
+	contentId.id = texbuffer.mContentId;
+	contentId.scaler = type;
+	contentId.scalefactor = mult;
+	texbuffer.mContentId = contentId.id;
 }

@@ -64,7 +64,7 @@ namespace swrenderer
 		RenderOpaquePass(RenderThread *thread);
 
 		void ClearClip();
-		void RenderScene();
+		void RenderScene(FLevelLocals *Level);
 
 		void ResetFakingUnderwater() { r_fakingunderwater = false; }
 		sector_t *FakeFlat(sector_t *sec, sector_t *tempsec, int *floorlightlevel, int *ceilinglightlevel, seg_t *backline, int backx1, int backx2, double frontcz1, double frontcz2);
@@ -86,8 +86,8 @@ namespace swrenderer
 		void AddPolyobjs(subsector_t *sub);
 
 		void Add3DFloorPlanes(subsector_t *sub, sector_t *frontsector, FDynamicColormap *basecolormap, bool foggy, int adjusted_ceilinglightlevel, int adjusted_floorlightlevel);
-		void FakeDrawLoop(subsector_t *sub, sector_t *frontsector, VisiblePlane *floorplane, VisiblePlane *ceilingplane, bool foggy, FDynamicColormap *basecolormap, Fake3DOpaque opaque3dfloor);
-		void Add3DFloorLine(seg_t *line, sector_t *frontsector, FDynamicColormap *basecolormap, bool foggy);
+		void FakeDrawLoop(subsector_t *sub, sector_t *frontsector, VisiblePlane *floorplane, VisiblePlane *ceilingplane, Fake3DOpaque opaque3dfloor);
+		void Add3DFloorLine(seg_t *line, sector_t *frontsector);
 
 		void AddSprites(sector_t *sec, int lightlevel, WaterFakeSide fakeside, bool foggy, FDynamicColormap *basecolormap);
 		bool IsPotentiallyVisible(AActor *thing);

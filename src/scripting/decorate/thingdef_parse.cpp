@@ -77,7 +77,7 @@ PClassActor *DecoDerivedClass(const FScriptPosition &sc, PClassActor *parent, FN
 	if (type == nullptr)
 	{
 		FString newname = typeName.GetChars();
-		FString sourcefile = sc.FileName;
+		FString sourcefile = sc.FileName.GetChars();
 
 		sourcefile.Substitute(":", "@");
 		newname << '@' << sourcefile;
@@ -1187,7 +1187,7 @@ static void ParseActor(FScanner &sc, PNamespace *ns)
 	}
 	try
 	{
-		GetDefaultByType(info)->Finalize(bag.statedef);
+		FinalizeClass(info, bag.statedef);
 	}
 	catch (CRecoverableError &err)
 	{

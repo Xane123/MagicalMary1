@@ -89,7 +89,6 @@
 #include "d_event.h"
 #include "d_netinf.h"
 #include "m_cheat.h"
-#include "compatibility.h"
 #include "m_joy.h"
 #include "po_man.h"
 #include "r_renderer.h"
@@ -118,7 +117,6 @@ extern void ReadStatistics();
 extern void M_SetDefaultMode ();
 extern void G_NewInit ();
 extern void SetupPlayerClasses ();
-extern void HUD_InitHud();
 void DeinitMenus();
 const FIWADInfo *D_FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad);
 
@@ -171,7 +169,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 			if (playeringame[i] && self <= D_GetFragCount(&players[i]))
 			{
 				Printf ("%s\n", GStrings("TXT_FRAGLIMIT"));
-				G_ExitLevel (0, false);
+				G_ExitLevel (currentSession->Levelinfo[0],  0, false);
 				break;
 			}
 		}
@@ -184,18 +182,19 @@ CVAR (Int, snd_drawoutput, 0, 0);
 CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
 	bool res = false;
+	
 
 	if (!stricmp(self, "None" ) && gameinfo.CursorPic.IsNotEmpty())
 	{
-		res = I_SetCursor(TexMan[gameinfo.CursorPic]);
+		res = I_SetCursor(TexMan.GetTextureByName(gameinfo.CursorPic));
 	}
 	else
 	{
-		res = I_SetCursor(TexMan[self]);
+		res = I_SetCursor(TexMan.GetTextureByName(self));
 	}
 	if (!res)
 	{
-		I_SetCursor(TexMan["cursor"]);
+		I_SetCursor(TexMan.GetTextureByName("cursor"));
 	}
 }
 
@@ -361,8 +360,7 @@ CUSTOM_CVAR (Int, dmflags, 0, CVAR_SERVERINFO)
 {
 	// In case DF_NO_FREELOOK was changed, reinitialize the sky
 	// map. (If no freelook, then no need to stretch the sky.)
-	if (sky1texture.isValid())
-		R_InitSkyMap ();
+	R_InitSkyMap ();
 
 	if (self & DF_NO_FREELOOK)
 	{
@@ -502,36 +500,39 @@ CVAR (Flag, sv_respawnsuper,		dmflags2, DF2_RESPAWN_SUPER);
 //
 //==========================================================================
 
-int i_compatflags, i_compatflags2;	// internal compatflags composed from the compatflags CVAR and MAPINFO settings
-int ii_compatflags, ii_compatflags2, ib_compatflags;
-
 EXTERN_CVAR(Int, compatmode)
 
-static int GetCompatibility(int mask)
+static int GetCompatibility(FLevelLocals *Level, int mask)
 {
-	if (level.info == NULL) return mask;
-	else return (mask & ~level.info->compatmask) | (level.info->compatflags & level.info->compatmask);
+	if (Level->info == nullptr) return mask;
+	else return (mask & ~Level->info->compatmask) | (Level->info->compatflags & Level->info->compatmask);
 }
 
-static int GetCompatibility2(int mask)
+static int GetCompatibility2(FLevelLocals *Level, int mask)
 {
-	return (level.info == NULL) ? mask
-		: (mask & ~level.info->compatmask2) | (level.info->compatflags2 & level.info->compatmask2);
+	return (Level->info == nullptr) ? mask
+		: (mask & ~Level->info->compatmask2) | (Level->info->compatflags2 & Level->info->compatmask2);
 }
 
 CUSTOM_CVAR (Int, compatflags, 0, CVAR_ARCHIVE|CVAR_SERVERINFO)
 {
-	int old = i_compatflags;
-	i_compatflags = GetCompatibility(self) | ii_compatflags;
-	if ((old ^ i_compatflags) & COMPATF_POLYOBJ)
+	ForAllLevels([&](FLevelLocals *Level)
 	{
-		FPolyObj::ClearAllSubsectorLinks();
-	}
+		int old = Level->i_compatflags;
+		Level->i_compatflags = GetCompatibility(Level, self) | Level->ii_compatflags;
+		if ((old ^ Level->i_compatflags) & COMPATF_POLYOBJ)
+		{
+			Level->ClearAllSubsectorLinks();
+		}
+	});
 }
 
 CUSTOM_CVAR (Int, compatflags2, 0, CVAR_ARCHIVE|CVAR_SERVERINFO)
 {
-	i_compatflags2 = GetCompatibility2(self) | ii_compatflags2;
+	ForAllLevels([&](FLevelLocals *Level)
+	{
+		Level->i_compatflags2 = GetCompatibility2(Level, self) | Level->ii_compatflags2;
+	});
 }
 
 CUSTOM_CVAR(Int, compatmode, 0, CVAR_ARCHIVE|CVAR_NOINITCALL)
@@ -746,34 +747,36 @@ void D_Display ()
 		//E_RenderFrame();
 		//
 		
-		// Check for the presence of dynamic lights at the start of the frame once.
-		if ((gl_lights && vid_rendermode == 4) || (r_dynlights && vid_rendermode != 4))
-		{
-			TThinkerIterator<ADynamicLight> it(STAT_DLIGHT);
-			level.HasDynamicLights = !!it.Next();
-		}
-		else level.HasDynamicLights = false;	// lights are off so effectively we have none.
-		
+		ForAllLevels([](FLevelLocals *Level) {
+			// Check for the presence of dynamic lights at the start of the frame once.
+			if ((gl_lights && vid_rendermode == 4) || (r_dynlights && vid_rendermode != 4))
+			{
+				Level->HasDynamicLights = !!Level->lights;
+			}
+			else Level->HasDynamicLights = false;	// lights are off so effectively we have none.
+		});
+					 
 		viewsec = screen->RenderView(&players[consoleplayer]);
 		screen->Begin2D();
 		screen->DrawBlend(viewsec);
-		if (automapactive)
+		if (automapactive && currentSession)
 		{
-			AM_Drawer (hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
-		}
-		if (!automapactive || viewactive)
-		{
-			screen->RefreshViewBorder ();
+			AM_Drawer (currentSession->Levelinfo[0], hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
 		}
 		
 		// for timing the statusbar code.
 		//cycle_t stb;
 		//stb.Reset();
 		//stb.Clock();
+		StatusBar->SetLevel(currentSession->Levelinfo[0]);
+		if (!automapactive || viewactive)
+		{
+			StatusBar->RefreshViewBorder ();
+		}
 		if (hud_althud && viewheight == SCREENHEIGHT && screenblocks > 10)
 		{
 			StatusBar->DrawBottomStuff (HUD_AltHud);
-			if (DrawFSHUD || automapactive) DrawHUD();
+			if (DrawFSHUD || automapactive) StatusBar->DrawAltHUD();
 			if (players[consoleplayer].camera && players[consoleplayer].camera->player && !automapactive)
 			{
 				StatusBar->DrawCrosshair();
@@ -834,16 +837,16 @@ void D_Display ()
 		int x;
 		FString pstring = "By ";
 
-		tex = TexMan(gameinfo.PauseSign);
-		x = (SCREENWIDTH - tex->GetScaledWidth() * CleanXfac)/2 +
-			tex->GetScaledLeftOffset(0) * CleanXfac;
+		tex = TexMan.GetTextureByName(gameinfo.PauseSign, true);
+		x = (SCREENWIDTH - tex->GetDisplayWidth() * CleanXfac)/2 +
+			tex->GetDisplayLeftOffset() * CleanXfac;
 		screen->DrawTexture (tex, x, 4, DTA_CleanNoMove, true, TAG_DONE);
 		if (paused && multiplayer)
 		{
 			pstring += players[paused - 1].userinfo.GetName();
 			screen->DrawText(SmallFont, CR_RED,
 				(screen->GetWidth() - SmallFont->StringWidth(pstring)*CleanXfac) / 2,
-				(tex->GetScaledHeight() * CleanYfac) + 4, pstring, DTA_CleanNoMove, true, TAG_DONE);
+				(tex->GetDisplayHeight() * CleanYfac) + 4, pstring, DTA_CleanNoMove, true, TAG_DONE);
 		}
 	}
 
@@ -855,8 +858,8 @@ void D_Display ()
 		D_DrawIcon = NULL;
 		if (picnum.isValid())
 		{
-			FTexture *tex = TexMan[picnum];
-			screen->DrawTexture (tex, 160 - tex->GetScaledWidth()/2, 100 - tex->GetScaledHeight()/2,
+			FTexture *tex = TexMan.GetTexture(picnum);
+			screen->DrawTexture (tex, 160 - tex->GetDisplayWidth()/2, 100 - tex->GetDisplayHeight()/2,
 				DTA_320x200, true, TAG_DONE);
 		}
 		NoWipe = 10;
@@ -1051,7 +1054,7 @@ void D_PageDrawer (void)
 	screen->Clear(0, 0, SCREENWIDTH, SCREENHEIGHT, 0, 0);
 	if (Page.Exists())
 	{
-		screen->DrawTexture (TexMan(Page), 0, 0,
+		screen->DrawTexture (TexMan.GetTexture(Page, true), 0, 0,
 			DTA_Fullscreen, true,
 			DTA_Masked, false,
 			DTA_BilinearFilter, true,
@@ -1241,7 +1244,7 @@ void D_DoAdvanceDemo (void)
 	case 3:
 		if (gameinfo.advisoryTime)
 		{
-			Advisory = TexMan["ADVISOR"];
+			Advisory = TexMan.GetTextureByName("ADVISOR");
 			demosequence = 1;
 			pagetic = (int)(gameinfo.advisoryTime * TICRATE);
 			break;
@@ -1853,6 +1856,16 @@ static FString ParseGameInfo(TArray<FString> &pwads, const char *fn, const char 
 			sc.MustGetString();
 			DoomStartupInfo.Song = sc.String;
 		}
+		else if (!nextKey.CompareNoCase("LOADLIGHTS"))
+		{
+			sc.MustGetNumber();
+			DoomStartupInfo.LoadLights = !!sc.Number;
+		}
+		else if (!nextKey.CompareNoCase("LOADBRIGHTMAPS"))
+		{
+			sc.MustGetNumber();
+			DoomStartupInfo.LoadBrightmaps = !!sc.Number;
+		}
 		else
 		{
 			// Silently ignore unknown properties
@@ -1905,7 +1918,7 @@ static FString CheckGameInfo(TArray<FString> & pwads)
 				if (lmp->Namespace == ns_global && !stricmp(lmp->Name, "GAMEINFO"))
 				{
 					// Found one!
-					FString iwad = ParseGameInfo(pwads, resfile->Filename, (const char*)lmp->CacheLump(), lmp->LumpSize);
+					FString iwad = ParseGameInfo(pwads, resfile->FileName, (const char*)lmp->CacheLump(), lmp->LumpSize);
 					delete resfile;
 					return iwad;
 				}
@@ -2022,13 +2035,13 @@ static void AddAutoloadFiles(const char *autoname)
 	// [SP] Dialog reaction - load lights.pk3 and brightmaps.pk3 based on user choices
 	if (!(gameinfo.flags & GI_SHAREWARE))
 	{
-		if (autoloadlights)
+		if (DoomStartupInfo.LoadLights == 1 || (DoomStartupInfo.LoadLights != 0 && autoloadlights))
 		{
 			const char *lightswad = BaseFileSearch ("lights.pk3", NULL);
 			if (lightswad)
 				D_AddFile (allwads, lightswad);
 		}
-		if (autoloadbrightmaps)
+		if (DoomStartupInfo.LoadBrightmaps == 1 || (DoomStartupInfo.LoadBrightmaps != 0 && autoloadbrightmaps))
 		{
 			const char *bmwad = BaseFileSearch ("brightmaps.pk3", NULL);
 			if (bmwad)
@@ -2422,8 +2435,6 @@ void D_DoomMain (void)
 			StartScreen = new FStartupScreen(0);
 		}
 
-		ParseCompatibility();
-
 		CheckCmdLine();
 
 		// [RH] Load sound environments
@@ -2536,7 +2547,6 @@ void D_DoomMain (void)
 
 		//SBarInfo support. Note that the first SBARINFO lump contains the mugshot definition so it even needs to be read when a regular status bar is being used.
 		SBarInfo::Load();
-		HUD_InitHud();
 
 		if (!batchrun)
 		{
@@ -2574,7 +2584,9 @@ void D_DoomMain (void)
 		// [RH] Run any saved commands from the command line or autoexec.cfg now.
 		gamestate = GS_FULLCONSOLE;
 		Net_NewMakeTic ();
-		DThinker::RunThinkers ();
+		ForAllLevels([](FLevelLocals *Level) {
+			Thinkers.RunThinkers (Level);
+		});
 		gamestate = GS_STARTUP;
 
 		if (!restart)
@@ -2690,10 +2702,9 @@ void D_DoomMain (void)
 		// clean up game state
 		ST_Clear();
 		D_ErrorCleanup ();
-		DThinker::DestroyThinkersInList(STAT_STATIC);
+		Thinkers.DestroyThinkersInList(STAT_STATIC);
 		E_Shutdown(false);
 		P_FreeLevelData();
-		P_FreeExtraLevelData();
 
 		M_SaveDefaults(NULL);			// save config before the restart
 
@@ -2708,13 +2719,13 @@ void D_DoomMain (void)
 		S_Shutdown();					// free all channels and delete playlist
 		C_ClearAliases();				// CCMDs won't be reinitialized so these need to be deleted here
 		DestroyCVarsFlagged(CVAR_MOD);	// Delete any cvar left by mods
-		FS_Close();						// destroy the global FraggleScript.
 		DeinitMenus();
-		LightDefaults.Clear();			// this can leak heap memory if it isn't cleared.
+		LightDefaults.DeleteAndClear();			// this can leak heap memory if it isn't cleared.
 
 		// delete DoomStartupInfo data
-		DoomStartupInfo.Name = (const char*)0;
+		DoomStartupInfo.Name = "";
 		DoomStartupInfo.BkColor = DoomStartupInfo.FgColor = DoomStartupInfo.Type = 0;
+		DoomStartupInfo.LoadLights = DoomStartupInfo.LoadBrightmaps = -1;
 
 		GC::FullGC();					// clean up before taking down the object list.
 

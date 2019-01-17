@@ -47,10 +47,6 @@
 
 IMPLEMENT_CLASS(DDoor, false, false)
 
-DDoor::DDoor ()
-{
-}
-
 void DDoor::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -136,7 +132,7 @@ void DDoor::Tick ()
 		// killough 10/98: implement gradual lighting effects
 		if (m_LightTag != 0 && m_TopDist != -m_Sector->floorplane.fD())
 		{
-			EV_LightTurnOnPartway (m_LightTag, 
+			EV_LightTurnOnPartway (Level, m_LightTag, 
 				(m_Sector->ceilingplane.fD() + m_Sector->floorplane.fD()) / (m_TopDist + m_Sector->floorplane.fD()));
 		}
 
@@ -147,7 +143,7 @@ void DDoor::Tick ()
 			{
 			case doorRaise:
 			case doorClose:
-				m_Sector->ceilingdata = NULL;	//jff 2/22/98
+				m_Sector->ceilingdata = nullptr;	//jff 2/22/98
 				Destroy ();						// unlink and free
 				break;
 				
@@ -182,7 +178,7 @@ void DDoor::Tick ()
 		// killough 10/98: implement gradual lighting effects
 		if (m_LightTag != 0 && m_TopDist != -m_Sector->floorplane.fD())
 		{
-			EV_LightTurnOnPartway (m_LightTag, 
+			EV_LightTurnOnPartway (Level, m_LightTag, 
 				(m_Sector->ceilingplane.fD() + m_Sector->floorplane.fD()) / (m_TopDist + m_Sector->floorplane.fD()));
 		}
 
@@ -198,7 +194,7 @@ void DDoor::Tick ()
 				
 			case doorCloseWaitOpen:
 			case doorOpen:
-				m_Sector->ceilingdata = NULL;	//jff 2/22/98
+				m_Sector->ceilingdata = nullptr;	//jff 2/22/98
 				Destroy ();						// unlink and free
 				break;
 				
@@ -293,8 +289,8 @@ void DDoor::DoorSound(bool raise, DSeqNode *curseq) const
 				if (line->backsector == NULL)
 					continue;
 
-				FTexture *tex = TexMan[line->sidedef[0]->GetTexture(side_t::top)];
-				texname = tex ? tex->Name.GetChars() : NULL;
+				FTexture *tex = TexMan.GetTexture(line->sidedef[0]->GetTexture(side_t::top));
+				texname = tex ? tex->GetName().GetChars() : NULL;
 				if (texname != NULL && texname[0] == 'D' && texname[1] == 'O' && texname[2] == 'R')
 				{
 					switch (texname[3])
@@ -350,7 +346,7 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 	vertex_t *spot;
 	double height;
 
-	if (i_compatflags & COMPATF_NODOORLIGHT)
+	if (Level->i_compatflags & COMPATF_NODOORLIGHT)
 	{
 		m_LightTag = 0;
 	}
@@ -359,7 +355,7 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 	{
 	case doorClose:
 		m_Direction = -1;
-		height = sec->FindLowestCeilingSurrounding (&spot);
+		height = FindLowestCeilingSurrounding (sec, &spot);
 		m_TopDist = sec->ceilingplane.PointToDist (spot, height - 4);
 		DoorSound (false);
 		break;
@@ -367,7 +363,7 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 	case doorOpen:
 	case doorRaise:
 		m_Direction = 1;
-		height = sec->FindLowestCeilingSurrounding (&spot);
+		height = FindLowestCeilingSurrounding (sec, &spot);
 		m_TopDist = sec->ceilingplane.PointToDist (spot, height - 4);
 		if (m_TopDist != sec->ceilingplane.fD())
 			DoorSound (true);
@@ -381,14 +377,14 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 
 	case doorWaitRaise:
 		m_Direction = 2;
-		height = sec->FindLowestCeilingSurrounding (&spot);
+		height = FindLowestCeilingSurrounding (sec, &spot);
 		m_TopDist = sec->ceilingplane.PointToDist (spot, height - 4);
 		break;
 
 	case doorWaitClose:
 		m_Direction = 0;
 		m_Type = DDoor::doorRaise;
-		height = sec->FindHighestFloorPoint (&m_BotSpot);
+		height = FindHighestFloorPoint (sec, &m_BotSpot);
 		m_BotDist = sec->ceilingplane.PointToDist (m_BotSpot, height);
 		m_OldFloorDist = sec->floorplane.fD();
 		m_TopDist = sec->ceilingplane.fD();
@@ -399,12 +395,12 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 	if (!m_Sector->floordata || !m_Sector->floordata->IsKindOf(RUNTIME_CLASS(DPlat)) ||
 		!(barrier_cast<DPlat*>(m_Sector->floordata))->IsLift())
 	{
-		height = sec->FindHighestFloorPoint (&m_BotSpot);
+		height = FindHighestFloorPoint (sec, &m_BotSpot);
 		m_BotDist = sec->ceilingplane.PointToDist (m_BotSpot, height);
 	}
 	else
 	{
-		height = sec->FindLowestCeilingPoint(&m_BotSpot);
+		height = FindLowestCeilingPoint(sec, &m_BotSpot);
 		m_BotDist = sec->ceilingplane.PointToDist (m_BotSpot, height);
 	}
 	m_OldFloorDist = sec->floorplane.fD();
@@ -417,7 +413,7 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 //
 //============================================================================
 
-bool EV_DoDoor (DDoor::EVlDoor type, line_t *line, AActor *thing,
+bool EV_DoDoor (FLevelLocals *Level, DDoor::EVlDoor type, line_t *line, AActor *thing,
 				int tag, double speed, int delay, int lock, int lightTag, bool boomgen, int topcountdown)
 {
 	bool		rtn = false;
@@ -484,21 +480,21 @@ bool EV_DoDoor (DDoor::EVlDoor type, line_t *line, AActor *thing,
 			}
 			return false;
 		}
-		if (Create<DDoor> (sec, type, speed, delay, lightTag, topcountdown))
+		if (CreateThinker<DDoor> (sec, type, speed, delay, lightTag, topcountdown))
 			rtn = true;
 	}
 	else
 	{	// [RH] Remote door
 
-		FSectorTagIterator it(tag);
+		FSectorTagIterator it(Level->tagManager, tag);
 		while ((secnum = it.Next()) >= 0)
 		{
-			sec = &level.sectors[secnum];
+			sec = &Level->sectors[secnum];
 			// if the ceiling is already moving, don't start the door action
 			if (sec->PlaneMoving(sector_t::ceiling))
 				continue;
 
-			if (Create<DDoor>(sec, type, speed, delay, lightTag, topcountdown))
+			if (CreateThinker<DDoor>(sec, type, speed, delay, lightTag, topcountdown))
 				rtn = true;
 		}
 				
@@ -513,10 +509,6 @@ bool EV_DoDoor (DDoor::EVlDoor type, line_t *line, AActor *thing,
 //============================================================================
 
 IMPLEMENT_CLASS(DAnimatedDoor, false, false)
-
-DAnimatedDoor::DAnimatedDoor ()
-{
-}
 
 DAnimatedDoor::DAnimatedDoor (sector_t *sec)
 	: DMovingCeiling (sec, false)
@@ -593,7 +585,7 @@ void DAnimatedDoor::Tick ()
 	switch (m_Status)
 	{
 	case Dead:
-		m_Sector->ceilingdata = NULL;
+		m_Sector->ceilingdata = nullptr;
 		Destroy ();
 		break;
 
@@ -608,7 +600,7 @@ void DAnimatedDoor::Tick ()
 
 				if (m_Delay == 0)
 				{
-					m_Sector->ceilingdata = NULL;
+					m_Sector->ceilingdata = nullptr;
 					Destroy ();
 					break;
 				}
@@ -647,7 +639,7 @@ void DAnimatedDoor::Tick ()
 			{
 				// IF DOOR IS DONE CLOSING...
 				m_Sector->MoveCeiling (2048., m_BotDist, -1);
-				m_Sector->ceilingdata = NULL;
+				m_Sector->ceilingdata = nullptr;
 				Destroy ();
 				// Unset blocking flags on lines that didn't start with them. Since the
 				// ceiling is down now, we shouldn't need this flag anymore to keep things
@@ -715,9 +707,8 @@ DAnimatedDoor::DAnimatedDoor (sector_t *sec, line_t *line, int speed, int delay,
 
 	picnum = tex1[side_t::top].texture;
 
-	// don't forget texture scaling here!
-	FTexture *tex = TexMan[picnum];
-	topdist = tex ? tex->GetScaledHeight() : 64;
+	FTexture *tex = TexMan.GetTexture(picnum);
+	topdist = tex ? tex->GetDisplayHeight() : 64;
 
 	topdist = m_Sector->ceilingplane.fD() - topdist * m_Sector->ceilingplane.fC();
 
@@ -749,7 +740,7 @@ DAnimatedDoor::DAnimatedDoor (sector_t *sec, line_t *line, int speed, int delay,
 //
 //============================================================================
 
-bool EV_SlidingDoor (line_t *line, AActor *actor, int tag, int speed, int delay, DAnimatedDoor::EADType type)
+bool EV_SlidingDoor (FLevelLocals *Level, line_t *line, AActor *actor, int tag, int speed, int delay, DAnimatedDoor::EADType type)
 {
 	sector_t *sec;
 	int secnum;
@@ -782,16 +773,16 @@ bool EV_SlidingDoor (line_t *line, AActor *actor, int tag, int speed, int delay,
 		FDoorAnimation *anim = TexMan.FindAnimatedDoor (line->sidedef[0]->GetTexture(side_t::top));
 		if (anim != NULL)
 		{
-			Create<DAnimatedDoor>(sec, line, speed, delay, anim, type);
+			CreateThinker<DAnimatedDoor>(sec, line, speed, delay, anim, type);
 			return true;
 		}
 		return false;
 	}
 
-	FSectorTagIterator it(tag);
+	FSectorTagIterator it(Level->tagManager, tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sec = &level.sectors[secnum];
+		sec = &Level->sectors[secnum];
 		if (sec->ceilingdata != NULL)
 		{
 			continue;
@@ -807,7 +798,7 @@ bool EV_SlidingDoor (line_t *line, AActor *actor, int tag, int speed, int delay,
 			if (anim != NULL)
 			{
 				rtn = true;
-				Create<DAnimatedDoor>(sec, line, speed, delay, anim, type);
+				CreateThinker<DAnimatedDoor>(sec, line, speed, delay, anim, type);
 				break;
 			}
 		}

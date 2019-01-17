@@ -82,6 +82,7 @@
 #include "d_player.h"
 #include "g_levellocals.h"
 #include "vm.h"
+#include "actorinlines.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -129,18 +130,19 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector, co
 	const float pt[3], int channel, int chanflags, FVector3 *pos, FVector3 *vel);
 static void CalcSectorSoundOrg(const DVector3 &listenpos, const sector_t *sec, int channum, FVector3 &res);
 static void CalcPolyobjSoundOrg(const DVector3 &listenpos, const FPolyObj *poly, FVector3 &res);
-static FSoundChan *S_StartSound(AActor *mover, const sector_t *sec, const FPolyObj *poly,
+static FSoundChan *S_StartSound(FLevelLocals *Level, AActor *mover, const sector_t *sec, const FPolyObj *poly,
 	const FVector3 *pt, int channel, FSoundID sound_id, float volume, float attenuation, FRolloffInfo *rolloff);
 static void S_SetListener(SoundListener &listener, AActor *listenactor);
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
+static FLevelLocals *SoundMainLevel;		// this is the level for which sound should be played. 
 static bool		SoundPaused;		// whether sound is paused
 static bool		MusicPaused;		// whether music is paused
 MusPlayingInfo mus_playing;	// music currently being played
 static FString	 LastSong;			// last music that was played
 static FPlayList *PlayList;
-static int		RestartEvictionsAt;	// do not restart evicted channels before this level.time
+static int		RestartEvictionsAt;	// do not restart evicted channels before a given delay.
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -150,8 +152,7 @@ FSoundChan *Channels;
 FSoundChan *FreeChannels;
 
 FRolloffInfo S_Rolloff;
-uint8_t *S_SoundCurve;
-int S_SoundCurveSize;
+TArray<uint8_t> S_SoundCurve;
 
 FBoolCVar noisedebug ("noise", false, 0);	// [RH] Print sound debugging info?
 CUSTOM_CVAR (Int, snd_channels, 128, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)	// number of channels available
@@ -311,20 +312,16 @@ void S_Init ()
 
 	atterm (S_Shutdown);
 
-	// remove old data (S_Init can be called multiple times!)
-	if (S_SoundCurve != NULL)
-	{
-		delete[] S_SoundCurve;
-		S_SoundCurve = NULL;
-	}
-
 	// Heretic and Hexen have sound curve lookup tables. Doom does not.
 	curvelump = Wads.CheckNumForName ("SNDCURVE");
 	if (curvelump >= 0)
 	{
-		S_SoundCurveSize = Wads.LumpLength (curvelump);
-		S_SoundCurve = new uint8_t[S_SoundCurveSize];
-		Wads.ReadLump(curvelump, S_SoundCurve);
+		S_SoundCurve.Resize(Wads.LumpLength (curvelump));
+		Wads.ReadLump(curvelump, S_SoundCurve.Data());
+	}
+	else
+	{
+		S_SoundCurve.Clear();
 	}
 
 	// Free all channels for use.
@@ -376,11 +373,6 @@ void S_Shutdown ()
 	}
 	FreeChannels = NULL;
 
-	if (S_SoundCurve != NULL)
-	{
-		delete[] S_SoundCurve;
-		S_SoundCurve = NULL;
-	}
 	if (PlayList != NULL)
 	{
 		delete PlayList;
@@ -399,10 +391,11 @@ void S_Shutdown ()
 // and starts new music.
 //==========================================================================
 
-void S_Start ()
+void S_Start (FLevelLocals *Level)
 {
 	if (GSnd)
 	{
+		SoundMainLevel = Level;
 		// kill all playing sounds at start of level (trust me - a good idea)
 		S_StopAllChannels();
 
@@ -411,53 +404,48 @@ void S_Start ()
 		FString LocalSndInfo;
 		FString LocalSndSeq;
 		
-		// To be certain better check whether level is valid!
-		if (level.info)
+		// If this is called with a null level (happens only in case of an I_Error) do not reset the last local definition
+		if (Level && Level->info)
 		{
-			LocalSndInfo = level.info->SoundInfo;
-		}
-
-		if (level.info)
-		{
-			LocalSndSeq  = level.info->SndSeq;
-		}
-
-		bool parse_ss = false;
-
-		// This level uses a different local SNDINFO
-		if (LastLocalSndInfo.CompareNoCase(LocalSndInfo) != 0 || !level.info)
-		{
-			// First delete the old sound list
-			for(unsigned i = 1; i < S_sfx.Size(); i++) 
+			LocalSndInfo = Level->info->SoundInfo;
+			LocalSndSeq = Level->info->SndSeq;
+			bool parse_ss = false;
+			
+			// This level uses a different local SNDINFO
+			if (LastLocalSndInfo.CompareNoCase(LocalSndInfo) != 0)
 			{
-				S_UnloadSound(&S_sfx[i]);
+				// First delete the old sound list
+				for(unsigned i = 1; i < S_sfx.Size(); i++)
+				{
+					S_UnloadSound(&S_sfx[i]);
+				}
+				
+				// Parse the global SNDINFO
+				S_ParseSndInfo(true);
+				
+				if (LocalSndInfo.IsNotEmpty())
+				{
+					// Now parse the local SNDINFO
+					int j = Wads.CheckNumForFullName(LocalSndInfo, true);
+					if (j>=0) S_AddLocalSndInfo(j);
+				}
+				
+				// Also reload the SNDSEQ if the SNDINFO was replaced!
+				parse_ss = true;
+			}
+			else if (LastLocalSndSeq.CompareNoCase(LocalSndSeq) != 0)
+			{
+				parse_ss = true;
 			}
 			
-			// Parse the global SNDINFO
-			S_ParseSndInfo(true);
-		
-			if (LocalSndInfo.IsNotEmpty())
+			if (parse_ss)
 			{
-				// Now parse the local SNDINFO
-				int j = Wads.CheckNumForFullName(LocalSndInfo, true);
-				if (j>=0) S_AddLocalSndInfo(j);
+				S_ParseSndSeq(LocalSndSeq.IsNotEmpty()? Wads.CheckNumForFullName(LocalSndSeq, true) : -1);
 			}
-
-			// Also reload the SNDSEQ if the SNDINFO was replaced!
-			parse_ss = true;
+			
+			LastLocalSndInfo = LocalSndInfo;
+			LastLocalSndSeq = LocalSndSeq;
 		}
-		else if (LastLocalSndSeq.CompareNoCase(LocalSndSeq) != 0)
-		{
-			parse_ss = true;
-		}
-
-		if (parse_ss)
-		{
-			S_ParseSndSeq(LocalSndSeq.IsNotEmpty()? Wads.CheckNumForFullName(LocalSndSeq, true) : -1);
-		}
-		
-		LastLocalSndInfo = LocalSndInfo;
-		LastLocalSndSeq = LocalSndSeq;
 	}
 
 	// stop the old music if it has been paused.
@@ -470,10 +458,13 @@ void S_Start ()
 
 	// Don't start the music if loading a savegame, because the music is stored there.
 	// Don't start the music if revisiting a level in a hub for the same reason.
-	if (!level.IsReentering())
+	if (Level == nullptr)
 	{
-		if (level.cdtrack == 0 || !S_ChangeCDMusic (level.cdtrack, level.cdid))
-			S_ChangeMusic (level.Music, level.musicorder);
+		S_ChangeMusic("", 0);
+	}
+	else if (!Level->IsReentering())
+	{
+		Level->SetMusic();
 	}
 }
 
@@ -485,7 +476,7 @@ void S_Start ()
 //
 //==========================================================================
 
-void S_PrecacheLevel ()
+void S_PrecacheLevel (const TArray<int> &levelsounds)
 {
 	unsigned int i;
 
@@ -497,20 +488,15 @@ void S_PrecacheLevel ()
 		}
 
 		AActor *actor;
-		TThinkerIterator<AActor> iterator;
+		TThinkerIterator<AActor> iterator(SoundMainLevel);
 
 		// Precache all sounds known to be used by the currently spawned actors.
 		while ( (actor = iterator.Next()) != NULL )
 		{
 			IFVIRTUALPTR(actor, AActor, MarkPrecacheSounds)
 			{
-				// Without the type cast this picks the 'void *' assignment...
 				VMValue params[1] = { actor };
 				VMCall(func, params, 1, nullptr, 0);
-			}
-			else
-			{
-				actor->MarkPrecacheSounds();
 			}
 		}
 		for (auto snd : gameinfo.PrecachedSounds)
@@ -518,7 +504,7 @@ void S_PrecacheLevel ()
 			FSoundID(snd).MarkUsed();
 		}
 		// Precache all extra sounds requested by this map.
-		for (auto snd : level.info->PrecacheSounds)
+		for (auto snd : levelsounds)
 		{
 			FSoundID(snd).MarkUsed();
 		}
@@ -698,7 +684,7 @@ static void CalcPosVel(FSoundChan *chan, FVector3 *pos, FVector3 *vel)
 //
 //=========================================================================
 
-static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
+static void CalcPosVel( int type, const AActor *actor, const sector_t *sector,
 	const FPolyObj *poly, const float pt[3], int channum, int chanflags, FVector3 *pos, FVector3 *vel)
 {
 	if (pos != NULL)
@@ -706,8 +692,9 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 		DVector3 listenpos;
 		int pgroup;
 		AActor *listener = players[consoleplayer].camera;
+		FLevelLocals *Level = SoundMainLevel;
 
-		if (listener != NULL)
+		if (listener != nullptr)
 		{
 			listenpos = listener->Pos();
 			*pos = listener->SoundPos();
@@ -718,14 +705,16 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 			listenpos.Zero();
 			pos->Zero();
 			pgroup = 0;
+			type = SOURCE_None; // No level means that no level sound placement should be performed.
 		}
 
 		// [BL] Moved this case out of the switch statement to make code easier
 		//      on static analysis.
 		if(type == SOURCE_Unattached)
-		{		
-			sector_t *sec = P_PointInSector(pt[0], pt[2]);
-			DVector2 disp = level.Displacements.getOffset(pgroup, sec->PortalGroup);
+		{
+			assert(Level != NULL);
+			sector_t *sec = P_PointInSector(SoundMainLevel, pt[0], pt[2]);
+			DVector2 disp = Level->Displacements.getOffset(pgroup, sec->PortalGroup);
 			pos->X = pt[0] - (float)disp.X;
 			pos->Y = !(chanflags & CHAN_LISTENERZ) ? pt[1] : (float)listenpos.Z;
 			pos->Z = pt[2] - (float)disp.Y;
@@ -742,7 +731,8 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 				//assert(actor != NULL);
 				if (actor != NULL)
 				{
-					DVector2 disp = level.Displacements.getOffset(pgroup, actor->Sector->PortalGroup);
+					assert(Level != nullptr);
+					DVector2 disp = Level->Displacements.getOffset(pgroup, actor->Sector->PortalGroup);
 					DVector3 posi = actor->Pos() - disp;
 					*pos = { (float)posi.X, (float)posi.Z, (float)posi.Y };
 				}
@@ -752,7 +742,8 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 				assert(sector != NULL);
 				if (sector != NULL)
 				{
-					DVector2 disp = level.Displacements.getOffset(pgroup, sector->PortalGroup);
+					assert(Level != nullptr);
+					DVector2 disp = Level->Displacements.getOffset(pgroup, sector->PortalGroup);
 					if (chanflags & CHAN_AREA)
 					{
 						// listener must be reversely offset to calculate the proper sound origin.
@@ -774,7 +765,9 @@ static void CalcPosVel(int type, const AActor *actor, const sector_t *sector,
 				assert(poly != NULL);
 				if (poly != NULL)
 				{
-					DVector2 disp = level.Displacements.getOffset(pgroup, poly->CenterSubsector->sector->PortalGroup);
+					assert(Level != NULL);
+					// Todo: Level offsetting
+					DVector2 disp = Level->Displacements.getOffset(pgroup, poly->CenterSubsector->sector->PortalGroup);
 					CalcPolyobjSoundOrg(listenpos + disp, poly, *pos);
 					pos->X -= (float)disp.X;
 					pos->Z -= (float)disp.Y;
@@ -843,7 +836,7 @@ static bool Validate(const FVector3 &value, const float limit, const char *const
 static bool ValidatePosVel(const AActor *actor, const FVector3 &pos, const FVector3 &vel)
 {
 	// The actual limit for map coordinates
-	static const float POSITION_LIMIT = 32768.f;
+	static const float POSITION_LIMIT = 1024.f * 1024.f;
 	const bool valid = Validate(pos, POSITION_LIMIT, "position", actor);
 
 	// The maximum velocity is enough to travel through entire map in one tic
@@ -868,10 +861,10 @@ static bool ValidatePosVel(const FSoundChan *const chan, const FVector3 &pos, co
 
 static void CalcSectorSoundOrg(const DVector3 &listenpos, const sector_t *sec, int channum, FVector3 &pos)
 {
-	if (!(i_compatflags & COMPATF_SECTORSOUNDS))
+	if (!(sec->Level->i_compatflags & COMPATF_SECTORSOUNDS))
 	{
 		// Are we inside the sector? If yes, the closest point is the one we're on.
-		if (P_PointInSector(listenpos.X, listenpos.Y) == sec)
+		if (P_PointInSector(sec->Level, listenpos.X, listenpos.Y) == sec)
 		{
 			pos.X = (float)listenpos.X;
 			pos.Z = (float)listenpos.Y;
@@ -935,13 +928,13 @@ static void CalcPolyobjSoundOrg(const DVector3 &listenpos, const FPolyObj *poly,
 //
 // S_StartSound
 //
-// 0 attenuation means full volume over whole level.
+// 0 attenuation means full volume over whole level,
 // 0 < attenuation means to scale the distance by that amount when
 //		calculating volume.
 //
 //==========================================================================
 
-static FSoundChan *S_StartSound(AActor *actor, const sector_t *sec, const FPolyObj *poly,
+static FSoundChan *S_StartSound(FLevelLocals *Level, AActor *actor, const sector_t *sec, const FPolyObj *poly,
 	const FVector3 *pt, int channel, FSoundID sound_id, float volume, float attenuation,
 	FRolloffInfo *forcedrolloff=NULL)
 {
@@ -957,6 +950,12 @@ static FSoundChan *S_StartSound(AActor *actor, const sector_t *sec, const FPolyO
 
 	if (sound_id <= 0 || volume <= 0 || nosfx || nosound )
 		return NULL;
+
+	// Playing sounds from other than the primary level is a job for later. For now, just do not play them.
+	if (Level && Level != SoundMainLevel)
+	{
+		return nullptr;
+	}
 
 	int type;
 
@@ -991,19 +990,19 @@ static FSoundChan *S_StartSound(AActor *actor, const sector_t *sec, const FPolyO
 	{
 		return nullptr;
 	}
-
-	if (i_compatflags & COMPATF_MAGICSILENCE)
+	
+	if (compatflags & COMPATF_MAGICSILENCE)
 	{ // For people who just can't play without a silent BFG.
 		channel = CHAN_WEAPON;
 	}
-	else if ((chanflags & CHAN_MAYBE_LOCAL) && (i_compatflags & COMPATF_SILENTPICKUP))
+	else if ((chanflags & CHAN_MAYBE_LOCAL) && (compatflags & COMPATF_SILENTPICKUP))
 	{
-		if (actor != NULL && actor != players[consoleplayer].camera)
+		if (actor != nullptr && actor != players[consoleplayer].camera)
 		{
-			return NULL;
+			return nullptr;
 		}
 	}
-
+	
 	sfx = &S_sfx[sound_id];
 
 	// Scale volume according to SNDINFO data.
@@ -1334,7 +1333,7 @@ void S_RestartSound(FSoundChan *chan)
 
 void S_Sound (int channel, FSoundID sound_id, float volume, float attenuation)
 {
-	S_StartSound (NULL, NULL, NULL, NULL, channel, sound_id, volume, attenuation);
+	S_StartSound (NULL, NULL, NULL, NULL, NULL, channel, sound_id, volume, attenuation);
 }
 
 DEFINE_ACTION_FUNCTION(DObject, S_Sound)
@@ -1342,8 +1341,8 @@ DEFINE_ACTION_FUNCTION(DObject, S_Sound)
 	PARAM_PROLOGUE;
 	PARAM_SOUND(id);
 	PARAM_INT(channel);
-	PARAM_FLOAT_DEF(volume);
-	PARAM_FLOAT_DEF(attn);
+	PARAM_FLOAT(volume);
+	PARAM_FLOAT(attn);
 	S_Sound(channel, id, static_cast<float>(volume), static_cast<float>(attn));
 	return 0;
 }
@@ -1358,7 +1357,7 @@ void S_Sound (AActor *ent, int channel, FSoundID sound_id, float volume, float a
 {
 	if (ent == NULL || ent->Sector->Flags & SECF_SILENT)
 		return;
-	S_StartSound (ent, NULL, NULL, NULL, channel, sound_id, volume, attenuation);
+	S_StartSound (ent->Level, ent, NULL, NULL, NULL, channel, sound_id, volume, attenuation);
 }
 
 //==========================================================================
@@ -1379,7 +1378,7 @@ void S_SoundMinMaxDist(AActor *ent, int channel, FSoundID sound_id, float volume
 	rolloff.RolloffType = ROLLOFF_Linear;
 	rolloff.MinDistance = mindist;
 	rolloff.MaxDistance = maxdist;
-	S_StartSound(ent, NULL, NULL, NULL, channel, sound_id, volume, 1, &rolloff);
+	S_StartSound(ent->Level, ent, NULL, NULL, NULL, channel, sound_id, volume, 1, &rolloff);
 }
 
 //==========================================================================
@@ -1390,7 +1389,7 @@ void S_SoundMinMaxDist(AActor *ent, int channel, FSoundID sound_id, float volume
 
 void S_Sound (const FPolyObj *poly, int channel, FSoundID sound_id, float volume, float attenuation)
 {
-	S_StartSound (NULL, NULL, poly, NULL, channel, sound_id, volume, attenuation);
+	S_StartSound (poly->GetLevel(), NULL, NULL, poly, NULL, channel, sound_id, volume, attenuation);
 }
 
 //==========================================================================
@@ -1399,11 +1398,11 @@ void S_Sound (const FPolyObj *poly, int channel, FSoundID sound_id, float volume
 //
 //==========================================================================
 
-void S_Sound(const DVector3 &pos, int channel, FSoundID sound_id, float volume, float attenuation)
+void S_Sound(FLevelLocals *Level, const DVector3 &pos, int channel, FSoundID sound_id, float volume, float attenuation)
 {
 	// The sound system switches Y and Z around.
 	FVector3 p((float)pos.X, (float)pos.Z, (float)pos.Y);
-	S_StartSound (NULL, NULL, NULL, &p, channel, sound_id, volume, attenuation);
+	S_StartSound (Level, NULL, NULL, NULL, &p, channel, sound_id, volume, attenuation);
 }
 
 //==========================================================================
@@ -1414,7 +1413,7 @@ void S_Sound(const DVector3 &pos, int channel, FSoundID sound_id, float volume, 
 
 void S_Sound (const sector_t *sec, int channel, FSoundID sfxid, float volume, float attenuation)
 {
-	S_StartSound (NULL, sec, NULL, NULL, channel, sfxid, volume, attenuation);
+	S_StartSound (sec->Level, NULL, sec, NULL, NULL, channel, sfxid, volume, attenuation);
 }
 
 //==========================================================================
@@ -1439,6 +1438,24 @@ void S_PlaySound(AActor *a, int chan, FSoundID sid, float vol, float atten, bool
 		if (a->CheckLocalView(consoleplayer))
 		{
 			S_Sound(chan, sid, vol, ATTN_NONE);
+		}
+	}
+}
+
+void A_PlaySound(AActor *self, int soundid, int channel, double volume, int looping, double attenuation, int local)
+{
+	if (!looping)
+	{
+		if (!(channel & CHAN_NOSTOP) || !S_IsActorPlayingSomething(self, channel & 7, soundid))
+		{
+			S_PlaySound(self, channel, soundid, (float)volume, (float)attenuation, local);
+		}
+	}
+	else
+	{
+		if (!S_IsActorPlayingSomething(self, channel & 7, soundid))
+		{
+			S_PlaySound(self, channel | CHAN_LOOP, soundid, (float)volume, (float)attenuation, local);
 		}
 	}
 }
@@ -1486,34 +1503,32 @@ sfxinfo_t *S_LoadSound(sfxinfo_t *sfx, FSoundLoadBuffer *pBuffer)
 		if (size > 0)
 		{
 			auto wlump = Wads.OpenLumpReader(sfx->lumpnum);
-			uint8_t *sfxdata = new uint8_t[size];
-			wlump.Read(sfxdata, size);
-			int32_t dmxlen = LittleLong(((int32_t *)sfxdata)[1]);
+			auto sfxdata = wlump.Read(size);
+			int32_t dmxlen = LittleLong(((int32_t *)sfxdata.Data())[1]);
             std::pair<SoundHandle,bool> snd;
 
 			// If the sound is voc, use the custom loader.
-			if (strncmp ((const char *)sfxdata, "Creative Voice File", 19) == 0)
+			if (strncmp ((const char *)sfxdata.Data(), "Creative Voice File", 19) == 0)
 			{
-				snd = GSnd->LoadSoundVoc(sfxdata, size);
+				snd = GSnd->LoadSoundVoc(sfxdata.Data(), size);
 			}
 			// If the sound is raw, just load it as such.
 			else if (sfx->bLoadRAW)
 			{
-				snd = GSnd->LoadSoundRaw(sfxdata, size, sfx->RawRate, 1, 8, sfx->LoopStart);
+				snd = GSnd->LoadSoundRaw(sfxdata.Data(), size, sfx->RawRate, 1, 8, sfx->LoopStart);
 			}
 			// Otherwise, try the sound as DMX format.
-			else if (((uint8_t *)sfxdata)[0] == 3 && ((uint8_t *)sfxdata)[1] == 0 && dmxlen <= size - 8)
+			else if (((uint8_t *)sfxdata.Data())[0] == 3 && ((uint8_t *)sfxdata.Data())[1] == 0 && dmxlen <= size - 8)
 			{
-				int frequency = LittleShort(((uint16_t *)sfxdata)[1]);
+				int frequency = LittleShort(((uint16_t *)sfxdata.Data())[1]);
 				if (frequency == 0) frequency = 11025;
-				snd = GSnd->LoadSoundRaw(sfxdata+8, dmxlen, frequency, 1, 8, sfx->LoopStart);
+				snd = GSnd->LoadSoundRaw(sfxdata.Data()+8, dmxlen, frequency, 1, 8, sfx->LoopStart);
 			}
 			// If that fails, let the sound system try and figure it out.
 			else
 			{
-				snd = GSnd->LoadSound(sfxdata, size, false, pBuffer);
+				snd = GSnd->LoadSound(sfxdata.Data(), size, false, pBuffer);
 			}
-			delete[] sfxdata;
 
             sfx->data = snd.first;
             if(snd.second)
@@ -1554,33 +1569,31 @@ static void S_LoadSound3D(sfxinfo_t *sfx, FSoundLoadBuffer *pBuffer)
 		if (size <= 0) return;
 
 		auto wlump = Wads.OpenLumpReader(sfx->lumpnum);
-		uint8_t *sfxdata = new uint8_t[size];
-		wlump.Read(sfxdata, size);
-		int32_t dmxlen = LittleLong(((int32_t *)sfxdata)[1]);
+		auto sfxdata = wlump.Read(size);
+		int32_t dmxlen = LittleLong(((int32_t *)sfxdata.Data())[1]);
 
 		// If the sound is voc, use the custom loader.
-		if (strncmp((const char *)sfxdata, "Creative Voice File", 19) == 0)
+		if (strncmp((const char *)sfxdata.Data(), "Creative Voice File", 19) == 0)
 		{
-			snd = GSnd->LoadSoundVoc(sfxdata, size, true);
+			snd = GSnd->LoadSoundVoc(sfxdata.Data(), size, true);
 		}
 		// If the sound is raw, just load it as such.
 		else if (sfx->bLoadRAW)
 		{
-			snd = GSnd->LoadSoundRaw(sfxdata, size, sfx->RawRate, 1, 8, sfx->LoopStart, true);
+			snd = GSnd->LoadSoundRaw(sfxdata.Data(), size, sfx->RawRate, 1, 8, sfx->LoopStart, true);
 		}
 		// Otherwise, try the sound as DMX format.
-		else if (((uint8_t *)sfxdata)[0] == 3 && ((uint8_t *)sfxdata)[1] == 0 && dmxlen <= size - 8)
+		else if (((uint8_t *)sfxdata.Data())[0] == 3 && ((uint8_t *)sfxdata.Data())[1] == 0 && dmxlen <= size - 8)
 		{
-			int frequency = LittleShort(((uint16_t *)sfxdata)[1]);
+			int frequency = LittleShort(((uint16_t *)sfxdata.Data())[1]);
 			if (frequency == 0) frequency = 11025;
-			snd = GSnd->LoadSoundRaw(sfxdata + 8, dmxlen, frequency, 1, 8, sfx->LoopStart, -1, true);
+			snd = GSnd->LoadSoundRaw(sfxdata.Data() + 8, dmxlen, frequency, 1, 8, sfx->LoopStart, -1, true);
 		}
 		// If that fails, let the sound system try and figure it out.
 		else
 		{
-			snd = GSnd->LoadSound(sfxdata, size, true, pBuffer);
+			snd = GSnd->LoadSound(sfxdata.Data(), size, true, pBuffer);
 		}
-		delete[] sfxdata;
 	}
 
 	sfx->data3d = snd.first;
@@ -1666,7 +1679,7 @@ void S_StopSound (int channel)
 	{
 		FSoundChan *next = chan->NextChan;
 		if (chan->SourceType == SOURCE_None &&
-			(chan->EntChannel == channel || (i_compatflags & COMPATF_MAGICSILENCE)))
+			(chan->EntChannel == channel || (compatflags & COMPATF_MAGICSILENCE)))
 		{
 			S_StopChannel(chan);
 		}
@@ -1690,7 +1703,7 @@ void S_StopSound (AActor *actor, int channel)
 		FSoundChan *next = chan->NextChan;
 		if (chan->SourceType == SOURCE_Actor &&
 			chan->Actor == actor &&
-			(chan->EntChannel == channel || (i_compatflags & COMPATF_MAGICSILENCE)))
+			(chan->EntChannel == channel || (compatflags & COMPATF_MAGICSILENCE)))
 		{
 			S_StopChannel(chan);
 		}
@@ -1714,7 +1727,7 @@ void S_StopSound (const sector_t *sec, int channel)
 		FSoundChan *next = chan->NextChan;
 		if (chan->SourceType == SOURCE_Sector &&
 			chan->Sector == sec &&
-			(chan->EntChannel == channel || (i_compatflags & COMPATF_MAGICSILENCE)))
+			(chan->EntChannel == channel || (compatflags & COMPATF_MAGICSILENCE)))
 		{
 			S_StopChannel(chan);
 		}
@@ -1738,7 +1751,7 @@ void S_StopSound (const FPolyObj *poly, int channel)
 		FSoundChan *next = chan->NextChan;
 		if (chan->SourceType == SOURCE_Polyobj &&
 			chan->Poly == poly &&
-			(chan->EntChannel == channel || (i_compatflags & COMPATF_MAGICSILENCE)))
+			(chan->EntChannel == channel || (compatflags & COMPATF_MAGICSILENCE)))
 		{
 			S_StopChannel(chan);
 		}
@@ -1754,7 +1767,8 @@ void S_StopSound (const FPolyObj *poly, int channel)
 
 void S_StopAllChannels ()
 {
-	SN_StopAllSequences();
+	if (currentSession)
+		ForAllLevels(SN_StopAllSequences);
 
 	FSoundChan *chan = Channels;
 	while (chan != NULL)
@@ -1814,8 +1828,9 @@ void S_RelinkSound (AActor *from, AActor *to)
 //
 //==========================================================================
 
-bool S_ChangeSoundVolume(AActor *actor, int channel, float volume)
+void S_ChangeSoundVolume(AActor *actor, int channel, double dvolume)
 {
+	float volume = float(dvolume);
 	// don't let volume get out of bounds
 	if (volume < 0.0)
 		volume = 0.0;
@@ -1826,14 +1841,14 @@ bool S_ChangeSoundVolume(AActor *actor, int channel, float volume)
 	{
 		if (chan->SourceType == SOURCE_Actor &&
 			chan->Actor == actor &&
-			(chan->EntChannel == channel || (i_compatflags & COMPATF_MAGICSILENCE)))
+			(chan->EntChannel == channel || (compatflags & COMPATF_MAGICSILENCE)))
 		{
 			GSnd->ChannelVolume(chan, volume);
 			chan->Volume = volume;
-			return true;
+			return;
 		}
 	}
-	return false;
+	return;
 }
 
 //==========================================================================
@@ -1932,7 +1947,7 @@ static bool S_IsChannelUsed(AActor *actor, int channel, int *seen)
 
 bool S_IsActorPlayingSomething (AActor *actor, int channel, int sound_id)
 {
-	if (i_compatflags & COMPATF_MAGICSILENCE)
+	if (compatflags & COMPATF_MAGICSILENCE)
 	{
 		channel = 0;
 	}
@@ -2180,13 +2195,13 @@ void S_UpdateSounds (AActor *listenactor)
 		chan->ChanFlags &= ~CHAN_JUSTSTARTED;
 	}
 
-	SN_UpdateActiveSequences();
+	ForAllLevels(SN_UpdateActiveSequences);
 
 
 	GSnd->UpdateListener(&listener);
 	GSnd->UpdateSounds();
 
-	if (level.time >= RestartEvictionsAt)
+	if (currentSession && currentSession->time >= RestartEvictionsAt)
 	{
 		RestartEvictionsAt = 0;
 		S_RestoreEvictedChannels();
@@ -2203,6 +2218,7 @@ static void S_SetListener(SoundListener &listener, AActor *listenactor)
 {
 	if (listenactor != NULL)
 	{
+		auto Level = listenactor->Level;
 		listener.angle = (float)listenactor->Angles.Yaw.Radians();
 		/*
 		listener.velocity.X = listenactor->vel.x * (TICRATE/65536.f);
@@ -2212,8 +2228,8 @@ static void S_SetListener(SoundListener &listener, AActor *listenactor)
 		listener.velocity.Zero();
 		listener.position = listenactor->SoundPos();
 		listener.underwater = listenactor->waterlevel == 3;
-		assert(level.Zones.Size() > listenactor->Sector->ZoneNumber);
-		listener.Environment = level.Zones[listenactor->Sector->ZoneNumber].Environment;
+		assert(Level->Zones.Size() > listenactor->Sector->ZoneNumber);
+		listener.Environment = Level->Zones[listenactor->Sector->ZoneNumber].Environment;
 		listener.valid = true;
 	}
 	else
@@ -2256,9 +2272,9 @@ float S_GetRolloff(FRolloffInfo *rolloff, float distance, bool logarithmic)
 	}
 
 	float volume = (rolloff->MaxDistance - distance) / (rolloff->MaxDistance - rolloff->MinDistance);
-	if (rolloff->RolloffType == ROLLOFF_Custom && S_SoundCurve != NULL)
+	if (rolloff->RolloffType == ROLLOFF_Custom && S_SoundCurve.Size() > 0)
 	{
-		volume = S_SoundCurve[int(S_SoundCurveSize * (1 - volume))] / 127.f;
+		volume = S_SoundCurve[int(S_SoundCurve.Size() * (1 - volume))] / 127.f;
 	}
 	if (logarithmic)
 	{
@@ -2431,7 +2447,7 @@ static FSerializer &Serialize(FSerializer &arc, const char *key, FSoundChan &cha
 //
 //==========================================================================
 
-void S_SerializeSounds(FSerializer &arc)
+void S_SerializeSounds(FSerializer &arc, FLevelLocals *Level)
 {
 	FSoundChan *chan;
 
@@ -2491,7 +2507,7 @@ void S_SerializeSounds(FSerializer &arc)
 		// playing before the wipe, and depending on the synchronization
 		// between the main thread and the mixer thread at the time, the
 		// sounds might be heard briefly before pausing for the wipe.
-		RestartEvictionsAt = level.time + 2;
+		RestartEvictionsAt = currentSession->time + 2;
 	}
 	GSnd->Sync(false);
 	GSnd->UpdateSounds();
@@ -2576,13 +2592,14 @@ bool S_ChangeMusic (const char *musicname, int order, bool looping, bool force)
 		return false;
 	}
 
-	// allow specifying "*" as a placeholder to play the level's default music.
+	// allow specifying "*" as a placeholder to play the current primary level's default music.
 	if (musicname != NULL && !strcmp(musicname, "*"))
 	{
-		if (gamestate == GS_LEVEL || gamestate == GS_TITLELEVEL)
+		if ((gamestate == GS_LEVEL || gamestate == GS_TITLELEVEL) && currentSession)
 		{
-			musicname = level.Music;
-			order = level.musicorder;
+			auto Level = currentSession->Levelinfo[0];
+			musicname = Level->Music;
+			order = Level->musicorder;
 		}
 		else
 		{
@@ -2736,7 +2753,7 @@ DEFINE_ACTION_FUNCTION(DObject, S_ChangeMusic)
 {
 	PARAM_PROLOGUE;
 	PARAM_STRING(music);
-	PARAM_INT_DEF(order);
+	PARAM_INT(order);
 	PARAM_BOOL(looping);
 	PARAM_BOOL(force);
 	ACTION_RETURN_BOOL(S_ChangeMusic(music, order, looping, force));
@@ -2860,9 +2877,9 @@ CCMD (loopsound)
 		{
 			Printf("'%s' is not a sound\n", argv[1]);
 		}
-		else
+		else if (currentSession)
 		{
-			AActor *icon = Spawn("SpeakerIcon", players[consoleplayer].mo->PosPlusZ(32.), ALLOW_REPLACE);
+			AActor *icon = Spawn(currentSession->Levelinfo[0], "SpeakerIcon", players[consoleplayer].mo->PosPlusZ(32.), ALLOW_REPLACE);
 			if (icon != NULL)
 			{
 				S_Sound(icon, CHAN_BODY | CHAN_LOOP, id, 1.f, ATTN_IDLE);
@@ -2938,7 +2955,7 @@ CCMD (changemus)
 				delete PlayList;
 				PlayList = NULL;
 			}
-		S_ChangeMusic (argv[1], argv.argc() > 2 ? atoi (argv[2]) : 0);
+			S_ChangeMusic (argv[1], argv.argc() > 2 ? atoi (argv[2]) : 0);
 		}
 		else
 		{

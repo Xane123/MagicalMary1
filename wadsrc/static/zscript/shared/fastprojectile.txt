@@ -50,14 +50,8 @@ class FastProjectile : Actor
 		ClearInterpolation();
 		double oldz = pos.Z;
 
-		if (!bNoTimeFreeze)
-		{
-			//Added by MC: Freeze mode.
-			if (globalfreeze || level.Frozen)
-			{
-				return;
-			}
-		}
+		if (isFrozen())
+			return;
 
 		// [RH] Ripping is a little different than it was in Hexen
 		FCheckPosition tm;
@@ -82,7 +76,13 @@ class FastProjectile : Actor
 		}
 
 		// Handle movement
-		if (Vel != (0, 0, 0) || (pos.Z != floorz))
+		bool ismoved = Vel != (0, 0, 0)
+			// Check Z position set during previous tick.
+			// It should be strictly equal to the argument of SetZ() function.
+			|| (   (pos.Z != floorz           ) /* Did it hit the floor?   */
+				&& (pos.Z != ceilingz - Height) /* Did it hit the ceiling? */ );
+
+		if (ismoved)
 		{
 			// force some lateral movement so that collision detection works as intended.
 			if (bMissile && Vel.X == 0 && Vel.Y == 0 && !IsZeroDamage())
@@ -148,6 +148,7 @@ class FastProjectile : Actor
 
 					SetZ(floorz);
 					HitFloor ();
+                    Destructible.ProjectileHitPlane(self, SECPART_Floor);
 					ExplodeMissile (NULL, NULL);
 					return;
 				}
@@ -161,6 +162,7 @@ class FastProjectile : Actor
 					}
 
 					SetZ(ceilingz - Height);
+                    Destructible.ProjectileHitPlane(self, SECPART_Ceiling);
 					ExplodeMissile (NULL, NULL);
 					return;
 				}

@@ -40,13 +40,13 @@ void RenderPolyWallSprite::Render(PolyRenderThread *thread, AActor *thing, subse
 	pos.Z += thing->GetBobOffset(viewpoint.TicFrac);
 
 	bool flipTextureX = false;
-	FTexture *tex = RenderPolySprite::GetSpriteTexture(thing, flipTextureX);
-	if (tex == nullptr || tex->UseType == ETextureType::Null)
+	FSoftwareTexture *tex = RenderPolySprite::GetSpriteTexture(thing, flipTextureX);
+	if (tex == nullptr)
 		return;
 
 	DVector2 spriteScale = thing->Scale;
-	double thingxscalemul = spriteScale.X / tex->Scale.X;
-	double thingyscalemul = spriteScale.Y / tex->Scale.Y;
+	double thingxscalemul = spriteScale.X / tex->GetScale().X;
+	double thingyscalemul = spriteScale.Y / tex->GetScale().Y;
 	double spriteHeight = thingyscalemul * tex->GetHeight();
 
 	DAngle ang = thing->Angles.Yaw + 90;
@@ -91,8 +91,8 @@ void RenderPolyWallSprite::Render(PolyRenderThread *thread, AActor *thing, subse
 		vertices[i].y = (float)p.Y;
 		vertices[i].z = (float)(pos.Z + spriteHeight * offsets[i].second);
 		vertices[i].w = 1.0f;
-		vertices[i].u = (float)(offsets[i].first * tex->Scale.X);
-		vertices[i].v = (float)((1.0f - offsets[i].second) * tex->Scale.Y);
+		vertices[i].u = (float)(offsets[i].first * tex->GetScale().X);
+		vertices[i].v = (float)((1.0f - offsets[i].second) * tex->GetScale().Y);
 		if (flipTextureX)
 			vertices[i].u = 1.0f - vertices[i].u;
 	}
@@ -101,7 +101,8 @@ void RenderPolyWallSprite::Render(PolyRenderThread *thread, AActor *thing, subse
 	int lightlevel = fullbrightSprite ? 255 : thing->Sector->lightlevel + actualextralight;
 
 	PolyDrawArgs args;
-	args.SetLight(GetColorTable(sub->sector->Colormap, sub->sector->SpecialColors[sector_t::sprites], true), lightlevel, PolyRenderer::Instance()->Light.WallGlobVis(foggy), fullbrightSprite);
+	auto nc = !!(sub->sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
+	args.SetLight(GetSpriteColorTable(sub->sector->Colormap, sub->sector->SpecialColors[sector_t::sprites], nc), lightlevel, PolyRenderer::Instance()->Light.WallGlobVis(foggy), fullbrightSprite);
 	args.SetStencilTestValue(stencilValue);
 	args.SetTexture(tex, thing->RenderStyle);
 	args.SetDepthTest(true);

@@ -73,7 +73,7 @@ bool DBot::Reachable (AActor *rtarget)
 	double estimated_dist = player->mo->Distance2D(rtarget);
 	bool reachable = true;
 
-	FPathTraverse it(player->mo->X()+player->mo->Vel.X, player->mo->Y()+player->mo->Vel.Y, rtarget->X(), rtarget->Y(), PT_ADDLINES|PT_ADDTHINGS);
+	FPathTraverse it(player->mo->Level, player->mo->X()+player->mo->Vel.X, player->mo->Y()+player->mo->Vel.Y, rtarget->X(), rtarget->Y(), PT_ADDLINES|PT_ADDTHINGS);
 	intercept_t *in;
 	while ((in = it.Next()))
 	{
@@ -188,7 +188,7 @@ void DBot::Dofire (ticcmd_t *cmd)
 
 	//Reaction skill thing.
 	if (first_shot &&
-		!(player->ReadyWeapon->WeaponFlags & WIF_BOT_REACTION_SKILL_THING))
+		!(GetBotInfo(player->ReadyWeapon).flags & BIF_BOT_REACTION_SKILL_THING))
 	{
 		t_react = (100-skill.reaction+1)/((pr_botdofire()%3)+3);
 	}
@@ -203,38 +203,21 @@ void DBot::Dofire (ticcmd_t *cmd)
 	Dist = player->mo->Distance2D(enemy, player->mo->Vel.X - enemy->Vel.X, player->mo->Vel.Y - enemy->Vel.Y);
 
 	//FIRE EACH TYPE OF WEAPON DIFFERENT: Here should all the different weapons go.
-	if (player->ReadyWeapon->WeaponFlags & WIF_MELEEWEAPON)
+	if (GetBotInfo(player->ReadyWeapon).MoveCombatDist == 0)
 	{
-		if ((player->ReadyWeapon->ProjectileType != NULL))
-		{
-			if (player->ReadyWeapon->CheckAmmo (AWeapon::PrimaryFire, false, true))
-			{
-				// This weapon can fire a projectile and has enough ammo to do so
-				goto shootmissile;
-			}
-			else if (!(player->ReadyWeapon->WeaponFlags & WIF_AMMO_OPTIONAL))
-			{
-				// Ammo is required, so don't shoot. This is for weapons that shoot
-				// missiles that die at close range, such as the powered-up Phoneix Rod.
-				return;
-			}
-		}
-		else
-		{
-			//*4 is for atmosphere,  the chainsaws sounding and all..
-			no_fire = (Dist > DEFMELEERANGE*4);
-		}
+		//*4 is for atmosphere,  the chainsaws sounding and all..
+		no_fire = (Dist > DEFMELEERANGE*4);
 	}
-	else if (player->ReadyWeapon->WeaponFlags & WIF_BOT_BFG)
+	else if (GetBotInfo(player->ReadyWeapon).flags & BIF_BOT_BFG)
 	{
 		//MAKEME: This should be smarter.
 		if ((pr_botdofire()%200)<=skill.reaction)
 			if(Check_LOS(enemy, SHOOTFOV))
 				no_fire = false;
 	}
-	else if (player->ReadyWeapon->ProjectileType != NULL)
+	else if (GetBotInfo(player->ReadyWeapon).projectileType != NULL)
 	{
-		if (player->ReadyWeapon->WeaponFlags & WIF_BOT_EXPLOSIVE)
+		if (GetBotInfo(player->ReadyWeapon).flags & BIF_BOT_EXPLOSIVE)
 		{
 			//Special rules for RL
 			an = FireRox (enemy, cmd);
@@ -250,10 +233,9 @@ void DBot::Dofire (ticcmd_t *cmd)
 			}
 		}
 		// prediction aiming
-shootmissile:
 		Dist = player->mo->Distance2D(enemy);
-		fm = Dist / GetDefaultByType (player->ReadyWeapon->ProjectileType)->Speed;
-		bglobal.SetBodyAt(enemy->Pos() + enemy->Vel.XY() * fm * 2, 1);
+		fm = Dist / GetDefaultByType (GetBotInfo(player->ReadyWeapon).projectileType)->Speed;
+		bglobal.SetBodyAt(Level, enemy->Pos() + enemy->Vel.XY() * fm * 2, 1);
 		Angle = player->mo->AngleTo(bglobal.body1);
 		if (Check_LOS (enemy, SHOOTFOV))
 			no_fire = false;
@@ -369,7 +351,7 @@ AActor *DBot::Choose_Mate ()
 	if (mate)
 	{
 		if (mate->health <= 0)
-			mate = NULL;
+			mate = nullptr;
 		else
 			last_mate = mate;
 	}
@@ -379,7 +361,7 @@ AActor *DBot::Choose_Mate ()
 	//Check old_mates status.
 	if (last_mate)
 		if (last_mate->health <= 0)
-			last_mate = NULL;
+			last_mate = nullptr;
 
 	target = NULL;
 	closest_dist = FLT_MAX;
@@ -497,7 +479,7 @@ AActor *DBot::Find_enemy ()
 
 
 //Creates a temporary mobj (invisible) at the given location.
-void FCajunMaster::SetBodyAt (const DVector3 &pos, int hostnum)
+void FCajunMaster::SetBodyAt (FLevelLocals *l, const DVector3 &pos, int hostnum)
 {
 	if (hostnum == 1)
 	{
@@ -507,7 +489,7 @@ void FCajunMaster::SetBodyAt (const DVector3 &pos, int hostnum)
 		}
 		else
 		{
-			body1 = Spawn ("CajunBodyNode", pos, NO_REPLACE);
+			body1 = Spawn (l, "CajunBodyNode", pos, NO_REPLACE);
 		}
 	}
 	else if (hostnum == 2)
@@ -518,7 +500,7 @@ void FCajunMaster::SetBodyAt (const DVector3 &pos, int hostnum)
 		}
 		else
 		{
-			body2 = Spawn ("CajunBodyNode", pos, NO_REPLACE);
+			body2 = Spawn (l, "CajunBodyNode", pos, NO_REPLACE);
 		}
 	}
 }
@@ -535,7 +517,7 @@ void FCajunMaster::SetBodyAt (const DVector3 &pos, int hostnum)
 //Emulates missile travel. Returns distance travelled.
 double FCajunMaster::FakeFire (AActor *source, AActor *dest, ticcmd_t *cmd)
 {
-	AActor *th = Spawn ("CajunTrace", source->PosPlusZ(4*8.), NO_REPLACE);
+	AActor *th = Spawn (source->Level, "CajunTrace", source->PosPlusZ(4*8.), NO_REPLACE);
 	
 	th->target = source;		// where it came from
 
@@ -561,7 +543,7 @@ DAngle DBot::FireRox (AActor *enemy, ticcmd_t *cmd)
 	AActor *actor;
 	double m;
 
-	bglobal.SetBodyAt(player->mo->PosPlusZ(player->mo->Height / 2) + player->mo->Vel.XY() * 5, 2);
+	bglobal.SetBodyAt(Level, player->mo->PosPlusZ(player->mo->Height / 2) + player->mo->Vel.XY() * 5, 2);
 
 	actor = bglobal.body2;
 
@@ -571,7 +553,7 @@ DAngle DBot::FireRox (AActor *enemy, ticcmd_t *cmd)
 	//Predict.
 	m = ((dist+1) / GetDefaultByName("Rocket")->Speed);
 
-	bglobal.SetBodyAt(DVector3((enemy->Pos() + enemy->Vel * (m + 2)), ONFLOORZ), 1);
+	bglobal.SetBodyAt(Level, DVector3((enemy->Pos() + enemy->Vel * (m + 2)), ONFLOORZ), 1);
 	
 	//try the predicted location
 	if (P_CheckSight (actor, bglobal.body1, SF_IGNOREVISIBILITY)) //See the predicted location, so give a test missile

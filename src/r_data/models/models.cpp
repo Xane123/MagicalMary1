@@ -42,18 +42,19 @@
 #include "r_data/models/models_ue1.h"
 #include "r_data/models/models_obj.h"
 #include "i_time.h"
+#include "actorinlines.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244) // warning C4244: conversion from 'double' to 'float', possible loss of data
 #endif
 
 CVAR(Bool, gl_interpolate_model_frames, true, CVAR_ARCHIVE)
-EXTERN_CVAR(Bool, r_drawvoxels)
+EXTERN_CVAR (Bool, r_drawvoxels)
 
 extern TDeletingArray<FVoxel *> Voxels;
 extern TDeletingArray<FVoxelDef *> VoxelDefs;
 
-DeletingModelArray Models;
+TDeletingArray<FModel*> Models;
 
 void FModelRenderer::RenderModel(float x, float y, float z, FSpriteModelFrame *smf, AActor *actor, double ticFrac)
 {
@@ -167,13 +168,13 @@ void FModelRenderer::RenderModel(float x, float y, float z, FSpriteModelFrame *s
 	objectToWorldMatrix.rotate(-smf->rolloffset, 1, 0, 0);
 
 	// consider the pixel stretching. For non-voxels this must be factored out here
-	float stretch = (smf->modelIDs[0] != -1 ? Models[smf->modelIDs[0]]->getAspectFactor() : 1.f) / level.info->pixelstretch;
+	float stretch = (smf->modelIDs[0] != -1 ? Models[smf->modelIDs[0]]->getAspectFactor(actor->Level) : 1.f) / actor->Level->info->pixelstretch;
 	objectToWorldMatrix.scale(1, stretch, 1);
 
 	float orientation = scaleFactorX * scaleFactorY * scaleFactorZ;
 
 	BeginDrawModel(actor, smf, objectToWorldMatrix, orientation < 0);
-	RenderFrameModels(smf, actor->state, actor->tics, actor->GetClass(), translation);
+	RenderFrameModels(actor->Level, smf, actor->state, actor->tics, actor->GetClass(), translation);
 	EndDrawModel(actor, smf);
 }
 
@@ -211,11 +212,11 @@ void FModelRenderer::RenderHUDModel(DPSprite *psp, float ofsX, float ofsY)
 	float orientation = smf->xscale * smf->yscale * smf->zscale;
 
 	BeginDrawHUDModel(playermo, objectToWorldMatrix, orientation < 0);
-	RenderFrameModels(smf, psp->GetState(), psp->GetTics(), playermo->player->ReadyWeapon->GetClass(), 0);
+	RenderFrameModels(playermo->Level, smf, psp->GetState(), psp->GetTics(), playermo->player->ReadyWeapon->GetClass(), 0);
 	EndDrawHUDModel(playermo);
 }
 
-void FModelRenderer::RenderFrameModels(const FSpriteModelFrame *smf, const FState *curState, const int curTics, const PClass *ti, int translation)
+void FModelRenderer::RenderFrameModels(FLevelLocals *Level, const FSpriteModelFrame *smf, const FState *curState, const int curTics, const PClass *ti, int translation)
 {
 	// [BB] Frame interpolation: Find the FSpriteModelFrame smfNext which follows after smf in the animation
 	// and the scalar value inter ( element of [0,1) ), both necessary to determine the interpolated frame.
@@ -229,7 +230,7 @@ void FModelRenderer::RenderFrameModels(const FSpriteModelFrame *smf, const FStat
 			// [BB] To interpolate at more than 35 fps we take tic fractions into account.
 			float ticFraction = 0.;
 			// [BB] In case the tic counter is frozen we have to leave ticFraction at zero.
-			if (ConsoleState == c_up && menuactive != MENU_On && !(level.flags2 & LEVEL2_FROZEN))
+			if (ConsoleState == c_up && menuactive != MENU_On && !currentSession->isFrozen())
 			{
 				ticFraction = I_GetTimeFrac();
 			}
@@ -268,9 +269,8 @@ void FModelRenderer::RenderFrameModels(const FSpriteModelFrame *smf, const FStat
 		if (smf->modelIDs[i] != -1)
 		{
 			FModel * mdl = Models[smf->modelIDs[i]];
-			FTexture *tex = smf->skinIDs[i].isValid() ? TexMan(smf->skinIDs[i]) : nullptr;
+			FTexture *tex = smf->skinIDs[i].isValid() ? TexMan.GetTexture(smf->skinIDs[i], true) : nullptr;
 			mdl->BuildVertexBuffer(this);
-			SetVertexBuffer(mdl->GetVertexBuffer(this));
 
 			mdl->PushSpriteMDLFrame(smf, i);
 
@@ -278,8 +278,6 @@ void FModelRenderer::RenderFrameModels(const FSpriteModelFrame *smf, const FStat
 				mdl->RenderFrame(this, tex, smf->modelframes[i], smfNext->modelframes[i], inter, translation);
 			else
 				mdl->RenderFrame(this, tex, smf->modelframes[i], smf->modelframes[i], 0.f, translation);
-
-			ResetVertexBuffer();
 		}
 	}
 }
@@ -317,14 +315,8 @@ void FModel::DestroyVertexBuffer()
 }
 
 static TArray<FSpriteModelFrame> SpriteModelFrames;
-static int * SpriteModelHash;
+static TArray<int> SpriteModelHash;
 //TArray<FStateModelFrame> StateModelFrames;
-
-static void DeleteModelHash()
-{
-	if (SpriteModelHash != nullptr) delete [] SpriteModelHash;
-	SpriteModelHash = nullptr;
-}
 
 //===========================================================================
 //
@@ -492,13 +484,9 @@ static void ParseModelDefLump(int Lump);
 
 void InitModels()
 {
-	for (unsigned i = 0; i < Models.Size(); i++)
-	{
-		delete Models[i];
-	}
-	Models.Clear();
+	Models.DeleteAndClear();
 	SpriteModelFrames.Clear();
-	DeleteModelHash();
+	SpriteModelHash.Clear();
 
 	// First, create models for each voxel
 	for (unsigned i = 0; i < Voxels.Size(); i++)
@@ -512,6 +500,7 @@ void InitModels()
 		FVoxelModel *md = (FVoxelModel*)Models[VoxelDefs[i]->Voxel->VoxelIndex];
 		FSpriteModelFrame smf;
 		memset(&smf, 0, sizeof(smf));
+		smf.isVoxel = true;
 		smf.modelIDs[1] = smf.modelIDs[2] = smf.modelIDs[3] = -1;
 		smf.modelIDs[0] = VoxelDefs[i]->Voxel->VoxelIndex;
 		smf.skinIDs[0] = md->GetPaletteTexture();
@@ -550,9 +539,8 @@ void InitModels()
 	}
 
 	// create a hash table for quick access
-	SpriteModelHash = new int[SpriteModelFrames.Size ()];
-	atterm(DeleteModelHash);
-	memset(SpriteModelHash, 0xff, SpriteModelFrames.Size () * sizeof(int));
+	SpriteModelHash.Resize(SpriteModelFrames.Size ());
+	memset(SpriteModelHash.Data(), 0xff, SpriteModelFrames.Size () * sizeof(int));
 
 	for (unsigned int i = 0; i < SpriteModelFrames.Size (); i++)
 	{

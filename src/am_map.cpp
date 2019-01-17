@@ -62,6 +62,7 @@
 #include "a_keys.h"
 #include "g_levellocals.h"
 #include "actorinlines.h"
+#include "earcut.hpp"
 
 
 //=============================================================================
@@ -96,10 +97,6 @@ CUSTOM_CVAR (Int, am_emptyspacemargin, 0, CVAR_ARCHIVE)
 		self = 90;
 	}
 
-	if (nullptr != StatusBar)
-	{
-		AM_NewResolution();
-	}
 }
 
 //=============================================================================
@@ -605,23 +602,6 @@ void FMapInfoParser::ParseAMColors(bool overlay)
 //
 //=============================================================================
 
-// scale on entry
-#define INITSCALEMTOF .2
-// used by MTOF to scale from map-to-frame-buffer coords
-static double scale_mtof = INITSCALEMTOF;
-// used by FTOM to scale from frame-buffer-to-map coords (=1/scale_mtof)
-static double scale_ftom;
-
-// translates between frame-buffer and map distances
-inline double FTOM(double x)
-{
-	return x * scale_ftom;
-}
-
-inline double MTOF(double x)
-{
-	return x * scale_mtof;
-}
 
 static int bigstate = 0;
 static bool textured = 1;	// internal toggle for texture mode
@@ -643,22 +623,26 @@ CUSTOM_CVAR (Int, am_showalllines, -1, 0)	// This is a cheat so don't save it.
 {
 	int flagged = 0;
 	int total = 0;
-	if (self > 0 && level.lines.Size() > 0)
-	{
-		for(auto &line : level.lines)
+	
+	ForAllLevels([&](FLevelLocals *Level) {
+		for(auto &line : Level->lines)
 		{
 			// disregard intra-sector lines
-			if (line.frontsector == line.backsector) continue;	
-
+			if (line.frontsector == line.backsector) continue;
+			
 			// disregard control sectors for deep water
-			if (line.frontsector->e->FakeFloor.Sectors.Size() > 0) continue;	
-
+			if (line.frontsector->e->FakeFloor.Sectors.Size() > 0) continue;
+			
 			// disregard control sectors for 3D-floors
-			if (line.frontsector->e->XFloor.attached.Size() > 0) continue;	
-
+			if (line.frontsector->e->XFloor.attached.Size() > 0) continue;
+			
 			total++;
 			if (line.flags & ML_DONTDRAW) flagged++;
 		}
+	});
+
+	if (self > 0 && total > 0)
+	{
 		am_showallenabled =  (flagged * 100 / total >= self);
 	}
 	else if (self == 0)
@@ -683,8 +667,6 @@ CUSTOM_CVAR (Int, am_cheat, 0, 0)
 
 
 
-#define AM_NUMMARKPOINTS 10
-
 // player radius for automap checking
 #define PLAYERRADIUS	16.
 
@@ -699,8 +681,8 @@ CUSTOM_CVAR (Int, am_cheat, 0, 0)
 #define M_ZOOMOUT       (1/1.02)
 
 // translates between frame-buffer and map coordinates
-#define CXMTOF(x)  int(MTOF((x)-m_x)/* - f_x*/)
-#define CYMTOF(y)  int(f_h - MTOF((y)-m_y)/* + f_y*/)
+#define CXMTOF(x)  int(Level->MTOF((x)-m_x)/* - f_x*/)
+#define CYMTOF(y)  int(f_h - Level->MTOF((y)-m_y)/* + f_y*/)
 
 struct  fpoint_t
 {
@@ -820,8 +802,6 @@ static double old_m_x, old_m_y;
 static mpoint_t f_oldloc;
 
 static FTextureID marknums[10]; // numbers used for marking by the automap
-static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
-static int markpointnum = 0; // next point to be assigned
 
 static FTextureID mapback;	// the automap background
 static double mapystart=0; // y-value for the start of the map bitmap...used in the parallax stuff.
@@ -831,12 +811,11 @@ static bool stopped = true;
 
 static void AM_calcMinMaxMtoF();
 
-static void DrawMarker (FTexture *tex, double x, double y, int yadjust,
+static void DrawMarker (FLevelLocals *Level, FTexture *tex, double x, double y, int yadjust,
 	INTBOOL flip, double xscale, double yscale, int translation, double alpha, uint32_t fillcolor, FRenderStyle renderstyle);
 
 void AM_rotatePoint (double *x, double *y);
 void AM_rotate (double *x, double *y, DAngle an);
-void AM_doFollowPlayer ();
 
 
 //=============================================================================
@@ -845,11 +824,11 @@ void AM_doFollowPlayer ();
 //
 //=============================================================================
 
-bool AM_addMark ();
-bool AM_clearMarks ();
+bool AM_addMark (FLevelLocals *);
+bool AM_clearMarks (FLevelLocals *);
 void AM_saveScaleAndLoc ();
-void AM_restoreScaleAndLoc ();
-void AM_minOutWindowScale ();
+void AM_restoreScaleAndLoc(FLevelLocals *Level);
+void AM_minOutWindowScale(FLevelLocals *Level);
 
 
 CVAR(Bool, am_followplayer, true, CVAR_ARCHIVE)
@@ -871,7 +850,7 @@ CCMD(am_togglegrid)
 
 CCMD(am_toggletexture)
 {
-	if (am_textured && hasglnodes)
+	if (am_textured)
 	{
 		textured = !textured;
 		Printf ("%s\n", GStrings(textured ? "AMSTR_TEXON" : "AMSTR_TEXOFF"));
@@ -880,15 +859,16 @@ CCMD(am_toggletexture)
 
 CCMD(am_setmark)
 {
-	if (AM_addMark())
+	auto Level = who->Level;
+	if (AM_addMark(Level))
 	{
-		Printf ("%s %d\n", GStrings("AMSTR_MARKEDSPOT"), markpointnum);
+		Printf ("%s %d\n", GStrings("AMSTR_MARKEDSPOT"), Level->am_markpointnum);
 	}
 }
 
 CCMD(am_clearmarks)
 {
-	if (AM_clearMarks())
+	if (AM_clearMarks(who->Level))
 	{
 		Printf ("%s\n", GStrings("AMSTR_MARKSCLEARED"));
 	}
@@ -900,10 +880,10 @@ CCMD(am_gobig)
 	if (bigstate)
 	{
 		AM_saveScaleAndLoc();
-		AM_minOutWindowScale();
+		AM_minOutWindowScale(who->Level);
 	}
 	else
-		AM_restoreScaleAndLoc();
+		AM_restoreScaleAndLoc(who->Level);
 }
 
 //=============================================================================
@@ -964,7 +944,6 @@ void AM_StaticInit()
 		mysnprintf (namebuf, countof(namebuf), "AMMNUM%d", i);
 		marknums[i] = TexMan.CheckForTexture (namebuf, ETextureType::MiscPatch);
 	}
-	markpointnum = 0;
 	mapback.SetInvalid();
 }
 
@@ -985,12 +964,12 @@ DVector2 AM_GetPosition()
 //
 //=============================================================================
 
-void AM_activateNewScale ()
+void AM_activateNewScale (FLevelLocals *Level)
 {
 	m_x += m_w/2;
 	m_y += m_h/2;
-	m_w = FTOM(f_w);
-	m_h = FTOM(f_h);
+	m_w = Level->FTOM(f_w);
+	m_h = Level->FTOM(f_h);
 	m_x -= m_w/2;
 	m_y -= m_h/2;
 	m_x2 = m_x + m_w;
@@ -1017,7 +996,7 @@ void AM_saveScaleAndLoc ()
 //
 //=============================================================================
 
-void AM_restoreScaleAndLoc ()
+void AM_restoreScaleAndLoc (FLevelLocals *Level)
 {
 	m_w = old_m_w;
 	m_h = old_m_h;
@@ -1035,8 +1014,8 @@ void AM_restoreScaleAndLoc ()
 	m_y2 = m_y + m_h;
 
 	// Change the scaling multipliers
-	scale_mtof = f_w / m_w;
-	scale_ftom = 1. / scale_mtof;
+	Level->am_scale_mtof = f_w / m_w;
+	Level->am_scale_ftom = 1. / Level->am_scale_mtof;
 }
 
 //=============================================================================
@@ -1045,13 +1024,13 @@ void AM_restoreScaleAndLoc ()
 //
 //=============================================================================
 
-bool AM_addMark ()
+bool AM_addMark (FLevelLocals *Level)
 {
 	if (marknums[0].isValid())
 	{
-		markpoints[markpointnum].x = m_x + m_w/2;
-		markpoints[markpointnum].y = m_y + m_h/2;
-		markpointnum = (markpointnum + 1) % AM_NUMMARKPOINTS;
+		Level->am_markpoints[Level->am_markpointnum].x = m_x + m_w/2;
+		Level->am_markpoints[Level->am_markpointnum].y = m_y + m_h/2;
+		Level->am_markpointnum = (Level->am_markpointnum + 1) % Level->AM_NUMMARKPOINTS;
 		return true;
 	}
 	return false;
@@ -1064,12 +1043,12 @@ bool AM_addMark ()
 //
 //=============================================================================
 
-static void AM_findMinMaxBoundaries ()
+static void AM_findMinMaxBoundaries (FLevelLocals *Level)
 {
 	min_x = min_y = FLT_MAX;
 	max_x = max_y = FIXED_MIN;
   
-	for (auto &vert : level.vertexes)
+	for (auto &vert : Level->vertexes)
 	{
 		if (vert.fX() < min_x)
 			min_x = vert.fX();
@@ -1183,22 +1162,22 @@ static void AM_ClipRotatedExtents (double pivotx, double pivoty)
 //
 //=============================================================================
 
-static void AM_ScrollParchment (double dmapx, double dmapy)
+static void AM_ScrollParchment (FLevelLocals *Level, double dmapx, double dmapy)
 {
-	mapxstart = mapxstart - dmapx * scale_mtof;
-	mapystart = mapystart - dmapy * scale_mtof;
+	mapxstart = mapxstart - dmapx * Level->am_scale_mtof;
+	mapystart = mapystart - dmapy * Level->am_scale_mtof;
 
 	mapxstart = clamp(mapxstart, -40000., 40000.);
 	mapystart = clamp(mapystart, -40000., 40000.);
 
 	if (mapback.isValid())
 	{
-		FTexture *backtex = TexMan[mapback];
+		FTexture *backtex = TexMan.GetTexture(mapback);
 
 		if (backtex != NULL)
 		{
-			int pwidth = backtex->GetWidth();
-			int pheight = backtex->GetHeight();
+			int pwidth = backtex->GetDisplayWidth();
+			int pheight = backtex->GetDisplayHeight();
 
 			while(mapxstart > 0)
 				mapxstart -= pwidth;
@@ -1218,7 +1197,7 @@ static void AM_ScrollParchment (double dmapx, double dmapy)
 //
 //=============================================================================
 
-void AM_changeWindowLoc ()
+void AM_changeWindowLoc (FLevelLocals *Level)
 {
 	if (m_paninc.x || m_paninc.y)
 	{
@@ -1243,7 +1222,7 @@ void AM_changeWindowLoc ()
 	m_y += incy;
 
 	AM_ClipRotatedExtents (oldmx + m_w/2, oldmy + m_h/2);
-	AM_ScrollParchment (m_x != oldmx ? oincx : 0, m_y != oldmy ? -oincy : 0);
+	AM_ScrollParchment (Level, m_x != oldmx ? oincx : 0, m_y != oldmy ? -oincy : 0);
 }
 
 
@@ -1253,7 +1232,7 @@ void AM_changeWindowLoc ()
 //
 //=============================================================================
 
-void AM_initVariables ()
+void AM_initVariables (FLevelLocals *Level)
 {
 	int pnum;
 
@@ -1274,8 +1253,8 @@ void AM_initVariables ()
 	m_paninc.x = m_paninc.y = 0;
 	mtof_zoommul = 1.;
 
-	m_w = FTOM(SCREENWIDTH);
-	m_h = FTOM(SCREENHEIGHT);
+	m_w = Level->FTOM(SCREENWIDTH);
+	m_h = Level->FTOM(SCREENHEIGHT);
 
 	// find player to center on initially
 	if (!playeringame[pnum = consoleplayer])
@@ -1285,7 +1264,7 @@ void AM_initVariables ()
 	assert(pnum >= 0 && pnum < MAXPLAYERS);
 	m_x = players[pnum].camera->X() - m_w/2;
 	m_y = players[pnum].camera->Y() - m_h/2;
-	AM_changeWindowLoc();
+	AM_changeWindowLoc(Level);
 
 	// for saving & restoring
 	old_m_x = m_x;
@@ -1348,11 +1327,11 @@ static void AM_initColors (bool overlayed)
 //
 //=============================================================================
 
-bool AM_clearMarks ()
+bool AM_clearMarks (FLevelLocals *Level)
 {
-	for (int i = AM_NUMMARKPOINTS-1; i >= 0; i--)
-		markpoints[i].x = -1; // means empty
-	markpointnum = 0;
+	for (int i = Level->AM_NUMMARKPOINTS-1; i >= 0; i--)
+		Level->am_markpoints[i].x = -1; // means empty
+	Level->am_markpointnum = 0;
 	return marknums[0].isValid();
 }
 
@@ -1362,24 +1341,24 @@ bool AM_clearMarks ()
 //
 //=============================================================================
 
-void AM_LevelInit ()
+void AM_LevelInit (FLevelLocals *Level)
 {
-	if (level.info->MapBackground.Len() == 0)
+	if (Level->info->MapBackground.Len() == 0)
 	{
 		mapback = TexMan.CheckForTexture("AUTOPAGE", ETextureType::MiscPatch);
 	}
 	else
 	{
-		mapback = TexMan.CheckForTexture(level.info->MapBackground, ETextureType::MiscPatch);
+		mapback = TexMan.CheckForTexture(Level->info->MapBackground, ETextureType::MiscPatch);
 	}
 
-	AM_clearMarks();
+	AM_clearMarks(Level);
 
-	AM_findMinMaxBoundaries();
-	scale_mtof = min_scale_mtof / 0.7;
-	if (scale_mtof > max_scale_mtof)
-		scale_mtof = min_scale_mtof;
-	scale_ftom = 1 / scale_mtof;
+	AM_findMinMaxBoundaries(Level);
+	Level->am_scale_mtof = min_scale_mtof / 0.7;
+	if (Level->am_scale_mtof > max_scale_mtof)
+		Level->am_scale_mtof = min_scale_mtof;
+	Level->am_scale_ftom = 1 / Level->am_scale_mtof;
 
 	am_showalllines.Callback();
 }
@@ -1403,11 +1382,11 @@ void AM_Stop ()
 //
 //=============================================================================
 
-void AM_Start ()
+void AM_Start (FLevelLocals *Level)
 {
 	if (!stopped) AM_Stop();
 	stopped = false;
-	AM_initVariables();
+	AM_initVariables(Level);
 }
 
 
@@ -1418,10 +1397,10 @@ void AM_Start ()
 //
 //=============================================================================
 
-void AM_minOutWindowScale ()
+void AM_minOutWindowScale (FLevelLocals *Level)
 {
-	scale_mtof = min_scale_mtof;
-	scale_ftom = 1/ scale_mtof;
+	Level->am_scale_mtof = min_scale_mtof;
+	Level->am_scale_ftom = 1/ Level->am_scale_mtof;
 }
 
 //=============================================================================
@@ -1430,10 +1409,10 @@ void AM_minOutWindowScale ()
 //
 //=============================================================================
 
-void AM_maxOutWindowScale ()
+void AM_maxOutWindowScale (FLevelLocals *Level)
 {
-	scale_mtof = max_scale_mtof;
-	scale_ftom = 1 / scale_mtof;
+	Level->am_scale_mtof = max_scale_mtof;
+	Level->am_scale_ftom = 1 / Level->am_scale_mtof;
 }
 
 //=============================================================================
@@ -1442,7 +1421,7 @@ void AM_maxOutWindowScale ()
 //
 //=============================================================================
 
-void AM_NewResolution()
+void AM_NewResolution(FLevelLocals *Level)
 {
 	double oldmin = min_scale_mtof;
 	
@@ -1451,15 +1430,15 @@ void AM_NewResolution()
 		return; // [SP] Not in a game, exit!
 	}	
 	AM_calcMinMaxMtoF();
-	scale_mtof = scale_mtof * min_scale_mtof / oldmin;
-	scale_ftom = 1 / scale_mtof;
-	if (scale_mtof < min_scale_mtof)
-		AM_minOutWindowScale();
-	else if (scale_mtof > max_scale_mtof)
-		AM_maxOutWindowScale();
+	Level->am_scale_mtof = Level->am_scale_mtof * min_scale_mtof / oldmin;
+	Level->am_scale_ftom = 1 / Level->am_scale_mtof;
+	if (Level->am_scale_mtof < min_scale_mtof)
+		AM_minOutWindowScale(Level);
+	else if (Level->am_scale_mtof > max_scale_mtof)
+		AM_maxOutWindowScale(Level);
 	f_w = screen->GetWidth();
 	f_h = StatusBar->GetTopOfStatusbar();
-	AM_activateNewScale();
+	AM_activateNewScale(Level);
 }
 
 
@@ -1483,7 +1462,7 @@ CCMD (togglemap)
 //
 //=============================================================================
 
-void AM_ToggleMap ()
+void AM_ToggleMap (FLevelLocals *Level)
 {
 	if (gamestate != GS_LEVEL)
 		return;
@@ -1494,7 +1473,7 @@ void AM_ToggleMap ()
 
 	if (!automapactive)
 	{
-		AM_Start ();
+		AM_Start (Level);
 		viewactive = (am_overlay != 0.f);
 	}
 	else
@@ -1547,7 +1526,7 @@ bool AM_Responder (event_t *ev, bool last)
 //
 //=============================================================================
 
-void AM_changeWindowScale ()
+void AM_changeWindowScale (FLevelLocals *Level)
 {
 	double mtof_zoommul;
 
@@ -1574,13 +1553,13 @@ void AM_changeWindowScale ()
 	am_zoomdir = 0;
 
 	// Change the scaling multipliers
-	scale_mtof = scale_mtof * mtof_zoommul;
-	scale_ftom = 1 / scale_mtof;
+	Level->am_scale_mtof = Level->am_scale_mtof * mtof_zoommul;
+	Level->am_scale_ftom = 1 / Level->am_scale_mtof;
 
-	if (scale_mtof < min_scale_mtof)
-		AM_minOutWindowScale();
-	else if (scale_mtof > max_scale_mtof)
-		AM_maxOutWindowScale();
+	if (Level->am_scale_mtof < min_scale_mtof)
+		AM_minOutWindowScale(Level);
+	else if (Level->am_scale_mtof > max_scale_mtof)
+		AM_maxOutWindowScale(Level);
 }
 
 CCMD(am_zoom)
@@ -1597,7 +1576,7 @@ CCMD(am_zoom)
 //
 //=============================================================================
 
-void AM_doFollowPlayer ()
+void AM_doFollowPlayer (FLevelLocals *Level)
 {
 	double sx, sy;
 	auto cam = players[consoleplayer].camera;
@@ -1620,7 +1599,7 @@ void AM_doFollowPlayer ()
 			{
 				AM_rotate(&sx, &sy, cam->Angles.Yaw - 90);
 			}
-			AM_ScrollParchment(sx, sy);
+			AM_ScrollParchment(Level, sx, sy);
 
 			f_oldloc.x = ampos.X;
 			f_oldloc.y = ampos.Y;
@@ -1634,7 +1613,7 @@ void AM_doFollowPlayer ()
 //
 //=============================================================================
 
-void AM_Ticker ()
+void AM_Ticker (FLevelLocals *Level)
 {
 	if (!automapactive)
 		return;
@@ -1643,24 +1622,24 @@ void AM_Ticker ()
 
 	if (am_followplayer)
 	{
-		AM_doFollowPlayer();
+		AM_doFollowPlayer(Level);
 	}
 	else
 	{
 		m_paninc.x = m_paninc.y = 0;
-		if (Button_AM_PanLeft.bDown) m_paninc.x -= FTOM(F_PANINC);
-		if (Button_AM_PanRight.bDown) m_paninc.x += FTOM(F_PANINC);
-		if (Button_AM_PanUp.bDown) m_paninc.y += FTOM(F_PANINC);
-		if (Button_AM_PanDown.bDown) m_paninc.y -= FTOM(F_PANINC);
+		if (Button_AM_PanLeft.bDown) m_paninc.x -= Level->FTOM(F_PANINC);
+		if (Button_AM_PanRight.bDown) m_paninc.x += Level->FTOM(F_PANINC);
+		if (Button_AM_PanUp.bDown) m_paninc.y += Level->FTOM(F_PANINC);
+		if (Button_AM_PanDown.bDown) m_paninc.y -= Level->FTOM(F_PANINC);
 	}
 
 	// Change the zoom if necessary
 	if (Button_AM_ZoomIn.bDown || Button_AM_ZoomOut.bDown || am_zoomdir != 0)
-		AM_changeWindowScale();
+		AM_changeWindowScale(Level);
 
 	// Change x,y location
 	//if (m_paninc.x || m_paninc.y)
-		AM_changeWindowLoc();
+		AM_changeWindowLoc(Level);
 }
 
 
@@ -1688,11 +1667,11 @@ void AM_clearFB (const AMColor &color)
 	}
 	else
 	{
-		FTexture *backtex = TexMan[mapback];
+		FTexture *backtex = TexMan.GetTexture(mapback);
 		if (backtex != NULL)
 		{
-			int pwidth = backtex->GetWidth();
-			int pheight = backtex->GetHeight();
+			int pwidth = backtex->GetDisplayWidth();
+			int pheight = backtex->GetDisplayHeight();
 			int x, y;
 
 			//blit the automap background to the screen.
@@ -1718,7 +1697,7 @@ void AM_clearFB (const AMColor &color)
 //
 //=============================================================================
 
-bool AM_clipMline (mline_t *ml, fline_t *fl)
+bool AM_clipMline (FLevelLocals *Level, mline_t *ml, fline_t *fl)
 {
 	enum {
 		LEFT	=1,
@@ -1845,19 +1824,19 @@ bool AM_clipMline (mline_t *ml, fline_t *fl)
 //
 //=============================================================================
 
-void AM_drawMline (mline_t *ml, const AMColor &color)
+void AM_drawMline (FLevelLocals *Level, mline_t *ml, const AMColor &color)
 {
 	fline_t fl;
 
-	if (AM_clipMline (ml, &fl))
+	if (AM_clipMline (Level, ml, &fl))
 	{
 		screen->DrawLine (f_x + fl.a.x, f_y + fl.a.y, f_x + fl.b.x, f_y + fl.b.y, color.Index, color.RGB);
 	}
 }
 
-inline void AM_drawMline (mline_t *ml, int colorindex)
+inline void AM_drawMline (FLevelLocals *Level, mline_t *ml, int colorindex)
 {
-	AM_drawMline(ml, AMColors[colorindex]);
+	AM_drawMline(Level, ml, AMColors[colorindex]);
 }
 
 //=============================================================================
@@ -1866,15 +1845,15 @@ inline void AM_drawMline (mline_t *ml, int colorindex)
 //
 //=============================================================================
 
-void AM_drawGrid (int color)
+void AM_drawGrid (FLevelLocals *Level, int color)
 {
 	double x, y;
 	double start, end;
 	mline_t ml;
 	double minlen, extx, exty;
 	double minx, miny;
-	auto bmaporgx = level.blockmap.bmaporgx;
-	auto bmaporgy = level.blockmap.bmaporgy;
+	auto bmaporgx = Level->blockmap.bmaporgx;
+	auto bmaporgy = Level->blockmap.bmaporgy;
 
 	// [RH] Calculate a minimum for how long the grid lines should be so that
 	// they cover the screen at any rotation.
@@ -1903,7 +1882,7 @@ void AM_drawGrid (int color)
 			AM_rotatePoint (&ml.a.x, &ml.a.y);
 			AM_rotatePoint (&ml.b.x, &ml.b.y);
 		}
-		AM_drawMline(&ml, color);
+		AM_drawMline(Level, &ml, color);
 	}
 
 	// Figure out start of horizontal gridlines
@@ -1923,7 +1902,7 @@ void AM_drawGrid (int color)
 			AM_rotatePoint (&ml.a.x, &ml.a.y);
 			AM_rotatePoint (&ml.b.x, &ml.b.y);
 		}
-		AM_drawMline (&ml, color);
+		AM_drawMline (Level, &ml, color);
 	}
 }
 
@@ -2051,10 +2030,11 @@ sector_t * AM_FakeFlat(AActor *viewer, sector_t * sec, sector_t * dest)
 //
 //=============================================================================
 
-void AM_drawSubsectors()
+void AM_drawSubsectors(FLevelLocals *Level)
 {
 	static TArray<FVector2> points;
-	double scale = scale_mtof;
+	std::vector<uint32_t> indices;
+	double scale = Level->am_scale_mtof;
 	DAngle rotation;
 	sector_t tempsec;
 	int floorlight;
@@ -2064,30 +2044,31 @@ void AM_drawSubsectors()
 	PalEntry flatcolor;
 	mpoint_t originpt;
 
-	auto &subsectors = level.subsectors;
+	auto &subsectors = Level->subsectors;
 	for (unsigned i = 0; i < subsectors.Size(); ++i)
 	{
-		if (subsectors[i].flags & SSECF_POLYORG)
+		auto sub = &subsectors[i];
+		if (sub->flags & SSECF_POLYORG)
 		{
 			continue;
 		}
 
-		if ((!(subsectors[i].flags & SSECMF_DRAWN) || (subsectors[i].render_sector->MoreFlags & SECMF_HIDDEN)) && am_cheat == 0)
+		if ((!(sub->flags & SSECMF_DRAWN) || (sub->flags & SSECF_HOLE) || (sub->render_sector->MoreFlags & SECMF_HIDDEN)) && am_cheat == 0)
 		{
 			continue;
 		}
 
-		if (am_portaloverlay && subsectors[i].render_sector->PortalGroup != MapPortalGroup && subsectors[i].render_sector->PortalGroup != 0)
+		if (am_portaloverlay && sub->render_sector->PortalGroup != MapPortalGroup && sub->render_sector->PortalGroup != 0)
 		{
 			continue;
 		}
 
 		// Fill the points array from the subsector.
-		points.Resize(subsectors[i].numlines);
-		for (uint32_t j = 0; j < subsectors[i].numlines; ++j)
+		points.Resize(sub->numlines);
+		for (uint32_t j = 0; j < sub->numlines; ++j)
 		{
-			mpoint_t pt = { subsectors[i].firstline[j].v1->fX(),
-							subsectors[i].firstline[j].v1->fY() };
+			mpoint_t pt = { sub->firstline[j].v1->fX(),
+							sub->firstline[j].v1->fY() };
 			if (am_rotate == 1 || (am_rotate == 2 && viewactive))
 			{
 				AM_rotatePoint(&pt.x, &pt.y);
@@ -2096,7 +2077,7 @@ void AM_drawSubsectors()
 			points[j].Y = float(f_y + (f_h - (pt.y - m_y) * scale));
 		}
 		// For lighting and texture determination
-		sector_t *sec = AM_FakeFlat(players[consoleplayer].camera, subsectors[i].render_sector, &tempsec);
+		sector_t *sec = AM_FakeFlat(players[consoleplayer].camera, sub->render_sector, &tempsec);
 		floorlight = sec->GetFloorLight();
 		// Find texture origin.
 		originpt.x = -sec->GetXOffset(sector_t::floor);
@@ -2123,7 +2104,7 @@ void AM_drawSubsectors()
 			double secx;
 			double secy;
 			double seczb, seczt;
-            auto &vp = r_viewpoint;
+			auto &vp = r_viewpoint;
 			double cmpz = vp.Pos.Z;
 
 			if (players[consoleplayer].camera && sec == players[consoleplayer].camera->Sector)
@@ -2144,7 +2125,7 @@ void AM_drawSubsectors()
 			{
 				F3DFloor *rover = sec->e->XFloor.ffloors[i];
 				if (!(rover->flags & FF_EXISTS)) continue;
-				if (rover->flags & (FF_FOG|FF_THISINSIDE)) continue;
+				if (rover->flags & (FF_FOG | FF_THISINSIDE)) continue;
 				if (!(rover->flags & FF_RENDERPLANES)) continue;
 				if (rover->alpha == 0) continue;
 				double roverz = rover->top.plane->ZatPoint(secx, secy);
@@ -2194,7 +2175,7 @@ void AM_drawSubsectors()
 
 		// If this subsector has not actually been seen yet (because you are cheating
 		// to see it on the map), tint and desaturate it.
-		if (!(subsectors[i].flags & SSECMF_DRAWN))
+		if (!(sub->flags & SSECMF_DRAWN))
 		{
 			colormap.LightColor = PalEntry(
 				(colormap.LightColor.r + 255) / 2,
@@ -2203,16 +2184,35 @@ void AM_drawSubsectors()
 			colormap.Desaturation = 255 - (255 - colormap.Desaturation) / 4;
 		}
 		// make table based fog visible on the automap as well.
-		if (level.flags & LEVEL_HASFADETABLE)
+		if (Level->flags & LEVEL_HASFADETABLE)
 		{
 			colormap.FadeColor = PalEntry(0, 128, 128, 128);
 		}
 
 		// Draw the polygon.
-		FTexture *pic = TexMan(maptex);
-		if (pic != NULL && pic->UseType != ETextureType::Null)
+		if (maptex.isValid())
 		{
-			screen->FillSimplePoly(TexMan(maptex),
+			// Hole filling "subsectors" are not necessarily convex so they require real triangulation.
+			// These things are extremely rare so performance is secondary here.
+			if (sub->flags & SSECF_HOLE && sub->numlines > 3)
+			{
+				using Point = std::pair<double, double>;
+				std::vector<std::vector<Point>> polygon;
+				std::vector<Point> *curPoly;
+
+				polygon.resize(1);
+				curPoly = &polygon.back();
+				curPoly->resize(points.Size());
+
+				for (unsigned i = 0; i < points.Size(); i++)
+				{
+					(*curPoly)[i] = { points[i].X, points[i].Y };
+				}
+				indices = mapbox::earcut(polygon);
+			}
+			else indices.clear();
+
+			screen->FillSimplePoly(TexMan.GetTexture(maptex, true),
 				&points[0], points.Size(),
 				originx, originy,
 				scale / scalex,
@@ -2221,8 +2221,9 @@ void AM_drawSubsectors()
 				colormap,
 				flatcolor,
 				floorlight,
-				f_y + f_h
-				);
+				Level->lightMode,
+				f_y + f_h,
+				indices.data(), indices.size());
 		}
 	}
 }
@@ -2277,10 +2278,10 @@ void AM_drawSeg(seg_t *seg, const AMColor &color)
 		AM_rotatePoint (&l.a.x, &l.a.y);
 		AM_rotatePoint (&l.b.x, &l.b.y);
 	}
-	AM_drawMline(&l, color);
+	AM_drawMline(seg->frontsector->Level, &l, color);
 }
 
-void AM_drawPolySeg(FPolySeg *seg, const AMColor &color)
+void AM_drawPolySeg(FLevelLocals *Level, FPolySeg *seg, const AMColor &color)
 {
 	mline_t l;
 	l.a.x = seg->v1.pos.X;
@@ -2293,28 +2294,27 @@ void AM_drawPolySeg(FPolySeg *seg, const AMColor &color)
 		AM_rotatePoint (&l.a.x, &l.a.y);
 		AM_rotatePoint (&l.b.x, &l.b.y);
 	}
-	AM_drawMline(&l, color);
+	AM_drawMline(Level, &l, color);
 }
 
-void AM_showSS()
+void AM_showSS(FLevelLocals *Level)
 {
-	if (am_showsubsector >= 0 && (unsigned)am_showsubsector < level.subsectors.Size())
+	if (am_showsubsector >= 0 && (unsigned)am_showsubsector < Level->subsectors.Size())
 	{
 		AMColor yellow;
 		yellow.FromRGB(255,255,0);
 		AMColor red;
 		red.FromRGB(255,0,0);
 
-		subsector_t *sub = &level.subsectors[am_showsubsector];
+		subsector_t *sub = &Level->subsectors[am_showsubsector];
 		for (unsigned int i = 0; i < sub->numlines; i++)
 		{
 			AM_drawSeg(sub->firstline + i, yellow);
 		}
 
-		for (int i = 0; i <po_NumPolyobjs; i++)
+		for (auto &poly : Level->Polyobjects)
 		{
-			FPolyObj *po = &polyobjs[i];
-			FPolyNode *pnode = po->subsectorlinks;
+			FPolyNode *pnode = poly.subsectorlinks;
 
 			while (pnode != NULL)
 			{
@@ -2322,7 +2322,7 @@ void AM_showSS()
 				{
 					for (unsigned j = 0; j < pnode->segs.Size(); j++)
 					{
-						AM_drawPolySeg(&pnode->segs[j], red);
+						AM_drawPolySeg(Level, &pnode->segs[j], red);
 					}
 				}
 				pnode = pnode->snext;
@@ -2550,26 +2550,26 @@ bool AM_isLockBoundary (line_t &line, int *lockptr = NULL)
 //
 //=============================================================================
 
-void AM_drawWalls (bool allmap)
+void AM_drawWalls (FLevelLocals *Level, bool allmap)
 {
 	static mline_t l;
 	int lock, color;
 
-	int numportalgroups = am_portaloverlay ? level.Displacements.size : 0;
+	int numportalgroups = am_portaloverlay ? Level->Displacements.size : 0;
 
 	for (int p = numportalgroups - 1; p >= -1; p--)
 	{
 		if (p == MapPortalGroup) continue;
 
 
-		for (auto &line : level.lines)
+		for (auto &line : Level->lines)
 		{
 			int pg;
 			
 			if (line.sidedef[0]->Flags & WALLF_POLYOBJ)
 			{
 				// For polyobjects we must test the surrounding sector to get the proper group.
-				pg = P_PointInSector(line.v1->fX() + line.Delta().X / 2, line.v1->fY() + line.Delta().Y / 2)->PortalGroup;
+				pg = P_PointInSector(line.GetLevel(), line.v1->fX() + line.Delta().X / 2, line.v1->fY() + line.Delta().Y / 2)->PortalGroup;
 			}
 			else
 			{
@@ -2579,7 +2579,7 @@ void AM_drawWalls (bool allmap)
 			bool portalmode = numportalgroups > 0 &&  pg != MapPortalGroup;
 			if (pg == p)
 			{
-				offset = level.Displacements.getOffset(pg, MapPortalGroup);
+				offset = Level->Displacements.getOffset(pg, MapPortalGroup);
 			}
 			else if (p == -1 && (pg == MapPortalGroup || !am_portaloverlay))
 			{
@@ -2611,37 +2611,37 @@ void AM_drawWalls (bool allmap)
 				if (line.automapstyle > AMLS_Default && line.automapstyle < AMLS_COUNT
 					&& (am_cheat == 0 || am_cheat >= 4))
 				{
-					AM_drawMline(&l, AUTOMAP_LINE_COLORS[line.automapstyle]);
+					AM_drawMline(Level, &l, AUTOMAP_LINE_COLORS[line.automapstyle]);
 					continue;
 				}
 
 				if (portalmode)
 				{
-					AM_drawMline(&l, AMColors.PortalColor);
+					AM_drawMline(Level, &l, AMColors.PortalColor);
 				}
 				else if (AM_CheckSecret(&line) == 1)
 				{
 					// map secret sectors like Boom
-					AM_drawMline(&l, AMColors.SecretSectorColor);
+					AM_drawMline(Level, &l, AMColors.SecretSectorColor);
 				}
 				else if (AM_CheckSecret(&line) == 2)
 				{
-					AM_drawMline(&l, AMColors.UnexploredSecretColor);
+					AM_drawMline(Level, &l, AMColors.UnexploredSecretColor);
 				}
 				else if (line.flags & ML_SECRET)
 				{ // secret door
 					if (am_cheat != 0 && line.backsector != NULL)
-						AM_drawMline(&l, AMColors.SecretWallColor);
+						AM_drawMline(Level, &l, AMColors.SecretWallColor);
 					else
-						AM_drawMline(&l, AMColors.WallColor);
+						AM_drawMline(Level, &l, AMColors.WallColor);
 				}
 				else if (AM_isTeleportBoundary(line) && AMColors.isValid(AMColors.IntraTeleportColor))
 				{ // intra-level teleporters
-					AM_drawMline(&l, AMColors.IntraTeleportColor);
+					AM_drawMline(Level, &l, AMColors.IntraTeleportColor);
 				}
 				else if (AM_isExitBoundary(line) && AMColors.isValid(AMColors.InterTeleportColor))
 				{ // inter-level/game-ending teleporters
-					AM_drawMline(&l, AMColors.InterTeleportColor);
+					AM_drawMline(Level, &l, AMColors.InterTeleportColor);
 				}
 				else if (AM_isLockBoundary(line, &lock))
 				{
@@ -2654,40 +2654,40 @@ void AM_drawWalls (bool allmap)
 						if (color >= 0)	c.FromRGB(RPART(color), GPART(color), BPART(color));
 						else c = AMColors[AMColors.LockedColor];
 
-						AM_drawMline(&l, c);
+						AM_drawMline(Level, &l, c);
 					}
 					else
 					{
-						AM_drawMline(&l, AMColors.LockedColor);  // locked special
+						AM_drawMline(Level, &l, AMColors.LockedColor);  // locked special
 					}
 				}
 				else if (am_showtriggerlines
 					&& AMColors.isValid(AMColors.SpecialWallColor)
 					&& AM_isTriggerBoundary(line))
 				{
-					AM_drawMline(&l, AMColors.SpecialWallColor);	// wall with special non-door action the player can do
+					AM_drawMline(Level, &l, AMColors.SpecialWallColor);	// wall with special non-door action the player can do
 				}
 				else if (line.backsector == NULL)
 				{
-					AM_drawMline(&l, AMColors.WallColor);	// one-sided wall
+					AM_drawMline(Level, &l, AMColors.WallColor);	// one-sided wall
 				}
 				else if (line.backsector->floorplane
 					!= line.frontsector->floorplane)
 				{
-					AM_drawMline(&l, AMColors.FDWallColor); // floor level change
+					AM_drawMline(Level, &l, AMColors.FDWallColor); // floor level change
 				}
 				else if (line.backsector->ceilingplane
 					!= line.frontsector->ceilingplane)
 				{
-					AM_drawMline(&l, AMColors.CDWallColor); // ceiling level change
+					AM_drawMline(Level, &l, AMColors.CDWallColor); // ceiling level change
 				}
 				else if (AM_Check3DFloors(&line))
 				{
-					AM_drawMline(&l, AMColors.EFWallColor); // Extra floor border
+					AM_drawMline(Level, &l, AMColors.EFWallColor); // Extra floor border
 				}
 				else if (am_cheat > 0 && am_cheat < 4)
 				{
-					AM_drawMline(&l, AMColors.TSWallColor);
+					AM_drawMline(Level, &l, AMColors.TSWallColor);
 				}
 			}
 			else if (allmap || (line.flags & ML_REVEALED))
@@ -2699,7 +2699,7 @@ void AM_drawWalls (bool allmap)
 						continue;
 					}
 				}
-				AM_drawMline(&l, AMColors.NotSeenColor);
+				AM_drawMline(Level, &l, AMColors.NotSeenColor);
 			}
 		}
 	}
@@ -2760,7 +2760,9 @@ void AM_rotatePoint (double *x, double *y)
 
 void
 AM_drawLineCharacter
-( const mline_t *lineguy,
+( 
+	FLevelLocals *Level,
+	const mline_t *lineguy,
   int		lineguylines,
   double	scale,
   DAngle	angle,
@@ -2800,7 +2802,7 @@ AM_drawLineCharacter
 		l.b.x += x;
 		l.b.y += y;
 
-		AM_drawMline(&l, color);
+		AM_drawMline(Level, &l, color);
 	}
 }
 
@@ -2810,7 +2812,7 @@ AM_drawLineCharacter
 //
 //=============================================================================
 
-void AM_drawPlayers ()
+void AM_drawPlayers (FLevelLocals *Level)
 {
 	if (am_cheat >= 2 && am_cheat != 4 && am_showthingsprites > 0)
 	{
@@ -2851,7 +2853,7 @@ void AM_drawPlayers ()
 			arrow = &MapArrow[0];
 			numarrowlines = MapArrow.Size();
 		}
-		AM_drawLineCharacter(arrow, numarrowlines, 0, angle, AMColors[AMColors.YourColor], pt.x, pt.y);
+		AM_drawLineCharacter(Level, arrow, numarrowlines, 0, angle, AMColors[AMColors.YourColor], pt.x, pt.y);
 		return;
 	}
 
@@ -2904,7 +2906,7 @@ void AM_drawPlayers ()
 				angle -= players[consoleplayer].camera->Angles.Yaw - 90.;
 			}
 
-			AM_drawLineCharacter(&MapArrow[0], MapArrow.Size(), 0, angle, color, pt.x, pt.y);
+			AM_drawLineCharacter(Level, &MapArrow[0], MapArrow.Size(), 0, angle, color, pt.x, pt.y);
 		}
     }
 }
@@ -2915,14 +2917,14 @@ void AM_drawPlayers ()
 //
 //=============================================================================
 
-void AM_drawKeys ()
+void AM_drawKeys (FLevelLocals *Level)
 {
 	AMColor color;
 	mpoint_t p;
 	DAngle	 angle;
 
-	TThinkerIterator<AInventory> it(NAME_Key);
-	AInventory *key;
+	TThinkerIterator<AActor> it(Level, NAME_Key);
+	AActor *key;
 
 	while ((key = it.Next()) != NULL)
 	{
@@ -2943,12 +2945,11 @@ void AM_drawKeys ()
 			// Find the key's own color.
 			// Only works correctly if single-key locks have lower numbers than any-key locks.
 			// That is the case for all default keys, however.
-			int P_GetMapColorForKey (AInventory * key);
 			int c = P_GetMapColorForKey(key);
 
 			if (c >= 0)	color.FromRGB(RPART(c), GPART(c), BPART(c));
 			else color = AMColors[AMColors.ThingColor_CountItem];
-			AM_drawLineCharacter(&EasyKey[0], EasyKey.Size(), 0, 0., color, p.x, p.y);
+			AM_drawLineCharacter(Level, &EasyKey[0], EasyKey.Size(), 0, 0., color, p.x, p.y);
 		}
 	}
 }
@@ -2958,14 +2959,14 @@ void AM_drawKeys ()
 //
 //
 //=============================================================================
-void AM_drawThings ()
+void AM_drawThings (FLevelLocals *Level)
 {
 	AMColor color;
 	AActor*	 t;
 	mpoint_t p;
 	DAngle	 angle;
 
-	for (auto &sec : level.sectors)
+	for (auto &sec : Level->sectors)
 	{
 		t = sec.thinglist;
 		while (t)
@@ -2998,15 +2999,15 @@ void AM_drawThings ()
 						rotation = int((angle.Normalized360() * (16. / 360.)).Degrees);
 
 						const FTextureID textureID = frame->Texture[show > 2 ? rotation : 0];
-						texture = TexMan(textureID);
+						texture = TexMan.GetTexture(textureID, true);
 					}
 
 					if (texture == NULL) goto drawTriangle;	// fall back to standard display if no sprite can be found.
 
-					const double spriteXScale = (t->Scale.X * (10. / 16.) * scale_mtof);
-					const double spriteYScale = (t->Scale.Y * (10. / 16.) * scale_mtof);
+					const double spriteXScale = (t->Scale.X * (10. / 16.) * Level->am_scale_mtof);
+					const double spriteYScale = (t->Scale.Y * (10. / 16.) * Level->am_scale_mtof);
 
-					DrawMarker (texture, p.x, p.y, 0, !!(frame->Flip & (1 << rotation)),
+					DrawMarker (Level, texture, p.x, p.y, 0, !!(frame->Flip & (1 << rotation)),
 						spriteXScale, spriteYScale, t->Translation, 1., 0, LegacyRenderStyles[STYLE_Normal]);
 				}
 				else
@@ -3043,12 +3044,11 @@ void AM_drawThings ()
 							}
 							else if (am_showkeys)
 							{
-								int P_GetMapColorForKey (AInventory * key);
-								int c = P_GetMapColorForKey(static_cast<AInventory *>(t));
+								int c = P_GetMapColorForKey(t);
 
 								if (c >= 0)	color.FromRGB(RPART(c), GPART(c), BPART(c));
 								else color = AMColors[AMColors.ThingColor_CountItem];
-								AM_drawLineCharacter(&CheatKey[0], CheatKey.Size(), 0, 0., color, p.x, p.y);
+								AM_drawLineCharacter(Level, &CheatKey[0], CheatKey.Size(), 0, 0., color, p.x, p.y);
 								color.Index = -1;
 							}
 							else
@@ -3064,7 +3064,7 @@ void AM_drawThings ()
 
 					if (color.Index != -1)
 					{
-						AM_drawLineCharacter(thintriangle_guy, NUMTHINTRIANGLEGUYLINES,	16, angle, color, p.x, p.y);
+						AM_drawLineCharacter(Level, thintriangle_guy, NUMTHINTRIANGLEGUYLINES,	16, angle, color, p.x, p.y);
 					}
 
 					if (am_cheat == 3 || am_cheat == 6)
@@ -3077,7 +3077,7 @@ void AM_drawThings ()
 							{ { -1,  1 }, { -1, -1 } },
 						};
 
-						AM_drawLineCharacter (box, 4, t->radius, angle - t->Angles.Yaw, color, p.x, p.y);
+						AM_drawLineCharacter (Level, box, 4, t->radius, angle - t->Angles.Yaw, color, p.x, p.y);
 					}
 				}
 			}
@@ -3092,10 +3092,10 @@ void AM_drawThings ()
 //
 //=============================================================================
 
-static void DrawMarker (FTexture *tex, double x, double y, int yadjust,
+static void DrawMarker (FLevelLocals *Level, FTexture *tex, double x, double y, int yadjust,
 	INTBOOL flip, double xscale, double yscale, int translation, double alpha, uint32_t fillcolor, FRenderStyle renderstyle)
 {
-	if (tex == NULL || tex->UseType == ETextureType::Null)
+	if (tex == NULL || !tex->isValid())
 	{
 		return;
 	}
@@ -3104,8 +3104,8 @@ static void DrawMarker (FTexture *tex, double x, double y, int yadjust,
 		AM_rotatePoint (&x, &y);
 	}
 	screen->DrawTexture (tex, CXMTOF(x) + f_x, CYMTOF(y) + yadjust + f_y,
-		DTA_DestWidthF, tex->GetScaledWidthDouble() * CleanXfac * xscale,
-		DTA_DestHeightF, tex->GetScaledHeightDouble() * CleanYfac * yscale,
+		DTA_DestWidthF, tex->GetDisplayWidthDouble() * CleanXfac * xscale,
+		DTA_DestHeightF, tex->GetDisplayHeightDouble() * CleanYfac * yscale,
 		DTA_ClipTop, f_y,
 		DTA_ClipBottom, f_y + f_h,
 		DTA_ClipLeft, f_x,
@@ -3124,13 +3124,13 @@ static void DrawMarker (FTexture *tex, double x, double y, int yadjust,
 //
 //=============================================================================
 
-void AM_drawMarks ()
+void AM_drawMarks (FLevelLocals *Level)
 {
-	for (int i = 0; i < AM_NUMMARKPOINTS; i++)
+	for (int i = 0; i < Level->AM_NUMMARKPOINTS; i++)
 	{
-		if (markpoints[i].x != -1)
+		if (Level->am_markpoints[i].x != -1)
 		{
-			DrawMarker (TexMan(marknums[i]), markpoints[i].x, markpoints[i].y, -3, 0,
+			DrawMarker (Level, TexMan.GetTexture(marknums[i], true), Level->am_markpoints[i].x, Level->am_markpoints[i].y, -3, 0,
 				1, 1, 0, 1, 0, LegacyRenderStyles[STYLE_Normal]);
 		}
 	}
@@ -3142,12 +3142,12 @@ void AM_drawMarks ()
 //
 //=============================================================================
 
-void AM_drawAuthorMarkers ()
+void AM_drawAuthorMarkers (FLevelLocals *Level)
 {
 	// [RH] Draw any actors derived from AMapMarker on the automap.
 	// If args[0] is 0, then the actor's sprite is drawn at its own location.
 	// Otherwise, its sprite is drawn at the location of any actors whose TIDs match args[0].
-	TThinkerIterator<AActor> it ("MapMarker", STAT_MAPMARKER);
+	TThinkerIterator<AActor> it (Level, "MapMarker", STAT_MAPMARKER);
 	AActor *mark;
 
 	while ((mark = it.Next()) != NULL)
@@ -3163,13 +3163,13 @@ void AM_drawAuthorMarkers ()
 
 		if (mark->picnum.isValid())
 		{
-			tex = TexMan(mark->picnum);
-			if (tex->Rotations != 0xFFFF)
+			tex = TexMan.GetTexture(mark->picnum, true);
+			if (tex->GetRotations() != 0xFFFF)
 			{
-				spriteframe_t *sprframe = &SpriteFrames[tex->Rotations];
+				spriteframe_t *sprframe = &SpriteFrames[tex->GetRotations()];
 				picnum = sprframe->Texture[0];
 				flip = sprframe->Flip & 1;
-				tex = TexMan[picnum];
+				tex = TexMan.GetTexture(picnum);
 			}
 		}
 		else
@@ -3184,21 +3184,17 @@ void AM_drawAuthorMarkers ()
 				spriteframe_t *sprframe = &SpriteFrames[sprdef->spriteframes + mark->frame];
 				picnum = sprframe->Texture[0];
 				flip = sprframe->Flip & 1;
-				tex = TexMan[picnum];
+				tex = TexMan.GetTexture(picnum);
 			}
 		}
-		FActorIterator it (mark->args[0]);
+		FActorIterator it (Level, mark->args[0]);
 		AActor *marked = mark->args[0] == 0 ? mark : it.Next();
 
 		while (marked != NULL)
 		{
-			// Use more correct info if we have GL nodes available
-			if (mark->args[1] == 0 ||
-				(mark->args[1] == 1 && (hasglnodes ?
-				 marked->subsector->flags & SSECMF_DRAWN :
-				 marked->Sector->MoreFlags & SECMF_DRAWN)))
+			if (mark->args[1] == 0 || (mark->args[1] == 1 && (marked->subsector->flags & SSECMF_DRAWN)))
 			{
-				DrawMarker (tex, marked->X(), marked->Y(), 0, flip, mark->Scale.X, mark->Scale.Y, mark->Translation,
+				DrawMarker (Level, tex, marked->X(), marked->Y(), 0, flip, mark->Scale.X, mark->Scale.Y, mark->Translation,
 					mark->Alpha, mark->fillcolor, mark->RenderStyle);
 			}
 			marked = mark->args[0] != 0 ? it.Next() : NULL;
@@ -3223,12 +3219,14 @@ void AM_drawCrosshair (const AMColor &color)
 //
 //=============================================================================
 
-void AM_Drawer (int bottom)
+void AM_Drawer (FLevelLocals *Level, int bottom)
 {
 	if (!automapactive)
 		return;
 
-	bool allmap = (level.flags2 & LEVEL2_ALLMAP) != 0;
+	AM_NewResolution(Level);
+
+	bool allmap = (Level->flags2 & LEVEL2_ALLMAP) != 0;
 	bool allthings = allmap && players[consoleplayer].mo->FindInventory(NAME_PowerScanner, true) != nullptr;
 
 	if (am_portaloverlay)
@@ -3258,45 +3256,27 @@ void AM_Drawer (int bottom)
 		f_w = viewwidth;
 		f_h = viewheight;
 	}
-	AM_activateNewScale();
+	AM_activateNewScale(Level);
 
-	if (am_textured && hasglnodes && textured && !viewactive)
-		AM_drawSubsectors();
+	if (am_textured && textured && !viewactive)
+		AM_drawSubsectors(Level);
 
 	if (grid)	
-		AM_drawGrid(AMColors.GridColor);
+		AM_drawGrid(Level, AMColors.GridColor);
 
-	AM_drawWalls(allmap);
-	AM_drawPlayers();
+	AM_drawWalls(Level, allmap);
+	AM_drawPlayers(Level);
 	if (G_SkillProperty(SKILLP_EasyKey))
-		AM_drawKeys();
+		AM_drawKeys(Level);
 	if ((am_cheat >= 2 && am_cheat != 4) || allthings)
-		AM_drawThings();
+		AM_drawThings(Level);
 
-	AM_drawAuthorMarkers();
+	AM_drawAuthorMarkers(Level);
 
 	if (!viewactive)
 		AM_drawCrosshair(AMColors[AMColors.XHairColor]);
 
-	AM_drawMarks();
+	AM_drawMarks(Level);
 
-	AM_showSS();
-}
-
-//=============================================================================
-//
-//
-//
-//=============================================================================
-
-void AM_SerializeMarkers(FSerializer &arc)
-{
-	if (arc.BeginObject("automarkers"))
-	{
-		arc("markpointnum", markpointnum)
-			.Array("markpoints", &markpoints[0].x, AM_NUMMARKPOINTS*2)	// write as a double array.
-			("scale_mtof", scale_mtof)
-			("scale_ftom", scale_ftom)
-			.EndObject();
-	}
+	AM_showSS(Level);
 }

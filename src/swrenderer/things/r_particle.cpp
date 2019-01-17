@@ -69,7 +69,7 @@ EXTERN_CVAR(Bool, r_fullbrightignoresectorcolor);
 
 namespace swrenderer
 {
-	void RenderParticle::Project(RenderThread *thread, particle_t *particle, const sector_t *sector, int shade, WaterFakeSide fakeside, bool foggy)
+	void RenderParticle::Project(RenderThread *thread, particle_t *particle, const sector_t *sector, int lightlevel, WaterFakeSide fakeside, bool foggy)
 	{
 		double 				tr_x, tr_y;
 		double 				tx, ty;
@@ -79,7 +79,7 @@ namespace swrenderer
 		sector_t*			heightsec = NULL;
 
 		double timefrac = r_viewpoint.TicFrac;
-		if (paused || bglobal.freeze || (level.flags2 & LEVEL2_FROZEN))
+		if (paused || currentSession->isFrozen())
 			timefrac = 0.;
 
 		double ippx = particle->Pos.X + particle->Vel.X * timefrac;
@@ -156,6 +156,8 @@ namespace swrenderer
 		FTextureID botpic;
 		FDynamicColormap *map;
 
+		auto nc = !!(sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
+
 		if (heightsec)	// only clip things which are in special sectors
 		{
 			if (fakeside == WaterFakeSide::AboveCeiling)
@@ -164,7 +166,7 @@ namespace swrenderer
 				botplane = &heightsec->ceilingplane;
 				toppic = sector->GetTexture(sector_t::ceiling);
 				botpic = heightsec->GetTexture(sector_t::ceiling);
-				map = GetColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], true);
+				map = GetSpriteColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], nc);
 			}
 			else if (fakeside == WaterFakeSide::BelowFloor)
 			{
@@ -172,7 +174,7 @@ namespace swrenderer
 				botplane = &sector->floorplane;
 				toppic = heightsec->GetTexture(sector_t::floor);
 				botpic = sector->GetTexture(sector_t::floor);
-				map = GetColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], true);
+				map = GetSpriteColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], nc);
 			}
 			else
 			{
@@ -180,7 +182,7 @@ namespace swrenderer
 				botplane = &heightsec->floorplane;
 				toppic = heightsec->GetTexture(sector_t::ceiling);
 				botpic = heightsec->GetTexture(sector_t::floor);
-				map = GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true);
+				map = GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc);
 			}
 		}
 		else
@@ -189,7 +191,7 @@ namespace swrenderer
 			botplane = &sector->floorplane;
 			toppic = sector->GetTexture(sector_t::ceiling);
 			botpic = sector->GetTexture(sector_t::floor);
-			map = GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true);
+			map = GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc);
 		}
 
 		if (botpic != skyflatnum && ippz < botplane->ZatPoint(particle->Pos))
@@ -220,7 +222,7 @@ namespace swrenderer
 		vis->floorclip = 0;
 		vis->foggy = foggy;
 
-		vis->Light.SetColormap(tiz * thread->Light->ParticleGlobVis(foggy), shade, map, particle->bright != 0, false, false);
+		vis->Light.SetColormap(thread, tz, lightlevel, foggy, map, particle->bright != 0, false, false, false, true);
 
 		thread->SpriteList->Push(vis);
 	}
@@ -291,7 +293,9 @@ namespace swrenderer
 			{
 				continue;
 			}
-			if ((ds->siz2 - ds->siz1) * ((x2 + x1) / 2 - ds->sx1) / (ds->sx2 - ds->sx1) + ds->siz1 < idepth)
+			float siz1 = 1 / ds->WallC.sz1;
+			float siz2 = 1 / ds->WallC.sz2;
+			if ((siz2 - siz1) * ((x2 + x1) / 2 - ds->WallC.sx1) / (ds->WallC.sx2 - ds->WallC.sx1) + siz1 < idepth)
 			{
 				// [ZZ] only draw stuff that's inside the same portal as the particle, other portals will care for themselves
 				if (ds->CurrentPortalUniq == CurrentPortalUniq)
