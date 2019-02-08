@@ -3940,7 +3940,7 @@ int DLevelScript::DoSetMaster (AActor *self, AActor *master)
             {
                 // [KS] Be friendly to this player
                 self->master = nullptr;
-                Level->total_monsters -= self->CountsAsKill();
+                level.total_monsters -= self->CountsAsKill();
                 self->flags|=MF_FRIENDLY;
                 self->SetFriendPlayer(master->player);
 
@@ -5076,7 +5076,7 @@ void DLevelScript::SetActorAngle(AActor *activator, int tid, int angle, bool int
 
 void DLevelScript::SetActorPitch(AActor *activator, int tid, int angle, bool interpolate)
 {
-	DAngle an = ACSToAngle(angle);
+	DAngle an = ACSToAngle(angle).Normalized180();
 	if (tid == 0)
 	{
 		if (activator != NULL)
@@ -6777,7 +6777,7 @@ static bool CharArrayParms(int &capacity, int &offset, int &a, FACSStackMemory& 
 
 PClass *DLevelScript::GetClassForIndex(int index) const
 {
-	return PClass::FindActor(Level->Behaviors.LookupString(index));
+	return PClass::FindActor(level.Behaviors.LookupString(index));
 }
 
 int DLevelScript::RunScript ()
@@ -9646,7 +9646,7 @@ scriptwait:
 			break;
 
 		case PCD_SETMARINESPRITE:
-			ScriptUtil::Exec(NAME_SetMarineSprite, ScriptUtil::Pointer, Level, ScriptUtil::Pointer, activator, ScriptUtil::Int, STACK(2), ScriptUtil::Class, GetClassForIndex(STACK(1)), ScriptUtil::End);
+			ScriptUtil::Exec(NAME_SetMarineSprite, ScriptUtil::Pointer, activator, ScriptUtil::Int, STACK(2), ScriptUtil::Class, GetClassForIndex(STACK(1)), ScriptUtil::End);
 			sp -= 2;
 			break;
 

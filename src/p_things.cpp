@@ -237,6 +237,15 @@ static void VelIntercept(AActor *targ, AActor *mobj, double speed, bool aimpitch
 			const DVector2 velocity = mobj->Vel.XY();
 			mobj->Angles.Pitch = -VecToAngle(velocity.Length(), mobj->Vel.Z);
 		}
+		if (aimpitch) // [MC] Ripped right out of A_FaceMovementDirection
+		{
+			const DVector2 velocity = mobj->Vel.XY();
+			mobj->Angles.Pitch = -VecToAngle(velocity.Length(), mobj->Vel.Z);
+		}
+	}
+	else
+	{
+		InterceptDefaultAim(mobj, targ, aim, speed);
 	}
 	else
 	{

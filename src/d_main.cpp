@@ -759,16 +759,16 @@ void D_Display ()
 		viewsec = screen->RenderView(&players[consoleplayer]);
 		screen->Begin2D();
 		screen->DrawBlend(viewsec);
-		if (automapactive && currentSession)
+
+		if (automapactive)
 		{
-			AM_Drawer (currentSession->Levelinfo[0], hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
+			AM_Drawer (hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
 		}
 		
 		// for timing the statusbar code.
 		//cycle_t stb;
 		//stb.Reset();
 		//stb.Clock();
-		StatusBar->SetLevel(currentSession->Levelinfo[0]);
 		if (!automapactive || viewactive)
 		{
 			StatusBar->RefreshViewBorder ();
@@ -2584,9 +2584,7 @@ void D_DoomMain (void)
 		// [RH] Run any saved commands from the command line or autoexec.cfg now.
 		gamestate = GS_FULLCONSOLE;
 		Net_NewMakeTic ();
-		ForAllLevels([](FLevelLocals *Level) {
-			Thinkers.RunThinkers (Level);
-		});
+		C_RunDelayedCommands();
 		gamestate = GS_STARTUP;
 
 		if (!restart)
@@ -2653,7 +2651,7 @@ void D_DoomMain (void)
 							G_InitNew(startmap, false);
 							if (StoredWarp.IsNotEmpty())
 							{
-								AddCommandString(StoredWarp.LockBuffer());
+								AddCommandString(StoredWarp);
 								StoredWarp = NULL;
 							}
 						}

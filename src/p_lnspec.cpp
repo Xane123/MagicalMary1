@@ -2312,7 +2312,7 @@ FUNC(LS_Scroll_Texture_Both)
 		sidechoice = 0;
 	}
 
-	SetWallScroller (Level, arg0, sidechoice, dx, dy, scw_all);
+	SetWallScroller (&level, arg0, sidechoice, dx, dy, scw_all);
 
 	return true;
 }
@@ -2323,7 +2323,7 @@ FUNC(LS_Scroll_Wall)
 	if (arg0 == 0)
 		return false;
 
-	SetWallScroller (Level, arg0, !!arg3, arg1 / 65536., arg2 / 65536., EScrollPos(arg4));
+	SetWallScroller (&level, arg0, !!arg3, arg1 / 65536., arg2 / 65536., EScrollPos(arg4));
 	return true;
 }
 
@@ -2339,19 +2339,19 @@ FUNC(LS_Scroll_Floor)
 
 	if (arg3 == 0 || arg3 == 2)
 	{
-		SetScroller (Level, arg0, EScroll::sc_floor, -dx, dy);
+		SetScroller (&level, arg0, EScroll::sc_floor, -dx, dy);
 	}
 	else
 	{
-		SetScroller (Level, arg0, EScroll::sc_floor, 0, 0);
+		SetScroller (&level, arg0, EScroll::sc_floor, 0, 0);
 	}
 	if (arg3 > 0)
 	{
-		SetScroller (Level, arg0, EScroll::sc_carry, dx, dy);
+		SetScroller (&level, arg0, EScroll::sc_carry, dx, dy);
 	}
 	else
 	{
-		SetScroller (Level, arg0, EScroll::sc_carry, 0, 0);
+		SetScroller (&level, arg0, EScroll::sc_carry, 0, 0);
 	}
 	return true;
 }
@@ -2362,7 +2362,7 @@ FUNC(LS_Scroll_Ceiling)
 	double dx = arg1 / 32.;
 	double dy = arg2 / 32.;
 
-	SetScroller (Level, arg0, EScroll::sc_ceiling, -dx, dy);
+	SetScroller (&level, arg0, EScroll::sc_ceiling, -dx, dy);
 	return true;
 }
 
@@ -2434,7 +2434,7 @@ FUNC(LS_Sector_SetColor)
 	int secnum;
 	while ((secnum = itr.Next()) >= 0)
 	{
-		Level->sectors[secnum].SetColor(PalEntry(255, arg1, arg2, arg3), arg4);
+		level.sectors[secnum].SetColor(PalEntry(arg1, arg2, arg3), arg4);
 	}
 
 	return true;
@@ -2447,7 +2447,7 @@ FUNC(LS_Sector_SetFade)
 	int secnum;
 	while ((secnum = itr.Next()) >= 0)
 	{
-		Level->sectors[secnum].SetFade(PalEntry(255, arg1, arg2, arg3));
+		level.sectors[secnum].SetFade(PalEntry(arg1, arg2, arg3));
 	}
 	return true;
 }
@@ -3962,6 +3962,6 @@ DEFINE_ACTION_FUNCTION(FLevelLocals, ExecuteSpecial)
 	PARAM_INT(arg4);
 	PARAM_INT(arg5);
 
-	ACTION_RETURN_INT(P_ExecuteSpecial(self, special, linedef, activator, lineside, arg1, arg2, arg3, arg4, arg5));
+	ACTION_RETURN_INT(P_ExecuteSpecial(special, linedef, activator, lineside, arg1, arg2, arg3, arg4, arg5));
 }
 

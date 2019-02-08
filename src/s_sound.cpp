@@ -407,15 +407,17 @@ void S_Start (FLevelLocals *Level)
 		// If this is called with a null level (happens only in case of an I_Error) do not reset the last local definition
 		if (Level && Level->info)
 		{
-			LocalSndInfo = Level->info->SoundInfo;
-			LocalSndSeq = Level->info->SndSeq;
+			LocalSndInfo = level.info->SoundInfo;
+			LocalSndSeq = level.info->SndSeq;
+		}
+
 			bool parse_ss = false;
-			
+
 			// This level uses a different local SNDINFO
-			if (LastLocalSndInfo.CompareNoCase(LocalSndInfo) != 0)
+		if (LastLocalSndInfo.CompareNoCase(LocalSndInfo) != 0 || !level.info)
 			{
 				// First delete the old sound list
-				for(unsigned i = 1; i < S_sfx.Size(); i++)
+			for(unsigned i = 1; i < S_sfx.Size(); i++) 
 				{
 					S_UnloadSound(&S_sfx[i]);
 				}
@@ -429,7 +431,7 @@ void S_Start (FLevelLocals *Level)
 					int j = Wads.CheckNumForFullName(LocalSndInfo, true);
 					if (j>=0) S_AddLocalSndInfo(j);
 				}
-				
+
 				// Also reload the SNDSEQ if the SNDINFO was replaced!
 				parse_ss = true;
 			}
@@ -437,7 +439,7 @@ void S_Start (FLevelLocals *Level)
 			{
 				parse_ss = true;
 			}
-			
+
 			if (parse_ss)
 			{
 				S_ParseSndSeq(LocalSndSeq.IsNotEmpty()? Wads.CheckNumForFullName(LocalSndSeq, true) : -1);
@@ -446,7 +448,6 @@ void S_Start (FLevelLocals *Level)
 			LastLocalSndInfo = LocalSndInfo;
 			LastLocalSndSeq = LocalSndSeq;
 		}
-	}
 
 	// stop the old music if it has been paused.
 	// This ensures that the new music is started from the beginning

@@ -1842,7 +1842,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 	// [RH] Don't start chasing after a goal if it isn't time yet.
 	if (self->target == self->goal)
 	{
-		if (self->reactiontime > Level->maptime)
+		if (self->reactiontime > level.maptime)
 			self->target = nullptr;
 	}
 	else if (self->SeeSound)
@@ -2026,7 +2026,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_LookEx)
 	// [RH] Don't start chasing after a goal if it isn't time yet.
 	if (self->target == self->goal)
 	{
-		if (self->reactiontime > Level->maptime)
+		if (self->reactiontime > level.maptime)
 			self->target = nullptr;
 	}
 	else if (self->SeeSound && !(flags & LOF_NOSEESOUND))

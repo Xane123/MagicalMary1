@@ -2256,7 +2256,6 @@ DEFINE_ACTION_FUNCTION(AAmbientSound, Tick)
 	PARAM_SELF_PROLOGUE(AActor);
 
 	self->Tick();
-	auto Level = self->Level;
 	
 	if (self->special1 > 0)
 	{

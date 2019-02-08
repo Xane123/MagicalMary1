@@ -220,6 +220,12 @@ EXTERN_CVAR (Int, team)
 
 CVAR (Bool, teamplay, false, CVAR_SERVERINFO)
 
+// Workaround for x64 code generation bug in MSVC 2015 
+// Optimized targets contain illegal instructions in the function below
+#if defined _M_X64 && _MSC_VER < 1910
+#pragma optimize("", off)
+#endif // _M_X64 && _MSC_VER < 1910
+
 // [RH] Allow turbo setting anytime during game
 CUSTOM_CVAR (Float, turbo, 100.f, CVAR_NOINITCALL)
 {
@@ -241,6 +247,10 @@ CUSTOM_CVAR (Float, turbo, 100.f, CVAR_NOINITCALL)
 		sidemove[1] = (int)(gameinfo.normsidemove[1]*scale);
 	}
 }
+
+#if defined _M_X64 && _MSC_VER < 1910
+#pragma optimize("", on)
+#endif // _M_X64 && _MSC_VER < 1910
 
 CCMD (turnspeeds)
 {
@@ -1009,9 +1019,8 @@ void G_Ticker ()
 
 	if (ToggleFullscreen)
 	{
-		static char toggle_fullscreen[] = "toggle fullscreen";
 		ToggleFullscreen = false;
-		AddCommandString (toggle_fullscreen);
+		AddCommandString ("toggle fullscreen");
 	}
 
 	// do things to change the game state
@@ -1162,6 +1171,7 @@ void G_Ticker ()
 
 	// [ZZ] also tick the UI part of the events
 	E_UiTick();
+	C_RunDelayedCommands();
 
 	// do main actions
 	switch (gamestate)
@@ -2071,8 +2081,9 @@ static void PutSaveComment (FSerializer &arc)
 	});
 
 	// Append elapsed time
-	levelTime = currentSession->time / TICRATE;
-	comment.AppendFormat("time: %02d:%02d:%02d", levelTime/3600, (levelTime%3600)/60, levelTime%60);
+	const char *const time = GStrings("SAVECOMMENT_TIME");
+	levelTime = level.time / TICRATE;
+	comment.AppendFormat("%s: %02d:%02d:%02d", time, levelTime/3600, (levelTime%3600)/60, levelTime%60);
 
 	// Write out the comment
 	arc.AddString("Comment", comment);

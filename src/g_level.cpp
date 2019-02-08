@@ -500,13 +500,16 @@ void G_InitNew (const char *mapname, bool bTitleLevel)
 	ST_CreateStatusBar(bTitleLevel);
 	setsizeneeded = true;
 
-	if (gameinfo.gametype == GAME_Strife || (SBarInfoScript[SCRIPT_CUSTOM] != NULL && SBarInfoScript[SCRIPT_CUSTOM]->GetGameType() == GAME_Strife))
+	const bool setlogtext = !savegamerestore && (gameinfo.gametype == GAME_Strife 
+		|| (SBarInfoScript[SCRIPT_CUSTOM] != nullptr && SBarInfoScript[SCRIPT_CUSTOM]->GetGameType() == GAME_Strife));
+
+	if (setlogtext)
 	{
 		// Set the initial quest log text for Strife.
 		for (i = 0; i < MAXPLAYERS; ++i)
 		{
 			if (playeringame[i])
-				players[i].SetLogText ("Find help");
+				players[i].SetLogText ("$TXT_FINDHELP");
 		}
 	}
 
@@ -2396,7 +2399,7 @@ DEFINE_ACTION_FUNCTION(FLevelLocals, SphericalCoords)
 
 	ACTION_RETURN_VEC3(DVector3(
 		deltaangle(vecTo.Angle(), viewYaw).Degrees,
-		deltaangle(-vecTo.Pitch(), viewPitch).Degrees,
+		deltaangle(vecTo.Pitch(), viewPitch).Degrees,
 		vecTo.Length()
 	));
 }
