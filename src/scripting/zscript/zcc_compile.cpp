@@ -1356,11 +1356,6 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 							{
 								f->mVersion = field->Version;
 							}
-							if (name->Name == NAME_globalfreeze)	// Give the parser a kick in the butt for not parsing the declaration properly. I have no idea why it doesn't work.
-							{
-								f->mVersion = MakeVersion(3, 8, 0);
-								f->Flags |= VARF_Deprecated;
-							}
 
 							if (OutNamespace->Symbols.AddSymbol(f) == nullptr)
 							{ // name is already in use
@@ -2772,6 +2767,8 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 			}
 		}
 
+		VMFunction *newfunc = nullptr;
+
 		if (!(f->Flags & ZCC_Native))
 		{
 			if (f->Body == nullptr)
@@ -2784,7 +2781,7 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 				auto code = ConvertAST(c->Type(), f->Body);
 				if (code != nullptr)
 				{
-					FunctionBuildList.AddFunction(OutNamespace, mVersion, sym, code, FStringf("%s.%s", c->Type()->TypeName.GetChars(), FName(f->Name).GetChars()), false, -1, 0, Lump);
+					newfunc = FunctionBuildList.AddFunction(OutNamespace, mVersion, sym, code, FStringf("%s.%s", c->Type()->TypeName.GetChars(), FName(f->Name).GetChars()), false, -1, 0, Lump);
 				}
 			}
 		}
@@ -2863,6 +2860,16 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 						{
 							sym->Variants[0].Implementation->DefaultArgs = parentfunc->Variants[0].Implementation->DefaultArgs;
 							sym->Variants[0].ArgFlags = parentfunc->Variants[0].ArgFlags;
+						}
+
+						// Update argument flags for VM function if needed as their list could be incomplete
+						// At the moment of function creation, arguments with default values were not copied yet from the parent function
+						if (newfunc != nullptr && sym->Variants[0].ArgFlags.Size() != newfunc->ArgFlags.Size())
+						{
+							for (unsigned i = newfunc->ArgFlags.Size(), count = sym->Variants[0].ArgFlags.Size(); i < count; ++i)
+							{
+								newfunc->ArgFlags.Push(sym->Variants[0].ArgFlags[i]);
+							}
 						}
 					}
 				}

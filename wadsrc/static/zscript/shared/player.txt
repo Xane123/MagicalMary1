@@ -1635,10 +1635,11 @@ class PlayerPawn : Actor
 		if (!(player.cheats & CF_PREDICTING))
 		{
 			CheckEnvironment();
-			CheckUse();
-			CheckUndoMorph();
+			// Note that after this point the PlayerPawn may have changed due to getting unmorphed or getting its skull popped so 'self' is no longer safe to use.
+			// This also must not read mo into a local variable because several functions in this block can change the attached PlayerPawn.
+			player.mo.CheckUse();
+			player.mo.CheckUndoMorph();
 			// Cycle psprites.
-			// Note that after this point the PlayerPawn may have changed due to getting unmorphed so 'self' is no longer safe to use.
 			player.mo.TickPSprites();
 			// Other Counters
 			if (player.damagecount)	player.damagecount--;
@@ -1887,16 +1888,16 @@ class PlayerPawn : Actor
 						bool res;
 						Actor check;
 						[res, check] = item.CallTryPickup(self);
-						if (check != self)
+						if (!res)
+						{
+							item.Destroy();
+							item = NULL;
+						}
+						else if (check != self)
 						{
 							// Player was morphed. This is illegal at game start.
 							// This problem is only detectable when it's too late to do something about it...
 							ThrowAbortException("Cannot give morph item '%s' when starting a game!", di.Name);
-						}
-						else if (!res)
-						{
-							item.Destroy();
-							item = NULL;
 						}
 					}
 					let weap = Weapon(item);
@@ -2042,7 +2043,7 @@ class PlayerPawn : Actor
 				if (item.bINVBAR && item.Amount > item.InterHubAmount)
 				{
 					item.Amount = item.InterHubAmount;
-					if (Level.REMOVEITEMS && !item.bUNDROPPABLE)
+					if (level.REMOVEITEMS && !item.bUNDROPPABLE && !item.bUNCLEARABLE)
 					{
 						todelete.Push(item);
 					}
@@ -2175,7 +2176,8 @@ class PlayerPawn : Actor
 				// look for its non-powered up version.
 				if (ReadyWeapon.bPOWERED_UP && ReadyWeapon.SisterWeaponType != null)
 				{
-					return player.weapons.LocateWeapon(ReadyWeapon.SisterWeaponType);
+					[found, slot, index] = player.weapons.LocateWeapon(ReadyWeapon.SisterWeaponType);
+					return found, slot, index;
 				}
 				return false, 0, 0;
 			}

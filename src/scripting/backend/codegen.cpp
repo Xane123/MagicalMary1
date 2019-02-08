@@ -5153,6 +5153,11 @@ CVAR(Bool, vm_warnthinkercreation, false, 0)
 
 static DObject *BuiltinNew(PClass *cls, int outerside, int backwardscompatible)
 {
+	if (cls == nullptr)
+	{
+		ThrowAbortException(X_OTHER, "New without a class");
+		return nullptr;
+	}
 	if (cls->ConstructNative == nullptr)
 	{
 		ThrowAbortException(X_OTHER, "Class %s requires native construction", cls->TypeName.GetChars());
@@ -5181,12 +5186,6 @@ static DObject *BuiltinNew(PClass *cls, int outerside, int backwardscompatible)
 	if (backwardscompatible && object->IsKindOf(NAME_Thinker))
 	{
 		// Todo: Link thinker to current primary level.
-		static_cast<DThinker*>(object)->Level = currentSession->Levelinfo.Size() ? currentSession->Levelinfo[0] : nullptr;
-		static_cast<DThinker*>(object)->ChangeStatNum(STAT_DEFAULT);
-		if (!backwardscompatible)
-		{
-			Printf(TEXTCOLOR_ORANGE "Created a thinker of type %s without level reference.\n", object->GetClass()->TypeName.GetChars());
-		}
 	}
 	return object;
 }
@@ -6036,11 +6035,10 @@ FxExpression *FxIdentifier::Resolve(FCompileContext& ctx)
 		{
 			if (ctx.Function == nullptr)
 			{
-				ScriptPosition.Message(MSG_ERROR, "Unable to access class member %s from constant declaration", sym->SymbolName.GetChars());
+				ScriptPosition.Message(MSG_ERROR, "Unable to access class member %s from constant declaration", Identifier.GetChars());
 				delete this;
 				return nullptr;
 			}
-
 			FxExpression *self = new FxSelf(ScriptPosition);
 			self = self->Resolve(ctx);
 			newex = ResolveMember(ctx, ctx.Function->Variants[0].SelfClass, self, ctx.Function->Variants[0].SelfClass);
@@ -6064,29 +6062,36 @@ FxExpression *FxIdentifier::Resolve(FCompileContext& ctx)
 			delete this;
 			return nullptr;
 		}
-		// Do this check for ZScript as well, so that a clearer error message can be printed. MSG_OPTERROR will default to MSG_ERROR there.
-		else if (ctx.Function->Variants[0].SelfClass != ctx.Class && sym->IsKindOf(RUNTIME_CLASS(PField)))
+		// The following only applies to non-static content.
+		// Static functions have no access to non-static parts of a class and should be able to see global identifiers of the same name.
+		else if (ctx.Function->Variants[0].SelfClass != nullptr)
 		{
-			FxExpression *self = new FxSelf(ScriptPosition, true);
-			self = self->Resolve(ctx);
-			newex = ResolveMember(ctx, ctx.Class, self, ctx.Class);
-			ABORT(newex);
-			ScriptPosition.Message(MSG_OPTERROR, "Self pointer used in ambiguous context; VM execution may abort!");
-			ctx.Unsafe = true;
-			goto foundit;
-		}
-		else
-		{
-			if (sym->IsKindOf(RUNTIME_CLASS(PFunction)))
+			// Do this check for ZScript as well, so that a clearer error message can be printed. MSG_OPTERROR will default to MSG_ERROR there.
+			if (ctx.Function->Variants[0].SelfClass != ctx.Class && sym->IsKindOf(RUNTIME_CLASS(PField)))
 			{
-				ScriptPosition.Message(MSG_ERROR, "Function '%s' used without ().\n", Identifier.GetChars());
+				FxExpression *self = new FxSelf(ScriptPosition, true);
+				self = self->Resolve(ctx);
+				newex = ResolveMember(ctx, ctx.Class, self, ctx.Class);
+				ABORT(newex);
+				ScriptPosition.Message(MSG_OPTERROR, "Self pointer used in ambiguous context; VM execution may abort!");
+				ctx.Unsafe = true;
+				goto foundit;
 			}
 			else
 			{
-				ScriptPosition.Message(MSG_ERROR, "Invalid member identifier '%s'.\n", Identifier.GetChars());
+				if (sym->IsKindOf(RUNTIME_CLASS(PFunction)))
+				{
+					ScriptPosition.Message(MSG_ERROR, "Function '%s' used without ().\n", Identifier.GetChars());
+					delete this;
+					return nullptr;
+				}
+				else
+				{
+					ScriptPosition.Message(MSG_ERROR, "Invalid member identifier '%s'.\n", Identifier.GetChars());
+					delete this;
+					return nullptr;
+				}
 			}
-			delete this;
-			return nullptr;
 		}
 	}
 
@@ -8644,7 +8649,7 @@ FxExpression *FxActionSpecialCall::Resolve(FCompileContext& ctx)
 
 int BuiltinCallLineSpecial(int special, AActor *activator, int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-	return P_ExecuteSpecial(activator ? activator->Level : currentSession->Levelinfo[0], special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5);
+	return P_ExecuteSpecial(special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DObject, BuiltinCallLineSpecial, BuiltinCallLineSpecial)

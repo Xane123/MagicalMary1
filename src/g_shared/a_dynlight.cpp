@@ -75,8 +75,6 @@ CUSTOM_CVAR (Bool, gl_lights, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOIN
 	else AActor::DeleteAllAttachedLights();
 }
 
-CVAR (Bool, gl_attachedlights, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG);
-
 //==========================================================================
 //
 //==========================================================================
@@ -226,7 +224,7 @@ void FDynamicLight::ReleaseLight()
 	if (prev != nullptr) prev->next = next;
 	else Level->lights = next;
 	if (next != nullptr) next->prev = prev;
-	prev = nullptr;
+	next = prev = nullptr;
 	FreeList.Push(this);
 }
 
@@ -306,7 +304,7 @@ void FDynamicLight::Tick()
 	case FlickerLight:
 	{
 		int rnd = randLight(360);
-		m_currentRadius = float((rnd >= int(specialf1))? GetIntensity() : GetSecondaryIntensity());
+		m_currentRadius = float((rnd < int(specialf1))? GetIntensity() : GetSecondaryIntensity());
 		break;
 	}
 
@@ -857,18 +855,16 @@ void AActor::RecreateAllAttachedLights()
 {
 	ForAllLevels([](FLevelLocals *Level)
 	{
-		TThinkerIterator<AActor> it(Level);
-		AActor * a;
-
-		while ((a = it.Next()))
+		if (!a->IsKindOf(NAME_DynamicLight))
 		{
-			if (a->IsKindOf(NAME_DynamicLight))
+			a->SetDynamicLights();
+		}
+		else if (a->AttachedLights.Size() == 0)
+		{
+			::AttachLight(a);
+			if (!(a->flags2 & MF2_DORMANT))
 			{
-				::AttachLight(a);
-			}
-			else
-			{
-				a->SetDynamicLights();
+				::ActivateLight(a);
 			}
 		}
 	});
