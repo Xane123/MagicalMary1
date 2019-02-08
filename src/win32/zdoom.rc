@@ -100,14 +100,6 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "icon1.ico"
-IDI_BOING1              ICON                    "boing1.ico"
-IDI_BOING2              ICON                    "boing2.ico"
-IDI_BOING3              ICON                    "boing3.ico"
-IDI_BOING4              ICON                    "boing4.ico"
-IDI_BOING5              ICON                    "boing5.ico"
-IDI_BOING6              ICON                    "boing6.ico"
-IDI_BOING7              ICON                    "boing7.ico"
-IDI_BOING8              ICON                    "boing8.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -223,25 +215,25 @@ END
 IDD_IWADDIALOG DIALOGEX 0, 0, 224, 249
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
-CAPTION "Welcome"
+CAPTION "Mary's Magical Adventure launcher"
 #ifndef __MINGW32__
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 FONT 8, "MS Shell Dlg"
 {
    CONTROL 101, IDC_STATIC, STATIC, SS_ICON | WS_CHILD | WS_VISIBLE, 7, 7, 21, 20
-   CONTROL "Welcome to GZDoom!", IDC_STATIC, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 42, 8, 180, 8
+   CONTROL "Welcome to Mary's Magical Adventure!", IDC_STATIC, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 42, 8, 180, 8
    CONTROL "<Version info>", IDC_WELCOME_VERSION, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 42, 18, 180, 8
-   CONTROL "IWAD selection", IDC_STATIC, BUTTON, BS_GROUPBOX | WS_CHILD | WS_VISIBLE, 8, 32, 208, 117
-   CONTROL "Select which game file (IWAD) to run.", IDC_STATIC, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 12, 44, 190, 8
+   CONTROL "Game Data selection", IDC_STATIC, BUTTON, BS_GROUPBOX | WS_CHILD | WS_VISIBLE, 8, 32, 208, 117
+   CONTROL "Select which game data (IWAD) to use.", IDC_STATIC, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 12, 44, 190, 8
    CONTROL "", IDC_IWADLIST, LISTBOX, LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | WS_TABSTOP, 12, 56, 200, 87
    CONTROL "Video settings", IDC_STATIC, BUTTON, BS_GROUPBOX | WS_CHILD | WS_VISIBLE, 8, 155, 109, 52
    CONTROL "Fullscreen", IDC_WELCOME_FULLSCREEN, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 12, 170, 48, 10
    CONTROL "Resource settings", IDC_STATIC, BUTTON, BS_GROUPBOX | WS_CHILD | WS_VISIBLE, 123, 155, 95, 52
    CONTROL "Disable autoload", IDC_WELCOME_NOAUTOLOAD, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 130, 170, 65, 10
-   CONTROL "Load lights", IDC_WELCOME_LIGHTS, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 130, 180, 51, 10
-   CONTROL "Load brightmaps", IDC_WELCOME_BRIGHTMAPS, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 130, 190, 65, 10
-   CONTROL "Don't ask me this again", IDC_DONTASKIWAD, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 73, 211, 87, 10
-   CONTROL "Play GZDoom", IDOK, BUTTON, BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 8, 228, 90, 14
+   CONTROL "Load GZDoom lights", IDC_WELCOME_LIGHTS, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 130, 180, 51, 10
+   CONTROL "Load GZDoom brightmaps", IDC_WELCOME_BRIGHTMAPS, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 130, 190, 65, 10
+   CONTROL "Don't show this again", IDC_DONTASKIWAD, BUTTON, BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 73, 211, 87, 10
+   CONTROL "Play!", IDOK, BUTTON, BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 8, 228, 90, 14
    CONTROL "Exit", IDCANCEL, BUTTON, BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 166, 228, 50, 14
 }
 #else
@@ -249,18 +241,18 @@ FONT 8, "MS Shell Dlg"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDI_ICON1,IDC_STATIC,7,7,21,20
-    LTEXT           "Welcome to GZDoom!",IDC_STATIC,42,8,180,8
+    LTEXT           "Welcome to Mary's Magical Adventure!",IDC_STATIC,42,8,180,8
     LTEXT           "<Version info>",IDC_WELCOME_VERSION,42,18,180,8
     GROUPBOX        "IWAD selection",IDC_STATIC,8,32,208,102
-    LTEXT           "Select which game file (IWAD) to run.",IDC_STATIC,12,44,190,8
+    LTEXT           "Select which game data (IWAD) to run.",IDC_STATIC,12,44,190,8
     LISTBOX         IDC_IWADLIST,12,56,200,72,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Video settings",IDC_STATIC,8,138,208,28
     CONTROL         "Fullscreen",IDC_WELCOME_FULLSCREEN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,124,150,48,10
     CONTROL         "Disable autoload",IDC_WELCOME_NOAUTOLOAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,148,39,65,10
     CONTROL         "Lights.pk3",IDC_WELCOME_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,46,182,51,10
     CONTROL         "Brightmaps.pk3",IDC_WELCOME_BRIGHTMAPS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,182,65,10
-    CONTROL         "Don't ask me this again",IDC_DONTASKIWAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,73,201,87,10
-    DEFPUSHBUTTON   "Play GZDoom",IDOK,8,228,90,14
+    CONTROL         "Don't show this again",IDC_DONTASKIWAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,73,201,87,10
+    DEFPUSHBUTTON   "Play!",IDOK,8,228,90,14
     PUSHBUTTON      "Exit",IDCANCEL,166,228,50,14
 END
 #endif
@@ -521,15 +513,15 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
-            VALUE "CompanyName", " "
-            VALUE "FileDescription", "GZDoom"
+            VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which GZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
+            VALUE "CompanyName", "Xane Corp."
+            VALUE "FileDescription", "Mary's Magical Adventure"
             VALUE "FileVersion", RC_FILEVERSION2
-            VALUE "InternalName", "GZDoom"
-            VALUE "LegalCopyright", "Copyright © 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
-            VALUE "LegalTrademarks", "DoomR is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "gzdoom.exe"
-            VALUE "ProductName", "GZDoom"
+            VALUE "InternalName", "Mary's Magical Adventure"
+            VALUE "LegalCopyright", "©1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, 2019 Xane Myers, et al."
+            VALUE "LegalTrademarks", "DOOM is a Registered Trademark of id Software, Inc."
+            VALUE "OriginalFilename", "Mary's Magical Adventure.exe"
+            VALUE "ProductName", "Mary's Magical Adventure"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
     END
