@@ -399,7 +399,7 @@ public:
 	// Mark the palette as changed. It will be updated on the next Update().
 	virtual void UpdatePalette() {}
 
-	// Sets the gamma Level. Returns false if the hardware does not support
+	// Sets the gamma level. Returns false if the hardware does not support
 	// gamma changing. (Always true for now, since palettes can always be
 	// gamma adjusted.)
 	virtual void SetGamma() {}
@@ -499,7 +499,7 @@ public:
 	// Fill a simple polygon with a texture
 	void FillSimplePoly(FTexture *tex, FVector2 *points, int npoints,
 		double originx, double originy, double scalex, double scaley, DAngle rotation,
-		const FColormap &colormap, PalEntry flatcolor, int lightlevel, ELightMode lightmode, int bottomclip, uint32_t *indices, size_t indexcount);
+		const FColormap &colormap, PalEntry flatcolor, int lightlevel, int bottomclip, uint32_t *indices, size_t indexcount);
 
 	// Set an area to a specified color
 	void Clear(int left, int top, int right, int bottom, int palcolor, uint32_t color);

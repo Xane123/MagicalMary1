@@ -354,7 +354,7 @@ void SetDefaultColormap (const char *name)
 		// [RH] If using BUILD's palette, generate the colormap
 		if (lump == -1 || Wads.CheckNumForFullName("palette.dat") >= 0 || Wads.CheckNumForFullName("blood.pal") >= 0)
 		{
-			//Printf ("Make colormap\n");
+			Printf ("Make colormap\n");
 			FDynamicColormap foo;
 
 			foo.Color = 0xFFFFFF;
@@ -524,10 +524,7 @@ CCMD (testfade)
 		{
 			color = V_GetColorFromString (NULL, argv[1]);
 		}
-		ForAllLevels([&](FLevelLocals *Level)
-		{
-			Level->fadeto = color;
-		});
+		level.fadeto = color;
 		NormalLight.ChangeFade (color);
 	}
 }

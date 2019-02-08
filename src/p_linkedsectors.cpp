@@ -284,11 +284,11 @@ static void AddSingleSector(extsector_t::linked::plane &scrollplane, sector_t *s
 //
 //============================================================================
 
-static void RemoveTaggedSectors(FLevelLocals *Level, extsector_t::linked::plane &scrollplane, int tag)
+static void RemoveTaggedSectors(extsector_t::linked::plane &scrollplane, int tag)
 {
 	for(int i = scrollplane.Sectors.Size()-1; i>=0; i--)
 	{
-		if (Level->tagManager.SectorHasTag(scrollplane.Sectors[i].Sector, tag))
+		if (tagManager.SectorHasTag(scrollplane.Sectors[i].Sector, tag))
 		{
 			scrollplane.Sectors.Delete(i);
 		}
@@ -308,7 +308,6 @@ static void RemoveTaggedSectors(FLevelLocals *Level, extsector_t::linked::plane 
 bool P_AddSectorLinks(sector_t *control, int tag, INTBOOL ceiling, int movetype)
 {
 	int param = movetype;
-	auto Level = control->Level;
 
 	// can't be done if the control sector is moving.
 	if ((ceiling && control->PlaneMoving(sector_t::ceiling)) || 
@@ -328,21 +327,21 @@ bool P_AddSectorLinks(sector_t *control, int tag, INTBOOL ceiling, int movetype)
 	if (movetype > 0)
 	{
 		int sec;
-		FSectorTagIterator itr(Level->tagManager, tag);
+		FSectorTagIterator itr(tag);
 		while ((sec = itr.Next()) >= 0)
 		{
 			// Don't attach to self (but allow attaching to this sector's oposite plane.
-			if (control == &Level->sectors[sec])
+			if (control == &level.sectors[sec])
 			{
 				if (ceiling == sector_t::floor && movetype & LINK_FLOOR) continue;
 				if (ceiling == sector_t::ceiling && movetype & LINK_CEILING) continue;
 			}
-			AddSingleSector(scrollplane, &Level->sectors[sec], movetype);
+			AddSingleSector(scrollplane, &level.sectors[sec], movetype);
 		}
 	}
 	else
 	{
-		RemoveTaggedSectors(Level, scrollplane, tag);
+		RemoveTaggedSectors(scrollplane, tag);
 	}
 	return true;
 }
@@ -360,13 +359,12 @@ bool P_AddSectorLinks(sector_t *control, int tag, INTBOOL ceiling, int movetype)
 void P_AddSectorLinksByID(sector_t *control, int id, INTBOOL ceiling)
 {
 	extsector_t::linked::plane &scrollplane = ceiling? control->e->Linked.Ceiling : control->e->Linked.Floor;
-	auto Level = control->Level;
 
-	FLineIdIterator itr(Level->tagManager, id);
+	FLineIdIterator itr(id);
 	int line;
 	while ((line = itr.Next()) >= 0)
 	{
-		line_t *ld = &Level->lines[line];
+		line_t *ld = &level.lines[line];
 
 		if (ld->special == Static_Init && ld->args[1] == Init_SectorLink)
 		{

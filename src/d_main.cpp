@@ -106,6 +106,7 @@ EXTERN_CVAR(Int, vr_mode)
 void DrawHUD();
 void D_DoAnonStats();
 
+
 // MACROS ------------------------------------------------------------------
 
 // TYPES -------------------------------------------------------------------
@@ -169,7 +170,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 			if (playeringame[i] && self <= D_GetFragCount(&players[i]))
 			{
 				Printf ("%s\n", GStrings("TXT_FRAGLIMIT"));
-				G_ExitLevel (currentSession->Levelinfo[0],  0, false);
+				G_ExitLevel (0, false);
 				break;
 			}
 		}
@@ -177,7 +178,7 @@ CUSTOM_CVAR (Int, fraglimit, 0, CVAR_SERVERINFO)
 }
 
 CVAR (Float, timelimit, 0.f, CVAR_SERVERINFO);
-CVAR (Int, wipetype, 0, 0);	//[XANE]Wipes are ugly; Never remember what the user chose!
+CVAR (Int, wipetype, 1, CVAR_ARCHIVE);
 CVAR (Int, snd_drawoutput, 0, 0);
 CUSTOM_CVAR (String, vid_cursor, "None", CVAR_ARCHIVE | CVAR_NOINITCALL)
 {
@@ -360,7 +361,8 @@ CUSTOM_CVAR (Int, dmflags, 0, CVAR_SERVERINFO)
 {
 	// In case DF_NO_FREELOOK was changed, reinitialize the sky
 	// map. (If no freelook, then no need to stretch the sky.)
-	R_InitSkyMap ();
+	if (sky1texture.isValid())
+		R_InitSkyMap ();
 
 	if (self & DF_NO_FREELOOK)
 	{
@@ -500,39 +502,36 @@ CVAR (Flag, sv_respawnsuper,		dmflags2, DF2_RESPAWN_SUPER);
 //
 //==========================================================================
 
+int i_compatflags, i_compatflags2;	// internal compatflags composed from the compatflags CVAR and MAPINFO settings
+int ii_compatflags, ii_compatflags2, ib_compatflags;
+
 EXTERN_CVAR(Int, compatmode)
 
-static int GetCompatibility(FLevelLocals *Level, int mask)
+static int GetCompatibility(int mask)
 {
-	if (Level->info == nullptr) return mask;
-	else return (mask & ~Level->info->compatmask) | (Level->info->compatflags & Level->info->compatmask);
+	if (level.info == NULL) return mask;
+	else return (mask & ~level.info->compatmask) | (level.info->compatflags & level.info->compatmask);
 }
 
-static int GetCompatibility2(FLevelLocals *Level, int mask)
+static int GetCompatibility2(int mask)
 {
-	return (Level->info == nullptr) ? mask
-		: (mask & ~Level->info->compatmask2) | (Level->info->compatflags2 & Level->info->compatmask2);
+	return (level.info == NULL) ? mask
+		: (mask & ~level.info->compatmask2) | (level.info->compatflags2 & level.info->compatmask2);
 }
 
 CUSTOM_CVAR (Int, compatflags, 0, CVAR_ARCHIVE|CVAR_SERVERINFO)
 {
-	ForAllLevels([&](FLevelLocals *Level)
+	int old = i_compatflags;
+	i_compatflags = GetCompatibility(self) | ii_compatflags;
+	if ((old ^ i_compatflags) & COMPATF_POLYOBJ)
 	{
-		int old = Level->i_compatflags;
-		Level->i_compatflags = GetCompatibility(Level, self) | Level->ii_compatflags;
-		if ((old ^ Level->i_compatflags) & COMPATF_POLYOBJ)
-		{
-			Level->ClearAllSubsectorLinks();
-		}
-	});
+		FPolyObj::ClearAllSubsectorLinks();
+	}
 }
 
 CUSTOM_CVAR (Int, compatflags2, 0, CVAR_ARCHIVE|CVAR_SERVERINFO)
 {
-	ForAllLevels([&](FLevelLocals *Level)
-	{
-		Level->i_compatflags2 = GetCompatibility2(Level, self) | Level->ii_compatflags2;
-	});
+	i_compatflags2 = GetCompatibility2(self) | ii_compatflags2;
 }
 
 CUSTOM_CVAR(Int, compatmode, 0, CVAR_ARCHIVE|CVAR_NOINITCALL)
@@ -747,19 +746,16 @@ void D_Display ()
 		//E_RenderFrame();
 		//
 		
-		ForAllLevels([](FLevelLocals *Level) {
-			// Check for the presence of dynamic lights at the start of the frame once.
-			if ((gl_lights && vid_rendermode == 4) || (r_dynlights && vid_rendermode != 4))
-			{
-				Level->HasDynamicLights = !!Level->lights;
-			}
-			else Level->HasDynamicLights = false;	// lights are off so effectively we have none.
-		});
-					 
+		// Check for the presence of dynamic lights at the start of the frame once.
+		if ((gl_lights && vid_rendermode == 4) || (r_dynlights && vid_rendermode != 4))
+		{
+			level.HasDynamicLights = !!level.lights;
+		}
+		else level.HasDynamicLights = false;	// lights are off so effectively we have none.
+		
 		viewsec = screen->RenderView(&players[consoleplayer]);
 		screen->Begin2D();
 		screen->DrawBlend(viewsec);
-
 		if (automapactive)
 		{
 			AM_Drawer (hud_althud? viewheight : StatusBar->GetTopOfStatusbar());
@@ -1275,7 +1271,7 @@ void D_DoAdvanceDemo (void)
 	case 0:
 		gamestate = GS_DEMOSCREEN;
 		pagename = gameinfo.TitlePage;
-		pagetic = 0;	//pagetic = (int)(gameinfo.titleTime * TICRATE);
+		pagetic = (int)(gameinfo.titleTime * TICRATE);
 		S_ChangeMusic (gameinfo.titleMusic, gameinfo.titleOrder, false);
 		demosequence = 3;
 		pagecount = 0;
@@ -1283,14 +1279,13 @@ void D_DoAdvanceDemo (void)
 		break;
 
 	case 2:
-		pagetic = 0;
-		/*pagetic = (int)(gameinfo.pageTime * TICRATE);
+		pagetic = (int)(gameinfo.pageTime * TICRATE);
 		gamestate = GS_DEMOSCREEN;
 		if (gameinfo.creditPages.Size() > 0)
 		{
 			pagename = gameinfo.creditPages[pagecount];
 			pagecount = (pagecount+1) % gameinfo.creditPages.Size();
-		}*/
+		}
 		demosequence = 1;
 		break;
 	}
@@ -2301,7 +2296,7 @@ void D_DoomMain (void)
 	}
 	FString basewad = wad;
 
-	//FString optionalwad = BaseFileSearch(OPTIONALWAD, NULL, true);
+	FString optionalwad = BaseFileSearch(OPTIONALWAD, NULL, true);
 
 	iwad_man = new FIWadManager(basewad);
 
@@ -2335,7 +2330,7 @@ void D_DoomMain (void)
 		{
 			iwad_man = new FIWadManager(basewad);
 		}
-		const FIWADInfo *iwad_info = iwad_man->FindIWAD(allwads, iwad, basewad);
+		const FIWADInfo *iwad_info = iwad_man->FindIWAD(allwads, iwad, basewad, optionalwad);
 		gameinfo.gametype = iwad_info->gametype;
 		gameinfo.flags = iwad_info->flags;
 		gameinfo.ConfigName = iwad_info->Configname;
@@ -2700,7 +2695,7 @@ void D_DoomMain (void)
 		// clean up game state
 		ST_Clear();
 		D_ErrorCleanup ();
-		Thinkers.DestroyThinkersInList(STAT_STATIC);
+		DThinker::DestroyThinkersInList(STAT_STATIC);
 		E_Shutdown(false);
 		P_FreeLevelData();
 

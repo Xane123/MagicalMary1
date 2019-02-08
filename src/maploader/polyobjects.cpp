@@ -282,7 +282,7 @@ void MapLoader::TranslateToStartSpot (int tag, const DVector2 &origin)
 	FPolyObj *po;
 	DVector2 delta;
 
-	po = PO_GetPolyobj(Level, tag);
+	po = PO_GetPolyobj(tag);
 	if (po == nullptr)
 	{ // didn't match the tag with a polyobj tag
 		Printf(TEXTCOLOR_RED "TranslateToStartSpot: Unable to match polyobj tag: %d\n", tag);
@@ -315,7 +315,7 @@ void MapLoader::TranslateToStartSpot (int tag, const DVector2 &origin)
 	}
 	po->CalcCenter();
 	// For compatibility purposes
-	po->CenterSubsector = R_PointInSubsector(Level, po->CenterSpot.pos);
+	po->CenterSubsector = R_PointInSubsector(po->CenterSpot.pos);
 }
 
 //==========================================================================

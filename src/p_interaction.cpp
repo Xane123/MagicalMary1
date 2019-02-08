@@ -352,7 +352,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 	// [JM] Fire KILL type scripts for actor. Not needed for players, since they have the "DEATH" script type.
 	if (!player && !(flags7 & MF7_NOKILLSCRIPTS) && ((flags7 & MF7_USEKILLSCRIPTS) || gameinfo.forcekillscripts))
 	{
-		Level->Behaviors.StartTypedScripts(Level, SCRIPT_Kill, this, true, 0, true);
+		level.Behaviors.StartTypedScripts(SCRIPT_Kill, this, true, 0, true);
 	}
 
 	flags &= ~(MF_SHOOTABLE|MF_FLOAT|MF_SKULLFLY);
@@ -387,7 +387,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 	}
 
 	if (CountsAsKill())
-		Level->killed_monsters++;
+		level.killed_monsters++;
 		
 	if (source && source->player)
 	{
@@ -399,7 +399,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 		// Don't count any frags at level start, because they're just telefrags
 		// resulting from insufficient deathmatch starts, and it wouldn't be
 		// fair to count them toward a player's score.
-		if (player && Level->maptime)
+		if (player && level.maptime)
 		{
 			source->player->frags[player - players]++;
 			if (player == source->player)	// [RH] Cumulative frag count
@@ -492,7 +492,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 				source->player->multicount++;
 				if (source->player->lastkilltime > 0)
 				{
-					if (source->player->lastkilltime < currentSession->time - 3*TICRATE)
+					if (source->player->lastkilltime < level.time - 3*TICRATE)
 					{
 						source->player->multicount = 1;
 					}
@@ -535,7 +535,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 						}
 					}
 				}
-				source->player->lastkilltime = currentSession->time;
+				source->player->lastkilltime = level.time;
 			}
 
 			// [RH] Implement fraglimit
@@ -543,7 +543,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 				fraglimit <= D_GetFragCount (source->player))
 			{
 				Printf ("%s\n", GStrings("TXT_FRAGLIMIT"));
-				G_ExitLevel (Level, 0, false);
+				G_ExitLevel (0, false);
 			}
 		}
 	}
@@ -563,10 +563,10 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 		E_PlayerDied(int(player - players));
 
 		// Death script execution, care of Skull Tag
-		Level->Behaviors.StartTypedScripts (Level, SCRIPT_Death, this, true);
+		level.Behaviors.StartTypedScripts (SCRIPT_Death, this, true);
 
 		// [RH] Force a delay between death and respawn
-		player->respawn_time = currentSession->time + TICRATE;
+		player->respawn_time = level.time + TICRATE;
 
 		//Added by MC: Respawn bots
 		if (bglobal.botnum && !demoplayback)
@@ -618,7 +618,7 @@ void AActor::Die (AActor *source, AActor *inflictor, int dmgflags, FName MeansOf
 
 	// [RH] If this is the unmorphed version of another monster, destroy this
 	// actor, because the morphed version is the one that will stick around in
-	// the Level->
+	// the level.
 	if (flags & MF_UNMORPHED)
 	{
 		Destroy ();
@@ -1186,8 +1186,6 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	}
 
 
-	auto Level = target->Level;
-
 	//[RC] Backported from the Zandronum source.. Mostly.
 	if( target->player  &&
 		damage > 0 &&
@@ -1249,7 +1247,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 		//Use the original damage to check for telefrag amount. Don't let the now-amplified damagetypes do it.
 		if (!telefragDamage || (target->flags7 & MF7_LAXTELEFRAGDMG))
 		{ // Still allow telefragging :-(
-			damage = (int)(damage * Level->teamdamage);
+			damage = (int)(damage * level.teamdamage);
 			if (damage <= 0)
 			{
 				return (damage < 0) ? -1 : 0;
@@ -1335,7 +1333,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 			// [MC]Buddha2 absorbs telefrag damage, and anything else thrown their way.
 			int buddha = hasBuddha(player);
 			if (flags & DMG_FORCED) buddha = 0;
-			//if (telefragDamage && buddha == 1) buddha = 0;
+			if (telefragDamage && buddha == 1) buddha = 0;
 			if (buddha)
 			{
 				// If this is a voodoo doll we need to handle the real player as well.
@@ -1625,7 +1623,7 @@ bool AActor::OkayToSwitchTarget(AActor *other)
 	int infight;
 	if (flags7 & MF7_FORCEINFIGHTING) infight = 1;
 	else if (flags5 & MF5_NOINFIGHTING) infight = -1;
-	else infight = Level->GetInfighting();
+	else infight = G_SkillProperty(SKILLP_Infight);
 
 	if (infight < 0 &&	other->player == NULL && !IsHostile (other))
 	{
@@ -1681,10 +1679,9 @@ bool P_PoisonPlayer (player_t *player, AActor *poisoner, AActor *source, int poi
 	{
 		return false;
 	}
-	auto Level = player->mo->Level;
 	if (source != NULL && source->player != player && player->mo->IsTeammate (source))
 	{
-		poison = (int)(poison * Level->teamdamage);
+		poison = (int)(poison * level.teamdamage);
 	}
 	if (poison > 0)
 	{
@@ -1805,9 +1802,7 @@ void P_PoisonDamage (player_t *player, AActor *source, int damage, bool playPain
 			return;
 		}
 	}
-	auto Level = player->mo->Level;
-
-	if (!(Level->maptime & 63) && playPainSound)
+	if (!(level.time&63) && playPainSound)
 	{
 		FState *painstate = target->FindState(NAME_Pain, player->poisonpaintype);
 		if (painstate != NULL)

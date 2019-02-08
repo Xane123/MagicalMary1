@@ -157,8 +157,8 @@ static uint32_t Col2RGB8_2[63][256];
 // There's also only one, not four.
 DFrameBuffer *screen;
 
-CVAR (Int, vid_defwidth, 1280, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-CVAR (Int, vid_defheight, 720, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defwidth, 640, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+CVAR (Int, vid_defheight, 480, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 CVAR (Bool, ticker, false, 0)
 
 CUSTOM_CVAR (Bool, vid_vsync, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
@@ -592,6 +592,7 @@ void V_OutputResized (int width, int height)
 	C_NewModeAdjust();
 	// Reload crosshair if transitioned to a different size
 	ST_LoadCrosshair(true);
+	AM_NewResolution();
 }
 
 void V_CalcCleanFacs (int designwidth, int designheight, int realwidth, int realheight, int *cleanx, int *cleany, int *_cx1, int *_cx2)

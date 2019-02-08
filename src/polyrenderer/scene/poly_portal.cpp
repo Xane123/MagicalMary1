@@ -91,13 +91,13 @@ void PolyDrawSectorPortal::SaveGlobals()
 	viewpoint.SetViewAngle(viewwindow);
 
 	Portal->mFlags |= PORTSF_INSKYBOX;
-	if (Portal->mPartner > 0) PolyRenderer::Instance()->Level->sectorPortals[Portal->mPartner].mFlags |= PORTSF_INSKYBOX;
+	if (Portal->mPartner > 0) level.sectorPortals[Portal->mPartner].mFlags |= PORTSF_INSKYBOX;
 }
 
 void PolyDrawSectorPortal::RestoreGlobals()
 {
 	Portal->mFlags &= ~PORTSF_INSKYBOX;
-	if (Portal->mPartner > 0) PolyRenderer::Instance()->Level->sectorPortals[Portal->mPartner].mFlags &= ~PORTSF_INSKYBOX;
+	if (Portal->mPartner > 0) level.sectorPortals[Portal->mPartner].mFlags &= ~PORTSF_INSKYBOX;
 
 	auto &viewpoint = PolyRenderer::Instance()->Viewpoint;
 	const auto &viewwindow = PolyRenderer::Instance()->Viewwindow;
@@ -234,7 +234,7 @@ void PolyDrawLinePortal::SaveGlobals()
 	}
 
 	viewpoint.camera = nullptr;
-	viewpoint.sector = R_PointInSubsector(viewpoint.camera->Level, viewpoint.Pos)->sector;
+	viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 
 	viewpoint.SetViewAngle(viewwindow);
 }

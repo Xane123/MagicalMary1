@@ -24,7 +24,6 @@ class FTagManager
 	friend class FSectorTagIterator;
 	friend class FLineIdIterator;
 
-	FLevelLocals *Level;
 	TArray<FTagItem> allTags;
 	TArray<FTagItem> allIDs;
 	TArray<int> startForSector;
@@ -43,7 +42,6 @@ class FTagManager
 	}
 
 public:
-	FTagManager(FLevelLocals *l) : Level(l) {}
 	void Clear()
 	{
 		allTags.Clear();
@@ -71,21 +69,17 @@ public:
 	void RemoveLineIDs(int line);
 
 	void DumpTags();
-
-	int FindFirstSectorFromTag(int tag);
-	int FindFirstLineFromID(int tag);
-
 };
+
+extern FTagManager tagManager;
 
 class FSectorTagIterator
 {
 protected:
 	int searchtag;
 	int start;
-	FLevelLocals *Level;
-	FTagManager &tagManager;
 
-	FSectorTagIterator(FTagManager &manager) : tagManager(manager)
+	FSectorTagIterator()
 	{
 		// For DSectorTagIterator
 	}
@@ -111,13 +105,13 @@ protected:
 	}
 
 public:
-	FSectorTagIterator(FTagManager &manager, int tag) : tagManager(manager)
+	FSectorTagIterator(int tag)
 	{
 		Init(tag);
 	}
 
 	// Special constructor for actions that treat tag 0 as  'back of activation line'
-	FSectorTagIterator(FTagManager &manager, int tag, line_t *line) : tagManager(manager)
+	FSectorTagIterator(int tag, line_t *line)
 	{
 		Init(tag, line);
 	}
@@ -131,10 +125,9 @@ class FLineIdIterator
 protected:
 	int searchtag;
 	int start;
-	FTagManager &tagManager;
 
 public:
-	FLineIdIterator(FTagManager &manager, int id) : tagManager(manager)
+	FLineIdIterator(int id)
 	{
 		searchtag = id;
 		start = tagManager.IDHashFirst[((unsigned int)id) % FTagManager::TAG_HASH_SIZE];
@@ -144,15 +137,15 @@ public:
 };
 
 
-inline int FTagManager::FindFirstSectorFromTag(int tag)
+inline int P_FindFirstSectorFromTag(int tag)
 {
-	FSectorTagIterator it(*this, tag);
+	FSectorTagIterator it(tag);
 	return it.Next();
 }
 
-inline int FTagManager::FindFirstLineFromID(int tag)
+inline int P_FindFirstLineFromID(int tag)
 {
-	FLineIdIterator it(*this, tag);
+	FLineIdIterator it(tag);
 	return it.Next();
 }
 

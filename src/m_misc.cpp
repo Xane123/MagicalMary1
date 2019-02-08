@@ -67,9 +67,9 @@
 
 FGameConfigFile *GameConfig;
 
-CVAR(Bool, screenshot_quiet, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(Bool, screenshot_quiet, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(String, screenshot_type, "png", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
-CVAR(String, screenshot_dir, "./shots", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
+CVAR(String, screenshot_dir, "", CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 EXTERN_CVAR(Bool, longsavemessages);
 
 static long ParseCommandLine (const char *args, int *argc, char **argv);
@@ -523,9 +523,9 @@ static bool FindFreeName (FString &fullname, const char *extension)
 	FString lbmname;
 	int i;
 
-	for (i = 0; i <= 999; i++)
+	for (i = 0; i <= 9999; i++)
 	{
-		/*const char *gamename = gameinfo.ConfigName;
+		const char *gamename = gameinfo.ConfigName;
 
 		time_t now;
 		tm *tm;
@@ -534,9 +534,9 @@ static bool FindFreeName (FString &fullname, const char *extension)
 		tm = localtime(&now);
 
 		if (tm == NULL)
-		{*/
-			lbmname.Format ("%sScreenshot%03d.%s", fullname.GetChars(), i, extension);
-		/*}
+		{
+			lbmname.Format ("%sScreenshot_%s_%04d.%s", fullname.GetChars(), gamename, i, extension);
+		}
 		else if (i == 0)
 		{
 			lbmname.Format ("%sScreenshot_%s_%04d%02d%02d_%02d%02d%02d.%s", fullname.GetChars(), gamename,
@@ -550,7 +550,7 @@ static bool FindFreeName (FString &fullname, const char *extension)
 				tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
 				tm->tm_hour, tm->tm_min, tm->tm_sec,
 				i, extension);
-		}*/
+		}
 
 		if (!FileExists (lbmname.GetChars()))
 		{
@@ -593,7 +593,7 @@ void M_ScreenShot (const char *filename)
 		CreatePath(autoname);
 		if (!FindFreeName (autoname, writepcx ? "pcx" : "png"))
 		{
-			Printf ("You have too many screenshots saved; Please delete some before taking another one.\n");
+			Printf ("M_ScreenShot: Delete some screenshots\n");
 			return;
 		}
 	}

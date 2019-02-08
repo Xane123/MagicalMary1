@@ -526,7 +526,7 @@ set( PLAT_UNIX_SOURCES
 set( PLAT_OSX_SOURCES
 	posix/osx/iwadpicker_cocoa.mm
 	posix/osx/i_specialpaths.mm
-	posix/osx/mma.icns )
+	posix/osx/zdoom.icns )
 set( PLAT_COCOA_SOURCES
 	posix/cocoa/critsec.cpp
 	posix/cocoa/i_input.mm
@@ -1389,7 +1389,7 @@ endif()
 
 add_custom_command(TARGET zdoom POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	${CMAKE_SOURCE_DIR}/soundfont/default.sf2 $<TARGET_FILE_DIR:zdoom>/soundfonts/default.sf2
+	${CMAKE_SOURCE_DIR}/soundfont/gzdoom.sf2 $<TARGET_FILE_DIR:zdoom>/soundfonts/gzdoom.sf2
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	${CMAKE_SOURCE_DIR}/fm_banks/GENMIDI.GS.wopl $<TARGET_FILE_DIR:zdoom>/fm_banks/GENMIDI.GS.wopl
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different

@@ -202,7 +202,7 @@ void FSoftwareRenderer::RenderView(player_t *player, DCanvas *target, void *vide
 		r_viewwindow = mScene.MainThread()->Viewport->viewwindow;
 	}
 
-	player->mo->Level->canvasTextureInfo.UpdateAll([&](AActor *camera, FCanvasTexture *camtex, double fov)
+	level.canvasTextureInfo.UpdateAll([&](AActor *camera, FCanvasTexture *camtex, double fov)
 	{
 		RenderTextureView(camtex, camera, fov);
 	});
@@ -296,15 +296,15 @@ void FSoftwareRenderer::RenderTextureView (FCanvasTexture *camtex, AActor *viewp
 	r_viewwindow = cameraViewwindow;
 }
 
-void FSoftwareRenderer::SetColormap(FLevelLocals *Level)
+void FSoftwareRenderer::SetColormap()
 {
 	// This just sets the default colormap for the spftware renderer.
 	NormalLight.Maps = realcolormaps.Maps;
 	NormalLight.ChangeColor(PalEntry(255, 255, 255), 0);
-	NormalLight.ChangeFade(Level->fadeto);
-	if (Level->fadeto == 0)
+	NormalLight.ChangeFade(level.fadeto);
+	if (level.fadeto == 0)
 	{
-		SetDefaultColormap(Level->info->FadeTable);
+		SetDefaultColormap(level.info->FadeTable);
 	}
 }
 

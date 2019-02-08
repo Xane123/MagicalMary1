@@ -211,12 +211,11 @@ static int P_Set3DFloor(line_t * line, int param, int param2, int alpha)
 	int flags;
 	int tag = line->args[0];
 	sector_t * sec = line->frontsector, *ss;
-	auto Level = sec->Level;
 
-	FSectorTagIterator itr(Level->tagManager, tag);
+	FSectorTagIterator itr(tag);
 	while ((s = itr.Next()) >= 0)
 	{
-		ss = &Level->sectors[s];
+		ss = &level.sectors[s];
 
 		if (param == 0)
 		{
@@ -333,7 +332,8 @@ void P_PlayerOnSpecial3DFloor(player_t* player)
 		P_PlayerInSpecialSector(player, rover->model);
 
 		// Apply flat specials (using the ceiling!)
-		P_PlayerOnSpecialFlat(player, rover->model->GetTerrain(rover->top.isceiling));
+		P_PlayerOnSpecialFlat(
+			player, rover->model->GetTerrain(rover->top.isceiling));
 
 		break;
 	}
@@ -657,9 +657,9 @@ void P_Recalculate3DFloors(sector_t * sector)
 //
 //==========================================================================
 
-void P_ClearDynamic3DFloorData(FLevelLocals *Level)
+void P_ClearDynamic3DFloorData()
 {
-	for (auto &sec : Level->sectors)
+	for (auto &sec : level.sectors)
 	{
 		TArray<F3DFloor*> & ffloors = sec.e->XFloor.ffloors;
 
@@ -883,11 +883,11 @@ void P_LineOpening_XFloors (FLineOpening &open, AActor * thing, const line_t *li
 // Spawns 3D floors
 //
 //==========================================================================
-void P_Spawn3DFloors (FLevelLocals *Level)
+void P_Spawn3DFloors (void)
 {
 	static int flagvals[] = {512, 2+512, 512+1024};
 
-	for (auto &line : Level->lines)
+	for (auto &line : level.lines)
 	{
 		switch(line.special)
 		{
@@ -901,11 +901,11 @@ void P_Spawn3DFloors (FLevelLocals *Level)
 			// The flag high-byte/line id is only needed in Hexen format.
 			// UDMF can set both of these parameters without any restriction of the usable values.
 			// In Doom format the translators can take full integers for the tag and the line ID always is the same as the tag.
-			if (Level->maptype == MAPTYPE_HEXEN)	
+			if (level.maptype == MAPTYPE_HEXEN)	
 			{
 				if (line.args[1]&8)
 				{
-					Level->tagManager.AddLineID(line.Index(), line.args[4]);
+					tagManager.AddLineID(line.Index(), line.args[4]);
 				}
 				else
 				{
@@ -923,7 +923,7 @@ void P_Spawn3DFloors (FLevelLocals *Level)
 		line.args[0] = line.args[1] = line.args[2] = line.args[3] = line.args[4] = 0;
 	}
 
-	for (auto &sec : Level->sectors)
+	for (auto &sec : level.sectors)
 	{
 		P_Recalculate3DFloors(&sec);
 	}
@@ -965,6 +965,10 @@ secplane_t P_FindFloorPlane(sector_t * sector, const DVector3 &pos)
 
 int	P_Find3DFloor(sector_t * sec, const DVector3 &pos, bool above, bool floor, double &cmpz)
 {
+	// If no sector given, find the one appropriate
+	if (sec == NULL)
+		sec = P_PointInSector(pos);
+
 	// Above normal ceiling
 	cmpz = sec->ceilingplane.ZatPoint(pos);
 	if (pos.Z >= cmpz)
@@ -1012,25 +1016,28 @@ int	P_Find3DFloor(sector_t * sec, const DVector3 &pos, bool above, bool floor, d
 
 CCMD (dump3df)
 {
-	ForAllLevels([](FLevelLocals *Level)
+	if (argv.argc() > 1) 
 	{
-		Printf("%s - %s\n", Level->MapName.GetChars(), Level->LevelName.GetChars());
-		for (auto &sec : Level->sectors)
+		int sec = (int)strtoll(argv[1], NULL, 10);
+		if ((unsigned)sec >= level.sectors.Size())
 		{
-			TArray<F3DFloor*> & ffloors = sec.e->XFloor.ffloors;
-
-			for (unsigned int i = 0; i < ffloors.Size(); i++)
-			{
-				double height = ffloors[i]->top.plane->ZatPoint(sec.centerspot);
-				double bheight = ffloors[i]->bottom.plane->ZatPoint(sec.centerspot);
-
-				IGNORE_FORMAT_PRE
-					Printf("FFloor %d @ top = %f (model = %d), bottom = %f (model = %d), flags = %B, alpha = %d %s %s\n",
-						i, height, ffloors[i]->top.model->sectornum,
-						bheight, ffloors[i]->bottom.model->sectornum,
-						ffloors[i]->flags, ffloors[i]->alpha, (ffloors[i]->flags&FF_EXISTS) ? "Exists" : "", (ffloors[i]->flags&FF_DYNAMIC) ? "Dynamic" : "");
-				IGNORE_FORMAT_POST
-			}
+			Printf("Sector %d does not exist.\n", sec);
+			return;
 		}
-	});
+		sector_t *sector = &level.sectors[sec];
+		TArray<F3DFloor*> & ffloors=sector->e->XFloor.ffloors;
+
+		for (unsigned int i = 0; i < ffloors.Size(); i++)
+		{
+			double height=ffloors[i]->top.plane->ZatPoint(sector->centerspot);
+			double bheight=ffloors[i]->bottom.plane->ZatPoint(sector->centerspot);
+
+			IGNORE_FORMAT_PRE
+			Printf("FFloor %d @ top = %f (model = %d), bottom = %f (model = %d), flags = %B, alpha = %d %s %s\n", 
+				i, height, ffloors[i]->top.model->sectornum, 
+				bheight, ffloors[i]->bottom.model->sectornum,
+				ffloors[i]->flags, ffloors[i]->alpha, (ffloors[i]->flags&FF_EXISTS)? "Exists":"", (ffloors[i]->flags&FF_DYNAMIC)? "Dynamic":"");
+			IGNORE_FORMAT_POST
+		}
+	}
 }

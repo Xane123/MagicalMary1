@@ -39,7 +39,6 @@
 #include "g_game.h"
 #include "swrenderer/r_swscene.h"
 #include "hwrenderer/utility/hw_clock.h"
-#include "actorinlines.h"
 
 #include "gl_load/gl_interface.h"
 #include "gl/system/gl_framebuffer.h"
@@ -188,9 +187,9 @@ void FGLRenderer::EndOffscreen()
 //
 //===========================================================================
 
-void FGLRenderer::UpdateShadowMap(FLevelLocals *Level)
+void FGLRenderer::UpdateShadowMap()
 {
-	if (screen->mShadowMap.PerformUpdate(Level))
+	if (screen->mShadowMap.PerformUpdate())
 	{
 		FGLDebug::PushGroup("ShadowMap");
 
@@ -246,8 +245,7 @@ sector_t *FGLRenderer::RenderView(player_t* player)
 		if (cl_capfps || r_NoInterpolate) r_viewpoint.TicFrac = 1.;
 		else r_viewpoint.TicFrac = I_GetTimeFrac();
 
-		auto Level = player->camera->Level;
-		ForAllLevels(P_FindParticleSubsectors);
+		P_FindParticleSubsectors();
 
 		screen->mLights->Clear();
 		screen->mViewpoints->Clear();
@@ -355,7 +353,7 @@ void FGLRenderer::WriteSavePic (player_t *player, FileWriter *file, int width, i
     mBuffers = mSaveBuffers;
     
 	hw_ClearFakeFlat();
-	ForAllLevels(P_FindParticleSubsectors);
+	P_FindParticleSubsectors();    // make sure that all recently spawned particles have a valid subsector.
 	gl_RenderState.SetVertexBuffer(screen->mVertexData);
 	screen->mVertexData->Reset();
     screen->mLights->Clear();

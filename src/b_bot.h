@@ -116,11 +116,11 @@ public:
 	void ClearPlayer (int playernum, bool keepTeam);
 
 	//(b_game.cpp)
-	void Main (FLevelLocals *Level);
+	void Main ();
 	void Init ();
 	void End();
 	bool SpawnBot (const char *name, int color = NOCOLOR);
-	void TryAddBot (FLevelLocals *Level, uint8_t **stream, int player);
+	void TryAddBot (uint8_t **stream, int player);
 	void RemoveAllBots (bool fromlist);
 	bool LoadBots ();
 	void ForgetBots ();
@@ -129,7 +129,7 @@ public:
 	void StartTravel ();
 	void FinishTravel ();
 	bool IsLeader (player_t *player);
-	void SetBodyAt (FLevelLocals *l, const DVector3 &pos, int hostnum);
+	void SetBodyAt (const DVector3 &pos, int hostnum);
 	double FakeFire (AActor *source, AActor *dest, ticcmd_t *cmd);
 	bool SafeCheckPosition (AActor *actor, double x, double y, FCheckPosition &tm);
 	void BotTick(AActor *mo);
@@ -139,6 +139,8 @@ public:
 	bool IsDangerous (sector_t *sec);
 
 	TArray<FString> getspawned; //Array of bots (their names) which should be spawned when starting a game.
+	uint8_t freeze;			//Game in freeze mode.
+	uint8_t changefreeze;	//Game wants to change freeze mode.
 	int botnum;
 	botinfo_t *botinfo;
 	int spawn_tries;
@@ -151,7 +153,7 @@ public:
 
 private:
 	//(b_game.cpp)
-	bool DoAddBot (FLevelLocals *Level, uint8_t *info, botskill_t skill);
+	bool DoAddBot (uint8_t *info, botskill_t skill);
 
 protected:
 	bool	 ctf;
@@ -162,12 +164,9 @@ protected:
 class DBot : public DThinker
 {
 	DECLARE_CLASS(DBot,DThinker)
-	HAS_OBJECT_POINTERS;
-
-	DBot() = default;
+	HAS_OBJECT_POINTERS
 public:
-	static const int DEFAULT_STAT = STAT_BOT;
-	DBot (FLevelLocals *Level);
+	DBot ();
 
 	void Clear ();
 	void Serialize(FSerializer &arc);

@@ -167,10 +167,8 @@ namespace swrenderer
 				continue;
 			}
 
-			auto Level = Thread->Viewport->GetLevel();
-
 			SetInSkyBox(port);
-			if (port->mPartner > 0) SetInSkyBox(&Level->sectorPortals[port->mPartner]);
+			if (port->mPartner > 0) SetInSkyBox(&level.sectorPortals[port->mPartner]);
 			Thread->Viewport->viewpoint.camera = nullptr;
 			Thread->Viewport->viewpoint.sector = port->mDestination;
 			assert(Thread->Viewport->viewpoint.sector != nullptr);
@@ -223,12 +221,12 @@ namespace swrenderer
 			memcpy(draw_segment->sprtopclip, ceilingclip + pl->left, (pl->right - pl->left) * sizeof(short));
 			drawseglist->Push(draw_segment);
 
-			Thread->OpaquePass->RenderScene(Thread->Viewport->GetLevel());
+			Thread->OpaquePass->RenderScene();
 			Thread->Clip3D->ResetClip(); // reset clips (floor/ceiling)
 			planes->Render();
 
 			ClearInSkyBox(port);
-			if (port->mPartner > 0) SetInSkyBox(&Level->sectorPortals[port->mPartner]);
+			if (port->mPartner > 0) SetInSkyBox(&level.sectorPortals[port->mPartner]);
 		}
 
 		// Draw all the masked textures in a second pass, in the reverse order they
@@ -440,7 +438,7 @@ namespace swrenderer
 		memcpy(ceilingclip + pds->x1, &pds->ceilingclip[0], pds->len * sizeof(*ceilingclip));
 		memcpy(floorclip + pds->x1, &pds->floorclip[0], pds->len * sizeof(*floorclip));
 
-		Thread->OpaquePass->RenderScene(Thread->Viewport->GetLevel());
+		Thread->OpaquePass->RenderScene();
 		Thread->Clip3D->ResetClip(); // reset clips (floor/ceiling)
 		if (!savedvisibility && viewpoint.camera) viewpoint.camera->renderflags &= ~RF_INVISIBLE;
 

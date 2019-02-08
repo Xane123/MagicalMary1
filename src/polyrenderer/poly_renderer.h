@@ -68,7 +68,6 @@ public:
 	FRenderViewpoint Viewpoint;
 	PolyLightVisibility Light;
 	RenderPolyScene Scene;
-	FLevelLocals *Level;
 
 private:
 	void RenderActorView(AActor *actor, bool dontmaplines);

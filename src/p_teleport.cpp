@@ -42,7 +42,6 @@
 #include "r_utility.h"
 #include "p_spec.h"
 #include "g_levellocals.h"
-#include "actorinlines.h"
 #include "vm.h"
 
 #define FUDGEFACTOR		10
@@ -71,7 +70,7 @@ void P_SpawnTeleportFog(AActor *mobj, const DVector3 &pos, bool beforeTele, bool
 	else
 	{
 		double fogDelta = mobj->flags & MF_MISSILE ? 0 : TELEFOGHEIGHT;
-		mo = Spawn(mobj->Level, (beforeTele ? mobj->TeleFogSourceType : mobj->TeleFogDestType), DVector3(pos, pos.Z + fogDelta), ALLOW_REPLACE);
+		mo = Spawn((beforeTele ? mobj->TeleFogSourceType : mobj->TeleFogDestType), DVector3(pos, pos.Z + fogDelta), ALLOW_REPLACE);
 	}
 
 	if (mo != NULL && setTarget)
@@ -108,7 +107,7 @@ bool P_Teleport (AActor *thing, DVector3 pos, DAngle angle, int flags)
 
 	old = thing->Pos();
 	aboveFloor = thing->Z() - thing->floorz;
-	destsect = P_PointInSector (thing->Level, pos);
+	destsect = P_PointInSector (pos);
 	// killough 5/12/98: exclude voodoo dolls:
 	player = thing->player;
 	if (player && player->mo != thing)
@@ -187,7 +186,7 @@ bool P_Teleport (AActor *thing, DVector3 pos, DAngle angle, int flags)
 		if (!predicting)
 		{
 			DVector2 vector = angle.ToVector(20);
-			DVector2 fogpos = P_GetOffsetPosition(thing->Level, pos.X, pos.Y, vector.X, vector.Y);
+			DVector2 fogpos = P_GetOffsetPosition(pos.X, pos.Y, vector.X, vector.Y);
 			P_SpawnTeleportFog(thing, DVector3(fogpos, thing->Z()), false, true);
 
 		}
@@ -236,7 +235,7 @@ DEFINE_ACTION_FUNCTION(AActor, Teleport)
 	ACTION_RETURN_BOOL(P_Teleport(self, DVector3(x, y, z), an, flags));
 }
 
-static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool norandom)
+static AActor *SelectTeleDest (int tid, int tag, bool norandom)
 {
 	AActor *searcher;
 
@@ -247,15 +246,15 @@ static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool noran
 	// sector).
 
 	// Compatibility hack for some maps that fell victim to a bug in the teleport code in 2.0.9x
-	if (Level->ib_compatflags & BCOMPATF_BADTELEPORTERS) tag = 0;
+	if (ib_compatflags & BCOMPATF_BADTELEPORTERS) tag = 0;
 
 	if (tid != 0)
 	{
-		NActorIterator iterator (Level, NAME_TeleportDest, tid);
+		NActorIterator iterator (NAME_TeleportDest, tid);
 		int count = 0;
 		while ( (searcher = iterator.Next ()) )
 		{
-			if (tag == 0 || Level->tagManager.SectorHasTag(searcher->Sector, tag))
+			if (tag == 0 || tagManager.SectorHasTag(searcher->Sector, tag))
 			{
 				count++;
 			}
@@ -269,12 +268,12 @@ static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool noran
 			if (tag == 0)
 			{
 				// Try to find a matching map spot (fixes Hexen MAP10)
-				NActorIterator it2 (Level, NAME_MapSpot, tid);
+				NActorIterator it2 (NAME_MapSpot, tid);
 				searcher = it2.Next ();
 				if (searcher == NULL)
 				{
 					// Try to find a matching non-blocking spot of any type (fixes Caldera MAP13)
-					FActorIterator it3 (Level, tid);
+					FActorIterator it3 (tid);
 					searcher = it3.Next ();
 					while (searcher != NULL && (searcher->flags & MF_SOLID))
 					{
@@ -294,7 +293,7 @@ static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool noran
 			while (count > 0)
 			{
 				searcher = iterator.Next ();
-				if (tag == 0 || Level->tagManager.SectorHasTag(searcher->Sector, tag))
+				if (tag == 0 || tagManager.SectorHasTag(searcher->Sector, tag))
 				{
 					count--;
 				}
@@ -307,7 +306,7 @@ static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool noran
 	{
 		int secnum;
 
-		FSectorTagIterator itr(Level->tagManager, tag);
+		FSectorTagIterator itr(tag);
 		while ((secnum = itr.Next()) >= 0)
 		{
 			// Scanning the snext links of things in the sector will not work, because
@@ -317,10 +316,10 @@ static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool noran
 			// teleport destination. This means if 50 sectors have a matching tag and
 			// only the last one has a destination, *every* actor is scanned at least 49
 			// times. Yuck.
-			TThinkerIterator<AActor> it2(Level, NAME_TeleportDest);
+			TThinkerIterator<AActor> it2(NAME_TeleportDest);
 			while ((searcher = it2.Next()) != NULL)
 			{
-				if (searcher->Sector == &Level->sectors[secnum])
+				if (searcher->Sector == &level.sectors[secnum])
 				{
 					return searcher;
 				}
@@ -331,7 +330,7 @@ static AActor *SelectTeleDest (FLevelLocals *Level, int tid, int tag, bool noran
 	return NULL;
 }
 
-bool EV_Teleport (FLevelLocals *Level, int tid, int tag, line_t *line, int side, AActor *thing, int flags)
+bool EV_Teleport (int tid, int tag, line_t *line, int side, AActor *thing, int flags)
 {
 	AActor *searcher;
 	double z;
@@ -353,7 +352,7 @@ bool EV_Teleport (FLevelLocals *Level, int tid, int tag, line_t *line, int side,
 	{ // Don't teleport if hit back of line, so you can get out of teleporter.
 		return 0;
 	}
-	searcher = SelectTeleDest(Level, tid, tag, predicting);
+	searcher = SelectTeleDest(tid, tag, predicting);
 	if (searcher == NULL)
 	{
 		return false;
@@ -386,7 +385,7 @@ bool EV_Teleport (FLevelLocals *Level, int tid, int tag, line_t *line, int side,
 	{
 		z = ONFLOORZ;
 	}
-	if ((Level->i_compatflags2 & COMPATF2_BADANGLES) && (thing->player != NULL))
+	if ((i_compatflags2 & COMPATF2_BADANGLES) && (thing->player != NULL))
 	{
 		badangle = 0.01;
 	}
@@ -427,18 +426,17 @@ bool EV_SilentLineTeleport (line_t *line, int side, AActor *thing, int id, INTBO
 {
 	int i;
 	line_t *l;
-	auto Level = thing->Level;
 
 	if (side || thing->flags2 & MF2_NOTELEPORT || !line || line->sidedef[1] == NULL)
 		return false;
 
-	FLineIdIterator itr(Level->tagManager, id);
+	FLineIdIterator itr(id);
 	while ((i = itr.Next()) >= 0)
 	{
 		if (line->Index() == i)
 			continue;
 
-		if ((l=&Level->lines[i]) != line && l->backsector)
+		if ((l=&level.lines[i]) != line && l->backsector)
 		{
 			// Get the thing's position along the source linedef
 			double pos;
@@ -602,18 +600,18 @@ bool EV_SilentLineTeleport (line_t *line, int side, AActor *thing, int id, INTBO
 }
 
 // [RH] Teleport anything matching other_tid to dest_tid
-bool EV_TeleportOther (FLevelLocals *Level, int other_tid, int dest_tid, bool fog)
+bool EV_TeleportOther (int other_tid, int dest_tid, bool fog)
 {
 	bool didSomething = false;
 
 	if (other_tid != 0 && dest_tid != 0)
 	{
 		AActor *victim;
-		FActorIterator iterator (Level, other_tid);
+		FActorIterator iterator (other_tid);
 
 		while ( (victim = iterator.Next ()) )
 		{
-			didSomething |= EV_Teleport (Level, dest_tid, 0, NULL, 0, victim,
+			didSomething |= EV_Teleport (dest_tid, 0, NULL, 0, victim,
 				fog ? (TELF_DESTFOG | TELF_SOURCEFOG) : TELF_KEEPORIENTATION);
 		}
 	}
@@ -640,20 +638,20 @@ static bool DoGroupForOne (AActor *victim, AActor *source, AActor *dest, bool fl
 
 // [RH] Teleport a group of actors centered around source_tid so
 // that they become centered around dest_tid instead.
-bool EV_TeleportGroup (FLevelLocals *Level, int group_tid, AActor *victim, int source_tid, int dest_tid, bool moveSource, bool fog)
+bool EV_TeleportGroup (int group_tid, AActor *victim, int source_tid, int dest_tid, bool moveSource, bool fog)
 {
 	AActor *sourceOrigin, *destOrigin;
 	{
-		FActorIterator iterator (Level, source_tid);
+		FActorIterator iterator (source_tid);
 		sourceOrigin = iterator.Next ();
 	}
 	if (sourceOrigin == NULL)
 	{ // If there is no source origin, behave like TeleportOther
-		return EV_TeleportOther (Level, group_tid, dest_tid, fog);
+		return EV_TeleportOther (group_tid, dest_tid, fog);
 	}
 
 	{
-		NActorIterator iterator (Level, NAME_TeleportDest, dest_tid);
+		NActorIterator iterator (NAME_TeleportDest, dest_tid);
 		destOrigin = iterator.Next ();
 	}
 	if (destOrigin == NULL)
@@ -671,7 +669,7 @@ bool EV_TeleportGroup (FLevelLocals *Level, int group_tid, AActor *victim, int s
 	}
 	else
 	{
-		FActorIterator iterator (Level, group_tid);
+		FActorIterator iterator (group_tid);
 
 		// For each actor with tid matching arg0, move it to the same
 		// position relative to destOrigin as it is relative to sourceOrigin
@@ -695,11 +693,11 @@ bool EV_TeleportGroup (FLevelLocals *Level, int group_tid, AActor *victim, int s
 // [RH] Teleport a group of actors in a sector. Source_tid is used as a
 // reference point so that they end up in the same position relative to
 // dest_tid. Group_tid can be used to not teleport all actors in the sector.
-bool EV_TeleportSector (FLevelLocals *Level, int tag, int source_tid, int dest_tid, bool fog, int group_tid)
+bool EV_TeleportSector (int tag, int source_tid, int dest_tid, bool fog, int group_tid)
 {
 	AActor *sourceOrigin, *destOrigin;
 	{
-		FActorIterator iterator (Level, source_tid);
+		FActorIterator iterator (source_tid);
 		sourceOrigin = iterator.Next ();
 	}
 	if (sourceOrigin == NULL)
@@ -707,7 +705,7 @@ bool EV_TeleportSector (FLevelLocals *Level, int tag, int source_tid, int dest_t
 		return false;
 	}
 	{
-		NActorIterator iterator (Level, NAME_TeleportDest, dest_tid);
+		NActorIterator iterator (NAME_TeleportDest, dest_tid);
 		destOrigin = iterator.Next ();
 	}
 	if (destOrigin == NULL)
@@ -720,11 +718,11 @@ bool EV_TeleportSector (FLevelLocals *Level, int tag, int source_tid, int dest_t
 	int secnum;
 
 	secnum = -1;
-	FSectorTagIterator itr(Level->tagManager, tag);
+	FSectorTagIterator itr(tag);
 	while ((secnum = itr.Next()) >= 0)
 	{
 		msecnode_t *node;
-		const sector_t * const sec = &Level->sectors[secnum];
+		const sector_t * const sec = &level.sectors[secnum];
 
 		for (node = sec->touching_thinglist; node; )
 		{

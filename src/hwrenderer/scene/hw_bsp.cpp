@@ -559,16 +559,16 @@ void HWDrawInfo::RenderThings(subsector_t * sub, sector_t * sector)
 void HWDrawInfo::RenderParticles(subsector_t *sub, sector_t *front)
 {
 	SetupSprite.Clock();
-	for (int i = Level->ParticlesInSubsec[sub->Index()]; i != NO_PARTICLE; i = Level->Particles[i].snext)
+	for (int i = ParticlesInSubsec[sub->Index()]; i != NO_PARTICLE; i = Particles[i].snext)
 	{
 		if (mClipPortal)
 		{
-			int clipres = mClipPortal->ClipPoint(Level->Particles[i].Pos);
+			int clipres = mClipPortal->ClipPoint(Particles[i].Pos);
 			if (clipres == PClip_InFront) continue;
 		}
 
 		GLSprite sprite;
-		sprite.ProcessParticle(this, &Level->Particles[i], front);
+		sprite.ProcessParticle(this, &Particles[i], front);
 	}
 	SetupSprite.Unclock();
 }
@@ -631,7 +631,7 @@ void HWDrawInfo::DoSubsector(subsector_t * sub)
 	}
 
 	// [RH] Add particles
-	if (gl_render_things &&Level->ParticlesInSubsec[sub->Index()] != NO_PARTICLE)
+	if (gl_render_things && ParticlesInSubsec[sub->Index()] != NO_PARTICLE)
 	{
 		if (multithread)
 		{
@@ -691,7 +691,7 @@ void HWDrawInfo::DoSubsector(subsector_t * sub)
 					fakesector = hw_FakeFlat(sector, in_area, false);
 				}
 
-				uint8_t &srf = section_renderflags[Level->sections.SectionIndex(sub->section)];
+				uint8_t &srf = section_renderflags[level.sections.SectionIndex(sub->section)];
 				if (!(srf & SSRF_PROCESSED))
 				{
 					srf |= SSRF_PROCESSED;
@@ -766,9 +766,9 @@ void HWDrawInfo::DoSubsector(subsector_t * sub)
 
 void HWDrawInfo::RenderBSPNode (void *node)
 {
-	if (Level->nodes.Size() == 0)
+	if (level.nodes.Size() == 0)
 	{
-		DoSubsector (&Level->subsectors[0]);
+		DoSubsector (&level.subsectors[0]);
 		return;
 	}
 	while (!((size_t)node & 1))  // Keep going until found a subsector

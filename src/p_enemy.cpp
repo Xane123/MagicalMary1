@@ -161,12 +161,12 @@ static void P_RecursiveSound(sector_t *sec, AActor *soundtarget, bool splash, AA
 		// I wish there was a better method to do this than randomly looking through the portal at a few places...
 		if (checkabove)
 		{
-			sector_t *upper = P_PointInSector(sec->Level, check->v1->fPos() + check->Delta() / 2 + sec->GetPortalDisplacement(sector_t::ceiling));
+			sector_t *upper = P_PointInSector(check->v1->fPos() + check->Delta() / 2 + sec->GetPortalDisplacement(sector_t::ceiling));
 			NoiseMarkSector(upper, soundtarget, splash, emitter, soundblocks, maxdist);
 		}
 		if (checkbelow)
 		{
-			sector_t *lower = P_PointInSector(sec->Level, check->v1->fPos() + check->Delta() / 2 + sec->GetPortalDisplacement(sector_t::floor));
+			sector_t *lower = P_PointInSector(check->v1->fPos() + check->Delta() / 2 + sec->GetPortalDisplacement(sector_t::floor));
 			NoiseMarkSector(lower, soundtarget, splash, emitter, soundblocks, maxdist);
 		}
 
@@ -864,10 +864,10 @@ void P_NewChaseDir(AActor * actor)
 	if (actor->floorz - actor->dropoffz > actor->MaxDropOffHeight && 
 		actor->Z() <= actor->floorz && !(actor->flags & MF_DROPOFF) && 
 		!(actor->flags2 & MF2_ONMOBJ) &&
-		!(actor->flags & MF_FLOAT) && !(actor->Level->i_compatflags & COMPATF_DROPOFF))
+		!(actor->flags & MF_FLOAT) && !(i_compatflags & COMPATF_DROPOFF))
 	{
 		FBoundingBox box(actor->X(), actor->Y(), actor->radius);
-		FBlockLinesIterator it(actor->Level, box);
+		FBlockLinesIterator it(box);
 		line_t *line;
 
 		double deltax = 0;
@@ -1201,7 +1201,7 @@ int P_LookForMonsters (AActor *actor)
 {
 	int count;
 	AActor *mo;
-	TThinkerIterator<AActor> iterator(actor->Level);
+	TThinkerIterator<AActor> iterator;
 
 	if (!P_CheckSight (players[0].mo, actor, SF_SEEPASTBLOCKEVERYTHING))
 	{ // Player can't see monster
@@ -1258,8 +1258,7 @@ AActor *LookForTIDInBlock (AActor *lookee, int index, void *extparams)
 	AActor *link;
 	AActor *other;
 	
-	auto Level = lookee->Level;
-	for (block = Level->blockmap.blocklinks[index]; block != NULL; block = block->NextActor)
+	for (block = level.blockmap.blocklinks[index]; block != NULL; block = block->NextActor)
 	{
 		link = block->Me;
 
@@ -1430,8 +1429,7 @@ AActor *LookForEnemiesInBlock (AActor *lookee, int index, void *extparam)
 	AActor *other;
 	FLookExParams *params = (FLookExParams *)extparam;
 	
-	auto Level = lookee->Level;
-	for (block = Level->blockmap.blocklinks[index]; block != NULL; block = block->NextActor)
+	for (block = level.blockmap.blocklinks[index]; block != NULL; block = block->NextActor)
 	{
 		link = block->Me;
 
@@ -1717,7 +1715,7 @@ int P_LookForPlayers (AActor *actor, INTBOOL allaround, FLookExParams *params)
 		// the player then, eh?
 		if(!(actor->flags6 & MF6_SEEINVISIBLE)) 
 		{
-			if ((player->mo->flags & MF_SHADOW && !(actor->Level->i_compatflags & COMPATF_INVISIBILITY)) ||
+			if ((player->mo->flags & MF_SHADOW && !(i_compatflags & COMPATF_INVISIBILITY)) ||
 				player->mo->flags3 & MF3_GHOST)
 			{
 				if (player->mo->Distance2D (actor) > 128 && player->mo->Vel.XY().LengthSquared() < 5*5)
@@ -1759,15 +1757,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 	if (self->flags5 & MF5_INCONVERSATION)
 		return 0;
 
-	auto Level = self->Level;
-
 	// [RH] Set goal now if appropriate
 	if (self->special == Thing_SetGoal && self->args[0] == 0) 
 	{
-		NActorIterator iterator (Level, NAME_PatrolPoint, self->args[1]);
+		NActorIterator iterator (NAME_PatrolPoint, self->args[1]);
 		self->special = 0;
 		self->goal = iterator.Next ();
-		self->reactiontime = self->args[2] * TICRATE + Level->maptime;
+		self->reactiontime = self->args[2] * TICRATE + level.maptime;
 		if (self->args[3] == 0) self->flags5 &= ~MF5_CHASEGOAL;
 		else self->flags5 |= MF5_CHASEGOAL;
 	}
@@ -1780,7 +1776,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look)
 	}
 	else
 	{
-		targ = (Level->i_compatflags & COMPATF_SOUNDTARGET || self->flags & MF_NOSECTOR)? 
+		targ = (i_compatflags & COMPATF_SOUNDTARGET || self->flags & MF_NOSECTOR)? 
 			self->Sector->SoundTarget : self->LastHeard;
 
 		// [RH] If the soundtarget is dead, don't chase it
@@ -1890,15 +1886,13 @@ DEFINE_ACTION_FUNCTION(AActor, A_LookEx)
 	if (self->flags5 & MF5_INCONVERSATION)
 		return 0;
 
-	auto Level = self->Level;
-
 	// [RH] Set goal now if appropriate
 	if (self->special == Thing_SetGoal && self->args[0] == 0) 
 	{
-		NActorIterator iterator(Level, NAME_PatrolPoint, self->args[1]);
+		NActorIterator iterator(NAME_PatrolPoint, self->args[1]);
 		self->special = 0;
 		self->goal = iterator.Next ();
-		self->reactiontime = self->args[2] * TICRATE + Level->maptime;
+		self->reactiontime = self->args[2] * TICRATE + level.maptime;
 		if (self->args[3] == 0)
 			self->flags5 &= ~MF5_CHASEGOAL;
 		else
@@ -1915,7 +1909,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_LookEx)
 	{
 		if (!(flags & LOF_NOSOUNDCHECK))
 		{
-			targ = (Level->i_compatflags & COMPATF_SOUNDTARGET || self->flags & MF_NOSECTOR)?
+			targ = (i_compatflags & COMPATF_SOUNDTARGET || self->flags & MF_NOSECTOR)?
 				self->Sector->SoundTarget : self->LastHeard;
 			if (targ != NULL)
 			{
@@ -2153,11 +2147,10 @@ DEFINE_ACTION_FUNCTION(AActor, A_Look2)
 	{
 		targ = NULL;
 	}
-	auto Level = self->Level;
 
 	if (targ && (targ->flags & MF_SHOOTABLE))
 	{
-		if ((Level->flags & LEVEL_NOALLIES) ||
+		if ((level.flags & LEVEL_NOALLIES) ||
 			(self->flags & MF_FRIENDLY) != (targ->flags & MF_FRIENDLY))
 		{
 			if (self->flags & MF_AMBUSH)
@@ -2378,18 +2371,16 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 
 		if (result)
 		{
-			auto Level = actor->Level;
-
 			// reached the goal
-			NActorIterator iterator (Level, NAME_PatrolPoint, actor->goal->args[0]);
-			NActorIterator specit (Level, NAME_PatrolSpecial, actor->goal->tid);
+			NActorIterator iterator (NAME_PatrolPoint, actor->goal->args[0]);
+			NActorIterator specit (NAME_PatrolSpecial, actor->goal->tid);
 			AActor *spec;
 
 			// Execute the specials of any PatrolSpecials with the same TID
 			// as the goal.
 			while ( (spec = specit.Next()) )
 			{
-				P_ExecuteSpecial(actor->Level, spec->special, NULL, actor, false, spec->args[0],
+				P_ExecuteSpecial(spec->special, NULL, actor, false, spec->args[0],
 					spec->args[1], spec->args[2], spec->args[3], spec->args[4]);
 			}
 
@@ -2399,7 +2390,7 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 			if (newgoal != NULL && actor->goal == actor->target)
 			{
 				delay = newgoal->args[1];
-				actor->reactiontime = delay * TICRATE + Level->maptime;
+				actor->reactiontime = delay * TICRATE + level.maptime;
 			}
 			else
 			{
@@ -2636,7 +2627,7 @@ bool P_CheckForResurrection(AActor *self, bool usevilestates)
 
 		FPortalGroupArray check(FPortalGroupArray::PGA_Full3d);
 
-		FMultiBlockThingsIterator it(check, self->Level, viletry.X, viletry.Y, self->Z() - 64, self->Top() + 64, 32., false, NULL);
+		FMultiBlockThingsIterator it(check, viletry.X, viletry.Y, self->Z() - 64, self->Top() + 64, 32., false, NULL);
 		FMultiBlockThingsIterator::CheckResult cres;
 		while (it.Next(&cres))
 		{
@@ -2730,7 +2721,7 @@ bool P_CheckForResurrection(AActor *self, bool usevilestates)
 				{
 					corpsehit->Translation = info->Translation; // Clean up bloodcolor translation from crushed corpses
 				}
-				if (self->Level->ib_compatflags & BCOMPATF_VILEGHOSTS)
+				if (ib_compatflags & BCOMPATF_VILEGHOSTS)
 				{
 					corpsehit->Height *= 4;
 					// [GZ] This was a commented-out feature, so let's make use of it,
@@ -3053,7 +3044,7 @@ int CheckBossDeath (AActor *actor)
 		return false; // no one left alive, so do not end game
 	
 	// Make sure all bosses are dead
-	TThinkerIterator<AActor> iterator(actor->Level);
+	TThinkerIterator<AActor> iterator;
 	AActor *other;
 
 	while ( (other = iterator.Next ()) )
@@ -3083,10 +3074,9 @@ void A_BossDeath(AActor *self)
 	
 	// Do generic special death actions first
 	bool checked = false;
-	auto Level = self->Level;
-	for (unsigned i = 0; i < Level->info->specialactions.Size(); i++)
+	for (unsigned i = 0; i < level.info->specialactions.Size(); i++)
 	{
-		FSpecialAction *sa = &Level->info->specialactions[i];
+		FSpecialAction *sa = &level.info->specialactions[i];
 
 		if (type == sa->Type || mytype == sa->Type)
 		{
@@ -3096,7 +3086,7 @@ void A_BossDeath(AActor *self)
 			}
 			checked = true;
 
-			P_ExecuteSpecial(self->Level, sa->Action, NULL, self, false, 
+			P_ExecuteSpecial(sa->Action, NULL, self, false, 
 				sa->Args[0], sa->Args[1], sa->Args[2], sa->Args[3], sa->Args[4]);
 		}
 	}
@@ -3104,7 +3094,7 @@ void A_BossDeath(AActor *self)
 	// [RH] These all depend on the presence of level flags now
 	//		rather than being hard-coded to specific levels/episodes.
 
-	if ((Level->flags & (LEVEL_MAP07SPECIAL|
+	if ((level.flags & (LEVEL_MAP07SPECIAL|
 						LEVEL_BRUISERSPECIAL|
 						LEVEL_CYBORGSPECIAL|
 						LEVEL_SPIDERSPECIAL|
@@ -3113,14 +3103,14 @@ void A_BossDeath(AActor *self)
 						LEVEL_SORCERER2SPECIAL)) == 0)
 		return;
 
-	if ((Level->i_compatflags & COMPATF_ANYBOSSDEATH) || ( // [GZ] Added for UAC_DEAD
-		((Level->flags & LEVEL_MAP07SPECIAL) && (type == NAME_Fatso || type == NAME_Arachnotron)) ||
-		((Level->flags & LEVEL_BRUISERSPECIAL) && (type == NAME_BaronOfHell)) ||
-		((Level->flags & LEVEL_CYBORGSPECIAL) && (type == NAME_Cyberdemon)) ||
-		((Level->flags & LEVEL_SPIDERSPECIAL) && (type == NAME_SpiderMastermind)) ||
-		((Level->flags & LEVEL_HEADSPECIAL) && (type == NAME_Ironlich)) ||
-		((Level->flags & LEVEL_MINOTAURSPECIAL) && (type == NAME_Minotaur)) ||
-		((Level->flags & LEVEL_SORCERER2SPECIAL) && (type == NAME_Sorcerer2))
+	if ((i_compatflags & COMPATF_ANYBOSSDEATH) || ( // [GZ] Added for UAC_DEAD
+		((level.flags & LEVEL_MAP07SPECIAL) && (type == NAME_Fatso || type == NAME_Arachnotron)) ||
+		((level.flags & LEVEL_BRUISERSPECIAL) && (type == NAME_BaronOfHell)) ||
+		((level.flags & LEVEL_CYBORGSPECIAL) && (type == NAME_Cyberdemon)) ||
+		((level.flags & LEVEL_SPIDERSPECIAL) && (type == NAME_SpiderMastermind)) ||
+		((level.flags & LEVEL_HEADSPECIAL) && (type == NAME_Ironlich)) ||
+		((level.flags & LEVEL_MINOTAURSPECIAL) && (type == NAME_Minotaur)) ||
+		((level.flags & LEVEL_SORCERER2SPECIAL) && (type == NAME_Sorcerer2))
 	   ))
 		;
 	else
@@ -3132,47 +3122,47 @@ void A_BossDeath(AActor *self)
 	}
 
 	// victory!
-	if (Level->flags & LEVEL_SPECKILLMONSTERS)
+	if (level.flags & LEVEL_SPECKILLMONSTERS)
 	{ // Kill any remaining monsters
 		P_Massacre ();
 	}
-	if (Level->flags & LEVEL_MAP07SPECIAL)
+	if (level.flags & LEVEL_MAP07SPECIAL)
 	{
 		if (type == NAME_Fatso)
 		{
-			EV_DoFloor(Level, DFloor::floorLowerToLowest, NULL, 666, 1., 0, -1, 0, false);
+			EV_DoFloor (DFloor::floorLowerToLowest, NULL, 666, 1., 0, -1, 0, false);
 			return;
 		}
 		
 		if (type == NAME_Arachnotron)
 		{
-			EV_DoFloor(Level, DFloor::floorRaiseByTexture, NULL, 667, 1., 0, -1, 0, false);
+			EV_DoFloor (DFloor::floorRaiseByTexture, NULL, 667, 1., 0, -1, 0, false);
 			return;
 		}
 	}
 	else
 	{
-		switch (Level->flags & LEVEL_SPECACTIONSMASK)
+		switch (level.flags & LEVEL_SPECACTIONSMASK)
 		{
 		case LEVEL_SPECLOWERFLOOR:
-			EV_DoFloor(Level, DFloor::floorLowerToLowest, NULL, 666, 1., 0, -1, 0, false);
+			EV_DoFloor (DFloor::floorLowerToLowest, NULL, 666, 1., 0, -1, 0, false);
 			return;
 		
 		case LEVEL_SPECLOWERFLOORTOHIGHEST:
-			EV_DoFloor(Level, DFloor::floorLowerToHighest, NULL, 666, 1., 0, -1, 0, false);
+			EV_DoFloor (DFloor::floorLowerToHighest, NULL, 666, 1., 0, -1, 0, false);
 			return;
 		
 		case LEVEL_SPECOPENDOOR:
-			EV_DoDoor(Level, DDoor::doorOpen, NULL, NULL, 666, 8., 0, 0, 0);
+			EV_DoDoor (DDoor::doorOpen, NULL, NULL, 666, 8., 0, 0, 0);
 			return;
 		}
 	}
 
-	// [RH] If noexit, then don't end the map.
+	// [RH] If noexit, then don't end the level.
 	if ((deathmatch || alwaysapplydmflags) && (dmflags & DF_NO_EXIT))
 		return;
 
-	G_ExitLevel (Level, 0, false);
+	G_ExitLevel (0, false);
 }
 
 //----------------------------------------------------------------------------
@@ -3192,19 +3182,16 @@ int P_Massacre (bool baddies, PClassActor *cls)
 	// fixed lost soul bug (LSs left behind when PEs are killed)
 
 	int killcount = 0;
-	ForAllLevels([&](FLevelLocals *Level)
-	{
-		AActor *actor;
-		TThinkerIterator<AActor> iterator(Level, cls ? cls : RUNTIME_CLASS(AActor));
+	AActor *actor;
+	TThinkerIterator<AActor> iterator(cls? cls : RUNTIME_CLASS(AActor));
 
-		while ((actor = iterator.Next()))
+	while ( (actor = iterator.Next ()) )
+	{
+		if (!(actor->flags2 & MF2_DORMANT) && (actor->flags3 & MF3_ISMONSTER) && (!baddies || !(actor->flags & MF_FRIENDLY)))
 		{
-			if (!(actor->flags2 & MF2_DORMANT) && (actor->flags3 & MF3_ISMONSTER) && (!baddies || !(actor->flags & MF_FRIENDLY)))
-			{
-				killcount += actor->Massacre();
-			}
+			killcount += actor->Massacre();
 		}
-	});
+	}
 	return killcount;
 }
 

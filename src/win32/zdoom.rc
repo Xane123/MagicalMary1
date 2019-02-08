@@ -71,14 +71,14 @@ BEGIN
     "        BLOCK ""040904b0""\r\n"
     "        BEGIN\r\n"
     "            VALUE ""Comments"", ""Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg.""\r\n"
-    "            VALUE ""CompanyName"", ""Xane Corp.""\r\n"
-    "            VALUE ""FileDescription"", ""Mary's Magical Adventure""\r\n"
+    "            VALUE ""CompanyName"", "" ""\r\n"
+    "            VALUE ""FileDescription"", ""GZDoom""\r\n"
     "            VALUE ""FileVersion"", RC_FILEVERSION2\r\n"
-    "            VALUE ""InternalName"", ""Mary's Magical Adventure""\r\n"
-    "            VALUE ""LegalCopyright"", ""Copyright (C)1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, 2017-2018 Xane Myers, et al.""\r\n"
-    "            VALUE ""LegalTrademarks"", ""Doom(R) is a Registered Trademark of id Software, Inc.""\r\n"
-    "            VALUE ""OriginalFilename"", ""play.exe""\r\n"
-    "            VALUE ""ProductName"", ""Mary's Magical Adventure""\r\n"
+    "            VALUE ""InternalName"", ""GZDoom""\r\n"
+    "            VALUE ""LegalCopyright"", ""Copyright © 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
+    "            VALUE ""LegalTrademarks"", ""DoomR is a Registered Trademark of id Software, Inc.""\r\n"
+    "            VALUE ""OriginalFilename"", ""gzdoom.exe""\r\n"
+    "            VALUE ""ProductName"", ""GZDoom""\r\n"
     "            VALUE ""ProductVersion"", RC_PRODUCTVERSION2\r\n"
     "        END\r\n"
     "    END\r\n"
@@ -522,14 +522,14 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which ZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
-            VALUE "CompanyName", "Xane Corp."
-            VALUE "FileDescription", "Mary's Magical Adventure"
+            VALUE "CompanyName", " "
+            VALUE "FileDescription", "GZDoom"
             VALUE "FileVersion", RC_FILEVERSION2
-            VALUE "InternalName", "Mary's Magical Adventure"
-            VALUE "LegalCopyright", "Copyright (c)1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, 2017-2018 Xane Myers, et al."
-            VALUE "LegalTrademarks", "Doom(R) is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "play.exe"
-            VALUE "ProductName", "Mary's Magical Adventure"
+            VALUE "InternalName", "GZDoom"
+            VALUE "LegalCopyright", "Copyright © 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al."
+            VALUE "LegalTrademarks", "DoomR is a Registered Trademark of id Software, Inc."
+            VALUE "OriginalFilename", "gzdoom.exe"
+            VALUE "ProductName", "GZDoom"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
     END
@@ -540,3 +540,4 @@ BEGIN
 END
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+

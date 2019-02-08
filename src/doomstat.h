@@ -68,6 +68,7 @@ extern	FString			StoredWarp;			// [RH] +warp at the command line
 
 // Selected by user. 
 EXTERN_CVAR (Int, gameskill);
+extern	int				NextSkill;			// [RH] Skill to use at next level load
 
 // Netgame? Only true if >1 player.
 extern	bool			netgame;
@@ -89,6 +90,10 @@ EXTERN_CVAR (Bool, teamplay)
 
 // [RH] Friendly fire amount
 EXTERN_CVAR (Float, teamdamage)
+
+// [RH] The class the player will spawn as in single player,
+// in case using a random class with Hexen.
+extern int SinglePlayerClass[/*MAXPLAYERS*/];
 
 // -------------------------
 // Internal parameters for sound rendering.
@@ -243,6 +248,7 @@ EXTERN_CVAR (Int, dmflags2);	// [BC]
 
 EXTERN_CVAR (Int, compatflags);
 EXTERN_CVAR (Int, compatflags2);
+extern int i_compatflags, i_compatflags2, ii_compatflags, ii_compatflags2, ib_compatflags;
 
 // Filters from AddAutoloadFiles(). Used to filter files from archives.
 extern FString LumpFilterIWAD;

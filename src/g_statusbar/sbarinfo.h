@@ -92,7 +92,6 @@ struct SBarInfo
 		ALIGN_RIGHT
 	};
 
-	FLevelLocals *Level;
 	TArray<FString> Images;
 	SBarInfoMainBlock *huds[NUMHUDS];
 	Popup popups[NUMPOPUPS];

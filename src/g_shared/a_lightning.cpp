@@ -41,14 +41,14 @@ static FRandom pr_lightning ("Lightning");
 
 IMPLEMENT_CLASS(DLightningThinker, false, false)
 
-DLightningThinker::DLightningThinker (FLevelLocals *l)
-	: DThinker(l)
+DLightningThinker::DLightningThinker ()
+	: DThinker (STAT_LIGHTNING)
 {
 	Stopped = false;
 	LightningFlashCount = 0;
 	NextLightningFlash = ((pr_lightning()&15)+5)*35; // don't flash at level start
 
-	LightningLightLevels.Resize(Level->sectors.Size());
+	LightningLightLevels.Resize(level.sectors.Size());
 	fillshort(&LightningLightLevels[0], LightningLightLevels.Size(), SHRT_MAX);
 }
 
@@ -89,8 +89,8 @@ void DLightningThinker::LightningFlash ()
 		LightningFlashCount--;
 		if (LightningFlashCount)
 		{ // reduce the brightness of the flash
-			tempSec = &Level->sectors[0];
-			for (i = Level->sectors.Size(), j = 0; i > 0; ++j, --i, ++tempSec)
+			tempSec = &level.sectors[0];
+			for (i = level.sectors.Size(), j = 0; i > 0; ++j, --i, ++tempSec)
 			{
 				// [RH] Checking this sector's applicability to lightning now
 				// is not enough to know if we should lower its light level,
@@ -105,24 +105,24 @@ void DLightningThinker::LightningFlash ()
 		}					
 		else
 		{ // remove the alternate lightning flash special
-			tempSec = &Level->sectors[0];
-			for (i = Level->sectors.Size(), j = 0; i > 0; ++j, --i, ++tempSec)
+			tempSec = &level.sectors[0];
+			for (i = level.sectors.Size(), j = 0; i > 0; ++j, --i, ++tempSec)
 			{
 				if (LightningLightLevels[j] != SHRT_MAX)
 				{
 					tempSec->SetLightLevel(LightningLightLevels[j]);
 				}
 			}
-			fillshort(&LightningLightLevels[0], Level->sectors.Size(), SHRT_MAX);
-			Level->flags &= ~LEVEL_SWAPSKIES;
+			fillshort(&LightningLightLevels[0], level.sectors.Size(), SHRT_MAX);
+			level.flags &= ~LEVEL_SWAPSKIES;
 		}
 		return;
 	}
 
 	LightningFlashCount = (pr_lightning()&7)+8;
 	flashLight = 200+(pr_lightning()&31);
-	tempSec = &Level->sectors[0];
-	for (i = Level->sectors.Size(), j = 0; i > 0; ++j, --i, ++tempSec)
+	tempSec = &level.sectors[0];
+	for (i = level.sectors.Size(), j = 0; i > 0; ++j, --i, ++tempSec)
 	{
 		// allow combination of the lightning sector specials with bit masks
 		int special = tempSec->special;
@@ -152,12 +152,12 @@ void DLightningThinker::LightningFlash ()
 		}
 	}
 
-	Level->flags |= LEVEL_SWAPSKIES;	// set alternate sky
+	level.flags |= LEVEL_SWAPSKIES;	// set alternate sky
 	S_Sound (CHAN_AUTO, "world/thunder", 1.0, ATTN_NONE);
 	// [ZZ] just in case
 	E_WorldLightning();
 	// start LIGHTNING scripts
-	Level->Behaviors.StartTypedScripts (Level, SCRIPT_Lightning, NULL, false);	// [RH] Run lightning scripts
+	level.Behaviors.StartTypedScripts (SCRIPT_Lightning, NULL, false);	// [RH] Run lightning scripts
 
 	// Calculate the next lighting flash
 	if (!NextLightningFlash)
@@ -168,7 +168,7 @@ void DLightningThinker::LightningFlash ()
 		}
 		else
 		{
-			if (pr_lightning() < 128 && !(currentSession->time&32))
+			if (pr_lightning() < 128 && !(level.time&32))
 			{
 				NextLightningFlash = ((pr_lightning()&7)+2)*35;
 			}
@@ -197,22 +197,22 @@ void DLightningThinker::ForceLightning (int mode)
 	}
 }
 
-static DLightningThinker *LocateLightning (FLevelLocals *Level)
+static DLightningThinker *LocateLightning ()
 {
-	TThinkerIterator<DLightningThinker> iterator (Level, STAT_LIGHTNING);
+	TThinkerIterator<DLightningThinker> iterator (STAT_LIGHTNING);
 	return iterator.Next ();
 }
 
-void P_StartLightning (FLevelLocals *Level)
+void P_StartLightning ()
 {
 	const bool isOriginalHexen = (gameinfo.gametype == GAME_Hexen)
-		&& (Level->flags2 & LEVEL2_HEXENHACK);
+		&& (level.flags2 & LEVEL2_HEXENHACK);
 
 	if (isOriginalHexen)
 	{
 		bool hasLightning = false;
 
-		for (const sector_t &sector : Level->sectors)
+		for (const sector_t &sector : level.sectors)
 		{
 			hasLightning = sector.GetTexture(sector_t::ceiling) == skyflatnum
 				|| sector.special == Light_IndoorLightning1
@@ -226,24 +226,24 @@ void P_StartLightning (FLevelLocals *Level)
 
 		if (!hasLightning)
 		{
-			Level->flags &= ~LEVEL_STARTLIGHTNING;
+			level.flags &= ~LEVEL_STARTLIGHTNING;
 			return;
 		}
 	}
 
-	DLightningThinker *lightning = LocateLightning (Level);
+	DLightningThinker *lightning = LocateLightning ();
 	if (lightning == NULL)
 	{
-		CreateThinker<DLightningThinker>(Level);
+		Create<DLightningThinker>();
 	}
 }
 
-void P_ForceLightning (FLevelLocals *Level, int mode)
+void P_ForceLightning (int mode)
 {
-	DLightningThinker *lightning = LocateLightning (Level);
+	DLightningThinker *lightning = LocateLightning ();
 	if (lightning == NULL)
 	{
-		lightning = CreateThinker<DLightningThinker>(Level);
+		lightning = Create<DLightningThinker>();
 	}
 	if (lightning != NULL)
 	{

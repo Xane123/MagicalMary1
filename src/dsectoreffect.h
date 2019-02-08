@@ -8,7 +8,6 @@ class DSectorEffect : public DThinker
 {
 	DECLARE_CLASS (DSectorEffect, DThinker)
 public:
-	static const int DEFAULT_STAT = STAT_SECTOREFFECT;
 	DSectorEffect (sector_t *sector);
 
 	
@@ -20,7 +19,7 @@ public:
 	sector_t *m_Sector;
 
 protected:
-	DSectorEffect() = default;
+	DSectorEffect();
 
 };
 
@@ -36,7 +35,8 @@ public:
 	void StopInterpolation(bool force = false);
 
 protected:
-	DMover() = default;
+	DMover () {}
+	
 	void Serialize(FSerializer &arc);
 	void OnDestroy() override;
 };
@@ -46,7 +46,7 @@ class DMovingFloor : public DMover
 	DECLARE_ABSTRACT_CLASS (DMovingFloor, DMover)
 protected:
 	DMovingFloor (sector_t *sector);
-	DMovingFloor() = default;
+	DMovingFloor() {}
 };
 
 class DMovingCeiling : public DMover
@@ -54,7 +54,7 @@ class DMovingCeiling : public DMover
 	DECLARE_ABSTRACT_CLASS (DMovingCeiling, DMover)
 protected:
 	DMovingCeiling (sector_t *sector, bool interpolate = true);
-	DMovingCeiling() = default;
+	DMovingCeiling () {}
 };
 
 #endif //__DSECTOREFFECT_H__

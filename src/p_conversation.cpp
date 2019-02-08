@@ -96,21 +96,28 @@ struct TeaserSpeech
 
 static FRandom pr_randomspeech("RandomSpeech");
 
+TArray<FStrifeDialogueNode *> StrifeDialogues;
+
+typedef TMap<int, int> FDialogueIDMap;				// maps dialogue IDs to dialogue array index (for ACS)
+typedef TMap<FName, int> FDialogueMap;				// maps actor class names to dialogue array index
+
 FClassMap StrifeTypes;
+static FDialogueIDMap DialogueRoots;
+static FDialogueMap ClassRoots;
 static int ConversationMenuY;
 
-// These two should be moved to player_t...
-static FStrifeDialogueNode *PrevNode;
+static int ConversationPauseTic;
 static int StaticLastReply;
 
-static bool LoadScriptFile(FLevelLocals *Level, int lumpnum, FileReader &lump, int numnodes, bool include, int type);
-static FStrifeDialogueNode *ReadRetailNode (FLevelLocals *Level, FileReader &lump, uint32_t &prevSpeakerType);
-static FStrifeDialogueNode *ReadTeaserNode (FLevelLocals *Level, FileReader &lump, uint32_t &prevSpeakerType);
+static bool LoadScriptFile(int lumpnum, FileReader &lump, int numnodes, bool include, int type);
+static FStrifeDialogueNode *ReadRetailNode (FileReader &lump, uint32_t &prevSpeakerType);
+static FStrifeDialogueNode *ReadTeaserNode (FileReader &lump, uint32_t &prevSpeakerType);
 static void ParseReplies (FStrifeDialogueReply **replyptr, Response *responses);
 static bool DrawConversationMenu ();
 static void PickConversationReply (int replyindex);
 static void TerminalResponse (const char *str);
 
+static FStrifeDialogueNode *PrevNode;
 
 //============================================================================
 //
@@ -130,7 +137,7 @@ void ClearStrifeTypes()
 	StrifeTypes.Clear();
 }
 
-void FLevelLocals::SetConversation(int convid, PClassActor *Class, int dlgindex)
+void SetConversation(int convid, PClassActor *Class, int dlgindex)
 {
 	if (convid != -1)
 	{
@@ -149,14 +156,14 @@ PClassActor *GetStrifeType (int typenum)
 	else return *ptype;
 }
 
-int FLevelLocals::GetConversation(int conv_id)
+int GetConversation(int conv_id)
 {
 	int *pindex = DialogueRoots.CheckKey(conv_id);
 	if (pindex == NULL) return -1;
 	else return *pindex;
 }
 
-int FLevelLocals::GetConversation(FName classname)
+int GetConversation(FName classname)
 {
 	int *pindex = ClassRoots.CheckKey(classname);
 	if (pindex == NULL) return -1;
@@ -171,11 +178,12 @@ int FLevelLocals::GetConversation(FName classname)
 //
 //============================================================================
 
-void P_LoadStrifeConversations (FLevelLocals *Level, MapData *map, const char *mapname)
+void P_LoadStrifeConversations (MapData *map, const char *mapname)
 {
+	P_FreeStrifeConversations ();
 	if (map->Size(ML_CONVERSATION) > 0)
 	{
-		LoadScriptFile (Level, map->lumpnum, map->Reader(ML_CONVERSATION), map->Size(ML_CONVERSATION), false, 0);
+		LoadScriptFile (map->lumpnum, map->Reader(ML_CONVERSATION), map->Size(ML_CONVERSATION), false, 0);
 	}
 	else
 	{
@@ -184,8 +192,8 @@ void P_LoadStrifeConversations (FLevelLocals *Level, MapData *map, const char *m
 			char scriptname_b[9] = { 'S','C','R','I','P','T',mapname[3],mapname[4],0 };
 			char scriptname_t[9] = { 'D','I','A','L','O','G',mapname[3],mapname[4],0 };
 
-			if (   LoadScriptFile(Level, scriptname_t, false, 2)
-				|| LoadScriptFile(Level, scriptname_b, false, 1))
+			if (   LoadScriptFile(scriptname_t, false, 2)
+				|| LoadScriptFile(scriptname_b, false, 1))
 			{
 				return;
 			}
@@ -193,13 +201,13 @@ void P_LoadStrifeConversations (FLevelLocals *Level, MapData *map, const char *m
 
 		if (gameinfo.Dialogue.IsNotEmpty())
 		{
-			if (LoadScriptFile(Level, gameinfo.Dialogue, false, 0))
+			if (LoadScriptFile(gameinfo.Dialogue, false, 0))
 			{
 				return;
 			}
 		}
 
-		LoadScriptFile(Level, "SCRIPT00", false, 1);
+		LoadScriptFile("SCRIPT00", false, 1);
 	}
 }
 
@@ -211,7 +219,7 @@ void P_LoadStrifeConversations (FLevelLocals *Level, MapData *map, const char *m
 //
 //============================================================================
 
-bool LoadScriptFile (FLevelLocals *Level, const char *name, bool include, int type)
+bool LoadScriptFile (const char *name, bool include, int type)
 {
 	int lumpnum = Wads.CheckNumForName (name);
 	const bool found = lumpnum >= 0
@@ -228,11 +236,11 @@ bool LoadScriptFile (FLevelLocals *Level, const char *name, bool include, int ty
 	}
 	FileReader lump = Wads.ReopenLumpReader (lumpnum);
 
-	bool res = LoadScriptFile(Level, lumpnum, lump, Wads.LumpLength(lumpnum), include, type);
+	bool res = LoadScriptFile(lumpnum, lump, Wads.LumpLength(lumpnum), include, type);
 	return res;
 }
 
-static bool LoadScriptFile(FLevelLocals *Level, int lumpnum, FileReader &lump, int numnodes, bool include, int type)
+static bool LoadScriptFile(int lumpnum, FileReader &lump, int numnodes, bool include, int type)
 {
 	int i;
 	uint32_t prevSpeakerType;
@@ -253,13 +261,13 @@ static bool LoadScriptFile(FLevelLocals *Level, int lumpnum, FileReader &lump, i
 
 	if (!isbinary)
 	{
-		P_ParseUSDF(Level, lumpnum, lump, numnodes);
+		P_ParseUSDF(lumpnum, lump, numnodes);
 	}
 	else 
 	{
 		if (!include)
 		{
-			LoadScriptFile(Level, "SCRIPT00", true, 1);
+			LoadScriptFile("SCRIPT00", true, 1);
 		}
 		if (!(gameinfo.flags & GI_SHAREWARE))
 		{
@@ -289,13 +297,13 @@ static bool LoadScriptFile(FLevelLocals *Level, int lumpnum, FileReader &lump, i
 		{
 			if (!(gameinfo.flags & GI_SHAREWARE))
 			{
-				node = ReadRetailNode (Level, lump, prevSpeakerType);
+				node = ReadRetailNode (lump, prevSpeakerType);
 			}
 			else
 			{
-				node = ReadTeaserNode (Level, lump, prevSpeakerType);
+				node = ReadTeaserNode (lump, prevSpeakerType);
 			}
-			node->ThisNodeNum = Level->StrifeDialogues.Push(node);
+			node->ThisNodeNum = StrifeDialogues.Push(node);
 		}
 	}
 	return true;
@@ -309,7 +317,7 @@ static bool LoadScriptFile(FLevelLocals *Level, int lumpnum, FileReader &lump, i
 //
 //============================================================================
 
-static FStrifeDialogueNode *ReadRetailNode (FLevelLocals *Level, FileReader &lump, uint32_t &prevSpeakerType)
+static FStrifeDialogueNode *ReadRetailNode (FileReader &lump, uint32_t &prevSpeakerType)
 {
 	FStrifeDialogueNode *node;
 	Speech speech;
@@ -335,9 +343,9 @@ static FStrifeDialogueNode *ReadRetailNode (FLevelLocals *Level, FileReader &lum
 	{
 		if (type != NULL)
 		{
-			Level->ClassRoots[type->TypeName] = Level->StrifeDialogues.Size();
+			ClassRoots[type->TypeName] = StrifeDialogues.Size();
 		}
-		Level->DialogueRoots[speech.SpeakerType] = Level->StrifeDialogues.Size();
+		DialogueRoots[speech.SpeakerType] = StrifeDialogues.Size();
 		prevSpeakerType = speech.SpeakerType;
 	}
 
@@ -385,7 +393,7 @@ static FStrifeDialogueNode *ReadRetailNode (FLevelLocals *Level, FileReader &lum
 //
 //============================================================================
 
-static FStrifeDialogueNode *ReadTeaserNode (FLevelLocals *Level, FileReader &lump, uint32_t &prevSpeakerType)
+static FStrifeDialogueNode *ReadTeaserNode (FileReader &lump, uint32_t &prevSpeakerType)
 {
 	FStrifeDialogueNode *node;
 	TeaserSpeech speech;
@@ -410,9 +418,9 @@ static FStrifeDialogueNode *ReadTeaserNode (FLevelLocals *Level, FileReader &lum
 	{
 		if (type != NULL)
 		{
-			Level->ClassRoots[type->TypeName] = Level->StrifeDialogues.Size();
+			ClassRoots[type->TypeName] = StrifeDialogues.Size();
 		}
-		Level->DialogueRoots[speech.SpeakerType] = Level->StrifeDialogues.Size();
+		DialogueRoots[speech.SpeakerType] = StrifeDialogues.Size();
 		prevSpeakerType = speech.SpeakerType;
 	}
 
@@ -573,7 +581,7 @@ FStrifeDialogueNode::~FStrifeDialogueNode ()
 //
 //============================================================================
 
-int FLevelLocals::FindNode (const FStrifeDialogueNode *node)
+static int FindNode (const FStrifeDialogueNode *node)
 {
 	int rootnode = 0;
 
@@ -582,19 +590,6 @@ int FLevelLocals::FindNode (const FStrifeDialogueNode *node)
 		rootnode++;
 	}
 	return rootnode;
-}
-
-//============================================================================
-//
-//
-//
-//============================================================================
-
-int FLevelLocals::GetInfighting()
-{
-	if (flags2 & LEVEL2_TOTALINFIGHTING) return 1;
-	if (flags2 & LEVEL2_NOINFIGHTING) return -1;
-	return G_SkillProperty(SKILLP_Infight);
 }
 
 //============================================================================
@@ -730,6 +725,16 @@ DEFINE_ACTION_FUNCTION(DConversationMenu, SendConversationReply)
 
 void P_FreeStrifeConversations ()
 {
+	FStrifeDialogueNode *node;
+
+	while (StrifeDialogues.Pop (node))
+	{
+		delete node;
+	}
+
+	DialogueRoots.Clear();
+	ClassRoots.Clear();
+
 	PrevNode = NULL;
 	if (CurrentMenu != NULL && CurrentMenu->IsKindOf("ConversationMenu"))
 	{
@@ -751,8 +756,7 @@ void P_StartConversation (AActor *npc, AActor *pc, bool facetalker, bool saveang
 	int i;
 
 	// Make sure this is actually a player.
-	if (pc == nullptr || pc->player == nullptr || npc == nullptr) return;
-	auto Level = pc->Level;
+	if (pc->player == NULL) return;
 
 	// [CW] If an NPC is talking to a PC already, then don't let
 	// anyone else talk to the NPC.
@@ -814,7 +818,7 @@ void P_StartConversation (AActor *npc, AActor *pc, bool facetalker, bool saveang
 		if (jump && CurNode->ItemCheckNode > 0)
 		{
 			int root = pc->player->ConversationNPC->ConversationRoot;
-			CurNode = Level->StrifeDialogues[root + CurNode->ItemCheckNode - 1];
+			CurNode = StrifeDialogues[root + CurNode->ItemCheckNode - 1];
 		}
 		else
 		{
@@ -900,14 +904,14 @@ static void HandleReply(player_t *player, bool isconsole, int nodenum, int reply
 	AActor *npc;
 	bool takestuff;
 	int i;
-	auto Level = player->mo->Level;
-	if (player->ConversationNPC == nullptr || (unsigned)nodenum >= Level->StrifeDialogues.Size())
+
+	if (player->ConversationNPC == NULL || (unsigned)nodenum >= StrifeDialogues.Size())
 	{
 		return;
 	}
 
 	// Find the reply.
-	node = Level->StrifeDialogues[nodenum];
+	node = StrifeDialogues[nodenum];
 	for (i = 0, reply = node->Children; reply != NULL && i != replynum; ++i, reply = reply->Next)
 	{ }
 	npc = player->ConversationNPC;
@@ -957,7 +961,7 @@ static void HandleReply(player_t *player, bool isconsole, int nodenum, int reply
 	
 			if (takestuff)
 			{
-				auto item = Spawn(player->mo->Level, reply->GiveType);
+				auto item = Spawn(reply->GiveType);
 				// Items given here should not count as items!
 				item->ClearCounters();
 				if (item->GetClass()->TypeName == NAME_FlameThrower)
@@ -989,7 +993,7 @@ static void HandleReply(player_t *player, bool isconsole, int nodenum, int reply
 
 	if (reply->ActionSpecial != 0)
 	{
-		takestuff |= !!P_ExecuteSpecial(player->mo->Level, reply->ActionSpecial, NULL, player->mo, false,
+		takestuff |= !!P_ExecuteSpecial(reply->ActionSpecial, NULL, player->mo, false,
 			reply->Args[0], reply->Args[1], reply->Args[2], reply->Args[3], reply->Args[4]);
 	}
 
@@ -1037,9 +1041,9 @@ static void HandleReply(player_t *player, bool isconsole, int nodenum, int reply
 		const bool isNegative = reply->NextNode < 0;
 		const unsigned next = (unsigned)(rootnode + (isNegative ? -1 : 1) * reply->NextNode - 1);
 
-		if (next < Level->StrifeDialogues.Size())
+		if (next < StrifeDialogues.Size())
 		{
-			npc->Conversation = Level->StrifeDialogues[next];
+			npc->Conversation = StrifeDialogues[next];
 
 			if (isNegative)
 			{
@@ -1077,7 +1081,7 @@ static void HandleReply(player_t *player, bool isconsole, int nodenum, int reply
 
 	if (isconsole)
 	{
-		I_SetMusicVolume (currentSession->MusicVolume);
+		I_SetMusicVolume (level.MusicVolume);
 	}
 }
 

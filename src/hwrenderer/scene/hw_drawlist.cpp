@@ -289,7 +289,7 @@ void HWDrawList::SortWallIntoPlane(SortNode * head, SortNode * sort)
 			float newtexv = ws->tcs[GLWall::UPLFT].v + ((ws->tcs[GLWall::LOLFT].v - ws->tcs[GLWall::UPLFT].v) / (ws->zbottom[0] - ws->ztop[0])) * (fh->z - ws->ztop[0]);
 
 			// I make the very big assumption here that translucent walls in sloped sectors
-			// and 3D-floors never coexist in the same level - If that were the case this
+			// and 3D-floors never coexist in the same level. If that were the case this
 			// code would become extremely more complicated.
 			if (!ceiling)
 			{
@@ -588,7 +588,7 @@ inline int HWDrawList::CompareSprites(SortNode * a,SortNode * b)
 	int res = s1->depth - s2->depth;
 
 	if (res != 0) return -res;
-	else return reverseSort? s2->index-s1->index : s1->index-s2->index;
+	else return (i_compatflags & COMPATF_SPRITESORT)? s2->index-s1->index : s1->index-s2->index;
 }
 
 //==========================================================================
@@ -702,7 +702,6 @@ SortNode * HWDrawList::DoSort(HWDrawInfo *di, SortNode * head)
 //==========================================================================
 void HWDrawList::Sort(HWDrawInfo *di)
 {
-	reverseSort = !!(di->Level->i_compatflags & COMPATF_SPRITESORT);
     SortZ = di->Viewpoint.Pos.Z;
 	MakeSortList();
 	sorted = DoSort(di, SortNodes[SortNodeStart]);
@@ -710,7 +709,7 @@ void HWDrawList::Sort(HWDrawInfo *di)
 
 //==========================================================================
 //
-// Sorting the drawitems first by texture and then by light level
+// Sorting the drawitems first by texture and then by light level.
 //
 //==========================================================================
 

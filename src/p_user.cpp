@@ -115,7 +115,7 @@ ColorSetList ColorSets;
 PainFlashList PainFlashes;
 
 // [Nash] FOV cvar setting
-CUSTOM_CVAR(Float, fov, 90.f, /*CVAR_ARCHIVE |*/ CVAR_USERINFO | CVAR_NOINITCALL)
+CUSTOM_CVAR(Float, fov, 90.f, CVAR_ARCHIVE | CVAR_USERINFO | CVAR_NOINITCALL)
 {
 	player_t *p = &players[consoleplayer];
 	p->SetFOV(fov);
@@ -694,8 +694,7 @@ bool player_t::Resurrect()
 	// fire E_PlayerRespawned and start the ACS SCRIPT_Respawn.
 	E_PlayerRespawned(int(this - players));
 	//
-	auto Level = mo->Level;
-	Level->Behaviors.StartTypedScripts(Level, SCRIPT_Respawn, mo, true);
+	level.Behaviors.StartTypedScripts(SCRIPT_Respawn, mo, true);
 	return true;
 }
 
@@ -891,9 +890,8 @@ DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 		return 0;
 	}
 
-	auto Level = self->Level;
 	// Handle the different player death screams
-	if ((((Level->flags >> 15) | (dmflags)) &
+	if ((((level.flags >> 15) | (dmflags)) &
 		(DF_FORCE_FALLINGZD | DF_FORCE_FALLINGHX)) &&
 		self->Vel.Z <= -39)
 	{
@@ -996,10 +994,8 @@ void P_CheckPlayerSprite(AActor *actor, int &spritenum, DVector2 &scale)
 
 CUSTOM_CVAR (Float, sv_aircontrol, 0.00390625f, CVAR_SERVERINFO|CVAR_NOSAVE)
 {
-	ForAllLevels([&](FLevelLocals *Level)
-	{
-		Level->ChangeAirControl(self);
-	});
+	level.aircontrol = self;
+	G_AirControlChanged ();
 }
 
 //==========================================================================
@@ -1014,8 +1010,7 @@ void P_FallingDamage (AActor *actor)
 	int damage;
 	double vel;
 
-	auto Level = actor->Level;
-	damagestyle = ((Level->flags >> 15) | (dmflags)) &
+	damagestyle = ((level.flags >> 15) | (dmflags)) &
 		(DF_FORCE_FALLINGZD | DF_FORCE_FALLINGHX);
 
 	if (damagestyle == 0)
@@ -1088,7 +1083,7 @@ void P_FallingDamage (AActor *actor)
 
 	if (actor->player)
 	{
-		//S_Sound (actor, CHAN_AUTO, "*land", 1, ATTN_NORM);
+		S_Sound (actor, CHAN_AUTO, "*land", 1, ATTN_NORM);
 		P_NoiseAlert (actor, actor, true);
 		if (damage >= TELEFRAG_DAMAGE && ((actor->player->cheats & (CF_GODMODE | CF_BUDDHA) ||
 			(actor->FindInventory(PClass::FindActor(NAME_PowerBuddha), true) != nullptr))))
@@ -1116,8 +1111,7 @@ void P_CheckMusicChange(player_t *player)
 			{
 				if (player->MUSINFOactor->args[0] != 0)
 				{
-					auto Level = player->mo->Level;
-					const FName *music = Level->info->MusicMap.CheckKey(player->MUSINFOactor->args[0]);
+					FName *music = level.info->MusicMap.CheckKey(player->MUSINFOactor->args[0]);
 
 					if (music != NULL)
 					{
@@ -1226,12 +1220,6 @@ void P_PlayerThink (player_t *player)
 		I_Error ("No player %td start\n", player - players + 1);
 	}
 
-	// Bots do not think in freeze mode.
-	if (currentSession->isFrozen() && player->Bot != nullptr)
-	{
-		return;
-	}
-
 	if (debugfile && !(player->cheats & CF_PREDICTING))
 	{
 		fprintf (debugfile, "tic %d for pl %d: (%f, %f, %f, %f) b:%02x p:%d y:%d f:%d s:%d u:%d\n",
@@ -1261,7 +1249,7 @@ void P_PredictionLerpReset()
 
 bool P_LerpCalculate(AActor *pmo, PredictPos from, PredictPos to, PredictPos &result, float scale)
 {
-	//DVector2 pfrom = Level->Displacements.getOffset(from.portalgroup, to.portalgroup);
+	//DVector2 pfrom = level.Displacements.getOffset(from.portalgroup, to.portalgroup);
 	DVector3 vecFrom = from.pos;
 	DVector3 vecTo = to.pos;
 	DVector3 vecResult;
@@ -1696,7 +1684,7 @@ bool P_IsPlayerTotallyFrozen(const player_t *player)
 	return
 		gamestate == GS_TITLELEVEL ||
 		player->cheats & CF_TOTALLYFROZEN ||
-		player->mo->isFrozen();
+		((level.flags2 & LEVEL2_FROZEN) && player->timefreezer == 0);
 }
 
 

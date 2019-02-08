@@ -46,12 +46,12 @@ class DRotatePoly : public DPolyAction
 {
 	DECLARE_CLASS (DRotatePoly, DPolyAction)
 public:
-	DRotatePoly (FPolyObj *polyNum);
+	DRotatePoly (int polyNum);
 	void Tick ();
 private:
-	DRotatePoly() = default;
+	DRotatePoly ();
 
-	friend bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, int byteAngle, int direction, bool overRide);
+	friend bool EV_RotatePoly (line_t *line, int polyNum, int speed, int byteAngle, int direction, bool overRide);
 };
 
 
@@ -59,30 +59,30 @@ class DMovePoly : public DPolyAction
 {
 	DECLARE_CLASS (DMovePoly, DPolyAction)
 public:
-	DMovePoly (FPolyObj *polyNum);
+	DMovePoly (int polyNum);
 	void Serialize(FSerializer &arc);
 	void Tick ();
 protected:
-	DMovePoly() = default;
+	DMovePoly ();
 	DAngle m_Angle;
 	DVector2 m_Speedv;
 
-	friend bool EV_MovePoly(FLevelLocals *Level, line_t *line, int polyNum, double speed, DAngle angle, double dist, bool overRide);
+	friend bool EV_MovePoly(line_t *line, int polyNum, double speed, DAngle angle, double dist, bool overRide);
 };
 
 class DMovePolyTo : public DPolyAction
 {
 	DECLARE_CLASS(DMovePolyTo, DPolyAction)
 public:
-	DMovePolyTo(FPolyObj *polyNum);
+	DMovePolyTo(int polyNum);
 	void Serialize(FSerializer &arc);
 	void Tick();
-private:
-	DMovePolyTo() = default;
+protected:
+	DMovePolyTo();
 	DVector2 m_Speedv;
 	DVector2 m_Target;
 
-	friend bool EV_MovePolyTo(FLevelLocals *Level, line_t *line, int polyNum, double speed, const DVector2 &pos, bool overRide);
+	friend bool EV_MovePolyTo(line_t *line, int polyNum, double speed, const DVector2 &pos, bool overRide);
 };
 
 
@@ -90,7 +90,7 @@ class DPolyDoor : public DMovePoly
 {
 	DECLARE_CLASS (DPolyDoor, DMovePoly)
 public:
-	DPolyDoor (FPolyObj *polyNum, podoortype_t type);
+	DPolyDoor (int polyNum, podoortype_t type);
 	void Serialize(FSerializer &arc);
 	void Tick ();
 protected:
@@ -101,9 +101,9 @@ protected:
 	podoortype_t m_Type;
 	bool m_Close;
 
-	friend bool EV_OpenPolyDoor(FLevelLocals *Level, line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type);
+	friend bool EV_OpenPolyDoor(line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type);
 private:
-	DPolyDoor() = default;
+	DPolyDoor ();
 };
 
 class FPolyMirrorIterator
@@ -152,6 +152,10 @@ IMPLEMENT_POINTERS_START(DPolyAction)
 	IMPLEMENT_POINTER(m_Interpolation)
 IMPLEMENT_POINTERS_END
 
+DPolyAction::DPolyAction ()
+{
+}
+
 void DPolyAction::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -161,8 +165,7 @@ void DPolyAction::Serialize(FSerializer &arc)
 		("interpolation", m_Interpolation);
 }
 
-DPolyAction::DPolyAction (FPolyObj *polyNum)
-	:DThinker(polyNum->GetLevel())
+DPolyAction::DPolyAction (int polyNum)
 {
 	m_PolyObj = polyNum;
 	m_Speed = 0;
@@ -172,9 +175,11 @@ DPolyAction::DPolyAction (FPolyObj *polyNum)
 
 void DPolyAction::OnDestroy()
 {
-	if (m_PolyObj->specialdata == this)
+	FPolyObj *poly = PO_GetPolyobj (m_PolyObj);
+
+	if (poly->specialdata == this)
 	{
-		m_PolyObj->specialdata = nullptr;
+		poly->specialdata = NULL;
 	}
 
 	StopInterpolation();
@@ -183,21 +188,23 @@ void DPolyAction::OnDestroy()
 
 void DPolyAction::Stop()
 {
-	SN_StopSequence(m_PolyObj);
+	FPolyObj *poly = PO_GetPolyobj(m_PolyObj);
+	SN_StopSequence(poly);
 	Destroy();
 }
 
 void DPolyAction::SetInterpolation ()
 {
-	m_Interpolation = m_PolyObj->SetInterpolation();
+	FPolyObj *poly = PO_GetPolyobj (m_PolyObj);
+	m_Interpolation = poly->SetInterpolation();
 }
 
 void DPolyAction::StopInterpolation ()
 {
-	if (m_Interpolation != nullptr)
+	if (m_Interpolation != NULL)
 	{
 		m_Interpolation->DelRef();
-		m_Interpolation = nullptr;
+		m_Interpolation = NULL;
 	}
 }
 
@@ -209,8 +216,11 @@ void DPolyAction::StopInterpolation ()
 
 IMPLEMENT_CLASS(DRotatePoly, false, false)
 
+DRotatePoly::DRotatePoly ()
+{
+}
 
-DRotatePoly::DRotatePoly (FPolyObj *polyNum)
+DRotatePoly::DRotatePoly (int polyNum)
 	: Super (polyNum)
 {
 }
@@ -223,6 +233,10 @@ DRotatePoly::DRotatePoly (FPolyObj *polyNum)
 
 IMPLEMENT_CLASS(DMovePoly, false, false)
 
+DMovePoly::DMovePoly ()
+{
+}
+
 void DMovePoly::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -230,7 +244,7 @@ void DMovePoly::Serialize(FSerializer &arc)
 		("speedv", m_Speedv);
 }
 
-DMovePoly::DMovePoly (FPolyObj *polyNum)
+DMovePoly::DMovePoly (int polyNum)
 	: Super (polyNum)
 {
 	m_Angle = 0.;
@@ -246,6 +260,10 @@ DMovePoly::DMovePoly (FPolyObj *polyNum)
 
 IMPLEMENT_CLASS(DMovePolyTo, false, false)
 
+DMovePolyTo::DMovePolyTo()
+{
+}
+
 void DMovePolyTo::Serialize(FSerializer &arc)
 {
 	Super::Serialize(arc);
@@ -253,7 +271,7 @@ void DMovePolyTo::Serialize(FSerializer &arc)
 		("target", m_Target);
 }
 
-DMovePolyTo::DMovePolyTo(FPolyObj *polyNum)
+DMovePolyTo::DMovePolyTo(int polyNum)
 	: Super(polyNum)
 {
 	m_Speedv = m_Target = { 0,0 };
@@ -267,6 +285,10 @@ DMovePolyTo::DMovePolyTo(FPolyObj *polyNum)
 
 IMPLEMENT_CLASS(DPolyDoor, false, false)
 
+DPolyDoor::DPolyDoor ()
+{
+}
+
 void DPolyDoor::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -278,7 +300,7 @@ void DPolyDoor::Serialize(FSerializer &arc)
 		("close", m_Close);
 }
 
-DPolyDoor::DPolyDoor (FPolyObj * polyNum, podoortype_t type)
+DPolyDoor::DPolyDoor (int polyNum, podoortype_t type)
 	: Super (polyNum), m_Type (type)
 {
 	m_Direction = 0.;
@@ -298,7 +320,8 @@ DPolyDoor::DPolyDoor (FPolyObj * polyNum, podoortype_t type)
 
 void DRotatePoly::Tick ()
 {
-	if (m_PolyObj == nullptr) return;
+	FPolyObj *poly = PO_GetPolyobj (m_PolyObj);
+	if (poly == NULL) return;
 
 	// Don't let non-perpetual polyobjs overshoot their targets.
 	if (m_Dist != -1 && m_Dist < fabs(m_Speed))
@@ -306,7 +329,7 @@ void DRotatePoly::Tick ()
 		m_Speed = m_Speed < 0 ? -m_Dist : m_Dist;
 	}
 
-	if (m_PolyObj->RotatePolyobj (m_Speed))
+	if (poly->RotatePolyobj (m_Speed))
 	{
 		if (m_Dist == -1)
 		{ // perpetual polyobj
@@ -315,7 +338,7 @@ void DRotatePoly::Tick ()
 		m_Dist -= fabs(m_Speed);
 		if (m_Dist == 0)
 		{
-			SN_StopSequence (m_PolyObj);
+			SN_StopSequence (poly);
 			Destroy ();
 		}
 	}
@@ -328,21 +351,22 @@ void DRotatePoly::Tick ()
 //==========================================================================
 
 
-bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, int byteAngle, int direction, bool overRide)
+bool EV_RotatePoly (line_t *line, int polyNum, int speed, int byteAngle,
+					int direction, bool overRide)
 {
-	DRotatePoly *pe = nullptr;
+	DRotatePoly *pe = NULL;
 	FPolyObj *poly;
 
-	if ((poly = PO_GetPolyobj(Level, polyNum)) == nullptr)
+	if ((poly = PO_GetPolyobj(polyNum)) == NULL)
 	{
 		Printf("EV_RotatePoly: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
 
-	while ((poly = it.NextMirror()) != nullptr)
+	while ((poly = it.NextMirror()) != NULL)
 	{
-		if ((poly->specialdata != nullptr || poly->bBlocked) && !overRide)
+		if ((poly->specialdata != NULL || poly->bBlocked) && !overRide)
 		{ // poly is already in motion
 			break;
 		}
@@ -351,7 +375,7 @@ bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, i
 			// cannot do rotations on linked polyportals.
 			break;
 		}
-		pe = CreateThinker<DRotatePoly>(poly);
+		pe = Create<DRotatePoly>(poly->tag);
 		poly->specialdata = pe;
 		poly->bBlocked = false;
 		if (byteAngle != 0)
@@ -373,7 +397,7 @@ bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, i
 		SN_StartSequence (poly, poly->seqType, SEQ_DOOR, 0);
 		direction = -direction;	// Reverse the direction
 	}
-	return pe != nullptr;	// Return true if something started moving.
+	return pe != NULL;	// Return true if something started moving.
 }
 
 //==========================================================================
@@ -384,15 +408,17 @@ bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, i
 
 void DMovePoly::Tick ()
 {
-	if (m_PolyObj != nullptr)
+	FPolyObj *poly = PO_GetPolyobj (m_PolyObj);
+
+	if (poly != NULL)
 	{
-		if (m_PolyObj->MovePolyobj (m_Speedv))
+		if (poly->MovePolyobj (m_Speedv))
 		{
 			double absSpeed = fabs (m_Speed);
 			m_Dist -= absSpeed;
 			if (m_Dist <= 0)
 			{
-				SN_StopSequence (m_PolyObj);
+				SN_StopSequence (poly);
 				Destroy ();
 			}
 			else if (m_Dist < absSpeed)
@@ -400,7 +426,7 @@ void DMovePoly::Tick ()
 				m_Speed = m_Dist * (m_Speed < 0 ? -1 : 1);
 				m_Speedv = m_Angle.ToVector(m_Speed);
 			}
-			m_PolyObj->UpdateLinks();
+			poly->UpdateLinks();
 		}
 	}
 }
@@ -411,26 +437,27 @@ void DMovePoly::Tick ()
 //
 //==========================================================================
 
-bool EV_MovePoly (FLevelLocals *Level, line_t *line, int polyNum, double speed, DAngle angle, double dist, bool overRide)
+bool EV_MovePoly (line_t *line, int polyNum, double speed, DAngle angle,
+				  double dist, bool overRide)
 {
-	DMovePoly *pe = nullptr;
+	DMovePoly *pe = NULL;
 	FPolyObj *poly;
 	DAngle an = angle;
 
-	if ((poly = PO_GetPolyobj(Level, polyNum)) == nullptr)
+	if ((poly = PO_GetPolyobj(polyNum)) == NULL)
 	{
 		Printf("EV_MovePoly: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
 
-	while ((poly = it.NextMirror()) != nullptr)
+	while ((poly = it.NextMirror()) != NULL)
 	{
-		if ((poly->specialdata != nullptr || poly->bBlocked) && !overRide)
+		if ((poly->specialdata != NULL || poly->bBlocked) && !overRide)
 		{ // poly is already in motion
 			break;
 		}
-		pe = CreateThinker<DMovePoly>(poly);
+		pe = Create<DMovePoly>(poly->tag);
 		poly->specialdata = pe;
 		poly->bBlocked = false;
 		pe->m_Dist = dist; // Distance
@@ -450,7 +477,7 @@ bool EV_MovePoly (FLevelLocals *Level, line_t *line, int polyNum, double speed, 
 
 		angle += 180.;	// Reverse the angle.
 	}
-	return pe != nullptr;	// Return true if something started moving.
+	return pe != NULL;	// Return true if something started moving.
 }
 
 //==========================================================================
@@ -461,23 +488,25 @@ bool EV_MovePoly (FLevelLocals *Level, line_t *line, int polyNum, double speed, 
 
 void DMovePolyTo::Tick ()
 {
-	if (m_PolyObj != nullptr)
+	FPolyObj *poly = PO_GetPolyobj (m_PolyObj);
+
+	if (poly != NULL)
 	{
-		if (m_PolyObj->MovePolyobj (m_Speedv))
+		if (poly->MovePolyobj (m_Speedv))
 		{
 			double absSpeed = fabs (m_Speed);
 			m_Dist -= absSpeed;
 			if (m_Dist <= 0)
 			{
-				SN_StopSequence (m_PolyObj);
+				SN_StopSequence (poly);
 				Destroy ();
 			}
 			else if (m_Dist < absSpeed)
 			{
 				m_Speed = m_Dist * (m_Speed < 0 ? -1 : 1);
-				m_Speedv = m_Target - m_PolyObj->StartSpot.pos;
+				m_Speedv = m_Target - poly->StartSpot.pos;
 			}
-			m_PolyObj->UpdateLinks();
+			poly->UpdateLinks();
 		}
 	}
 }
@@ -488,14 +517,14 @@ void DMovePolyTo::Tick ()
 //
 //==========================================================================
 
-bool EV_MovePolyTo(FLevelLocals *Level, line_t *line, int polyNum, double speed, const DVector2 &targ, bool overRide)
+bool EV_MovePolyTo(line_t *line, int polyNum, double speed, const DVector2 &targ, bool overRide)
 {
-	DMovePolyTo *pe = nullptr;
+	DMovePolyTo *pe = NULL;
 	FPolyObj *poly;
 	DVector2 dist;
 	double distlen;
 
-	if ((poly = PO_GetPolyobj(Level, polyNum)) == nullptr)
+	if ((poly = PO_GetPolyobj(polyNum)) == NULL)
 	{
 		Printf("EV_MovePolyTo: Invalid polyobj num: %d\n", polyNum);
 		return false;
@@ -504,13 +533,13 @@ bool EV_MovePolyTo(FLevelLocals *Level, line_t *line, int polyNum, double speed,
 
 	dist = targ - poly->StartSpot.pos;
 	distlen = dist.MakeUnit();
-	while ((poly = it.NextMirror()) != nullptr)
+	while ((poly = it.NextMirror()) != NULL)
 	{
-		if ((poly->specialdata != nullptr || poly->bBlocked) && !overRide)
+		if ((poly->specialdata != NULL || poly->bBlocked) && !overRide)
 		{ // poly is already in motion
 			break;
 		}
-		pe = CreateThinker<DMovePolyTo>(poly);
+		pe = Create<DMovePolyTo>(poly->tag);
 		poly->specialdata = pe;
 		poly->bBlocked = false;
 		pe->m_Dist = distlen;
@@ -523,7 +552,7 @@ bool EV_MovePolyTo(FLevelLocals *Level, line_t *line, int polyNum, double speed,
 		}
 		dist = -dist;	// reverse the direction
 	}
-	return pe != nullptr; // Return true if something started moving.
+	return pe != NULL; // Return true if something started moving.
 }
 
 //==========================================================================
@@ -534,26 +563,28 @@ bool EV_MovePolyTo(FLevelLocals *Level, line_t *line, int polyNum, double speed,
 
 void DPolyDoor::Tick ()
 {
-	if (m_PolyObj == nullptr) return;
+	FPolyObj *poly = PO_GetPolyobj (m_PolyObj);
+
+	if (poly == NULL) return;
 
 	if (m_Tics)
 	{
 		if (!--m_Tics)
 		{
-			SN_StartSequence (m_PolyObj, m_PolyObj->seqType, SEQ_DOOR, m_Close);
+			SN_StartSequence (poly, poly->seqType, SEQ_DOOR, m_Close);
 		}
 		return;
 	}
 	switch (m_Type)
 	{
 	case PODOOR_SLIDE:
-		if (m_Dist <= 0 || m_PolyObj->MovePolyobj (m_Speedv))
+		if (m_Dist <= 0 || poly->MovePolyobj (m_Speedv))
 		{
 			double absSpeed = fabs (m_Speed);
 			m_Dist -= absSpeed;
 			if (m_Dist <= 0)
 			{
-				SN_StopSequence (m_PolyObj);
+				SN_StopSequence (poly);
 				if (!m_Close && m_WaitTics >= 0)
 				{
 					m_Dist = m_TotalDist;
@@ -566,15 +597,15 @@ void DPolyDoor::Tick ()
 				{
 					// if set to wait infinitely, Hexen kept the dead thinker to block the polyobject from getting activated again but that causes some problems
 					// with the subsectorlinks and the interpolation. Better delete the thinker and use a different means to block it.
-					if (!m_Close) m_PolyObj->bBlocked = true;
+					if (!m_Close) poly->bBlocked = true;
 					Destroy ();
 				}
 			}
-			m_PolyObj->UpdateLinks();
+			poly->UpdateLinks();
 		}
 		else
 		{
-			if (m_PolyObj->crush || !m_Close)
+			if (poly->crush || !m_Close)
 			{ // continue moving if the poly is a crusher, or is opening
 				return;
 			}
@@ -584,19 +615,19 @@ void DPolyDoor::Tick ()
 				m_Direction = -m_Direction;
 				m_Speedv = -m_Speedv;
 				m_Close = false;
-				SN_StartSequence (m_PolyObj, m_PolyObj->seqType, SEQ_DOOR, 0);
+				SN_StartSequence (poly, poly->seqType, SEQ_DOOR, 0);
 			}
 		}
 		break;
 
 	case PODOOR_SWING:
-		if (m_Dist <= 0 || m_PolyObj->RotatePolyobj (m_Speed))
+		if (m_Dist <= 0 || poly->RotatePolyobj (m_Speed))
 		{
 			double absSpeed = fabs (m_Speed);
 			m_Dist -= absSpeed;
 			if (m_Dist <= 0)
 			{
-				SN_StopSequence (m_PolyObj);
+				SN_StopSequence (poly);
 				if (!m_Close && m_WaitTics >= 0)
 				{
 					m_Dist = m_TotalDist;
@@ -606,14 +637,14 @@ void DPolyDoor::Tick ()
 				}
 				else
 				{
-					if (!m_Close) m_PolyObj->bBlocked = true;
+					if (!m_Close) poly->bBlocked = true;
 					Destroy ();
 				}
 			}
 		}
 		else
 		{
-			if(m_PolyObj->crush || !m_Close)
+			if(poly->crush || !m_Close)
 			{ // continue moving if the poly is a crusher, or is opening
 				return;
 			}
@@ -622,7 +653,7 @@ void DPolyDoor::Tick ()
 				m_Dist = m_TotalDist - m_Dist;
 				m_Speed = -m_Speed;
 				m_Close = false;
-				SN_StartSequence (m_PolyObj, m_PolyObj->seqType, SEQ_DOOR, 0);
+				SN_StartSequence (poly, poly->seqType, SEQ_DOOR, 0);
 			}
 		}			
 		break;
@@ -638,22 +669,22 @@ void DPolyDoor::Tick ()
 //
 //==========================================================================
 
-bool EV_OpenPolyDoor(FLevelLocals *Level, line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type)
+bool EV_OpenPolyDoor(line_t *line, int polyNum, double speed, DAngle angle, int delay, double distance, podoortype_t type)
 {
-	DPolyDoor *pd = nullptr;
+	DPolyDoor *pd = NULL;
 	FPolyObj *poly;
 	int swingdir = 1;	// ADD:  PODOOR_SWINGL, PODOOR_SWINGR
 
-	if ((poly = PO_GetPolyobj(Level, polyNum)) == nullptr)
+	if ((poly = PO_GetPolyobj(polyNum)) == NULL)
 	{
 		Printf("EV_OpenPolyDoor: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
 
-	while ((poly = it.NextMirror()) != nullptr)
+	while ((poly = it.NextMirror()) != NULL)
 	{
-		if ((poly->specialdata != nullptr || poly->bBlocked))
+		if ((poly->specialdata != NULL || poly->bBlocked))
 		{ // poly is already moving
 			break;
 		}
@@ -663,7 +694,7 @@ bool EV_OpenPolyDoor(FLevelLocals *Level, line_t *line, int polyNum, double spee
 			break;
 		}
 
-		pd = CreateThinker<DPolyDoor>(poly, type);
+		pd = Create<DPolyDoor>(poly->tag, type);
 		poly->specialdata = pd;
 		if (type == PODOOR_SLIDE)
 		{
@@ -686,7 +717,7 @@ bool EV_OpenPolyDoor(FLevelLocals *Level, line_t *line, int polyNum, double spee
 		}
 
 	}
-	return pd != nullptr;	// Return true if something started moving.
+	return pd != NULL;	// Return true if something started moving.
 }
 
 //==========================================================================
@@ -695,13 +726,13 @@ bool EV_OpenPolyDoor(FLevelLocals *Level, line_t *line, int polyNum, double spee
 //
 //==========================================================================
 
-bool EV_StopPoly(FLevelLocals *Level, int polynum)
+bool EV_StopPoly(int polynum)
 {
 	FPolyObj *poly;
 
-	if (nullptr != (poly = PO_GetPolyobj(Level, polynum)))
+	if (NULL != (poly = PO_GetPolyobj(polynum)))
 	{
-		if (poly->specialdata != nullptr)
+		if (poly->specialdata != NULL)
 		{
 			poly->specialdata->Stop();
 		}
@@ -718,9 +749,9 @@ bool EV_StopPoly(FLevelLocals *Level, int polynum)
 //
 //==========================================================================
 
-FPolyObj *PO_GetPolyobj (FLevelLocals *Level, int polyNum)
+FPolyObj *PO_GetPolyobj (int polyNum)
 {
-	for(auto &poly : Level->Polyobjects)
+	for(auto &poly : level.Polyobjects)
 	{
 		if (poly.tag == polyNum)
 		{
@@ -749,9 +780,9 @@ FPolyObj::FPolyObj()
 	seqType = 0;
 	Size = 0;
 	bBlocked = false;
-	subsectorlinks = nullptr;
-	specialdata = nullptr;
-	interpolation = nullptr;
+	subsectorlinks = NULL;
+	specialdata = NULL;
+	interpolation = NULL;
 }
 
 //==========================================================================
@@ -775,7 +806,6 @@ void FPolyObj::ThrustMobj (AActor *actor, side_t *side)
 {
 	DAngle thrustAngle;
 	DPolyAction *pe;
-	auto Level = GetLevel();
 
 	double force;
 
@@ -813,11 +843,11 @@ void FPolyObj::ThrustMobj (AActor *actor, side_t *side)
 		DVector2 pos = actor->Vec2Offset(thrust.X, thrust.Y);
 		if (bHurtOnTouch || !P_CheckMove (actor, pos))
 		{
-			int newdam = P_DamageMobj (actor, nullptr, nullptr, crush, NAME_Crush);
+			int newdam = P_DamageMobj (actor, NULL, NULL, crush, NAME_Crush);
 			P_TraceBleed (newdam > 0 ? newdam : crush, actor);
 		}
 	}
-	if (Level->flags2 & LEVEL2_POLYGRIND) actor->CallGrind(false); // crush corpses that get caught in a polyobject's way
+	if (level.flags2 & LEVEL2_POLYGRIND) actor->CallGrind(false); // crush corpses that get caught in a polyobject's way
 }
 
 //==========================================================================
@@ -830,7 +860,6 @@ void FPolyObj::UpdateLinks()
 {
 	if (bHasPortals == 2)
 	{
-		auto Level = GetLevel();
 		TMap<int, bool> processed;
 		for (unsigned i = 0; i < Linedefs.Size(); i++)
 		{
@@ -849,7 +878,7 @@ void FPolyObj::UpdateLinks()
 					{
 						processed[destgroup] = true;
 						DVector2 delta = port->mDisplacement - old;
-						Level->Displacements.MoveGroup(destgroup, delta);
+						level.Displacements.MoveGroup(destgroup, delta);
 					}
 				}
 			}
@@ -882,13 +911,13 @@ void FPolyObj::CalcCenter()
 //
 //==========================================================================
 
-bool FPolyObj::MovePolyobj (const DVector2 &pos, bool fromsave)
+bool FPolyObj::MovePolyobj (const DVector2 &pos, bool force)
 {
 	FBoundingBox oldbounds = Bounds;
 	UnLinkPolyobj ();
 	DoMovePolyobj (pos);
 
-	if (!fromsave)
+	if (!force)
 	{
 		bool blocked = false;
 
@@ -910,7 +939,7 @@ bool FPolyObj::MovePolyobj (const DVector2 &pos, bool fromsave)
 	CenterSpot.pos += pos;
 	LinkPolyobj ();
 	ClearSubsectorLinks();
-	if (!fromsave) RecalcActorFloorCeil(Bounds | oldbounds);
+	RecalcActorFloorCeil(Bounds | oldbounds);
 	return true;
 }
 
@@ -1004,7 +1033,7 @@ bool FPolyObj::RotatePolyobj (DAngle angle, bool fromsave)
 	Angle += angle;
 	LinkPolyobj();
 	ClearSubsectorLinks();
-	if (!fromsave) RecalcActorFloorCeil(Bounds | oldbounds);
+	RecalcActorFloorCeil(Bounds | oldbounds);
 	return true;
 }
 
@@ -1019,26 +1048,25 @@ void FPolyObj::UnLinkPolyobj ()
 	polyblock_t *link;
 	int i, j;
 	int index;
-	auto Level = GetLevel();
 
 	// remove the polyobj from each blockmap section
 	for(j = bbox[BOXBOTTOM]; j <= bbox[BOXTOP]; j++)
 	{
-		index = j*Level->blockmap.bmapwidth;
+		index = j*level.blockmap.bmapwidth;
 		for(i = bbox[BOXLEFT]; i <= bbox[BOXRIGHT]; i++)
 		{
-			if(i >= 0 && i < Level->blockmap.bmapwidth && j >= 0 && j < Level->blockmap.bmapheight)
+			if(i >= 0 && i < level.blockmap.bmapwidth && j >= 0 && j < level.blockmap.bmapheight)
 			{
-				link = Level->PolyBlockMap[index+i];
-				while(link != nullptr && link->polyobj != this)
+				link = level.PolyBlockMap[index+i];
+				while(link != NULL && link->polyobj != this)
 				{
 					link = link->next;
 				}
-				if(link == nullptr)
+				if(link == NULL)
 				{ // polyobj not located in the link cell
 					continue;
 				}
-				link->polyobj = nullptr;
+				link->polyobj = NULL;
 			}
 		}
 	}
@@ -1052,7 +1080,6 @@ void FPolyObj::UnLinkPolyobj ()
 
 bool FPolyObj::CheckMobjBlocking (side_t *sd)
 {
-	auto Level = GetLevel();
 	static TArray<AActor *> checker;
 	FBlockNode *block;
 	AActor *mobj;
@@ -1061,15 +1088,15 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 	line_t *ld;
 	bool blocked;
 	bool performBlockingThrust;
-	int bmapwidth = Level->blockmap.bmapwidth;
-	int bmapheight = Level->blockmap.bmapheight;
+	int bmapwidth = level.blockmap.bmapwidth;
+	int bmapheight = level.blockmap.bmapheight;
 
 	ld = sd->linedef;
 
-	top = Level->blockmap.GetBlockY(ld->bbox[BOXTOP]);
-	bottom = Level->blockmap.GetBlockY(ld->bbox[BOXBOTTOM]);
-	left = Level->blockmap.GetBlockX(ld->bbox[BOXLEFT]);
-	right = Level->blockmap.GetBlockX(ld->bbox[BOXRIGHT]);
+	top = level.blockmap.GetBlockY(ld->bbox[BOXTOP]);
+	bottom = level.blockmap.GetBlockY(ld->bbox[BOXBOTTOM]);
+	left = level.blockmap.GetBlockX(ld->bbox[BOXLEFT]);
+	right = level.blockmap.GetBlockX(ld->bbox[BOXRIGHT]);
 
 	blocked = false;
 	checker.Clear();
@@ -1087,7 +1114,7 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 	{
 		for (i = left; i <= right; i++)
 		{
-			for (block = Level->blockmap.blocklinks[j+i]; block != nullptr; block = block->NextActor)
+			for (block = level.blockmap.blocklinks[j+i]; block != NULL; block = block->NextActor)
 			{
 				mobj = block->Me;
 				for (k = (int)checker.Size()-1; k >= 0; --k)
@@ -1106,7 +1133,7 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 						open.top = LINEOPEN_MAX;
 						open.bottom = LINEOPEN_MIN;
 						// [TN] Check wether this actor gets blocked by the line.
-						if (ld->backsector != nullptr &&
+						if (ld->backsector != NULL &&
 							!(ld->flags & (ML_BLOCKING|ML_BLOCKEVERYTHING))
 							&& !(ld->flags & ML_BLOCK_PLAYERS && (mobj->player || (mobj->flags8 & MF8_BLOCKASPLAYER))) 
 							&& !(ld->flags & ML_BLOCKMONSTERS && mobj->flags3 & MF3_ISMONSTER)
@@ -1146,7 +1173,7 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 						// We have a two-sided linedef so we should only check one side
 						// so that the thrust from both sides doesn't cancel each other out.
 						// Best use the one facing the player and ignore the back side.
-						if (ld->sidedef[1] != nullptr)
+						if (ld->sidedef[1] != NULL)
 						{
 							int side = P_PointOnLineSidePrecise(mobj->Pos(), ld);
 							if (ld->sidedef[side] != sd)
@@ -1188,9 +1215,8 @@ void FPolyObj::LinkPolyobj ()
 {
 	polyblock_t **link;
 	polyblock_t *tempLink;
-	auto Level = GetLevel();
-	int bmapwidth = Level->blockmap.bmapwidth;
-	int bmapheight = Level->blockmap.bmapheight;
+	int bmapwidth = level.blockmap.bmapwidth;
+	int bmapheight = level.blockmap.bmapheight;
 
 	// calculate the polyobj bbox
 	Bounds.ClearBox();
@@ -1203,10 +1229,10 @@ void FPolyObj::LinkPolyobj ()
 		vt = Sidedefs[i]->linedef->v2;
 		Bounds.AddToBox(vt->fPos());
 	}
-	bbox[BOXRIGHT] = Level->blockmap.GetBlockX(Bounds.Right());
-	bbox[BOXLEFT] = Level->blockmap.GetBlockX(Bounds.Left());
-	bbox[BOXTOP] = Level->blockmap.GetBlockY(Bounds.Top());
-	bbox[BOXBOTTOM] = Level->blockmap.GetBlockY(Bounds.Bottom());
+	bbox[BOXRIGHT] = level.blockmap.GetBlockX(Bounds.Right());
+	bbox[BOXLEFT] = level.blockmap.GetBlockX(Bounds.Left());
+	bbox[BOXTOP] = level.blockmap.GetBlockY(Bounds.Top());
+	bbox[BOXBOTTOM] = level.blockmap.GetBlockY(Bounds.Bottom());
 	// add the polyobj to each blockmap section
 	for(int j = bbox[BOXBOTTOM]*bmapwidth; j <= bbox[BOXTOP]*bmapwidth;
 		j += bmapwidth)
@@ -1215,24 +1241,24 @@ void FPolyObj::LinkPolyobj ()
 		{
 			if(i >= 0 && i < bmapwidth && j >= 0 && j < bmapheight*bmapwidth)
 			{
-				link = &Level->PolyBlockMap[j+i];
+				link = &level.PolyBlockMap[j+i];
 				if(!(*link))
 				{ // Create a new link at the current block cell
 					*link = new polyblock_t;
-					(*link)->next = nullptr;
-					(*link)->prev = nullptr;
+					(*link)->next = NULL;
+					(*link)->prev = NULL;
 					(*link)->polyobj = this;
 					continue;
 				}
 				else
 				{
 					tempLink = *link;
-					while(tempLink->next != nullptr && tempLink->polyobj != nullptr)
+					while(tempLink->next != NULL && tempLink->polyobj != NULL)
 					{
 						tempLink = tempLink->next;
 					}
 				}
-				if(tempLink->polyobj == nullptr)
+				if(tempLink->polyobj == NULL)
 				{
 					tempLink->polyobj = this;
 					continue;
@@ -1240,7 +1266,7 @@ void FPolyObj::LinkPolyobj ()
 				else
 				{
 					tempLink->next = new polyblock_t;
-					tempLink->next->next = nullptr;
+					tempLink->next->next = NULL;
 					tempLink->next->prev = tempLink;
 					tempLink->next->polyobj = this;
 				}
@@ -1261,10 +1287,10 @@ void FPolyObj::LinkPolyobj ()
 
 void FPolyObj::RecalcActorFloorCeil(FBoundingBox bounds) const
 {
-	FBlockThingsIterator it(GetLevel(), bounds);
+	FBlockThingsIterator it(bounds);
 	AActor *actor;
 
-	while ((actor = it.Next()) != nullptr)
+	while ((actor = it.Next()) != NULL)
 	{
 		// skip everything outside the bounding box.
 		if (actor->X() + actor->radius <= bounds.Left() ||
@@ -1296,7 +1322,7 @@ void FPolyObj::ClosestPoint(const DVector2 &fpos, DVector2 &out, side_t **side) 
 	double x = fpos.X, y = fpos.Y;
 	double bestdist = HUGE_VAL;
 	double bestx = 0, besty = 0;
-	side_t *bestline = nullptr;
+	side_t *bestline = NULL;
 
 	for (i = 0; i < Sidedefs.Size(); ++i)
 	{
@@ -1344,7 +1370,7 @@ void FPolyObj::ClosestPoint(const DVector2 &fpos, DVector2 &out, side_t **side) 
 		}
 	}
 	out = { bestx, besty };
-	if (side != nullptr)
+	if (side != NULL)
 	{
 		*side = bestline;
 	}
@@ -1356,12 +1382,12 @@ void FPolyObj::ClosestPoint(const DVector2 &fpos, DVector2 &out, side_t **side) 
 //
 //==========================================================================
 
-bool PO_Busy (FLevelLocals *Level, int polyobj)
+bool PO_Busy (int polyobj)
 {
 	FPolyObj *poly;
 
-	poly = PO_GetPolyobj (Level, polyobj);
-	return (poly != nullptr && poly->specialdata != nullptr);
+	poly = PO_GetPolyobj (polyobj);
+	return (poly != NULL && poly->specialdata != NULL);
 }
 
 
@@ -1374,19 +1400,19 @@ bool PO_Busy (FLevelLocals *Level, int polyobj)
 
 void FPolyObj::ClearSubsectorLinks()
 {
-	while (subsectorlinks != nullptr)
+	while (subsectorlinks != NULL)
 	{
 		assert(subsectorlinks->state == 1337);
 
 		FPolyNode *next = subsectorlinks->snext;
 
-		if (subsectorlinks->pnext != nullptr)
+		if (subsectorlinks->pnext != NULL)
 		{
 			assert(subsectorlinks->pnext->state == 1337);
 			subsectorlinks->pnext->pprev = subsectorlinks->pprev;
 		}
 
-		if (subsectorlinks->pprev != nullptr)
+		if (subsectorlinks->pprev != NULL)
 		{
 			assert(subsectorlinks->pprev->state == 1337);
 			subsectorlinks->pprev->pnext = subsectorlinks->pnext;
@@ -1396,7 +1422,7 @@ void FPolyObj::ClearSubsectorLinks()
 			subsectorlinks->subsector->polys = subsectorlinks->pnext;
 		}
 
-		if (subsectorlinks->subsector->BSP != nullptr)
+		if (subsectorlinks->subsector->BSP != NULL)
 		{
 			subsectorlinks->subsector->BSP->bDirty = true;
 		}
@@ -1405,12 +1431,12 @@ void FPolyObj::ClearSubsectorLinks()
 		delete subsectorlinks;
 		subsectorlinks = next;
 	}
-	subsectorlinks = nullptr;
+	subsectorlinks = NULL;
 }
 
-void FLevelLocals::ClearAllSubsectorLinks()
+void FPolyObj::ClearAllSubsectorLinks()
 {
-	for(auto &poly : Polyobjects)
+	for(auto &poly : level.Polyobjects)
 	{
 		poly.ClearSubsectorLinks();
 	}
@@ -1650,12 +1676,12 @@ static void SplitPoly(FPolyNode *pnode, void *node, float bbox[4])
 
 		// Link node to subsector
 		pnode->pnext = sub->polys;
-		if (pnode->pnext != nullptr) 
+		if (pnode->pnext != NULL) 
 		{
 			assert(pnode->pnext->state == 1337);
 			pnode->pnext->pprev = pnode;
 		}
-		pnode->pprev = nullptr;
+		pnode->pprev = NULL;
 		sub->polys = pnode;
 
 		// link node to polyobject
@@ -1685,7 +1711,6 @@ static void SplitPoly(FPolyNode *pnode, void *node, float bbox[4])
 
 void FPolyObj::CreateSubsectorLinks()
 {
-	auto Level = GetLevel();
 	FPolyNode *node = NewPolyNode();
 	// Even though we don't care about it, we need to initialize this
 	// bounding box to something so that Valgrind won't complain about it
@@ -1704,9 +1729,9 @@ void FPolyObj::CreateSubsectorLinks()
 		seg->v2 = side->V2();
 		seg->wall = side;
 	}
-	if (!(Level->i_compatflags & COMPATF_POLYOBJ))
+	if (!(i_compatflags & COMPATF_POLYOBJ))
 	{
-		SplitPoly(node, Level->HeadNode(), dummybbox);
+		SplitPoly(node, level.HeadNode(), dummybbox);
 	}
 	else
 	{
@@ -1714,12 +1739,12 @@ void FPolyObj::CreateSubsectorLinks()
 
 		// Link node to subsector
 		node->pnext = sub->polys;
-		if (node->pnext != nullptr) 
+		if (node->pnext != NULL) 
 		{
 			assert(node->pnext->state == 1337);
 			node->pnext->pprev = node;
 		}
-		node->pprev = nullptr;
+		node->pprev = NULL;
 		sub->polys = node;
 
 		// link node to polyobject
@@ -1735,9 +1760,9 @@ void FPolyObj::CreateSubsectorLinks()
 //
 //==========================================================================
 
-void PO_LinkToSubsectors(FLevelLocals *Level)
+void PO_LinkToSubsectors()
 {
-	for(auto &poly : Level->Polyobjects)
+	for(auto &poly : level.Polyobjects)
 	{
 		if (poly.subsectorlinks == nullptr)
 		{
@@ -1756,7 +1781,7 @@ static FPolyNode *NewPolyNode()
 {
 	FPolyNode *node;
 
-	if (FreePolyNodes != nullptr)
+	if (FreePolyNodes != NULL)
 	{
 		node = FreePolyNodes;
 		FreePolyNodes = node->pnext;
@@ -1766,11 +1791,11 @@ static FPolyNode *NewPolyNode()
 		node = new FPolyNode;
 	}
 	node->state = 1337;
-	node->poly = nullptr;
-	node->pnext = nullptr;
-	node->pprev = nullptr;
-	node->subsector = nullptr;
-	node->snext = nullptr;
+	node->poly = NULL;
+	node->pnext = NULL;
+	node->pprev = NULL;
+	node->subsector = NULL;
+	node->snext = NULL;
 	return node;
 }
 
@@ -1797,7 +1822,7 @@ void ReleaseAllPolyNodes()
 {
 	FPolyNode *node, *next;
 
-	for (node = FreePolyNodes; node != nullptr; node = next)
+	for (node = FreePolyNodes; node != NULL; node = next)
 	{
 		next = node->pnext;
 		delete node;
@@ -1816,7 +1841,7 @@ void ReleaseAllPolyNodes()
 FPolyMirrorIterator::FPolyMirrorIterator(FPolyObj *poly)
 {
 	CurPoly = poly;
-	if (poly != nullptr)
+	if (poly != NULL)
 	{
 		UsedPolys[0] = poly->tag;
 		NumUsedPolys = 1;
@@ -1831,7 +1856,7 @@ FPolyMirrorIterator::FPolyMirrorIterator(FPolyObj *poly)
 //
 // FPolyMirrorIterator :: NextMirror
 //
-// Returns the polyobject that mirrors the current one, or nullptr if there
+// Returns the polyobject that mirrors the current one, or NULL if there
 // is no mirroring polyobject, or there is a mirroring polyobject but it was
 // already returned.
 //
@@ -1841,15 +1866,15 @@ FPolyObj *FPolyMirrorIterator::NextMirror()
 {
 	FPolyObj *poly = CurPoly, *nextpoly;
 
-	if (poly == nullptr)
+	if (poly == NULL)
 	{
-		return nullptr;
+		return NULL;
 	}
 
 	// Do the work to decide which polyobject to return the next time this
 	// function is called.
 	int mirror = poly->GetMirror(), i;
-	nextpoly = nullptr;
+	nextpoly = NULL;
 
 	// Is there a mirror and we have room to remember it?
 	if (mirror != 0 && NumUsedPolys != countof(UsedPolys))
@@ -1865,8 +1890,8 @@ FPolyObj *FPolyMirrorIterator::NextMirror()
 		if (i == NumUsedPolys)
 		{ // No, it has not been returned.
 			UsedPolys[NumUsedPolys++] = mirror;
-			nextpoly = PO_GetPolyobj(CurPoly->GetLevel(), mirror);
-			if (nextpoly == nullptr)
+			nextpoly = PO_GetPolyobj(mirror);
+			if (nextpoly == NULL)
 			{
 				Printf("Invalid mirror polyobj num %d for polyobj num %d\n", mirror, UsedPolys[i - 1]);
 			}

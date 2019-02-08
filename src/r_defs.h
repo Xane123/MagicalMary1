@@ -652,7 +652,6 @@ struct sector_t
 
 	splane planes[2];
 
-	FLevelLocals * Level;					// To have access to the current level from gepmetry data. The sector can be accessed by all other elements so they won't need this info.
 	extsector_t	*				e;			// This stores data that requires construction/destruction. Such data must not be copied by R_FakeFlat.
 
 	secplane_t	floorplane, ceilingplane;	// [RH] store floor and ceiling planes instead of heights
@@ -1406,11 +1405,6 @@ struct line_t
 		alpha = a;
 	}
 
-	FLevelLocals *GetLevel() const
-	{
-		return frontsector->Level;
-	}
-
 	FSectorPortal *GetTransferredPortal();
 	void AdjustLine();
 
@@ -1603,21 +1597,21 @@ typedef uint8_t lighttable_t;	// This could be wider for >8 bit display.
 // not the same as R_PointInSubsector
 //
 //----------------------------------------------------------------------------------
-subsector_t *P_PointInSubsector(FLevelLocals *Level, double x, double y);
+subsector_t *P_PointInSubsector(double x, double y);
 
-inline sector_t *P_PointInSector(FLevelLocals *Level, const DVector2 &pos)
+inline sector_t *P_PointInSector(const DVector2 &pos)
 {
-	return P_PointInSubsector(Level, pos.X, pos.Y)->sector;
+	return P_PointInSubsector(pos.X, pos.Y)->sector;
 }
 
-inline sector_t *P_PointInSector(FLevelLocals *Level, double X, double Y)
+inline sector_t *P_PointInSector(double X, double Y)
 {
-	return P_PointInSubsector(Level, X, Y)->sector;
+	return P_PointInSubsector(X, Y)->sector;
 }
 
-inline sector_t *P_PointInSectorXY(FLevelLocals *Level, double X, double Y)	// This is for the benefit of unambiguously looking up this function's address
+inline sector_t *P_PointInSectorXY(double X, double Y)	// This is for the benefit of unambiguously looking up this function's address
 {
-	return P_PointInSubsector(Level, X, Y)->sector;
+	return P_PointInSubsector(X, Y)->sector;
 }
 
 inline bool FBoundingBox::inRange(const line_t *ld) const

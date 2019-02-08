@@ -54,17 +54,17 @@ const int AAPreference = 16;
 #define D(x) do{}while(0)
 #endif
 
-FNodeBuilder::FNodeBuilder(FLevel &_level)
-: Level(_level), GLNodes(false), SegsStuffed(0)
+FNodeBuilder::FNodeBuilder(FLevel &level)
+: Level(level), GLNodes(false), SegsStuffed(0)
 {
 	VertexMap = NULL;
 	OldVertexTable = NULL;
 }
 
-FNodeBuilder::FNodeBuilder (FLevel &_level,
+FNodeBuilder::FNodeBuilder (FLevel &level,
 							TArray<FPolyStart> &polyspots, TArray<FPolyStart> &anchors,
 							bool makeGLNodes)
-	: Level(_level), GLNodes(makeGLNodes), SegsStuffed(0)
+	: Level(level), GLNodes(makeGLNodes), SegsStuffed(0)
 {
 	VertexMap = new FVertexMap (*this, Level.MinX, Level.MinY, Level.MaxX, Level.MaxY);
 	FindUsedVertices (Level.Vertices, Level.NumVertices);

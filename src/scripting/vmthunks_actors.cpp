@@ -137,7 +137,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, A_StopSound, NativeStopSound)
 {
 	PARAM_SELF_PROLOGUE(AActor);
 	PARAM_INT(slot);
-
+	
 	S_StopSound(self, slot);
 	return 0;
 }
@@ -297,7 +297,7 @@ static void VelFromAngle(AActor *self, double speed, double angle)
 	else
 	{
 		if (angle == 1e37)
-
+			
 		{
 			self->VelFromAngle(speed);
 		}
@@ -439,7 +439,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, SetXYZ, SetXYZ)
 	PARAM_FLOAT(y);
 	PARAM_FLOAT(z);
 	self->SetXYZ(x, y, z);
-	return 0;
+	return 0; 
 }
 
 static void Vec2Angle(AActor *self, double length, double angle, bool absolute, DVector2 *result)
@@ -893,17 +893,12 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, GetFloorTerrain, GetFloorTerrain)
 	ACTION_RETURN_POINTER(GetFloorTerrain(self));
 }
 
-static int P_FindUniqueTID(FLevelLocals *Level, int start, int limit)
+DEFINE_ACTION_FUNCTION_NATIVE(AActor, FindUniqueTid, P_FindUniqueTID)
 {
-	return Level->FindUniqueTID(start, limit);
-}
-
-DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, FindUniqueTid, P_FindUniqueTID)
-{
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_INT(start);
 	PARAM_INT(limit);
-	ACTION_RETURN_INT(P_FindUniqueTID(self, start, limit));
+	ACTION_RETURN_INT(P_FindUniqueTID(start, limit));
 }
 
 static void RemoveFromHash(AActor *self)
@@ -1005,7 +1000,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, TestMobjZ, P_TestMobjZ)
 {
 	PARAM_SELF_PROLOGUE(AActor);
 	PARAM_BOOL(quick);
-
+	
 	AActor *on = nullptr;
 	bool retv = P_TestMobjZ(self, quick, &on);
 	if (numret > 1) ret[1].SetObject(on);
@@ -1096,7 +1091,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, LineAttack, ZS_LineAttack)
 	PARAM_FLOAT(offsetz);
 	PARAM_FLOAT(offsetforward);
 	PARAM_FLOAT(offsetside);
-
+	
 	int acdmg;
 	auto puff = ZS_LineAttack(self, angle, distance, pitch, damage, damageType, puffType, flags, victim, offsetz, offsetforward, offsetside, &acdmg);
 	if (numret > 0) ret[0].SetObject(puff);
@@ -1134,7 +1129,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, TraceBleedAngle, TraceBleedAngle)
 	PARAM_INT(damage);
 	PARAM_FLOAT(angle);
 	PARAM_FLOAT(pitch);
-
+	
 	P_TraceBleed(damage, self, angle, pitch);
 	return 0;
 }
@@ -1149,7 +1144,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(_FTranslatedLineTarget, TraceBleed, TraceBleedTLT)
 	PARAM_SELF_STRUCT_PROLOGUE(FTranslatedLineTarget);
 	PARAM_INT(damage);
 	PARAM_OBJECT_NOT_NULL(missile, AActor);
-
+	
 	P_TraceBleed(damage, self, missile);
 	return 0;
 }
@@ -1256,7 +1251,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, GetReplacee, ZS_GetReplacee)
 
 static void DrawSplash(AActor *self, int count, double angle, int kind)
 {
-	P_DrawSplash(self->Level, count, self->Pos(), angle, kind);
+	P_DrawSplash(count, self->Pos(), angle, kind);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(AActor, DrawSplash, DrawSplash)
@@ -1265,7 +1260,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, DrawSplash, DrawSplash)
 	PARAM_INT(count);
 	PARAM_FLOAT(angle);
 	PARAM_INT(kind);
-	P_DrawSplash(self->Level, count, self->Pos(), angle, kind);
+	P_DrawSplash(count, self->Pos(), angle, kind);
 	return 0;
 }
 
@@ -1330,7 +1325,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, CheckSight, P_CheckSight)
 
 static void GiveSecret(AActor *self, bool printmessage, bool playsound)
 {
-	P_GiveSecret(self->Level, self, printmessage, playsound, -1);
+	P_GiveSecret(self, printmessage, playsound, -1);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(AActor, GiveSecret, GiveSecret)
@@ -1338,7 +1333,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, GiveSecret, GiveSecret)
 	PARAM_SELF_PROLOGUE(AActor);
 	PARAM_BOOL(printmessage);
 	PARAM_BOOL(playsound);
-	P_GiveSecret(self->Level, self, printmessage, playsound, -1);
+	P_GiveSecret(self, printmessage, playsound, -1);
 	return 0;
 }
 
@@ -1356,7 +1351,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, GetMissileDamage, ZS_GetMissileDamage)
 	PARAM_INT(pick_pointer);
 	ACTION_RETURN_INT(ZS_GetMissileDamage(self, mask, add, pick_pointer));
 }
-
+	
 DEFINE_ACTION_FUNCTION_NATIVE(AActor, SoundAlert, P_NoiseAlert)
 {
 	PARAM_SELF_PROLOGUE(AActor);
@@ -1652,44 +1647,6 @@ DEFINE_ACTION_FUNCTION_NATIVE(AActor, CheckFor3DCeilingHit, CheckFor3DCeilingHit
 	ACTION_RETURN_BOOL(P_CheckFor3DCeilingHit(self, z, trigger));
 }
 
-//=====================================================================================
-//
-// compat flags. These two are the only ones that get checked in script code
-// so anything more complex isn't really needed.
-//
-//=====================================================================================
-static int compat_limitpain_(AActor *self)
-{
-	return self->Level->i_compatflags & COMPATF_LIMITPAIN;
-}
-
-static int compat_mushroom_(AActor *self)
-{
-	return self->Level->i_compatflags & COMPATF_MUSHROOM;
-}
-
-DEFINE_ACTION_FUNCTION_NATIVE(AActor, compat_limitpain, compat_limitpain_)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	ACTION_RETURN_INT(compat_limitpain_(self));
-}
-
-DEFINE_ACTION_FUNCTION_NATIVE(AActor, compat_mushroom, compat_mushroom_)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	ACTION_RETURN_INT(compat_mushroom_(self));
-}
-
-static int isFrozen(AActor *self)
-{
-	return self->isFrozen();
-}
-
-DEFINE_ACTION_FUNCTION_NATIVE(AActor, isFrozen, isFrozen)
-{
-	PARAM_SELF_PROLOGUE(AActor);
-	ACTION_RETURN_BOOL(isFrozen(self));
-}
 
 
 //===========================================================================
@@ -1946,3 +1903,5 @@ DEFINE_FIELD_X(FLineTraceData, FLineTraceData, LineSide);
 DEFINE_FIELD_X(FLineTraceData, FLineTraceData, LinePart);
 DEFINE_FIELD_X(FLineTraceData, FLineTraceData, SectorPlane);
 DEFINE_FIELD_X(FLineTraceData, FLineTraceData, HitType);
+
+

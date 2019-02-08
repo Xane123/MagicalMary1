@@ -1015,9 +1015,8 @@ public:
 		CPlayer = player;
 	}
 
-	void _Draw (EHudState state, FLevelLocals *l)
+	void _Draw (EHudState state)
 	{
-		Level = l;
 		int hud = STBAR_NORMAL;
 		if(state == HUD_StatusBar)
 		{
@@ -1076,7 +1075,7 @@ public:
 			lastHud = hud;
 
 			// Handle inventory bar drawing
-			if(CPlayer->inventorytics > 0 && !(Level->flags & LEVEL_NOINVENTORYBAR) && (state == HUD_StatusBar || state == HUD_Fullscreen))
+			if(CPlayer->inventorytics > 0 && !(level.flags & LEVEL_NOINVENTORYBAR) && (state == HUD_StatusBar || state == HUD_Fullscreen))
 			{
 				SBarInfoMainBlock *inventoryBar = state == HUD_StatusBar ? script->huds[STBAR_INVENTORY] : script->huds[STBAR_INVENTORYFULLSCREEN];
 				if(inventoryBar != lastInventoryBar)
@@ -1127,9 +1126,8 @@ public:
 		return script->huds[STBAR_POPUPLOG]->NumCommands() == 0;
 	}
 
-	void _Tick (FLevelLocals *l)
+	void _Tick ()
 	{
-		Level = l;
 		if(currentPopup != DBaseStatusBar::POP_None)
 		{
 			script->popups[currentPopup-1].tick();
@@ -1482,7 +1480,6 @@ public:
 	unsigned int invBarOffset;
 	player_t *CPlayer = nullptr;
 	DBaseStatusBar *wrapper;
-	FLevelLocals *Level;
 
 private:
 	SBarInfo *script;
@@ -1537,17 +1534,16 @@ DEFINE_ACTION_FUNCTION_NATIVE(DSBarInfo, AttachToPlayer, SBarInfo_AttachToPlayer
 	return 0;
 }
 
-static void SBarInfo_Draw(DSBarInfo *self, int state, FLevelLocals *l)
+static void SBarInfo_Draw(DSBarInfo *self, int state)
 {
-	self->_Draw((EHudState)state, l);
+	self->_Draw((EHudState)state);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DSBarInfo, Draw, SBarInfo_Draw)
 {
 	PARAM_SELF_STRUCT_PROLOGUE(DSBarInfo);
 	PARAM_INT(State);
-	PARAM_POINTER(l, FLevelLocals);
-	self->_Draw((EHudState)State, l);
+	self->_Draw((EHudState)State);
 	return 0;
 }
 
@@ -1575,16 +1571,15 @@ DEFINE_ACTION_FUNCTION_NATIVE(DSBarInfo, MustDrawLog, SBarInfo_MustDrawLog)
 	ACTION_RETURN_BOOL(self->_MustDrawLog((EHudState)State));
 }
 
-static void SBarInfo_Tick(DSBarInfo *self, FLevelLocals *l)
+static void SBarInfo_Tick(DSBarInfo *self)
 {
-	self->_Tick(l);
+	self->_Tick();
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DSBarInfo, Tick, SBarInfo_Tick)
 {
 	PARAM_SELF_STRUCT_PROLOGUE(DSBarInfo);
-	PARAM_POINTER(l, FLevelLocals);
-	self->_Tick(l);
+	self->_Tick();
 	return 0;
 }
 

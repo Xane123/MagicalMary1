@@ -111,7 +111,9 @@ void BloodCrypt (void *data, int key, int len);
 void P_ClearUDMFKeys();
 void InitRenderInfo();
 
-extern AActor *SpawnMapThing (FLevelLocals *Level, int index, FMapThing *mthing, int position);
+extern AActor *SpawnMapThing (int index, FMapThing *mthing, int position);
+
+extern void P_TranslateTeleportThings (void);
 
 EXTERN_CVAR(Bool, am_textured)
 
@@ -1044,7 +1046,6 @@ void MapLoader::LoadSectors (MapData *map, FMissingTextureTracker &missingtex)
 	for (unsigned i = 0; i < numsectors; i++, ss++, ms++)
 	{
 		ss->e = &sectors[0].e[i];
-		ss->Level = Level;
 		if (!map->HasBehavior) ss->Flags |= SECF_FLOORDROP;
 		ss->SetPlaneTexZ(sector_t::floor, (double)LittleShort(ms->floorheight));
 		ss->floorplane.set(0, 0, 1., -ss->GetPlaneTexZ(sector_t::floor));
@@ -1057,7 +1058,7 @@ void MapLoader::LoadSectors (MapData *map, FMissingTextureTracker &missingtex)
 			ss->special = LittleShort(ms->special);
 		else	// [RH] Translate to new sector special
 			ss->special = P_TranslateSectorSpecial (LittleShort(ms->special));
-		Level->tagManager.AddSectorTag(i, LittleShort(ms->tag));
+		tagManager.AddSectorTag(i, LittleShort(ms->tag));
 		ss->thinglist = nullptr;
 		ss->touching_thinglist = nullptr;		// phares 3/14/98
 		ss->sectorportal_thinglist = nullptr;
@@ -1394,7 +1395,7 @@ void MapLoader::SpawnThings (int position)
 
 	for (int i=0; i < numthings; i++)
 	{
-		AActor *actor = SpawnMapThing (Level, i, &MapThingsConverted[i], position);
+		AActor *actor = SpawnMapThing (i, &MapThingsConverted[i], position);
 		unsigned *udi = MapThingsUserDataIndex.CheckKey((unsigned)i);
 		if (udi != nullptr)
 		{
@@ -1462,7 +1463,7 @@ void MapLoader::SetLineID (int i, line_t *ld)
 			break;
 			
 		case Plane_Align:
-			if (!(Level->ib_compatflags & BCOMPATF_NOSLOPEID)) setid = ld->args[2];
+			if (!(ib_compatflags & BCOMPATF_NOSLOPEID)) setid = ld->args[2];
 			break;
 			
 		case Static_Init:
@@ -1475,7 +1476,7 @@ void MapLoader::SetLineID (int i, line_t *ld)
 		}
 		if (setid != -1)
 		{
-			Level->tagManager.AddLineID(i, setid);
+			tagManager.AddLineID(i, setid);
 		}
 	}
 }
@@ -1569,7 +1570,7 @@ void MapLoader::FinishLoadingLineDef(line_t *ld, int alpha)
 		{
 			for (unsigned j = 0; j < Level->lines.Size(); j++)
 			{
-				if (Level->tagManager.LineHasID(j, ld->args[0]))
+				if (tagManager.LineHasID(j, ld->args[0]))
 				{
 					Level->lines[j].alpha = dalpha;
 					if (additive)
@@ -1699,7 +1700,7 @@ void MapLoader::LoadLineDefs (MapData * map)
 		// do not assign the tag for Extradata lines.
 		if (ld->special != Static_Init || (ld->args[1] != Init_EDLine && ld->args[1] != Init_EDSector))
 		{
-			Level->tagManager.AddLineID(i, mld->tag);
+			tagManager.AddLineID(i, mld->tag);
 		}
 #ifndef NO_EDATA
 		if (ld->special == Static_Init && ld->args[1] == Init_EDLine)
@@ -2073,7 +2074,7 @@ void MapLoader::ProcessSideTextures(bool checktranmap, side_t *sd, sector_t *sec
 			{
 				for (unsigned s = 0; s < Level->sectors.Size(); s++)
 				{
-					if (Level->tagManager.SectorHasTag(s, tag))
+					if (tagManager.SectorHasTag(s, tag))
 					{
 						if (colorgood)
 						{
@@ -2699,9 +2700,9 @@ void MapLoader::GroupLines (bool buildmap)
 	{
 		if (sector->Lines.Count == 0)
 		{
-			Printf ("Sector %i (tag %i) has no lines\n", i, Level->tagManager.GetFirstSectorTag(Index(sector)));
+			Printf ("Sector %i (tag %i) has no lines\n", i, tagManager.GetFirstSectorTag(Index(sector)));
 			// 0 the sector's tag so that no specials can use it
-			Level->tagManager.RemoveSectorTags(i);
+			tagManager.RemoveSectorTags(i);
 		}
 		else
 		{
@@ -2756,7 +2757,7 @@ void MapLoader::GroupLines (bool buildmap)
 	}
 
 	// killough 1/30/98: Create xref tables for tags
-	Level->tagManager.HashTags();
+	tagManager.HashTags();
 
 	if (!buildmap)
 	{
@@ -2838,7 +2839,7 @@ void MapLoader::LoadBehavior(MapData * map)
 {
 	if (map->Size(ML_BEHAVIOR) > 0)
 	{
-		Level->Behaviors.LoadModule(Level, -1, &map->Reader(ML_BEHAVIOR), map->Size(ML_BEHAVIOR));
+		Level->Behaviors.LoadModule(-1, &map->Reader(ML_BEHAVIOR), map->Size(ML_BEHAVIOR));
 	}
 	if (!Level->Behaviors.CheckAllGood())
 	{
@@ -2962,7 +2963,7 @@ void MapLoader::LoadLevel(MapData *map, const char *lumpname, int position)
 		Level->maptype = MAPTYPE_UDMF;
 	}
 	FName checksum = CheckCompatibility(map);
-	if (Level->ib_compatflags & BCOMPATF_REBUILDNODES)
+	if (ib_compatflags & BCOMPATF_REBUILDNODES)
 	{
 		ForceNodeBuild = true;
 	}
@@ -2988,11 +2989,11 @@ void MapLoader::LoadLevel(MapData *map, const char *lumpname, int position)
 		Level->flags2 |= LEVEL2_DUMMYSWITCHES;
 	}
 
-	Level->Behaviors.LoadDefaultModules(Level);
+	Level->Behaviors.LoadDefaultModules();
 	LoadMapinfoACSLump();
 
 
-	P_LoadStrifeConversations(Level, map, lumpname);
+	P_LoadStrifeConversations(map, lumpname);
 
 	FMissingTextureTracker missingtex;
 
@@ -3187,7 +3188,7 @@ void MapLoader::LoadLevel(MapData *map, const char *lumpname, int position)
 	CopySlopes();
 
 	// Spawn 3d floors - must be done before spawning things so it can't be done in P_SpawnSpecials
-	P_Spawn3DFloors(Level);
+	P_Spawn3DFloors();
 
 	SpawnThings(position);
 
@@ -3197,7 +3198,7 @@ void MapLoader::LoadLevel(MapData *map, const char *lumpname, int position)
 			players[i].health = players[i].mo->health;
 	}
 	if (!map->HasBehavior && !map->isText)
-		Level->TranslateTeleportThings();	// [RH] Assign teleport destination TIDs
+		P_TranslateTeleportThings();	// [RH] Assign teleport destination TIDs
 
 	if (oldvertextable != nullptr)
 	{
@@ -3229,12 +3230,12 @@ void MapLoader::LoadLevel(MapData *map, const char *lumpname, int position)
 		P_Recalculate3DFloors(&sec);
 	}
 
-	SWRenderer->SetColormap(Level);	//The SW renderer needs to do some special setup for the level's default colormap.
+	SWRenderer->SetColormap();	//The SW renderer needs to do some special setup for the level's default colormap.
 	InitPortalGroups(Level);
-	P_InitHealthGroups(Level);
+	P_InitHealthGroups();
 
 	if (reloop) LoopSidedefs(false);
 	PO_Init();				// Initialize the polyobjs
 	if (!Level->IsReentering())
-		P_FinalizePortals(Level);	// finalize line portals after polyobjects have been initialized. This info is needed for properly flagging them.
+		P_FinalizePortals();	// finalize line portals after polyobjects have been initialized. This info is needed for properly flagging them.
 }

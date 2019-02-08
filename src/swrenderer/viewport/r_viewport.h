@@ -5,7 +5,6 @@
 #include <memory>
 #include "v_video.h"
 #include "r_defs.h"
-#include "actorinlines.h"
 #include "polyrenderer/math/gpu_types.h"
 
 #define MINZ double((2048*4) / double(1 << 20))
@@ -79,11 +78,6 @@ namespace swrenderer
 		double ScreenToViewY(int screenY, double viewZ) const
 		{
 			return (CenterY - screenY - 0.5) / FocalLengthY * viewZ;
-		}
-
-		FLevelLocals *GetLevel()
-		{
-			return viewpoint.camera->Level;
 		}
 
 	private:

@@ -97,7 +97,6 @@ namespace swrenderer
 
 		FDynamicColormap *basecolormap;
 		CameraLight *cameraLight = CameraLight::Instance();
-		auto nc = !!(Thread->Viewport->GetLevel()->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
 		if (cameraLight->FixedLightLevel() < 0 && Thread->Viewport->viewpoint.sector->e && Thread->Viewport->viewpoint.sector->e->XFloor.lightlist.Size())
 		{
 			for (i = Thread->Viewport->viewpoint.sector->e->XFloor.lightlist.Size() - 1; i >= 0; i--)
@@ -111,9 +110,9 @@ namespace swrenderer
 							break;
 						sec = rover->model;
 						if (rover->flags & FF_FADEWALLS)
-							basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
+							basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
 						else
-							basecolormap = GetSpriteColorTable(Thread->Viewport->viewpoint.sector->e->XFloor.lightlist[i].extra_colormap, sec->SpecialColors[sector_t::sprites], nc);
+							basecolormap = GetColorTable(Thread->Viewport->viewpoint.sector->e->XFloor.lightlist[i].extra_colormap, sec->SpecialColors[sector_t::sprites], true);
 					}
 					break;
 				}
@@ -121,7 +120,7 @@ namespace swrenderer
 			if (!sec)
 			{
 				sec = Thread->Viewport->viewpoint.sector;
-				basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
+				basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
 			}
 			floorlight = ceilinglight = sec->lightlevel;
 		}
@@ -131,12 +130,11 @@ namespace swrenderer
 			sec = Thread->OpaquePass->FakeFlat(Thread->Viewport->viewpoint.sector, &tempsec, &floorlight, &ceilinglight, nullptr, 0, 0, 0, 0);
 
 			// [RH] set basecolormap
-			basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
+			basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
 		}
 
 		// [RH] set foggy flag
-		auto Level = Thread->Viewport->GetLevel();
-		bool foggy = (Level->fadeto || basecolormap->Fade || (Level->flags & LEVEL_HASFADETABLE));
+		bool foggy = (level.fadeto || basecolormap->Fade || (level.flags & LEVEL_HASFADETABLE));
 
 		// get light level
 		int lightlevel = (floorlight + ceilinglight) >> 1;

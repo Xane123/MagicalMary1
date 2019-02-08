@@ -31,8 +31,8 @@ struct FRenderer
 	// draws player sprites with hardware acceleration (only useful for software rendering)
 	virtual void DrawRemainingPlayerSprites() = 0;
 
-	// set up the colormap for a newly loaded map.
-	virtual void SetColormap(FLevelLocals *) = 0;
+	// set up the colormap for a newly loaded level.
+	virtual void SetColormap() = 0;
 
 	virtual void SetClearColor(int color) = 0;
 

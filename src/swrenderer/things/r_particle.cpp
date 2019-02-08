@@ -79,7 +79,7 @@ namespace swrenderer
 		sector_t*			heightsec = NULL;
 
 		double timefrac = r_viewpoint.TicFrac;
-		if (paused || currentSession->isFrozen())
+		if (paused || bglobal.freeze || (level.flags2 & LEVEL2_FROZEN))
 			timefrac = 0.;
 
 		double ippx = particle->Pos.X + particle->Vel.X * timefrac;
@@ -156,8 +156,6 @@ namespace swrenderer
 		FTextureID botpic;
 		FDynamicColormap *map;
 
-		auto nc = !!(sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
-
 		if (heightsec)	// only clip things which are in special sectors
 		{
 			if (fakeside == WaterFakeSide::AboveCeiling)
@@ -166,7 +164,7 @@ namespace swrenderer
 				botplane = &heightsec->ceilingplane;
 				toppic = sector->GetTexture(sector_t::ceiling);
 				botpic = heightsec->GetTexture(sector_t::ceiling);
-				map = GetSpriteColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], nc);
+				map = GetColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], true);
 			}
 			else if (fakeside == WaterFakeSide::BelowFloor)
 			{
@@ -174,7 +172,7 @@ namespace swrenderer
 				botplane = &sector->floorplane;
 				toppic = heightsec->GetTexture(sector_t::floor);
 				botpic = sector->GetTexture(sector_t::floor);
-				map = GetSpriteColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], nc);
+				map = GetColorTable(heightsec->Colormap, heightsec->SpecialColors[sector_t::sprites], true);
 			}
 			else
 			{
@@ -182,7 +180,7 @@ namespace swrenderer
 				botplane = &heightsec->floorplane;
 				toppic = heightsec->GetTexture(sector_t::ceiling);
 				botpic = heightsec->GetTexture(sector_t::floor);
-				map = GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc);
+				map = GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true);
 			}
 		}
 		else
@@ -191,7 +189,7 @@ namespace swrenderer
 			botplane = &sector->floorplane;
 			toppic = sector->GetTexture(sector_t::ceiling);
 			botpic = sector->GetTexture(sector_t::floor);
-			map = GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc);
+			map = GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true);
 		}
 
 		if (botpic != skyflatnum && ippz < botplane->ZatPoint(particle->Pos))

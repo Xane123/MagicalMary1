@@ -109,7 +109,7 @@ static int Inited = NOT_INITED;
 //
 //==========================================================================
 
-CUSTOM_CVAR (Bool, cd_enabled, false, CVAR_ARCHIVE|CVAR_NOINITCALL|CVAR_GLOBALCONFIG)	//[XANE]THis is false because MMA avoids playing music if CD audio is enabled.
+CUSTOM_CVAR (Bool, cd_enabled, true, CVAR_ARCHIVE|CVAR_NOINITCALL|CVAR_GLOBALCONFIG)
 {
 	if (self)
 		CD_Init ();

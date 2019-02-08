@@ -66,7 +66,6 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 
 	FDynamicColormap *basecolormap;
 	PolyCameraLight *cameraLight = PolyCameraLight::Instance();
-	bool nc = !!(viewpoint.camera->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
 	if (cameraLight->FixedLightLevel() < 0 && viewpoint.sector->e && viewpoint.sector->e->XFloor.lightlist.Size())
 	{
 		for (i = viewpoint.sector->e->XFloor.lightlist.Size() - 1; i >= 0; i--)
@@ -80,9 +79,9 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 						break;
 					sec = rover->model;
 					if (rover->flags & FF_FADEWALLS)
-						basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
+						basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
 					else
-						basecolormap = GetSpriteColorTable(viewpoint.sector->e->XFloor.lightlist[i].extra_colormap, sec->SpecialColors[sector_t::sprites], nc);
+						basecolormap = GetColorTable(viewpoint.sector->e->XFloor.lightlist[i].extra_colormap, sec->SpecialColors[sector_t::sprites], true);
 				}
 				break;
 			}
@@ -90,7 +89,7 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 		if (!sec)
 		{
 			sec = viewpoint.sector;
-			basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
+			basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
 		}
 		floorlight = ceilinglight = sec->lightlevel;
 	}
@@ -103,11 +102,11 @@ void RenderPolyPlayerSprites::Render(PolyRenderThread *thread)
 		ceilinglight = fakeflat.CeilingLightLevel;
 
 		// [RH] set basecolormap
-		basecolormap = GetSpriteColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], nc);
+		basecolormap = GetColorTable(sec->Colormap, sec->SpecialColors[sector_t::sprites], true);
 	}
 
 	// [RH] set foggy flag
-	bool foggy = (PolyRenderer::Instance()->Level->fadeto || basecolormap->Fade || (PolyRenderer::Instance()->Level->flags & LEVEL_HASFADETABLE));
+	bool foggy = (level.fadeto || basecolormap->Fade || (level.flags & LEVEL_HASFADETABLE));
 
 	// get light level
 	lightnum = ((floorlight + ceilinglight) >> 1) + (foggy ? 0 : viewpoint.extralight << 4);
@@ -459,7 +458,7 @@ void RenderPolyPlayerSprites::RenderSprite(PolyRenderThread *thread, DPSprite *p
 
 fixed_t RenderPolyPlayerSprites::LightLevelToShade(int lightlevel, bool foggy)
 {
-	bool nolightfade = !foggy && ((PolyRenderer::Instance()->Level->flags3 & LEVEL3_NOLIGHTFADE));
+	bool nolightfade = !foggy && ((level.flags3 & LEVEL3_NOLIGHTFADE));
 	if (nolightfade)
 	{
 		return (MAX(255 - lightlevel, 0) * NUMCOLORMAPS) << (FRACBITS - 8);

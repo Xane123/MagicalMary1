@@ -99,7 +99,7 @@ CVAR (Flag, pf_ice,			paletteflash, PF_ICE)
 CVAR (Flag, pf_hazard,		paletteflash, PF_HAZARD)
 
 // Stretch status bar to full screen width?
-CUSTOM_CVAR (Int, st_scale, -1, CVAR_ARCHIVE)
+CUSTOM_CVAR (Int, st_scale, 0, CVAR_ARCHIVE)
 {
 	if (self < -1)
 	{
@@ -121,12 +121,12 @@ CUSTOM_CVAR(Bool, hud_aspectscale, false, CVAR_ARCHIVE)
 	}
 }
 
-CVAR (Int, crosshair, -2, CVAR_ARCHIVE)
+CVAR (Int, crosshair, 0, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
-CVAR (Color, crosshaircolor, 0x8888ff, CVAR_ARCHIVE);
+CVAR (Color, crosshaircolor, 0xff0000, CVAR_ARCHIVE);
 CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
-CVAR (Float, crosshairscale, 0.33, CVAR_ARCHIVE);
-CVAR (Bool, crosshairgrow, true, CVAR_ARCHIVE);
+CVAR (Float, crosshairscale, 1.0, CVAR_ARCHIVE);
+CVAR (Bool, crosshairgrow, false, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
@@ -140,17 +140,17 @@ CVAR (Bool, idmypos, false, 0);
 //
 //---------------------------------------------------------------------------
 
-void FLevelLocals::FormatMapName(FString &mapname, const char *mapnamecolor)
+void ST_FormatMapName(FString &mapname, const char *mapnamecolor)
 {
-	cluster_info_t *cluster = FindClusterInfo (this->cluster);
+	cluster_info_t *cluster = FindClusterInfo (level.cluster);
 	bool ishub = (cluster != NULL && (cluster->flags & CLUSTER_HUB));
 
 	mapname = "";
 	if (am_showmaplabel == 1 || (am_showmaplabel == 2 && !ishub))
 	{
-		mapname << MapName << ": ";
+		mapname << level.MapName << ": ";
 	}
-	mapname << mapnamecolor << LevelName;
+	mapname << mapnamecolor << level.LevelName;
 }
 
 //---------------------------------------------------------------------------
@@ -808,7 +808,6 @@ void DBaseStatusBar::RefreshViewBorder ()
 		{
 			return;
 		}
-
 		auto tex = GetBorderTexture(&level);
 		screen->DrawBorder (tex, 0, 0, Width, viewwindowy);
 		screen->DrawBorder (tex, 0, viewwindowy, viewwindowx, viewheight + viewwindowy);
@@ -1169,7 +1168,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 	DrawMessages (HUDMSGLayer_OverHUD, (state == HUD_StatusBar) ? GetTopOfStatusbar() : SCREENHEIGHT);
 	E_RenderOverlay(state);
 
-	//DrawConsistancy ();
+	DrawConsistancy ();
 	DrawWaiting ();
 	if (ShowLog && MustDrawLog(state)) DrawLog ();
 
@@ -1180,7 +1179,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 }
 
 
-/*void DBaseStatusBar::DrawConsistancy () const
+void DBaseStatusBar::DrawConsistancy () const
 {
 	static bool firsttime = true;
 	int i;
@@ -1221,7 +1220,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
 			0, conbuff, DTA_CleanNoMove, true, TAG_DONE);
 	}
-}*/
+}
 
 void DBaseStatusBar::DrawWaiting () const
 {
@@ -1238,8 +1237,8 @@ void DBaseStatusBar::DrawWaiting () const
 		{
 			if (buff_p == NULL)
 			{
-				strcpy (conbuff, "Waiting for player ");
-				buff_p = conbuff + 19;
+				strcpy (conbuff, "Waiting for:");
+				buff_p = conbuff + 12;
 			}
 			*buff_p++ = ' ';
 			*buff_p++ = '1' + i;
@@ -1249,7 +1248,7 @@ void DBaseStatusBar::DrawWaiting () const
 
 	if (buff_p != NULL)
 	{
-		screen->DrawText (SmallFont, CR_YELLOW, 
+		screen->DrawText (SmallFont, CR_ORANGE, 
 			(screen->GetWidth() - SmallFont->StringWidth (conbuff)*CleanXfac) / 2,
 			SmallFont->GetHeight()*CleanYfac, conbuff, DTA_CleanNoMove, true, TAG_DONE);
 	}

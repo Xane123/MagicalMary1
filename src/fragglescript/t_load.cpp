@@ -135,7 +135,7 @@ void FScriptLoader::ParseInfoCmd(char *line, FString &scriptsrc)
 			sc.MustGetString();
 			if (!FS_ChangeMusic(sc.String))
 			{
-				Level->SetMusic();
+				S_ChangeMusic(Level->Music, Level->musicorder);
 			}
 		}
 		else if (sc.Compare("skyname"))
@@ -143,14 +143,14 @@ void FScriptLoader::ParseInfoCmd(char *line, FString &scriptsrc)
 			sc.MustGetStringName("=");
 			sc.MustGetString();
 		
-			Level->skytexture1 = Level->skytexture2 = TexMan.GetTextureID (sc.String, ETextureType::Wall, FTextureManager::TEXMAN_Overridable|FTextureManager::TEXMAN_ReturnFirst);
-			InitSkyMap (Level);
+			sky2texture = sky1texture = Level->skytexture1 = Level->skytexture2 = TexMan.GetTextureID (sc.String, ETextureType::Wall, FTextureManager::TEXMAN_Overridable|FTextureManager::TEXMAN_ReturnFirst);
+			R_InitSkyMap ();
 		}
 		else if (sc.Compare("interpic"))
 		{
 			sc.MustGetStringName("=");
 			sc.MustGetString();
-			const_cast<level_info_t*>(Level->info)->ExitPic = sc.String;
+			Level->info->ExitPic = sc.String;
 		}
 		else if (sc.Compare("gravity"))
 		{
@@ -262,7 +262,7 @@ bool FScriptLoader::ParseInfo(MapData * map)
 			I_Error("Only one FraggleThinker is allowed to exist at a time.\nCheck your code.");
 		}
 
-		auto th = CreateThinker<DFraggleThinker>(Level);
+		auto th = Create<DFraggleThinker>();
 		th->LevelScript->data = copystring(scriptsrc.GetChars());
 		Level->FraggleScriptThinker = th;
 

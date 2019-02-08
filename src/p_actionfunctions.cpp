@@ -70,6 +70,9 @@
 #include "actorinlines.h"
 #include "types.h"
 
+AActor *SingleActorFromTID(int tid, AActor *defactor);
+
+
 static FRandom pr_camissile ("CustomActorfire");
 static FRandom pr_cabullet ("CustomBullet");
 static FRandom pr_cwjump ("CustomWpJump");
@@ -295,7 +298,7 @@ DEFINE_ACTION_FUNCTION(AActor, GetZAt)
 				double c = angle.Cos();
 				pos = mobj->Vec2Offset(pos.X * c + pos.Y * s, pos.X * s - pos.Y * c);
 			}
-			sector_t *sec = P_PointInSector(mobj->Level, pos);
+			sector_t *sec = P_PointInSector(pos);
 
 			if (sec)
 			{
@@ -868,7 +871,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RadiusDamageSelf)
 		// the player to indicate bad things happened.
 		AActor *flash = NULL;
 		if(flashtype != NULL)
-			flash = Spawn(self->Level, flashtype, self->target->PosPlusZ(self->target->Height / 4), ALLOW_REPLACE);
+			flash = Spawn(flashtype, self->target->PosPlusZ(self->target->Height / 4), ALLOW_REPLACE);
 
 		int dmgFlags = 0;
 		FName dmgType = NAME_BFGSplash;
@@ -1585,7 +1588,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_SpawnDebris)
 		double xo = (pr_spawndebris() - 128) / 16.;
 		double yo = (pr_spawndebris() - 128) / 16.;
 		double zo = pr_spawndebris()*self->Height / 256 + self->GetBobOffset();
-		mo = Spawn(self->Level, debris, self->Vec3Offset(xo, yo, zo), ALLOW_REPLACE);
+		mo = Spawn(debris, self->Vec3Offset(xo, yo, zo), ALLOW_REPLACE);
 		if (mo)
 		{
 			if (transfer_translation)
@@ -1669,7 +1672,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_SpawnParticle)
 			acc.X = accelx * c + accely * s;
 			acc.Y = accelx * s - accely * c;
 		}
-		P_SpawnParticle(self->Level, self->Vec3Offset(pos), vel, acc, color, startalpha, lifetime, size, fadestep, sizestep, flags);
+		P_SpawnParticle(self->Vec3Offset(pos), vel, acc, color, startalpha, lifetime, size, fadestep, sizestep, flags);
 	}
 	return 0;
 }
@@ -1848,8 +1851,9 @@ DEFINE_ACTION_FUNCTION(AActor, A_SetBlend)
 //	if (color2.a == 0)
 //		color2 = color;
 
-	CreateThinker<DFlashFader>(color.r/255.f, color.g/255.f, color.b/255.f, float(alpha),
-					color2.r/255.f, color2.g/255.f, color2.b/255.f, float(alpha2), float(tics)/TICRATE, self, true);
+	Create<DFlashFader>(color.r/255.f, color.g/255.f, color.b/255.f, float(alpha),
+					color2.r/255.f, color2.g/255.f, color2.b/255.f, float(alpha2),
+					float(tics)/TICRATE, self, true);
 	return 0;
 }
 
@@ -1920,7 +1924,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Burst)
 		double xo = (pr_burst() - 128) * self->radius / 128;
 		double yo = (pr_burst() - 128) * self->radius / 128;
 		double zo = (pr_burst() * self->Height / 255);
-		mo = Spawn(self->Level, chunk, self->Vec3Offset(xo, yo, zo), ALLOW_REPLACE);
+		mo = Spawn(chunk, self->Vec3Offset(xo, yo, zo), ALLOW_REPLACE);
 
 		if (mo)
 		{
@@ -1965,7 +1969,6 @@ DEFINE_ACTION_FUNCTION(AActor, A_Respawn)
 
 	bool oktorespawn = false;
 	DVector3 pos = self->Pos();
-	auto Level = self->Level;
 
 	self->flags |= MF_SOLID;
 	self->Height = self->GetDefault()->Height;
@@ -2022,7 +2025,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Respawn)
 		}
 		if (self->CountsAsKill())
 		{
-			Level->total_monsters++;
+			level.total_monsters++;
 		}
 	}
 	else
@@ -2302,7 +2305,7 @@ DEFINE_ACTION_FUNCTION(AActor, CheckLOF)
 		range
 	*/
 
-	sector_t *sec = P_PointInSector(self->Level, pos);
+	sector_t *sec = P_PointInSector(pos);
 
 	if (range == 0)
 	{
@@ -2620,10 +2623,9 @@ DEFINE_ACTION_FUNCTION(AActor, A_ChangeCountFlags)
 	PARAM_INT(item);
 	PARAM_INT(secret);
 
-	auto Level = self->Level;
-	if (self->CountsAsKill() && self->health > 0) --Level->total_monsters;
-	if (self->flags & MF_COUNTITEM) --Level->total_items;
-	if (self->flags5 & MF5_COUNTSECRET) --Level->total_secrets;
+	if (self->CountsAsKill() && self->health > 0) --level.total_monsters;
+	if (self->flags & MF_COUNTITEM) --level.total_items;
+	if (self->flags5 & MF5_COUNTSECRET) --level.total_secrets;
 
 	if (kill != -1)
 	{
@@ -2642,9 +2644,9 @@ DEFINE_ACTION_FUNCTION(AActor, A_ChangeCountFlags)
 		if (secret == 0) self->flags5 &= ~MF5_COUNTSECRET;
 		else self->flags5 |= MF5_COUNTSECRET;
 	}
-	if (self->CountsAsKill() && self->health > 0) ++Level->total_monsters;
-	if (self->flags & MF_COUNTITEM) ++Level->total_items;
-	if (self->flags5 & MF5_COUNTSECRET) ++Level->total_secrets;
+	if (self->CountsAsKill() && self->health > 0) ++level.total_monsters;
+	if (self->flags & MF_COUNTITEM) ++level.total_items;
+	if (self->flags5 & MF5_COUNTSECRET) ++level.total_secrets;
 	return 0;
 }
 
@@ -2675,7 +2677,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RaiseChildren)
 	PARAM_SELF_PROLOGUE(AActor);
 	PARAM_INT(flags);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	while ((mo = it.Next()) != NULL)
@@ -2698,7 +2700,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RaiseSiblings)
 	PARAM_SELF_PROLOGUE(AActor);
 	PARAM_INT(flags);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	if (self->master != NULL)
@@ -3050,7 +3052,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Teleport)
 		}
 	}
 
-	DSpotState *state = GetSpotState(self->Level, false);
+	DSpotState *state = GetSpotState(&level, false);
 	if (state == NULL)
 	{
 		return numret;
@@ -3113,7 +3115,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Teleport)
 					P_SpawnTeleportFog(ref, prev, true, true);
 				else
 				{
-					fog1 = Spawn(self->Level, fog_type, prev, ALLOW_REPLACE);
+					fog1 = Spawn(fog_type, prev, ALLOW_REPLACE);
 					if (fog1 != NULL)
 						fog1->target = ref;
 				}
@@ -3124,7 +3126,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Teleport)
 					P_SpawnTeleportFog(ref, ref->Pos(), false, true);
 				else
 				{
-					fog2 = Spawn(self->Level, fog_type, ref->Pos(), ALLOW_REPLACE);
+					fog2 = Spawn(fog_type, ref->Pos(), ALLOW_REPLACE);
 					if (fog2 != NULL)
 						fog2->target = ref;
 				}
@@ -3179,7 +3181,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Quake)
 	PARAM_INT		(tremrad);
 	PARAM_SOUND	(sound);
 
-	P_StartQuake(self->Level, self, 0, intensity, duration, damrad, tremrad, sound);
+	P_StartQuake(self, 0, intensity, duration, damrad, tremrad, sound);
 	return 0;
 }
 
@@ -3209,7 +3211,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_QuakeEx)
 	PARAM_INT(highpoint);
 	PARAM_FLOAT(rollIntensity);
 	PARAM_FLOAT(rollWave);
-	P_StartQuakeXYZ(self->Level, self, 0, intensityX, intensityY, intensityZ, duration, damrad, tremrad, sound, flags, mulWaveX, mulWaveY, mulWaveZ, falloff, highpoint, 
+	P_StartQuakeXYZ(self, 0, intensityX, intensityY, intensityZ, duration, damrad, tremrad, sound, flags, mulWaveX, mulWaveY, mulWaveZ, falloff, highpoint, 
 		rollIntensity, rollWave);
 	return 0;
 }
@@ -3300,7 +3302,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_LineEffect)
 		{
 			oldjunk.tag = tag;								// Sector tag for linedef
 			P_TranslateLineDef(&junk, &oldjunk);			// Turn into native type
-			res = !!P_ExecuteSpecial(self->Level, junk.special, NULL, self, false, junk.args[0], 
+			res = !!P_ExecuteSpecial(junk.special, NULL, self, false, junk.args[0], 
 				junk.args[1], junk.args[2], junk.args[3], junk.args[4]); 
 			if (res && !(junk.flags & ML_REPEAT_SPECIAL))	// If only once,
 				self->flags6 |= MF6_LINEDONE;				// no more for this thing
@@ -3455,12 +3457,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_Warp)
 
 	if ((flags & WARPF_USETID))
 	{
-		if (destination_selector != 0)
-		{
-			FActorIterator it(self->Level, destination_selector);
-			reference = it.Next();
-		}
-		else reference = self;
+		reference = SingleActorFromTID(destination_selector, self);
 	}
 	else
 	{
@@ -3657,7 +3654,7 @@ static bool DoRadiusGive(AActor *self, AActor *thing, PClassActor *item, int amo
 
 		if ((flags & RGF_NOSIGHT) || P_CheckSight(thing, self, SF_IGNOREVISIBILITY | SF_IGNOREWATERBOUNDARY))
 		{ // OK to give; target is in direct path, or the monster doesn't care about it being in line of sight.
-			auto gift = Spawn(thing->Level, item);
+			auto gift = Spawn(item);
 			if (gift->IsKindOf(NAME_Health))
 			{
 				gift->IntVar(NAME_Amount) *= amount;
@@ -3708,7 +3705,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RadiusGive)
 	int given = 0;
 	if (flags & RGF_MISSILES)
 	{
-		TThinkerIterator<AActor> it(self->Level);
+		TThinkerIterator<AActor> it;
 		while ((thing = it.Next()) && ((unlimited) || (given < limit)))
 		{
 			given += DoRadiusGive(self, thing, item, amount, distance, flags, filter, species, mindist);
@@ -3718,7 +3715,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RadiusGive)
 	{
 		FPortalGroupArray check(FPortalGroupArray::PGA_Full3d);
 		double mid = self->Center();
-		FMultiBlockThingsIterator it(check, self->Level, self->X(), self->Y(), mid-distance, mid+distance, distance, false, self->Sector);
+		FMultiBlockThingsIterator it(check, self->X(), self->Y(), mid-distance, mid+distance, distance, false, self->Sector);
 		FMultiBlockThingsIterator::CheckResult cres;
 
 		while ((it.Next(&cres)) && ((unlimited) || (given < limit)))
@@ -3937,7 +3934,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_DamageChildren)
 	AActor *source = COPY_AAPTR(self, src);
 	AActor *inflictor = COPY_AAPTR(self, inflict);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	while ( (mo = it.Next()) )
@@ -3967,7 +3964,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_DamageSiblings)
 	AActor *source = COPY_AAPTR(self, src);
 	AActor *inflictor = COPY_AAPTR(self, inflict);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	if (self->master != NULL)
@@ -4118,7 +4115,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_KillChildren)
 	AActor *source = COPY_AAPTR(self, src);
 	AActor *inflictor = COPY_AAPTR(self, inflict);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	while ( (mo = it.Next()) )
@@ -4149,7 +4146,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_KillSiblings)
 	AActor *source = COPY_AAPTR(self, src);
 	AActor *inflictor = COPY_AAPTR(self, inflict);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	if (self->master != NULL)
@@ -4277,7 +4274,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RemoveChildren)
 	PARAM_CLASS(filter, AActor);
 	PARAM_NAME(species);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	while ((mo = it.Next()) != NULL)
@@ -4303,7 +4300,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_RemoveSiblings)
 	PARAM_CLASS(filter, AActor);
 	PARAM_NAME(species);
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo;
 
 	if (self->master != NULL)
@@ -4844,7 +4841,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_CheckTerrain)
 		}
 		else if (sec->special == Scroll_StrifeCurrent)
 		{
-			int anglespeed = self->Level->tagManager.GetFirstSectorTag(sec) - 100;
+			int anglespeed = tagManager.GetFirstSectorTag(sec) - 100;
 			double speed = (anglespeed % 10) / 16.;
 			DAngle an = (anglespeed / 10) * (360 / 8.);
 			self->Thrust(an, speed);

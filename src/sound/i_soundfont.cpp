@@ -380,7 +380,7 @@ void FSoundFontManager::CollectSoundfonts()
 
 	if (soundfonts.Size() == 0)
 	{
-		ProcessOneFile(NicePath("$PROGDIR/soundfonts/soundfont.sf2"));
+		ProcessOneFile(NicePath("$PROGDIR/soundfonts/gzdoom.sf2"));
 	}
 }
 

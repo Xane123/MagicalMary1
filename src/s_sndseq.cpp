@@ -219,6 +219,8 @@ static bool TwiddleSeqNum (int &sequence, seqtype_t type);
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 FSoundSequencePtrArray Sequences;
+int ActiveSequences;
+DSeqNode *DSeqNode::SequenceListHead;
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------
 
@@ -287,6 +289,11 @@ static FRandom pr_sndseq ("SndSeq");
 
 // CODE --------------------------------------------------------------------
 
+void DSeqNode::SerializeSequences (FSerializer &arc)
+{
+	arc("sndseqlisthead", SequenceListHead);
+}
+
 IMPLEMENT_CLASS(DSeqNode, false, true)
 
 IMPLEMENT_POINTERS_START(DSeqNode)
@@ -354,7 +361,6 @@ void DSeqNode::Serialize(FSerializer &arc)
 	}
 	else
 	{
-		Level = arc.Level;
 		seqnum = FindSequence (seqName);
 		if (seqnum >= 0)
 		{
@@ -391,9 +397,9 @@ void DSeqNode::OnDestroy()
 		m_ParentSeqNode->m_ChildSeqNode = nullptr;
 		m_ParentSeqNode = nullptr;
 	}
-	if (Level->SequenceListHead == this)
+	if (SequenceListHead == this)
 	{
-		Level->SequenceListHead = m_Next;
+		SequenceListHead = m_Next;
 		GC::WriteBarrier(m_Next);
 	}
 	if (m_Prev)
@@ -406,7 +412,7 @@ void DSeqNode::OnDestroy()
 		m_Next->m_Prev = m_Prev;
 		GC::WriteBarrier(m_Next, m_Prev);
 	}
-	Level->ActiveSequences--;
+	ActiveSequences--;
 	Super::OnDestroy();
 }
 
@@ -797,21 +803,20 @@ static void AddSequence (int curseq, FName seqname, FName slot, int stopsound, c
 	Sequences[curseq]->Script[ScriptTemp.Size()] = MakeCommand(SS_CMD_END, 0);
 }
 
-DSeqNode::DSeqNode (FLevelLocals *l, int sequence, int modenum)
+DSeqNode::DSeqNode (int sequence, int modenum)
 : m_ModeNum(modenum), m_SequenceChoices(0)
 {
-	Level = l;
 	ActivateSequence (sequence);
-	if (!Level->SequenceListHead)
+	if (!SequenceListHead)
 	{
-		Level->SequenceListHead = this;
+		SequenceListHead = this;
 		m_Next = m_Prev = NULL;
 	}
 	else
 	{
-		Level->SequenceListHead->m_Prev = this;		GC::WriteBarrier(Level->SequenceListHead->m_Prev, this);
-		m_Next = Level->SequenceListHead;			GC::WriteBarrier(this, Level->SequenceListHead);
-		Level->SequenceListHead = this;
+		SequenceListHead->m_Prev = this;		GC::WriteBarrier(SequenceListHead->m_Prev, this);
+		m_Next = SequenceListHead;				GC::WriteBarrier(this, SequenceListHead);
+		SequenceListHead = this;
 		m_Prev = NULL;
 	}
 	GC::WriteBarrier(this);
@@ -827,23 +832,24 @@ void DSeqNode::ActivateSequence (int sequence)
 	m_CurrentSoundID = 0;
 	m_Volume = 1;			// Start at max volume...
 	m_Atten = ATTN_IDLE;	// ...and idle attenuation
-	Level->ActiveSequences++;
+
+	ActiveSequences++;
 }
 
 DSeqActorNode::DSeqActorNode (AActor *actor, int sequence, int modenum)
-	: DSeqNode (actor->Level, sequence, modenum),
+	: DSeqNode (sequence, modenum),
 	  m_Actor (actor)
 {
 }
 
 DSeqPolyNode::DSeqPolyNode (FPolyObj *poly, int sequence, int modenum)
-	: DSeqNode (poly->GetLevel(), sequence, modenum),
+	: DSeqNode (sequence, modenum),
 	  m_Poly (poly)
 {
 }
 
 DSeqSectorNode::DSeqSectorNode (sector_t *sec, int chan, int sequence, int modenum)
-	: DSeqNode (sec->Level, sequence, modenum),
+	: DSeqNode (sequence, modenum),
 	  Channel (chan),
 	  m_Sector (sec)
 {
@@ -1042,8 +1048,7 @@ static int FindSequence (FName seqname)
 
 DSeqNode *SN_CheckSequence(sector_t *sector, int chan)
 {
-	auto Level = sector->Level;
-	for (DSeqNode *node = Level->SequenceListHead; node; )
+	for (DSeqNode *node = DSeqNode::FirstSequence(); node; )
 	{
 		DSeqNode *next = node->NextSequence();
 		if (node->Source() == sector)
@@ -1074,7 +1079,7 @@ DEFINE_ACTION_FUNCTION(_Sector, CheckSoundSequence)
 
 void SN_StopSequence (AActor *actor)
 {
-	SN_DoStop (actor->Level, actor);
+	SN_DoStop (actor);
 }
 
 DEFINE_ACTION_FUNCTION(AActor, StopSoundSequence)
@@ -1104,14 +1109,14 @@ DEFINE_ACTION_FUNCTION(_Sector, StopSoundSequence)
 
 void SN_StopSequence (FPolyObj *poly)
 {
-	SN_DoStop (poly->GetLevel(), poly);
+	SN_DoStop (poly);
 }
 
-void SN_DoStop (FLevelLocals *Level, void *source)
+void SN_DoStop (void *source)
 {
 	DSeqNode *node;
 
-	for (node = Level->SequenceListHead; node; )
+	for (node = DSeqNode::FirstSequence(); node; )
 	{
 		DSeqNode *next = node->NextSequence();
 		if (node->Source() == source)
@@ -1159,7 +1164,7 @@ bool SN_IsMakingLoopingSound (sector_t *sector)
 {
 	DSeqNode *node;
 
-	for (node = sector->Level->SequenceListHead; node; )
+	for (node = DSeqNode::FirstSequence (); node; )
 	{
 		DSeqNode *next = node->NextSequence();
 		if (node->Source() == (void *)sector)
@@ -1323,7 +1328,7 @@ void DSeqNode::Tick ()
 						int seqnum = FindSequence (ENamedName(m_SequencePtr[i*2+1]));
 						if (seqnum >= 0)
 						{ // Found a match, and it's a good one too.
-							Level->ActiveSequences--;
+							ActiveSequences--;
 							ActivateSequence (seqnum);
 							break;
 						}
@@ -1354,15 +1359,15 @@ void DSeqNode::Tick ()
 	}
 }
 
-void SN_UpdateActiveSequences (FLevelLocals *Level)
+void SN_UpdateActiveSequences (void)
 {
 	DSeqNode *node;
 
-	if (!Level->ActiveSequences || paused)
+	if (!ActiveSequences || paused)
 	{ // No sequences currently playing/game is paused
 		return;
 	}
-	for (node =Level->SequenceListHead; node; node = node->NextSequence())
+	for (node = DSeqNode::FirstSequence(); node; node = node->NextSequence())
 	{
 		node->Tick ();
 	}
@@ -1374,11 +1379,11 @@ void SN_UpdateActiveSequences (FLevelLocals *Level)
 //
 //==========================================================================
 
-void SN_StopAllSequences (FLevelLocals *Level)
+void SN_StopAllSequences (void)
 {
 	DSeqNode *node;
 
-	for (node = Level->SequenceListHead; node; )
+	for (node = DSeqNode::FirstSequence(); node; )
 	{
 		DSeqNode *next = node->NextSequence();
 		node->m_StopSound = 0; // don't play any stop sounds
@@ -1465,14 +1470,14 @@ DEFINE_ACTION_FUNCTION(DSeqNode, MarkPrecacheSounds)
 // 	nodeNum zero is the first node
 //==========================================================================
 
-void SN_ChangeNodeData (FLevelLocals *Level, int nodeNum, int seqOffset, int delayTics, float volume,
+void SN_ChangeNodeData (int nodeNum, int seqOffset, int delayTics, float volume,
 	int currentSoundID)
 {
 	int i;
 	DSeqNode *node;
 
 	i = 0;
-	node = Level->SequenceListHead;
+	node = DSeqNode::FirstSequence();
 	while (node && i < nodeNum)
 	{
 		node = node->NextSequence();

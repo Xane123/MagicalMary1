@@ -93,7 +93,6 @@ Everything that is changed is marked (maybe commented) with "Added by MC"
 #include "events.h"
 #include "vm.h"
 #include "g_levellocals.h"
-#include "actorinlines.h"
 
 static FRandom pr_botspawn ("BotSpawn");
 
@@ -130,7 +129,7 @@ FCajunMaster::~FCajunMaster()
 }
 
 //This function is called every tick (from g_game.c).
-void FCajunMaster::Main(FLevelLocals *Level)
+void FCajunMaster::Main ()
 {
 	BotThinkCycles.Reset();
 
@@ -138,7 +137,7 @@ void FCajunMaster::Main(FLevelLocals *Level)
 		return;
 
 	//Add new bots?
-	if (wanted_botnum > botnum && !currentSession->isFrozen())
+	if (wanted_botnum > botnum && !freeze)
 	{
 		if (t_join == ((wanted_botnum - botnum) * SPAWN_DELAY))
 		{
@@ -177,6 +176,7 @@ void FCajunMaster::Init ()
 	botnum = 0;
 	firstthing = nullptr;
 	spawn_tries = 0;
+	freeze = false;
 	observer = false;
 	body1 = nullptr;
 	body2 = nullptr;
@@ -207,7 +207,7 @@ void FCajunMaster::End ()
 {
 	int i;
 
-	//Arrange wanted botnum and their names, so they can be spawned next map.
+	//Arrange wanted botnum and their names, so they can be spawned next level.
 	getspawned.Clear();
 	if (deathmatch)
 	{
@@ -340,7 +340,7 @@ bool FCajunMaster::SpawnBot (const char *name, int color)
 	return true;
 }
 
-void FCajunMaster::TryAddBot (FLevelLocals *Level, uint8_t **stream, int player)
+void FCajunMaster::TryAddBot (uint8_t **stream, int player)
 {
 	int botshift = ReadByte (stream);
 	char *info = ReadString (stream);
@@ -363,7 +363,7 @@ void FCajunMaster::TryAddBot (FLevelLocals *Level, uint8_t **stream, int player)
 		}
 	}
 
-	if (DoAddBot (Level, (uint8_t *)info, skill))
+	if (DoAddBot ((uint8_t *)info, skill))
 	{
 		//Increment this.
 		botnum++;
@@ -384,7 +384,7 @@ void FCajunMaster::TryAddBot (FLevelLocals *Level, uint8_t **stream, int player)
 	delete[] info;
 }
 
-bool FCajunMaster::DoAddBot (FLevelLocals *Level, uint8_t *info, botskill_t skill)
+bool FCajunMaster::DoAddBot (uint8_t *info, botskill_t skill)
 {
 	int bnum;
 
@@ -405,7 +405,7 @@ bool FCajunMaster::DoAddBot (FLevelLocals *Level, uint8_t *info, botskill_t skil
 	D_ReadUserInfoStrings (bnum, &info, false);
 
 	multiplayer = true; //Prevents cheating and so on; emulates real netgame (almost).
-	players[bnum].Bot = CreateThinker<DBot>(Level);
+	players[bnum].Bot = Create<DBot>();
 	players[bnum].Bot->player = &players[bnum];
 	players[bnum].Bot->skill = skill;
 	playeringame[bnum] = true;
@@ -448,8 +448,7 @@ void FCajunMaster::RemoveAllBots (bool fromlist)
 			// [ZZ] run event hook
 			E_PlayerDisconnected(i);
 			//
-			auto Level = players[i].Bot->Level;
-			Level->Behaviors.StartTypedScripts (Level, SCRIPT_Disconnect, players[i].mo, true, i, true);
+			level.Behaviors.StartTypedScripts (SCRIPT_Disconnect, players[i].mo, true, i, true);
 			ClearPlayer (i, !fromlist);
 		}
 	}

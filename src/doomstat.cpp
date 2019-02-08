@@ -50,22 +50,22 @@ CVAR (Bool, alwaysapplydmflags, false, CVAR_SERVERINFO);
 
 CUSTOM_CVAR (Float, teamdamage, 0.f, CVAR_SERVERINFO)
 {
-	ForAllLevels([&](FLevelLocals *Level) {
-		Level->teamdamage = self;
-	});
+	level.teamdamage = self;
 }
 
 CUSTOM_CVAR (String, language, "auto", CVAR_ARCHIVE)
 {
 	SetLanguageIDs ();
 	GStrings.LoadStrings (false);
-	ForAllLevels([](FLevelLocals *Level) {
-		if (Level->info != nullptr) Level->LevelName = Level->info->LookupLevelName();
-	});
+	if (level.info != NULL) level.LevelName = level.info->LookupLevelName();
 }
 
 // [RH] Network arbitrator
 int Net_Arbitrator = 0;
+
+int NextSkill = -1;
+
+int SinglePlayerClass[MAXPLAYERS];
 
 bool ToggleFullscreen;
 

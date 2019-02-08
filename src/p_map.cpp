@@ -275,7 +275,7 @@ static bool PIT_FindFloorCeiling(FMultiBlockLinesIterator &mit, FMultiBlockLines
 
 void P_GetFloorCeilingZ(FCheckPosition &tmf, int flags)
 {
-	sector_t *sec = (!(flags & FFCF_SAMESECTOR) || tmf.thing->Sector == NULL)? P_PointInSector(tmf.thing->Level, tmf.pos) : tmf.sector;
+	sector_t *sec = (!(flags & FFCF_SAMESECTOR) || tmf.thing->Sector == NULL)? P_PointInSector(tmf.pos) : tmf.sector;
 	F3DFloor *ffc, *fff;
 
 	tmf.ceilingz = NextHighestCeilingAt(sec, tmf.pos.X, tmf.pos.Y, tmf.pos.Z, tmf.pos.Z + tmf.thing->Height, flags, &tmf.ceilingsector, &ffc);
@@ -413,15 +413,15 @@ bool	P_TeleportMove(AActor* thing, const DVector3 &pos, bool telefrag, bool modi
 
 	spechit.Clear();	// this is needed so that no more specials get activated after crossing a teleporter.
 
-	bool StompAlwaysFrags = ((thing->flags2 & MF2_TELESTOMP) || (thing->Level->flags & LEVEL_MONSTERSTELEFRAG) || telefrag) && !(thing->flags7 & MF7_NOTELESTOMP);
+	bool StompAlwaysFrags = ((thing->flags2 & MF2_TELESTOMP) || (level.flags & LEVEL_MONSTERSTELEFRAG) || telefrag) && !(thing->flags7 & MF7_NOTELESTOMP);
 
 	// P_LineOpening requires the thing's z to be the destination z in order to work.
 	double savedz = thing->Z();
 	thing->SetZ(pos.Z);
-	sector_t *sector = P_PointInSector(thing->Level, pos);
+	sector_t *sector = P_PointInSector(pos);
 
 	FPortalGroupArray grouplist;
-	FMultiBlockLinesIterator mit(grouplist, thing->Level, pos.X, pos.Y, pos.Z, thing->Height, thing->radius, sector);
+	FMultiBlockLinesIterator mit(grouplist, pos.X, pos.Y, pos.Z, thing->Height, thing->radius, sector);
 	FMultiBlockLinesIterator::CheckResult cres;
 
 	while (mit.Next(&cres))
@@ -432,7 +432,7 @@ bool	P_TeleportMove(AActor* thing, const DVector3 &pos, bool telefrag, bool modi
 
 	if (tmf.touchmidtex) tmf.dropoffz = tmf.floorz;
 
-	FMultiBlockThingsIterator mit2(grouplist, thing->Level, pos.X, pos.Y, pos.Z, thing->Height, thing->radius, false, sector);
+	FMultiBlockThingsIterator mit2(grouplist, pos.X, pos.Y, pos.Z, thing->Height, thing->radius, false, sector);
 	FMultiBlockThingsIterator::CheckResult cres2;
 
 	while (mit2.Next(&cres2))
@@ -459,7 +459,7 @@ bool	P_TeleportMove(AActor* thing, const DVector3 &pos, bool telefrag, bool modi
 		// [RH] Z-Check
 		// But not if not MF2_PASSMOBJ or MF3_DONTOVERLAP are set!
 		// Otherwise those things would get stuck inside each other.
-		if ((thing->flags2 & MF2_PASSMOBJ || th->flags4 & MF4_ACTLIKEBRIDGE) && !(thing->Level->i_compatflags & COMPATF_NO_PASSMOBJ))
+		if ((thing->flags2 & MF2_PASSMOBJ || th->flags4 & MF4_ACTLIKEBRIDGE) && !(i_compatflags & COMPATF_NO_PASSMOBJ))
 		{
 			if (!(th->flags3 & thing->flags3 & MF3_DONTOVERLAP))
 			{
@@ -516,7 +516,7 @@ bool	P_TeleportMove(AActor* thing, const DVector3 &pos, bool telefrag, bool modi
 		// If this teleport was caused by a move, P_TryMove() will handle the
 		// sector transition messages better than we can here.
 		// This needs to be compatibility optioned because some older maps exploited this missing feature.
-		if (!(thing->flags6 & MF6_INTRYMOVE) && !(thing->Level->i_compatflags2 & COMPATF2_TELEPORT))
+		if (!(thing->flags6 & MF6_INTRYMOVE) && !(i_compatflags2 & COMPATF2_TELEPORT))
 		{
 			thing->CheckSectorTransition(oldsec);
 		}
@@ -850,7 +850,7 @@ bool PIT_CheckLine(FMultiBlockLinesIterator &mit, FMultiBlockLinesIterator::Chec
 	// into being friendly with the MBF flag automatically gain MF3_NOBLOCKMONST, so this
 	// just optionally generalizes the behavior to other friendly monsters.
 	bool NotBlocked = ((tm.thing->flags3 & MF3_NOBLOCKMONST)
-		|| ((tm.thing->Level->i_compatflags & COMPATF_NOBLOCKFRIENDS) && (tm.thing->flags & MF_FRIENDLY)));
+		|| ((i_compatflags & COMPATF_NOBLOCKFRIENDS) && (tm.thing->flags & MF_FRIENDLY)));
 
 	uint32_t ProjectileBlocking = ML_BLOCKEVERYTHING | ML_BLOCKPROJECTILE;
 	if ( tm.thing->flags8 & MF8_BLOCKASPLAYER ) ProjectileBlocking |= ML_BLOCK_PLAYERS | ML_BLOCKING;
@@ -975,7 +975,7 @@ bool PIT_CheckLine(FMultiBlockLinesIterator &mit, FMultiBlockLinesIterator::Chec
 		// better than Strife's handling of rails, which lets you jump into rails
 		// from either side. How long until somebody reports this as a bug and I'm
 		// forced to say, "It's not a bug. It's a feature?" Ugh.
-		(!(ld->GetLevel()->flags2 & LEVEL2_RAILINGHACK) ||
+		(!(level.flags2 & LEVEL2_RAILINGHACK) ||
 		open.bottom == tm.thing->Sector->floorplane.ZatPoint(ref)))
 	{
 		open.bottom += 32;
@@ -1082,7 +1082,7 @@ static bool PIT_CheckPortal(FMultiBlockLinesIterator &mit, FMultiBlockLinesItera
 	tm.thing->AddZ(zofs);
 
 	FBoundingBox pbox(cres.Position.X, cres.Position.Y, tm.thing->radius);
-	FBlockLinesIterator it(tm.thing->Level, pbox);
+	FBlockLinesIterator it(pbox);
 	bool ret = false;
 	line_t *ld;
 
@@ -1163,7 +1163,7 @@ static bool CanAttackHurt(AActor *victim, AActor *shooter)
 	// to harm / be harmed by anything.
 	if (!victim->player && !shooter->player)
 	{
-		int infight = victim->Level->GetInfighting();
+		int infight = G_SkillProperty(SKILLP_Infight);
 		if (infight < 0 && (victim->flags7 & MF7_FORCEINFIGHTING)) infight = 0;	// This must override the 'no infight' setting to take effect.
 
 		if (infight < 0)
@@ -1263,7 +1263,7 @@ bool PIT_CheckThing(FMultiBlockThingsIterator &it, FMultiBlockThingsIterator::Ch
 	// walking on other actors and unblocking is too messy through restricted portal types so disable it.
 	if (!(cres.portalflags & FFCF_RESTRICTEDPORTAL))
 	{
-		if (!(thing->Level->i_compatflags & COMPATF_NO_PASSMOBJ) && !(tm.thing->flags & (MF_FLOAT | MF_MISSILE | MF_SKULLFLY | MF_NOGRAVITY)) &&
+		if (!(i_compatflags & COMPATF_NO_PASSMOBJ) && !(tm.thing->flags & (MF_FLOAT | MF_MISSILE | MF_SKULLFLY | MF_NOGRAVITY)) &&
 			(thing->flags & MF_SOLID) && (thing->flags4 & MF4_ACTLIKEBRIDGE))
 		{
 			// [RH] Let monsters walk on actors as well as floors
@@ -1311,7 +1311,7 @@ bool PIT_CheckThing(FMultiBlockThingsIterator &it, FMultiBlockThingsIterator::Ch
 
 	// [RH] If the other thing is a bridge, then treat the moving thing as if it had MF2_PASSMOBJ, so
 	// you can use a scrolling floor to move scenery items underneath a bridge.
-	if ((tm.thing->flags2 & MF2_PASSMOBJ || thing->flags4 & MF4_ACTLIKEBRIDGE) && !(tm.thing->Level->i_compatflags & COMPATF_NO_PASSMOBJ))
+	if ((tm.thing->flags2 & MF2_PASSMOBJ || thing->flags4 & MF4_ACTLIKEBRIDGE) && !(i_compatflags & COMPATF_NO_PASSMOBJ))
 	{ // check if a mobj passed over/under another object
 		if (!(tm.thing->flags & MF_MISSILE) ||
 			!(tm.thing->flags2 & MF2_RIP) ||
@@ -1359,17 +1359,16 @@ bool PIT_CheckThing(FMultiBlockThingsIterator &it, FMultiBlockThingsIterator::Ch
 			P_DamageMobj(thing, NULL, NULL, thing->health, NAME_None, DMG_FORCED);  // kill object
 			return true;
 		}
-		auto Level = thing->Level;
 
 		// Check for MF6_BUMPSPECIAL
 		// By default, only players can activate things by bumping into them
 		if ((thing->flags6 & MF6_BUMPSPECIAL) && ((tm.thing->player != NULL)
 			|| ((thing->activationtype & THINGSPEC_MonsterTrigger) && (tm.thing->flags3 & MF3_ISMONSTER))
 			|| ((thing->activationtype & THINGSPEC_MissileTrigger) && (tm.thing->flags & MF_MISSILE))
-			) && (Level->maptime > thing->lastbump)) // Leave the bumper enough time to go away
+			) && (level.maptime > thing->lastbump)) // Leave the bumper enough time to go away
 		{
 			if (P_ActivateThingSpecial(thing, tm.thing))
-				thing->lastbump = Level->maptime + TICRATE;
+				thing->lastbump = level.maptime + TICRATE;
 		}
 	}
 
@@ -1442,7 +1441,7 @@ bool PIT_CheckThing(FMultiBlockThingsIterator &it, FMultiBlockThingsIterator::Ch
 		{
 			clipheight = thing->projectilepassheight;
 		}
-		else if (thing->projectilepassheight < 0 && (thing->Level->i_compatflags & COMPATF_MISSILECLIP))
+		else if (thing->projectilepassheight < 0 && (i_compatflags & COMPATF_MISSILECLIP))
 		{
 			clipheight = -thing->projectilepassheight;
 		}
@@ -1669,7 +1668,7 @@ bool P_CheckPosition(AActor *thing, const DVector2 &pos, FCheckPosition &tm, boo
 	tm.pos.Y = pos.Y;
 	tm.pos.Z = thing->Z();
 
-	newsec = tm.sector = P_PointInSector(thing->Level, pos);
+	newsec = tm.sector = P_PointInSector(pos);
 	tm.ceilingline = thing->BlockingLine = NULL;
 
 	// Retrieve the base floor / ceiling from the target location.
@@ -1751,7 +1750,7 @@ bool P_CheckPosition(AActor *thing, const DVector2 &pos, FCheckPosition &tm, boo
 	FBoundingBox box(pos.X, pos.Y, thing->radius);
 
 	FPortalGroupArray pcheck;
-	FMultiBlockThingsIterator it2(pcheck, thing->Level, pos.X, pos.Y, thing->Z(), thing->Height, thing->radius, false, newsec);
+	FMultiBlockThingsIterator it2(pcheck, pos.X, pos.Y, thing->Z(), thing->Height, thing->radius, false, newsec);
 	FMultiBlockThingsIterator::CheckResult tcres;
 
 	while ((it2.Next(&tcres)))
@@ -1764,7 +1763,7 @@ bool P_CheckPosition(AActor *thing, const DVector2 &pos, FCheckPosition &tm, boo
 			AActor *BlockingMobj = thing->BlockingMobj;
 
 			// If this blocks through a restricted line portal, it will always completely block.
-			if (BlockingMobj == NULL || (thing->Level->i_compatflags & COMPATF_NO_PASSMOBJ) || (tcres.portalflags & FFCF_RESTRICTEDPORTAL))
+			if (BlockingMobj == NULL || (i_compatflags & COMPATF_NO_PASSMOBJ) || (tcres.portalflags & FFCF_RESTRICTEDPORTAL))
 			{ // Thing slammed into something; don't let it move now.
 				thing->Height = realHeight;
 				return false;
@@ -1823,7 +1822,7 @@ bool P_CheckPosition(AActor *thing, const DVector2 &pos, FCheckPosition &tm, boo
 		return (thing->BlockingMobj = thingblocker) == NULL;
 
 
-	FMultiBlockLinesIterator it(pcheck, thing->Level, pos.X, pos.Y, thing->Z(), thing->Height, thing->radius, newsec);
+	FMultiBlockLinesIterator it(pcheck, pos.X, pos.Y, thing->Z(), thing->Height, thing->radius, newsec);
 	FMultiBlockLinesIterator::CheckResult lcres;
 
 	double thingdropoffz = tm.floorz;
@@ -2034,15 +2033,15 @@ void P_FakeZMovement(AActor *mo)
 		{
 			double dist = mo->Distance2D(mo->target);
 			double delta = mo->target->Center() - mo->Z();
-			if (delta < 0 /*&& dist < -(delta * 3)*/)
+			if (delta < 0 && dist < -(delta * 3))
 				mo->AddZ(-mo->FloatSpeed);
-			else if (delta > 0 /*&& dist < (delta * 3)*/)
+			else if (delta > 0 && dist < (delta * 3))
 				mo->AddZ(mo->FloatSpeed);
 		}
 	}
 	if (mo->player && mo->flags&MF_NOGRAVITY && (mo->Z() > mo->floorz) && !mo->IsNoClip2())
 	{
-		mo->AddZ(DAngle(4.5 * mo->Level->maptime).Sin());
+		mo->AddZ(DAngle(4.5 * level.maptime).Sin());
 	}
 
 	//
@@ -2067,10 +2066,9 @@ void P_FakeZMovement(AActor *mo)
 
 static void CheckForPushSpecial(line_t *line, int side, AActor *mobj, DVector2 *posforwindowcheck)
 {
-	auto Level = mobj->Level;
 	if (line->special && !(mobj->flags6 & MF6_NOTRIGGER))
 	{
-		if (posforwindowcheck && !(Level->i_compatflags2 & COMPATF2_PUSHWINDOW) && line->backsector != NULL)
+		if (posforwindowcheck && !(i_compatflags2 & COMPATF2_PUSHWINDOW) && line->backsector != NULL)
 		{ // Make sure this line actually blocks us and is not a window
 			// or similar construct we are standing inside of.
 			DVector3 pos = mobj->PosRelative(line);
@@ -2113,7 +2111,7 @@ static void CheckForPushSpecial(line_t *line, int side, AActor *mobj, DVector2 *
 		}
 		else if (mobj->flags2 & MF2_IMPACT)
 		{
-			if ((Level->flags2 & LEVEL2_MISSILESACTIVATEIMPACT) ||
+			if ((level.flags2 & LEVEL2_MISSILESACTIVATEIMPACT) ||
 				!(mobj->flags & MF_MISSILE) ||
 				(mobj->target == NULL))
 			{
@@ -2177,7 +2175,7 @@ bool P_TryMove(AActor *thing, const DVector2 &pos,
 				goto pushline;
 			}
 		}
-		if (!(tm.thing->flags2 & MF2_PASSMOBJ) || (tm.thing->Level->i_compatflags & COMPATF_NO_PASSMOBJ))
+		if (!(tm.thing->flags2 & MF2_PASSMOBJ) || (i_compatflags & COMPATF_NO_PASSMOBJ))
 		{
 			thing->SetZ(oldz);
 			thing->flags6 &= ~MF6_INTRYMOVE;
@@ -2276,7 +2274,7 @@ bool P_TryMove(AActor *thing, const DVector2 &pos,
 
 		// compatibility check: Doom originally did not allow monsters to cross dropoffs at all.
 		// If the compatibility flag is on, only allow this when the velocity comes from a scroller
-		if ((thing->Level->i_compatflags & COMPATF_CROSSDROPOFF) && !(thing->flags4 & MF4_SCROLLMOVE))
+		if ((i_compatflags & COMPATF_CROSSDROPOFF) && !(thing->flags4 & MF4_SCROLLMOVE))
 		{
 			dropoff = false;
 		}
@@ -2598,7 +2596,7 @@ bool P_TryMove(AActor *thing, const DVector2 &pos,
 		thing->UnlinkFromWorld(&ctx);
 		thing->SetXYZ(thing->PosRelative(tm.portalgroup));
 		thing->Prev += thing->Pos() - oldpos;
-		thing->Sector = P_PointInSector(thing->Level, thing->Pos());
+		thing->Sector = P_PointInSector(thing->Pos());
 		thing->PrevPortalGroup = thing->Sector->PortalGroup;
 		thing->LinkToWorld(&ctx);
 
@@ -2828,7 +2826,7 @@ void FSlide::HitSlideLine(line_t* ld)
 			tmmove.Y /= 2; // absorb half the velocity
 			if (slidemo->player && slidemo->health > 0 && !(slidemo->player->cheats & CF_PREDICTING))
 			{
-				//S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!//   ^
+				S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!//   ^
 			}
 		}																		//   |
 		else																	// phares
@@ -2844,7 +2842,7 @@ void FSlide::HitSlideLine(line_t* ld)
 			tmmove.Y = -tmmove.Y / 2;
 			if (slidemo->player && slidemo->health > 0 && !(slidemo->player->cheats & CF_PREDICTING))
 			{
-				//S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
+				S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
 			}
 		}
 		else
@@ -2876,7 +2874,7 @@ void FSlide::HitSlideLine(line_t* ld)
 		movelen /= 2; // absorb
 		if (slidemo->player && slidemo->health > 0 && !(slidemo->player->cheats & CF_PREDICTING))
 		{
-			//S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
+			S_Sound(slidemo, CHAN_VOICE, "*grunt", 1, ATTN_IDLE); // oooff!
 		}
 		tmmove = moveangle.ToVector(movelen);
 	}	
@@ -2930,7 +2928,7 @@ void FSlide::HitSlideLine(line_t* ld)
 void FSlide::SlideTraverse(const DVector2 &start, const DVector2 &end)
 {
 	FLineOpening open;
-	FPathTraverse it(slidemo->Level, start.X, start.Y, end.X, end.Y, PT_ADDLINES);
+	FPathTraverse it(start.X, start.Y, end.X, end.Y, PT_ADDLINES);
 	intercept_t *in;
 
 	while ((in = it.Next()))
@@ -2965,7 +2963,7 @@ void FSlide::SlideTraverse(const DVector2 &start, const DVector2 &end)
 			goto isblocking;
 		}
 		if (li->flags & ML_BLOCKMONSTERS && !((slidemo->flags3 & MF3_NOBLOCKMONST)
-			|| ((slidemo->Level->i_compatflags & COMPATF_NOBLOCKFRIENDS) && (slidemo->flags & MF_FRIENDLY))))
+			|| ((i_compatflags & COMPATF_NOBLOCKFRIENDS) && (slidemo->flags & MF_FRIENDLY))))
 		{
 			goto isblocking;
 		}
@@ -3287,7 +3285,7 @@ const secplane_t * P_CheckSlopeWalk(AActor *actor, DVector2 &move)
 bool FSlide::BounceTraverse(const DVector2 &start, const DVector2 &end)
 {
 	FLineOpening open;
-	FPathTraverse it(slidemo->Level, start.X, start.Y, end.X, end.Y, PT_ADDLINES);
+	FPathTraverse it(start.X, start.Y, end.X, end.Y, PT_ADDLINES);
 	intercept_t *in;
 
 	while ((in = it.Next()))
@@ -3821,7 +3819,7 @@ struct aim_t
 		newtrace.aimdir = position == sector_t::ceiling? aim_t::aim_up : aim_t::aim_down;
 		newtrace.startpos = startpos + entersec->GetPortalDisplacement(position);
 		newtrace.startfrac = frac + 1. / attackrange;	// this is to skip the transition line to the portal which would produce a bogus opening
-		newtrace.lastsector = P_PointInSector(entersec->Level, newtrace.startpos + aimtrace * newtrace.startfrac);
+		newtrace.lastsector = P_PointInSector(newtrace.startpos + aimtrace * newtrace.startfrac);
 		newtrace.limitz = portalz;
 		if (aimdebug)
 			Printf("-----Entering %s portal from sector %d to sector %d\n", position ? "ceiling" : "floor", lastsector->sectornum, newtrace.lastsector->sectornum);
@@ -3860,7 +3858,7 @@ struct aim_t
 
 		DVector2 pos = newtrace.startpos + newtrace.aimtrace * newtrace.startfrac;
 
-		newtrace.lastsector = P_PointInSector(li->GetLevel(), pos);
+		newtrace.lastsector = P_PointInSector(pos);
 		P_TranslatePortalZ(li, limitz);
 		if (aimdebug)
 			Printf("-----Entering line portal from sector %d to sector %d\n", lastsector->sectornum, newtrace.lastsector->sectornum);
@@ -3979,7 +3977,7 @@ struct aim_t
 		if (ceilingportalstate) EnterSectorPortal(sector_t::ceiling, 0, lastsector, toppitch, MIN<DAngle>(0., bottompitch));
 		if (floorportalstate) EnterSectorPortal(sector_t::floor, 0, lastsector, MAX<DAngle>(0., toppitch), bottompitch);
 
-		FPathTraverse it(shootthing->Level, startpos.X, startpos.Y, aimtrace.X, aimtrace.Y, PT_ADDLINES | PT_ADDTHINGS | PT_COMPATIBLE | PT_DELTA, startfrac);
+		FPathTraverse it(startpos.X, startpos.Y, aimtrace.X, aimtrace.Y, PT_ADDLINES | PT_ADDTHINGS | PT_COMPATIBLE | PT_DELTA, startfrac);
 		intercept_t *in;
 
 		if (aimdebug)
@@ -4267,12 +4265,11 @@ DAngle P_AimLineAttack(AActor *t1, DAngle angle, double distance, FTranslatedLin
 	int flags, AActor *target, AActor *friender)
 {
 	double shootz = t1->Center() - t1->Floorclip + t1->AttackOffset();
-	auto Level = t1->Level;
 
 	// can't shoot outside view angles
 	if (vrange == 0)
 	{
-		if (t1->player == NULL || !Level->IsFreelookAllowed())
+		if (t1->player == NULL || !level.IsFreelookAllowed())
 		{
 			vrange = 35.;
 		}
@@ -4378,7 +4375,6 @@ AActor *P_LineAttack(AActor *t1, DAngle angle, double distance,
 	DAngle pitch, int damage, FName damageType, PClassActor *pufftype, int flags, FTranslatedLineTarget*victim, int *actualdamage, 
 	double sz, double offsetforward, double offsetside)
 {
-	auto Level = t1->Level;
 	bool nointeract = !!(flags & LAF_NOINTERACT);
 	DVector3 direction;
 	double shootz;
@@ -4446,7 +4442,7 @@ AActor *P_LineAttack(AActor *t1, DAngle angle, double distance,
 
 		AActor *tempuff = NULL;
 		if (pufftype != NULL)
-			tempuff = Spawn(Level, pufftype, t1->Pos(), ALLOW_REPLACE);
+			tempuff = Spawn(pufftype, t1->Pos(), ALLOW_REPLACE);
 		if (tempuff != NULL)
 		{
 			TData.PuffSpecies = tempuff->GetSpecies();
@@ -4543,7 +4539,7 @@ AActor *P_LineAttack(AActor *t1, DAngle angle, double distance,
 			// position a bit closer for puffs
 			if (nointeract || trace.HitType != TRACE_HitWall || ((trace.Line->special != Line_Horizon) || spawnSky))
 			{
-				DVector2 pos = P_GetOffsetPosition(t1->Level, trace.HitPos.X, trace.HitPos.Y, -trace.HitVector.X * 4, -trace.HitVector.Y * 4);
+				DVector2 pos = P_GetOffsetPosition(trace.HitPos.X, trace.HitPos.Y, -trace.HitVector.X * 4, -trace.HitVector.Y * 4);
 				puff = P_SpawnPuff(t1, pufftype, DVector3(pos, trace.HitPos.Z - trace.HitVector.Z * 4), trace.SrcAngleFromTarget,
 					trace.SrcAngleFromTarget - 90, 0, puffFlags);
 				puff->radius = 1/65536.;
@@ -4592,9 +4588,9 @@ AActor *P_LineAttack(AActor *t1, DAngle angle, double distance,
 			// Hit a thing, so it could be either a puff or blood
 			DVector3 bleedpos = trace.HitPos;
 			// position a bit closer for puffs/blood if using compatibility mode.
-			if (Level->i_compatflags & COMPATF_HITSCAN)
+			if (i_compatflags & COMPATF_HITSCAN)
 			{
-				DVector2 ofs = P_GetOffsetPosition(t1->Level, bleedpos.X, bleedpos.Y, -10 * trace.HitVector.X, -10 * trace.HitVector.Y);
+				DVector2 ofs = P_GetOffsetPosition(bleedpos.X, bleedpos.Y, -10 * trace.HitVector.X, -10 * trace.HitVector.Y);
 				bleedpos.X = ofs.X;
 				bleedpos.Y = ofs.Y;
 				bleedpos.Z -= -10 * trace.HitVector.Z;
@@ -4785,7 +4781,7 @@ int P_LineTrace(AActor *t1, DAngle angle, double distance,
 	if ( flags & TRF_BLOCKSELF )
 	{
 		bool Projectile = ( (t1->flags&MF_MISSILE) || (t1->BounceFlags&BOUNCE_MBF) );
-		bool NotBlocked = ( (t1->flags3&MF3_NOBLOCKMONST) || ( (t1->Level->i_compatflags&COMPATF_NOBLOCKFRIENDS) && (t1->flags&MF_FRIENDLY) ) );
+		bool NotBlocked = ( (t1->flags3&MF3_NOBLOCKMONST) || ( (i_compatflags&COMPATF_NOBLOCKFRIENDS) && (t1->flags&MF_FRIENDLY) ) );
 		if ( Projectile ) lflags |= ML_BLOCKPROJECTILE;
 		if ( !Projectile || (t1->flags8&MF8_BLOCKASPLAYER) ) lflags |= ML_BLOCKING;
 		if ( !NotBlocked ) lflags |= ML_BLOCKMONSTERS;
@@ -5103,9 +5099,9 @@ static ETraceStatus ProcessRailHit(FTraceResults &res, void *userdata)
 	newhit.HitActor = res.Actor;
 	newhit.HitPos = res.HitPos;
 	newhit.HitAngle = res.SrcAngleFromTarget;
-	if (res.Actor->Level->i_compatflags & COMPATF_HITSCAN)
+	if (i_compatflags & COMPATF_HITSCAN)
 	{
-		DVector2 ofs = P_GetOffsetPosition(res.Actor->Level, newhit.HitPos.X, newhit.HitPos.Y, -10 * res.HitVector.X, -10 * res.HitVector.Y);
+		DVector2 ofs = P_GetOffsetPosition(newhit.HitPos.X, newhit.HitPos.Y, -10 * res.HitVector.X, -10 * res.HitVector.Y);
 		newhit.HitPos.X = ofs.X;
 		newhit.HitPos.Y = ofs.Y;
 		newhit.HitPos.Z -= -10 * res.HitVector.Z;
@@ -5191,7 +5187,7 @@ void P_RailAttack(FRailParams *p)
 	// used as damage inflictor
 	AActor *thepuff = NULL;
 	
-	if (puffclass != NULL) thepuff = Spawn(source->Level, puffclass, source->Pos(), ALLOW_REPLACE);
+	if (puffclass != NULL) thepuff = Spawn(puffclass, source->Pos(), ALLOW_REPLACE);
 		rail_data.PuffSpecies = (thepuff != NULL) ? thepuff->GetSpecies() : NAME_None;
 
 	Trace(start, source->Sector, vec, p->distance, MF_SHOOTABLE, ML_BLOCKEVERYTHING, source, trace,	flags, ProcessRailHit, &rail_data);
@@ -5380,7 +5376,7 @@ bool P_TalkFacing(AActor *player)
 
 bool P_UseTraverse(AActor *usething, const DVector2 &start, const DVector2 &end, bool &foundline)
 {
-	FPathTraverse it(usething->Level, start.X, start.Y, end.X, end.Y, PT_ADDLINES | PT_ADDTHINGS);
+	FPathTraverse it(start.X, start.Y, end.X, end.Y, PT_ADDLINES | PT_ADDTHINGS);
 	intercept_t *in;
 	DVector3 xpos = { start.X, start.Y, usething->Z() };
 
@@ -5431,7 +5427,7 @@ bool P_UseTraverse(AActor *usething, const DVector2 &start, const DVector2 &end,
 				P_LineOpening(open, NULL, in->d.line, it.InterceptPoint(in));
 			}
 			if (open.range <= 0 ||
-				(in->d.line->special != 0 && (usething->Level->i_compatflags & COMPATF_USEBLOCKING)))
+				(in->d.line->special != 0 && (i_compatflags & COMPATF_USEBLOCKING)))
 			{
 				// [RH] Give sector a chance to intercept the use
 
@@ -5491,7 +5487,7 @@ bool P_UseTraverse(AActor *usething, const DVector2 &start, const DVector2 &end,
 			//[RH] And now I've changed it again. If the line is of type
 			//	   SPAC_USE, then it eats the use. Everything else passes
 			//	   it through, including SPAC_USETHROUGH.
-			if (usething->Level->i_compatflags & COMPATF_USEBLOCKING)
+			if (i_compatflags & COMPATF_USEBLOCKING)
 			{
 				if (in->d.line->activation & SPAC_UseThrough) continue;
 				else return true;
@@ -5523,7 +5519,7 @@ bool P_UseTraverse(AActor *usething, const DVector2 &start, const DVector2 &end,
 
 bool P_NoWayTraverse(AActor *usething, const DVector2 &start, const DVector2 &end)
 {
-	FPathTraverse it(usething->Level, start.X, start.Y, end.X, end.Y, PT_ADDLINES);
+	FPathTraverse it(start.X, start.Y, end.X, end.Y, PT_ADDLINES);
 	intercept_t *in;
 
 	while ((in = it.Next()))
@@ -5600,7 +5596,7 @@ int P_UsePuzzleItem(AActor *PuzzleItemUser, int PuzzleItemType)
 	start = PuzzleItemUser->GetPortalTransition(PuzzleItemUser->Height / 2);
 	end = PuzzleItemUser->Angles.Yaw.ToVector(usedist);
 
-	FPathTraverse it(PuzzleItemUser->Level, start.X, start.Y, end.X, end.Y, PT_DELTA | PT_ADDLINES | PT_ADDTHINGS);
+	FPathTraverse it(start.X, start.Y, end.X, end.Y, PT_DELTA | PT_ADDLINES | PT_ADDTHINGS);
 	intercept_t *in;
 
 	while ((in = it.Next()))
@@ -5628,7 +5624,7 @@ int P_UsePuzzleItem(AActor *PuzzleItemUser, int PuzzleItemType)
 				return false;
 			}
 			int args[3] = { in->d.line->args[2], in->d.line->args[3], in->d.line->args[4] };
-			P_StartScript(PuzzleItemUser->Level, PuzzleItemUser, in->d.line, in->d.line->args[1], NULL, args, 3, ACS_ALWAYS);
+			P_StartScript(PuzzleItemUser, in->d.line, in->d.line->args[1], NULL, args, 3, ACS_ALWAYS);
 			in->d.line->special = 0;
 			return true;
 		}
@@ -5643,7 +5639,7 @@ int P_UsePuzzleItem(AActor *PuzzleItemUser, int PuzzleItemType)
 			continue;
 		}
 		int args[3] = { mobj->args[2], mobj->args[3], mobj->args[4] };
-		P_StartScript(PuzzleItemUser->Level, PuzzleItemUser, NULL, mobj->args[1], NULL, args, 3, ACS_ALWAYS);
+		P_StartScript(PuzzleItemUser, NULL, mobj->args[1], NULL, args, 3, ACS_ALWAYS);
 		mobj->special = 0;
 		return true;
 	}
@@ -5840,7 +5836,7 @@ int P_RadiusAttack(AActor *bombspot, AActor *bombsource, int bombdamage, int bom
 	fulldamagedistance = clamp<int>(fulldamagedistance, 0, bombdistance - 1);
 
 	FPortalGroupArray grouplist(FPortalGroupArray::PGA_Full3d);
-	FMultiBlockThingsIterator it(grouplist, bombspot->Level, bombspot->X(), bombspot->Y(), bombspot->Z() - bombdistance, bombspot->Height + bombdistance*2, bombdistance, false, bombspot->Sector);
+	FMultiBlockThingsIterator it(grouplist, bombspot->X(), bombspot->Y(), bombspot->Z() - bombdistance, bombspot->Height + bombdistance*2, bombdistance, false, bombspot->Sector);
 	FMultiBlockThingsIterator::CheckResult cres;
 
 	if (flags & RADF_SOURCEISSPOT)
@@ -6171,8 +6167,7 @@ void P_DoCrunch(AActor *thing, FChangePosition *cpos)
 	if (!(thing && thing->CallGrind(true) && cpos)) return;
 	cpos->nofit = true;
 
-	auto Level = thing->Level;
-	if ((cpos->crushchange > 0) && !(Level->maptime & 3))
+	if ((cpos->crushchange > 0) && !(level.maptime & 3))
 	{
 		int newdam = P_DamageMobj(thing, NULL, NULL, cpos->crushchange, NAME_Crush);
 
@@ -6188,7 +6183,7 @@ void P_DoCrunch(AActor *thing, FChangePosition *cpos)
 				{
 					AActor *mo;
 
-					mo = Spawn(thing->Level, bloodcls, thing->PosPlusZ(thing->Height / 2), ALLOW_REPLACE);
+					mo = Spawn(bloodcls, thing->PosPlusZ(thing->Height / 2), ALLOW_REPLACE);
 
 					mo->Vel.X = pr_crunch.Random2() / 16.;
 					mo->Vel.Y = pr_crunch.Random2() / 16.;
@@ -6208,7 +6203,7 @@ void P_DoCrunch(AActor *thing, FChangePosition *cpos)
 				DAngle an = (M_Random() - 128) * (360./256);
 				if (cl_bloodtype >= 1)
 				{
-					P_DrawSplash2(thing->Level, 32,  thing->PosPlusZ(thing->Height/2), an, 2, thing->BloodColor);
+					P_DrawSplash2(32,  thing->PosPlusZ(thing->Height/2), an, 2, thing->BloodColor);
 				}
 			}
 			if (thing->CrushPainSound != 0 && !S_GetSoundPlayingInfo(thing, thing->CrushPainSound))
@@ -6770,20 +6765,17 @@ void SpawnShootDecal(AActor *t1, const FTraceResults &trace)
 static void SpawnDeepSplash(AActor *t1, const FTraceResults &trace, AActor *puff)
 {
 	const DVector3 *hitpos;
-	FLevelLocals *Level;
 	if (trace.Crossed3DWater)
 	{
 		hitpos = &trace.Crossed3DWaterPos;
-		Level = trace.Crossed3DWater->model->Level;
 	}
 	else if (trace.CrossedWater && trace.CrossedWater->heightsec)
 	{
 		hitpos = &trace.CrossedWaterPos;
-		Level = trace.CrossedWater->Level;
 	}
 	else return;
 
-	P_HitWater(puff != NULL ? puff : t1, P_PointInSector(Level, *hitpos), *hitpos);
+	P_HitWater(puff != NULL ? puff : t1, P_PointInSector(*hitpos), *hitpos);
 }
 
 //=============================================================================
@@ -6797,7 +6789,6 @@ static void SpawnDeepSplash(AActor *t1, const FTraceResults &trace, AActor *puff
 bool P_ActivateThingSpecial(AActor * thing, AActor * trigger, bool death)
 {
 	bool res = false;
-	auto Level = thing->Level;
 
 	// Target switching mechanism
 	if (thing->activationtype & THINGSPEC_ThingTargets)		thing->target = trigger;
@@ -6836,16 +6827,16 @@ bool P_ActivateThingSpecial(AActor * thing, AActor * trigger, bool death)
 	// Run the special, if any
 	if (thing->special)
 	{
-		res = !!P_ExecuteSpecial(thing->Level, thing->special, NULL,
+		res = !!P_ExecuteSpecial(thing->special, NULL,
 			// TriggerActs overrides the level flag, which only concerns thing activated by death
-			(((death && Level->flags & LEVEL_ACTOWNSPECIAL && !(thing->activationtype & THINGSPEC_TriggerActs))
+			(((death && level.flags & LEVEL_ACTOWNSPECIAL && !(thing->activationtype & THINGSPEC_TriggerActs))
 			|| (thing->activationtype & THINGSPEC_ThingActs)) // Who triggers?
 			? thing : trigger),
 			false, thing->args[0], thing->args[1], thing->args[2], thing->args[3], thing->args[4]);
 
 		// Clears the special if it was run on thing's death or if flag is set.
 		// Note that Hexen originally did not clear the special which some original maps depend on (e.g. the bell in HEXDD.)
-		if ((death && !(Level->flags2 & LEVEL2_HEXENHACK)) || (thing->activationtype & THINGSPEC_ClearSpecial && res)) thing->special = 0;
+		if ((death && !(level.flags2 & LEVEL2_HEXENHACK)) || (thing->activationtype & THINGSPEC_ClearSpecial && res)) thing->special = 0;
 	}
 
 	// Returns the result

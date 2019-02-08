@@ -75,9 +75,9 @@ void P_SetHealthGroupHealth(FHealthGroup* grp, int health)
 	}
 }
 
-void P_SetHealthGroupHealth(FLevelLocals *Level, int id, int health)
+void P_SetHealthGroupHealth(int id, int health)
 {
-	P_SetHealthGroupHealth(P_GetHealthGroup(Level, id), health);
+	P_SetHealthGroupHealth(P_GetHealthGroup(id), health);
 }
 
 void P_DamageHealthGroup(FHealthGroup* grp, void* object, AActor* source, int damage, FName damagetype, int side, int part, DVector3 position, bool isradius)
@@ -133,7 +133,6 @@ void P_DamageLinedef(line_t* line, AActor* source, int damage, FName damagetype,
 
 	line->health -= damage;
 	if (line->health < 0) line->health = 0;
-	auto Level = line->GetLevel();
 
 	// callbacks here
 	// first off, call special if needed
@@ -146,7 +145,7 @@ void P_DamageLinedef(line_t* line, AActor* source, int damage, FName damagetype,
 
 	if (dogroups && line->healthgroup)
 	{
-		FHealthGroup* grp = P_GetHealthGroup(Level, line->healthgroup);
+		FHealthGroup* grp = P_GetHealthGroup(line->healthgroup);
 		if (grp)
 			grp->health = line->health;
 		P_DamageHealthGroup(grp, line, source, damage, damagetype, side, -1, position, isradius);
@@ -167,7 +166,6 @@ void P_DamageSector(sector_t* sector, AActor* source, int damage, FName damagety
 
 	if (!damage) return;
 
-	auto Level = sector->Level;
 	int* sectorhealth;
 	int group;
 	int dmg;
@@ -211,7 +209,7 @@ void P_DamageSector(sector_t* sector, AActor* source, int damage, FName damagety
 
 	if (dogroups && group)
 	{
-		FHealthGroup* grp = P_GetHealthGroup(Level, group);
+		FHealthGroup* grp = P_GetHealthGroup(group);
 		if (grp)
 			grp->health = newhealth;
 		P_DamageHealthGroup(grp, sector, source, damage, damagetype, 0, part, position, isradius);
@@ -227,36 +225,35 @@ void P_DamageSector(sector_t* sector, AActor* source, int damage, FName damagety
 //
 //===========================================================================
 
-FHealthGroup* P_GetHealthGroup(FLevelLocals *Level, int id)
+FHealthGroup* P_GetHealthGroup(int id)
 {
-	FHealthGroup* grp = Level->healthGroups.CheckKey(id);
+	FHealthGroup* grp = level.healthGroups.CheckKey(id);
 	return grp;
 }
 
-FHealthGroup* P_GetHealthGroupOrNew(FLevelLocals *Level, int id, int health)
+FHealthGroup* P_GetHealthGroupOrNew(int id, int health)
 {
-	FHealthGroup* grp = Level->healthGroups.CheckKey(id);
+	FHealthGroup* grp = level.healthGroups.CheckKey(id);
 	if (!grp)
 	{
 		FHealthGroup newgrp;
 		newgrp.id = id;
 		newgrp.health = health;
-		grp = &(Level->healthGroups.Insert(id, newgrp));
+		grp = &(level.healthGroups.Insert(id, newgrp));
 	}
 	return grp;
 }
 
-void P_InitHealthGroups(FLevelLocals *Level)
+void P_InitHealthGroups()
 {
-	Level->healthGroups.Clear();
+	level.healthGroups.Clear();
 	TArray<int> groupsInError;
-
-	for (unsigned i = 0; i < Level->lines.Size(); i++)
+	for (unsigned i = 0; i < level.lines.Size(); i++)
 	{
-		line_t* lline = &Level->lines[i];
+		line_t* lline = &level.lines[i];
 		if (lline->healthgroup > 0)
 		{
-			FHealthGroup* grp = P_GetHealthGroupOrNew(Level, lline->healthgroup, lline->health);
+			FHealthGroup* grp = P_GetHealthGroupOrNew(lline->healthgroup, lline->health);
 			if (grp->health != lline->health)
 			{
 				Printf(TEXTCOLOR_RED "Warning: line %d in health group %d has different starting health (line health = %d, group health = %d)\n", i, lline->healthgroup, lline->health, grp->health);
@@ -267,12 +264,12 @@ void P_InitHealthGroups(FLevelLocals *Level)
 			grp->lines.Push(lline);
 		}
 	}
-	for (unsigned i = 0; i < Level->sectors.Size(); i++)
+	for (unsigned i = 0; i < level.sectors.Size(); i++)
 	{
-		sector_t* lsector = &Level->sectors[i];
+		sector_t* lsector = &level.sectors[i];
 		if (lsector->healthceilinggroup > 0)
 		{
-			FHealthGroup* grp = P_GetHealthGroupOrNew(Level, lsector->healthceilinggroup, lsector->healthceiling);
+			FHealthGroup* grp = P_GetHealthGroupOrNew(lsector->healthceilinggroup, lsector->healthceiling);
 			if (grp->health != lsector->healthceiling)
 			{
 				Printf(TEXTCOLOR_RED "Warning: sector ceiling %d in health group %d has different starting health (ceiling health = %d, group health = %d)\n", i, lsector->healthceilinggroup, lsector->healthceiling, grp->health);
@@ -284,7 +281,7 @@ void P_InitHealthGroups(FLevelLocals *Level)
 		}
 		if (lsector->healthfloorgroup > 0)
 		{
-			FHealthGroup* grp = P_GetHealthGroupOrNew(Level, lsector->healthfloorgroup, lsector->healthfloor);
+			FHealthGroup* grp = P_GetHealthGroupOrNew(lsector->healthfloorgroup, lsector->healthfloor);
 			if (grp->health != lsector->healthfloor)
 			{
 				Printf(TEXTCOLOR_RED "Warning: sector floor %d in health group %d has different starting health (floor health = %d, group health = %d)\n", i, lsector->healthfloorgroup, lsector->healthfloor, grp->health);
@@ -298,7 +295,7 @@ void P_InitHealthGroups(FLevelLocals *Level)
 	}
 	for (unsigned i = 0; i < groupsInError.Size(); i++)
 	{
-		FHealthGroup* grp = P_GetHealthGroup(Level, groupsInError[i]);
+		FHealthGroup* grp = P_GetHealthGroup(groupsInError[i]);
 		Printf(TEXTCOLOR_GOLD "Health group %d is using the highest found health value of %d", groupsInError[i], grp->health);
 	}
 }
@@ -523,7 +520,7 @@ void P_GeometryRadiusAttack(AActor* bombspot, AActor* bombsource, int bombdamage
 
 	// enumerate all lines around
 	FBoundingBox bombbox(bombspot->X(), bombspot->Y(), bombdistance);
-	FBlockLinesIterator it(bombspot->Level, bombbox);
+	FBlockLinesIterator it(bombbox);
 	line_t* ln;
 	int vc = validcount;
 	TArray<line_t*> lines;
@@ -843,7 +840,7 @@ FSerializer &Serialize(FSerializer &arc, const char *key, FHealthGroup& g, FHeal
 	return arc;
 }
 
-void P_SerializeHealthGroups(FLevelLocals *Level, FSerializer& arc)
+void P_SerializeHealthGroups(FSerializer& arc)
 {
 	// todo : stuff
 	if (arc.BeginArray("healthgroups"))
@@ -856,7 +853,7 @@ void P_SerializeHealthGroups(FLevelLocals *Level, FSerializer& arc)
 			{
 				FHealthGroup grp;
 				arc(nullptr, grp);
-				FHealthGroup* existinggrp = P_GetHealthGroup(Level, grp.id);
+				FHealthGroup* existinggrp = P_GetHealthGroup(grp.id);
 				if (!existinggrp)
 					continue;
 				existinggrp->health = grp.health;
@@ -864,7 +861,7 @@ void P_SerializeHealthGroups(FLevelLocals *Level, FSerializer& arc)
 		}
 		else
 		{
-			TMap<int, FHealthGroup>::ConstIterator it(Level->healthGroups);
+			TMap<int, FHealthGroup>::ConstIterator it(level.healthGroups);
 			TMap<int, FHealthGroup>::ConstPair* pair;
 			while (it.NextPair(pair))
 			{
@@ -886,11 +883,11 @@ DEFINE_FIELD_X(HealthGroup, FHealthGroup, health)
 DEFINE_FIELD_X(HealthGroup, FHealthGroup, sectors)
 DEFINE_FIELD_X(HealthGroup, FHealthGroup, lines)
 
-DEFINE_ACTION_FUNCTION(FLevelLocals, FindHealthGroup)
+DEFINE_ACTION_FUNCTION(FHealthGroup, Find)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_INT(id);
-	FHealthGroup* grp = P_GetHealthGroup(self, id);
+	FHealthGroup* grp = P_GetHealthGroup(id);
 	ACTION_RETURN_POINTER(grp);
 }
 
@@ -996,7 +993,7 @@ DEFINE_ACTION_FUNCTION(_Line, GetHealth)
 	PARAM_SELF_STRUCT_PROLOGUE(line_t);
 	if (self->healthgroup)
 	{
-		FHealthGroup* grp = P_GetHealthGroup(self->GetLevel(), self->healthgroup);
+		FHealthGroup* grp = P_GetHealthGroup(self->healthgroup);
 		if (grp) ACTION_RETURN_INT(grp->health);
 	}
 
@@ -1014,7 +1011,7 @@ DEFINE_ACTION_FUNCTION(_Line, SetHealth)
 	self->health = newhealth;
 	if (self->healthgroup)
 	{
-		FHealthGroup* grp = P_GetHealthGroup(self->GetLevel(), self->healthgroup);
+		FHealthGroup* grp = P_GetHealthGroup(self->healthgroup);
 		if (grp) P_SetHealthGroupHealth(grp, newhealth);
 	}
 
@@ -1027,15 +1024,14 @@ DEFINE_ACTION_FUNCTION(_Sector, GetHealth)
 	PARAM_INT(part);
 
 	FHealthGroup* grp;
-	auto Level = self->Level;
 	switch (part)
 	{
 	case SECPART_Floor:
-		ACTION_RETURN_INT((self->healthfloorgroup && (grp = P_GetHealthGroup(Level, self->healthfloorgroup))) ? grp->health : self->healthfloor);
+		ACTION_RETURN_INT((self->healthfloorgroup && (grp = P_GetHealthGroup(self->healthfloorgroup))) ? grp->health : self->healthfloor);
 	case SECPART_Ceiling:
-		ACTION_RETURN_INT((self->healthceilinggroup && (grp = P_GetHealthGroup(Level, self->healthceilinggroup))) ? grp->health : self->healthceiling);
+		ACTION_RETURN_INT((self->healthceilinggroup && (grp = P_GetHealthGroup(self->healthceilinggroup))) ? grp->health : self->healthceiling);
 	case SECPART_3D:
-		ACTION_RETURN_INT((self->health3dgroup && (grp = P_GetHealthGroup(Level, self->health3dgroup))) ? grp->health : self->health3d);
+		ACTION_RETURN_INT((self->health3dgroup && (grp = P_GetHealthGroup(self->health3dgroup))) ? grp->health : self->health3d);
 	default:
 		ACTION_RETURN_INT(0);
 	}
@@ -1070,7 +1066,7 @@ DEFINE_ACTION_FUNCTION(_Sector, SetHealth)
 		return 0;
 	}
 
-	FHealthGroup* grp = group ? P_GetHealthGroup(self->Level, group) : nullptr;
+	FHealthGroup* grp = group ? P_GetHealthGroup(group) : nullptr;
 	*health = newhealth;
 	if (grp) P_SetHealthGroupHealth(grp, newhealth);
 	return 0;

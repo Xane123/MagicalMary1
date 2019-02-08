@@ -19,8 +19,9 @@ class DBaseDecal : public DThinker
 	DECLARE_CLASS (DBaseDecal, DThinker)
 	HAS_OBJECT_POINTERS
 public:
-	static const int DEFAULT_STAT = STAT_DECAL;
-	DBaseDecal(FLevelLocals *l, double z = 0);
+	DBaseDecal ();
+	DBaseDecal(double z);
+	DBaseDecal(int statnum, double z);
 	DBaseDecal (const AActor *actor);
 	DBaseDecal (const DBaseDecal *basis);
 
@@ -54,16 +55,13 @@ protected:
 
 	static void SpreadLeft (double r, vertex_t *v1, side_t *feelwall, F3DFloor *ffloor, SpreadInfo *spread);
 	static void SpreadRight (double r, side_t *feelwall, double wallsize, F3DFloor *ffloor, SpreadInfo *spread);
-protected:
-	DBaseDecal() = default;
 };
 
 class DImpactDecal : public DBaseDecal
 {
 	DECLARE_CLASS (DImpactDecal, DBaseDecal)
 public:
-	static const int DEFAULT_STAT = STAT_AUTODECAL;
-	DImpactDecal(FLevelLocals *l, double z);
+	DImpactDecal(double z);
 	DImpactDecal (side_t *wall, const FDecalTemplate *templ);
 
 	static DImpactDecal *StaticCreate(const char *name, const DVector3 &pos, side_t *wall, F3DFloor * ffloor, PalEntry color = 0);
@@ -76,7 +74,7 @@ protected:
 	void CheckMax ();
 
 private:
-	DImpactDecal() {}
+	DImpactDecal();
 };
 
 class DFlashFader : public DThinker
@@ -128,7 +126,6 @@ class DEarthquake : public DThinker
 	DECLARE_CLASS (DEarthquake, DThinker)
 	HAS_OBJECT_POINTERS
 public:
-	static const int DEFAULT_STAT = STAT_EARTHQUAKE;
 	DEarthquake(AActor *center, int intensityX, int intensityY, int intensityZ, int duration,
 		int damrad, int tremrad, FSoundID quakesfx, int flags, 
 		double waveSpeedX, double waveSpeedY, double waveSpeedZ, int falloff, int highpoint, double rollIntensity, double rollWave);
@@ -154,7 +151,7 @@ public:
 	static int StaticGetQuakeIntensities(double ticFrac, AActor *viewer, FQuakeJiggers &jiggers);
 
 private:
-	DEarthquake() = default;
+	DEarthquake ();
 };
 
 #endif //__A_SHAREDGLOBAL_H__

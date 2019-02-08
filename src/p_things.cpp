@@ -52,12 +52,12 @@ FClassMap SpawnableThings;
 
 static FRandom pr_leadtarget ("LeadTarget");
 
-bool P_Thing_Spawn (FLevelLocals *Level, int tid, AActor *source, int type, DAngle angle, bool fog, int newtid)
+bool P_Thing_Spawn (int tid, AActor *source, int type, DAngle angle, bool fog, int newtid)
 {
 	int rtn = 0;
 	PClassActor *kind;
 	AActor *spot, *mobj;
-	FActorIterator iterator (Level, tid);
+	FActorIterator iterator (tid);
 
 	kind = P_GetSpawnableType(type);
 
@@ -68,7 +68,7 @@ bool P_Thing_Spawn (FLevelLocals *Level, int tid, AActor *source, int type, DAng
 	kind = kind->GetReplacement();
 
 	if ((GetDefaultByType(kind)->flags3 & MF3_ISMONSTER) && 
-		((dmflags & DF_NO_MONSTERS) || (Level->flags2 & LEVEL2_NOMONSTERS)))
+		((dmflags & DF_NO_MONSTERS) || (level.flags2 & LEVEL2_NOMONSTERS)))
 		return false;
 
 	if (tid == 0)
@@ -81,7 +81,7 @@ bool P_Thing_Spawn (FLevelLocals *Level, int tid, AActor *source, int type, DAng
 	}
 	while (spot != NULL)
 	{
-		mobj = Spawn (spot->Level, kind, spot->Pos(), ALLOW_REPLACE);
+		mobj = Spawn (kind, spot->Pos(), ALLOW_REPLACE);
 
 		if (mobj != NULL)
 		{
@@ -144,16 +144,16 @@ bool P_MoveThing(AActor *source, const DVector3 &pos, bool fog)
 	}
 }
 
-bool P_Thing_Move (FLevelLocals *Level, int tid, AActor *source, int mapspot, bool fog)
+bool P_Thing_Move (int tid, AActor *source, int mapspot, bool fog)
 {
 	AActor *target;
 
 	if (tid != 0)
 	{
-		FActorIterator iterator1(Level, tid);
+		FActorIterator iterator1(tid);
 		source = iterator1.Next();
 	}
-	FActorIterator iterator2 (Level, mapspot);
+	FActorIterator iterator2 (mapspot);
 	target = iterator2.Next ();
 
 	if (source != NULL && target != NULL)
@@ -237,15 +237,6 @@ static void VelIntercept(AActor *targ, AActor *mobj, double speed, bool aimpitch
 			const DVector2 velocity = mobj->Vel.XY();
 			mobj->Angles.Pitch = -VecToAngle(velocity.Length(), mobj->Vel.Z);
 		}
-		if (aimpitch) // [MC] Ripped right out of A_FaceMovementDirection
-		{
-			const DVector2 velocity = mobj->Vel.XY();
-			mobj->Angles.Pitch = -VecToAngle(velocity.Length(), mobj->Vel.Z);
-		}
-	}
-	else
-	{
-		InterceptDefaultAim(mobj, targ, aim, speed);
 	}
 	else
 	{
@@ -265,14 +256,14 @@ DEFINE_ACTION_FUNCTION(AActor, VelIntercept)
 	return 0;
 }
 
-bool P_Thing_Projectile (FLevelLocals *Level, int tid, AActor *source, int type, const char *type_name, DAngle angle,
+bool P_Thing_Projectile (int tid, AActor *source, int type, const char *type_name, DAngle angle,
 	double speed, double vspeed, int dest, AActor *forcedest, int gravity, int newtid,
 	bool leadTarget)
 {
 	int rtn = 0;
 	PClassActor *kind;
 	AActor *spot, *mobj, *targ = forcedest;
-	FActorIterator iterator (Level, tid);
+	FActorIterator iterator (tid);
 	int defflags3;
 
 	if (type_name == NULL)
@@ -292,8 +283,8 @@ bool P_Thing_Projectile (FLevelLocals *Level, int tid, AActor *source, int type,
 	kind = kind->GetReplacement();
 
 	defflags3 = GetDefaultByType(kind)->flags3;
-	if ((defflags3 & MF3_ISMONSTER) &&
-		((dmflags & DF_NO_MONSTERS) || (Level->flags2 & LEVEL2_NOMONSTERS)))
+	if ((defflags3 & MF3_ISMONSTER) && 
+		((dmflags & DF_NO_MONSTERS) || (level.flags2 & LEVEL2_NOMONSTERS)))
 		return false;
 
 	if (tid == 0)
@@ -306,7 +297,7 @@ bool P_Thing_Projectile (FLevelLocals *Level, int tid, AActor *source, int type,
 	}
 	while (spot != NULL)
 	{
-		FActorIterator tit (Level, dest);
+		FActorIterator tit (dest);
 
 		if (dest == 0 || (targ = tit.Next()))
 		{
@@ -325,7 +316,7 @@ bool P_Thing_Projectile (FLevelLocals *Level, int tid, AActor *source, int type,
 				{
 					z -= spot->Floorclip;
 				}
-				mobj = Spawn (Level, kind, spot->PosAtZ(z), ALLOW_REPLACE);
+				mobj = Spawn (kind, spot->PosAtZ(z), ALLOW_REPLACE);
 
 				if (mobj)
 				{
@@ -403,9 +394,9 @@ bool P_Thing_Projectile (FLevelLocals *Level, int tid, AActor *source, int type,
 	return rtn != 0;
 }
 
-int P_Thing_Damage (FLevelLocals *Level,int tid, AActor *whofor0, int amount, FName type)
+int P_Thing_Damage (int tid, AActor *whofor0, int amount, FName type)
 {
-	FActorIterator iterator (Level, tid);
+	FActorIterator iterator (tid);
 	int count = 0;
 	AActor *actor;
 
@@ -763,7 +754,7 @@ int P_Thing_CheckProximity(AActor *self, PClass *classname, double distance, int
 	const bool ptrWillChange = !!(flags & (CPXF_SETTARGET | CPXF_SETMASTER | CPXF_SETTRACER));
 	const bool ptrDistPref = !!(flags & (CPXF_CLOSEST | CPXF_FARTHEST));
 
-	TThinkerIterator<AActor> it(self->Level);
+	TThinkerIterator<AActor> it;
 	AActor *mo, *dist = nullptr;
 
 	// [MC] Process of elimination, I think, will get through this as quickly and 
@@ -961,22 +952,20 @@ int P_Thing_Warp(AActor *caller, AActor *reference, double xofs, double yofs, do
 			{
 				caller->Vel.Zero();
 			}
-			
-			auto &Displacements = caller->Level->Displacements;
 
 			// this is no fun with line portals 
 			if (flags & WARPF_WARPINTERPOLATION)
 			{
 				// This just translates the movement but doesn't change the vector
-				DVector3 displacedold  = old + Displacements.getOffset(oldpgroup, caller->Sector->PortalGroup);
+				DVector3 displacedold  = old + level.Displacements.getOffset(oldpgroup, caller->Sector->PortalGroup);
 				caller->Prev += caller->Pos() - displacedold;
 				caller->PrevPortalGroup = caller->Sector->PortalGroup;
 			}
 			else if (flags & WARPF_COPYINTERPOLATION)
 			{
 				// Map both positions of the reference actor to the current portal group
-				DVector3 displacedold = old + Displacements.getOffset(reference->PrevPortalGroup, caller->Sector->PortalGroup);
-				DVector3 displacedref = old + Displacements.getOffset(reference->Sector->PortalGroup, caller->Sector->PortalGroup);
+				DVector3 displacedold = old + level.Displacements.getOffset(reference->PrevPortalGroup, caller->Sector->PortalGroup);
+				DVector3 displacedref = old + level.Displacements.getOffset(reference->Sector->PortalGroup, caller->Sector->PortalGroup);
 				caller->Prev = caller->Pos() + displacedold - displacedref;
 				caller->PrevPortalGroup = caller->Sector->PortalGroup;
 			}

@@ -49,7 +49,6 @@
 #include "d_player.h"
 #include "w_wad.h"
 #include "vm.h"
-#include "g_levellocals.h"
 
 IMPLEMENT_CLASS(DBot, false, true)
 
@@ -64,8 +63,8 @@ IMPLEMENT_POINTERS_END
 
 DEFINE_FIELD(DBot, dest)
 
-DBot::DBot (FLevelLocals *Level)
-	:DThinker(Level)
+DBot::DBot ()
+: DThinker(STAT_BOT)
 {
 	Clear ();
 }
@@ -139,7 +138,7 @@ void DBot::Tick ()
 {
 	Super::Tick ();
 
-	if (player->mo == nullptr || currentSession->isFrozen())
+	if (player->mo == nullptr || bglobal.freeze)
 	{
 		return;
 	}

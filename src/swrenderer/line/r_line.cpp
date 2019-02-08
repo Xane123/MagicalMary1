@@ -60,7 +60,7 @@
 #include "swrenderer/things/r_decal.h"
 #include "swrenderer/r_renderthread.h"
 
-CVAR(Bool, r_fogboundary, false, 0)
+CVAR(Bool, r_fogboundary, true, 0)
 CVAR(Bool, r_drawmirrors, true, 0)
 EXTERN_CVAR(Bool, r_fullbrightignoresectorcolor);
 
@@ -444,7 +444,7 @@ namespace swrenderer
 						double yscale = (pic ? pic->GetScale().Y : 1.0) * sidedef->GetTextureYScale(side_t::mid);
 						fixed_t xoffset = FLOAT2FIXED(sidedef->GetTextureXOffset(side_t::mid));
 
-						if (pic && pic->useWorldPanning(sidedef->sector->Level))
+						if (pic && pic->useWorldPanning())
 						{
 							xoffset = xs_RoundToInt(xoffset * lwallscale);
 						}
@@ -591,7 +591,7 @@ namespace swrenderer
 			if (mFrontSector->e && mFrontSector->e->XFloor.lightlist.Size()) return true;
 			if (mBackSector->e && mBackSector->e->XFloor.lightlist.Size()) return true;
 
-			if (sidedef->GetTexture(side_t::mid).isValid() && ((mFrontSector->Level->ib_compatflags & BCOMPATF_CLIPMIDTEX) || (linedef->flags & (ML_CLIP_MIDTEX | ML_WRAP_MIDTEX)) || sidedef->Flags & (WALLF_CLIP_MIDTEX | WALLF_WRAP_MIDTEX))) return true;
+			if (sidedef->GetTexture(side_t::mid).isValid() && ((ib_compatflags & BCOMPATF_CLIPMIDTEX) || (linedef->flags & (ML_CLIP_MIDTEX | ML_WRAP_MIDTEX)) || sidedef->Flags & (WALLF_CLIP_MIDTEX | WALLF_WRAP_MIDTEX))) return true;
 
 			return false;
 		}
@@ -653,7 +653,7 @@ namespace swrenderer
 
 				if (sidedef->GetTexture(side_t::mid).isValid())
 				{
-					if (mFrontSector->Level->ib_compatflags & BCOMPATF_CLIPMIDTEX) return true;
+					if (ib_compatflags & BCOMPATF_CLIPMIDTEX) return true;
 					if (linedef->flags & (ML_CLIP_MIDTEX | ML_WRAP_MIDTEX)) return true;
 					if (sidedef->Flags & (WALLF_CLIP_MIDTEX | WALLF_WRAP_MIDTEX)) return true;
 				}
@@ -822,7 +822,7 @@ namespace swrenderer
 				mTopPart.TextureMid = (mBackSector->GetPlaneTexZ(sector_t::ceiling) - Thread->Viewport->viewpoint.Pos.Z) * yrepeat;
 			}
 		}
-		if (mTopPart.Texture->useWorldPanning(mLineSegment->frontsector->Level))
+		if (mTopPart.Texture->useWorldPanning())
 		{
 			mTopPart.TextureMid += rowoffset * yrepeat;
 		}
@@ -880,7 +880,7 @@ namespace swrenderer
 				mMiddlePart.TextureMid = (mFrontSector->GetPlaneTexZ(sector_t::ceiling) - Thread->Viewport->viewpoint.Pos.Z) * yrepeat + mMiddlePart.Texture->GetHeight();
 			}
 		}
-		if (mMiddlePart.Texture->useWorldPanning(mLineSegment->frontsector->Level))
+		if (mMiddlePart.Texture->useWorldPanning())
 		{
 			mMiddlePart.TextureMid += rowoffset * yrepeat;
 		}
@@ -947,7 +947,7 @@ namespace swrenderer
 				mBottomPart.TextureMid = (mBackSector->GetPlaneTexZ(sector_t::floor) - Thread->Viewport->viewpoint.Pos.Z) * yrepeat + mBottomPart.Texture->GetHeight();
 			}
 		}
-		if (mBottomPart.Texture->useWorldPanning(mLineSegment->frontsector->Level))
+		if (mBottomPart.Texture->useWorldPanning())
 		{
 			mBottomPart.TextureMid += rowoffset * yrepeat;
 		}
@@ -1122,7 +1122,7 @@ namespace swrenderer
 			lwallscale = xscale;
 		}
 		fixed_t offset;
-		if (mTopPart.Texture->useWorldPanning(mLineSegment->frontsector->Level))
+		if (mTopPart.Texture->useWorldPanning())
 		{
 			offset = xs_RoundToInt(mTopPart.TextureOffsetU * xscale);
 		}
@@ -1153,7 +1153,7 @@ namespace swrenderer
 			lwallscale = xscale;
 		}
 		fixed_t offset;
-		if (mMiddlePart.Texture->useWorldPanning(mLineSegment->frontsector->Level))
+		if (mMiddlePart.Texture->useWorldPanning())
 		{
 			offset = xs_RoundToInt(mMiddlePart.TextureOffsetU * xscale);
 		}
@@ -1185,7 +1185,7 @@ namespace swrenderer
 			lwallscale = xscale;
 		}
 		fixed_t offset;
-		if (mBottomPart.Texture->useWorldPanning(mLineSegment->frontsector->Level))
+		if (mBottomPart.Texture->useWorldPanning())
 		{
 			offset = xs_RoundToInt(mBottomPart.TextureOffsetU * xscale);
 		}

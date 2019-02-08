@@ -103,7 +103,6 @@
 static FRandom pr_playerinspecialsector ("PlayerInSpecialSector");
 
 EXTERN_CVAR(Bool, cl_predict_specials)
-EXTERN_CVAR(Bool, forcewater)
 
 
 // killough 3/7/98: Initialize generalized scrolling
@@ -113,16 +112,16 @@ void P_SpawnPushers ();		// phares 3/20/98
 
 
 // [RH] Check dmflags for noexit and respond accordingly
-bool FLevelLocals::CheckIfExitIsGood (AActor *self, level_info_t *info)
+bool CheckIfExitIsGood (AActor *self, level_info_t *info)
 {
-	cluster_info_t *clusterdef;
+	cluster_info_t *cluster;
 
 	// The world can always exit itself.
 	if (self == NULL)
 		return true;
 
-	// We must kill all monsters to exit the Level
-	if ((dmflags2 & DF2_KILL_MONSTERS) && killed_monsters != total_monsters)
+	// We must kill all monsters to exit the level.
+	if ((dmflags2 & DF2_KILL_MONSTERS) && level.killed_monsters != level.total_monsters)
 		return false;
 
 	// Is this a deathmatch game and we're not allowed to exit?
@@ -135,15 +134,15 @@ bool FLevelLocals::CheckIfExitIsGood (AActor *self, level_info_t *info)
 	if (self->health <= 0 &&
 		!multiplayer &&
 		info != NULL &&
-		info->cluster == cluster &&
-		(clusterdef = FindClusterInfo(cluster)) != NULL &&
-		clusterdef->flags & CLUSTER_HUB)
+		info->cluster == level.cluster &&
+		(cluster = FindClusterInfo(level.cluster)) != NULL &&
+		cluster->flags & CLUSTER_HUB)
 	{
 		return false;
 	}
 	if (deathmatch && gameaction != ga_completed)
 	{
-		Printf ("%s exited the level\n", self->player->userinfo.GetName());
+		Printf ("%s exited the level.\n", self->player->userinfo.GetName());
 	}
 	return true;
 }
@@ -165,7 +164,6 @@ bool P_ActivateLine (line_t *line, AActor *mo, int side, int activationType, DVe
 	INTBOOL repeat;
 	INTBOOL buttonSuccess;
 	uint8_t special;
-	auto Level = line->GetLevel();
 
 	if (!P_TestActivateLine (line, mo, side, activationType, optpos))
 	{
@@ -183,7 +181,7 @@ bool P_ActivateLine (line_t *line, AActor *mo, int side, int activationType, DVe
 	lineActivation = line->activation;
 	repeat = line->flags & ML_REPEAT_SPECIAL;
 	buttonSuccess = false;
-	buttonSuccess = P_ExecuteSpecial(Level, line->special,
+	buttonSuccess = P_ExecuteSpecial(line->special,
 					line, mo, side == 1, line->args[0],
 					line->args[1], line->args[2],
 					line->args[3], line->args[4]);
@@ -206,13 +204,13 @@ bool P_ActivateLine (line_t *line, AActor *mo, int side, int activationType, DVe
 	}
 	// some old WADs use this method to create walls that change the texture when shot.
 	else if (activationType == SPAC_Impact &&					// only for shootable triggers
-		(line->GetLevel()->flags2 & LEVEL2_DUMMYSWITCHES) &&				// this is only a compatibility setting for an old hack!
+		(level.flags2 & LEVEL2_DUMMYSWITCHES) &&				// this is only a compatibility setting for an old hack!
 		!repeat &&												// only non-repeatable triggers
 		(special<Generic_Floor || special>Generic_Crusher) &&	// not for Boom's generalized linedefs
 		special &&												// not for lines without a special
-		Level->tagManager.LineHasID(line, line->args[0]) &&							// Safety check: exclude edited UDMF linedefs or ones that don't map the tag to args[0]
+		tagManager.LineHasID(line, line->args[0]) &&							// Safety check: exclude edited UDMF linedefs or ones that don't map the tag to args[0]
 		line->args[0] &&										// only if there's a tag (which is stored in the first arg)
-		Level->tagManager.FindFirstSectorFromTag (line->args[0]) == -1)			// only if no sector is tagged to this linedef
+		P_FindFirstSectorFromTag (line->args[0]) == -1)			// only if no sector is tagged to this linedef
 	{
 		P_ChangeSwitchTexture (line->sidedef[0], repeat, special);
 		line->special = 0;
@@ -317,7 +315,7 @@ bool P_TestActivateLine (line_t *line, AActor *mo, int side, int activationType,
 		// lax activation checks, monsters can also activate certain lines
 		// even without them being marked as monster activate-able. This is
 		// the default for non-Hexen maps in Hexen format.
-		if (!(line->GetLevel()->flags2 & LEVEL2_LAXMONSTERACTIVATION))
+		if (!(level.flags2 & LEVEL2_LAXMONSTERACTIVATION))
 		{
 			return false;
 		}
@@ -404,7 +402,7 @@ bool P_PredictLine(line_t *line, AActor *mo, int side, int activationType)
 	if (line->locknumber > 0) return false;
 	lineActivation = line->activation;
 	buttonSuccess = false;
-	buttonSuccess = P_ExecuteSpecial(line->GetLevel(), line->special,
+	buttonSuccess = P_ExecuteSpecial(line->special,
 		line, mo, side == 1, line->args[0],
 		line->args[1], line->args[2],
 		line->args[3], line->args[4]);
@@ -440,8 +438,6 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 	// Has hit ground.
 	AActor *ironfeet;
 
-	auto Level = sector->Level;
-
 	// [RH] Apply any customizable damage
 	if (sector->damageamount > 0)
 	{
@@ -463,12 +459,12 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 				player->hazardtype = sector->damagetype;
 				player->hazardinterval = sector->damageinterval;
 			}
-			else if (Level->maptime % sector->damageinterval == 0)
+			else if (level.time % sector->damageinterval == 0)
 			{
 				if (!(player->cheats & (CF_GODMODE|CF_GODMODE2))) P_DamageMobj(player->mo, NULL, NULL, sector->damageamount, sector->damagetype);
 				if ((sector->Flags & SECF_ENDLEVEL) && player->health <= 10 && (!deathmatch || !(dmflags & DF_NO_EXIT)))
 				{
-					G_ExitLevel(player->mo->Level, 0, false);
+					G_ExitLevel(0, false);
 				}
 				if (sector->Flags & SECF_DMGTERRAINFX)
 				{
@@ -479,7 +475,7 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 	}
 	else if (sector->damageamount < 0)
 	{
-		if (Level->maptime % sector->damageinterval == 0)
+		if (level.time % sector->damageinterval == 0)
 		{
 			P_GiveBody(player->mo, -sector->damageamount, 100);
 		}
@@ -488,7 +484,7 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 	if (sector->isSecret())
 	{
 		sector->ClearSecret();
-		P_GiveSecret(Level, player->mo, true, true, sector->Index());
+		P_GiveSecret(player->mo, true, true, sector->Index());
 	}
 }
 
@@ -522,14 +518,14 @@ static void DoSectorDamage(AActor *actor, sector_t *sec, int amount, FName type,
 	P_DamageMobj (actor, NULL, NULL, amount, type, dflags);
 }
 
-void P_SectorDamage(FLevelLocals *Level, int tag, int amount, FName type, PClassActor *protectClass, int flags)
+void P_SectorDamage(int tag, int amount, FName type, PClassActor *protectClass, int flags)
 {
-	FSectorTagIterator itr(Level->tagManager, tag);
+	FSectorTagIterator itr(tag);
 	int secnum;
 	while ((secnum = itr.Next()) >= 0)
 	{
 		AActor *actor, *next;
-		sector_t *sec = &Level->sectors[secnum];
+		sector_t *sec = &level.sectors[secnum];
 
 		// Do for actors in this sector.
 		for (actor = sec->thinglist; actor != NULL; actor = next)
@@ -583,7 +579,7 @@ void P_SectorDamage(FLevelLocals *Level, int tag, int amount, FName type, PClass
 CVAR(Bool, showsecretsector, false, 0)
 CVAR(Bool, cl_showsecretmessage, true, CVAR_ARCHIVE)
 
-void P_GiveSecret(FLevelLocals *Level, AActor *actor, bool printmessage, bool playsound, int sectornum)
+void P_GiveSecret(AActor *actor, bool printmessage, bool playsound, int sectornum)
 {
 	if (actor != NULL)
 	{
@@ -614,16 +610,16 @@ void P_GiveSecret(FLevelLocals *Level, AActor *actor, bool printmessage, bool pl
 			if (playsound) S_Sound (CHAN_AUTO | CHAN_UI, "misc/secret", 1, ATTN_NORM);
 		}
 	}
-	Level->found_secrets++;
+	level.found_secrets++;
 }
 
 DEFINE_ACTION_FUNCTION(FLevelLocals, GiveSecret)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_OBJECT(activator, AActor);
 	PARAM_BOOL(printmessage);
 	PARAM_BOOL(playsound);
-	P_GiveSecret(self, activator, printmessage, playsound, -1);
+	P_GiveSecret(activator, printmessage, playsound, -1);
 	return 0;
 }
 
@@ -635,10 +631,8 @@ DEFINE_ACTION_FUNCTION(FLevelLocals, GiveSecret)
 
 void P_PlayerOnSpecialFlat (player_t *player, int floorType)
 {
-	auto Level = player->mo->Level;
-
 	if (Terrains[floorType].DamageAmount &&
-		!(Level->maptime & Terrains[floorType].DamageTimeMask))
+		!(level.time & Terrains[floorType].DamageTimeMask))
 	{
 		AActor *ironfeet = NULL;
 
@@ -675,37 +669,59 @@ void P_PlayerOnSpecialFlat (player_t *player, int floorType)
 //
 EXTERN_CVAR (Float, timelimit)
 
-void P_UpdateSpecials (FLevelLocals *Level)
+void P_UpdateSpecials ()
 {
 	// LEVEL TIMER
 	if (deathmatch && timelimit)
 	{
-		if (Level->maptime >= (int)(timelimit * TICRATE * 60))
+		if (level.maptime >= (int)(timelimit * TICRATE * 60))
 		{
 			Printf ("%s\n", GStrings("TXT_TIMELIMIT"));
-			G_ExitLevel(Level, 0, false);
+			G_ExitLevel(0, false);
 		}
 	}
 }
+
+
 
 //
 // SPECIAL SPAWNING
 //
 
+CUSTOM_CVAR (Bool, forcewater, false, CVAR_ARCHIVE|CVAR_SERVERINFO)
+{
+	if (gamestate == GS_LEVEL)
+	{
+		for (auto &sec : level.sectors)
+		{
+			sector_t *hsec = sec.GetHeightSec();
+			if (hsec && !(hsec->MoreFlags & SECMF_UNDERWATER))
+			{
+				if (self)
+				{
+					hsec->MoreFlags |= SECMF_FORCEDUNDERWATER;
+				}
+				else
+				{
+					hsec->MoreFlags &= ~SECMF_FORCEDUNDERWATER;
+				}
+			}
+		}
+	}
+}
+
 class DLightTransfer : public DThinker
 {
 	DECLARE_CLASS (DLightTransfer, DThinker)
 
-	DLightTransfer() = default;
+	DLightTransfer() {}
 public:
-	static const int DEFAULT_STAT = STAT_LIGHTTRANSFER;
-
 	DLightTransfer (sector_t *srcSec, int target, bool copyFloor);
 	void Serialize(FSerializer &arc);
 	void Tick ();
 
 protected:
-	void DoTransfer (int level, int target, bool floor);
+	static void DoTransfer (int level, int target, bool floor);
 
 	sector_t *Source;
 	int TargetTag;
@@ -725,7 +741,6 @@ void DLightTransfer::Serialize(FSerializer &arc)
 }
 
 DLightTransfer::DLightTransfer (sector_t *srcSec, int target, bool copyFloor)
-	: DThinker(srcSec->Level)
 {
 	int secnum;
 
@@ -734,19 +749,19 @@ DLightTransfer::DLightTransfer (sector_t *srcSec, int target, bool copyFloor)
 	CopyFloor = copyFloor;
 	DoTransfer (LastLight = srcSec->lightlevel, target, copyFloor);
 
-	auto Level = Source->Level;
 	if (copyFloor)
 	{
-		FSectorTagIterator itr(Level->tagManager, target);
+		FSectorTagIterator itr(target);
 		while ((secnum = itr.Next()) >= 0)
-			Level->sectors[secnum].ChangeFlags(sector_t::floor, 0, PLANEF_ABSLIGHTING);
+			level.sectors[secnum].ChangeFlags(sector_t::floor, 0, PLANEF_ABSLIGHTING);
 	}
 	else
 	{
-		FSectorTagIterator itr(Level->tagManager, target);
+		FSectorTagIterator itr(target);
 		while ((secnum = itr.Next()) >= 0)
-			Level->sectors[secnum].ChangeFlags(sector_t::ceiling, 0, PLANEF_ABSLIGHTING);
+			level.sectors[secnum].ChangeFlags(sector_t::ceiling, 0, PLANEF_ABSLIGHTING);
 	}
+	ChangeStatNum (STAT_LIGHTTRANSFER);
 }
 
 void DLightTransfer::Tick ()
@@ -764,18 +779,17 @@ void DLightTransfer::DoTransfer (int llevel, int target, bool floor)
 {
 	int secnum;
 
-	auto Level = Source->Level;
 	if (floor)
 	{
-		FSectorTagIterator itr(Level->tagManager, target);
+		FSectorTagIterator itr(target);
 		while ((secnum = itr.Next()) >= 0)
-			Level->sectors[secnum].SetPlaneLight(sector_t::floor, llevel);
+			level.sectors[secnum].SetPlaneLight(sector_t::floor, llevel);
 	}
 	else
 	{
-		FSectorTagIterator itr(Level->tagManager, target);
+		FSectorTagIterator itr(target);
 		while ((secnum = itr.Next()) >= 0)
-			Level->sectors[secnum].SetPlaneLight(sector_t::ceiling, llevel);
+			level.sectors[secnum].SetPlaneLight(sector_t::ceiling, llevel);
 	}
 }
 
@@ -790,15 +804,14 @@ class DWallLightTransfer : public DThinker
 	};
 
 	DECLARE_CLASS (DWallLightTransfer, DThinker)
-	DWallLightTransfer() = default;
+	DWallLightTransfer() {}
 public:
-	static const int DEFAULT_STAT = STAT_LIGHTTRANSFER;
 	DWallLightTransfer (sector_t *srcSec, int target, uint8_t flags);
 	void Serialize(FSerializer &arc);
 	void Tick ();
 
 protected:
-	void DoTransfer (short level, int target, uint8_t flags);
+	static void DoTransfer (short level, int target, uint8_t flags);
 
 	sector_t *Source;
 	int TargetID;
@@ -818,7 +831,6 @@ void DWallLightTransfer::Serialize(FSerializer &arc)
 }
 
 DWallLightTransfer::DWallLightTransfer (sector_t *srcSec, int target, uint8_t flags)
-	: DThinker(srcSec->Level)
 {
 	int linenum;
 	int wallflags;
@@ -837,20 +849,20 @@ DWallLightTransfer::DWallLightTransfer (sector_t *srcSec, int target, uint8_t fl
 		wallflags = WALLF_ABSLIGHTING | WALLF_NOFAKECONTRAST;
 	}
 
-	FLineIdIterator itr(Level->tagManager, target);
-	auto Level = Source->Level;
+	FLineIdIterator itr(target);
 	while ((linenum = itr.Next()) >= 0)
 	{
-		if (flags & WLF_SIDE1 && Level->lines[linenum].sidedef[0] != NULL)
+		if (flags & WLF_SIDE1 && level.lines[linenum].sidedef[0] != NULL)
 		{
-			Level->lines[linenum].sidedef[0]->Flags |= wallflags;
+			level.lines[linenum].sidedef[0]->Flags |= wallflags;
 		}
 
-		if (flags & WLF_SIDE2 && Level->lines[linenum].sidedef[1] != NULL)
+		if (flags & WLF_SIDE2 && level.lines[linenum].sidedef[1] != NULL)
 		{
-			Level->lines[linenum].sidedef[1]->Flags |= wallflags;
+			level.lines[linenum].sidedef[1]->Flags |= wallflags;
 		}
 	}
+	ChangeStatNum(STAT_LIGHTTRANSFER);
 }
 
 void DWallLightTransfer::Tick ()
@@ -868,11 +880,10 @@ void DWallLightTransfer::DoTransfer (short lightlevel, int target, uint8_t flags
 {
 	int linenum;
 
-	auto Level = Source->Level;
-	FLineIdIterator itr(Level->tagManager, target);
+	FLineIdIterator itr(target);
 	while ((linenum = itr.Next()) >= 0)
 	{
-		line_t *line = &Level->lines[linenum];
+		line_t *line = &level.lines[linenum];
 
 		if (flags & WLF_SIDE1 && line->sidedef[0] != NULL)
 		{
@@ -897,7 +908,7 @@ void DWallLightTransfer::DoTransfer (short lightlevel, int target, uint8_t flags
 
 static void SetupFloorPortal (AActor *point)
 {
-	NActorIterator it (point->Level, NAME_LowerStackLookOnly, point->tid);
+	NActorIterator it (NAME_LowerStackLookOnly, point->tid);
 	sector_t *Sector = point->Sector;
 	auto skyv = it.Next();
 	if (skyv != nullptr)
@@ -912,7 +923,7 @@ static void SetupFloorPortal (AActor *point)
 
 static void SetupCeilingPortal (AActor *point)
 {
-	NActorIterator it (point->Level, NAME_UpperStackLookOnly, point->tid);
+	NActorIterator it (NAME_UpperStackLookOnly, point->tid);
 	sector_t *Sector = point->Sector;
 	auto skyv = it.Next();
 	if (skyv != nullptr)
@@ -925,9 +936,9 @@ static void SetupCeilingPortal (AActor *point)
 	}
 }
 
-void P_SetupPortals(FLevelLocals *Level)
+void P_SetupPortals()
 {
-	TThinkerIterator<AActor> it(Level, "StackPoint");
+	TThinkerIterator<AActor> it("StackPoint");
 	AActor *pt;
 	TArray<AActor *> points;
 
@@ -947,21 +958,21 @@ void P_SetupPortals(FLevelLocals *Level)
 	}
 	// the semantics here are incredibly lax so the final setup can only be done once all portals have been created,
 	// because later stackpoints will happily overwrite info in older ones, if there are multiple links.
-	for (auto &s : Level->sectorPortals)
+	for (auto &s : level.sectorPortals)
 	{
 		if (s.mType == PORTS_STACKEDSECTORTHING && s.mSkybox)
 		{
-			for (auto &ss : Level->sectorPortals)
+			for (auto &ss : level.sectorPortals)
 			{
 				if (ss.mType == PORTS_STACKEDSECTORTHING && ss.mSkybox == s.mSkybox->target)
 				{
-					s.mPartner = unsigned((&ss) - &Level->sectorPortals[0]);
+					s.mPartner = unsigned((&ss) - &level.sectorPortals[0]);
 				}
 			}
 		}
 	}
 	// Now we can finally set the displacement and delete the stackpoint reference.
-	for (auto &s : Level->sectorPortals)
+	for (auto &s : level.sectorPortals)
 	{
 		if (s.mType == PORTS_STACKEDSECTORTHING && s.mSkybox)
 		{
@@ -982,7 +993,7 @@ static void SetPortal(sector_t *sector, int plane, unsigned pnum, double alpha)
 			if (sector->GetAlpha(sector_t::ceiling) == 1.)
 				sector->SetAlpha(sector_t::ceiling, alpha);
 
-			if (sector->Level->sectorPortals[pnum].mFlags & PORTSF_SKYFLATONLY)
+			if (level.sectorPortals[pnum].mFlags & PORTSF_SKYFLATONLY)
 				sector->SetTexture(sector_t::ceiling, skyflatnum);
 		}
 	}
@@ -995,21 +1006,21 @@ static void SetPortal(sector_t *sector, int plane, unsigned pnum, double alpha)
 		if (sector->GetAlpha(sector_t::floor) == 1.)
 			sector->SetAlpha(sector_t::floor, alpha);
 
-		if (sector->Level->sectorPortals[pnum].mFlags & PORTSF_SKYFLATONLY)
+		if (level.sectorPortals[pnum].mFlags & PORTSF_SKYFLATONLY)
 			sector->SetTexture(sector_t::floor, skyflatnum);
 	}
 }
 
-static void CopyPortal(FLevelLocals *Level, int sectortag, int plane, unsigned pnum, double alpha, bool tolines)
+static void CopyPortal(int sectortag, int plane, unsigned pnum, double alpha, bool tolines)
 {
 	int s;
-	FSectorTagIterator itr(Level->tagManager, sectortag);
+	FSectorTagIterator itr(sectortag);
 	while ((s = itr.Next()) >= 0)
 	{
-		SetPortal(&Level->sectors[s], plane, pnum, alpha);
+		SetPortal(&level.sectors[s], plane, pnum, alpha);
 	}
 
-	for (auto &line : Level->lines)
+	for (auto &line : level.lines)
 	{
 		// Check if this portal needs to be copied to other sectors
 		// This must be done here to ensure that it gets done only after the portal is set up
@@ -1024,10 +1035,10 @@ static void CopyPortal(FLevelLocals *Level, int sectortag, int plane, unsigned p
 			}
 			else
 			{
-				FSectorTagIterator itr(Level->tagManager, line.args[0]);
+				FSectorTagIterator itr(line.args[0]);
 				while ((s = itr.Next()) >= 0)
 				{
-					SetPortal(&Level->sectors[s], plane, pnum, alpha);
+					SetPortal(&level.sectors[s], plane, pnum, alpha);
 				}
 			}
 		}
@@ -1041,10 +1052,10 @@ static void CopyPortal(FLevelLocals *Level, int sectortag, int plane, unsigned p
 			}
 			else
 			{
-				FLineIdIterator itr(Level->tagManager, line.args[0]);
+				FLineIdIterator itr(line.args[0]);
 				while ((s = itr.Next()) >= 0)
 				{
-					Level->lines[s].portaltransferred = pnum;
+					level.lines[s].portaltransferred = pnum;
 				}
 			}
 		}
@@ -1052,10 +1063,10 @@ static void CopyPortal(FLevelLocals *Level, int sectortag, int plane, unsigned p
 }
 
 
-void P_SpawnPortal(FLevelLocals *Level, line_t *line, int sectortag, int plane, int bytealpha, int linked)
+void P_SpawnPortal(line_t *line, int sectortag, int plane, int bytealpha, int linked)
 {
 	if (plane < 0 || plane > 2 || (linked && plane == 2)) return;
-	for (auto &oline : Level->lines)
+	for (auto &oline : level.lines)
 	{
 		// We must look for the reference line with a linear search unless we want to waste the line ID for it
 		// which is not a good idea.
@@ -1069,7 +1080,7 @@ void P_SpawnPortal(FLevelLocals *Level, line_t *line, int sectortag, int plane, 
 			DVector2 pos1 = line->v1->fPos() + line->Delta() / 2;
 			DVector2 pos2 = oline.v1->fPos() + oline.Delta() / 2;
 			unsigned pnum = P_GetPortal(linked ? PORTS_LINKEDPORTAL : PORTS_PORTAL, plane, line->frontsector, oline.frontsector, pos2 - pos1);
-			CopyPortal(Level, sectortag, plane, pnum, bytealpha / 255., false);
+			CopyPortal(sectortag, plane, pnum, bytealpha / 255., false);
 			return;
 		}
 	}
@@ -1083,7 +1094,7 @@ void P_SpawnSkybox(AActor *origin)
 	if (Sector == NULL)
 	{
 		Printf("Sector not initialized for SkyCamCompat\n");
-		origin->Sector = Sector = P_PointInSector(origin->Level, origin->Pos());
+		origin->Sector = Sector = P_PointInSector(origin->Pos());
 	}
 	if (Sector)
 	{
@@ -1093,7 +1104,7 @@ void P_SpawnSkybox(AActor *origin)
 			{
 				// We found the setup linedef for this skybox, so let's use it for our init.
 				unsigned pnum = P_GetSkyboxPortal(origin);
-				CopyPortal(Sector->Level, refline->args[0], refline->args[2], pnum, 0, true);
+				CopyPortal(refline->args[0], refline->args[2], pnum, 0, true);
 				return;
 			}
 		}
@@ -1135,7 +1146,7 @@ void P_InitSectorSpecial(sector_t *sector, int special)
 	if (sector->special & SECRET_MASK)
 	{
 		sector->Flags |= SECF_SECRET | SECF_WASSECRET;
-		sector->Level->total_secrets++;
+		level.total_secrets++;
 	}
 	if (sector->special & FRICTION_MASK)
 	{
@@ -1177,7 +1188,7 @@ void P_InitSectorSpecial(sector_t *sector, int special)
 		break;
 
 	case dSector_DoorCloseIn30:
-		CreateThinker<DDoor>(sector, DDoor::doorWaitClose, 2, 0, 0, 30 * TICRATE);
+		Create<DDoor>(sector, DDoor::doorWaitClose, 2, 0, 0, 30 * TICRATE);
 		break;
 			
 	case dDamage_End:
@@ -1185,7 +1196,7 @@ void P_InitSectorSpecial(sector_t *sector, int special)
 		break;
 
 	case dSector_DoorRaiseIn5Mins:
-		CreateThinker<DDoor> (sector, DDoor::doorWaitRaise, 2, TICRATE*30/7, 0, 5*60*TICRATE);
+		Create<DDoor> (sector, DDoor::doorWaitRaise, 2, TICRATE*30/7, 0, 5*60*TICRATE);
 		break;
 
 	case dFriction_Low:
@@ -1287,10 +1298,9 @@ void P_InitSectorSpecial(sector_t *sector, int special)
 
 void P_SpawnSpecials (MapLoader *ml)
 {
-	auto Level = ml->Level;
-	P_SetupPortals(Level);
+	P_SetupPortals();
 
-	for (auto &sec : Level->sectors)
+	for (auto &sec : level.sectors)
 	{
 		if (sec.special == 0)
 			continue;
@@ -1309,14 +1319,14 @@ void P_SpawnSpecials (MapLoader *ml)
 	P_SpawnFriction();	// phares 3/12/98: New friction model using linedefs
 	P_SpawnPushers();	// phares 3/20/98: New pusher model using linedefs
 
-	TThinkerIterator<AActor> it2(Level, "SkyCamCompat");
+	TThinkerIterator<AActor> it2("SkyCamCompat");
 	AActor *pt2;
 	while ((pt2 = it2.Next()))
 	{
 		P_SpawnSkybox(pt2);
 	}
 
-	for (auto &line : Level->lines)
+	for (auto &line : level.lines)
 	{
 		switch (line.special)
 		{
@@ -1349,18 +1359,18 @@ void P_SpawnSpecials (MapLoader *ml)
 				{
 					sec->MoreFlags |= SECMF_IGNOREHEIGHTSEC;
 				}
-				else Level->HasHeightSecs = true;
+				else level.HasHeightSecs = true;
 				if (line.args[1] & 32)
 				{
 					sec->MoreFlags |= SECMF_NOFAKELIGHT;
 				}
-				FSectorTagIterator itr(Level->tagManager, line.args[0]);
+				FSectorTagIterator itr(line.args[0]);
 				while ((s = itr.Next()) >= 0)
 				{
-					Level->sectors[s].heightsec = sec;
-					sec->e->FakeFloor.Sectors.Push(&Level->sectors[s]);
-					Level->sectors[s].MoreFlags |= (sec->MoreFlags & SECMF_IGNOREHEIGHTSEC);	// copy this to the destination sector for easier checking.
-					Level->sectors[s].AdjustFloorClip();
+					level.sectors[s].heightsec = sec;
+					sec->e->FakeFloor.Sectors.Push(&level.sectors[s]);
+					level.sectors[s].MoreFlags |= (sec->MoreFlags & SECMF_IGNOREHEIGHTSEC);	// copy this to the destination sector for easier checking.
+					level.sectors[s].AdjustFloorClip();
 				}
 				break;
 			}
@@ -1368,19 +1378,19 @@ void P_SpawnSpecials (MapLoader *ml)
 		// killough 3/16/98: Add support for setting
 		// floor lighting independently (e.g. lava)
 		case Transfer_FloorLight:
-			CreateThinker<DLightTransfer> (line.frontsector, line.args[0], true);
+			Create<DLightTransfer> (line.frontsector, line.args[0], true);
 			break;
 
 		// killough 4/11/98: Add support for setting
 		// ceiling lighting independently
 		case Transfer_CeilingLight:
-			CreateThinker<DLightTransfer>(line.frontsector, line.args[0], false);
+			Create<DLightTransfer> (line.frontsector, line.args[0], false);
 			break;
 
 		// [Graf Zahl] Add support for setting lighting
 		// per wall independently
 		case Transfer_WallLight:
-			CreateThinker<DWallLightTransfer>(line.frontsector, line.args[0], line.args[1]);
+			Create<DWallLightTransfer> (line.frontsector, line.args[0], line.args[1]);
 			break;
 
 		case Sector_Attach3dMidtex:
@@ -1410,12 +1420,12 @@ void P_SpawnSpecials (MapLoader *ml)
 			// arg 4 = for the anchor only: alpha
 			if ((line.args[1] == 0 || line.args[1] == 6) && line.args[3] == 0)
 			{
-				P_SpawnPortal(Level, &line, line.args[0], line.args[2], line.args[4], line.args[1]);
+				P_SpawnPortal(&line, line.args[0], line.args[2], line.args[4], line.args[1]);
 			}
 			else if (line.args[1] == 3 || line.args[1] == 4)
 			{
 				unsigned pnum = P_GetPortal(line.args[1] == 3 ? PORTS_PLANE : PORTS_HORIZON, line.args[2], line.frontsector, NULL, { 0,0 });
-				CopyPortal(Level, line.args[0], line.args[2], pnum, 0, true);
+				CopyPortal(line.args[0], line.args[2], pnum, 0, true);
 			}
 			break;
 
@@ -1430,9 +1440,9 @@ void P_SpawnSpecials (MapLoader *ml)
 			case Init_Gravity:
 				{
 					double grav = line.Delta().Length() / 100.;
-					FSectorTagIterator itr(Level->tagManager, line.args[0]);
+					FSectorTagIterator itr(line.args[0]);
 					while ((s = itr.Next()) >= 0)
-						Level->sectors[s].gravity = grav;
+						level.sectors[s].gravity = grav;
 				}
 				break;
 
@@ -1442,10 +1452,10 @@ void P_SpawnSpecials (MapLoader *ml)
 			case Init_Damage:
 				{
 					int damage = int(line.Delta().Length());
-					FSectorTagIterator itr(Level->tagManager, line.args[0]);
+					FSectorTagIterator itr(line.args[0]);
 					while ((s = itr.Next()) >= 0)
 					{
-						sector_t *sec = &Level->sectors[s];
+						sector_t *sec = &level.sectors[s];
 						sec->damageamount = damage;
 						sec->damagetype = NAME_None;
 						if (sec->damageamount < 20)
@@ -1483,9 +1493,9 @@ void P_SpawnSpecials (MapLoader *ml)
 
 			case Init_TransferSky:
 				{
-					FSectorTagIterator itr(Level->tagManager, line.args[0]);
+					FSectorTagIterator itr(line.args[0]);
 					while ((s = itr.Next()) >= 0)
-						Level->sectors[s].sky = (line.Index() + 1) | PL_SKYFLAT;
+						level.sectors[s].sky = (line.Index() + 1) | PL_SKYFLAT;
 					break;
 				}
 			}
@@ -1493,7 +1503,7 @@ void P_SpawnSpecials (MapLoader *ml)
 		}
 	}
 	// [RH] Start running any open scripts on this map
-	Level->Behaviors.StartTypedScripts (Level, SCRIPT_Open, NULL, false);
+	level.Behaviors.StartTypedScripts (SCRIPT_Open, NULL, false);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1549,11 +1559,11 @@ void P_SpawnSpecials (MapLoader *ml)
 //
 // Initialize the sectors where friction is increased or decreased
 
-static void P_SpawnFriction(FLevelLocals *Level)
+static void P_SpawnFriction(void)
 {
-	line_t *l = &Level->lines[0];
+	line_t *l = &level.lines[0];
 
-	for (unsigned i = 0 ; i < Level->lines.Size() ; i++,l++)
+	for (unsigned i = 0 ; i < level.lines.Size() ; i++,l++)
 	{
 		if (l->special == Sector_SetFriction)
 		{
@@ -1568,13 +1578,13 @@ static void P_SpawnFriction(FLevelLocals *Level)
 				length = int(l->Delta().Length());
 			}
 
-			P_SetSectorFriction (Level, l->args[0], length, false);
+			P_SetSectorFriction (l->args[0], length, false);
 			l->special = 0;
 		}
 	}
 }
 
-void P_SetSectorFriction (FLevelLocals *Level, int tag, int amount, bool alterFlag)
+void P_SetSectorFriction (int tag, int amount, bool alterFlag)
 {
 	int s;
 	double friction, movefactor;
@@ -1591,7 +1601,7 @@ void P_SetSectorFriction (FLevelLocals *Level, int tag, int amount, bool alterFl
 	// higher friction value actually means 'less friction'.
 	movefactor = FrictionToMoveFactor(friction);
 
-	FSectorTagIterator itr(Level->tagManager, tag);
+	FSectorTagIterator itr(tag);
 	while ((s = itr.Next()) >= 0)
 	{
 		// killough 8/28/98:
@@ -1604,19 +1614,19 @@ void P_SetSectorFriction (FLevelLocals *Level, int tag, int amount, bool alterFl
 		// drag on CPU. New code adjusts friction of sector only once
 		// at level startup, and then uses this friction value.
 
-		Level->sectors[s].friction = friction;
-		Level->sectors[s].movefactor = movefactor;
+		level.sectors[s].friction = friction;
+		level.sectors[s].movefactor = movefactor;
 		if (alterFlag)
 		{
 			// When used inside a script, the sectors' friction flags
 			// can be enabled and disabled at will.
 			if (friction == ORIG_FRICTION)
 			{
-				Level->sectors[s].Flags &= ~SECF_FRICTION;
+				level.sectors[s].Flags &= ~SECF_FRICTION;
 			}
 			else
 			{
-				Level->sectors[s].Flags |= SECF_FRICTION;
+				level.sectors[s].Flags |= SECF_FRICTION;
 			}
 		}
 	}

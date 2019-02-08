@@ -473,9 +473,9 @@ double FindHighestCeilingSurrounding (const sector_t *sector, vertex_t **v)
 // jff 02/03/98 Add routine to find shortest lower texture
 //
 
-static inline void CheckShortestTex (FLevelLocals *Level, FTextureID texnum, double &minsize)
+static inline void CheckShortestTex (FTextureID texnum, double &minsize)
 {
-	if (texnum.isValid() || (texnum.isNull() && (Level->i_compatflags & COMPATF_SHORTTEX)))
+	if (texnum.isValid() || (texnum.isNull() && (i_compatflags & COMPATF_SHORTTEX)))
 	{
 		FTexture *tex = TexMan.GetTexture(texnum);
 		if (tex != NULL)
@@ -497,8 +497,8 @@ double FindShortestTextureAround (sector_t *sec)
 	{
 		if (check->flags & ML_TWOSIDED)
 		{
-			CheckShortestTex (sec->Level, check->sidedef[0]->GetTexture(side_t::bottom), minsize);
-			CheckShortestTex (sec->Level, check->sidedef[1]->GetTexture(side_t::bottom), minsize);
+			CheckShortestTex (check->sidedef[0]->GetTexture(side_t::bottom), minsize);
+			CheckShortestTex (check->sidedef[1]->GetTexture(side_t::bottom), minsize);
 		}
 	}
 	return minsize < FLT_MAX ? minsize : TexMan.ByIndex(0)->GetDisplayHeight();
@@ -522,8 +522,8 @@ double FindShortestUpperAround (sector_t *sec)
 	{
 		if (check->flags & ML_TWOSIDED)
 		{
-			CheckShortestTex (sec->Level, check->sidedef[0]->GetTexture(side_t::top), minsize);
-			CheckShortestTex (sec->Level, check->sidedef[1]->GetTexture(side_t::top), minsize);
+			CheckShortestTex (check->sidedef[0]->GetTexture(side_t::top), minsize);
+			CheckShortestTex (check->sidedef[1]->GetTexture(side_t::top), minsize);
 		}
 	}
 	return minsize < FLT_MAX ? minsize : TexMan.ByIndex(0)->GetDisplayHeight();
@@ -623,7 +623,7 @@ double FindHighestFloorPoint (const sector_t *sector, vertex_t **v)
 	{
 		if (v != NULL)
 		{
-			if (sector->Lines.Size() == 0) *v = &sector->Level->vertexes[0];
+			if (sector->Lines.Size() == 0) *v = &level.vertexes[0];
 			else *v = sector->Lines[0]->v1;
 		}
 		return -sector->floorplane.fD();
@@ -663,7 +663,7 @@ double FindLowestCeilingPoint (const sector_t *sector, vertex_t **v)
 	{
 		if (v != nullptr)
 		{
-			if (sector->Lines.Size() == 0) *v = &sector->Level->vertexes[0];
+			if (sector->Lines.Size() == 0) *v = &level.vertexes[0];
 			else *v = sector->Lines[0]->v1;
 		}
 		return sector->ceilingplane.fD();
@@ -941,7 +941,7 @@ double HighestCeilingAt(sector_t *check, double x, double y, sector_t **resultse
 	{
 		pos += check->GetPortalDisplacement(sector_t::ceiling);
 		planeheight = check->GetPortalPlaneZ(sector_t::ceiling);
-		check = P_PointInSector(check->Level, pos);
+		check = P_PointInSector(pos);
 	}
 	if (resultsec) *resultsec = check;
 	return check->ceilingplane.ZatPoint(pos);
@@ -963,7 +963,7 @@ double LowestFloorAt(sector_t *check, double x, double y, sector_t **resultsec)
 	{
 		pos += check->GetPortalDisplacement(sector_t::floor);
 		planeheight = check->GetPortalPlaneZ(sector_t::ceiling);
-		check = P_PointInSector(check->Level, pos);
+		check = P_PointInSector(pos);
 	}
 	if (resultsec) *resultsec = check;
 	return check->floorplane.ZatPoint(pos);
@@ -1012,7 +1012,7 @@ double NextHighestCeilingAt(sector_t *sec, double x, double y, double bottomz, d
 			x += pos.X;
 			y += pos.Y;
 			planeheight = sec->GetPortalPlaneZ(sector_t::ceiling);
-			sec = P_PointInSector(sec->Level, x, y);
+			sec = P_PointInSector(x, y);
 		}
 	}
 }
@@ -1061,7 +1061,7 @@ double NextLowestFloorAt(sector_t *sec, double x, double y, double z, int flags,
 			x += pos.X;
 			y += pos.Y;
 			planeheight = sec->GetPortalPlaneZ(sector_t::floor);
-			sec = P_PointInSector(sec->Level, x, y);
+			sec = P_PointInSector(x, y);
 		}
 	}
 }
@@ -1358,9 +1358,9 @@ bool secplane_t::CopyPlaneIfValid (secplane_t *dest, const secplane_t *opp) cons
 //
 //==========================================================================
 
-bool P_AlignFlat (FLevelLocals *Level, int linenum, int side, int fc)
+bool P_AlignFlat (int linenum, int side, int fc)
 {
-	line_t *line = &Level->lines[linenum];
+	line_t *line = &level.lines[linenum];
 	sector_t *sec = side ? line->backsector : line->frontsector;
 
 	if (!sec)
@@ -1388,7 +1388,7 @@ bool P_AlignFlat (FLevelLocals *Level, int linenum, int side, int fc)
 //
 //==========================================================================
 
-void P_ReplaceTextures(FLevelLocals *Level, const char *fromname, const char *toname, int flags)
+void P_ReplaceTextures(const char *fromname, const char *toname, int flags)
 {
 	FTextureID picnum1, picnum2;
 
@@ -1400,7 +1400,7 @@ void P_ReplaceTextures(FLevelLocals *Level, const char *fromname, const char *to
 		picnum1 = TexMan.GetTextureID(fromname, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
 		picnum2 = TexMan.GetTextureID(toname, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
 
-		for (auto &side : Level->sides)
+		for (auto &side : level.sides)
 		{
 			for (int j = 0; j<3; j++)
 			{
@@ -1417,7 +1417,7 @@ void P_ReplaceTextures(FLevelLocals *Level, const char *fromname, const char *to
 		picnum1 = TexMan.GetTextureID(fromname, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
 		picnum2 = TexMan.GetTextureID(toname, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
 
-		for (auto &sec : Level->sectors)
+		for (auto &sec : level.sectors)
 		{
 			if (!(flags & NOT_FLOOR) && sec.GetTexture(sector_t::floor) == picnum1)
 				sec.SetTexture(sector_t::floor, picnum2);
@@ -1438,12 +1438,11 @@ static FNodeBuilder PolyNodeBuilder(PolyNodeLevel);
 void subsector_t::BuildPolyBSP()
 {
 	assert((BSP == NULL || BSP->bDirty) && "BSP computed more than once");
-	auto Level = sector->Level;
 
 	// Set up level information for the node builder.
-	PolyNodeLevel.Sides = &Level->sides[0];
-	PolyNodeLevel.NumSides = Level->sides.Size();
-	PolyNodeLevel.Lines = &Level->lines[0];
+	PolyNodeLevel.Sides = &level.sides[0];
+	PolyNodeLevel.NumSides = level.sides.Size();
+	PolyNodeLevel.Lines = &level.lines[0];
 	PolyNodeLevel.NumLines = numlines; // is this correct???
 
 	// Feed segs to the nodebuilder and build the nodes.
@@ -1529,27 +1528,26 @@ int side_t::GetLightLevel (bool foggy, int baselight, bool is3dlight, int *pfake
 		*pfakecontrast = 0;
 	}
 
-	auto Level = sector->Level;
-	if (!foggy || Level->flags3 & LEVEL3_FORCEFAKECONTRAST) // Don't do relative lighting in foggy sectors
+	if (!foggy || level.flags3 & LEVEL3_FORCEFAKECONTRAST) // Don't do relative lighting in foggy sectors
 	{
 		if (!(Flags & WALLF_NOFAKECONTRAST) && r_fakecontrast != 0)
 		{
 			DVector2 delta = linedef->Delta();
 			int rel;
-			if (((Level->flags2 & LEVEL2_SMOOTHLIGHTING) || (Flags & WALLF_SMOOTHLIGHTING) || r_fakecontrast == 2) &&
+			if (((level.flags2 & LEVEL2_SMOOTHLIGHTING) || (Flags & WALLF_SMOOTHLIGHTING) || r_fakecontrast == 2) &&
 				delta.X != 0)
 			{
 				rel = xs_RoundToInt // OMG LEE KILLOUGH LIVES! :/
 					(
-						Level->WallHorizLight
+						level.WallHorizLight
 						+ fabs(atan(delta.Y / delta.X) / 1.57079)
-						* (Level->WallVertLight - Level->WallHorizLight)
+						* (level.WallVertLight - level.WallHorizLight)
 					);
 			}
 			else
 			{
-				rel = delta.X == 0 ? Level->WallVertLight : 
-					  delta.Y == 0 ? Level->WallHorizLight : 0;
+				rel = delta.X == 0 ? level.WallVertLight : 
+					  delta.Y == 0 ? level.WallHorizLight : 0;
 			}
 			if (pfakecontrast != NULL)
 			{

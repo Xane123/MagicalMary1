@@ -287,10 +287,7 @@ void cht_DoCheat (player_t *player, int cheat)
 
 		if (i == 4)
 		{
-			ForAllLevels([](FLevelLocals *Level)
-			{
-				Level->flags2 ^= LEVEL2_ALLMAP;
-			});
+			level.flags2 ^= LEVEL2_ALLMAP;
 		}
 		else if (player->mo != NULL && player->health >= 0)
 		{
@@ -465,7 +462,7 @@ void cht_DoCheat (player_t *player, int cheat)
 		if (player->mo != NULL && player->health >= 0)
 		{
 			static VMFunction *gsp = nullptr;
-			if (gsp == nullptr) PClass::FindFunction(&gsp, NAME_Actor, NAME_GiveSigilPiece);
+			if (gsp == nullptr) PClass::FindFunction(&gsp, NAME_Sigil, NAME_GiveSigilPiece);
 			if (gsp)
 			{
 				VMValue params[1] = { player->mo };
@@ -514,9 +511,8 @@ void cht_DoCheat (player_t *player, int cheat)
 		break;
 
 	case CHT_FREEZE:
-	{
-		currentSession->changefreeze ^= 2;
-		if (currentSession->isFrozen() ^ currentSession->changefreeze)
+		bglobal.changefreeze ^= 1;
+		if (bglobal.freeze ^ bglobal.changefreeze)
 		{
 			msg = GStrings("TXT_FREEZEON");
 		}
@@ -525,7 +521,6 @@ void cht_DoCheat (player_t *player, int cheat)
 			msg = GStrings("TXT_FREEZEOFF");
 		}
 		break;
-	}
 	}
 
 	if (!*msg)              // [SO] Don't print blank lines!
@@ -602,7 +597,6 @@ class DSuicider : public DThinker
 public:
 	TObjPtr<AActor*> Pawn;
 
-	DSuicider(AActor *pawn) : DThinker(pawn->Level), Pawn(pawn) {}
 	void Tick()
 	{
 		Pawn->flags |= MF_SHOOTABLE;
@@ -625,8 +619,6 @@ public:
 		Super::Serialize(arc);
 		arc("pawn", Pawn);
 	}
-private:
-	DSuicider() = default;
 };
 
 IMPLEMENT_CLASS(DSuicider, false, true)
@@ -644,7 +636,7 @@ void cht_Suicide (player_t *plyr)
 	// the initial tick.
 	if (plyr->mo != NULL)
 	{
-		DSuicider *suicide = CreateThinker<DSuicider>(plyr->mo);
+		DSuicider *suicide = Create<DSuicider>();
 		suicide->Pawn = plyr->mo;
 		GC::WriteBarrier(suicide, suicide->Pawn);
 	}

@@ -135,8 +135,7 @@ namespace swrenderer
 		planeheight = fabs(pl->height.Zat0() - Thread->Viewport->viewpoint.Pos.Z);
 
 		// [RH] set foggy flag
-		auto Level = Thread->Viewport->GetLevel();
-		foggy = (Level->fadeto || colormap->Fade || (Level->flags & LEVEL_HASFADETABLE));
+		foggy = (level.fadeto || colormap->Fade || (level.flags & LEVEL_HASFADETABLE));
 		lightlevel = pl->lightlevel;
 
 		CameraLight *cameraLight = CameraLight::Instance();

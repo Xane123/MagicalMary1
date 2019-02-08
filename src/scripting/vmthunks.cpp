@@ -656,12 +656,12 @@ DEFINE_ACTION_FUNCTION_NATIVE(_Sector, RemoveForceField, RemoveForceField)
 	 return 0;
  }
 
-  DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, PointInSector, P_PointInSectorXY)
+  DEFINE_ACTION_FUNCTION_NATIVE(_Sector, PointInSector, P_PointInSectorXY)
  {
-	 PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	 PARAM_PROLOGUE;
 	 PARAM_FLOAT(x);
 	 PARAM_FLOAT(y);
-	 ACTION_RETURN_POINTER(P_PointInSector(self, x, y));
+	 ACTION_RETURN_POINTER(P_PointInSector(x, y));
  }
 
   static void SetXOffset(sector_t *self, int pos, double o)
@@ -1165,7 +1165,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(_Sector, RemoveForceField, RemoveForceField)
 
  static void SetEnvironmentID(sector_t *self, int envnum)
  {
-	 self->Level->Zones[self->ZoneNumber].Environment = S_FindEnvironment(envnum);
+	 level.Zones[self->ZoneNumber].Environment = S_FindEnvironment(envnum);
  }
 
  DEFINE_ACTION_FUNCTION_NATIVE(_Sector, SetEnvironmentID, SetEnvironmentID)
@@ -1178,7 +1178,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(_Sector, RemoveForceField, RemoveForceField)
 
  static void SetEnvironment(sector_t *self, const FString &env)
  {
-	 self->Level->Zones[self->ZoneNumber].Environment = S_FindEnvironment(env);
+	 level.Zones[self->ZoneNumber].Environment = S_FindEnvironment(env);
  }
 
  DEFINE_ACTION_FUNCTION_NATIVE(_Sector, SetEnvironment, SetEnvironment)
@@ -1620,34 +1620,30 @@ DEFINE_ACTION_FUNCTION_NATIVE(_Sector, RemoveForceField, RemoveForceField)
 //=====================================================================================
 
  // This is needed to convert the strings to char pointers.
- static void ReplaceTextures(FLevelLocals *l, const FString &from, const FString &to, int flags)
+ static void ReplaceTextures(const FString &from, const FString &to, int flags)
  {
-	 P_ReplaceTextures(l, from, to, flags);
+	 P_ReplaceTextures(from, to, flags);
  }
 
-DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, ReplaceTextures, ReplaceTextures)
+DEFINE_ACTION_FUNCTION_NATIVE(_TexMan, ReplaceTextures, ReplaceTextures)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_STRING(from);
 	PARAM_STRING(to);
 	PARAM_INT(flags);
-	P_ReplaceTextures(self, from, to, flags);
+	P_ReplaceTextures(from, to, flags);
 	return 0;
 }
 
-void SetCameraToTexture(FLevelLocals *Level, AActor *viewpoint, const FString &texturename, double fov);
-void SetCameraToTexture_(AActor *viewpoint, const FString &texturename, double fov)
-{
-	SetCameraToTexture(viewpoint->Level, viewpoint, texturename, fov);
-}
+void SetCameraToTexture(AActor *viewpoint, const FString &texturename, double fov);
 
-DEFINE_ACTION_FUNCTION_NATIVE(_TexMan, SetCameraToTexture, SetCameraToTexture_)
+DEFINE_ACTION_FUNCTION_NATIVE(_TexMan, SetCameraToTexture, SetCameraToTexture)
 {
 	PARAM_PROLOGUE;
 	PARAM_OBJECT(viewpoint, AActor);
 	PARAM_STRING(texturename); // [ZZ] there is no point in having this as FTextureID because it's easier to refer to a cameratexture by name and it isn't executed too often to cache it.
 	PARAM_FLOAT(fov);
-	SetCameraToTexture_(viewpoint, texturename, fov);
+	SetCameraToTexture(viewpoint, texturename, fov);
 	return 0;
 }
 
@@ -2353,57 +2349,51 @@ DEFINE_ACTION_FUNCTION_NATIVE(DBaseStatusBar, SetClipRect, SBar_SetClipRect)
 	return 0;
 }
 
-static void GetGlobalACSString(DBaseStatusBar *self, int index, FString *result)
+static void GetGlobalACSString(int index, FString *result)
 {
-	if (self->Level == nullptr) ThrowAbortException(X_OTHER, "BaseStatusBar.GetGlobalACSString called from outside the status bar code.");
-	*result = self->Level->Behaviors.LookupString(ACS_GlobalVars[index]);
+	*result = level.Behaviors.LookupString(ACS_GlobalVars[index]);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DBaseStatusBar, GetGlobalACSString, GetGlobalACSString)
 {
-	PARAM_SELF_PROLOGUE(DBaseStatusBar);
+	PARAM_PROLOGUE;
 	PARAM_INT(index);
-	FString result;
-	GetGlobalACSString(self, index, &result);
-	ACTION_RETURN_STRING(result);
+	ACTION_RETURN_STRING(level.Behaviors.LookupString(ACS_GlobalVars[index]));
 }
 
-static void GetGlobalACSArrayString(DBaseStatusBar *self, int arrayno, int index, FString *result)
+static void GetGlobalACSArrayString(int arrayno, int index, FString *result)
 {
-	if (self->Level == nullptr) ThrowAbortException(X_OTHER, "BaseStatusBar.GetGlobalACSArrayString called from outside the status bar code.");
-	*result = self->Level->Behaviors.LookupString(ACS_GlobalVars[index]);
+	*result = level.Behaviors.LookupString(ACS_GlobalVars[index]);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DBaseStatusBar, GetGlobalACSArrayString, GetGlobalACSArrayString)
 {
-	PARAM_SELF_PROLOGUE(DBaseStatusBar);
+	PARAM_PROLOGUE;
 	PARAM_INT(arrayno);
 	PARAM_INT(index);
-	FString result;
-	GetGlobalACSArrayString(self, arrayno, index, &result);
-	ACTION_RETURN_STRING(result);
+	ACTION_RETURN_STRING(level.Behaviors.LookupString(ACS_GlobalArrays[arrayno][index]));
 }
 
-static int GetGlobalACSValue(DBaseStatusBar *self, int index)
+static int GetGlobalACSValue(int index)
 {
 	return (ACS_GlobalVars[index]);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DBaseStatusBar, GetGlobalACSValue, GetGlobalACSValue)
 {
-	PARAM_SELF_PROLOGUE(DBaseStatusBar);
+	PARAM_PROLOGUE;
 	PARAM_INT(index);
 	ACTION_RETURN_INT(ACS_GlobalVars[index]);
 }
 
-static int GetGlobalACSArrayValue(DBaseStatusBar *self, int arrayno, int index)
+static int GetGlobalACSArrayValue(int arrayno, int index)
 {
 	return (ACS_GlobalArrays[arrayno][index]);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DBaseStatusBar, GetGlobalACSArrayValue, GetGlobalACSArrayValue)
 {
-	PARAM_SELF_PROLOGUE(DBaseStatusBar);
+	PARAM_PROLOGUE;
 	PARAM_INT(arrayno);
 	PARAM_INT(index);
 	ACTION_RETURN_INT(ACS_GlobalArrays[arrayno][index]);
@@ -2509,7 +2499,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetSpotState, GetSpotState)
 static void FormatMapName(FLevelLocals *self, int cr, FString *result)
 {
 	char mapnamecolor[3] = { '\34', char(cr + 'A'), 0 };
-	self->FormatMapName(*result, mapnamecolor);
+	ST_FormatMapName(*result, mapnamecolor);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, FormatMapName, FormatMapName)
@@ -2534,7 +2524,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetAutomapPosition, GetAutomapPositi
 
 static int ZGetUDMFInt(FLevelLocals *self, int type, int index, int key)
 {
-	return GetUDMFInt(self,type, index, ENamedName(key));
+	return GetUDMFInt(type, index, ENamedName(key));
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetUDMFInt, ZGetUDMFInt)
@@ -2543,12 +2533,12 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetUDMFInt, ZGetUDMFInt)
 	PARAM_INT(type);
 	PARAM_INT(index);
 	PARAM_NAME(key);
-	ACTION_RETURN_INT(GetUDMFInt(self, type, index, key));
+	ACTION_RETURN_INT(GetUDMFInt(type, index, key));
 }
 
 static double ZGetUDMFFloat(FLevelLocals *self, int type, int index, int key)
 {
-	return GetUDMFFloat(self, type, index, ENamedName(key));
+	return GetUDMFFloat(type, index, ENamedName(key));
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetUDMFFloat, ZGetUDMFFloat)
@@ -2557,12 +2547,12 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetUDMFFloat, ZGetUDMFFloat)
 	PARAM_INT(type);
 	PARAM_INT(index);
 	PARAM_NAME(key);
-	ACTION_RETURN_FLOAT(GetUDMFFloat(self, type, index, key));
+	ACTION_RETURN_FLOAT(GetUDMFFloat(type, index, key));
 }
 
 static void ZGetUDMFString(FLevelLocals *self, int type, int index, int key, FString *result)
 {
-	*result = GetUDMFString(self, type, index, ENamedName(key));
+	*result = GetUDMFString(type, index, ENamedName(key));
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetUDMFString, ZGetUDMFString)
@@ -2571,7 +2561,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, GetUDMFString, ZGetUDMFString)
 	PARAM_INT(type);
 	PARAM_INT(index);
 	PARAM_NAME(key);
-	ACTION_RETURN_STRING(GetUDMFString(self, type, index, key));
+	ACTION_RETURN_STRING(GetUDMFString(type, index, key));
 }
 
 DEFINE_ACTION_FUNCTION(FLevelLocals, GetChecksum)
@@ -2581,13 +2571,13 @@ DEFINE_ACTION_FUNCTION(FLevelLocals, GetChecksum)
 
 	for (int j = 0; j < 16; ++j)
 	{
-		sprintf(md5string + j * 2, "%02x", self->md5[j]);
+		sprintf(md5string + j * 2, "%02x", level.md5[j]);
 	}
 
 	ACTION_RETURN_STRING((const char*)md5string);
 }
 
-static void Vec2Offset(FLevelLocals *self, double x, double y, double dx, double dy, bool absolute, DVector2 *result)
+static void Vec2Offset(double x, double y, double dx, double dy, bool absolute, DVector2 *result)
 {
 	if (absolute)
 	{
@@ -2595,24 +2585,24 @@ static void Vec2Offset(FLevelLocals *self, double x, double y, double dx, double
 	}
 	else
 	{
-		*result = P_GetOffsetPosition(self, x, y, dx, dy);
+		*result = P_GetOffsetPosition(x, y, dx, dy);
 	}
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, Vec2Offset, Vec2Offset)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 	PARAM_FLOAT(dx);
 	PARAM_FLOAT(dy);
 	PARAM_BOOL(absolute);
 	DVector2 result;
-	Vec2Offset(self, x, y, dx, dy, absolute, &result);
+	Vec2Offset(x, y, dx, dy, absolute, &result);
 	ACTION_RETURN_VEC2(result);
 }
 
-static void Vec2OffsetZ(FLevelLocals *Level, double x, double y, double dx, double dy, double atz, bool absolute, DVector3 *result)
+static void Vec2OffsetZ(double x, double y, double dx, double dy, double atz, bool absolute, DVector3 *result)
 {
 	if (absolute)
 	{
@@ -2620,14 +2610,14 @@ static void Vec2OffsetZ(FLevelLocals *Level, double x, double y, double dx, doub
 	}
 	else
 	{
-		DVector2 v = P_GetOffsetPosition(Level, x, y, dx, dy);
+		DVector2 v = P_GetOffsetPosition(x, y, dx, dy);
 		*result = (DVector3(v, atz));
 	}
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, Vec2OffsetZ, Vec2OffsetZ)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 	PARAM_FLOAT(dx);
@@ -2635,11 +2625,11 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, Vec2OffsetZ, Vec2OffsetZ)
 	PARAM_FLOAT(atz);
 	PARAM_BOOL(absolute);
 	DVector3 result;
-	Vec2OffsetZ(self, x, y, dx, dy, atz, absolute, &result);
+	Vec2OffsetZ(x, y, dx, dy, atz, absolute, &result);
 	ACTION_RETURN_VEC3(result);
 }
 
-static void Vec3Offset(FLevelLocals *Level, double x, double y, double z, double dx, double dy, double dz, bool absolute, DVector3 *result)
+static void Vec3Offset(double x, double y, double z, double dx, double dy, double dz, bool absolute, DVector3 *result)
 {
 	if (absolute)
 	{
@@ -2647,14 +2637,14 @@ static void Vec3Offset(FLevelLocals *Level, double x, double y, double z, double
 	}
 	else
 	{
-		DVector2 v = P_GetOffsetPosition(Level, x, y, dx, dy);
+		DVector2 v = P_GetOffsetPosition(x, y, dx, dy);
 		*result = (DVector3(v, z + dz));
 	}
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, Vec3Offset, Vec3Offset)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 	PARAM_FLOAT(z);
@@ -2663,36 +2653,11 @@ DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, Vec3Offset, Vec3Offset)
 	PARAM_FLOAT(dz);
 	PARAM_BOOL(absolute);
 	DVector3 result;
-	Vec3Offset(self, x, y, z, dx, dy, dz, absolute, &result);
+	Vec3Offset(x, y, z, dx, dy, dz, absolute, &result);
 	ACTION_RETURN_VEC3(result);
 }
 
-static int isFrozen(FGameSession *self)
-{
-	return self->isFrozen();
-}
 
-DEFINE_ACTION_FUNCTION_NATIVE(FGameSession, isFrozen, isFrozen)
-{
-	PARAM_SELF_STRUCT_PROLOGUE(FGameSession);
-	return isFrozen(self);
-}
-
-void setFrozen(FGameSession *self, int on)
-{
-	self->frozenstate = (self->frozenstate & ~1) | on;
-	// For compatibility. The engine itself never checks this.
-	if (on) self->Levelinfo[0]->flags2 |= LEVEL2_FROZEN;
-	else  self->Levelinfo[0]->flags2 &= ~LEVEL2_FROZEN;
-}
-
-DEFINE_ACTION_FUNCTION_NATIVE(FGameSession, setFrozen, setFrozen)
-{
-	PARAM_SELF_STRUCT_PROLOGUE(FGameSession);
-	PARAM_BOOL(on);
-	setFrozen(self, on);
-	return 0;
-}
 
 //=====================================================================================
 //
@@ -2730,12 +2695,15 @@ DEFINE_ACTION_FUNCTION_NATIVE(_AltHUD, GetLatency, Net_GetLatency)
 //
 //
 //==========================================================================
+DEFINE_GLOBAL(level);
 DEFINE_FIELD(FLevelLocals, sectors)
 DEFINE_FIELD(FLevelLocals, lines)
 DEFINE_FIELD(FLevelLocals, sides)
 DEFINE_FIELD(FLevelLocals, vertexes)
 DEFINE_FIELD(FLevelLocals, sectorPortals)
+DEFINE_FIELD(FLevelLocals, time)
 DEFINE_FIELD(FLevelLocals, maptime)
+DEFINE_FIELD(FLevelLocals, totaltime)
 DEFINE_FIELD(FLevelLocals, starttime)
 DEFINE_FIELD(FLevelLocals, partime)
 DEFINE_FIELD(FLevelLocals, sucktime)
@@ -2746,6 +2714,7 @@ DEFINE_FIELD(FLevelLocals, LevelName)
 DEFINE_FIELD(FLevelLocals, MapName)
 DEFINE_FIELD(FLevelLocals, NextMap)
 DEFINE_FIELD(FLevelLocals, NextSecretMap)
+DEFINE_FIELD(FLevelLocals, F1Pic)
 DEFINE_FIELD(FLevelLocals, maptype)
 DEFINE_FIELD(FLevelLocals, Music)
 DEFINE_FIELD(FLevelLocals, musicorder)
@@ -2769,7 +2738,6 @@ DEFINE_FIELD(FLevelLocals, outsidefogdensity)
 DEFINE_FIELD(FLevelLocals, skyfog)
 DEFINE_FIELD(FLevelLocals, pixelstretch)
 DEFINE_FIELD(FLevelLocals, deathsequence)
-
 DEFINE_FIELD_BIT(FLevelLocals, flags, noinventorybar, LEVEL_NOINVENTORYBAR)
 DEFINE_FIELD_BIT(FLevelLocals, flags, monsterstelefrag, LEVEL_MONSTERSTELEFRAG)
 DEFINE_FIELD_BIT(FLevelLocals, flags, actownspecial, LEVEL_ACTOWNSPECIAL)
@@ -2787,13 +2755,6 @@ DEFINE_FIELD_BIT(FLevelLocals, flags2, no_dlg_freeze, LEVEL2_CONV_SINGLE_UNFREEZ
 DEFINE_FIELD_BIT(FLevelLocals, flags2, keepfullinventory, LEVEL2_KEEPFULLINVENTORY)
 DEFINE_FIELD_BIT(FLevelLocals, flags3, removeitems, LEVEL3_REMOVEITEMS)
 
-DEFINE_FIELD(FGameSession, Levelinfo)
-DEFINE_FIELD(FGameSession, F1Pic)
-DEFINE_FIELD(FGameSession, time)
-DEFINE_FIELD(FGameSession, totaltime)
-DEFINE_GLOBAL(currentSession)
-
-DEFINE_FIELD_X(Sector, sector_t, Level)
 DEFINE_FIELD_X(Sector, sector_t, floorplane)
 DEFINE_FIELD_X(Sector, sector_t, ceilingplane)
 DEFINE_FIELD_X(Sector, sector_t, Colormap)
@@ -2890,10 +2851,7 @@ DEFINE_FIELD(DBaseStatusBar, fullscreenOffsets);
 DEFINE_FIELD(DBaseStatusBar, defaultScale);
 DEFINE_FIELD(DBaseStatusBar, artiflashTick);
 DEFINE_FIELD(DBaseStatusBar, itemflashFade);
-DEFINE_FIELD(DBaseStatusBar, Level);
 
 DEFINE_FIELD(DHUDFont, mFont);
 
 DEFINE_GLOBAL(StatusBar);
-
-DEFINE_FIELD(DThinker, Level);

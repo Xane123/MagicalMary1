@@ -34,6 +34,7 @@
 */
 
 #include "doomstat.h"
+#include "g_hub.h"
 #include "g_level.h"
 #include "g_game.h"
 #include "m_png.h"
@@ -43,7 +44,39 @@
 #include "g_levellocals.h"
 
 
-void FGameSession::LeavingHub(int mode, cluster_info_t * cluster, wbstartstruct_t * wbs, FLevelLocals *Level)
+//==========================================================================
+//
+// Player is leaving the current level
+//
+//==========================================================================
+
+struct FHubInfo
+{
+	int			levelnum;
+	
+	int			maxkills;
+	int			maxitems;
+	int			maxsecret;
+	int			maxfrags;
+
+	wbplayerstruct_t	plyr[MAXPLAYERS];
+
+	FHubInfo &operator=(const wbstartstruct_t &wbs)
+	{
+		levelnum = wbs.finished_ep;
+		maxkills = wbs.maxkills;
+		maxsecret= wbs.maxsecret;
+		maxitems = wbs.maxitems;
+		maxfrags = wbs.maxfrags;
+		memcpy(plyr, wbs.plyr, sizeof(plyr));
+		return *this;
+	}
+};
+
+
+static TArray<FHubInfo> hubdata;
+
+void G_LeavingHub(int mode, cluster_info_t * cluster, wbstartstruct_t * wbs)
 {
 	unsigned int i, j;
 
@@ -51,7 +84,7 @@ void FGameSession::LeavingHub(int mode, cluster_info_t * cluster, wbstartstruct_
 	{
 		for (i = 0; i < hubdata.Size(); i++)
 		{
-			if (hubdata[i].levelnum == Level->levelnum)
+			if (hubdata[i].levelnum == level.levelnum)
 			{
 				hubdata[i] = *wbs;
 				break;
@@ -62,13 +95,13 @@ void FGameSession::LeavingHub(int mode, cluster_info_t * cluster, wbstartstruct_
 			hubdata[hubdata.Reserve(1)] = *wbs;
 		}
 
-		hubdata[i].levelnum = Level->levelnum;
+		hubdata[i].levelnum = level.levelnum;
 		if (!multiplayer && !deathmatch)
 		{
 			// The player counters don't work in hubs
-			hubdata[i].plyr[0].skills = Level->killed_monsters;
-			hubdata[i].plyr[0].sitems = Level->found_items;
-			hubdata[i].plyr[0].ssecret = Level->found_secrets;
+			hubdata[i].plyr[0].skills = level.killed_monsters;
+			hubdata[i].plyr[0].sitems = level.found_items;
+			hubdata[i].plyr[0].ssecret = level.found_secrets;
 		}
 
 
@@ -96,11 +129,11 @@ void FGameSession::LeavingHub(int mode, cluster_info_t * cluster, wbstartstruct_
 			{
 				if (cluster->flags & CLUSTER_LOOKUPNAME)
 				{
-					Level->LevelName = GStrings(cluster->ClusterName);
+					level.LevelName = GStrings(cluster->ClusterName);
 				}
 				else
 				{
-					Level->LevelName = cluster->ClusterName;
+					level.LevelName = cluster->ClusterName;
 				}
 			}
 		}
@@ -142,4 +175,14 @@ FSerializer &Serialize(FSerializer &arc, const char *key, FHubInfo &h, FHubInfo 
 			.EndObject();
 	}
 	return arc;
+}
+
+void G_SerializeHub(FSerializer &arc)
+{
+	arc("hubinfo", hubdata);
+}
+
+void G_ClearHubInfo()
+{
+	hubdata.Clear();
 }

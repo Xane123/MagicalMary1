@@ -94,8 +94,8 @@ static TArray<DVector3a> InterpolationPath;
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
 CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
-CVAR (Int, r_clearbuffer, 1, CVAR_ARCHIVE)
-CVAR (Bool, r_drawvoxels, true, CVAR_ARCHIVE)
+CVAR (Int, r_clearbuffer, 0, 0)
+CVAR (Bool, r_drawvoxels, true, 0)
 CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
 CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
@@ -367,16 +367,16 @@ CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 //
 //==========================================================================
 
-subsector_t *R_PointInSubsector (FLevelLocals *Level, fixed_t x, fixed_t y)
+subsector_t *R_PointInSubsector (fixed_t x, fixed_t y)
 {
 	node_t *node;
 	int side;
 
 	// single subsector is a special case
-	if (Level->nodes.Size() == 0)
-		return &Level->subsectors[0];
+	if (level.nodes.Size() == 0)
+		return &level.subsectors[0];
 				
-	node = Level->HeadNode();
+	node = level.HeadNode();
 
 	do
 	{
@@ -450,9 +450,8 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 		NoInterpolateView = false;
 		iview->Old = iview->New;
 	}
-	auto Level = viewpoint.camera->Level;
-	int oldgroup = R_PointInSubsector(Level, iview->Old.Pos)->sector->PortalGroup;
-	int newgroup = R_PointInSubsector(Level, iview->New.Pos)->sector->PortalGroup;
+	int oldgroup = R_PointInSubsector(iview->Old.Pos)->sector->PortalGroup;
+	int newgroup = R_PointInSubsector(iview->New.Pos)->sector->PortalGroup;
 
 	DAngle oviewangle = iview->Old.Angles.Yaw;
 	DAngle nviewangle = iview->New.Angles.Yaw;
@@ -519,7 +518,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 		}
 		else
 		{
-			DVector2 disp = Level->Displacements.getOffset(oldgroup, newgroup);
+			DVector2 disp = level.Displacements.getOffset(oldgroup, newgroup);
 			viewpoint.Pos = iview->Old.Pos + (iview->New.Pos - iview->Old.Pos - disp) * Frac;
 			viewpoint.Path[0] = viewpoint.Path[1] = iview->New.Pos;
 		}
@@ -557,7 +556,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 	}
 	
 	// Due to interpolation this is not necessarily the same as the sector the camera is in.
-	viewpoint.sector = R_PointInSubsector(Level, viewpoint.Pos)->sector;
+	viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 	bool moved = false;
 	while (!viewpoint.sector->PortalBlocksMovement(sector_t::ceiling))
 	{
@@ -565,7 +564,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 		{
 			viewpoint.Pos += viewpoint.sector->GetPortalDisplacement(sector_t::ceiling);
 			viewpoint.ActorPos += viewpoint.sector->GetPortalDisplacement(sector_t::ceiling);
-			viewpoint.sector = R_PointInSubsector(Level, viewpoint.Pos)->sector;
+			viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 			moved = true;
 		}
 		else break;
@@ -578,7 +577,7 @@ void R_InterpolateView (FRenderViewpoint &viewpoint, player_t *player, double Fr
 			{
 				viewpoint.Pos += viewpoint.sector->GetPortalDisplacement(sector_t::floor);
 				viewpoint.ActorPos += viewpoint.sector->GetPortalDisplacement(sector_t::floor);
-				viewpoint.sector = R_PointInSubsector(Level, viewpoint.Pos)->sector;
+				viewpoint.sector = R_PointInSubsector(viewpoint.Pos)->sector;
 				moved = true;
 			}
 			else break;
@@ -808,7 +807,7 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 	if (player != NULL && gamestate != GS_TITLELEVEL &&
 		((player->cheats & CF_CHASECAM) || (r_deathcamera && viewpoint.camera->health <= 0)))
 	{
-		sector_t *oldsector = R_PointInSubsector(actor->Level, iview->Old.Pos)->sector;
+		sector_t *oldsector = R_PointInSubsector(iview->Old.Pos)->sector;
 		// [RH] Use chasecam view
 		DVector3 campos;
 		DAngle camangle;
@@ -855,10 +854,7 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 
 	viewpoint.SetViewAngle (viewwindow);
 
-	ForAllLevels([&](FLevelLocals *Level)
-	{
-		Level->interpolator.DoInterpolations(viewpoint.TicFrac);
-	});
+	interpolator.DoInterpolations (viewpoint.TicFrac);
 
 	// Keep the view within the sector's floor and ceiling
 	if (viewpoint.sector->PortalBlocksMovement(sector_t::ceiling))
@@ -1033,7 +1029,7 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 	// However, to set up a projection matrix this needs to be adjusted.
 	double radPitch = viewpoint.Angles.Pitch.Normalized180().Radians();
 	double angx = cos(radPitch);
-	double angy = sin(radPitch) * actor->Level->info->pixelstretch;
+	double angy = sin(radPitch) * level.info->pixelstretch;
 	double alen = sqrt(angx*angx + angy*angy);
 	viewpoint.HWAngles.Pitch = RAD2DEG((float)asin(angy / alen));
 	
@@ -1077,7 +1073,7 @@ CUSTOM_CVAR(Float, transsouls, 0.75f, CVAR_ARCHIVE)
 	}
 }
 
-CUSTOM_CVAR(Float, maxviewpitch, 75.f, CVAR_ARCHIVE | CVAR_SERVERINFO)
+CUSTOM_CVAR(Float, maxviewpitch, 90.f, CVAR_ARCHIVE | CVAR_SERVERINFO)
 {
 	if (self>90.f) self = 90.f;
 	else if (self<-90.f) self = -90.f;

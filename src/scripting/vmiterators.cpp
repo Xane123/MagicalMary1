@@ -29,7 +29,6 @@
 #include "p_maputl.h"
 #include "g_levellocals.h"
 #include "vm.h"
-#include "actorinlines.h"
 
 //==========================================================================
 //
@@ -42,25 +41,25 @@ class DThinkerIterator : public DObject, public FThinkerIterator
 	DECLARE_ABSTRACT_CLASS(DThinkerIterator, DObject)
 
 public:
-	DThinkerIterator(FLevelLocals *Level, PClass *cls, int statnum = MAX_STATNUM + 1)
-		: FThinkerIterator(Level, cls, statnum)
+	DThinkerIterator(PClass *cls, int statnum = MAX_STATNUM + 1)
+		: FThinkerIterator(cls, statnum)
 	{
 	}
 };
 
 IMPLEMENT_CLASS(DThinkerIterator, true, false);
 
-static DThinkerIterator *CreateThinkerIterator(FLevelLocals *Level, PClass *type, int statnum)
+static DThinkerIterator *CreateThinkerIterator(PClass *type, int statnum)
 {
-	return Create<DThinkerIterator>(Level, type, statnum);
+	return Create<DThinkerIterator>(type, statnum);
 }
 
-DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, CreateThinkerIterator, CreateThinkerIterator)
+DEFINE_ACTION_FUNCTION_NATIVE(DThinkerIterator, Create, CreateThinkerIterator)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_CLASS(type, DThinker);
 	PARAM_INT(statnum);
-	ACTION_RETURN_OBJECT(CreateThinkerIterator(self, type, statnum));
+	ACTION_RETURN_OBJECT(Create<DThinkerIterator>(type, statnum));
 }
 
 static DThinker *NextThinker(DThinkerIterator *self, bool exact)
@@ -109,8 +108,8 @@ public:
 		cres.portalflags = 0;
 	}
 
-	DBlockLinesIterator(FLevelLocals *Level, double x, double y, double z, double height, double radius, sector_t *sec)
-		:FMultiBlockLinesIterator(check, Level, x, y, z, height, radius, sec)
+	DBlockLinesIterator(double x, double y, double z, double height, double radius, sector_t *sec)
+		:FMultiBlockLinesIterator(check, x, y, z, height, radius, sec)
 	{
 		cres.line = nullptr;
 		cres.Position.Zero();
@@ -133,22 +132,21 @@ DEFINE_ACTION_FUNCTION_NATIVE(DBlockLinesIterator, Create, CreateBLI)
 	ACTION_RETURN_OBJECT(Create<DBlockLinesIterator>(origin, radius));
 }
 
-static DBlockLinesIterator *CreateBLIFromPos(FLevelLocals *Level, double x, double y, double z, double h, double radius, sector_t *sec)
+static DBlockLinesIterator *CreateBLIFromPos(double x, double y, double z, double h, double radius, sector_t *sec)
 {
-	return Create<DBlockLinesIterator>(Level, x, y, z, h, radius, sec);
+	return Create<DBlockLinesIterator>(x, y, z, h, radius, sec);
 }
 
-DEFINE_ACTION_FUNCTION_NATIVE(DBlockLinesIterator, CreateFromPosition, CreateBLIFromPos)
+DEFINE_ACTION_FUNCTION_NATIVE(DBlockLinesIterator, CreateFromPos, CreateBLIFromPos)
 {
 	PARAM_PROLOGUE;
-	PARAM_POINTER(Level, FLevelLocals);
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 	PARAM_FLOAT(z);
 	PARAM_FLOAT(h);
 	PARAM_FLOAT(radius);
 	PARAM_POINTER(sec, sector_t);
-	ACTION_RETURN_OBJECT(Create<DBlockLinesIterator>(Level, x, y, z, h, radius, sec));
+	ACTION_RETURN_OBJECT(Create<DBlockLinesIterator>(x, y, z, h, radius, sec));
 }
 
 static int BLINext(DBlockLinesIterator *self)
@@ -184,8 +182,8 @@ public:
 		cres.portalflags = 0;
 	}
 
-	DBlockThingsIterator(FLevelLocals *Level, double checkx, double checky, double checkz, double checkh, double checkradius, bool ignorerestricted, sector_t *newsec)
-		: iterator(check, Level, checkx, checky, checkz, checkh, checkradius, ignorerestricted, newsec)
+	DBlockThingsIterator(double checkx, double checky, double checkz, double checkh, double checkradius, bool ignorerestricted, sector_t *newsec)
+		: iterator(check, checkx, checky, checkz, checkh, checkradius, ignorerestricted, newsec)
 	{
 		cres.thing = nullptr;
 		cres.Position.Zero();
@@ -211,22 +209,21 @@ DEFINE_ACTION_FUNCTION_NATIVE(DBlockThingsIterator, Create, CreateBTI)
 	ACTION_RETURN_OBJECT(Create<DBlockThingsIterator>(origin, radius, ignore));
 }
 
-static DBlockThingsIterator *CreateBTIFromPos(FLevelLocals *Level, double x, double y, double z, double h, double radius, bool ignore)
+static DBlockThingsIterator *CreateBTIFromPos(double x, double y, double z, double h, double radius, bool ignore)
 {
-	return Create<DBlockThingsIterator>(Level, x, y, z, h, radius, ignore, nullptr);
+	return Create<DBlockThingsIterator>(x, y, z, h, radius, ignore, nullptr);
 }
 
-DEFINE_ACTION_FUNCTION_NATIVE(DBlockThingsIterator, CreateFromPosition, CreateBTIFromPos)
+DEFINE_ACTION_FUNCTION_NATIVE(DBlockThingsIterator, CreateFromPos, CreateBTIFromPos)
 {
 	PARAM_PROLOGUE;
-	PARAM_POINTER(Level, FLevelLocals);
 	PARAM_FLOAT(x);
 	PARAM_FLOAT(y);
 	PARAM_FLOAT(z);
 	PARAM_FLOAT(h);
 	PARAM_FLOAT(radius);
 	PARAM_BOOL(ignore);
-	ACTION_RETURN_OBJECT(Create<DBlockThingsIterator>(Level, x, y, z, h, radius, ignore, nullptr));
+	ACTION_RETURN_OBJECT(Create<DBlockThingsIterator>(x, y, z, h, radius, ignore, nullptr));
 }
 
 static int NextBTI(DBlockThingsIterator *bti)
@@ -246,7 +243,7 @@ class DSectorTagIterator : public DObject, public FSectorTagIterator
 {
 	DECLARE_ABSTRACT_CLASS(DSectorTagIterator, DObject);
 public:
-	DSectorTagIterator(FTagManager &tagManager, int tag, line_t *line) : FSectorTagIterator(tagManager)
+	DSectorTagIterator(int tag, line_t *line)
 	{
 		if (line == nullptr) Init(tag);
 		else Init(tag, line);
@@ -255,17 +252,17 @@ public:
 
 IMPLEMENT_CLASS(DSectorTagIterator, true, false);
 
-static DSectorTagIterator *CreateSTI(FLevelLocals *Level, int tag, line_t *line)
+static DSectorTagIterator *CreateSTI(int tag, line_t *line)
 {
-	return Create<DSectorTagIterator>(Level->tagManager, tag, line);
+	return Create<DSectorTagIterator>(tag, line);
 }
 
-DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, CreateSectorTagIterator, CreateSTI)
+DEFINE_ACTION_FUNCTION_NATIVE(DSectorTagIterator, Create, CreateSTI)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_INT(tag);
 	PARAM_POINTER(line, line_t);
-	ACTION_RETURN_POINTER(Create<DSectorTagIterator>(self->tagManager, tag, line));
+	ACTION_RETURN_POINTER(Create<DSectorTagIterator>(tag, line));
 }
 
 int NextSTI(DSectorTagIterator *self)
@@ -302,8 +299,8 @@ class DLineIdIterator : public DObject, public FLineIdIterator
 {
 	DECLARE_ABSTRACT_CLASS(DLineIdIterator, DObject);
 public:
-	DLineIdIterator(FTagManager &tagManager, int tag)
-		: FLineIdIterator(tagManager, tag)
+	DLineIdIterator(int tag)
+		: FLineIdIterator(tag)
 	{
 	}
 };
@@ -311,16 +308,16 @@ public:
 IMPLEMENT_CLASS(DLineIdIterator, true, false);
 
 
-static DLineIdIterator *CreateLTI(FLevelLocals *Level, int tag)
+static DLineIdIterator *CreateLTI(int tag)
 {
-	return Create<DLineIdIterator>(Level->tagManager, tag);
+	return Create<DLineIdIterator>(tag);
 }
 
-DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, CreateLineIDIterator, CreateLTI)
+DEFINE_ACTION_FUNCTION_NATIVE(DLineIdIterator, Create, CreateLTI)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_INT(tag);
-	ACTION_RETURN_POINTER(Create<DLineIdIterator>(self->tagManager, tag));
+	ACTION_RETURN_POINTER(Create<DLineIdIterator>(tag));
 }
 
 int NextLTI(DLineIdIterator *self)
@@ -345,25 +342,25 @@ class DActorIterator : public DObject, public NActorIterator
 	DECLARE_ABSTRACT_CLASS(DActorIterator, DObject)
 
 public:
-	DActorIterator(FLevelLocals *Level, PClassActor *cls = nullptr, int tid = 0)
-		: NActorIterator(Level, cls, tid)
+	DActorIterator(PClassActor *cls = nullptr, int tid = 0)
+		: NActorIterator(cls, tid)
 	{
 	}
 };
 
 IMPLEMENT_CLASS(DActorIterator, true, false);
 
-static DActorIterator *CreateActI(FLevelLocals *Level, int tid, PClassActor *type)
+static DActorIterator *CreateActI(int tid, PClassActor *type)
 {
-	return Create<DActorIterator>(Level, type, tid);
+	return Create<DActorIterator>(type, tid);
 }
 
-DEFINE_ACTION_FUNCTION_NATIVE(FLevelLocals, CreateActorIterator, CreateActI)
+DEFINE_ACTION_FUNCTION_NATIVE(DActorIterator, Create, CreateActI)
 {
-	PARAM_SELF_STRUCT_PROLOGUE(FLevelLocals);
+	PARAM_PROLOGUE;
 	PARAM_INT(tid);
 	PARAM_CLASS(type, AActor);
-	ACTION_RETURN_OBJECT(Create<DActorIterator>(self, type, tid));
+	ACTION_RETURN_OBJECT(Create<DActorIterator>(type, tid));
 }
 
 static AActor *NextActI(DActorIterator *self)

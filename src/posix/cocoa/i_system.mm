@@ -52,8 +52,6 @@
 
 EXTERN_CVAR(String, language)
 
-CVAR(Bool, saveconfig, true, CVAR_ARCHIVE)	//[XANE]Save to config file? This is used to hide the error when saving fails, like if on a disc.
-
 uint32_t LanguageIDs[4];
 
 
@@ -265,12 +263,8 @@ int I_PickIWad(WadStuff* const wads, const int numwads, const bool showwin, cons
 
 bool I_WriteIniFailed()
 {
-	if(saveconfig)
-	{
-		printf("The config file %s could not be saved:\n%s\n", GameConfig->GetPathName(), strerror(errno));
-		return false; // return true to retry
-	}
-	else return false;	//[XANE]If the player has showing of config-saving errors disabled, always silently ignore them.
+	printf("The config file %s could not be saved:\n%s\n", GameConfig->GetPathName(), strerror(errno));
+	return false; // return true to retry
 }
 
 

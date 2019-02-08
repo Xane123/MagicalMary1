@@ -307,7 +307,6 @@ public:
 
 	// {} sections
 
-	FLevelLocals *Level;
 	TObjPtr<DFsSection*> sections[SECTIONSLOTS];
 
 	// variables:
@@ -333,7 +332,7 @@ public:
 	bool lastiftrue;     // haleyjd: whether last "if" statement was 
 	// true or false
 
-	DFsScript(FLevelLocals *Level);
+	DFsScript();
 	~DFsScript();
 	void OnDestroy() override;
 	void Serialize(FSerializer &ar);
@@ -366,9 +365,6 @@ public:
 	void ParseInclude(char *lumpname);
 	void ParseScript(char *rover = NULL);
 	void ParseData(char *rover, char *data, char *end);
-	
-private:
-	DFsScript() {}
 };
 
 //==========================================================================
@@ -692,7 +688,6 @@ class DFraggleThinker : public DThinker
 	DECLARE_CLASS(DFraggleThinker, DThinker)
 	HAS_OBJECT_POINTERS
 public:
-	static const int DEFAULT_STAT = STAT_SCRIPTS;
 
 	int zoom = 1;
 	AActor *trigger_obj;	// this is a transient pointer not being subjected to GC.
@@ -701,7 +696,7 @@ public:
 	TObjPtr<DRunningScript*> RunningScripts;
 	TArray<TObjPtr<AActor*> > SpawnedThings;
 
-	DFraggleThinker(FLevelLocals *Level);
+	DFraggleThinker();
 	void OnDestroy() override;
 
 
@@ -714,8 +709,6 @@ public:
 	void AddRunningScript(DRunningScript *runscr);
 
 	static TObjPtr<DFraggleThinker*> ActiveThinker;
-private:
-	DFraggleThinker();
 };
 
 //-----------------------------------------------------------------------------

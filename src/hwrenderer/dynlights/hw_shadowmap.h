@@ -26,27 +26,27 @@ public:
 	static int LightsProcessed;
 	static int LightsShadowmapped;
 
-	bool PerformUpdate(FLevelLocals *level);
+	bool PerformUpdate();
 	void FinishUpdate()
 	{
 		UpdateCycles.Clock();
 	}
 
 protected:
-	void CollectLights(FDynamicLight *head);
+	void CollectLights();
 	bool ValidateAABBTree(FLevelLocals *lev);
 
 	// Upload the AABB-tree to the GPU
-	void UploadAABBTree(FLevelLocals *Level);
+	void UploadAABBTree();
 
 	// Upload light list to the GPU
-	void UploadLights(FDynamicLight *head);
+	void UploadLights();
 
 	// Working buffer for creating the list of lights. Stored here to avoid allocating memory each frame
 	TArray<float> mLights;
 
 	// Used to detect when a level change requires the AABB tree to be regenerated
-	const level_info_t *mLastLevel = nullptr;
+	level_info_t *mLastLevel = nullptr;
 	unsigned mLastNumNodes = 0;
 	unsigned mLastNumSegs = 0;
 

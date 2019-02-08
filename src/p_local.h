@@ -50,7 +50,6 @@ struct secplane_t;
 struct FCheckPosition;
 struct FTranslatedLineTarget;
 struct FLinePortal;
-struct FLevelLocals;
 
 #include <stdlib.h>
 
@@ -98,7 +97,7 @@ void	P_PredictionLerpReset();
 #define SPF_TEMPPLAYER		1	// spawning a short-lived dummy player
 #define SPF_WEAPONFULLYUP	2	// spawn with weapon already raised
 
-AActor *P_SpawnPlayer (FLevelLocals *Level, FPlayerStart *mthing, int playernum, int flags=0);
+AActor *P_SpawnPlayer (FPlayerStart *mthing, int playernum, int flags=0);
 
 int P_FaceMobj (AActor *source, AActor *target, DAngle *delta);
 bool P_SeekerMissile (AActor *actor, double thresh, double turnMax, bool precise = false, bool usecurspeed=false);
@@ -146,14 +145,14 @@ AActor *P_SpawnSubMissile (AActor *source, PClassActor *type, AActor *target);	/
 extern FClassMap SpawnableThings;
 extern FClassMap StrifeTypes;
 
-bool	P_Thing_Spawn (FLevelLocals *Level, int tid, AActor *source, int type, DAngle angle, bool fog, int newtid);
-bool	P_Thing_Projectile (FLevelLocals *Level, int tid, AActor *source, int type, const char * type_name, DAngle angle,
+bool	P_Thing_Spawn (int tid, AActor *source, int type, DAngle angle, bool fog, int newtid);
+bool	P_Thing_Projectile (int tid, AActor *source, int type, const char * type_name, DAngle angle,
 			double speed, double vspeed, int dest, AActor *forcedest, int gravity, int newtid,
 			bool leadTarget);
 
 bool	P_MoveThing(AActor *source, const DVector3 &pos, bool fog);
-bool	P_Thing_Move (FLevelLocals *Level, int tid, AActor *source, int mapspot, bool fog);
-int		P_Thing_Damage (FLevelLocals *Level, int tid, AActor *whofor0, int amount, FName type);
+bool	P_Thing_Move (int tid, AActor *source, int mapspot, bool fog);
+int		P_Thing_Damage (int tid, AActor *whofor0, int amount, FName type);
 void	P_Thing_SetVelocity(AActor *actor, const DVector3 &vec, bool add, bool setbob);
 void P_RemoveThing(AActor * actor);
 bool P_Thing_Raise(AActor *thing, AActor *raiser, int flags = 0);
@@ -458,11 +457,11 @@ enum EDmgFlags
 	DMG_NO_ENHANCE = 4096,
 };
 
-struct FLevelLocals;
+
 //
 // P_SPEC
 //
-bool P_AlignFlat (FLevelLocals *l, int linenum, int side, int fc);
+bool P_AlignFlat (int linenum, int side, int fc);
 
 enum ETexReplaceFlags
 {
@@ -473,7 +472,7 @@ enum ETexReplaceFlags
 	NOT_CEILING			= 16
 };
 
-void P_ReplaceTextures(FLevelLocals *l, const char *fromname, const char *toname, int flags);
+void P_ReplaceTextures(const char *fromname, const char *toname, int flags);
 
 enum ERaise
 {

@@ -285,6 +285,20 @@ const char *UDMFParserBase::CheckString(const char *key)
 //
 //===========================================================================
 
+typedef TMap<int, FUDMFKeys> FUDMFKeyMap;
+
+
+static FUDMFKeyMap UDMFKeys[4];
+// Things must be handled differently
+
+void P_ClearUDMFKeys()
+{
+	for(int i=0;i<4;i++)
+	{
+		UDMFKeys[i].Clear();
+	}
+}
+
 static int udmfcmp(const void *a, const void *b)
 {
 	FUDMFKey *A = (FUDMFKey*)a;
@@ -332,11 +346,11 @@ FUDMFKey *FUDMFKeys::Find(FName key)
 //
 //===========================================================================
 
-int GetUDMFInt(FLevelLocals *Level, int type, int index, FName key)
+int GetUDMFInt(int type, int index, FName key)
 {
 	assert(type >=0 && type <=3);
 
-	FUDMFKeys *pKeys = Level->UDMFKeys[type].CheckKey(index);
+	FUDMFKeys *pKeys = UDMFKeys[type].CheckKey(index);
 
 	if (pKeys != NULL)
 	{
@@ -349,11 +363,11 @@ int GetUDMFInt(FLevelLocals *Level, int type, int index, FName key)
 	return 0;
 }
 
-double GetUDMFFloat(FLevelLocals *Level, int type, int index, FName key)
+double GetUDMFFloat(int type, int index, FName key)
 {
 	assert(type >=0 && type <=3);
 
-	FUDMFKeys *pKeys = Level->UDMFKeys[type].CheckKey(index);
+	FUDMFKeys *pKeys = UDMFKeys[type].CheckKey(index);
 
 	if (pKeys != NULL)
 	{
@@ -366,11 +380,11 @@ double GetUDMFFloat(FLevelLocals *Level, int type, int index, FName key)
 	return 0;
 }
 
-FString GetUDMFString(FLevelLocals *Level, int type, int index, FName key)
+FString GetUDMFString(int type, int index, FName key)
 {
 	assert(type >= 0 && type <= 3);
 
-	FUDMFKeys *pKeys = Level->UDMFKeys[type].CheckKey(index);
+	FUDMFKeys *pKeys = UDMFKeys[type].CheckKey(index);
 
 	if (pKeys != NULL)
 	{
@@ -445,7 +459,7 @@ public:
   }
 	void AddUserKey(FName key, int kind, int index)
 	{
-		FUDMFKeys &keyarray = Level->UDMFKeys[kind][index];
+		FUDMFKeys &keyarray = UDMFKeys[kind][index];
 
 		for(unsigned i=0; i < keyarray.Size(); i++)
 		{
@@ -842,7 +856,7 @@ public:
 
 			case NAME_Id:
 				lineid = CheckInt(key);
-				Level->tagManager.AddLineID(index, lineid);
+				tagManager.AddLineID(index, lineid);
 				continue;
 
 			case NAME_Sidefront:
@@ -1113,7 +1127,7 @@ public:
 			// scan the string as long as valid numbers can be found
 			while (sc.CheckNumber())
 			{
-				if (sc.Number != 0)	Level->tagManager.AddLineID(index, sc.Number);
+				if (sc.Number != 0)	tagManager.AddLineID(index, sc.Number);
 			}
 		}
 
@@ -1499,7 +1513,7 @@ public:
 				continue;
 
 			case NAME_Id:
-				Level->tagManager.AddSectorTag(index, CheckInt(key));
+				tagManager.AddSectorTag(index, CheckInt(key));
 				continue;
 
 			default:
@@ -1894,7 +1908,7 @@ public:
 			// scan the string as long as valid numbers can be found
 			while (sc.CheckNumber())
 			{
-				if (sc.Number != 0)	Level->tagManager.AddSectorTag(index, sc.Number);
+				if (sc.Number != 0)	tagManager.AddSectorTag(index, sc.Number);
 			}
 		}
 
@@ -2264,7 +2278,6 @@ public:
 		for(unsigned i = 0; i < Level->sectors.Size(); i++)
 		{
 			Level->sectors[i].e = &Level->sectors[0].e[i];
-			Level->sectors[i].Level = Level;
 		}
 		// Now create the scrollers.
 		for (auto &scroll : UDMFScrollers)

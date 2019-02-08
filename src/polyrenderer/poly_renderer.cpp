@@ -34,7 +34,6 @@
 #include "st_stuff.h"
 #include "g_levellocals.h"
 #include "p_effect.h"
-#include "actorinlines.h"
 #include "polyrenderer/scene/poly_light.h"
 #include "swrenderer/scene/r_scene.h"
 #include "swrenderer/drawers/r_draw_rgba.h"
@@ -132,11 +131,10 @@ void PolyRenderer::RenderActorView(AActor *actor, bool dontmaplines)
 	NetUpdate();
 	
 	DontMapLines = dontmaplines;
-
-	Level = actor->Level;
+	
 	R_SetupFrame(Viewpoint, Viewwindow, actor);
-	ForAllLevels(P_FindParticleSubsectors);
-	ForAllLevels(PO_LinkToSubsectors);
+	P_FindParticleSubsectors();
+	PO_LinkToSubsectors();
 
 	static bool firstcall = true;
 	if (firstcall)
@@ -188,10 +186,7 @@ void PolyRenderer::RenderActorView(AActor *actor, bool dontmaplines)
 
 	if (Viewpoint.camera)
 		Viewpoint.camera->renderflags = savedflags;
-	ForAllLevels([](FLevelLocals *Level)
-	{
-		Level->interpolator.RestoreInterpolations();
-	});
+	interpolator.RestoreInterpolations ();
 	
 	NetUpdate();
 }
@@ -227,7 +222,7 @@ PolyPortalViewpoint PolyRenderer::SetupPerspectiveMatrix(bool mirror)
 	// We have to scale the pitch to account for the pixel stretching, because the playsim doesn't know about this and treats it as 1:1.
 	double radPitch = Viewpoint.Angles.Pitch.Normalized180().Radians();
 	double angx = cos(radPitch);
-	double angy = sin(radPitch) * PolyRenderer::Instance()->Level->info->pixelstretch;
+	double angy = sin(radPitch) * level.info->pixelstretch;
 	double alen = sqrt(angx*angx + angy*angy);
 	float adjustedPitch = (float)asin(angy / alen);
 	float adjustedViewAngle = (float)(Viewpoint.Angles.Yaw - 90).Radians();
@@ -243,7 +238,7 @@ PolyPortalViewpoint PolyRenderer::SetupPerspectiveMatrix(bool mirror)
 		Mat4f::Rotate((float)Viewpoint.Angles.Roll.Radians(), 0.0f, 0.0f, 1.0f) *
 		Mat4f::Rotate(adjustedPitch, 1.0f, 0.0f, 0.0f) *
 		Mat4f::Rotate(adjustedViewAngle, 0.0f, -1.0f, 0.0f) *
-		Mat4f::Scale(1.0f, PolyRenderer::Instance()->Level->info->pixelstretch, 1.0f) *
+		Mat4f::Scale(1.0f, level.info->pixelstretch, 1.0f) *
 		Mat4f::SwapYZ() *
 		Mat4f::Translate((float)-Viewpoint.Pos.X, (float)-Viewpoint.Pos.Y, (float)-Viewpoint.Pos.Z);
 

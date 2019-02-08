@@ -1125,7 +1125,7 @@ static void BuildEpisodeMenu()
 					else
 					{
 						it = CreateListMenuItemText(ld->mXpos, posy, ld->mLinespacing, AllEpisodes[i].mShortcut, 
-							AllEpisodes[i].mEpisodeName, ld->mFont, CR_PURPLE,CR_CREAM, NAME_Skillmenu, i);
+							AllEpisodes[i].mEpisodeName, ld->mFont, ld->mFontColor, ld->mFontColor2, NAME_Skillmenu, i);
 					}
 					ld->mItems.Push(it);
 					posy += ld->mLinespacing;
@@ -1217,9 +1217,8 @@ static void BuildPlayerclassMenu()
 			if (numclassitems <= 1)
 			{
 				// create a dummy item that auto-chooses the default class.
-				// [XANE]Use "CR_PURPLE,CR_CREAM" instead of the hardcoded colors here once it's known what is coating everything in RED!
 				auto it = CreateListMenuItemText(0, 0, 0, 'p', "player", 
-					ld->mFont,CR_PURPLE,CR_CREAM, NAME_Episodemenu, -1000);
+					ld->mFont,ld->mFontColor, ld->mFontColor2, NAME_Episodemenu, -1000);
 				ld->mAutoselect = ld->mItems.Push(it);
 				success = true;
 			}
@@ -1245,7 +1244,7 @@ static void BuildPlayerclassMenu()
 						if (pname != nullptr)
 						{
 							auto it = CreateListMenuItemText(ld->mXpos, ld->mYpos, ld->mLinespacing, *pname,
-								pname, ld->mFont,CR_PURPLE,CR_CREAM, NAME_Episodemenu, i);
+								pname, ld->mFont,ld->mFontColor,ld->mFontColor2, NAME_Episodemenu, i);
 							ld->mItems.Push(it);
 							ld->mYpos += ld->mLinespacing;
 							n++;
@@ -1255,7 +1254,7 @@ static void BuildPlayerclassMenu()
 				if (n > 1 && !gameinfo.norandomplayerclass)
 				{
 					auto it = CreateListMenuItemText(ld->mXpos, ld->mYpos, ld->mLinespacing, 'r',
-						"$MNU_RANDOM", ld->mFont,CR_PURPLE,CR_CREAM, NAME_Episodemenu, -1);
+						"$MNU_RANDOM", ld->mFont,ld->mFontColor,ld->mFontColor2, NAME_Episodemenu, -1);
 					ld->mItems.Push(it);
 				}
 				if (n == 0)
@@ -1264,7 +1263,7 @@ static void BuildPlayerclassMenu()
 					if (pname != nullptr)
 					{
 						auto it = CreateListMenuItemText(ld->mXpos, ld->mYpos, ld->mLinespacing, *pname,
-							pname, ld->mFont,CR_PURPLE,CR_CREAM, NAME_Episodemenu, 0);
+							pname, ld->mFont,ld->mFontColor,ld->mFontColor2, NAME_Episodemenu, 0);
 						ld->mItems.Push(it);
 					}
 				}
@@ -1633,11 +1632,11 @@ void M_StartupSkillMenu(FGameStartup *gs)
 					li = CreateListMenuItemPatch(ld->mXpos, y, ld->mLinespacing, skill.Shortcut, tex, action, SkillIndices[i]);
 				}
 				else
-				{	// [XANE] Use "ld->mFont, color,ld->mFontColor2" instead of hardcoded colors if it works better than this hackish method.
+				{
 					EColorRange color = (EColorRange)skill.GetTextColor();
 					if (color == CR_UNTRANSLATED) color = ld->mFontColor;
 					li = CreateListMenuItemText(x, y, ld->mLinespacing, skill.Shortcut, 
-									pItemText? *pItemText : skill.MenuName, ld->mFont, CR_PURPLE,CR_CREAM, action, SkillIndices[i]);
+									pItemText? *pItemText : skill.MenuName, ld->mFont, color,ld->mFontColor2, action, SkillIndices[i]);
 				}
 				ld->mItems.Push(li);
 				GC::WriteBarrier(*desc, li);

@@ -64,7 +64,6 @@
 #include "events.h"
 #include "i_time.h"
 #include "vm.h"
-#include "actorinlines.h"
 
 EXTERN_CVAR (Int, disableautosave)
 EXTERN_CVAR (Int, autosavecount)
@@ -2085,12 +2084,12 @@ static int KillAll(PClassActor *cls)
 	return P_Massacre(false, cls);
 }
 
-static int RemoveClass(FLevelLocals *Level, const PClass *cls)
+static int RemoveClass(const PClass *cls)
 {
 	AActor *actor;
 	int removecount = 0;
 	bool player = false;
-	TThinkerIterator<AActor> iterator(Level, cls);
+	TThinkerIterator<AActor> iterator(cls);
 	while ((actor = iterator.Next()))
 	{
 		if (actor->IsA(cls))
@@ -2226,12 +2225,8 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 		s = ReadString (stream);
 		// Using LEVEL_NOINTERMISSION tends to throw the game out of sync.
 		// That was a long time ago. Maybe it works now?
-		if (currentSession)
-		{
-			auto Level = currentSession->Levelinfo[0];
-			Level->flags |= LEVEL_CHANGEMAPCHEAT;
-			G_ChangeLevel(Level, s, pos, 0);
-		}
+		level.flags |= LEVEL_CHANGEMAPCHEAT;
+		G_ChangeLevel(s, pos, 0);
 		break;
 
 	case DEM_SUICIDE:
@@ -2239,7 +2234,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 		break;
 
 	case DEM_ADDBOT:
-		bglobal.TryAddBot (currentSession->Levelinfo[0], stream, player);
+		bglobal.TryAddBot (stream, player);
 		break;
 
 	case DEM_KILLBOTS:
@@ -2338,14 +2333,14 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 						const AActor *def = GetDefaultByType (typeinfo);
 						DVector3 spawnpos = source->Vec3Angle(def->radius * 2 + source->radius, source->Angles.Yaw, 8.);
 
-						AActor *spawned = Spawn (source->Level, typeinfo, spawnpos, ALLOW_REPLACE);
+						AActor *spawned = Spawn (typeinfo, spawnpos, ALLOW_REPLACE);
 						if (spawned != NULL)
 						{
 							if (type == DEM_SUMMONFRIEND || type == DEM_SUMMONFRIEND2 || type == DEM_SUMMONMBF)
 							{
 								if (spawned->CountsAsKill()) 
 								{
-									source->Level->total_monsters--;
+									level.total_monsters--;
 								}
 								spawned->FriendPlayer = player + 1;
 								spawned->flags |= MF_FRIENDLY;
@@ -2515,7 +2510,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 			}
 			if (!CheckCheatmode(player == consoleplayer))
 			{
-				P_ExecuteSpecial(players[player].mo->Level, snum, NULL, players[player].mo, false, arg[0], arg[1], arg[2], arg[3], arg[4]);
+				P_ExecuteSpecial(snum, NULL, players[player].mo, false, arg[0], arg[1], arg[2], arg[3], arg[4]);
 			}
 		}
 		break;
@@ -2590,11 +2585,11 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 		PClassActor *cls = PClass::FindActor(s);
 		if (cls != NULL && cls->IsDescendantOf(RUNTIME_CLASS(AActor)))
 		{
-			removecount = RemoveClass(players[player].mo->Level, cls);
+			removecount = RemoveClass(cls);
 			const PClass *cls_rep = cls->GetReplacement();
 			if (cls != cls_rep)
 			{
-				removecount += RemoveClass(players[player].mo->Level, cls_rep);
+				removecount += RemoveClass(cls_rep);
 			}
 			Printf("Removed %d actors of type %s.\n", removecount, s);
 		}
@@ -2668,11 +2663,7 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 
 	case DEM_FINISHGAME:
 		// Simulate an end-of-game action
-		if (currentSession)
-		{
-			auto Level = currentSession->Levelinfo[0];
-			G_ChangeLevel(Level, nullptr, 0, 0);
-		}
+		G_ChangeLevel(NULL, 0, 0);
 		break;
 
 	case DEM_NETEVENT:
@@ -2710,7 +2701,7 @@ static void RunScript(uint8_t **stream, AActor *pawn, int snum, int argn, int al
 			arg[i] = argval;
 		}
 	}
-	P_StartScript(pawn->Level, pawn, NULL, snum, pawn->Level->MapName, arg, MIN<int>(countof(arg), argn), ACS_NET | always);
+	P_StartScript(pawn, NULL, snum, level.MapName, arg, MIN<int>(countof(arg), argn), ACS_NET | always);
 }
 
 void Net_SkipCommand (int type, uint8_t **stream)

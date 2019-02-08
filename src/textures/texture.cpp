@@ -870,7 +870,7 @@ float FTexCoordInfo::TextureAdjustWidth() const
 //
 //===========================================================================
 
-void FTexCoordInfo::GetFromTexture(FTexture *tex, float x, float y, bool forceworldpanning)
+void FTexCoordInfo::GetFromTexture(FTexture *tex, float x, float y)
 {
 	if (x == 1.f)
 	{
@@ -904,7 +904,7 @@ void FTexCoordInfo::GetFromTexture(FTexture *tex, float x, float y, bool forcewo
 		mScale.Y = -mScale.Y;
 		mRenderHeight = -mRenderHeight;
 	}
-	mWorldPanning = tex->bWorldPanning || forceworldpanning;
+	mWorldPanning = tex->bWorldPanning || (level.flags3 & LEVEL3_FORCEWORLDPANNING);
 	mWidth = tex->GetWidth();
 }
 

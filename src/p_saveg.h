@@ -41,6 +41,9 @@ class FSerializer;
 // Also see farchive.(h|cpp)
 void P_DestroyThinkers(bool hubLoad);
 
-void G_SerializeLevel(FSerializer &arc, FLevelLocals *Level, bool hubLoad);
+void P_ReadACSDefereds (FSerializer &);
+void P_WriteACSDefereds (FSerializer &);
+
+void G_SerializeLevel(FSerializer &arc, bool hubLoad);
 
 #endif // __P_SAVEG_H__

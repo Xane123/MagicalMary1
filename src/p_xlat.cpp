@@ -102,8 +102,7 @@ void P_TranslateLineDef (line_t *ld, maplinedef_t *mld, int lineindexforid)
 		// line also needs to have its ID set to the same as its tag.
 		// An external conversion program would need to do this more
 		// intelligently.
-		auto Level = ld->GetLevel();
-		Level->tagManager.AddLineID(lineindexforid, tag);
+		tagManager.AddLineID(lineindexforid, tag);
 	}
 
 	// 0 specials are never translated.
@@ -296,10 +295,10 @@ void P_TranslateLineDef (line_t *ld, maplinedef_t *mld, int lineindexforid)
 // given a TID. And since Doom format maps don't have TIDs, we can safely
 // give them TID 1.
 
-void FLevelLocals::TranslateTeleportThings ()
+void P_TranslateTeleportThings ()
 {
 	AActor *dest;
-	TThinkerIterator<AActor> iterator(this, NAME_TeleportDest);
+	TThinkerIterator<AActor> iterator(NAME_TeleportDest);
 	bool foundSomething = false;
 
 	while ( (dest = iterator.Next()) )
@@ -314,7 +313,7 @@ void FLevelLocals::TranslateTeleportThings ()
 
 	if (foundSomething)
 	{
-		for (auto &line : lines)
+		for (auto &line : level.lines)
 		{
 			if (line.special == Teleport)
 			{

@@ -47,6 +47,10 @@
 
 IMPLEMENT_CLASS(DDoor, false, false)
 
+DDoor::DDoor ()
+{
+}
+
 void DDoor::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -132,7 +136,7 @@ void DDoor::Tick ()
 		// killough 10/98: implement gradual lighting effects
 		if (m_LightTag != 0 && m_TopDist != -m_Sector->floorplane.fD())
 		{
-			EV_LightTurnOnPartway (Level, m_LightTag, 
+			EV_LightTurnOnPartway (m_LightTag, 
 				(m_Sector->ceilingplane.fD() + m_Sector->floorplane.fD()) / (m_TopDist + m_Sector->floorplane.fD()));
 		}
 
@@ -178,7 +182,7 @@ void DDoor::Tick ()
 		// killough 10/98: implement gradual lighting effects
 		if (m_LightTag != 0 && m_TopDist != -m_Sector->floorplane.fD())
 		{
-			EV_LightTurnOnPartway (Level, m_LightTag, 
+			EV_LightTurnOnPartway (m_LightTag, 
 				(m_Sector->ceilingplane.fD() + m_Sector->floorplane.fD()) / (m_TopDist + m_Sector->floorplane.fD()));
 		}
 
@@ -346,7 +350,7 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 	vertex_t *spot;
 	double height;
 
-	if (Level->i_compatflags & COMPATF_NODOORLIGHT)
+	if (i_compatflags & COMPATF_NODOORLIGHT)
 	{
 		m_LightTag = 0;
 	}
@@ -413,7 +417,7 @@ DDoor::DDoor (sector_t *sec, EVlDoor type, double speed, int delay, int lightTag
 //
 //============================================================================
 
-bool EV_DoDoor (FLevelLocals *Level, DDoor::EVlDoor type, line_t *line, AActor *thing,
+bool EV_DoDoor (DDoor::EVlDoor type, line_t *line, AActor *thing,
 				int tag, double speed, int delay, int lock, int lightTag, bool boomgen, int topcountdown)
 {
 	bool		rtn = false;
@@ -480,21 +484,21 @@ bool EV_DoDoor (FLevelLocals *Level, DDoor::EVlDoor type, line_t *line, AActor *
 			}
 			return false;
 		}
-		if (CreateThinker<DDoor> (sec, type, speed, delay, lightTag, topcountdown))
+		if (Create<DDoor> (sec, type, speed, delay, lightTag, topcountdown))
 			rtn = true;
 	}
 	else
 	{	// [RH] Remote door
 
-		FSectorTagIterator it(Level->tagManager, tag);
+		FSectorTagIterator it(tag);
 		while ((secnum = it.Next()) >= 0)
 		{
-			sec = &Level->sectors[secnum];
+			sec = &level.sectors[secnum];
 			// if the ceiling is already moving, don't start the door action
 			if (sec->PlaneMoving(sector_t::ceiling))
 				continue;
 
-			if (CreateThinker<DDoor>(sec, type, speed, delay, lightTag, topcountdown))
+			if (Create<DDoor>(sec, type, speed, delay, lightTag, topcountdown))
 				rtn = true;
 		}
 				
@@ -509,6 +513,10 @@ bool EV_DoDoor (FLevelLocals *Level, DDoor::EVlDoor type, line_t *line, AActor *
 //============================================================================
 
 IMPLEMENT_CLASS(DAnimatedDoor, false, false)
+
+DAnimatedDoor::DAnimatedDoor ()
+{
+}
 
 DAnimatedDoor::DAnimatedDoor (sector_t *sec)
 	: DMovingCeiling (sec, false)
@@ -740,7 +748,7 @@ DAnimatedDoor::DAnimatedDoor (sector_t *sec, line_t *line, int speed, int delay,
 //
 //============================================================================
 
-bool EV_SlidingDoor (FLevelLocals *Level, line_t *line, AActor *actor, int tag, int speed, int delay, DAnimatedDoor::EADType type)
+bool EV_SlidingDoor (line_t *line, AActor *actor, int tag, int speed, int delay, DAnimatedDoor::EADType type)
 {
 	sector_t *sec;
 	int secnum;
@@ -773,16 +781,16 @@ bool EV_SlidingDoor (FLevelLocals *Level, line_t *line, AActor *actor, int tag, 
 		FDoorAnimation *anim = TexMan.FindAnimatedDoor (line->sidedef[0]->GetTexture(side_t::top));
 		if (anim != NULL)
 		{
-			CreateThinker<DAnimatedDoor>(sec, line, speed, delay, anim, type);
+			Create<DAnimatedDoor>(sec, line, speed, delay, anim, type);
 			return true;
 		}
 		return false;
 	}
 
-	FSectorTagIterator it(Level->tagManager, tag);
+	FSectorTagIterator it(tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sec = &Level->sectors[secnum];
+		sec = &level.sectors[secnum];
 		if (sec->ceilingdata != NULL)
 		{
 			continue;
@@ -798,7 +806,7 @@ bool EV_SlidingDoor (FLevelLocals *Level, line_t *line, AActor *actor, int tag, 
 			if (anim != NULL)
 			{
 				rtn = true;
-				CreateThinker<DAnimatedDoor>(sec, line, speed, delay, anim, type);
+				Create<DAnimatedDoor>(sec, line, speed, delay, anim, type);
 				break;
 			}
 		}

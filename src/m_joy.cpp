@@ -52,7 +52,6 @@
 EXTERN_CVAR(Bool, joy_ps2raw)
 EXTERN_CVAR(Bool, joy_dinput)
 EXTERN_CVAR(Bool, joy_xinput)
-EXTERN_CVAR(Bool, cl_run)
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
@@ -63,8 +62,6 @@ CUSTOM_CVAR(Bool, use_joystick, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG|CVAR_NOINI
 	joy_dinput.Callback();
 	joy_xinput.Callback();
 #endif
-
-	cl_run = use_joystick;	//[XANE]Automatically turn "always run" on when using a controller.
 }
 
 // PRIVATE DATA DEFINITIONS ------------------------------------------------

@@ -45,9 +45,9 @@ public:
 	}
 	
 	// The feature from hell... :(
-	bool useWorldPanning(FLevelLocals *Level) const
+	bool useWorldPanning() const
 	{
-		return mTexture->bWorldPanning || (Level->flags3 & LEVEL3_FORCEWORLDPANNING);
+		return mTexture->bWorldPanning || (level.flags3 & LEVEL3_FORCEWORLDPANNING);
 	}
 
 	bool isMasked()

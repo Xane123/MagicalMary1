@@ -163,7 +163,7 @@ namespace swrenderer
 			float z = (float)actor->Center();
 			float radiusSquared = (float)(actor->renderradius * actor->renderradius);
 
-			BSPWalkCircle(actor->Level, x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
+			BSPWalkCircle(x, y, radiusSquared, [&](subsector_t *subsector) // Iterate through all subsectors potentially touched by actor
 			{
 				FLightNode * node = subsector->section->lighthead;
 				while (node) // check all lights touching a subsector
@@ -273,11 +273,10 @@ namespace swrenderer
 	{
 		// Calculate the WorldToView matrix as it would have looked like without yshearing:
 		const auto &Viewpoint = Thread->Viewport->viewpoint;
-		auto Level = Thread->Viewport->GetLevel();
 		const auto &Viewwindow = Thread->Viewport->viewwindow;
 		double radPitch = Viewpoint.Angles.Pitch.Normalized180().Radians();
 		double angx = cos(radPitch);
-		double angy = sin(radPitch) * Level->info->pixelstretch;
+		double angy = sin(radPitch) * level.info->pixelstretch;
 		double alen = sqrt(angx*angx + angy*angy);
 		float adjustedPitch = (float)asin(angy / alen);
 		float adjustedViewAngle = (float)(Viewpoint.Angles.Yaw - 90).Radians();
@@ -287,7 +286,7 @@ namespace swrenderer
 		Mat4f altWorldToView =
 			Mat4f::Rotate(adjustedPitch, 1.0f, 0.0f, 0.0f) *
 			Mat4f::Rotate(adjustedViewAngle, 0.0f, -1.0f, 0.0f) *
-			Mat4f::Scale(1.0f, Level->info->pixelstretch, 1.0f) *
+			Mat4f::Scale(1.0f, level.info->pixelstretch, 1.0f) *
 			Mat4f::SwapYZ() *
 			Mat4f::Translate((float)-Viewpoint.Pos.X, (float)-Viewpoint.Pos.Y, (float)-Viewpoint.Pos.Z);
 
@@ -352,8 +351,7 @@ namespace swrenderer
 	void SWModelRenderer::DrawArrays(int start, int count)
 	{
 		PolyDrawArgs args;
-		auto nc = !!(sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
-		args.SetLight(GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc), lightlevel, visibility, fullbrightSprite);
+		args.SetLight(GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true), lightlevel, visibility, fullbrightSprite);
 		args.SetLights(Lights, NumLights);
 		args.SetNormal(FVector3(0.0f, 0.0f, 0.0f));
 		args.SetStyle(RenderStyle, RenderAlpha, fillcolor, Translation, SkinTexture->GetSoftwareTexture(), fullbrightSprite);
@@ -370,8 +368,7 @@ namespace swrenderer
 	void SWModelRenderer::DrawElements(int numIndices, size_t offset)
 	{
 		PolyDrawArgs args;
-		auto nc = !!(sector->Level->flags3 & LEVEL3_NOCOLOREDSPRITELIGHTING);
-		args.SetLight(GetSpriteColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], nc), lightlevel, visibility, fullbrightSprite);
+		args.SetLight(GetColorTable(sector->Colormap, sector->SpecialColors[sector_t::sprites], true), lightlevel, visibility, fullbrightSprite);
 		args.SetLights(Lights, NumLights);
 		args.SetNormal(FVector3(0.0f, 0.0f, 0.0f));
 		args.SetStyle(RenderStyle, RenderAlpha, fillcolor, Translation, SkinTexture->GetSoftwareTexture(), fullbrightSprite);

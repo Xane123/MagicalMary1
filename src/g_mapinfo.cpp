@@ -189,6 +189,37 @@ cluster_info_t *FindClusterInfo (int cluster)
 //
 //==========================================================================
 
+void G_ClearSnapshots (void)
+{
+	for (unsigned int i = 0; i < wadlevelinfos.Size(); i++)
+	{
+		wadlevelinfos[i].Snapshot.Clean();
+	}
+	// Since strings are only locked when snapshotting a level, unlock them
+	// all now, since we got rid of all the snapshots that cared about them.
+	GlobalACSStrings.UnlockAll();
+}
+
+//==========================================================================
+//
+// Remove any existing defereds
+//
+//==========================================================================
+
+void P_RemoveDefereds (void)
+{
+	for (unsigned int i = 0; i < wadlevelinfos.Size(); i++)
+	{
+		wadlevelinfos[i].ClearDefered();
+	}
+}
+
+
+//==========================================================================
+//
+//
+//==========================================================================
+
 void level_info_t::Reset()
 {
 	MapName = "";
@@ -214,6 +245,8 @@ void level_info_t::Reset()
 	WallVertLight = +8;
 	F1Pic = "";
 	musicorder = 0;
+	Snapshot = { 0,0,0,0,0,nullptr };
+	deferred.Clear();
 	skyspeed1 = skyspeed2 = 0.f;
 	fadeto = 0;
 	outsidefog = 0xff000000;
@@ -265,7 +298,7 @@ void level_info_t::Reset()
 //
 //==========================================================================
 
-FString level_info_t::LookupLevelName() const
+FString level_info_t::LookupLevelName()
 {
 	if (flags & LEVEL_LOOKUPLEVELNAME)
 	{
@@ -320,7 +353,7 @@ FString level_info_t::LookupLevelName() const
 //
 //==========================================================================
 
-level_info_t *level_info_t::CheckLevelRedirect () const
+level_info_t *level_info_t::CheckLevelRedirect ()
 {
 	if (RedirectType != NAME_None)
 	{
@@ -349,7 +382,7 @@ level_info_t *level_info_t::CheckLevelRedirect () const
 //
 //==========================================================================
 
-bool level_info_t::isValid() const
+bool level_info_t::isValid()
 {
 	return MapName.Len() != 0 || this == &TheDefaultLevelInfo;
 }
@@ -2251,6 +2284,8 @@ static void ClearMapinfo()
 	AllSkills.Clear();
 	DefaultSkill = -1;
 	DeinitIntermissions();
+	level.info = NULL;
+	level.F1Pic = "";
 }
 
 //==========================================================================

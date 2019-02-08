@@ -8,30 +8,28 @@
 
 inline DVector3 AActor::PosRelative(int portalgroup) const
 {
-	return Pos() + Level->Displacements.getOffset(Sector->PortalGroup, portalgroup);
+	return Pos() + level.Displacements.getOffset(Sector->PortalGroup, portalgroup);
 }
 
 inline DVector3 AActor::PosRelative(const AActor *other) const
 {
-	return Pos() + Level->Displacements.getOffset(Sector->PortalGroup, other->Sector->PortalGroup);
+	return Pos() + level.Displacements.getOffset(Sector->PortalGroup, other->Sector->PortalGroup);
 }
 
 inline DVector3 AActor::PosRelative(sector_t *sec) const
 {
-	return Pos() + Level->Displacements.getOffset(Sector->PortalGroup, sec->PortalGroup);
+	return Pos() + level.Displacements.getOffset(Sector->PortalGroup, sec->PortalGroup);
 }
 
 inline DVector3 AActor::PosRelative(const line_t *line) const
 {
-	return Pos() + Level->Displacements.getOffset(Sector->PortalGroup, line->frontsector->PortalGroup);
+	return Pos() + level.Displacements.getOffset(Sector->PortalGroup, line->frontsector->PortalGroup);
 }
 
-/*
 inline DVector3 PosRelative(const DVector3 &pos, line_t *line, sector_t *refsec = NULL)
 {
-	return pos + Level->Displacements.getOffset(refsec->PortalGroup, line->frontsector->PortalGroup);
+	return pos + level.Displacements.getOffset(refsec->PortalGroup, line->frontsector->PortalGroup);
 }
-*/
 
 
 inline void AActor::ClearInterpolation()
@@ -63,7 +61,7 @@ inline double AActor::GetBobOffset(double ticfrac) const
 	{
 		return 0;
 	}
-	return BobSin(FloatBobPhase + Level->maptime + ticfrac) * FloatBobStrength;
+	return BobSin(FloatBobPhase + level.maptime + ticfrac) * FloatBobStrength;
 }
 
 inline double AActor::GetCameraHeight() const
@@ -80,7 +78,7 @@ inline FDropItem *AActor::GetDropItems() const
 inline double AActor::GetGravity() const
 {
 	if (flags & MF_NOGRAVITY) return 0;
-	return Level->gravity * Sector->gravity * Gravity * 0.00125;
+	return level.gravity * Sector->gravity * Gravity * 0.00125;
 }
 
 inline double AActor::AttackOffset(double offset)
@@ -95,94 +93,3 @@ inline double AActor::AttackOffset(double offset)
 	}
 
 }
-
-inline bool AActor::isFrozen()
-{
-	if (!(flags5 & MF5_NOTIMEFREEZE))
-	{
-		auto state = currentSession->isFrozen();
-		if (state)
-		{
-			if (player == nullptr || player->Bot != nullptr) return true;
-
-			// This is the only place in the entire game where the two freeze flags need different treatment.
-			// The time freezer flag also freezes other players, the global setting does not.
-
-			if ((state & 1) && player->timefreezer == 0)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-
-class FActorIterator
-{
-public:
-	FActorIterator (FLevelLocals *l, int i) : Level(l), base (nullptr), id (i)
-	{
-	}
-	FActorIterator (int i, AActor *start) : Level(start->Level), base (start), id (i)
-	{
-	}
-	AActor *Next ()
-	{
-		if (id == 0)
-			return nullptr;
-		if (!base)
-			base = Level->TIDHash[id & 127];
-		else
-			base = base->inext;
-
-		while (base && base->tid != id)
-			base = base->inext;
-
-		return base;
-	}
-	void Reinit()
-	{
-		base = nullptr;
-	}
-
-private:
-	FLevelLocals *Level;
-	AActor *base;
-	int id;
-};
-
-template<class T>
-class TActorIterator : public FActorIterator
-{
-public:
-	TActorIterator (FLevelLocals *Level, int id) : FActorIterator (Level, id) {}
-	T *Next ()
-	{
-		AActor *actor;
-		do
-		{
-			actor = FActorIterator::Next ();
-		} while (actor && !actor->IsKindOf (RUNTIME_CLASS(T)));
-		return static_cast<T *>(actor);
-	}
-};
-
-class NActorIterator : public FActorIterator
-{
-	const PClass *type;
-public:
-	NActorIterator (FLevelLocals *Level, const PClass *cls, int id) : FActorIterator (Level, id) { type = cls; }
-	NActorIterator (FLevelLocals *Level, FName cls, int id) : FActorIterator (Level, id) { type = PClass::FindClass(cls); }
-	NActorIterator (FLevelLocals *Level, const char *cls, int id) : FActorIterator (Level, id) { type = PClass::FindClass(cls); }
-	AActor *Next ()
-	{
-		AActor *actor;
-		if (type == NULL) return NULL;
-		do
-		{
-			actor = FActorIterator::Next ();
-		} while (actor && !actor->IsKindOf (type));
-		return actor;
-	}
-};

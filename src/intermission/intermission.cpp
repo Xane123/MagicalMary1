@@ -787,7 +787,8 @@ void DIntermissionController::Ticker ()
 			switch (mGameState)
 			{
 			case FSTATE_InLevel:
-				currentSession->Levelinfo[0]->SetMusic();
+				if (level.cdtrack == 0 || !S_ChangeCDMusic (level.cdtrack, level.cdid))
+					S_ChangeMusic (level.Music, level.musicorder);
 				gamestate = GS_LEVEL;
 				wipegamestate = GS_LEVEL;
 				P_ResumeConversation ();

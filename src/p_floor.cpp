@@ -73,6 +73,10 @@ static void StartFloorSound (sector_t *sec)
 
 IMPLEMENT_CLASS(DFloor, false, false)
 
+DFloor::DFloor ()
+{
+}
+
 void DFloor::Serialize(FSerializer &arc)
 {
 	Super::Serialize (arc);
@@ -188,19 +192,19 @@ void DFloor::Tick ()
 				sector_t *sec = m_Sector;
 				sec->stairlock = -1;				// thinker done, promote lock to -1
 
-				while (sec->prevsec != -1 && Level->sectors[sec->prevsec].stairlock != -2)
-					sec = &Level->sectors[sec->prevsec];	// search for a non-done thinker
+				while (sec->prevsec != -1 && level.sectors[sec->prevsec].stairlock != -2)
+					sec = &level.sectors[sec->prevsec];	// search for a non-done thinker
 				if (sec->prevsec == -1)				// if all thinkers previous are done
 				{
 					sec = m_Sector;			// search forward
-					while (sec->nextsec != -1 && Level->sectors[sec->nextsec].stairlock != -2)
-						sec = &Level->sectors[sec->nextsec];
+					while (sec->nextsec != -1 && level.sectors[sec->nextsec].stairlock != -2)
+						sec = &level.sectors[sec->nextsec];
 					if (sec->nextsec == -1)			// if all thinkers ahead are done too
 					{
 						while (sec->prevsec != -1)	// clear all locks
 						{
 							sec->stairlock = 0;
-							sec = &Level->sectors[sec->prevsec];
+							sec = &level.sectors[sec->prevsec];
 						}
 						sec->stairlock = 0;
 					}
@@ -283,7 +287,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 
 	// new floor thinker
 	rtn = true;
-	floor = CreateThinker<DFloor>(sec);
+	floor = Create<DFloor>(sec);
 	floor->m_Type = floortype;
 	floor->m_Crush = crush;
 	floor->m_Hexencrush = hexencrush;
@@ -461,7 +465,7 @@ bool P_CreateFloor(sector_t *sec, DFloor::EFloor floortype, line_t *line,
 		// [Graf Zahl]
 		// Don't make sounds for instant movement hacks but make an exception for
 		// switches that activate their own back side. 
-		if (!(sec->Level->i_compatflags & COMPATF_SILENT_INSTANT_FLOORS))
+		if (!(i_compatflags & COMPATF_SILENT_INSTANT_FLOORS))
 		{
 			if (!line || !(line->activation & (SPAC_Use | SPAC_Push)) || line->backsector != sec)
 				silent = true;
@@ -521,17 +525,17 @@ DEFINE_ACTION_FUNCTION(DFloor, CreateFloor)
 //
 //==========================================================================
 
-bool EV_DoFloor (FLevelLocals *Level, DFloor::EFloor floortype, line_t *line, int tag,
+bool EV_DoFloor (DFloor::EFloor floortype, line_t *line, int tag,
 				 double speed, double height, int crush, int change, bool hexencrush, bool hereticlower)
 {
 	int 		secnum;
 	bool 		rtn = false;
 
 	// check if a manual trigger; if so do just the sector on the backside
-	FSectorTagIterator it(Level->tagManager, tag, line);
+	FSectorTagIterator it(tag, line);
 	while ((secnum = it.Next()) >= 0)
 	{
-		rtn |= P_CreateFloor(&Level->sectors[secnum], floortype, line, speed, height, crush, change, hexencrush, hereticlower);
+		rtn |= P_CreateFloor(&level.sectors[secnum], floortype, line, speed, height, crush, change, hexencrush, hereticlower);
 	}
 	return rtn;
 }
@@ -544,13 +548,13 @@ bool EV_DoFloor (FLevelLocals *Level, DFloor::EFloor floortype, line_t *line, in
 //
 //==========================================================================
 
-bool EV_FloorCrushStop (FLevelLocals *Level, int tag, line_t *line)
+bool EV_FloorCrushStop (int tag, line_t *line)
 {
 	int secnum;
-	FSectorTagIterator it(Level->tagManager, tag, line);
+	FSectorTagIterator it(tag, line);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sector_t *sec = &Level->sectors[secnum];
+		sector_t *sec = &level.sectors[secnum];
 
 		if (sec->floordata && sec->floordata->IsKindOf (RUNTIME_CLASS(DFloor)) &&
 			barrier_cast<DFloor *>(sec->floordata)->m_Type == DFloor::floorRaiseAndCrush)
@@ -564,17 +568,17 @@ bool EV_FloorCrushStop (FLevelLocals *Level, int tag, line_t *line)
 }
 
 // same as above but stops any floor mover that was active on the given sector.
-bool EV_StopFloor(FLevelLocals *Level, int tag, line_t *line)
+bool EV_StopFloor(int tag, line_t *line)
 {
 	int sec;
-	FSectorTagIterator it(Level->tagManager, tag, line);
+	FSectorTagIterator it(tag, line);
 	while ((sec = it.Next()) >= 0)
 	{
-		if (Level->sectors[sec].floordata)
+		if (level.sectors[sec].floordata)
 		{
-			SN_StopSequence(&Level->sectors[sec], CHAN_FLOOR);
-			Level->sectors[sec].floordata->Destroy();
-			Level->sectors[sec].floordata = nullptr;
+			SN_StopSequence(&level.sectors[sec], CHAN_FLOOR);
+			level.sectors[sec].floordata->Destroy();
+			level.sectors[sec].floordata = nullptr;
 		}
 	}
 	return true;
@@ -589,7 +593,7 @@ bool EV_StopFloor(FLevelLocals *Level, int tag, line_t *line)
 //
 //==========================================================================
 
-bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *line,
+bool EV_BuildStairs (int tag, DFloor::EStair type, line_t *line,
 					 double stairsize, double speed, int delay, int reset, int igntxt,
 					 int usespecials)
 {
@@ -615,13 +619,13 @@ bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *
 	persteptime = int(stairsize / speed);
 
 	// check if a manual trigger, if so do just the sector on the backside
-	FSectorTagIterator itr(Level->tagManager, tag, line);
+	FSectorTagIterator itr(tag, line);
 	// The compatibility mode doesn't work with a hashing algorithm.
 	// It needs the original linear search method. This was broken in Boom.
-	bool compatible = tag != 0 && (Level->i_compatflags & COMPATF_STAIRINDEX);
+	bool compatible = tag != 0 && (i_compatflags & COMPATF_STAIRINDEX);
 	while ((secnum = itr.NextCompat(compatible, secnum)) >= 0)
 	{
-		sec = &Level->sectors[secnum];
+		sec = &level.sectors[secnum];
 
 		// ALREADY MOVING?	IF SO, KEEP GOING...
 		//jff 2/26/98 add special lockout condition to wait for entire
@@ -633,7 +637,7 @@ bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *
 		
 		// new floor thinker
 		rtn = true;
-		floor = CreateThinker<DFloor>(sec);
+		floor = Create<DFloor> (sec);
 		floor->m_Direction = (type == DFloor::buildUp) ? 1 : -1;
 		stairstep = stairsize * floor->m_Direction;
 		floor->m_Type = DFloor::buildStair;	//jff 3/31/98 do not leave uninited
@@ -707,14 +711,14 @@ bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *
 
 					// Doom bug: Height was changed before discarding the sector as part of the stairs.
 					// Needs to be compatibility optioned because some maps (Eternall MAP25) depend on it.
-					if (Level->i_compatflags & COMPATF_STAIRINDEX) height += stairstep;
+					if (i_compatflags & COMPATF_STAIRINDEX) height += stairstep;
 
 					// if sector's floor already moving, look for another
 					//jff 2/26/98 special lockout condition for retriggering
 					if (tsec->PlaneMoving(sector_t::floor) || tsec->stairlock)
 						continue;
 
-					if (!(Level->i_compatflags & COMPATF_STAIRINDEX)) height += stairstep;
+					if (!(i_compatflags & COMPATF_STAIRINDEX)) height += stairstep;
 
 					ok = true;
 					break;
@@ -736,7 +740,7 @@ bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *
 				secnum = newsecnum;
 
 				// create and initialize a thinker for the next step
-				floor = CreateThinker<DFloor>(sec);
+				floor = Create<DFloor> (sec);
 				floor->StartFloorSound ();
 				floor->m_Direction = (type == DFloor::buildUp) ? 1 : -1;
 				floor->m_FloorDestDist = sec->floorplane.PointToDist (DVector2(0, 0), height);
@@ -766,7 +770,7 @@ bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *
 		} while (ok);
 		// [RH] make sure the first sector doesn't point to a previous one, otherwise
 		// it can infinite loop when the first sector stops moving.
-		Level->sectors[osecnum].prevsec = -1;
+		level.sectors[osecnum].prevsec = -1;
 	}
 	return rtn;
 }
@@ -777,7 +781,7 @@ bool EV_BuildStairs (FLevelLocals *Level, int tag, DFloor::EStair type, line_t *
 //
 //==========================================================================
 
-bool EV_DoDonut (FLevelLocals *Level, int tag, line_t *line, double pillarspeed, double slimespeed)
+bool EV_DoDonut (int tag, line_t *line, double pillarspeed, double slimespeed)
 {
 	sector_t*			s1;
 	sector_t*			s2;
@@ -790,10 +794,10 @@ bool EV_DoDonut (FLevelLocals *Level, int tag, line_t *line, double pillarspeed,
 		
 	rtn = false;
 
-	FSectorTagIterator itr(Level->tagManager, tag, line);
+	FSectorTagIterator itr(tag, line);
 	while ((secnum = itr.Next()) >= 0)
 	{
-		s1 = &Level->sectors[secnum];					// s1 is pillar's sector
+		s1 = &level.sectors[secnum];					// s1 is pillar's sector
 
 		// ALREADY MOVING?	IF SO, KEEP GOING...
 		if (s1->PlaneMoving(sector_t::floor))
@@ -815,7 +819,7 @@ bool EV_DoDonut (FLevelLocals *Level, int tag, line_t *line, double pillarspeed,
 			s3 = ln->backsector;
 			
 			//	Spawn rising slime
-			floor = CreateThinker<DFloor>(s2);
+			floor = Create<DFloor> (s2);
 			floor->m_Type = DFloor::donutRaise;
 			floor->m_Crush = -1;
 			floor->m_Hexencrush = false;
@@ -830,7 +834,7 @@ bool EV_DoDonut (FLevelLocals *Level, int tag, line_t *line, double pillarspeed,
 			floor->StartFloorSound ();
 			
 			//	Spawn lowering donut-hole
-			floor = CreateThinker<DFloor>(s1);
+			floor = Create<DFloor> (s1);
 			floor->m_Type = DFloor::floorLowerToNearest;
 			floor->m_Crush = -1;
 			floor->m_Hexencrush = false;
@@ -859,6 +863,10 @@ IMPLEMENT_POINTERS_START(DElevator)
 	IMPLEMENT_POINTER(m_Interp_Floor)
 	IMPLEMENT_POINTER(m_Interp_Ceiling)
 IMPLEMENT_POINTERS_END
+
+DElevator::DElevator ()
+{
+}
 
 DElevator::DElevator (sector_t *sec)
 	: Super (sec)
@@ -986,7 +994,7 @@ void DElevator::StartFloorSound ()
 //
 //==========================================================================
 
-bool EV_DoElevator (FLevelLocals *Level, line_t *line, DElevator::EElevator elevtype,
+bool EV_DoElevator (line_t *line, DElevator::EElevator elevtype,
 					double speed, double height, int tag)
 {
 	int			secnum;
@@ -1003,19 +1011,19 @@ bool EV_DoElevator (FLevelLocals *Level, line_t *line, DElevator::EElevator elev
 	secnum = -1;
 	rtn = false;
 
-	FSectorTagIterator itr(Level->tagManager, tag, line);
+	FSectorTagIterator itr(tag, line);
 
 	// act on all sectors with the same tag as the triggering linedef
 	while ((secnum = itr.Next()) >= 0)
 	{
-		sec = &Level->sectors[secnum];
+		sec = &level.sectors[secnum];
 		// If either floor or ceiling is already activated, skip it
 		if (sec->PlaneMoving(sector_t::floor) || sec->ceilingdata) //jff 2/22/98
 			continue; // the loop used to break at the end if tag were 0, but would miss that step if "continue" occured [FDARI]
 
 		// create and initialize new elevator thinker
 		rtn = true;
-		elevator = CreateThinker<DElevator>(sec);
+		elevator = Create<DElevator> (sec);
 		elevator->m_Type = elevtype;
 		elevator->m_Speed = speed;
 		elevator->StartFloorSound ();
@@ -1089,7 +1097,7 @@ bool EV_DoElevator (FLevelLocals *Level, line_t *line, DElevator::EElevator elev
 //
 //==========================================================================
 
-bool EV_DoChange (FLevelLocals *Level, line_t *line, EChange changetype, int tag)
+bool EV_DoChange (line_t *line, EChange changetype, int tag)
 {
 	int			secnum;
 	bool		rtn;
@@ -1098,10 +1106,10 @@ bool EV_DoChange (FLevelLocals *Level, line_t *line, EChange changetype, int tag
 
 	rtn = false;
 	// change all sectors with the same tag as the linedef
-	FSectorTagIterator it(Level->tagManager, tag);
+	FSectorTagIterator it(tag);
 	while ((secnum = it.Next()) >= 0)
 	{
-		sec = &Level->sectors[secnum];
+		sec = &level.sectors[secnum];
               
 		rtn = true;
 
@@ -1142,6 +1150,10 @@ bool EV_DoChange (FLevelLocals *Level, line_t *line, EChange changetype, int tag
 IMPLEMENT_CLASS(DWaggleBase, false, false)
 IMPLEMENT_CLASS(DFloorWaggle, false, false)
 IMPLEMENT_CLASS(DCeilingWaggle, false, false)
+
+DWaggleBase::DWaggleBase ()
+{
+}
 
 void DWaggleBase::Serialize(FSerializer &arc)
 {
@@ -1254,6 +1266,10 @@ void DWaggleBase::DoWaggle (bool ceiling)
 //
 //==========================================================================
 
+DFloorWaggle::DFloorWaggle ()
+{
+}
+
 DFloorWaggle::DFloorWaggle (sector_t *sec)
 	: Super (sec)
 {
@@ -1271,6 +1287,10 @@ void DFloorWaggle::Tick ()
 // CeilingWaggle
 //
 //==========================================================================
+
+DCeilingWaggle::DCeilingWaggle ()
+{
+}
 
 DCeilingWaggle::DCeilingWaggle (sector_t *sec)
 	: Super (sec)
@@ -1290,7 +1310,7 @@ void DCeilingWaggle::Tick ()
 //
 //==========================================================================
 
-bool EV_StartWaggle (FLevelLocals *Level, int tag, line_t *line, int height, int speed, int offset,
+bool EV_StartWaggle (int tag, line_t *line, int height, int speed, int offset,
 	int timer, bool ceiling)
 {
 	int sectorIndex;
@@ -1300,11 +1320,11 @@ bool EV_StartWaggle (FLevelLocals *Level, int tag, line_t *line, int height, int
 
 	retCode = false;
 
-	FSectorTagIterator itr(Level->tagManager, tag, line);
+	FSectorTagIterator itr(tag, line);
 
 	while ((sectorIndex = itr.Next()) >= 0)
 	{
-		sector = &Level->sectors[sectorIndex];
+		sector = &level.sectors[sectorIndex];
 		if ((!ceiling && sector->PlaneMoving(sector_t::floor)) || 
 			(ceiling && sector->PlaneMoving(sector_t::ceiling)))
 		{ // Already busy with another thinker
@@ -1313,12 +1333,12 @@ bool EV_StartWaggle (FLevelLocals *Level, int tag, line_t *line, int height, int
 		retCode = true;
 		if (ceiling)
 		{
-			waggle = CreateThinker<DCeilingWaggle>(sector);
+			waggle = Create<DCeilingWaggle> (sector);
 			waggle->m_OriginalDist = sector->ceilingplane.fD();
 		}
 		else
 		{
-			waggle = CreateThinker<DFloorWaggle>(sector);
+			waggle = Create<DFloorWaggle> (sector);
 			waggle->m_OriginalDist = sector->floorplane.fD();
 		}
 		waggle->m_Accumulator = offset;

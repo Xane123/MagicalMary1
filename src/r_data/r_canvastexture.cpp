@@ -93,7 +93,7 @@ void FCanvasTextureInfo::Add (AActor *viewpoint, FTextureID picnum, double fov)
 //
 //==========================================================================
 
-void SetCameraToTexture(FLevelLocals *Level, AActor *viewpoint, const FString &texturename, double fov)
+void SetCameraToTexture(AActor *viewpoint, const FString &texturename, double fov)
 {
 	FTextureID textureid = TexMan.CheckForTexture(texturename, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
 	if (textureid.isValid())
@@ -102,7 +102,7 @@ void SetCameraToTexture(FLevelLocals *Level, AActor *viewpoint, const FString &t
 		FTexture *tex = TexMan.GetTexture(textureid);
 		if (tex && tex->isCanvas())
 		{
-			Level->canvasTextureInfo.Add(viewpoint, textureid, fov);
+			level.canvasTextureInfo.Add(viewpoint, textureid, fov);
 		}
 	}
 }

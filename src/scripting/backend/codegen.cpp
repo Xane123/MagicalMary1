@@ -47,7 +47,6 @@
 #include "v_text.h"
 #include "w_wad.h"
 #include "doomstat.h"
-#include "g_levellocals.h"
 
 extern FRandom pr_exrandom;
 FMemArena FxAlloc(65536);
@@ -940,7 +939,7 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 			FxExpression *x = new FxConstant(constval.GetInt(), ScriptPosition);
 			if (constval.GetInt() != constval.GetFloat())
 			{
-				//ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
+				ScriptPosition.Message(MSG_WARNING, "Truncation of floating point constant %f", constval.GetFloat());
 			}
 
 			delete this;
@@ -948,7 +947,7 @@ FxExpression *FxIntCast::Resolve(FCompileContext &ctx)
 		}
 		else if (!NoWarn)
 		{
-			//ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
+			ScriptPosition.Message(MSG_DEBUGWARN, "Truncation of floating point value");
 		}
 
 		return this;
@@ -6297,24 +6296,6 @@ FxExpression *FxIdentifier::ResolveMember(FCompileContext &ctx, PContainerType *
 	}
 	else
 	{
-		if (objtype != nullptr)
-		{
-			// Try to remap deprecated fields to getter functions.
-			FStringf getter("__getter__%s__", Identifier.GetChars());
-			FName gettername(getter, true);
-			if (gettername != NAME_None)
-			{
-				if ((sym = objtype->Symbols.FindSymbolInTable(gettername, symtbl)) != nullptr)
-				{
-					FArgumentList argsList;
-					FxExpression *x = new FxMemberFunctionCall(object, gettername, argsList, ScriptPosition);
-					x = x->Resolve(ctx);
-					delete this;
-					return x;
-				}
-			}
-		}
-
 		ScriptPosition.Message(MSG_ERROR, "Unknown identifier '%s'", Identifier.GetChars());
 		delete object;
 		object = nullptr;
@@ -6861,7 +6842,9 @@ ExpEmit FxCVar::Emit(VMFunctionBuilder *build)
 		int *pVal;
 		auto cv = static_cast<FFlagCVar *>(CVar);
 		auto vcv = &cv->ValueVar;
-		pVal = &vcv->Value;
+		if (vcv == &compatflags) pVal = &i_compatflags;
+		else if (vcv == &compatflags2) pVal = &i_compatflags2;
+		else pVal = &vcv->Value;
 		build->Emit(OP_LKP, addr.RegNum, build->GetConstantAddress(pVal));
 		build->Emit(OP_LW, dest.RegNum, addr.RegNum, nul);
 		build->Emit(OP_SRL_RI, dest.RegNum, dest.RegNum, cv->BitNum);
@@ -7698,7 +7681,7 @@ FxExpression *FxFunctionCall::Resolve(FCompileContext& ctx)
 
 	if (ctx.Class != nullptr)
 	{
-		PFunction *afd = FindClassMemberFunction(ctx.Class, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version, true);
+		PFunction *afd = FindClassMemberFunction(ctx.Class, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version);
 
 		if (afd != nullptr)
 		{
@@ -7738,20 +7721,6 @@ FxExpression *FxFunctionCall::Resolve(FCompileContext& ctx)
 			{
 				delete this;
 				return nullptr;
-			}
-
-			// Redirect Spawn to another function when called from a non-static method of an actor.
-			// In this special case the missing Level parameter of the static variant can be worked around
-			// and deprecation is not needed. The only problem is that it is impossible to declare
-			// the replacement method in a way that lets it get picked automatically, so it needs to be done here.
-			if (afd->SymbolName == NAME_Spawn)
-			{
-				if ((outerflags & VARF_Method) && ctx.Function->OwningClass->isClass() && 
-					static_cast<PClassType*>(ctx.Function->OwningClass)->Descriptor->IsDescendantOf(RUNTIME_CLASS(AActor)))
-				{
-					PFunction *afd2 = FindClassMemberFunction(ctx.Class, ctx.Class, NAME_Spawn2, ScriptPosition, &error, ctx.Version, true);
-					if (afd2 != nullptr) afd = afd2;
-				}
 			}
 
 			auto self = (afd->Variants[0].Flags & VARF_Method) ? new FxSelf(ScriptPosition) : nullptr;
@@ -7808,11 +7777,6 @@ FxExpression *FxFunctionCall::Resolve(FCompileContext& ctx)
 			return nullptr;
 		}
 		FxExpression *self = (ctx.Function && (ctx.Function->Variants[0].Flags & VARF_Method) && isActor(ctx.Class)) ? new FxSelf(ScriptPosition) : (FxExpression*)new FxConstant(ScriptPosition);
-		if (self->isConstant())
-		{
-			if (ctx.Version >= MakeVersion(3, 8, 0))
-				ScriptPosition.Message(MSG_WARNING, "Deprecated use of %s. Action specials should only be used from actor methods", MethodName.GetChars());
-		}
 		FxExpression *x = new FxActionSpecialCall(self, special, ArgList, ScriptPosition);
 		delete this;
 		return x->Resolve(ctx);
@@ -8663,7 +8627,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(DObject, BuiltinCallLineSpecial, BuiltinCallLineSp
 	PARAM_INT(arg4);
 	PARAM_INT(arg5);
 
-	ACTION_RETURN_INT(BuiltinCallLineSpecial(special, activator, arg1, arg2, arg3, arg4, arg5));
+	ACTION_RETURN_INT(P_ExecuteSpecial(special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5));
 }
 
 ExpEmit FxActionSpecialCall::Emit(VMFunctionBuilder *build)

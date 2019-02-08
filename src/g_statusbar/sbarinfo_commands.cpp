@@ -850,26 +850,26 @@ class CommandDrawString : public SBarInfoCommand
 			switch(strValue)
 			{
 				case LEVELNAME:
-					if(statusBar->Level->lumpnum != cache)
+					if(level.lumpnum != cache)
 					{
-						cache = statusBar->Level->lumpnum;
-						str = statusBar->Level->LevelName;
+						cache = level.lumpnum;
+						str = level.LevelName;
 						RealignString();
 					}
 					break;
 				case LEVELLUMP:
-					if(statusBar->Level->lumpnum != cache)
+					if(level.lumpnum != cache)
 					{
-						cache = statusBar->Level->lumpnum;
-						str = statusBar->Level->MapName;
+						cache = level.lumpnum;
+						str = level.MapName;
 						str.ToUpper();
 						RealignString();
 					}
 					break;
 				case SKILLNAME:
-					if(statusBar->Level->lumpnum != cache) // Can only change skill between statusBar->Level->
+					if(level.lumpnum != cache) // Can only change skill between level.
 					{
-						cache = statusBar->Level->lumpnum;
+						cache = level.lumpnum;
 						str = G_SkillName();
 						RealignString();
 					}
@@ -904,7 +904,7 @@ class CommandDrawString : public SBarInfoCommand
 					if(ACS_GlobalVars[valueArgument] != cache)
 					{
 						cache = ACS_GlobalVars[valueArgument];
-						str = statusBar->Level->Behaviors.LookupString(ACS_GlobalVars[valueArgument]);
+						str = level.Behaviors.LookupString(ACS_GlobalVars[valueArgument]);
 						RealignString();
 					}
 					break;
@@ -912,13 +912,13 @@ class CommandDrawString : public SBarInfoCommand
 					if(ACS_GlobalArrays[valueArgument][consoleplayer] != cache)
 					{
 						cache = ACS_GlobalArrays[valueArgument][consoleplayer];
-						str = statusBar->Level->Behaviors.LookupString(ACS_GlobalArrays[valueArgument][consoleplayer]);
+						str = level.Behaviors.LookupString(ACS_GlobalArrays[valueArgument][consoleplayer]);
 						RealignString();
 					}
 					break;
 				case TIME:
 				{
-					int sec = Tics2Seconds(currentSession->time); 
+					int sec = Tics2Seconds(level.time); 
 					str.Format("%02d:%02d:%02d", sec / 3600, (sec % 3600) / 60, sec % 60);
 					break;
 				}
@@ -1389,25 +1389,25 @@ class CommandDrawNumber : public CommandDrawString
 					num = statusBar->CPlayer->fragcount;
 					break;
 				case KILLS:
-					num = statusBar->Level->killed_monsters;
+					num = level.killed_monsters;
 					break;
 				case MONSTERS:
-					num = statusBar->Level->total_monsters;
+					num = level.total_monsters;
 					break;
 				case ITEMS:
-					num = statusBar->Level->found_items;
+					num = level.found_items;
 					break;
 				case TOTALITEMS:
-					num = statusBar->Level->total_items;
+					num = level.total_items;
 					break;
 				case SECRETS:
-					num = statusBar->Level->found_secrets;
+					num = level.found_secrets;
 					break;
 				case SCORE:
 					num = statusBar->CPlayer->mo->Score;
 					break;
 				case TOTALSECRETS:
-					num = statusBar->Level->total_secrets;
+					num = level.total_secrets;
 					break;
 				case ARMORCLASS:
 				case SAVEPERCENT:
@@ -1459,9 +1459,9 @@ class CommandDrawNumber : public CommandDrawString
 				case AIRTIME:
 				{
 					if(statusBar->CPlayer->mo->waterlevel < 3)
-						num = statusBar->Level->airsupply/TICRATE;
+						num = level.airsupply/TICRATE;
 					else
-						num = clamp<int>((statusBar->CPlayer->air_finished - currentSession->time + (TICRATE-1))/TICRATE, 0, INT_MAX);
+						num = clamp<int>((statusBar->CPlayer->air_finished - level.time + (TICRATE-1))/TICRATE, 0, INT_MAX);
 					break;
 				}
 				case SELECTEDINVENTORY:
@@ -1502,7 +1502,7 @@ class CommandDrawNumber : public CommandDrawString
 				}
 				default: break;
 			}
-			if(interpolationSpeed != 0 && (!hudChanged || currentSession->time == 1))
+			if(interpolationSpeed != 0 && (!hudChanged || level.time == 1))
 			{
 				if(num < drawValue)
 					drawValue -= clamp<int>((drawValue - num) >> 2, 1, interpolationSpeed);
@@ -1691,7 +1691,7 @@ class CommandDrawSelectedInventory : public CommandDrawImage, private CommandDra
 			if(alternateOnEmpty)
 				SBarInfoCommandFlowControl::Draw(block, statusBar);
 
-			if(statusBar->CPlayer->mo->PointerVar<AActor>(NAME_InvSel) != NULL && !(statusBar->Level->flags & LEVEL_NOINVENTORYBAR))
+			if(statusBar->CPlayer->mo->PointerVar<AActor>(NAME_InvSel) != NULL && !(level.flags & LEVEL_NOINVENTORYBAR))
 			{
 				if(artiflash && statusBar->wrapper->artiflashTick)
 				{
@@ -1791,7 +1791,7 @@ class CommandDrawSelectedInventory : public CommandDrawImage, private CommandDra
 		{
 			SBarInfoCommandFlowControl::Tick(block, statusBar, hudChanged);
 
-			SetTruth(statusBar->CPlayer->mo->PointerVar<AActor>(NAME_InvSel) == NULL || (statusBar->Level->flags & LEVEL_NOINVENTORYBAR), block, statusBar);
+			SetTruth(statusBar->CPlayer->mo->PointerVar<AActor>(NAME_InvSel) == NULL || (level.flags & LEVEL_NOINVENTORYBAR), block, statusBar);
 
 			CommandDrawImage::Tick(block, statusBar, hudChanged);
 			CommandDrawNumber::Tick(block, statusBar, hudChanged);
@@ -1910,7 +1910,7 @@ class CommandInventoryBarNotVisible : public SBarInfoCommandFlowControl
 		{
 			SBarInfoCommandFlowControl::Tick(block, statusBar, hudChanged);
 
-			SetTruth(statusBar->CPlayer->inventorytics <= 0 || (statusBar->Level->flags & LEVEL_NOINVENTORYBAR), block, statusBar);
+			SetTruth(statusBar->CPlayer->inventorytics <= 0 || (level.flags & LEVEL_NOINVENTORYBAR), block, statusBar);
 		}
 };
 
@@ -2727,16 +2727,16 @@ class CommandDrawBar : public SBarInfoCommand
 					max = fraglimit;
 					break;
 				case KILLS:
-					value = statusBar->Level->killed_monsters;
-					max = statusBar->Level->total_monsters;
+					value = level.killed_monsters;
+					max = level.total_monsters;
 					break;
 				case ITEMS:
-					value = statusBar->Level->found_items;
-					max = statusBar->Level->total_items;
+					value = level.found_items;
+					max = level.total_items;
 					break;
 				case SECRETS:
-					value = statusBar->Level->found_secrets;
-					max = statusBar->Level->total_secrets;
+					value = level.found_secrets;
+					max = level.total_secrets;
 					break;
 				case INVENTORY:
 				{
@@ -2751,8 +2751,8 @@ class CommandDrawBar : public SBarInfoCommand
 					break;
 				}
 				case AIRTIME:
-					value = clamp<int>(statusBar->CPlayer->air_finished - currentSession->time, 0, INT_MAX);
-					max = statusBar->Level->airsupply;
+					value = clamp<int>(statusBar->CPlayer->air_finished - level.time, 0, INT_MAX);
+					max = level.airsupply;
 					break;
 				case POWERUPTIME:
 				{
@@ -2798,7 +2798,7 @@ class CommandDrawBar : public SBarInfoCommand
 			}
 			else
 				value = 0;
-			if(interpolationSpeed != 0 && (!hudChanged || currentSession->time == 1))
+			if(interpolationSpeed != 0 && (!hudChanged || level.time == 1))
 			{
 				// [BL] Since we used a percentage (in order to get the most fluid animation)
 				//      we need to establish a cut off point so the last pixel won't hang as the animation slows
@@ -3192,7 +3192,7 @@ class CommandDrawGem : public SBarInfoCommand
 		
 			goalValue = reverse ? 100 - goalValue : goalValue;
 		
-			if(interpolationSpeed != 0 && (!hudChanged || currentSession->time == 1)) // At the start force an animation
+			if(interpolationSpeed != 0 && (!hudChanged || level.time == 1)) // At the start force an animation
 			{
 				if(goalValue < drawValue)
 					drawValue -= clamp<int>((drawValue - goalValue) >> 2, 1, interpolationSpeed);
@@ -3202,7 +3202,7 @@ class CommandDrawGem : public SBarInfoCommand
 			else
 				drawValue = goalValue;
 		
-			if(wiggle && currentSession->time & 1)
+			if(wiggle && level.time & 1)
 				chainWiggle = pr_chainwiggle() & 1;
 		}
 	protected:

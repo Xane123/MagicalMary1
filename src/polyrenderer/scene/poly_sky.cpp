@@ -229,7 +229,7 @@ Mat4f PolySkyDome::GLSkyMath()
 
 		float xscale = texw < 1024.f ? floor(1024.f / float(texw)) : 1.f;
 		float yscale = 1.f;
-		if (texh <= 128 && (PolyRenderer::Instance()->Level->flags & LEVEL_FORCETILEDSKY))
+		if (texh <= 128 && (level.flags & LEVEL_FORCETILEDSKY))
 		{
 			modelMatrix = modelMatrix * Mat4f::Translate(0.f, 0.f, (-40 + tex->GetSkyOffset() + skyoffset)*skyoffsetfactor);
 			modelMatrix = modelMatrix * Mat4f::Scale(1.f, 1.f, 1.2f * 1.17f);
@@ -291,10 +291,9 @@ void PolySkySetup::Update()
 	double skyscale = 0.0;
 	float skyiscale = 0.0f;
 	fixed_t sky1cyl = 0, sky2cyl = 0;
-	auto Level = PolyRenderer::Instance()->Level;
 
-	auto skytex1 = TexMan.GetPalettedTexture(Level->skytexture1, true);
-	auto skytex2 = TexMan.GetPalettedTexture(Level->skytexture2, true);
+	auto skytex1 = TexMan.GetPalettedTexture(sky1texture, true);
+	auto skytex2 = TexMan.GetPalettedTexture(sky2texture, true);
 
 	if (skytex1)
 	{
@@ -308,7 +307,7 @@ void PolySkySetup::Update()
 		}
 		else if (skyheight > 200)
 		{
-			skytexturemid = (200 - skyheight) * sskytex1->GetScale().Y + ((r_skymode == 2 && !(Level->flags & LEVEL_FORCETILEDSKY)) ? skytex1->GetSkyOffset() : 0);
+			skytexturemid = (200 - skyheight) * sskytex1->GetScale().Y + ((r_skymode == 2 && !(level.flags & LEVEL_FORCETILEDSKY)) ? skytex1->GetSkyOffset() : 0);
 		}
 
 		if (viewwidth != 0 && viewheight != 0)
@@ -320,7 +319,7 @@ void PolySkySetup::Update()
 			skyscale *= float(90. / r_viewpoint.FieldOfView.Degrees);
 		}
 
-		if (Level->skystretch)
+		if (skystretch)
 		{
 			skyscale *= (double)SKYSTRETCH_HEIGHT / skyheight;
 			skyiscale *= skyheight / (float)SKYSTRETCH_HEIGHT;
@@ -338,15 +337,15 @@ void PolySkySetup::Update()
 	FTextureID sky1tex, sky2tex;
 	double frontdpos = 0, backdpos = 0;
 
-	if ((PolyRenderer::Instance()->Level->flags & LEVEL_SWAPSKIES) && !(PolyRenderer::Instance()->Level->flags & LEVEL_DOUBLESKY))
+	if ((level.flags & LEVEL_SWAPSKIES) && !(level.flags & LEVEL_DOUBLESKY))
 	{
-		sky1tex = Level->skytexture2;
+		sky1tex = sky2texture;
 	}
 	else
 	{
-		sky1tex = Level->skytexture1;
+		sky1tex = sky1texture;
 	}
-	sky2tex = Level->skytexture2;
+	sky2tex = sky2texture;
 	skymid = skytexturemid;
 	skyangle = 0;
 
@@ -356,13 +355,13 @@ void PolySkySetup::Update()
 	{	// use sky1
 	sky1:
 		frontskytex = GetSWTex(sky1tex);
-		if (PolyRenderer::Instance()->Level->flags & LEVEL_DOUBLESKY)
+		if (level.flags & LEVEL_DOUBLESKY)
 			backskytex = GetSWTex(sky2tex);
 		else
 			backskytex = nullptr;
 		skyflip = false;
-		frontdpos = Level->sky1pos;
-		backdpos = Level->sky2pos;
+		frontdpos = sky1pos;
+		backdpos = sky2pos;
 		frontcyl = sky1cyl;
 		backcyl = sky2cyl;
 	}
@@ -372,12 +371,12 @@ void PolySkySetup::Update()
 		backskytex = nullptr;
 		frontcyl = sky2cyl;
 		skyflip = false;
-		frontdpos = Level->sky2pos;
+		frontdpos = sky2pos;
 	}
 	else
 	{	// MBF's linedef-controlled skies
 		// Sky Linedef
-		const line_t *l = &PolyRenderer::Instance()->Level->lines[(sectorSky & ~PL_SKYFLAT) - 1];
+		const line_t *l = &level.lines[(sectorSky & ~PL_SKYFLAT) - 1];
 
 		// Sky transferred from first sidedef
 		const side_t *s = l->sidedef[0];
@@ -385,7 +384,7 @@ void PolySkySetup::Update()
 
 		// Texture comes from upper texture of reference sidedef
 		// [RH] If swapping skies, then use the lower sidedef
-		if (PolyRenderer::Instance()->Level->flags & LEVEL_SWAPSKIES && s->GetTexture(side_t::bottom).isValid())
+		if (level.flags & LEVEL_SWAPSKIES && s->GetTexture(side_t::bottom).isValid())
 		{
 			pos = side_t::bottom;
 		}

@@ -158,12 +158,11 @@ static int DoomSpecificInfo (char *buffer, char *end)
 
 	if (gamestate != GS_LEVEL && gamestate != GS_TITLELEVEL)
 	{
-		p += snprintf (buffer+p, size-p, "\n\nNot in a map.");
+		p += snprintf (buffer+p, size-p, "\n\nNot in a level.");
 	}
 	else
 	{
-		auto &vp = r_viewpoint;
-		p += snprintf (buffer+p, size-p, "\n\nCurrent map: %s", vp.camera->Level->MapName.GetChars());
+		p += snprintf (buffer+p, size-p, "\n\nCurrent map: %s", level.MapName.GetChars());
 
 		if (!viewactive)
 		{

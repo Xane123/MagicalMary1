@@ -125,7 +125,7 @@ FString M_GetCachePath(bool create)
 		path = progdir;
 	}
 
-	path += "/mma/cache";
+	path += "/zdoom/cache";
 	if (create) CreatePath(path);
 	return path;
 }

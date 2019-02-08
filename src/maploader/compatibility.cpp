@@ -279,17 +279,17 @@ FName MapLoader::CheckCompatibility(MapData *map)
 
 	if (BCompatMap.CountUsed() == 0) ParseCompatibility();
 
-	Level->ii_compatflags = 0;
-	Level->ii_compatflags2 = 0;
-	Level->ib_compatflags = 0;
+	ii_compatflags = 0;
+	ii_compatflags2 = 0;
+	ib_compatflags = 0;
 
 	// When playing Doom IWAD levels force COMPAT_SHORTTEX and COMPATF_LIGHT.
 	// I'm not sure if the IWAD maps actually need COMPATF_LIGHT but it certainly does not hurt.
 	// TNT's MAP31 also needs COMPATF_STAIRINDEX but that only gets activated for TNT.WAD.
 	if (Wads.GetLumpFile(map->lumpnum) == Wads.GetIwadNum() && (gameinfo.flags & GI_COMPATSHORTTEX) && Level->maptype == MAPTYPE_DOOM)
 	{
-		Level->ii_compatflags = COMPATF_SHORTTEX|COMPATF_LIGHT;
-		if (gameinfo.flags & GI_COMPATSTAIRS) Level->ii_compatflags |= COMPATF_STAIRINDEX;
+		ii_compatflags = COMPATF_SHORTTEX|COMPATF_LIGHT;
+		if (gameinfo.flags & GI_COMPATSTAIRS) ii_compatflags |= COMPATF_STAIRINDEX;
 	}
 
 	map->GetChecksum(md5.Bytes);
@@ -319,18 +319,18 @@ FName MapLoader::CheckCompatibility(MapData *map)
 
 	if (flags != NULL)
 	{
-		Level->ii_compatflags |= flags->CompatFlags[SLOT_COMPAT];
-		Level->ii_compatflags2 |= flags->CompatFlags[SLOT_COMPAT2];
-		Level->ib_compatflags |= flags->CompatFlags[SLOT_BCOMPAT];
+		ii_compatflags |= flags->CompatFlags[SLOT_COMPAT];
+		ii_compatflags2 |= flags->CompatFlags[SLOT_COMPAT2];
+		ib_compatflags |= flags->CompatFlags[SLOT_BCOMPAT];
 	}
 
-	// Reset Level->i_compatflags
+	// Reset i_compatflags
 	compatflags.Callback();
 	compatflags2.Callback();
 	// Set floatbob compatibility for all maps with an original Hexen MAPINFO.
 	if (Level->flags2 & LEVEL2_HEXENHACK)
 	{
-		Level->ib_compatflags |= BCOMPATF_FLOATBOB;
+		ib_compatflags |= BCOMPATF_FLOATBOB;
 	}
 	return FName(hash, true);	// if this returns NAME_None it means there is no scripted compatibility handler.
 }
@@ -391,7 +391,7 @@ DEFINE_ACTION_FUNCTION(DLevelCompatibility, ClearSectorTags)
 {
 	PARAM_SELF_PROLOGUE(DLevelCompatibility);
 	PARAM_INT(sector);
-	self->Level->tagManager.RemoveSectorTags(sector);
+	tagManager.RemoveSectorTags(sector);
 	return 0;
 }
 
@@ -403,7 +403,7 @@ DEFINE_ACTION_FUNCTION(DLevelCompatibility, AddSectorTag)
 
 	if ((unsigned)sector < self->Level->sectors.Size())
 	{
-		self->Level->tagManager.AddSectorTag(sector, tag);
+		tagManager.AddSectorTag(sector, tag);
 	}
 	return 0;
 }
@@ -574,9 +574,6 @@ CCMD (mapchecksum)
 
 CCMD (hiddencompatflags)
 {
-	ForAllLevels([](FLevelLocals *Level)
-	{
-		Printf("%s: %08x %08x %08x\n", Level->MapName.GetChars(), Level->ii_compatflags, Level->ii_compatflags2, Level->ib_compatflags);
-	});
+	Printf("%08x %08x %08x\n", ii_compatflags, ii_compatflags2, ib_compatflags);
 }
 

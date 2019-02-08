@@ -305,20 +305,20 @@ PClassActor *T_ClassType(const svalue_t &arg)
 class FSSectorTagIterator : public FSectorTagIterator
 {
 public:
-	FSSectorTagIterator(FLevelLocals *Level, int tag)
-		: FSectorTagIterator(Level->tagManager, tag)
+	FSSectorTagIterator(int tag)
+		: FSectorTagIterator(tag)
 	{
 		if (tag < 0)
 		{
 			searchtag = INT_MIN;
-			start = tag == -32768? 0 : -tag < (int)Level->sectors.Size()? -tag : -1;
+			start = tag == -32768? 0 : -tag < (int)level.sectors.Size()? -tag : -1;
 		}
 	}
 };
 
-inline int T_FindFirstSectorFromTag(FLevelLocals *Level, int tagnum)
+inline int T_FindFirstSectorFromTag(int tagnum)
 {
-	FSSectorTagIterator it(Level, tagnum);
+	FSSectorTagIterator it(tagnum);
 	return it.Next();
 }
 
@@ -635,7 +635,7 @@ void FParser::SF_Clock(void)
 
 void FParser::SF_ExitLevel(void)
 {
-	G_ExitLevel(Level, 0, false);
+	G_ExitLevel(0, false);
 }
 
 //==========================================================================
@@ -866,7 +866,7 @@ void FParser::SF_Spawn(void)
 			// [Graf Zahl] added option of spawning with a relative z coordinate
 			if(t_argc > 5)
 			{
-				if (intvalue(t_argv[5])) pos.Z += P_PointInSector(Level, pos)->floorplane.ZatPoint(pos);
+				if (intvalue(t_argv[5])) pos.Z += P_PointInSector(pos)->floorplane.ZatPoint(pos);
 			}
 		}
 		else
@@ -881,7 +881,7 @@ void FParser::SF_Spawn(void)
 		}
 		
 		t_return.type = svt_mobj;
-		t_return.value.mobj = Spawn(Level, pclass, pos, ALLOW_REPLACE);
+		t_return.value.mobj = Spawn(pclass, pos, ALLOW_REPLACE);
 
 		if (t_return.value.mobj)		
 		{
@@ -1067,7 +1067,7 @@ void FParser::SF_Teleport(void)
 		}
 		
 		if(mo)
-			EV_Teleport(Level, 0, tag, NULL, 0, mo, TELF_DESTFOG | TELF_SOURCEFOG);
+			EV_Teleport(0, tag, NULL, 0, mo, TELF_DESTFOG | TELF_SOURCEFOG);
 	}
 }
 
@@ -1096,7 +1096,7 @@ void FParser::SF_SilentTeleport(void)
 		}
 		
 		if(mo)
-			EV_Teleport(Level, 0, tag, NULL, 0, mo, TELF_KEEPORIENTATION);
+			EV_Teleport(0, tag, NULL, 0, mo, TELF_KEEPORIENTATION);
 	}
 }
 
@@ -1150,7 +1150,7 @@ void FParser::SF_ObjSector(void)
 	}
 
 	t_return.type = svt_int;
-	t_return.value.i = mo ? Level->tagManager.GetFirstSectorTag(mo->Sector) : 0; // nullptr check
+	t_return.value.i = mo ? tagManager.GetFirstSectorTag(mo->Sector) : 0; // nullptr check
 }
 
 //==========================================================================
@@ -1518,7 +1518,7 @@ void FParser::SF_StartSectorSound(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		int i=-1;
-		FSSectorTagIterator itr(Level, tagnum);
+		FSSectorTagIterator itr(tagnum);
 		while ((i = itr.Next()) >= 0)
 		{
 			sector = &Level->sectors[i];
@@ -1555,7 +1555,7 @@ void FParser::SF_FloorHeight(void)
 			
 			// set all sectors with tag
 			
-			FSSectorTagIterator itr(Level, tagnum);
+			FSSectorTagIterator itr(tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
 				auto &sec = Level->sectors[i];
@@ -1574,7 +1574,7 @@ void FParser::SF_FloorHeight(void)
 		}
 		else
 		{
-			secnum = T_FindFirstSectorFromTag(Level, tagnum);
+			secnum = T_FindFirstSectorFromTag(tagnum);
 			if(secnum < 0)
 			{ 
 				script_error("sector not found with tagnum %i\n", tagnum); 
@@ -1610,7 +1610,7 @@ void FParser::SF_MoveFloor(void)
 		
 		// move all sectors with tag
 		
-		FSSectorTagIterator itr(Level, tagnum);
+		FSSectorTagIterator itr(tagnum);
 		while ((secnum = itr.Next()) >= 0)
 		{
 			P_CreateFloor(&Level->sectors[secnum], DFloor::floorMoveToValue, NULL, platspeed, destheight, crush, 0, false, false);
@@ -1645,7 +1645,7 @@ void FParser::SF_CeilingHeight(void)
 			dest = floatvalue(t_argv[1]);
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(Level, tagnum);
+			FSSectorTagIterator itr(tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
 				auto &sec = Level->sectors[i];
@@ -1664,7 +1664,7 @@ void FParser::SF_CeilingHeight(void)
 		}
 		else
 		{
-			secnum = T_FindFirstSectorFromTag(Level, tagnum);
+			secnum = T_FindFirstSectorFromTag(tagnum);
 			if(secnum < 0)
 			{ 
 				script_error("sector not found with tagnum %i\n", tagnum); 
@@ -1702,7 +1702,7 @@ void FParser::SF_MoveCeiling(void)
 		silent=t_argc>4 ? intvalue(t_argv[4]):1;
 		
 		// move all sectors with tag
-		FSSectorTagIterator itr(Level, tagnum);
+		FSSectorTagIterator itr(tagnum);
 		while ((secnum = itr.Next()) >= 0)
 		{
 			P_CreateCeiling(&Level->sectors[secnum], DCeiling::ceilMoveToValue, NULL, tagnum, platspeed, platspeed, destheight, crush, silent | 4, 0, DCeiling::ECrushMode::crushDoom);
@@ -1727,7 +1727,7 @@ void FParser::SF_LightLevel(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		// argv is sector tag
-		secnum = T_FindFirstSectorFromTag(Level, tagnum);
+		secnum = T_FindFirstSectorFromTag(tagnum);
 		
 		if(secnum < 0)
 		{ 
@@ -1741,7 +1741,7 @@ void FParser::SF_LightLevel(void)
 			int i = -1;
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(Level, tagnum);
+			FSSectorTagIterator itr(tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
 				Level->sectors[i].SetLightLevel(intvalue(t_argv[1]));
@@ -1859,10 +1859,10 @@ void FParser::SF_FadeLight(void)
 		destlevel = intvalue(t_argv[1]);
 		speed = t_argc>2 ? intvalue(t_argv[2]) : 1;
 		
-		FSectorTagIterator it(Level->tagManager, sectag);
+		FSectorTagIterator it(sectag);
 		while ((i = it.Next()) >= 0)
 		{
-			if (!Level->sectors[i].lightingdata) CreateThinker<DLightLevel>(&Level->sectors[i],destlevel,speed);
+			if (!Level->sectors[i].lightingdata) Create<DLightLevel>(&Level->sectors[i],destlevel,speed);
 		}
 	}
 }
@@ -1882,7 +1882,7 @@ void FParser::SF_FloorTexture(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		// argv is sector tag
-		secnum = T_FindFirstSectorFromTag(Level, tagnum);
+		secnum = T_FindFirstSectorFromTag(tagnum);
 		
 		if(secnum < 0)
 		{ script_error("sector not found with tagnum %i\n", tagnum); return;}
@@ -1895,7 +1895,7 @@ void FParser::SF_FloorTexture(void)
 			FTextureID picnum = TexMan.GetTextureID(t_argv[1].string, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(Level, tagnum);
+			FSSectorTagIterator itr(tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
 				Level->sectors[i].SetTexture(sector_t::floor, picnum);
@@ -1934,7 +1934,7 @@ void FParser::SF_SectorColormap(void)
 	tagnum = intvalue(t_argv[0]);
 	
 	// argv is sector tag
-	secnum = T_FindFirstSectorFromTag(Level, tagnum);
+	secnum = T_FindFirstSectorFromTag(tagnum);
 	
 	if(secnum < 0)
 	{ script_error("sector not found with tagnum %i\n", tagnum); return;}
@@ -1945,7 +1945,7 @@ void FParser::SF_SectorColormap(void)
 	{
 		uint32_t cm = R_ColormapNumForName(t_argv[1].value.s);
 
-		FSSectorTagIterator itr(Level, tagnum);
+		FSSectorTagIterator itr(tagnum);
 		while ((i = itr.Next()) >= 0)
 		{
 			sectors[i].midmap=cm;
@@ -1972,7 +1972,7 @@ void FParser::SF_CeilingTexture(void)
 		tagnum = intvalue(t_argv[0]);
 		
 		// argv is sector tag
-		secnum = T_FindFirstSectorFromTag(Level, tagnum);
+		secnum = T_FindFirstSectorFromTag(tagnum);
 		
 		if(secnum < 0)
 		{ script_error("sector not found with tagnum %i\n", tagnum); return;}
@@ -1985,7 +1985,7 @@ void FParser::SF_CeilingTexture(void)
 			FTextureID picnum = TexMan.GetTextureID(t_argv[1].string, ETextureType::Flat, FTextureManager::TEXMAN_Overridable);
 			
 			// set all sectors with tag
-			FSSectorTagIterator itr(Level, tagnum);
+			FSSectorTagIterator itr(tagnum);
 			while ((i = itr.Next()) >= 0)
 			{
 				Level->sectors[i].SetTexture(sector_t::ceiling, picnum);
@@ -2042,7 +2042,7 @@ void FParser::SF_OpenDoor(void)
 		if(t_argc > 2) speed = intvalue(t_argv[2]);
 		else speed = 1;    // 1= normal speed
 
-		EV_DoDoor(Level, wait_time ? DDoor::doorRaise : DDoor::doorOpen, NULL, NULL, sectag, 2. * clamp(speed, 1, 127), wait_time, 0, 0);
+		EV_DoDoor(wait_time ? DDoor::doorRaise : DDoor::doorOpen, NULL, NULL, sectag, 2. * clamp(speed, 1, 127), wait_time, 0, 0);
 	}
 }
 
@@ -2067,7 +2067,7 @@ void FParser::SF_CloseDoor(void)
 		if(t_argc > 1) speed = intvalue(t_argv[1]);
 		else speed = 1;    // 1= normal speed
 		
-		EV_DoDoor(Level, DDoor::doorClose, NULL, NULL, sectag, 2.*clamp(speed, 1, 127), 0, 0, 0);
+		EV_DoDoor(DDoor::doorClose, NULL, NULL, sectag, 2.*clamp(speed, 1, 127), 0, 0, 0);
 	}
 }
 
@@ -2098,7 +2098,7 @@ void FParser::SF_LineTrigger()
 		mld.special=intvalue(t_argv[0]);
 		mld.tag=t_argc > 1 ? intvalue(t_argv[1]) : 0;
 		P_TranslateLineDef(&line, &mld);
-		P_ExecuteSpecial(Level, line.special, NULL, Script->trigger, false, 
+		P_ExecuteSpecial(line.special, NULL, Script->trigger, false, 
 			line.args[0],line.args[1],line.args[2],line.args[3],line.args[4]); 
 	}
 }
@@ -2157,7 +2157,7 @@ void FParser::SF_SetLineBlocking(void)
 		{
 			blocking=blocks[blocking];
 			int tag=intvalue(t_argv[0]);
-			FLineIdIterator itr(Level->tagManager, tag);
+			FLineIdIterator itr(tag);
 			int i;
 			while ((i = itr.Next()) >= 0)
 			{
@@ -2180,7 +2180,7 @@ void FParser::SF_SetLineMonsterBlocking(void)
 		int blocking = intvalue(t_argv[1]) ? (int)ML_BLOCKMONSTERS : 0;
 		int tag=intvalue(t_argv[0]);
 
-		FLineIdIterator itr(Level->tagManager, tag);
+		FLineIdIterator itr(tag);
 		int i;
 		while ((i = itr.Next()) >= 0)
 		{
@@ -2237,7 +2237,7 @@ void FParser::SF_SetLineTexture(void)
 			texture = stringvalue(t_argv[3]);
 			texturenum = TexMan.GetTextureID(texture, ETextureType::Wall, FTextureManager::TEXMAN_Overridable);
 			
-			FLineIdIterator itr(Level->tagManager, tag);
+			FLineIdIterator itr(tag);
 			while ((i = itr.Next()) >= 0)
 			{
 				// bad sidedef, Hexen just SEGV'd here!
@@ -2257,7 +2257,7 @@ void FParser::SF_SetLineTexture(void)
 			int sections = intvalue(t_argv[3]); 
 			
 			// set all sectors with tag 
-			FLineIdIterator itr(Level->tagManager, tag);
+			FLineIdIterator itr(tag);
 			while ((i = itr.Next()) >= 0)
 			{ 
 				side_t *sided = Level->lines[i].sidedef[side];
@@ -2853,7 +2853,7 @@ void FParser::SF_AmbientSound(void)
 
 void FParser::SF_ExitSecret(void)
 {
-	G_SecretExitLevel(Level, 0);
+	G_SecretExitLevel(0);
 }
 
 
@@ -2928,9 +2928,9 @@ void FParser::SF_SpawnExplosion()
 		if(t_argc > 3)
 			pos.Z = floatvalue(t_argv[3]);
 		else
-			pos.Z = P_PointInSector(Level, pos)->floorplane.ZatPoint(pos);
+			pos.Z = P_PointInSector(pos)->floorplane.ZatPoint(pos);
 		
-		spawn = Spawn (Level, pclass, pos, ALLOW_REPLACE);
+		spawn = Spawn (pclass, pos, ALLOW_REPLACE);
 		t_return.type = svt_int;
 		t_return.value.i=0;
 		if (spawn)
@@ -3645,7 +3645,7 @@ void FParser::SF_ThingCount(void)
 		pClass = pClass->GetReplacement();
 		
 again:
-		TThinkerIterator<AActor> it(Level);
+		TThinkerIterator<AActor> it;
 
 		if (t_argc<2 || intvalue(t_argv[1])==0 || pClass->IsDescendantOf(NAME_Inventory))
 		{
@@ -3700,7 +3700,7 @@ void FParser::SF_SetColor(void)
 	{
 		tagnum = intvalue(t_argv[0]);
 		
-		secnum = T_FindFirstSectorFromTag(Level, tagnum);
+		secnum = T_FindFirstSectorFromTag(tagnum);
 		
 		if(secnum < 0)
 		{ 
@@ -3721,7 +3721,7 @@ void FParser::SF_SetColor(void)
 		else return;
 
 		// set all sectors with tag
-		FSSectorTagIterator itr(Level, tagnum);
+		FSSectorTagIterator itr(tagnum);
 		while ((i = itr.Next()) >= 0)
 		{
 			Level->sectors[i].SetColor(color, 0);
@@ -3761,7 +3761,7 @@ void FParser::SF_SpawnShot2(void)
 
 		t_return.type = svt_mobj;
 
-		AActor *mo = Spawn(Level, pclass, source->PosPlusZ(z), ALLOW_REPLACE);
+		AActor *mo = Spawn(pclass, source->PosPlusZ(z), ALLOW_REPLACE);
 		if (mo)
 		{
 			S_Sound(mo, CHAN_VOICE, mo->SeeSound, 1, ATTN_NORM);
@@ -3786,13 +3786,13 @@ void  FParser::SF_KillInSector()
 {
 	if (CheckArgs(1))
 	{
-		TThinkerIterator<AActor> it(Level);
+		TThinkerIterator<AActor> it;
 		AActor * mo;
 		int tag=intvalue(t_argv[0]);
 
 		while ((mo=it.Next()))
 		{
-			if (mo->flags3&MF3_ISMONSTER && Level->tagManager.SectorHasTag(mo->Sector, tag)) P_DamageMobj(mo, NULL, NULL, 1000000, NAME_Massacre);
+			if (mo->flags3&MF3_ISMONSTER && tagManager.SectorHasTag(mo->Sector, tag)) P_DamageMobj(mo, NULL, NULL, 1000000, NAME_Massacre);
 		}
 	}
 }
@@ -3814,7 +3814,7 @@ void FParser::SF_SetLineTrigger()
 		id=intvalue(t_argv[0]);
 		spec=intvalue(t_argv[1]);
 		if (t_argc>2) tag=intvalue(t_argv[2]);
-		FLineIdIterator itr(Level->tagManager, id);
+		FLineIdIterator itr(id);
 		while ((i = itr.Next()) >= 0)
 		{
 			maplinedef_t mld;
@@ -3848,7 +3848,7 @@ void FParser::RunLineSpecial(const FLineSpecial *spec)
 			if (t_argc>i) args[i]=intvalue(t_argv[i]);
 			else args[i] = 0;
 		}
-		t_return.value.i = P_ExecuteSpecial(Level, spec->number, NULL,Script->trigger,false, args[0],args[1],args[2],args[3],args[4]);
+		t_return.value.i = P_ExecuteSpecial(spec->number, NULL,Script->trigger,false, args[0],args[1],args[2],args[3],args[4]);
 	}
 }
 

@@ -44,7 +44,6 @@
 #include "d_player.h"
 #include "g_levellocals.h"
 #include "vm.h"
-#include "actorinlines.h"
 
 CVAR( Float, blood_fade_scalar, 1.0f, CVAR_ARCHIVE )	// [SP] Pulled from Skulltag - changed default from 0.5 to 1.0
 CVAR( Float, pickup_fade_scalar, 1.0f, CVAR_ARCHIVE )	// [SP] Uses same logic as blood_fade_scalar except for pickups
@@ -172,23 +171,22 @@ void V_AddPlayerBlend (player_t *CPlayer, float blend[4], float maxinvalpha, int
 
 	if (CPlayer->hazardcount)
 	{
-		auto Level = CPlayer->mo->Level;
 		if (paletteflash & PF_HAZARD)
 		{
 			if (CPlayer->hazardcount > 16*TICRATE || (CPlayer->hazardcount & 8))
 			{
-				float r = ((Level->hazardflash & 0xff0000) >> 16) / 255.f;
-				float g = ((Level->hazardflash & 0xff00) >> 8) / 255.f;
-				float b = ((Level->hazardflash & 0xff)) / 255.f;
+				float r = ((level.hazardflash & 0xff0000) >> 16) / 255.f;
+				float g = ((level.hazardflash & 0xff00) >> 8) / 255.f;
+				float b = ((level.hazardflash & 0xff)) / 255.f;
 				V_AddBlend (r, g, b, 0.125f, blend);
 			}
 		}
 		else
 		{
 			cnt= MIN(CPlayer->hazardcount/8, 64);
-			float r = ((Level->hazardcolor & 0xff0000) >> 16) / 255.f;
-			float g = ((Level->hazardcolor & 0xff00) >> 8) / 255.f;
-			float b = ((Level->hazardcolor & 0xff)) / 255.f;
+			float r = ((level.hazardcolor & 0xff0000) >> 16) / 255.f;
+			float g = ((level.hazardcolor & 0xff00) >> 8) / 255.f;
+			float b = ((level.hazardcolor & 0xff)) / 255.f;
 			V_AddBlend (r, g, b, cnt/93.2571428571f, blend);
 		}
 	}

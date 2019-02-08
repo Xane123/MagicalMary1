@@ -281,7 +281,7 @@ void GLWall::DrawWall(HWDrawInfo *di, FRenderState &state, bool translucent)
 {
 	if (screen->BuffersArePersistent())
 	{
-		if (di->Level->HasDynamicLights && !di->isFullbrightScene() && gltexture != nullptr)
+		if (level.HasDynamicLights && !di->isFullbrightScene() && gltexture != nullptr)
 		{
 			SetupLights(di, lightdata);
 		}
@@ -322,7 +322,7 @@ void GLWall::SetupLights(HWDrawInfo *di, FDynLightData &lightdata)
 {
 	lightdata.Clear();
 
-	if (RenderStyle == STYLE_Add && !di->Level->lightadditivesurfaces) return;	// no lights on additively blended surfaces.
+	if (RenderStyle == STYLE_Add && !level.lightadditivesurfaces) return;	// no lights on additively blended surfaces.
 
 	// check for wall types which cannot have dynamic lights on them (portal types never get here so they don't need to be checked.)
 	switch (type)
@@ -456,7 +456,7 @@ void GLWall::PutWall(HWDrawInfo *di, bool translucent)
     
 	if (!screen->BuffersArePersistent())
 	{
-		if (di->Level->HasDynamicLights && !di->isFullbrightScene() && gltexture != nullptr)
+		if (level.HasDynamicLights && !di->isFullbrightScene() && gltexture != nullptr)
 		{
 			SetupLights(di, lightdata);
 		}
@@ -567,7 +567,7 @@ void GLWall::PutPortal(HWDrawInfo *di, int ptype, int plane)
 		if (!portal)
 		{
 			line_t *otherside = lineportal->lines[0]->mDestination;
-			if (otherside != nullptr && otherside->portalindex < di->Level->linePortals.Size())
+			if (otherside != nullptr && otherside->portalindex < level.linePortals.Size())
 			{
 				di->ProcessActorsInPortal(otherside->getPortal()->mGroup, di->in_area);
 			}
@@ -604,7 +604,7 @@ void GLWall::PutPortal(HWDrawInfo *di, int ptype, int plane)
 
 void GLWall::Put3DWall(HWDrawInfo *di, lightlist_t * lightlist, bool translucent)
 {
-	// only modify the light di->Level-> if it doesn't originate from the seg's frontsector. This is to account for light transferring effects
+	// only modify the light level if it doesn't originate from the seg's frontsector. This is to account for light transferring effects
 	if (lightlist->p_lightlevel != &seg->sidedef->sector->lightlevel)
 	{
 		lightlevel = hw_ClampLight(*lightlist->p_lightlevel);
@@ -1129,7 +1129,7 @@ void GLWall::DoTexture(HWDrawInfo *di, int _type,seg_t * seg, int peg,
 
 	FTexCoordInfo tci;
 
-	gltexture->GetTexCoordInfo(&tci, seg->sidedef, texpos, !!(di->Level->flags3 & LEVEL3_FORCEWORLDPANNING));
+	gltexture->GetTexCoordInfo(&tci, seg->sidedef, texpos);
 
 	type = _type;
 
@@ -1190,7 +1190,7 @@ void GLWall::DoMidTexture(HWDrawInfo *di, seg_t * seg, bool drawfogboundary,
 		// Align the texture to the ORIGINAL sector's height!!
 		// At this point slopes don't matter because they don't affect the texture's z-position
 
-		gltexture->GetTexCoordInfo(&tci, seg->sidedef, side_t::mid, !!(di->Level->flags3 & LEVEL3_FORCEWORLDPANNING));
+		gltexture->GetTexCoordInfo(&tci, seg->sidedef, side_t::mid);
 		if (tci.mRenderHeight < 0)
 		{
 			mirrory = true;
@@ -1516,7 +1516,7 @@ void GLWall::BuildFFBlock(HWDrawInfo *di, seg_t * seg, F3DFloor * rover,
 			light = P_GetPlaneLight(rover->target, rover->top.plane, true);
 			Colormap.Clear();
 			Colormap.LightColor = light->extra_colormap.FadeColor;
-			// the fog plane defines the light di->Level->, not the front sector
+			// the fog plane defines the light level, not the front sector
 			lightlevel = hw_ClampLight(*light->p_lightlevel);
 			gltexture = NULL;
 			type = RENDERWALL_FFBLOCK;
@@ -1526,24 +1526,23 @@ void GLWall::BuildFFBlock(HWDrawInfo *di, seg_t * seg, F3DFloor * rover,
 	else
 	{
 
-		auto fwp = !!(di->Level->flags3 & LEVEL3_FORCEWORLDPANNING);
 		if (rover->flags&FF_UPPERTEXTURE)
 		{
 			gltexture = FMaterial::ValidateTexture(seg->sidedef->GetTexture(side_t::top), false, true);
 			if (!gltexture) return;
-			gltexture->GetTexCoordInfo(&tci, seg->sidedef, side_t::top, fwp);
+			gltexture->GetTexCoordInfo(&tci, seg->sidedef, side_t::top);
 		}
 		else if (rover->flags&FF_LOWERTEXTURE)
 		{
 			gltexture = FMaterial::ValidateTexture(seg->sidedef->GetTexture(side_t::bottom), false, true);
 			if (!gltexture) return;
-			gltexture->GetTexCoordInfo(&tci, seg->sidedef, side_t::bottom, fwp);
+			gltexture->GetTexCoordInfo(&tci, seg->sidedef, side_t::bottom);
 		}
 		else
 		{
 			gltexture = FMaterial::ValidateTexture(mastersd->GetTexture(side_t::mid), false, true);
 			if (!gltexture) return;
-			gltexture->GetTexCoordInfo(&tci, mastersd, side_t::mid, fwp);
+			gltexture->GetTexCoordInfo(&tci, mastersd, side_t::mid);
 		}
 
 		to = (rover->flags&(FF_UPPERTEXTURE | FF_LOWERTEXTURE)) ? 0 : tci.TextureOffset(mastersd->GetTextureXOffset(side_t::mid));
@@ -1868,8 +1867,8 @@ void GLWall::Process(HWDrawInfo *di, seg_t *seg, sector_t * frontsector, sector_
 	else
 	{
 		// Need these for aligning the textures
-		realfront = &di->Level->sectors[frontsector->sectornum];
-		realback = backsector ? &di->Level->sectors[backsector->sectornum] : NULL;
+		realfront = &level.sectors[frontsector->sectornum];
+		realback = backsector ? &level.sectors[backsector->sectornum] : NULL;
 		segfront = frontsector;
 		segback = backsector;
 	}
@@ -1929,7 +1928,7 @@ void GLWall::Process(HWDrawInfo *di, seg_t *seg, sector_t * frontsector, sector_
 
 	int rel = 0;
 	int orglightlevel = hw_ClampLight(frontsector->lightlevel);
-	bool foggy = (!Colormap.FadeColor.isBlack() || di->Level->flags&LEVEL_HASFADETABLE);	// fog disables fake contrast
+	bool foggy = (!Colormap.FadeColor.isBlack() || level.flags&LEVEL_HASFADETABLE);	// fog disables fake contrast
 	lightlevel = hw_ClampLight(seg->sidedef->GetLightLevel(foggy, orglightlevel, false, &rel));
 	if (orglightlevel >= 253)			// with the software renderer fake contrast won't be visible above this.
 	{
@@ -2063,7 +2062,7 @@ void GLWall::Process(HWDrawInfo *di, seg_t *seg, sector_t * frontsector, sector_
 		FTexture *tex = TexMan.GetTexture(seg->sidedef->GetTexture(side_t::mid), true);
 		if (tex != NULL)
 		{
-			if (di->Level->i_compatflags & COMPATF_MASKEDMIDTEX)
+			if (i_compatflags & COMPATF_MASKEDMIDTEX)
 			{
 				tex = tex->GetRawTexture();
 			}
@@ -2196,7 +2195,7 @@ void GLWall::ProcessLowerMiniseg(HWDrawInfo *di, seg_t *seg, sector_t * frontsec
 		{
 			FTexCoordInfo tci;
 			type = RENDERWALL_BOTTOM;
-			gltexture->GetTexCoordInfo(&tci, 1.f, 1.f, !!(di->Level->flags3 & LEVEL3_FORCEWORLDPANNING));
+			gltexture->GetTexCoordInfo(&tci, 1.f, 1.f);
 			SetWallCoordinates(seg, &tci, bfh, bfh, bfh, ffh, ffh, 0);
 			PutWall(di, false);
 		}

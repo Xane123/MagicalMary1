@@ -36,6 +36,12 @@
 
 IMPLEMENT_CLASS(DSectorEffect, false, false)
 
+DSectorEffect::DSectorEffect ()
+: DThinker(STAT_SECTOREFFECT)
+{
+	m_Sector = nullptr;
+}
+
 void DSectorEffect::OnDestroy()
 {
 	if (m_Sector)
@@ -57,7 +63,7 @@ void DSectorEffect::OnDestroy()
 }
 
 DSectorEffect::DSectorEffect (sector_t *sector)
-	: DThinker(sector->Level)
+	: DThinker(STAT_SECTOREFFECT)
 {
 	m_Sector = sector;
 }
@@ -215,7 +221,7 @@ EMoveResult sector_t::MoveFloor(double speed, double dest, int crush, int direct
 		//destheight = (dest < ceilingheight) ? dest : ceilingheight;
 		if (!ceilingplane.isSlope() && !floorplane.isSlope() &&
 			!PortalIsLinked(sector_t::ceiling) &&
-			(!(Level->i_compatflags2 & COMPATF2_FLOORMOVE) && -dest > ceilingplane.fD()))
+			(!(i_compatflags2 & COMPATF2_FLOORMOVE) && -dest > ceilingplane.fD()))
 		{
 			dest = -ceilingplane.fD();
 		}
@@ -305,7 +311,7 @@ EMoveResult sector_t::MoveCeiling(double speed, double dest, int crush, int dire
 		//destheight = (dest > floorheight) ? dest : floorheight;
 		if (!ceilingplane.isSlope() && !floorplane.isSlope() &&
 			!PortalIsLinked(sector_t::floor) &&
-			(!(Level->i_compatflags2 & COMPATF2_FLOORMOVE) && dest < -floorplane.fD()))
+			(!(i_compatflags2 & COMPATF2_FLOORMOVE) && dest < -floorplane.fD()))
 		{
 			dest = -floorplane.fD();
 		}

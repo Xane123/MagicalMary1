@@ -273,6 +273,7 @@ static const char *KeyConfCommands[] =
 
 // CODE --------------------------------------------------------------------
 
+
 static int ListActionCommands (const char *pattern)
 {
 	char matcher[16];
@@ -1046,11 +1047,11 @@ void FConsoleCommand::Run (FCommandLine &argv, AActor *who, int key)
 
 void FUnsafeConsoleCommand::Run (FCommandLine &args, AActor *instigator, int key)
 {
-	/*if (UnsafeExecutionContext)
+	if (UnsafeExecutionContext)
 	{
 		Printf(TEXTCOLOR_RED "Cannot execute unsafe command " TEXTCOLOR_GOLD "%s\n", m_Name);
 		return;
-	}*/
+	}
 
 	FConsoleCommand::Run (args, instigator, key);
 }

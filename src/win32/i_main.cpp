@@ -1098,14 +1098,13 @@ void DoomSpecificInfo (char *buffer, size_t bufflen)
 		buffer += mysnprintf (buffer, buffend - buffer, "\r\nWad %d: %s", i, arg);
 	}
 
-	auto &vp = r_viewpoint;
 	if (gamestate != GS_LEVEL && gamestate != GS_TITLELEVEL)
 	{
-		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nNot in a map.");
+		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nNot in a level.");
 	}
 	else
 	{
-		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nCurrent map: %s", vp.camera->Level->MapName.GetChars());
+		buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nCurrent map: %s", level.MapName.GetChars());
 
 		if (!viewactive)
 		{
@@ -1113,6 +1112,7 @@ void DoomSpecificInfo (char *buffer, size_t bufflen)
 		}
 		else
 		{
+			auto &vp = r_viewpoint;
 			buffer += mysnprintf (buffer, buffend - buffer, "\r\n\r\nviewx = %f", vp.Pos.X);
 			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewy = %f", vp.Pos.Y);
 			buffer += mysnprintf (buffer, buffend - buffer, "\r\nviewz = %f", vp.Pos.Z);

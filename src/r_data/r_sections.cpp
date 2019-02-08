@@ -814,8 +814,9 @@ public:
 //
 //=============================================================================
 
-void PrintSections(FLevelLocals *Level, FSectionContainer &container)
+void PrintSections(FSectionContainer &container)
 {
+	auto Level = &level;
 	for (unsigned i = 0; i < container.allSections.Size(); i++)
 	{
 		auto &section = container.allSections[i];
@@ -876,11 +877,7 @@ void CreateSections(FLevelLocals *Level)
 
 CCMD(printsections)
 {
-	ForAllLevels([](FLevelLocals *Level)
-	{
-		Printf("%s - %s\n", Level->MapName.GetChars(), Level->LevelName.GetChars());
-		PrintSections(Level, Level->sections);
-	});
+	PrintSections(level.sections);
 }
 
 

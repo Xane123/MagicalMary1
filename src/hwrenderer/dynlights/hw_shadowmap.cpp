@@ -85,15 +85,12 @@ CUSTOM_CVAR (Bool, gl_light_shadowmap, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
     if (!self)
     {
-		ForAllLevels([](FLevelLocals *Level)
+		auto light = level.lights;
+		while (light)
 		{
-			auto light = Level->lights;
-			while (light)
-			{
-				light->mShadowmapIndex = 1024;
-				light = light->next;
-			}
-		});
+            light->mShadowmapIndex = 1024;
+			light = light->next;
+        }
     }
 }
 
@@ -110,13 +107,13 @@ bool IShadowMap::IsEnabled() const
 	return gl_light_shadowmap && (screen->hwcaps & RFL_SHADER_STORAGE_BUFFER);
 }
 
-void IShadowMap::CollectLights(FDynamicLight *head)
+void IShadowMap::CollectLights()
 {
 	if (mLights.Size() != 1024 * 4) mLights.Resize(1024 * 4);
 	int lightindex = 0;
 
 	// Todo: this should go through the blockmap in a spiral pattern around the player so that closer lights are preferred.
-	for (auto light = head; light; light = light->next)
+	for (auto light = level.lights; light; light = light->next)
 	{
 		LightsProcessed++;
 		if (light->shadowmapped && light->IsActive() && lightindex < 1024 * 4)
@@ -164,7 +161,7 @@ bool IShadowMap::ValidateAABBTree(FLevelLocals *Level)
 	return false;
 }
 
-bool IShadowMap::PerformUpdate(FLevelLocals *Level)
+bool IShadowMap::PerformUpdate()
 {
 	UpdateCycles.Reset();
 
@@ -174,8 +171,8 @@ bool IShadowMap::PerformUpdate(FLevelLocals *Level)
 	if (IsEnabled())
 	{
 		UpdateCycles.Clock();
-		UploadAABBTree(Level);
-		UploadLights(Level->lights);
+		UploadAABBTree();
+		UploadLights();
 		mLightList->BindBase();
 		mNodesBuffer->BindBase();
 		mLinesBuffer->BindBase();
@@ -184,9 +181,9 @@ bool IShadowMap::PerformUpdate(FLevelLocals *Level)
 	return false;
 }
 
-void IShadowMap::UploadLights(FDynamicLight *head)
+void IShadowMap::UploadLights()
 {
-	CollectLights(head);
+	CollectLights();
 
 	if (mLightList == nullptr)
 		mLightList = screen->CreateDataBuffer(4, true);
@@ -195,9 +192,9 @@ void IShadowMap::UploadLights(FDynamicLight *head)
 }
 
 
-void IShadowMap::UploadAABBTree(FLevelLocals *Level)
+void IShadowMap::UploadAABBTree()
 {
-	if (!ValidateAABBTree(Level))
+	if (!ValidateAABBTree(&level))
 	{
 		if (!mNodesBuffer)
 			mNodesBuffer = screen->CreateDataBuffer(2, true);

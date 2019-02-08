@@ -509,7 +509,7 @@ void FIWadManager::ValidateIWADs()
 
 static bool havepicked = false;
 
-int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad)
+int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, const char *zdoom_wad, const char *optional_wad)
 {
 	const char *iwadparm = Args->CheckValue ("-iwad");
 	FString custwad;
@@ -661,12 +661,12 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 					  "2. Edit your " GAMENAMELOWERCASE "-username.ini and add the directories of your iwads\n"
 					  "to the list beneath [IWADSearch.Directories]");
 #elif defined(__APPLE__)
-					  "1. Place one or more of these wads in ~/Library/Application Support/" GAMENAME "/\n"
+					  "1. Place one or more of these wads in ~/Library/Application Support/" GAMENAMELOWERCASE "/\n"
 					  "2. Edit your ~/Library/Preferences/" GAMENAMELOWERCASE ".ini and add the directories\n"
 					  "of your iwads to the list beneath [IWADSearch.Directories]");
 #else
-					  "1. Place one or more of these wads in ~/.config/" GAMENAME "/.\n"
-					  "2. Edit your ~/.config/" GAMENAME "/" GAMENAMELOWERCASE ".ini and add the directories of your\n"
+					  "1. Place one or more of these wads in ~/.config/" GAMENAMELOWERCASE "/.\n"
+					  "2. Edit your ~/.config/" GAMENAMELOWERCASE "/" GAMENAMELOWERCASE ".ini and add the directories of your\n"
 					  "iwads to the list beneath [IWADSearch.Directories]");
 #endif
 	}
@@ -720,9 +720,9 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	D_AddFile (wadfiles, zdoom_wad);
 
 	// [SP] Load non-free assets if available. This must be done before the IWAD.
-	/*if (D_AddFile(wadfiles, optional_wad))
+	if (D_AddFile(wadfiles, optional_wad))
 		Wads.SetIwadNum(2);
-	else*/
+	else
 		Wads.SetIwadNum(1);
 
 	if (picks[pick].mRequiredPath.IsNotEmpty())
@@ -760,9 +760,9 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 //
 //==========================================================================
 
-const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad)
+const FIWADInfo *FIWadManager::FindIWAD(TArray<FString> &wadfiles, const char *iwad, const char *basewad, const char *optionalwad)
 {
-	int iwadType = IdentifyVersion(wadfiles, iwad, basewad);
+	int iwadType = IdentifyVersion(wadfiles, iwad, basewad, optionalwad);
 	//gameiwad = iwadType;
 	const FIWADInfo *iwad_info = &mIWadInfos[iwadType];
 	if (DoomStartupInfo.Name.IsEmpty()) DoomStartupInfo.Name = iwad_info->Name;

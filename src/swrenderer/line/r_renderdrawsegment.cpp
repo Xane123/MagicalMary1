@@ -150,7 +150,7 @@ namespace swrenderer
 			return false;
 
 		FTexture *ttex = TexMan.GetPalettedTexture(curline->sidedef->GetTexture(side_t::mid), true);
-		if (curline->frontsector->Level->i_compatflags & COMPATF_MASKEDMIDTEX)
+		if (i_compatflags & COMPATF_MASKEDMIDTEX)
 		{
 			ttex = ttex->GetRawTexture();
 		}
@@ -197,7 +197,7 @@ namespace swrenderer
 				MaskedScaleY = -MaskedScaleY;
 				sprflipvert = true;
 			}
-			if (tex->useWorldPanning(curline->frontsector->Level))
+			if (tex->useWorldPanning())
 			{
 				// rowoffset is added before the multiply so that the masked texture will
 				// still be positioned in world units rather than texels.
@@ -294,7 +294,7 @@ namespace swrenderer
 			  // this drawseg.
 				if ((curline->linedef->flags & ML_CLIP_MIDTEX) ||
 					(curline->sidedef->Flags & WALLF_CLIP_MIDTEX) ||
-					(curline->frontsector->Level->ib_compatflags & BCOMPATF_CLIPMIDTEX))
+					(ib_compatflags & BCOMPATF_CLIPMIDTEX))
 				{
 					ClipMidtex(x1, x2);
 				}
@@ -332,7 +332,7 @@ namespace swrenderer
 		}
 		else
 		{ // Texture does wrap vertically.
-			if (tex->useWorldPanning(curline->frontsector->Level))
+			if (tex->useWorldPanning())
 			{
 				// rowoffset is added before the multiply so that the masked texture will
 				// still be positioned in world units rather than texels.
@@ -356,7 +356,7 @@ namespace swrenderer
 			  // this drawseg.
 				if ((curline->linedef->flags & ML_CLIP_MIDTEX) ||
 					(curline->sidedef->Flags & WALLF_CLIP_MIDTEX) ||
-					(curline->frontsector->Level->ib_compatflags & BCOMPATF_CLIPMIDTEX))
+					(ib_compatflags & BCOMPATF_CLIPMIDTEX))
 				{
 					ClipMidtex(x1, x2);
 				}
@@ -447,7 +447,7 @@ namespace swrenderer
 			rowoffset += rw_pic->GetHeight();
 		}
 		double texturemid = (planez - Thread->Viewport->viewpoint.Pos.Z) * yscale;
-		if (rw_pic->useWorldPanning(curline->frontsector->Level))
+		if (rw_pic->useWorldPanning())
 		{
 			// rowoffset is added before the multiply so that the masked texture will
 			// still be positioned in world units rather than texels.

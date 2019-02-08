@@ -82,11 +82,11 @@ bool UseKnownFolders()
 	if (file != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(file);
-		//if (!batchrun) Printf("Using program directory for storage\n");
+		if (!batchrun) Printf("Using program directory for storage\n");
 		iswritable = true;
 		return false;
 	}
-	//if (!batchrun) Printf("Using known folders for storage\n");
+	if (!batchrun) Printf("Using known folders for storage\n");
 	iswritable = false;
 	return true;
 }
@@ -197,7 +197,7 @@ FString M_GetCachePath(bool create)
 	}
 	// Don't use GAME_DIR and such so that ZDoom and its child ports can
 	// share the node cache.
-	path += "/mma/cache";
+	path += "/zdoom/cache";
 	path.Substitute("//", "/");	// needed because progdir ends with a slash.
 	if (create)
 	{
@@ -252,18 +252,15 @@ FString M_GetCajunPath(const char *botfilename)
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	/*HRESULT hr;
+	HRESULT hr;
+
 	path.Format("%s" GAMENAME "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
 	{
 		return path;
-	}*/
-
+	}
 	path = "";
-	path = progdir;
-	path += GAMENAMELOWERCASE ".ini";	//MMA only uses Settings.ini.
 
-	/*
 	// Construct a user-specific config name
 	if (UseKnownFolders() && GetKnownFolder(CSIDL_APPDATA, FOLDERID_RoamingAppData, true, path))
 	{
@@ -275,9 +272,10 @@ FString M_GetConfigPath(bool for_reading)
 	{ // construct "$PROGDIR/zdoom-$USER.ini"
 		TCHAR uname[UNLEN+1];
 		DWORD unamelen = countof(uname);
+
 		path = progdir;
 		hr = GetUserName(uname, &unamelen);
-		if (0)//SUCCEEDED(hr) && uname[0] != 0)
+		if (SUCCEEDED(hr) && uname[0] != 0)
 		{
 			// Is it valid for a user name to have slashes?
 			// Check for them and substitute just in case.
@@ -291,10 +289,10 @@ FString M_GetConfigPath(bool for_reading)
 			path << GAMENAMELOWERCASE "-" << uname << ".ini";
 		}
 		else
-		{ // Couldn't get user name, so just use Settings.ini
+		{ // Couldn't get user name, so just use zdoom.ini
 			path += GAMENAMELOWERCASE ".ini";
 		}
-	}*/
+	}
 
 	// If we are reading the config file, check if it exists. If not, fallback
 	// to $PROGDIR/zdoom.ini

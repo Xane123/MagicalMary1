@@ -583,7 +583,7 @@ void MapLoader::ProcessEDLinedef(line_t *ld, int recordnum)
 	ld->flags = (ld->flags&~fmask) | eld->flags;
 	ld->setAlpha(eld->alpha);
 	memcpy(ld->args, eld->args, sizeof(ld->args));
-	Level->tagManager.AddLineID(Index(ld), eld->tag);
+	tagManager.AddLineID(Index(ld), eld->tag);
 }
 
 void MapLoader::ProcessEDSector(sector_t *sec, int recordnum)
@@ -660,6 +660,6 @@ void MapLoader::LoadMapinfoACSLump()
 	if (Level->info->acsName.IsNotEmpty())
 	{
 		int lump = Wads.CheckNumForName(Level->info->acsName);
-		if (lump >= 0) Level->Behaviors.LoadModule(Level, lump);
+		if (lump >= 0) Level->Behaviors.LoadModule(lump);
 	}
 }

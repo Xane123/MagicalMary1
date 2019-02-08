@@ -54,7 +54,8 @@ public:
 		p_current
 	};
 
-	DPusher (EPusher type, line_t *l, int magnitude, int angle, AActor *source, sector_t *affectee);
+	DPusher ();
+	DPusher (EPusher type, line_t *l, int magnitude, int angle, AActor *source, int affectee);
 	void Serialize(FSerializer &arc);
 	int CheckForSectorMatch (EPusher type, int tag);
 	void ChangeValues (int magnitude, int angle)
@@ -72,13 +73,9 @@ protected:
 	DVector2 m_PushVec;
 	double m_Magnitude;		// Vector strength for point pusher
 	double m_Radius;		// Effective radius for point pusher
-	sector_t *m_Affectee;			// Number of affected sector
+	int m_Affectee;			// Number of affected sector
 
 	friend bool PIT_PushThing (AActor *thing);
-
-private:
-	DPusher() = default;
-
 };
 
 IMPLEMENT_CLASS(DPusher, false, true)
@@ -86,6 +83,10 @@ IMPLEMENT_CLASS(DPusher, false, true)
 IMPLEMENT_POINTERS_START(DPusher)
 	IMPLEMENT_POINTER(m_Source)
 IMPLEMENT_POINTERS_END
+
+DPusher::DPusher ()
+{
+}
 
 void DPusher::Serialize(FSerializer &arc)
 {
@@ -150,8 +151,8 @@ void DPusher::Serialize(FSerializer &arc)
 //
 // Add a push thinker to the thinker list
 
-DPusher::DPusher (DPusher::EPusher type, line_t *l, int magnitude, int angle, AActor *source, sector_t *affectee)
-	: DThinker(affectee->Level)
+DPusher::DPusher (DPusher::EPusher type, line_t *l, int magnitude, int angle,
+				  AActor *source, int affectee)
 {
 	m_Source = source;
 	m_Type = type;
@@ -173,8 +174,8 @@ DPusher::DPusher (DPusher::EPusher type, line_t *l, int magnitude, int angle, AA
 
 int DPusher::CheckForSectorMatch (EPusher type, int tag)
 {
-	if (m_Type == type && Level->tagManager.SectorHasTag(m_Affectee, tag))
-		return m_Affectee->Index();
+	if (m_Type == type && tagManager.SectorHasTag(m_Affectee, tag))
+		return m_Affectee;
 	else
 		return -1;
 }
@@ -195,7 +196,7 @@ void DPusher::Tick ()
 	if (!var_pushers)
 		return;
 
-	sec = m_Affectee;
+	sec = &level.sectors[m_Affectee];
 
 	// Be sure the special sector type is still turned on. If so, proceed.
 	// Else, bail out; the sector type has been changed on us.
@@ -337,10 +338,12 @@ void DPusher::Tick ()
 // P_GetPushThing() returns a pointer to an MT_PUSH or MT_PULL thing,
 // NULL otherwise.
 
-AActor *P_GetPushThing (sector_t *sec)
+AActor *P_GetPushThing (int s)
 {
 	AActor* thing;
+	sector_t* sec;
 
+	sec = &level.sectors[s];
 	thing = sec->thinglist;
 
 	while (thing &&
@@ -357,55 +360,56 @@ AActor *P_GetPushThing (sector_t *sec)
 // Initialize the sectors where pushers are present
 //
 
-void P_SpawnPushers (FLevelLocals *Level)
+void P_SpawnPushers ()
 {
-	line_t *l = &Level->lines[0];
+	line_t *l = &level.lines[0];
 	int s;
 
-	for (unsigned i = 0; i < Level->lines.Size(); i++, l++)
+	for (unsigned i = 0; i < level.lines.Size(); i++, l++)
 	{
 		switch (l->special)
 		{
 		case Sector_SetWind: // wind
 		{
-			FSectorTagIterator itr(Level->tagManager, l->args[0]);
+			FSectorTagIterator itr(l->args[0]);
 			while ((s = itr.Next()) >= 0)
-				CreateThinker<DPusher>(DPusher::p_wind, l->args[3] ? l : nullptr, l->args[1], l->args[2], nullptr, &Level->sectors[s]);
+				Create<DPusher>(DPusher::p_wind, l->args[3] ? l : nullptr, l->args[1], l->args[2], nullptr, s);
 			l->special = 0;
 			break;
 		}
 
 		case Sector_SetCurrent: // current
 		{
-			FSectorTagIterator itr(Level->tagManager, l->args[0]);
+			FSectorTagIterator itr(l->args[0]);
 			while ((s = itr.Next()) >= 0)
-				CreateThinker<DPusher>(DPusher::p_current, l->args[3] ? l : nullptr, l->args[1], l->args[2], nullptr, &Level->sectors[s]);
+				Create<DPusher>(DPusher::p_current, l->args[3] ? l : nullptr, l->args[1], l->args[2], nullptr, s);
 			l->special = 0;
 			break;
 		}
 
 		case PointPush_SetForce: // push/pull
 			if (l->args[0]) {	// [RH] Find thing by sector
-				FSectorTagIterator itr(Level->tagManager, l->args[0]);
+				FSectorTagIterator itr(l->args[0]);
 				while ((s = itr.Next()) >= 0)
 				{
-					AActor *thing = P_GetPushThing (&Level->sectors[s]);
+					AActor *thing = P_GetPushThing (s);
 					if (thing) {	// No MT_P* means no effect
 						// [RH] Allow narrowing it down by tid
 						if (!l->args[1] || l->args[1] == thing->tid)
-							CreateThinker<DPusher>(DPusher::p_push, l->args[3] ? l : NULL, l->args[2], 0, thing, &Level->sectors[s]);
+							Create<DPusher> (DPusher::p_push, l->args[3] ? l : NULL, l->args[2],
+										 0, thing, s);
 					}
 				}
 			} else {	// [RH] Find thing by tid
 				AActor *thing;
-				FActorIterator iterator (Level, l->args[1]);
+				FActorIterator iterator (l->args[1]);
 
 				while ( (thing = iterator.Next ()) )
 				{
 					if (thing->GetClass()->TypeName == NAME_PointPusher ||
 						thing->GetClass()->TypeName == NAME_PointPuller)
 					{
-						CreateThinker<DPusher>(DPusher::p_push, l->args[3] ? l : NULL, l->args[2], 0, thing, thing->Sector);
+						Create<DPusher> (DPusher::p_push, l->args[3] ? l : NULL, l->args[2], 0, thing, thing->Sector->Index());
 					}
 				}
 			}
@@ -415,21 +419,14 @@ void P_SpawnPushers (FLevelLocals *Level)
 	}
 }
 
-
-void AdjustPusher (FLevelLocals *Level, int tag, int magnitude, int angle, bool wind)
+void AdjustPusher (int tag, int magnitude, int angle, bool wind)
 {
-	struct FThinkerCollection
-	{
-		int RefNum;
-		DThinker *Obj;
-	};
-
 	DPusher::EPusher type = wind? DPusher::p_wind : DPusher::p_current;
 	
 	// Find pushers already attached to the sector, and change their parameters.
 	TArray<FThinkerCollection> Collection;
 	{
-		TThinkerIterator<DPusher> iterator(Level);
+		TThinkerIterator<DPusher> iterator;
 		FThinkerCollection collect;
 
 		while ( (collect.Obj = iterator.Next ()) )
@@ -446,7 +443,7 @@ void AdjustPusher (FLevelLocals *Level, int tag, int magnitude, int angle, bool 
 	int secnum;
 
 	// Now create pushers for any sectors that don't already have them.
-	FSectorTagIterator itr(Level->tagManager, tag);
+	FSectorTagIterator itr(tag);
 	while ((secnum = itr.Next()) >= 0)
 	{
 		unsigned int i;
@@ -457,7 +454,7 @@ void AdjustPusher (FLevelLocals *Level, int tag, int magnitude, int angle, bool 
 		}
 		if (i == numcollected)
 		{
-			CreateThinker<DPusher>(type, nullptr, magnitude, angle, nullptr, &Level->sectors[secnum]);
+			Create<DPusher> (type, nullptr, magnitude, angle, nullptr, secnum);
 		}
 	}
 }

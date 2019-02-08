@@ -174,8 +174,7 @@ namespace swrenderer
 
 		// [RH] set foggy flag
 		basecolormap = colormap;
-		auto Level = viewport->GetLevel();
-		foggy = Level->fadeto || basecolormap->Fade || (Level->flags & LEVEL_HASFADETABLE);
+		foggy = level.fadeto || basecolormap->Fade || (level.flags & LEVEL_HASFADETABLE);
 
 		planelightfloat = (Thread->Light->SlopePlaneGlobVis(foggy) * lxscale * lyscale) / (fabs(pl->height.ZatPoint(Thread->Viewport->viewpoint.Pos) - Thread->Viewport->viewpoint.Pos.Z)) / 65536.f;
 
