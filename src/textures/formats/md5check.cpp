@@ -44,7 +44,7 @@ struct MD5Check
 	const char *md5;
 };
 
-// If these lists grow they should maybe put in engine.pk3.
+// If these lists grow they should maybe put in gzdoom.pk3.
 
 // The first list is alpha textures in patch format.
 // Patches are normally paletted but for these it needs to be treated
