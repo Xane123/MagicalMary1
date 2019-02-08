@@ -94,20 +94,20 @@ const char *GetVersionString();
 #define SAVEVER 4555
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "GZDOOM"
-#define BASEWAD "gzdoom.pk3"
-#define OPTIONALWAD "zd_extra.pk3"
+#define GAMESIG "Mary's Magical Adventure"
+#define BASEWAD "engine.pk3"
+#define OPTIONALWAD "who_cares.pk3"
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "GZDoom"
-#define GAMENAMELOWERCASE "gzdoom"
+#define GAMENAME "Mary's Magical Adventure"
+#define GAMENAMELOWERCASE "Settings"
 #define FORUM_URL "http://forum.zdoom.org/"
 #define BUGS_FORUM_URL	"http://forum.zdoom.org/viewforum.php?f=2"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME
 #else
-#define GAME_DIR ".config/" GAMENAMELOWERCASE
+#define GAME_DIR ".config/" GAMENAME
 #endif
 
 

@@ -53,19 +53,19 @@ class SkyViewpoint : Actor
 	{
 		Super.BeginPlay ();
 
-		if (tid == 0 && Level.sectorPortals[0].mSkybox == null)
+		if (tid == 0 && level.sectorPortals[0].mSkybox == null)
 		{
-			Level.sectorPortals[0].mSkybox = self;
-			Level.sectorPortals[0].mDestination = CurSector;
+			level.sectorPortals[0].mSkybox = self;
+			level.sectorPortals[0].mDestination = CurSector;
 		}
 	}
 
 	override void OnDestroy ()
 	{
 		// remove all sector references to ourselves.
-		for (int i = 0; i < Level.sectorPortals.Size(); i++)
+		for (int i = 0; i < level.sectorPortals.Size(); i++)
 		{
-			SectorPortal s = Level.sectorPortals[i];
+			SectorPortal s = level.sectorPortals[i];
 			if (s.mSkybox == self)
 			{
 				s.mSkybox = null;
@@ -92,7 +92,7 @@ class SkyViewpoint : Actor
 
 // arg0 = tid of matching SkyViewpoint
 // A value of 0 means to use a regular stretched texture, in case
-// there is a default SkyViewpoint in the Level.
+// there is a default SkyViewpoint in the level.
 //
 // arg1 = 0: set both floor and ceiling skybox
 //		= 1: set only ceiling skybox
@@ -119,7 +119,7 @@ class SkyPicker : Actor
 		}
 		else
 		{
-			let it = Level.CreateActorIterator(args[0], "SkyViewpoint");
+			let it = ActorIterator.Create(args[0], "SkyViewpoint");
 			box = it.Next ();
 		}
 

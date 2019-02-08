@@ -1,9 +1,6 @@
 struct HealthGroup native play
 {
-    deprecated("3.8") static clearscope HealthGroup Find(int id)
-	{
-		return currentSession.__GetCompatibilityLevel().FindHealthGroup(id);
-	}
+    static clearscope native HealthGroup Find(int id);
     
     readonly int id;
     readonly int health;

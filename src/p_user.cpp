@@ -117,6 +117,7 @@ PainFlashList PainFlashes;
 // [Nash] FOV cvar setting
 CUSTOM_CVAR(Float, fov, 90.f, CVAR_ARCHIVE | CVAR_USERINFO | CVAR_NOINITCALL)
 {
+	if(fov<44.99||fov>120.01) fov = 90.0;	//[XANE]Sanity checks to prevent insane closeup upon starting game. Unfortunately prevents zooming in as well.
 	player_t *p = &players[consoleplayer];
 	p->SetFOV(fov);
 }

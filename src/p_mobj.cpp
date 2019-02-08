@@ -152,8 +152,8 @@ CUSTOM_CVAR (Float, sv_gravity, 800.f, CVAR_SERVERINFO|CVAR_NOSAVE)
 
 CVAR (Bool, cl_missiledecals, true, CVAR_ARCHIVE)
 CVAR (Bool, addrocketexplosion, false, CVAR_ARCHIVE)
-CVAR (Int, cl_pufftype, 0, CVAR_ARCHIVE);
-CVAR (Int, cl_bloodtype, 0, CVAR_ARCHIVE);
+CVAR (Int, cl_pufftype, 1, 0);
+CVAR (Int, cl_bloodtype, 2, 0);
 
 // CODE --------------------------------------------------------------------
 
@@ -2474,9 +2474,9 @@ void P_ZMovement (AActor *mo, double oldfloorz)
 		{
 			dist = mo->Distance2D (mo->target);
 			delta = (mo->target->Center()) - mo->Z();
-			if (delta < 0 && dist < -(delta*3))
+			if (delta < 0 /*&& dist < -(delta*3)*/)
 				mo->AddZ(-mo->FloatSpeed);
-			else if (delta > 0 && dist < (delta*3))
+			else if (delta > 0 /*&& dist < (delta*3)*/)
 				mo->AddZ(mo->FloatSpeed);
 		}
 	}
@@ -2782,14 +2782,14 @@ static void PlayerLandedOnThing (AActor *mo, AActor *onmobj)
 		// Why should this number vary by gravity?
 		if (mo->health > 0 && mo->Vel.Z < -mo->player->mo->FloatVar(NAME_GruntSpeed))
 		{
-			S_Sound (mo, CHAN_VOICE, "*grunt", 1, ATTN_NORM);
+			//S_Sound (mo, CHAN_VOICE, "*grunt", 1, ATTN_NORM);
 			grunted = true;
 		}
 		if (onmobj != NULL || !Terrains[P_GetThingFloorType (mo)].IsLiquid)
 		{
 			if (!grunted || !S_AreSoundsEquivalent (mo, "*grunt", "*land"))
 			{
-				S_Sound (mo, CHAN_AUTO, "*land", 1, ATTN_NORM);
+				//S_Sound (mo, CHAN_AUTO, "*land", 1, ATTN_NORM);
 			}
 		}
 	}

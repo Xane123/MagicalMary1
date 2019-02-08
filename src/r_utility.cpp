@@ -93,10 +93,10 @@ static TArray<DVector3a> InterpolationPath;
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 
-CVAR (Bool, r_deathcamera, false, CVAR_ARCHIVE)
-CVAR (Int, r_clearbuffer, 0, 0)
-CVAR (Bool, r_drawvoxels, true, 0)
-CVAR (Bool, r_drawplayersprites, true, 0)	// [RH] Draw player sprites?
+CVAR (Bool, r_deathcamera, true, CVAR_ARCHIVE)
+CVAR (Int, r_clearbuffer, 1, CVAR_ARCHIVE)
+CVAR (Bool, r_drawvoxels, true, CVAR_ARCHIVE)
+CVAR (Bool, r_drawplayersprites, true, CVAR_ARCHIVE)	// [RH] Draw player sprites?
 CUSTOM_CVAR(Float, r_quakeintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (self < 0.f) self = 0.f;
@@ -1073,10 +1073,10 @@ CUSTOM_CVAR(Float, transsouls, 0.75f, CVAR_ARCHIVE)
 	}
 }
 
-CUSTOM_CVAR(Float, maxviewpitch, 90.f, CVAR_ARCHIVE | CVAR_SERVERINFO)
+CUSTOM_CVAR(Float, maxviewpitch, 75.f, CVAR_ARCHIVE | CVAR_SERVERINFO)
 {
-	if (self>90.f) self = 90.f;
-	else if (self<-90.f) self = -90.f;
+	if (self>75.f) self = 75.f;
+	else if (self<-75.f) self = -75.f;
 	if (usergame)
 	{
 		// [SP] Update pitch limits to the netgame/gamesim.

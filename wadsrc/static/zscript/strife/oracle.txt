@@ -36,7 +36,7 @@ class Oracle : Actor
 	
 	void A_WakeOracleSpectre ()
 	{
-		ThinkerIterator it = Level.CreateThinkerIterator("AlienSpectre3");
+		ThinkerIterator it = ThinkerIterator.Create("AlienSpectre3");
 		Actor spectre = Actor(it.Next());
 
 		if (spectre != NULL && spectre.health > 0 && self.target != spectre)

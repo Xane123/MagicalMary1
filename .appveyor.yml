@@ -33,14 +33,14 @@ build_script:
   - md build
   - cd build
   - cmake -G "%GENERATOR%" -T "%TOOLSET%" -DPK3_QUIET_ZIPDIR=YES ..
-  - cmake --build . --config "%CONFIGURATION%" -- /verbosity:minimal
+  - cmake --build . --config "%CONFIGURATION%" -- -maxcpucount -verbosity:minimal
 
 after_build:
   - set OUTPUT_DIR=%APPVEYOR_BUILD_FOLDER%\build\%CONFIGURATION%\
-  - 7z a ..\gzdoom.zip "%OUTPUT_DIR%gzdoom.exe" "%OUTPUT_DIR%*.pk3"
+  - 7z a ..\compiled.zip "%OUTPUT_DIR%*.exe" "%OUTPUT_DIR%*.pk3"
 
 artifacts:
-  - path: gzdoom.zip
+  - path: compiled.zip
 
 notifications:
   - provider: Email

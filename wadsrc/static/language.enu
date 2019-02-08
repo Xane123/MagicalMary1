@@ -4,14 +4,13 @@
 
 SECRETMESSAGE = "A secret is revealed!";
 
-D_DEVSTR = "Useless mode ON.\n";
 D_CDROM = "CD-ROM Version: zdoom.ini from c:\\zdoomdat\n";
-PRESSKEY = "press a key.";
-PRESSYN = "press y or n.";
+PRESSKEY = "Press a key.";
+PRESSYN = "Press Y or N.";
 
-QUITMSG = "are you sure you want to\nquit this great game?";
-TXT_YES = "Yeah!";
-TXT_NO = "No...";
+QUITMSG = "Quit?";
+TXT_YES = "Yes";
+TXT_NO = "No";
 
 LOADNET = "you can't do load while in a net game!\n\npress a key.";
 QLOADNET = "you can't quickload during a netgame!\n\npress a key.";
@@ -21,13 +20,16 @@ QSPROMPT = "quicksave over your game named\n\n'%s'?\n\npress y or n.";
 QLPROMPT = "do you want to quickload the game named\n\n'%s'?\n\npress y or n.";
 NEWGAME = "you can't start a new game\nwhile in a network game.\n\npress a key.";
 NIGHTMARE = "are you sure? this skill level\nisn't even remotely fair.\n\npress y or n.";
-SWSTRING = "This version of Mary's Magical Adventure doesn't support mods. Please wait until a later version.";
+SWSTRING = "this is the shareware version of doom.\n\nyou need to order the entire trilogy.\n\npress a key.";
 MSGOFF = "Messages OFF";
 MSGON = "Messages ON";
 NETEND = "you can't end a netgame!\n\npress a key.";
 ENDGAME = "are you sure you want to end the game?\n\npress y or n.";
 DOSY = "(press y to quit)";
 EMPTYSTRING = "empty slot";
+NEWSAVE = "<New Save Game>";
+GGSAVED = "game saved.";
+HUSTR_MSGU = "[Message unsent]";
 
 HUSTR_TALKTOSELF1 = "You mumble to yourself";
 HUSTR_TALKTOSELF2 = "Who's there?";
@@ -86,29 +88,30 @@ MULTI5 = "Monster kill!";
 
 // Obituary strings
 // First the self-kills, then the other-kills
-OB_SUICIDE = "%o was weakened too much.";
-OB_FALLING = "%o forgot fall damage was enabled.";
-OB_CRUSH = "%o became squishy!";
-OB_EXIT = "%o tried to run from their destiny.";
-OB_WATER = "%o thought GZDoom swimming was decent.";
+OB_SUICIDE = "%o suicides.";
+OB_FALLING = "%o fell too far.";
+OB_CRUSH = "%o was squished.";
+OB_EXIT = "%o tried to leave.";
+OB_WATER = "%o can't swim.";
 OB_SLIME = "%o mutated.";
 OB_LAVA = "%o melted.";
 OB_BARREL = "%o went boom.";
 OB_SPLASH = "%o stood in the wrong spot.";
 OB_R_SPLASH = "%o should have stood back.";
 OB_ROCKET = "%o should have stood back.";
-OB_KILLEDSELF = "%o hurt %hself too much.";
+OB_KILLEDSELF = "%o killed %hself.";
+
 OB_VOODOO = "%o was killed by the power of voodoo.";
 
 // Same as OB_MPTELEFRAG, but shown when a monster telefrags you
-OB_MONTELEFRAG = "%o should've avoided standing there.";
+OB_MONTELEFRAG = "%o was telefragged.";
 
-OB_DEFAULT = "%o was defeated.";
-OB_MPDEFAULT = "%o was defeated by %k.";
-OB_FRIENDLY1 = "%k eliminates a teammate.";
-OB_FRIENDLY2 = "%k looks closely at the defeated person.";
-OB_FRIENDLY3 = "%k helps out the other team. Traitor!";
-OB_FRIENDLY4 = "%k loses a friend.";
+OB_DEFAULT = "%o died.";
+OB_MPDEFAULT = "%o was killed by %k.";
+OB_FRIENDLY1 = "%k mows down a teammate.";
+OB_FRIENDLY2 = "%k checks %p glasses.";
+OB_FRIENDLY3 = "%k gets a frag for the other team.";
+OB_FRIENDLY4 = "%k loses another friend.";
 
 SAVEGAMENAME = "zdoomsv";
 STARTUP1 = "";
@@ -134,26 +137,10 @@ SCORE_MISSED = "MISSED";
 SCORE_TOTAL = "TOTAL";
 SCORE_LVLTIME = "LEVEL TIME";
 
-TXT_CHEATPOWERON = "POWER ON";
-TXT_CHEATPOWEROFF = "POWER OFF";
-TXT_CHEATHEALTH = "FULL HEALTH";
-TXT_CHEATKEYS = "ALL KEYS";
 TXT_CHEATSOUNDON = "SOUND DEBUG ON";
 TXT_CHEATSOUNDOFF = "SOUND DEBUG OFF";
-TXT_CHEATIDDQD = "TRYING TO CHEAT, EH?  NOW YOU DIE!";
-TXT_CHEATIDKFA = "CHEATER - YOU DON'T DESERVE WEAPONS";
-TXT_CHEATTICKERON = "TICKER ON";
-TXT_CHEATTICKEROFF = "TICKER OFF";
-TXT_CHEATARTIFACTS3 = "YOU GOT IT";
-TXT_MIDASTOUCH = "YOU GOT THE MIDAS TOUCH, BABY";
-TXT_GOTSTUFF = "You got the stuff!";
 TXT_FREEZEON = "Freeze mode on";
 TXT_FREEZEOFF = "Freeze mode off";
-TXT_STRANGE = "You feel strange...";
-TXT_STRANGER = "You feel even stranger.";
-TXT_NOTSTRANGE = "You feel like yourself again.";
-TXT_LEADBOOTSON = "LEAD BOOTS ON";
-TXT_LEADBOOTSOFF = "LEAD BOOTS OFF";
 TXT_LIGHTER = "You feel lighter";
 TXT_GRAVITY = "Gravity weighs you down";
 
@@ -169,8 +156,53 @@ MNU_QUITGAME		= "QUIT GAME";
 // Skills
 MNU_CHOOSESKILL		= "CHOOSE SKILL LEVEL:";
 
+SKILL_BABY			= "I'm too young to die";
+SKILL_EASY			= "Hey, not too rough";
+SKILL_NORMAL		= "Hurt me plenty";
+SKILL_HARD			= "Ultra-Violence";
+SKILL_NIGHTMARE		= "NIGHTMARE!";
+
+CSKILL_BABY			= "Easy does it";
+CSKILL_EASY			= "Not so sticky";
+CSKILL_NORMAL		= "Gobs of goo";
+CSKILL_HARD			= "Extreme Ooze";
+CSKILL_NIGHTMARE	= "Super Slimey!";
+
+SSKILL_BABY			= "Training";
+SSKILL_EASY			= "Rookie";
+SSKILL_NORMAL		= "Veteran";
+SSKILL_HARD			= "Elite";
+SSKILL_NIGHTMARE	= "Bloodbath";
+
+MNU_WETNURSE		= "THOU NEEDETH A WET-NURSE";
+MNU_YELLOWBELLIES	= "YELLOWBELLIES-R-US";
+MNU_BRINGEST		= "BRINGEST THEM ONETH";
+MNU_SMITE			= "THOU ART A SMITE-MEISTER";
+MNU_BLACKPLAGUE		= "BLACK PLAGUE POSSESSES THEE";
+
+MNU_SQUIRE			= "SQUIRE";
+MNU_KNIGHT			= "KNIGHT";
+MNU_WARRIOR			= "WARRIOR";
+MNU_BERSERKER		= "BERSERKER";
+MNU_TITAN			= "TITAN";
+
+MNU_ALTARBOY		= "ALTAR BOY";
+MNU_ACOLYTE			= "ACOLYTE";
+MNU_PRIEST			= "PRIEST";
+MNU_CARDINAL		= "CARDINAL";
+MNU_POPE			= "POPE";
+
+MNU_APPRENTICE		= "APPRENTICE";
+MNU_ENCHANTER		= "ENCHANTER";
+MNU_SORCERER        = "SORCERER";
+MNU_WARLOCK			= "WARLOCK";
+MNU_ARCHMAGE		= "ARCHMAGE";
+
 // Classes
 MNU_CHOOSECLASS		= "CHOOSE CLASS:";
+MNU_FIGHTER			= "FIGHTER";
+MNU_CLERIC			= "CLERIC";
+MNU_MAGE			= "MAGE";
 MNU_RANDOM			= "RANDOM";
 
 // Game Files
@@ -183,6 +215,12 @@ MNU_DELETESG		= "Do you really want to delete the savegame\n";
 
 // Episodes
 MNU_EPISODE			= "Select Episode";
+MNU_COTD			= "CITY OF THE DAMNED";
+MNU_HELLSMAW		= "HELL'S MAW";
+MNU_DOME			= "THE DOME OF D'SPARIL";
+MNU_OSSUARY			= "THE OSSUARY";
+MNU_DEMESNE			= "THE STAGNANT DEMESNE";
+$ifgame(heretic) SWSTRING = "ONLY AVAILABLE IN THE REGISTERED VERSION";
 
 // Options Menu
 OPTMNU_TITLE				= "OPTIONS";
@@ -272,10 +310,8 @@ CNTRLMNU_AUTOMAP				= "Toggle automap";
 CNTRLMNU_CHASECAM				= "Chasecam";
 CNTRLMNU_COOPSPY				= "Coop spy";
 CNTRLMNU_SCREENSHOT				= "Screenshot";
-CNTRLMNU_MESSAGES				= "Top-of-screen messages";
 CNTRLMNU_CONSOLE				= "Open console";
-CNTRLMNU_PANORAMA				= "Capture panorama";
-CNTRLMNU_POPUPS					= "Unused Popup Screens";
+CNTRLMNU_POPUPS					= "Strife Popup Screens";
 CNTRLMNU_MISSION				= "Mission objectives";
 CNTRLMNU_KEYS					= "Keys list";
 CNTRLMNU_STATS					= "Weapons/ammo/stats";
@@ -332,7 +368,6 @@ DSPLYMNU_VSYNC					= "Vertical Sync";
 DSPLYMNU_CAPFPS					= "Rendering Interpolation";
 DSPLYMNU_COLUMNMETHOD			= "Column render mode";
 DSPLYMNU_BLENDMETHOD			= "Transparency render mode";
-DSPLYMNU_LEPRESET				= "Low-end presets";
 DSPLYMNU_LEADDLINE				= "Additive-rendered lines";
 DSPLYMNU_LEBLOCKVIS				= "Block distant rendering";
 DSPLYMNU_LEEFFECTS				= "Effects";
@@ -371,12 +406,6 @@ DSPLYMNU_MOVEBOB 				= "View bob amount while moving";
 DSPLYMNU_STILLBOB 				= "View bob amount while not moving";
 DSPLYMNU_BOBSPEED				= "Weapon bob speed";
 DSPLYMNU_GPUSWITCH				= "Notebook Switchable GPU";
-
-//Low-end presets
-OPTVAL_HIGH						= "Perfect";
-OPTVAL_MEDIUM					= "Decent";
-OPTVAL_LOW						= "Average";
-OPTVAL_CRAP						= "Crappy";
 
 // HUD Options
 HUDMNU_TITLE					= "HUD Options";
@@ -459,7 +488,6 @@ MISCMNU_CACHENODES				= "Cache nodes";
 MISCMNU_CACHETIME				= "Time threshold for node caching";
 MISCMNU_CLEARNODECACHE			= "Clear node cache";
 MISCMNU_INTERSCROLL				= "Allow skipping of intermission scrollers";
-MISCMNU_WINPROCESSPRIORITY		= "Above normal process priority";
 // Automap Options
 AUTOMAPMNU_TITLE				= "AUTOMAP OPTIONS";
 AUTOMAPMNU_COLORSET				= "Map color set";
@@ -616,6 +644,55 @@ GMPLYMNU_KEEPAMMO			= "Keep ammo";
 GMPLYMNU_LOSEHALFAMMO		= "Lose half ammo";
 GMPLYMNU_SPAWNWHEREDIED		= "Spawn where died";
 
+// Compatibility Options
+CMPTMNU_TITLE				= "COMPATIBILITY OPTIONS";
+CMPTMNU_MODE				= "Compatibility mode";
+CMPTMNU_ACTORBEHAVIOR		= "Actor Behavior";
+CMPTMNU_CORPSEGIBS			= "Crushed monsters can be resurrected";
+CMPTMNU_NOBLOCKFRIENDS		= "Friendly monsters aren't blocked";
+CMPTMNU_LIMITPAIN			= "Limit Pain Elementals' Lost Souls";
+CMPTMNU_MBFMONSTERMOVE		= "Monster movement is affected by effects";
+CMPTMNU_CROSSDROPOFF		= "Monsters cannot cross dropoffs";
+CMPTMNU_DROPOFF				= "Monsters get stuck over dropoffs";
+CMPTMNU_INVISIBILITY		= "Monsters see invisible players";
+CMPTMNU_MINOTAUR			= "No Minotaur floor flames in water";
+CMPTMNU_NOTOSSDROPS			= "Spawn item drops on the floor";
+CMPTMNU_DEHACKEDBEHAVIOR	= "DehackEd Behavior";
+CMPTMNU_DEHHEALTH			= "DEH health settings like Doom2.exe";
+CMPTMNU_MUSHROOM			= "Original A_Mushroom speed in DEH mods";
+CMPTMNU_MAPACTIONBEHAVIOR	= "Map/Action Behavior";
+CMPTMNU_USEBLOCKING			= "All special lines can block <use>";
+CMPTMNU_ANYBOSSDEATH		= "Allow any bossdeath for level special";
+CMPTMNU_NODOORLIGHT			= "Disable BOOM door light effect";
+CMPTMNU_LIGHT				= "Find neighboring light like Doom";
+CMPTMNU_SHORTTEX			= "Find shortest textures like Doom";
+CMPTMNU_STAIRS				= "Use buggier stair building";
+CMPTMNU_FLOORMOVE			= "Use Doom's floor motion behavior";
+CMPTMNU_POINTONLINE			= "Use Doom's point-on-line algorithm";
+CMPTMNU_MULTIEXIT			= "Level exit can be triggered more than once";
+CMPTMNU_PHYSICSBEHAVIOR		= "Physics Behavior";
+CMPTMNU_NOPASSOVER			= "Actors are infinitely tall";
+CMPTMNU_BOOMSCROLL			= "Boom scrollers are additive";
+CMPTMNU_BADANGLES			= "Cannot travel straight NSEW";
+CMPTMNU_WALLRUN				= "Enable wall running";
+CMPTMNU_RAVENSCROLL			= "Raven scrollers use original speed";
+CMPTMNU_TRACE				= "Self ref. sectors don't block shots";
+CMPTMNU_HITSCAN				= "Use Doom code for hitscan checks";
+CMPTMNU_MISSILECLIP			= "Use Doom heights for missile clipping";
+CMPTMNU_RENDERINGBEHAVIOR	= "Rendering Behavior";
+CMPTMNU_POLYOBJ				= "Draw polyobjects like Hexen";
+CMPTMNU_MASKEDMIDTEX		= "Ignore Y offsets on masked midtextures";
+CMPTMNU_SPRITESORT			= "Invert sprite sorting";
+CMPTMNU_SOUNDBEHAVIOR		= "Sound Behavior";
+CMPTMNU_SOUNDSLOTS			= "Cripple sound for silent BFG trick";
+CMPTMNU_SILENTPICKUP		= "Don't let others hear your pickups";
+CMPTMNU_SILENTINSTANTFLOORS	= "Inst. moving floors are not silent";
+CMPTMNU_SECTORSOUNDS		= "Sector sounds use center as source";
+CMPTMNU_SOUNDCUTOFF			= "Sounds stop when actor vanishes";
+CMPTMNU_SOUNDTARGET			= "Use original sound target handling";
+CMPTMNU_TELEPORT			= "Scripted teleports don't trigger sector actions";
+CMPTMNU_PUSHWINDOW			= "Non-blocking lines can be pushed";
+
 // Sound Options
 SNDMNU_TITLE			= "SOUND OPTIONS";
 SNDMNU_SFXVOLUME		= "Sounds volume";
@@ -626,16 +703,12 @@ SNDMNU_BACKGROUND		= "Sound in Background";
 SNDMNU_UNDERWATERREVERB	= "Underwater reverb";
 SNDMNU_RANDOMIZEPITCHES	= "Randomize pitches";
 SNDMNU_CHANNELS			= "Sound channels";
-SNDMNU_BACKEND			= "Sound";
+SNDMNU_BACKEND			= "Sound backend";
 SNDMNU_OPENAL			= "OpenAL options";
 SNDMNU_RESTART			= "Restart sound";
 SNDMNU_ADVANCED			= "Advanced options";
 SNDMNU_MODREPLAYER		= "Module replayer options";
 SNDMNU_MIDIPLAYER		= "Midi player options";
-SNDMNU_SOUNDTRACK		= "Soundtrack";
-SNDMNU_CDAUDIO			= "CD playback";
-SNDMNU_STEPPLAYER		= "Player footsteps";
-SNDMNU_STEPENEMY		= "Enemy footsteps";
 
 // OpenAL Options
 OPENALMNU_TITLE				= "OPENAL OPTIONS";
@@ -774,9 +847,6 @@ OPTVAL_OFF					= "Off";
 OPTVAL_IMPORTANT			= "Important only";
 OPTVAL_REDUCED				= "Reduced";
 OPTVAL_ON					= "On";
-OPTVAL_SMALL				= "Small";
-OPTVAL_LARGE				= "Large";
-OPTVAL_FULL					= "Full";
 OPTVAL_AUTO					= "Auto";
 OPTVAL_MALE					= "Male";
 OPTVAL_FEMALE				= "Female";
@@ -975,19 +1045,18 @@ OPTSTR_SIMPLEARROW			= "Simple arrow";
 OPTSTR_HERETIC				= "Heretic";
 OPTSTR_CHEX					= "Chex";
 OPTSTR_SYSTEMCURSOR			= "System cursor";
-
 OPTSTR_NOSOUND				= "No Sound";
 OPTSTR_AUTO					= "Auto";
 OPTSTR_MONO					= "Mono";
 OPTSTR_STEREO				= "Stereo";
-OPTSTR_PROLOGIC				= "Dolby(R) Prologic(TM) Decoder";	//Yes, let's parody stupid nonsense like Intel(R)'s unnecessary legal mark spam, why not.
+OPTSTR_PROLOGIC				= "Dolby Prologic Decoder";
 OPTSTR_QUAD					= "Quad";
 OPTSTR_SURROUND				= "5 speakers";
 OPTSTR_5POINT1				= "5.1 speakers";
 OPTSTR_7POINT1				= "7.1 speakers";
 OPTSTR_NOINTERPOLATION		= "No interpolation";
 OPTSTR_SPLINE				= "Spline";
-OPTSTR_OPENAL				= "Enabled";	//FMod is no more, so what's the point of naming OpenAL specifically?
+OPTSTR_OPENAL				= "OpenAL";
 
 NOTSET				= "Not set";
 SAFEMESSAGE			= "Do you really want to do this?";
@@ -999,6 +1068,212 @@ WI_ENTERING			= "Now entering:";
 AM_MONSTERS			= "Monsters:";
 AM_SECRETS			= "Secrets:";
 AM_ITEMS			= "Items:";
+
+// Bloodbath announcer
+
+BBA_BONED = "%k boned %o like a fish";
+BBA_CASTRA = "%k castrated %o";
+BBA_CREAMED = "%k creamed %o";
+BBA_DECIMAT = "%k decimated %o";
+BBA_DESTRO = "%k destroyed %o";
+BBA_DICED = "%k diced %o";
+BBA_DISEMBO = "%k disembowled %o";
+BBA_FLATTE = "%k flattened %o";
+BBA_JUSTICE = "%k gave %o Anal Justice";
+BBA_MADNESS = "%k gave AnAl MaDnEsS to %o";
+BBA_KILLED = "%k killed %o";
+BBA_MINCMEAT = "%k made mincemeat out of %o";
+BBA_MASSACR = "%k massacred %o";
+BBA_MUTILA = "%k mutilated %o";
+BBA_REAMED = "%k reamed %o";
+BBA_RIPPED = "%k ripped %o a new orifice";
+BBA_SLAUGHT = "%k slaughtered %o";
+BBA_SMASHED = "%k smashed %o";
+BBA_SODOMIZ = "%k sodomized %o";
+BBA_SPLATT = "%k splattered %o";
+BBA_SQUASH = "%k squashed %o";
+BBA_THROTTL = "%k throttled %o";
+BBA_WASTED = "%k wasted %o";
+BBA_BODYBAG = "%k body bagged %o";
+BBA_HELL = "%k sent %o to Hell";
+BBA_TOAST = "%k toasted %o";
+BBA_SNUFF = "%k snuffed %o";
+BBA_HOSED = "%k hosed %o";
+BBA_SPRAYED = "%k sprayed %o";
+BBA_DOGMEAT = "%k made dog meat out of %o";
+BBA_BEATEN = "%k beat %o like a cur";
+
+BBA_EXCREMENT = "%o is excrement";
+BBA_HAMBURGER = "%o is hamburger";
+BBA_SCROTUM = "%o suffered scrotum separation";
+BBA_POPULATION = "%o volunteered for population control";
+BBA_SUICIDE = "%o has suicided";
+BBA_DARWIN = "%o received the Darwin Award";
+
+// Chex Quest Strings
+CHUSTR_E1M1 = "E1M1: Landing Zone";
+CHUSTR_E1M2 = "E1M2: Storage Facility";
+CHUSTR_E1M3 = "E1M3: Experimental Lab";
+CHUSTR_E1M4 = "E1M4: Arboretum";
+CHUSTR_E1M5 = "E1M5: Caverns of Bazoik";
+
+CE1TEXT =
+		"Mission accomplished.\n"
+		"\n"
+		"Are you prepared for the next mission?\n"
+		"\n"
+		"\n"
+		"\n"
+		"\n"
+		"\n"
+		"\n"
+		"Press the escape key to continue...";
+
+CE2TEXT = "You've done it!";
+CE3TEXT = "Wonderful Job!";
+CE4TEXT = "Fantastic";
+
+CLOADNET = "you can't do load while in a net quest!\n\npress a key.";
+$ifgame(chex) QSPROMPT = "quicksave over your quest named\n\n'%s'?\n\npress y or n.";
+$ifgame(chex) QLOADNET = "you can't quickload during a netquest!\n\npress a key.";
+$ifgame(chex) QLPROMPT = "do you want to quickload the quest named\n\n'%s'?\n\npress y or n.";
+CNEWGAME = "you can't start a new quest\nwhile in a network quest.\n\npress a key.";
+
+CNIGHTMARE = "Careful, this will be tough.\nDo you wish to continue?\n\npress y or n.";
+
+CSWSTRING = "this is Chex(R) Quest. look for\n\nfuture levels at www.chexquest.com.\n\npress a key.";
+
+$ifgame(chex) NETEND = "you can't end a netquest!\n\npress a key.";
+$ifgame(chex) ENDGAME = "are you sure you want to end the quest?\n\npress y or n.";
+
+GOTCHEXARMOR = "Picked up the Chex(R) Armor.";
+GOTSUPERCHEXARMOR = "Picked up the Super Chex(R) Armor!";
+GOTWATER = "Picked up a glass of water.";
+GOTREPELLENT = "Picked up slime repellent.";
+GOTBREAKFAST = "Supercharge Breakfast!";
+GOTCBLUEKEY = "Picked up a blue key.";
+GOTCYELLOWKEY = "Picked up a yellow key.";
+GOTCREDKEY = "Picked up a red key.";
+GOTFRUIT = "Picked up a bowl of fruit.";
+GOTVEGETABLESNEED = "Vegetables are REALLY good for you!";
+GOTVEGETABLES = "Picked up a bowl of vegetables.";
+GOTSLIMESUIT = "Found a Slime-Proof Suit";
+GOTCHEXMAP = "Found a Computer Area Map";
+
+GOTZORCHRECHARGE = "Picked up a mini zorch recharge.";
+GOTMINIZORCHPACK = "Picked up a mini zorch pack.";
+GOTPROPULSORRECHARGE = "Picked up a zorch propulsor recharge.";
+GOTPROPULSORPACK = "Picked up a zorch propulsor pack.";
+GOTPHASINGZORCHERRECHARGE = "Picked up a phasing zorcher recharge";
+GOTPHASINGZORCHERPACK = "Picked up a phasing zorcher pack.";
+GOTLARGEZORCHERRECHARGE = "Picked up a large zorcher recharge.";
+GOTLARGEZORCHERPACK = "Picked up a large zorcher pack.";
+GOTZORCHPACK = "Picked up a Zorchpak!";
+
+GOTLAZDEVICE = "You got the LAZ Device! Woot!";
+GOTRAPIDZORCHER = "You got the Rapid Zorcher!";
+GOTSUPERBOOTSPORK = "You got the Super Bootspork!";
+GOTZORCHPROPULSOR = "You got the Zorch Propulsor!";
+GOTPHASINGZORCHER = "You got the Phasing Zorcher!";
+GOTLARGEZORCHER = "You got the Large Zorcher!";
+GOTSUPERLARGEZORCHER = "You got the Mega Zorcher!";
+GOTMINIZORCHER = "Picked up a Mini Zorcher.";
+
+$ifgame(chex) STSTR_DQDON = "Invincible Mode ON";
+$ifgame(chex) STSTR_DQDOFF = "Invincible Mode OFF";
+$ifgame(chex) STSTR_FAADDED = "Zorch Added";
+$ifgame(chex) STSTR_KFAADDED = "Super Zorch Added";
+$ifgame(chex) STSTR_CHOPPERS = "... Eat Chex(R)!";
+
+OB_COMMONUS = "%o was slimed by a flemoid.";
+OB_BIPEDICUS = "%o was slimed by a bipedicus.";
+OB_BIPEDICUS2 = "%o was slimed by an armored bipedicus.";
+OB_CYCLOPTIS = "%o was slimed by a cycloptis.";
+OB_FLEMBRANE = "%o was defeated by the Flembrane.";
+
+OB_MPSPOON = "%o was spoon fed by %k.";
+OB_MPBOOTSPORK = "%o was thoroughly mixed with %k's bootspork.";
+OB_MPZORCH = "%o was zorched by %k.";
+OB_MPMEGAZORCH = "%o was hit by %k's mega-zorcher.";
+OB_MPRAPIDZORCH = "%o was rapid zorched by %k.";
+OB_MPPROPULSOR = "%o was zorched by %k's propulsor.";
+OB_MPP_SPLASH = "%o was hit by %k's propulsor.";
+OB_MPPHASEZORCH = "%o was phase zorched by %k.";
+OB_MPLAZ_BOOM = "%o fell prey to %k's LAZ device.";
+OB_MPLAZ_SPLASH = "%o was lazzed by %k.";
+
+// Music names for Doom. These are needed in the string table only so that they can
+// be replaced by Dehacked.
+// Note that these names are not prefixed with 'd_' because that's how Dehacked patches
+// expect them.
+
+MUSIC_E1M1 = "e1m1";
+MUSIC_E1M2 = "e1m2";
+MUSIC_E1M3 = "e1m3";
+MUSIC_E1M4 = "e1m4";
+MUSIC_E1M5 = "e1m5";
+MUSIC_E1M6 = "e1m6";
+MUSIC_E1M7 = "e1m7";
+MUSIC_E1M8 = "e1m8";
+MUSIC_E1M9 = "e1m9";
+MUSIC_E2M1 = "e2m1";
+MUSIC_E2M2 = "e2m2";
+MUSIC_E2M3 = "e2m3";
+MUSIC_E2M4 = "e2m4";
+MUSIC_E2M5 = "e2m5";
+MUSIC_E2M6 = "e2m6";
+MUSIC_E2M7 = "e2m7";
+MUSIC_E2M8 = "e2m8";
+MUSIC_E2M9 = "e2m9";
+MUSIC_E3M1 = "e3m1";
+MUSIC_E3M2 = "e3m2";
+MUSIC_E3M3 = "e3m3";
+MUSIC_E3M4 = "e3m4";
+MUSIC_E3M5 = "e3m5";
+MUSIC_E3M6 = "e3m6";
+MUSIC_E3M7 = "e3m7";
+MUSIC_E3M8 = "e3m8";
+MUSIC_E3M9 = "e3m9";
+MUSIC_INTER = "inter";
+MUSIC_INTRO = "intro";
+MUSIC_BUNNY = "bunny";
+MUSIC_VICTOR = "victor";
+MUSIC_INTROA = "introa";
+MUSIC_RUNNIN = "runnin";
+MUSIC_STALKS = "stalks";
+MUSIC_COUNTD = "countd";
+MUSIC_BETWEE = "betwee";
+MUSIC_DOOM = "doom";
+MUSIC_THE_DA = "the_da";
+MUSIC_SHAWN = "shawn";
+MUSIC_DDTBLU = "ddtblu";
+MUSIC_IN_CIT = "in_cit";
+MUSIC_DEAD = "dead";
+MUSIC_STLKS2 = "stlks2";
+MUSIC_THEDA2 = "theda2";
+MUSIC_DOOM2 = "doom2";
+MUSIC_DDTBL2 = "ddtbl2";
+MUSIC_RUNNI2 = "runni2";
+MUSIC_DEAD2 = "dead2";
+MUSIC_STLKS3 = "stlks3";
+MUSIC_ROMERO = "romero";
+MUSIC_SHAWN2 = "shawn2";
+MUSIC_MESSAG = "messag";
+MUSIC_COUNT2 = "count2";
+MUSIC_DDTBL3 = "ddtbl3";
+MUSIC_AMPIE = "ampie";
+MUSIC_THEDA3 = "theda3";
+MUSIC_ADRIAN = "adrian";
+MUSIC_MESSG2 = "messg2";
+MUSIC_ROMER2 = "romer2";
+MUSIC_TENSE = "tense";
+MUSIC_SHAWN3 = "shawn3";
+MUSIC_OPENIN = "openin";
+MUSIC_EVIL = "evil";
+MUSIC_ULTIMA = "ultima";
+MUSIC_READ_M = "read_m";
+MUSIC_DM2TTL = "dm2ttl";
+MUSIC_DM2INT = "dm2int";
 
 // GZDoom exclusive:
 
@@ -1168,3 +1443,13 @@ TCMNU_MINFILTER				= "Linear filter when downscaling";
 TCMNU_MAGFILTER				= "Linear filter when upscaling";
 TCMNU_MIPMAP					= "Use mipmapped textures";
 TCMNU_DYNLIGHTS				= "Dynamic lights (Software)";
+
+// SVE strings:
+
+TAG_TALISMANRED = "Red Talisman";
+TAG_TALISMANGREEN = "Green Talisman";
+TAG_TALISMANBLUE = "Blue Talisman";
+MSG_TALISMANRED = "You have a feeling that it wasn't to be touched...";
+MSG_TALISMANGREEN = "Whatever it is, it doesn't belong in this world...";
+MSG_TALISMANBLUE = "It must do something...";
+MSG_TALISMANPOWER = "You have super strength!";

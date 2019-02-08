@@ -146,13 +146,13 @@ class ListMenuItemStaticText : ListMenuItem
 			{
 				double x = mXpos;
 				if (mCentered) x -= mFont.StringWidth(text)/2;
-				screen.DrawText(mFont, 0/*mColor*/, x, mYpos, text, DTA_Clean, true);
+				screen.DrawText(mFont, mColor, x, mYpos, text, DTA_Clean, true);
 			}
 			else
 			{
 				double x = (mXpos - 160) * CleanXfac + (Screen.GetWidth() >> 1);
 				if (mCentered) x -= (mFont.StringWidth(text) * CleanXfac)/2;
-				screen.DrawText (mFont, 0/*mColor*/, x, -mYpos*CleanYfac, text, DTA_CleanNoMove, true);
+				screen.DrawText (mFont, mColor, x, -mYpos*CleanYfac, text, DTA_CleanNoMove, true);
 			}
 		}
 	}

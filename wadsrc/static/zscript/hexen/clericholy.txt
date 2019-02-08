@@ -258,7 +258,7 @@ class HolyMissile : Actor
 				mo.bSkullFly = true;
 				mo.bMissile = false;
 			}
-			SpawnSpiritTail (mo);
+			HolyTail.SpawnSpiritTail (mo);
 		}
 	}
 }
@@ -461,7 +461,7 @@ class HolySpirit : Actor
 		}
 		VelFromAngle();
 
-		if (!(Level.maptime&15) 
+		if (!(level.time&15) 
 			|| pos.z > target.pos.z + target.height
 			|| pos.z + height < target.pos.z)
 		{
@@ -503,7 +503,7 @@ class HolySpirit : Actor
 		if (tracer)
 		{
 			CHolySeekerMissile (args[0], args[0]*2.);
-			if (!((Level.maptime+7)&15))
+			if (!((level.time+7)&15))
 			{
 				args[0] = 5+(random[HolySeeker]()/20);
 			}
@@ -558,6 +558,28 @@ class HolyTail : Actor
 		Stop;
 	}
 	
+	//============================================================================
+	//
+	// SpawnSpiritTail
+	//
+	//============================================================================
+
+	static void SpawnSpiritTail (Actor spirit)
+	{
+		Actor tail = Spawn ("HolyTail", spirit.Pos, ALLOW_REPLACE);
+		if (tail != null)
+		{
+			tail.target = spirit; // parent
+			for (int i = 1; i < 3; i++)
+			{
+				Actor next = Spawn ("HolyTailTrail", spirit.Pos, ALLOW_REPLACE);
+				tail.tracer = next;
+				tail = next;
+			}
+			tail.tracer = null; // last tail bit
+		}
+	}
+
 	//============================================================================
 	//
 	// CHolyTailFollow
@@ -651,30 +673,4 @@ class HolyTailTrail : HolyTail
 	Spawn:
 		Goto TailTrail;
 	}
-}
-
-extend class Actor
-{
-	//============================================================================
-	//
-	// SpawnSpiritTail
-	//
-	//============================================================================
-
-	void SpawnSpiritTail (Actor spirit)
-	{
-		Actor tail = Spawn ("HolyTail", spirit.Pos, ALLOW_REPLACE);
-		if (tail != null)
-		{
-			tail.target = spirit; // parent
-			for (int i = 1; i < 3; i++)
-			{
-				Actor next = Spawn ("HolyTailTrail", spirit.Pos, ALLOW_REPLACE);
-				tail.tracer = next;
-				tail = next;
-			}
-			tail.tracer = null; // last tail bit
-		}
-	}
-
 }

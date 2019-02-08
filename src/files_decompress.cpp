@@ -121,12 +121,12 @@ public:
 
 		if (err != Z_OK && err != Z_STREAM_END)
 		{
-			I_Error ("Corrupt zlib stream");
+			I_FatalError ("The PK3 file has been modified while Mary's Magical Adventure was open. Sorry for any inconvenience this caused.");
 		}
 
 		if (Stream.avail_out != 0)
 		{
-			I_Error ("Ran out of data in zlib stream");
+			I_FatalError ("Somehow, the compressed stream ran out. Please restart Mary's Magical Adventure.");
 		}
 
 		return len - Stream.avail_out;

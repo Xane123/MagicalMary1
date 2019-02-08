@@ -375,7 +375,7 @@ static bool CheatCheckList (event_t *ev, cheatseq_t *cheats, int numcheats)
 					eat |= cheats->Handler (cheats);
 				}
 			}
-			else if (cheats->Pos - cheats->Sequence > 2)
+			else if (cheats->Pos - cheats->Sequence > 1)
 			{ // If more than two characters into the sequence,
 			  // eat the keypress, just so that the Hexen cheats
 			  // with T in them will work without unbinding T.

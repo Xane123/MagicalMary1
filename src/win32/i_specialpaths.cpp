@@ -82,11 +82,11 @@ bool UseKnownFolders()
 	if (file != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(file);
-		if (!batchrun) Printf("Using program directory for storage\n");
+		//if (!batchrun) Printf("Using program directory for storage\n");
 		iswritable = true;
 		return false;
 	}
-	if (!batchrun) Printf("Using known folders for storage\n");
+	//if (!batchrun) Printf("Using known folders for storage\n");
 	iswritable = false;
 	return true;
 }
@@ -252,50 +252,21 @@ FString M_GetCajunPath(const char *botfilename)
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	HRESULT hr;
+	/*HRESULT hr;
 
 	path.Format("%s" GAMENAME "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
 	{
 		return path;
-	}
+	}*/
+	
 	path = "";
-
-	// Construct a user-specific config name
-	if (UseKnownFolders() && GetKnownFolder(CSIDL_APPDATA, FOLDERID_RoamingAppData, true, path))
-	{
-		path += "/" GAME_DIR;
-		CreatePath(path);
-		path += "/" GAMENAMELOWERCASE ".ini";
-	}
-	else
-	{ // construct "$PROGDIR/zdoom-$USER.ini"
-		TCHAR uname[UNLEN+1];
-		DWORD unamelen = countof(uname);
-
-		path = progdir;
-		hr = GetUserName(uname, &unamelen);
-		if (SUCCEEDED(hr) && uname[0] != 0)
-		{
-			// Is it valid for a user name to have slashes?
-			// Check for them and substitute just in case.
-			char *probe = uname;
-			while (*probe != 0)
-			{
-				if (*probe == '\\' || *probe == '/')
-					*probe = '_';
-				++probe;
-			}
-			path << GAMENAMELOWERCASE "-" << uname << ".ini";
-		}
-		else
-		{ // Couldn't get user name, so just use zdoom.ini
-			path += GAMENAMELOWERCASE ".ini";
-		}
-	}
-
+	path += "/" GAME_DIR;
+	CreatePath(path);
+	path += "/" GAMENAMELOWERCASE ".ini";
+	
 	// If we are reading the config file, check if it exists. If not, fallback
-	// to $PROGDIR/zdoom.ini
+	// to $PROGDIR/Settings.ini
 	if (for_reading)
 	{
 		if (!FileExists(path))
