@@ -25,6 +25,7 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Coins stored in Jane's bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
 * Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text, just like some games on consoles like the NES.
+* Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". Xane can do this to slightly slow his fall without losing power, but going upward will take away power (indicated by "fantasia" notes playing for each 20% lost).
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
