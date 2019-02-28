@@ -1161,8 +1161,8 @@ class PowerSpeed : Powerup
 	
 	Default
 	{
-		Powerup.Duration -255;
-		Speed 1.5;
+		Powerup.Duration -600;
+		Speed 1.0;
 		Inventory.Icon "SPBOOT0";
 		+INVENTORY.NOTELEPORTFREEZE
 	}
@@ -1221,11 +1221,11 @@ class PowerSpeed : Powerup
 			// [BC] Also get the scale from the owner.
 			speedMo.Scale = Owner.Scale;
 
-			if (Owner == players[consoleplayer].camera &&
+			/*if (Owner == players[consoleplayer].camera &&
 				!(Owner.player.cheats & CF_CHASECAM))
 			{
 				speedMo.bInvisible = true;
-			}
+			}*/
 		}
 	}
 }

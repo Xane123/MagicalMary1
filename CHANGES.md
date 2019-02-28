@@ -25,7 +25,7 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Coins stored in Jane's bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
 * Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text, just like some games on consoles like the NES.
-* Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". Xane can do this to slightly slow his fall without losing power, but going upward will take away power (indicated by "fantasia" notes playing for each 20% lost).
+* Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". This gives more fine control over Xane's flight, and gives him more of a flying advantage over the mostly-grounded Mary.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
@@ -50,3 +50,4 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Teleporters now can play ambience upon teleporting to the orange end pad. This is also saved to the checkpoint.
 * Both cop colors shoot glowing magic, green bullets to reflect changes to their pistols, as they are now said to be armed with "MAGIC-FIRE-B" pistols, which form magic into high-density "bullets", which is what the player's gun will use as well once it's added, just with pink and blue bullets instead.
 * Cops normally wait a few times before they actually consider shooting at you, to prevent GZDoom from causing endless bullet spam, but now it's been changed so they wait four times in easy difficulty, but that drops to only *two* if in hard difficulty, making it an overall harder game.
+* Added a new debug CVAR to test out planned epilogue for Mary. If ***debug_epilogue*** is set to TRUE, all enemies are removed from levels. Other things are planned too, such as boss battles immediately advancing to the next level (since none of them will be there at that point), but for now the only special thing that's done is that the Command Master doesn't talk over the speakers in HCPD HQ.
