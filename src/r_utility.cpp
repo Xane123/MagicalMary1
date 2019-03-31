@@ -1004,7 +1004,8 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 		}
 		else if (hom == 2)
 		{
-			color = GPalette.WhiteIndex;
+			color = 13;
+			//color = GPalette.WhiteIndex;
 		}
 		else if (hom == 4)
 		{

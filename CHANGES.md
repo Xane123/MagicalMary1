@@ -11,8 +11,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Fixed Air Dash checking wrong upgrade array index "20" rather than "5".
 ## Major
 * You can actually fail in Battle Arenas again! Somehow, I broke the arenas using their own "death behavior", which made them use #0, which is the default, taking a life from the player. This means the only way the player could lose was by running out of time, not dying!
-* Upgrades are now non-linear! When a player picks up a weapon upgrade, a menu appears; Choose an upgrade from this menu then you will be given it! You can't see upgrades for weapons you don't have on-hand, and the final, fourth upgrade for each weapon can only be chosen once all other upgrades for that weapon are activated.
-* Each weapon must have four upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
+* Each weapon must have three upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
 * Soap Boxes can be bought from Jane's Shop in packs of four! You can hold up to sixteen of them and place them anywhere to try catching enemies off-guard.
 * Jane now has animated sprites using her "old design". If Jane ever gets a new design like Mary, her sprites will be replaced.
 * You can now listen to the same radio "station" heard in City Street Run in Jane's Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
@@ -26,6 +25,7 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
 * Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text, just like some games on consoles like the NES.
 * Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". This gives more fine control over Xane's flight, and gives him more of a flying advantage over the mostly-grounded Mary.
+* Xane's Drop Dash has been removed as it was pretty pointless.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
@@ -36,7 +36,7 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Checkpoints no longer store the player's angle. This is to clear a **SetCheckpoint** script argument slot for a "forced ambience" argument, which will fix cases where the wrong ambience is heard upon returning to a checkpoint.
 * New songs were added to replace some of the radio songs. They're no more safe to use than the old ones, but the goal is to have the radio sounding higher-quality by the final version.
 * Doors now have new sounds that sound less silly.
-* After Mary is hurt, a third, purple "pain" meter appears until she has recovered from the pain. If this meter fills up, the crying behavior mentioned in the major changes will occur. If the player forces Mary to cry, the meter will disappear, as if she did it herself.
+* After Mary is hurt, a third, purple "pain" meter appears until she has recovered from the pain. If this meter fills up, Mary will forcibly cry to let out her stored pain. If the player forces Mary to cry, the meter will disappear, as if she did it herself.
 * Replaced some openInput variable checks to use verisons that aren't affected by players' frozen statuses. This removes the need for the psuedo-freeze that happens when viewing the minigame menu.
 * Due to changed priorities relating to minigames, the only minigame that is guaranteed to end up in the final game is Battle Arena. Therefore, the platform in the middle of the room in Jane's Hut now serves as the entrance to the minigame, moving down after a destination is chosen.
 * Added ***-1*** as a valid number for the ***xane_lowend*** CVAR. When this is chosen, the roads in City Street Run become reflective, which will not happen on normal (0) and performance (1) settings. This is due to even my gaming laptop lagging when the reflective roads are in sight and I would look to the opposite side of the open city area.
@@ -50,4 +50,6 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Teleporters now can play ambience upon teleporting to the orange end pad. This is also saved to the checkpoint.
 * Both cop colors shoot glowing magic, green bullets to reflect changes to their pistols, as they are now said to be armed with "MAGIC-FIRE-B" pistols, which form magic into high-density "bullets", which is what the player's gun will use as well once it's added, just with pink and blue bullets instead.
 * Cops normally wait a few times before they actually consider shooting at you, to prevent GZDoom from causing endless bullet spam, but now it's been changed so they wait four times in easy difficulty, but that drops to only *two* if in hard difficulty, making it an overall harder game.
-* Added a new debug CVAR to test out planned epilogue for Mary. If ***debug_epilogue*** is set to TRUE, all enemies are removed from levels. Other things are planned too, such as boss battles immediately advancing to the next level (since none of them will be there at that point), but for now the only special thing that's done is that the Command Master doesn't talk over the speakers in HCPD HQ.
+* Added a new debug CVAR to test out planned epilogue for Mary. If ***debug_epilogue*** is set to TRUE, all enemies are removed from levels. Other things are planned too, such as boss battles immediately advancing to the next level (since none of them will be there at that point), but for now the only special thing that's done is that the Command Master doesn't talk over the speakers in HCPD HQ
+* Internally, footsteps (and the new landing sounds) use LANGUAGE to look up the list of textures for each programmed "surface" type rather than a messy list in the "PlayFootstepSound" script.
+* New sounds were added for Mary/Xane landing! Now, rather than Mary saying "Ow!", a mini explosion sound plays, varying depending on what surface you land on. If you fall fast enough, a louder sound will play.
