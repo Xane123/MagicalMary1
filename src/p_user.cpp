@@ -89,6 +89,8 @@
 #include "actorinlines.h"
 #include "p_acs.h"
 #include "events.h"
+#include "g_game.h"
+#include "v_video.h"
 #include "gstrings.h"
 
 static FRandom pr_skullpop ("SkullPop");
@@ -239,46 +241,6 @@ void SetupPlayerClasses ()
 	}
 }
 
-CCMD (clearplayerclasses)
-{
-	if (ParsingKeyConf)
-	{
-		PlayerClasses.Clear ();
-	}
-}
-
-CCMD (addplayerclass)
-{
-	if (ParsingKeyConf && argv.argc () > 1)
-	{
-		PClassActor *ti = PClass::FindActor(argv[1]);
-
-		if (ValidatePlayerClass(ti, argv[1]))
-		{
-			FPlayerClass newclass;
-
-			newclass.Type = ti;
-			newclass.Flags = 0;
-
-			int arg = 2;
-			while (arg < argv.argc())
-			{
-				if (!stricmp (argv[arg], "nomenu"))
-				{
-					newclass.Flags |= PCF_NOMENU;
-				}
-				else
-				{
-					Printf ("Unknown flag '%s' for player class '%s'\n", argv[arg], argv[1]);
-				}
-
-				arg++;
-			}
-			PlayerClasses.Push (newclass);
-		}
-	}
-}
-
 CCMD (playerclasses)
 {
 	for (unsigned int i = 0; i < PlayerClasses.Size (); i++)
@@ -298,7 +260,7 @@ player_t::~player_t()
 	DestroyPSprites();
 }
 
-player_t &player_t::operator=(const player_t &p)
+void player_t::CopyFrom(player_t &p, bool copyPSP)
 {
 	mo = p.mo;
 	playerstate = p.playerstate;
@@ -351,7 +313,6 @@ player_t &player_t::operator=(const player_t &p)
 	extralight = p.extralight;
 	fixedcolormap = p.fixedcolormap;
 	fixedlightlevel = p.fixedlightlevel;
-	psprites = p.psprites;
 	morphTics = p.morphTics;
 	MorphedPlayerClass = p.MorphedPlayerClass;
 	MorphStyle = p.MorphStyle;
@@ -385,7 +346,12 @@ player_t &player_t::operator=(const player_t &p)
 	ConversationFaceTalker = p.ConversationFaceTalker;
 	MUSINFOactor = p.MUSINFOactor;
 	MUSINFOtics = p.MUSINFOtics;
-	return *this;
+	if (copyPSP)
+	{
+		// This needs to transfer ownership completely.
+		psprites = p.psprites;
+		p.psprites = nullptr;
+	}
 }
 
 size_t player_t::PropagateMark()
@@ -410,18 +376,37 @@ size_t player_t::PropagateMark()
 
 void player_t::SetLogNumber (int num)
 {
-	char lumpname[16];
+	char lumpname[26];
 	int lumpnum;
+
+	// First look up TXT_LOGTEXT%d in the string table
+	mysnprintf(lumpname, countof(lumpname), "$TXT_LOGTEXT%d", num);
+	auto text = GStrings[lumpname+1];
+	if (text)
+	{
+		SetLogText(lumpname);	// set the label, not the content, so that a language change can be picked up.
+		return;
+	}
 
 	mysnprintf (lumpname, countof(lumpname), "LOG%d", num);
 	lumpnum = Wads.CheckNumForName (lumpname);
-	if (lumpnum == -1)
+	if (lumpnum != -1)
 	{
-		// Leave the log message alone if this one doesn't exist.
-		//SetLogText (lumpname);
-	}
-	else
-	{
+		auto fn = Wads.GetLumpFile(lumpnum);
+		auto wadname = Wads.GetWadName(fn);
+		if (!stricmp(wadname, "STRIFE0.WAD") || !stricmp(wadname, "STRIFE1.WAD") || !stricmp(wadname, "SVE.WAD"))
+		{
+			// If this is an original IWAD text, try looking up its lower priority string version first.
+
+			mysnprintf(lumpname, countof(lumpname), "$TXT_ILOG%d", num);
+			auto text = GStrings[lumpname + 1];
+			if (text)
+			{
+				SetLogText(lumpname);	// set the label, not the content, so that a language change can be picked up.
+				return;
+			}
+		}
+
 		auto lump = Wads.ReadLump(lumpnum);
 		SetLogText (lump.GetString());
 	}
@@ -439,12 +424,10 @@ void player_t::SetLogText (const char *text)
 {
 	LogText = text;
 
-	if (mo->CheckLocalView(consoleplayer))
+	if (mo && mo->CheckLocalView())
 	{
 		// Print log text to console
-		AddToConsole(-1, TEXTCOLOR_GOLD);
-		AddToConsole(-1, GStrings(text[0] == '$' ? text + 1 : text));
-		AddToConsole(-1, "\n");
+		Printf(PRINT_NONOTIFY, TEXTCOLOR_GOLD "%s\n", LogText[0] == '$' ? GStrings(text + 1) : text);
 	}
 }
 
@@ -676,9 +659,10 @@ bool player_t::Resurrect()
 	mo->special1 = 0;	// required for the Hexen fighter's fist attack. 
 								// This gets set by AActor::Die as flag for the wimpy death and must be reset here.
 	mo->SetState(mo->SpawnState);
+	int pnum = mo->Level->PlayerNum(this);
 	if (!(mo->flags2 & MF2_DONTTRANSLATE))
 	{
-		mo->Translation = TRANSLATION(TRANSLATION_Players, uint8_t(this - players));
+		mo->Translation = TRANSLATION(TRANSLATION_Players, uint8_t(pnum));
 	}
 	if (ReadyWeapon != nullptr)
 	{
@@ -693,9 +677,8 @@ bool player_t::Resurrect()
 
 	// player is now alive.
 	// fire E_PlayerRespawned and start the ACS SCRIPT_Respawn.
-	E_PlayerRespawned(int(this - players));
-	//
-	level.Behaviors.StartTypedScripts(SCRIPT_Respawn, mo, true);
+	mo->Level->localEventManager->PlayerRespawned(pnum);
+	mo->Level->Behaviors.StartTypedScripts(SCRIPT_Respawn, mo, true);
 	return true;
 }
 
@@ -892,7 +875,7 @@ DEFINE_ACTION_FUNCTION(AActor, A_PlayerScream)
 	}
 
 	// Handle the different player death screams
-	if ((((level.flags >> 15) | (dmflags)) &
+	if ((((self->Level->flags >> 15) | (dmflags)) &
 		(DF_FORCE_FALLINGZD | DF_FORCE_FALLINGHX)) &&
 		self->Vel.Z <= -39)
 	{
@@ -993,10 +976,10 @@ void P_CheckPlayerSprite(AActor *actor, int &spritenum, DVector2 &scale)
 	}
 }
 
-CUSTOM_CVAR (Float, sv_aircontrol, 0.00390625f, CVAR_SERVERINFO|CVAR_NOSAVE)
+CUSTOM_CVAR (Float, sv_aircontrol, 0.00390625f, CVAR_SERVERINFO|CVAR_NOSAVE|CVAR_NOINITCALL)
 {
-	level.aircontrol = self;
-	G_AirControlChanged ();
+	primaryLevel->aircontrol = self;
+	primaryLevel->AirControlChanged ();
 }
 
 //==========================================================================
@@ -1011,7 +994,7 @@ void P_FallingDamage (AActor *actor)
 	int damage;
 	double vel;
 
-	damagestyle = ((level.flags >> 15) | (dmflags)) &
+	damagestyle = ((actor->Level->flags >> 15) | (dmflags)) &
 		(DF_FORCE_FALLINGZD | DF_FORCE_FALLINGHX);
 
 	if (damagestyle == 0)
@@ -1108,11 +1091,11 @@ void P_CheckMusicChange(player_t *player)
 	{
 		if (--player->MUSINFOtics < 0)
 		{
-			if (player - players == consoleplayer)
+			if (player == player->mo->Level->GetConsolePlayer())
 			{
 				if (player->MUSINFOactor->args[0] != 0)
 				{
-					FName *music = level.info->MusicMap.CheckKey(player->MUSINFOactor->args[0]);
+					FName *music = player->MUSINFOactor->Level->info->MusicMap.CheckKey(player->MUSINFOactor->args[0]);
 
 					if (music != NULL)
 					{
@@ -1124,7 +1107,7 @@ void P_CheckMusicChange(player_t *player)
 					S_ChangeMusic("*");
 				}
 			}
-			DPrintf(DMSG_NOTIFY, "MUSINFO change for player %d to %d\n", (int)(player - players), player->MUSINFOactor->args[0]);
+			DPrintf(DMSG_NOTIFY, "MUSINFO change for player %d to %d\n", (int)player->mo->Level->PlayerNum(player), player->MUSINFOactor->args[0]);
 		}
 	}
 }
@@ -1221,6 +1204,12 @@ void P_PlayerThink (player_t *player)
 		I_Error ("No player %td start\n", player - players + 1);
 	}
 
+	// Bots do not think in freeze mode.
+	if (player->mo->Level->isFrozen() && player->Bot != nullptr)
+	{
+		return;
+	}
+
 	if (debugfile && !(player->cheats & CF_PREDICTING))
 	{
 		fprintf (debugfile, "tic %d for pl %d: (%f, %f, %f, %f) b:%02x p:%d y:%d f:%d s:%d u:%d\n",
@@ -1250,7 +1239,6 @@ void P_PredictionLerpReset()
 
 bool P_LerpCalculate(AActor *pmo, PredictPos from, PredictPos to, PredictPos &result, float scale)
 {
-	//DVector2 pfrom = level.Displacements.getOffset(from.portalgroup, to.portalgroup);
 	DVector3 vecFrom = from.pos;
 	DVector3 vecTo = to.pos;
 	DVector3 vecResult;
@@ -1260,7 +1248,6 @@ bool P_LerpCalculate(AActor *pmo, PredictPos from, PredictPos to, PredictPos &re
 	DVector3 delta = vecResult - vecTo;
 
 	result.pos = pmo->Vec3Offset(vecResult - to.pos);
-	//result.portalgroup = P_PointInSector(result.pos.x, result.pos.y)->PortalGroup;
 
 	// As a fail safe, assume extrapolation is the threshold.
 	return (delta.LengthSquared() > cl_predict_lerpthreshold && scale <= 1.00f);
@@ -1368,7 +1355,7 @@ void P_PredictPlayer (player_t *player)
 		singletics ||
 		demoplayback ||
 		player->mo == NULL ||
-		player != &players[consoleplayer] ||
+		player != player->mo->Level->GetConsolePlayer() ||
 		player->playerstate != PST_LIVE ||
 		!netgame ||
 		/*player->morphTics ||*/
@@ -1385,7 +1372,7 @@ void P_PredictPlayer (player_t *player)
 	}
 
 	// Save original values for restoration later
-	PredictionPlayerBackup = *player;
+	PredictionPlayerBackup.CopyFrom(*player, false);
 
 	auto act = player->mo;
 	PredictionActor = player->mo;
@@ -1394,6 +1381,7 @@ void P_PredictPlayer (player_t *player)
 
 	act->flags &= ~MF_PICKUP;
 	act->flags2 &= ~MF2_PUSHWALL;
+	act->renderflags &= ~RF_NOINTERPOLATEVIEW;
 	player->cheats |= CF_PREDICTING;
 
 	BackupNodeList(act, act->touching_sectorlist, &sector_t::touching_thinglist, PredictionTouchingSectors_sprev_Backup, PredictionTouchingSectorsBackup);
@@ -1510,7 +1498,7 @@ void P_UnPredictPlayer ()
 		int inventorytics = player->inventorytics;
 		const bool settings_controller = player->settings_controller;
 
-		*player = PredictionPlayerBackup;
+		player->CopyFrom(PredictionPlayerBackup, false);
 
 		player->settings_controller = settings_controller;
 		// Restore the camera instead of using the backup's copy, because spynext/prev
@@ -1685,7 +1673,7 @@ bool P_IsPlayerTotallyFrozen(const player_t *player)
 	return
 		gamestate == GS_TITLELEVEL ||
 		player->cheats & CF_TOTALLYFROZEN ||
-		((level.flags2 & LEVEL2_FROZEN) && player->timefreezer == 0);
+		player->mo->isFrozen();
 }
 
 

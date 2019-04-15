@@ -1,6 +1,12 @@
 #pragma once
 
 #include "nodebuild.h"
+#include "g_levellocals.h"
+
+class FileReader;
+struct FStrifeDialogueNode;
+struct FStrifeDialogueReply;
+struct Response;
 
 struct EDMapthing
 {
@@ -95,8 +101,11 @@ struct MapData;
 class MapLoader
 {
 	friend class UDMFParser;
+	friend class USDFParser;
 	void *level;	// this is to hide the global variable and produce an error for referencing it.
+public:
 	FLevelLocals *Level;
+private:
 
 	int firstglvertex;	// helpers for loading GL nodes from GWA files.
 	bool format5;
@@ -138,6 +147,7 @@ private:
 	void ProcessEDMapthing(FMapThing *mt, int recordnum);
 	void ProcessEDLinedef(line_t *line, int recordnum);
 	void ProcessEDSector(sector_t *sec, int recordnum);
+	void parseEDLinedef(FScanner &sc, TMap<int, EDLinedef> &EDLines);
 
 	// Polyobjects
 	void InitSideLists();
@@ -169,6 +179,37 @@ private:
 	void FixHoles();
 	void ReportUnpairedMinisegs();
 	void CalcIndices();
+	
+	// Strife dialogue
+	void LoadStrifeConversations (MapData *map, const char *mapname);
+	bool LoadScriptFile (const char *name, bool include, int type);
+	bool LoadScriptFile(const char *name, int lumpnum, FileReader &lump, int numnodes, bool include, int type);
+	FStrifeDialogueNode *ReadRetailNode (const char *name, FileReader &lump, uint32_t &prevSpeakerType);
+	FStrifeDialogueNode *ReadTeaserNode (const char *name, FileReader &lump, uint32_t &prevSpeakerType);
+	void ParseReplies (const char *name, int pos, FStrifeDialogueReply **replyptr, Response *responses);
+	
+	bool ParseUSDF(int lumpnum, FileReader &lump, int lumplen);
+	
+	// Specials
+	void SpawnSpecials();
+	void InitSectorSpecial(sector_t *sector, int special);
+	void SpawnLights(sector_t *sector);
+	void CreateScroller(EScroll type, double dx, double dy, sector_t *affectee, int accel, EScrollPos scrollpos = EScrollPos::scw_all);
+	void SpawnScrollers();
+	void SpawnFriction();
+	void SpawnPushers();
+	AActor *GetPushThing (int s);
+	void SpawnPortal(line_t *line, int sectortag, int plane, int bytealpha, int linked);
+	void CopyPortal(int sectortag, int plane, unsigned pnum, double alpha, bool tolines);
+	void SetPortal(sector_t *sector, int plane, unsigned pnum, double alpha);
+	void SpawnLinePortal(line_t* line);
+	void SetupPortals();
+	void SpawnSkybox(AActor *origin);
+	void SetupFloorPortal (AActor *point);
+	void SetupCeilingPortal (AActor *point);
+	void TranslateTeleportThings();
+	int Set3DFloor(line_t * line, int param, int param2, int alpha);
+	void Spawn3DFloors ();
 
 	void SetTexture(side_t *side, int position, const char *name, FMissingTextureTracker &track);
 	void SetTexture(sector_t *sector, int index, int position, const char *name, FMissingTextureTracker &track, bool truncate);

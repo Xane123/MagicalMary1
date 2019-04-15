@@ -75,11 +75,11 @@ BEGIN
     "            VALUE ""FileDescription"", ""GZDoom""\r\n"
     "            VALUE ""FileVersion"", RC_FILEVERSION2\r\n"
     "            VALUE ""InternalName"", ""GZDoom""\r\n"
-    "            VALUE ""LegalCopyright"", ""Copyright Â© 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
+    "            VALUE ""LegalCopyright"", ""Copyright © 1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, et al.""\r\n"
     "            VALUE ""LegalTrademarks"", ""DoomR is a Registered Trademark of id Software, Inc.""\r\n"
     "            VALUE ""OriginalFilename"", ""gzdoom.exe""\r\n"
     "            VALUE ""ProductName"", ""GZDoom""\r\n"
-    "            VALUE ""ProductVersion"", RC_PRODUCTVERSION2\r\n"
+    "            VALUE ""ProductVersion"", GIT_VERSION\r\n"
     "        END\r\n"
     "    END\r\n"
     "    BLOCK ""VarFileInfo""\r\n"
@@ -178,14 +178,6 @@ BEGIN
         RIGHTMARGIN, 392
         TOPMARGIN, 7
         HORZGUIDE, 76
-    END
-
-    IDD_BOING, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 180
-        VERTGUIDE, 33
-        TOPMARGIN, 7
     END
 
     IDD_ERRORPANE, DIALOG
@@ -408,7 +400,6 @@ CAPTION "GZDoom Very Fatal Error"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     CONTROL         "",IDC_CRASHTAB,"SysTabControl32",WS_TABSTOP,4,4,404,280
-    PUSHBUTTON      "&Send Error Report",IDYES,146,289,91,14,WS_DISABLED
     PUSHBUTTON      "Save Report to Disk...",IDC_SAVEREPORT,242,289,91,14
     PUSHBUTTON      "&Discard Report",IDNO,338,289,70,14
 END
@@ -436,19 +427,6 @@ BEGIN
     RTEXT           "Static",IDC_CRASHFILESIZE,337,74,55,8
     LISTBOX         IDC_CRASHFILES,7,15,385,53,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
     CONTROL         "",IDC_CRASHFILECONTENTS,"RichEdit20A",ES_MULTILINE | ES_READONLY | WS_BORDER | WS_VSCROLL | WS_TABSTOP,7,83,385,174
-END
-
-IDD_BOING DIALOGEX 0, 0, 187, 196
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Upload status"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "Close",IDOK,130,175,50,14,WS_DISABLED
-    ICON            IDI_BOING1,IDC_BOING,7,7,21,20
-    LTEXT           "Static",IDC_BOINGSTATUS,33,12,147,8
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,166,189,1
-    CONTROL         "",IDC_BOINGEDIT,"RichEdit20A",ES_MULTILINE | ES_READONLY | WS_BORDER | WS_VSCROLL | WS_TABSTOP,7,34,173,124
-    CONTROL         "",IDC_BOINGPROGRESS,"msctls_progress32",NOT WS_VISIBLE | WS_BORDER | 0x1,33,22,147,9
 END
 
 IDD_ERRORPANE DIALOGEX 0, 0, 190, 28
@@ -514,7 +492,7 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which GZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
-            VALUE "CompanyName", "Xane Corp."
+            VALUE "CompanyName", ""
             VALUE "FileDescription", "Mary's Magical Adventure"
             VALUE "FileVersion", RC_FILEVERSION2
             VALUE "InternalName", "Mary's Magical Adventure"
@@ -522,7 +500,7 @@ BEGIN
             VALUE "LegalTrademarks", "DOOM is a Registered Trademark of id Software, Inc."
             VALUE "OriginalFilename", "Mary's Magical Adventure.exe"
             VALUE "ProductName", "Mary's Magical Adventure"
-            VALUE "ProductVersion", RC_PRODUCTVERSION2
+            VALUE "ProductVersion", GIT_DESCRIPTION
         END
     END
     BLOCK "VarFileInfo"

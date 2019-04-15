@@ -35,10 +35,12 @@
 
 #include "i_common.h"
 
+#include "v_video.h"
 #include "bitmap.h"
 #include "c_dispatch.h"
 #include "doomstat.h"
 #include "hardware.h"
+#include "i_system.h"
 #include "m_argv.h"
 #include "m_png.h"
 #include "r_renderer.h"
@@ -46,6 +48,7 @@
 #include "st_console.h"
 #include "v_text.h"
 #include "version.h"
+#include "doomerrors.h"
 
 #include "gl/renderer/gl_renderer.h"
 #include "gl/system/gl_framebuffer.h"
@@ -292,8 +295,6 @@ SystemGLFrameBuffer::SystemGLFrameBuffer(void*, const bool fullscreen)
 , m_hiDPI(false)
 , m_window(CreateWindow(STYLE_MASK_WINDOWED))
 {
-	SetFlash(0, 0);
-
 	NSOpenGLPixelFormat* pixelFormat = CreatePixelFormat();
 
 	if (nil == pixelFormat)
@@ -345,7 +346,7 @@ void SystemGLFrameBuffer::ToggleFullscreen(bool yes)
 
 void SystemGLFrameBuffer::SetWindowSize(int width, int height)
 {
-	if (width < MINIMUM_WIDTH || height < MINIMUM_HEIGHT)
+	if (width < VID_MIN_WIDTH || height < VID_MIN_HEIGHT)
 	{
 		return;
 	}
@@ -426,8 +427,8 @@ void SystemGLFrameBuffer::SetWindowedMode()
 		[m_window setHidesOnDeactivate:NO];
 	}
 
-	const int minimumFrameWidth  = MINIMUM_WIDTH;
-	const int minimumFrameHeight = MINIMUM_HEIGHT + GetTitleBarHeight();
+	const int minimumFrameWidth  = VID_MIN_WIDTH;
+	const int minimumFrameHeight = VID_MIN_HEIGHT + GetTitleBarHeight();
 	const NSSize minimumFrameSize = NSMakeSize(minimumFrameWidth, minimumFrameHeight);
 	[m_window setMinSize:minimumFrameSize];
 

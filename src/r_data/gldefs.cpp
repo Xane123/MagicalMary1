@@ -33,7 +33,7 @@
 **
 */
 #include <ctype.h>
-#include "i_system.h"
+
 #include "sc_man.h"
 #include "templates.h"
 #include "w_wad.h"
@@ -43,6 +43,7 @@
 #include "v_text.h"
 #include "g_levellocals.h"
 #include "a_dynlight.h"
+#include "v_video.h"
 #include "textures/skyboxtexture.h"
 #include "hwrenderer/postprocessing/hw_postprocessshader.h"
 #include "hwrenderer/textures/hw_material.h"
@@ -53,6 +54,7 @@ void InitializeActorLights(TArray<FLightAssociation> &LightAssociations);
 
 TArray<UserShaderDesc> usershaders;
 extern TDeletingArray<FLightDefaults *> LightDefaults;
+extern int AttenuationIsSet;
 
 
 //-----------------------------------------------------------------------------
@@ -1208,6 +1210,11 @@ class GLDefsParser
 		FTextureID no = TexMan.CheckForTexture(sc.String, type, FTextureManager::TEXMAN_TryAny | FTextureManager::TEXMAN_Overridable);
 		FTexture *tex = TexMan.GetTexture(no);
 
+		if (tex == nullptr)
+		{
+			sc.ScriptMessage("Material definition refers nonexistent texture '%s'\n", sc.String);
+		}
+
 		sc.MustGetToken('{');
 		while (!sc.CheckToken('}'))
 		{
@@ -1264,26 +1271,29 @@ class GLDefsParser
 					}
 				}
 				sc.MustGetString();
-				bool okay = false;
-				for (int i = 0; i < MAX_CUSTOM_HW_SHADER_TEXTURES; i++)
+				if (tex)
 				{
-					if (!tex->CustomShaderTextures[i])
+					bool okay = false;
+					for (int i = 0; i < MAX_CUSTOM_HW_SHADER_TEXTURES; i++)
 					{
-						tex->CustomShaderTextures[i] = TexMan.FindTexture(sc.String, ETextureType::Any, FTextureManager::TEXMAN_TryAny);
 						if (!tex->CustomShaderTextures[i])
 						{
-							sc.ScriptError("Custom hardware shader texture '%s' not found in texture '%s'\n", sc.String, tex ? tex->Name.GetChars() : "(null)");
-						}
+							tex->CustomShaderTextures[i] = TexMan.FindTexture(sc.String, ETextureType::Any, FTextureManager::TEXMAN_TryAny);
+							if (!tex->CustomShaderTextures[i])
+							{
+								sc.ScriptError("Custom hardware shader texture '%s' not found in texture '%s'\n", sc.String, tex->Name.GetChars());
+							}
 
-						texNameList.Push(textureName);
-						texNameIndex.Push(i);
-						okay = true;
-						break;
+							texNameList.Push(textureName);
+							texNameIndex.Push(i);
+							okay = true;
+							break;
+						}
 					}
-				}
-				if (!okay)
-				{
-					sc.ScriptError("Error: out of texture units in texture '%s'", tex ? tex->Name.GetChars() : "(null)");
+					if (!okay)
+					{
+						sc.ScriptError("Error: out of texture units in texture '%s'", tex->Name.GetChars());
+					}
 				}
 			}
 			else if (sc.Compare("define"))
@@ -1777,6 +1787,7 @@ void ParseGLDefs()
 	const char *defsLump = NULL;
 
 	LightDefaults.DeleteAndClear();
+	AttenuationIsSet = -1;
 	//gl_DestroyUserShaders(); function says 'todo'
 	switch (gameinfo.gametype)
 	{

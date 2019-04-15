@@ -46,6 +46,7 @@
 #include "vm.h"
 #include "i_time.h"
 #include "menu/menu.h"
+#include "v_text.h"
 
 const char *KeyNames[NUM_KEYS] =
 {
@@ -297,7 +298,7 @@ void C_NameKeys (char *str, int first, int second)
 		c++;
 		strcpy (str, KeyName (first));
 		if (second)
-			strcat (str, " or ");
+			strcat (str, TEXTCOLOR_BLACK ", " TEXTCOLOR_NORMAL);
 	}
 
 	if (second)
@@ -753,7 +754,6 @@ bool C_DoKey (event_t *ev, FKeyBindings *binds, FKeyBindings *doublebinds)
 	dclickmask = 1 << (ev->data1 & 7);
 	dclick = false;
 
-	// This used level.time which didn't work outside a level.
 	nowtime = (unsigned)I_msTime();
 	if (doublebinds != NULL && int(DClickTime[ev->data1] - nowtime) > 0 && ev->type == EV_KeyDown)
 	{

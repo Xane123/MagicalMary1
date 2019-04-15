@@ -45,7 +45,7 @@
 #include "c_console.h"
 #include "c_dispatch.h"
 #include "m_argv.h"
-#include "doomstat.h"
+#include "g_game.h"
 #include "d_player.h"
 #include "configfile.h"
 #include "v_text.h"
@@ -54,6 +54,7 @@
 #include "serializer.h"
 #include "menu/menu.h"
 #include "vm.h"
+#include "g_levellocals.h"
 
 // MACROS ------------------------------------------------------------------
 
@@ -562,7 +563,7 @@ void C_DoCommand (const char *cmd, int keynum)
 	const char *beg;
 
 	// Skip any beginning whitespace
-	while (*cmd && *cmd <= ' ')
+	while (*cmd > 0 && *cmd <= ' ')
 		cmd++;
 
 	// Find end of the command name
@@ -574,7 +575,7 @@ void C_DoCommand (const char *cmd, int keynum)
 	else
 	{
 		beg = cmd;
-		for (end = cmd+1; *end > ' '; ++end)
+		for (end = cmd+1; *end > ' ' || *end < 0; ++end)
 			;
 	}
 
@@ -727,7 +728,7 @@ void AddCommandString (const char *text, int keynum)
 				more = 0;
 			}
 			// Intercept wait commands here. Note: wait must be lowercase
-			while (*cmd && *cmd <= ' ')
+			while (*cmd > 0 && *cmd <= ' ')
 				cmd++;
 			if (*cmd)
 			{
@@ -1568,13 +1569,14 @@ void FExecList::AddPullins(TArray<FString> &wads) const
 
 FExecList *C_ParseExecFile(const char *file, FExecList *exec)
 {
-	FILE *f;
 	char cmd[4096];
 	int retval = 0;
 
-	if ( (f = fopen (file, "r")) )
+	FileReader fr;
+
+	if ( (fr.OpenFile(file)) )
 	{
-		while (fgets(cmd, countof(cmd)-1, f))
+		while (fr.Gets(cmd, countof(cmd)-1))
 		{
 			// Comments begin with //
 			char *stop = cmd + strlen(cmd) - 1;
@@ -1610,11 +1612,6 @@ FExecList *C_ParseExecFile(const char *file, FExecList *exec)
 			}
 			exec->AddCommand(cmd, file);
 		}
-		if (!feof(f))
-		{
-			Printf("Error parsing \"%s\"\n", file);
-		}
-		fclose(f);
 	}
 	else
 	{

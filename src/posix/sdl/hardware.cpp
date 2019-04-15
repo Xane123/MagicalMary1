@@ -35,11 +35,13 @@
 #include <SDL.h>
 #include <signal.h>
 
+#include "i_system.h"
 #include "hardware.h"
 #include "c_dispatch.h"
 #include "v_text.h"
 #include "doomstat.h"
 #include "m_argv.h"
+#include "doomerrors.h"
 #include "swrenderer/r_swrenderer.h"
 
 IVideo *Video;
@@ -147,11 +149,11 @@ void I_SetFPSLimit(int limit)
 	{
 		FPSLimitTimerEnabled = true;
 		if(timer_create(CLOCK_REALTIME, &FPSLimitEvent, &FPSLimitTimer) == -1)
-			Printf(DMSG_WARNING, "Failed to create FPS limitter event\n");
+			Printf(DMSG_WARNING, "Failed to create FPS limiter event\n");
 		itimerspec period = { {0, 0}, {0, 0} };
 		period.it_value.tv_nsec = period.it_interval.tv_nsec = 1000000000 / limit;
 		if(timer_settime(FPSLimitTimer, 0, &period, NULL) == -1)
-			Printf(DMSG_WARNING, "Failed to set FPS limitter timer\n");
+			Printf(DMSG_WARNING, "Failed to set FPS limiter timer\n");
 		DPrintf(DMSG_NOTIFY, "FPS timer set to %u ms\n", (unsigned int) period.it_interval.tv_nsec / 1000000);
 	}
 }

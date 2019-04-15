@@ -34,7 +34,7 @@
 
 #include <stdio.h>
 
-#include "i_system.h"
+
 #include "x86.h"
 #include "actor.h"
 
@@ -156,9 +156,9 @@ void DFrameBuffer::DrawRateStuff ()
 			int textScale = active_con_scale();
 
 			chars = mysnprintf (fpsbuff, countof(fpsbuff), "%2llu ms (%3llu fps)", (unsigned long long)howlong, (unsigned long long)LastCount);
-			rate_x = Width / textScale - ConFont->StringWidth(&fpsbuff[0]);
-			Clear (rate_x * textScale, 0, Width, ConFont->GetHeight() * textScale, GPalette.BlackIndex, 0);
-			DrawText (ConFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0],
+			rate_x = Width / textScale - NewConsoleFont->StringWidth(&fpsbuff[0]);
+			Clear (rate_x * textScale, 0, Width, NewConsoleFont->GetHeight() * textScale, GPalette.BlackIndex, 0);
+			DrawText (NewConsoleFont, CR_WHITE, rate_x, 0, (char *)&fpsbuff[0],
 				DTA_VirtualWidth, screen->GetWidth() / textScale,
 				DTA_VirtualHeight, screen->GetHeight() / textScale,
 				DTA_KeepRatio, true, TAG_DONE);
@@ -202,11 +202,6 @@ void DFrameBuffer::DrawRateStuff ()
 //
 //==========================================================================
 
-void DFrameBuffer::GetFlashedPalette(PalEntry pal[256])
-{
-	DoBlending(SourcePalette, pal, 256, Flash.r, Flash.g, Flash.b, Flash.a);
-}
-
 void DFrameBuffer::Update()
 {
 	CheckBench();
@@ -215,32 +210,14 @@ void DFrameBuffer::Update()
 	int initialHeight = GetClientHeight();
 	int clientWidth = ViewportScaledWidth(initialWidth, initialHeight);
 	int clientHeight = ViewportScaledHeight(initialWidth, initialHeight);
-	if (clientWidth < 320) clientWidth = 320;
-	if (clientHeight < 200) clientHeight = 200;
+	if (clientWidth < VID_MIN_WIDTH) clientWidth = VID_MIN_WIDTH;
+	if (clientHeight < VID_MIN_HEIGHT) clientHeight = VID_MIN_HEIGHT;
 	if (clientWidth > 0 && clientHeight > 0 && (GetWidth() != clientWidth || GetHeight() != clientHeight))
 	{
 		SetVirtualSize(clientWidth, clientHeight);
 		V_OutputResized(clientWidth, clientHeight);
 		mVertexData->OutputResized(clientWidth, clientHeight);
 	}
-}
-
-PalEntry *DFrameBuffer::GetPalette()
-{
-	return SourcePalette;
-}
-
-bool DFrameBuffer::SetFlash(PalEntry rgb, int amount)
-{
-	Flash = PalEntry(amount, rgb.r, rgb.g, rgb.b);
-	return true;
-}
-
-void DFrameBuffer::GetFlash(PalEntry &rgb, int &amount)
-{
-	rgb = Flash;
-	rgb.a = 0;
-	amount = Flash.a;
 }
 
 void DFrameBuffer::SetClearColor(int color)
@@ -291,18 +268,6 @@ FTexture *DFrameBuffer::WipeStartScreen()
 FTexture *DFrameBuffer::WipeEndScreen()
 {
     return nullptr;
-}
-
-//==========================================================================
-//
-// DFrameBuffer :: InitPalette
-//
-//==========================================================================
-
-void DFrameBuffer::InitPalette()
-{
-	memcpy(SourcePalette, GPalette.BaseColors, sizeof(PalEntry) * 256);
-	UpdatePalette();
 }
 
 //==========================================================================

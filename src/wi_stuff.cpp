@@ -37,7 +37,7 @@
 
 #include "m_random.h"
 #include "m_swap.h"
-#include "i_system.h"
+
 #include "w_wad.h"
 #include "g_level.h"
 #include "s_sound.h"
@@ -271,7 +271,7 @@ bool DInterBackground::LoadBackground(bool isenterpic)
 	texture.SetInvalid();
 
 	level_info_t * li = FindLevelInfo(wbs->current);
-	if (li != nullptr) exitpic = li->EnterPic;
+	if (li != nullptr) exitpic = li->ExitPic;
 	lumpname = exitpic;
 
 	if (isenterpic)
@@ -701,6 +701,7 @@ void WI_Ticker()
 {
 	if (WI_Screen)
 	{
+		ScaleOverrider s;
 		IFVIRTUALPTRNAME(WI_Screen, "StatusScreen", Ticker)
 		{
 			VMValue self = WI_Screen;
@@ -720,6 +721,7 @@ void WI_Drawer()
 {
 	if (WI_Screen)
 	{
+		ScaleOverrider s;
 		IFVIRTUALPTRNAME(WI_Screen, "StatusScreen", Drawer)
 		{
 			VMValue self = WI_Screen;
@@ -760,17 +762,14 @@ void WI_Start(wbstartstruct_t *wbstartstruct)
 			I_FatalError("Cannot create status screen");
 		}
 	}
-	// Set up some global stuff that is always needed.
-	auto info = FindLevelInfo(wbstartstruct->next, false);
-	if (info == nullptr)
-	{
-		wbstartstruct->next = "";
-	}
-	else wbstartstruct->nextname = info->LookupLevelName();
-	V_SetBlend(0, 0, 0, 0);
+	
 	S_StopAllChannels();
-	SN_StopAllSequences();
+	for (auto Level : AllLevels())
+	{
+		SN_StopAllSequences(Level);
+	}
 	WI_Screen = cls->CreateNew();
+	ScaleOverrider s;
 	IFVIRTUALPTRNAME(WI_Screen, "StatusScreen", Start)
 	{
 		VMValue val[2] = { WI_Screen, wbstartstruct };
@@ -860,6 +859,7 @@ DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, next_ep);
 DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, current);
 DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, next);
 DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, nextname);
+DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, thisname);
 DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, LName0);
 DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, LName1);
 DEFINE_FIELD_X(WBStartStruct, wbstartstruct_t, maxkills);

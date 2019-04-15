@@ -47,10 +47,12 @@
 #include "v_text.h"
 #include "w_wad.h"
 #include "doomstat.h"
+#include "g_levellocals.h"
+#include "v_video.h"
+#include "utf8.h"
 
 extern FRandom pr_exrandom;
 FMemArena FxAlloc(65536);
-int utf8_decode(const char *src, int *size);
 
 struct FLOP
 {
@@ -316,19 +318,13 @@ static FxExpression *StringConstToChar(FxExpression *basex)
 	// This serves as workaround for not being able to use single quoted literals because those are taken for names.
 	ExpVal constval = static_cast<FxConstant *>(basex)->GetValue();
 	FString str = constval.GetString();
-	if (str.Len() == 1)
+	int position = 0;
+	int chr = str.GetNextCharacter(position);
+
+	// Only succeed if the full string is consumed, i.e. it contains only one code point.
+	if (position == (int)str.Len())
 	{
-		return new FxConstant(str[0], basex->ScriptPosition);
-	}
-	else if (str.Len() > 1)
-	{
-		// If the string is UTF-8, allow a single character UTF-8 sequence.
-		int size;
-		int c = utf8_decode(str.GetChars(), &size);
-		if (c >= 0 && size_t(size) == str.Len())
-		{
-			return new FxConstant(c, basex->ScriptPosition);
-		}
+		return new FxConstant(chr, basex->ScriptPosition);
 	}
 	return nullptr;
 }
@@ -5173,18 +5169,21 @@ static DObject *BuiltinNew(PClass *cls, int outerside, int backwardscompatible)
 		ThrowAbortException(X_OTHER, "Cannot create actors with 'new'");
 		return nullptr;
 	}
-	if (vm_warnthinkercreation && cls->IsDescendantOf(NAME_Thinker))
+	if ((vm_warnthinkercreation || !backwardscompatible) && cls->IsDescendantOf(NAME_Thinker))
 	{
 		// This must output a diagnostic warning
-		//ThrowAbortException(X_OTHER, "Cannot create actors with 'new'");
-		//return nullptr;
+		Printf("Using 'new' to create thinkers is deprecated.");
 	}
 	// [ZZ] validate readonly and between scope construction
 	if (outerside) FScopeBarrier::ValidateNew(cls, outerside - 1);
-	auto object = cls->CreateNew();
-	if (backwardscompatible && object->IsKindOf(NAME_Thinker))
+	DObject *object;
+	if (!cls->IsDescendantOf(NAME_Thinker))
 	{
-		// Todo: Link thinker to current primary level.
+		object = cls->CreateNew();
+	}
+	else
+	{
+		object = currentVMLevel->CreateThinker(cls);
 	}
 	return object;
 }
@@ -6128,9 +6127,21 @@ FxExpression *FxIdentifier::Resolve(FCompileContext& ctx)
 			{
 				if (sym->mVersion <= ctx.Version)
 				{
-					ScriptPosition.Message(MSG_WARNING, "Accessing deprecated global variable %s - deprecated since %d.%d.%d", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision);
+					if (!(ctx.Function->Variants[0].Flags & VARF_Deprecated) && Wads.GetLumpFile(ctx.Lump) == 0)
+					{
+						ScriptPosition.Message(MSG_WARNING, "Accessing deprecated global variable %s - deprecated since %d.%d.%d", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision);
+					}
+					else
+					{
+						// Allow use of deprecated symbols in deprecated functions of the internal code. This is meant to allow deprecated code to remain as it was, 
+						// even if it depends on some deprecated symbol. 
+						// The main motivation here is to keep the deprecated static functions accessing the global level variable as they were.
+						// Print these only if debug output is active and at the highest verbosity level.
+						ScriptPosition.Message(MSG_DEBUGMSG, TEXTCOLOR_BLUE "Accessing deprecated global variable %s - deprecated since %d.%d.%d", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision);
+					}
 				}
 			}
+			
 
 			newex = new FxGlobalVariable(static_cast<PField *>(sym), ScriptPosition);
 			goto foundit;
@@ -6842,9 +6853,7 @@ ExpEmit FxCVar::Emit(VMFunctionBuilder *build)
 		int *pVal;
 		auto cv = static_cast<FFlagCVar *>(CVar);
 		auto vcv = &cv->ValueVar;
-		if (vcv == &compatflags) pVal = &i_compatflags;
-		else if (vcv == &compatflags2) pVal = &i_compatflags2;
-		else pVal = &vcv->Value;
+		pVal = &vcv->Value;
 		build->Emit(OP_LKP, addr.RegNum, build->GetConstantAddress(pVal));
 		build->Emit(OP_LW, dest.RegNum, addr.RegNum, nul);
 		build->Emit(OP_SRL_RI, dest.RegNum, dest.RegNum, cv->BitNum);
@@ -7334,6 +7343,10 @@ FxExpression *FxArrayElement::Resolve(FCompileContext &ctx)
 			auto parentfield = static_cast<FxMemberBase *>(Array)->membervar;
 			SizeAddr = parentfield->Offset + sizeof(void*);
 		}
+		else if (Array->ExprType == EFX_ArrayElement)
+		{
+			SizeAddr = ~0u;
+		}
 		else
 		{
 			ScriptPosition.Message(MSG_ERROR, "Invalid resizable array");
@@ -7406,7 +7419,8 @@ ExpEmit FxArrayElement::Emit(VMFunctionBuilder *build)
 	ExpEmit arrayvar = Array->Emit(build);
 	ExpEmit start;
 	ExpEmit bound;
-
+	bool nestedarray = false;
+	
 	if (SizeAddr != ~0u)
 	{
 		bool ismeta = Array->ExprType == EFX_ClassMember && static_cast<FxClassMember*>(Array)->membervar->Flags & VARF_Meta;
@@ -7416,20 +7430,44 @@ ExpEmit FxArrayElement::Emit(VMFunctionBuilder *build)
 		build->Emit(OP_LP, start.RegNum, arrayvar.RegNum, build->GetConstantInt(0));
 
 		auto f = Create<PField>(NAME_None, TypeUInt32, ismeta? VARF_Meta : 0, SizeAddr);
-		static_cast<FxMemberBase *>(Array)->membervar = f;
-		static_cast<FxMemberBase *>(Array)->AddressRequested = false;
+		auto arraymemberbase = static_cast<FxMemberBase *>(Array);
+
+		auto origmembervar = arraymemberbase->membervar;
+		auto origaddrreq = arraymemberbase->AddressRequested;
+		auto origvaluetype = Array->ValueType;
+
+		arraymemberbase->membervar = f;
+		arraymemberbase->AddressRequested = false;
 		Array->ValueType = TypeUInt32;
+
 		bound = Array->Emit(build);
+
+		arraymemberbase->membervar = origmembervar;
+		arraymemberbase->AddressRequested = origaddrreq;
+		Array->ValueType = origvaluetype;
+	}
+	else if (Array->ExprType == EFX_ArrayElement && Array->isStaticArray())
+	{
+		bool ismeta = Array->ExprType == EFX_ClassMember && static_cast<FxClassMember*>(Array)->membervar->Flags & VARF_Meta;
+
+		arrayvar.Free(build);
+		start = ExpEmit(build, REGT_POINTER);
+		build->Emit(OP_LP, start.RegNum, arrayvar.RegNum, build->GetConstantInt(0));
+
+		bound = ExpEmit(build, REGT_INT);
+		build->Emit(OP_LW, bound.RegNum, arrayvar.RegNum, build->GetConstantInt(sizeof(void*)));
+
+		nestedarray = true;
 	}
 	else start = arrayvar;
 
 	if (index->isConstant())
 	{
 		unsigned indexval = static_cast<FxConstant *>(index)->GetValue().GetInt();
-		assert(SizeAddr != ~0u || (indexval < arraytype->ElementCount && "Array index out of bounds"));
+		assert(SizeAddr != ~0u || nestedarray || (indexval < arraytype->ElementCount && "Array index out of bounds"));
 
 		// For resizable arrays we even need to check the bounds if if the index is constant because they are not known at compile time.
-		if (SizeAddr != ~0u)
+		if (SizeAddr != ~0u || nestedarray)
 		{
 			ExpEmit indexreg(build, REGT_INT);
 			build->EmitLoadInt(indexreg.RegNum, indexval);
@@ -8613,7 +8651,7 @@ FxExpression *FxActionSpecialCall::Resolve(FCompileContext& ctx)
 
 int BuiltinCallLineSpecial(int special, AActor *activator, int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-	return P_ExecuteSpecial(special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5);
+	return P_ExecuteSpecial(currentVMLevel , special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5);
 }
 
 DEFINE_ACTION_FUNCTION_NATIVE(DObject, BuiltinCallLineSpecial, BuiltinCallLineSpecial)
@@ -8627,7 +8665,7 @@ DEFINE_ACTION_FUNCTION_NATIVE(DObject, BuiltinCallLineSpecial, BuiltinCallLineSp
 	PARAM_INT(arg4);
 	PARAM_INT(arg5);
 
-	ACTION_RETURN_INT(P_ExecuteSpecial(special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5));
+	ACTION_RETURN_INT(P_ExecuteSpecial(currentVMLevel, special, nullptr, activator, 0, arg1, arg2, arg3, arg4, arg5));
 }
 
 ExpEmit FxActionSpecialCall::Emit(VMFunctionBuilder *build)
@@ -8849,10 +8887,17 @@ FxExpression *FxVMFunctionCall::Resolve(FCompileContext& ctx)
 	CallingFunction = ctx.Function;
 	if (ArgList.Size() > 0)
 	{
+		if (argtypes.Size() == 0)
+		{
+			ScriptPosition.Message(MSG_ERROR, "Too many arguments in call to %s", Function->SymbolName.GetChars());
+			delete this;
+			return nullptr;
+		}
+		
 		bool foundvarargs = false;
 		PType * type = nullptr;
 		int flag = 0;
-		if (argtypes.Last() != nullptr && ArgList.Size() + implicit > argtypes.Size())
+		if (argtypes.Size() > 0 && argtypes.Last() != nullptr && ArgList.Size() + implicit > argtypes.Size())
 		{
 			ScriptPosition.Message(MSG_ERROR, "Too many arguments in call to %s", Function->SymbolName.GetChars());
 			delete this;
