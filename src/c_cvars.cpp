@@ -1855,8 +1855,8 @@ CCMD (toggle)
 			val = var->GetGenericRep (CVAR_Bool);
 			val.Bool = !val.Bool;
 			var->SetGenericRep (val, CVAR_Bool);
-			Printf ("\"%s\" = \"%s\"\n", var->GetName(),
-				val.Bool ? "true" : "false");
+			Printf ("%s is now %s.\n", var->GetName(),
+				val.Bool ? "enabled" : "disabled");
 		}
 	}
 }

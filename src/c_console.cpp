@@ -246,7 +246,7 @@ public:
 			cellcount += w / 9;
 		}
 		return cellcount;
-
+			
 	}
 
 	unsigned CharsForCells(unsigned cellin, bool *overflow)
@@ -1176,12 +1176,12 @@ void C_DrawConsole ()
 		if (ConBottom >= 12)
 		{
 			if (textScale == 1)
-				screen->DrawText (CurrentConsoleFont, CR_ORANGE, SCREENWIDTH - 8 -
+				screen->DrawText (CurrentConsoleFont, CR_DARKGREEN, SCREENWIDTH - 8 -
 					CurrentConsoleFont->StringWidth (GetVersionString()),
 					ConBottom / textScale - CurrentConsoleFont->GetHeight() - 4,
 					GetVersionString(), TAG_DONE);
 			else
-				screen->DrawText(CurrentConsoleFont, CR_ORANGE, SCREENWIDTH / textScale - 8 -
+				screen->DrawText(CurrentConsoleFont, CR_DARKGREEN, SCREENWIDTH / textScale - 8 -
 					CurrentConsoleFont->StringWidth(GetVersionString()),
 					ConBottom / textScale - CurrentConsoleFont->GetHeight() - 4,
 					GetVersionString(),
@@ -1212,11 +1212,11 @@ void C_DrawConsole ()
 		{
 			if (textScale == 1)
 			{
-				screen->DrawText(CurrentConsoleFont, CR_TAN, LEFTMARGIN, offset + lines * CurrentConsoleFont->GetHeight(), p->Text, TAG_DONE);
+				screen->DrawText(CurrentConsoleFont, CR_ORANGE, LEFTMARGIN, offset + lines * CurrentConsoleFont->GetHeight(), p->Text, TAG_DONE);
 			}
 			else
 			{
-				screen->DrawText(CurrentConsoleFont, CR_TAN, LEFTMARGIN, offset + lines * CurrentConsoleFont->GetHeight(), p->Text,
+				screen->DrawText(CurrentConsoleFont, CR_ORANGE, LEFTMARGIN, offset + lines * CurrentConsoleFont->GetHeight(), p->Text,
 					DTA_VirtualWidth, screen->GetWidth() / textScale,
 					DTA_VirtualHeight, screen->GetHeight() / textScale,
 					DTA_KeepRatio, true, TAG_DONE);
@@ -1234,9 +1234,9 @@ void C_DrawConsole ()
 				// Indicate that the view has been scrolled up (10)
 				// and if we can scroll no further (12)
 				if (textScale == 1)
-					screen->DrawChar (CurrentConsoleFont, CR_GREEN, 0, bottomline, RowAdjust == conbuffer->GetFormattedLineCount() ? 12 : 10, TAG_DONE);
+					screen->DrawChar (CurrentConsoleFont, RowAdjust == conbuffer->GetFormattedLineCount() ? CR_BRICK : CR_YELLOW, 0, bottomline, RowAdjust == conbuffer->GetFormattedLineCount() ? 12 : 10, TAG_DONE);
 				else
-					screen->DrawChar(CurrentConsoleFont, CR_GREEN, 0, bottomline, RowAdjust == conbuffer->GetFormattedLineCount() ? 12 : 10,
+					screen->DrawChar(CurrentConsoleFont, RowAdjust == conbuffer->GetFormattedLineCount() ? CR_BRICK : CR_YELLOW, 0, bottomline, RowAdjust == conbuffer->GetFormattedLineCount() ? 12 : 10,
 						DTA_VirtualWidth, screen->GetWidth() / textScale,
 						DTA_VirtualHeight, screen->GetHeight() / textScale,
 						DTA_KeepRatio, true, TAG_DONE);
@@ -1528,7 +1528,7 @@ static bool C_HandleKey (event_t *ev, FCommandBuffer &buffer)
 			FString bufferText = buffer.GetText();
 
 			bufferText.StripLeftRight();
-			Printf(127, TEXTCOLOR_WHITE "]%s\n", bufferText.GetChars());
+			Printf(127, TEXTCOLOR_WHITE ">%s\n", bufferText.GetChars());
 
 			if (bufferText.Len() == 0)
 			{
