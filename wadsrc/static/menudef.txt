@@ -950,6 +950,7 @@ OptionMenu "VideoOptions" protected
 	Option "$DSPLYMNU_LEEFFECTS",				"le_effects",		"LEEffectsOpt"
 	Option "$DSPLYMNU_LEDRAWDIST",				"le_drawdistance",	"LEDrawDistances"
 	Option "$DSPLYMNU_LESKYOFF",				"le_skyboxoff",		"OffOn"
+	Slider "$DSPLYMNU_LEOBJDIST",				"xane_objdrawdistance", 0.0, 8.0, 0.5, 0
 	
 	StaticText " "
 	Option "$DSPLYMNU_WIPETYPE",				"wipetype", "Wipes"

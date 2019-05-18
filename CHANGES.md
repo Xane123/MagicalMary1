@@ -1,4 +1,4 @@
-# Changes (for v2.0)
+# Changes (for v1.75)
 This is a list of any changes done to Mary's Magical Adventure since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
 * Disabled "HandleHealthEvents" script in the Small Hut, which fixes the player randomly dropping coins upon warping there for a second time after losing health in the level.
@@ -26,13 +26,15 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text, just like some games on consoles like the NES.
 * Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". This gives more fine control over Xane's flight, and gives him more of a flying advantage over the mostly-grounded Mary.
 * Xane's Drop Dash has been removed as it was pretty pointless.
+* (Most) springs now "freeze" the player to make it harder to accidentally break spring chains. Using your character's mid-air ability or landing on the ground will restore movement. It's intended that all springs behave this way.
+* Mary's ability meter regenerates at a variable rate depending on how fast you're moving. Stand still and it'll fill up very quickly, or run and it'll take forever to refill.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
-* Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**!
+* Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**! A shame, Jane will eventually be removed and the hut will somewhat have its purpose changed.
 * Friendly Turrets are now placed slightly closer to the player.
 * Buffed Soap Boxes slightly; Soap that lands on the ground deals more damage over time and flies farther from the Soap Box. Additionally, Soap Boxes have less health, so a single hammer attack makes them explode now.
 * Magical Cutie Mary isn't affected by cops' stunning bullets and other special pain reactions.
-* Disabled draw distance in Jane's Hut as the area is too small to need it. All other levels can still have it enabled.
+* Disabled draw distance in the Hut as the area is too small to need it. All other levels can still have it enabled.
 * Checkpoints no longer store the player's angle. This is to clear a **SetCheckpoint** script argument slot for a "forced ambience" argument, which will fix cases where the wrong ambience is heard upon returning to a checkpoint.
 * New songs were added to replace some of the radio songs. They're no more safe to use than the old ones, but the goal is to have the radio sounding higher-quality by the final version.
 * Doors now have new sounds that sound less silly.
@@ -51,5 +53,7 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Both cop colors shoot glowing magic, green bullets to reflect changes to their pistols, as they are now said to be armed with "MAGIC-FIRE-B" pistols, which form magic into high-density "bullets", which is what the player's gun will use as well once it's added, just with pink and blue bullets instead.
 * Cops normally wait a few times before they actually consider shooting at you, to prevent GZDoom from causing endless bullet spam, but now it's been changed so they wait four times in easy difficulty, but that drops to only *two* if in hard difficulty, making it an overall harder game.
 * Added a new debug CVAR to test out planned epilogue for Mary. If ***debug_epilogue*** is set to TRUE, all enemies are removed from levels. Other things are planned too, such as boss battles immediately advancing to the next level (since none of them will be there at that point), but for now the only special thing that's done is that the Command Master doesn't talk over the speakers in HCPD HQ
-* Internally, footsteps (and the new landing sounds) use LANGUAGE to look up the list of textures for each programmed "surface" type rather than a messy list in the "PlayFootstepSound" script.
+* Internally, footsteps (and the new landing sounds) use LANGUAGE (.lst) to look up the list of textures for each programmed "surface" type rather than a messy list in the "PlayFootstepSound" script.
 * New sounds were added for Mary/Xane landing! Now, rather than Mary saying "Ow!", a mini explosion sound plays, varying depending on what surface you land on. If you fall fast enough, a louder sound will play.
+* Springs now use a function, "CheckSpringWhitelist", which returns if the activator is on one of the lists. This simplifies the messy "CheckActorClass" if-checks in the spring scripts and makes it easier to mod, just like footstep sounds.
+* Mary's Air Dash now behaves differently; The "Upward Air Dash" behaves more like a second jump, barely giving horizontal momentum. The normal variant acts like the old Upward Air Dash, though.

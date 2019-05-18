@@ -373,6 +373,7 @@ DSPLYMNU_LEBLOCKVIS				= "Block distant rendering";
 DSPLYMNU_LEEFFECTS				= "Effects";
 DSPLYMNU_LEDRAWDIST				= "Draw distance";
 DSPLYMNU_LESKYOFF				= "Moving Skybox";
+DSPLYMNU_LEOBJDIST				= "Decorative render distance";
 
 DSPLYMNU_WIPETYPE				= "Screen wipe style";
 DSPLYMNU_SHOWENDOOM				= "Show ENDOOM screen";
