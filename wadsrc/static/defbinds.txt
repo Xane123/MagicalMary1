@@ -14,9 +14,9 @@ doublebind w +mc_run
 9 "slot 9"
 0 "slot 0"
 [ "screenblocks 10"
-] "screenblocks 12"
-mwheelleft invprev
-mwheelright invnext
+] "screenblocks 11"
+mwheelup invnext
+mwheeldown invprev
 q +attack
 e +altattack
 shift +speed
@@ -50,8 +50,8 @@ pause pause
 sysrq screenshot
 enter messagemode
 f12 spynext
-mwheeldown weapnext
-mwheelup weapprev
+mwheelleft weapprev
+mwheelright weapnext
 
 //Mouse
 mouse1 +attack
