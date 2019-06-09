@@ -18,8 +18,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker.
 * Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles and city roads.
 * It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, run and hide fast, as everyone will start trying to cheaply kill you.
-* Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. However, they will stilll be used in Time Attack and Boss Rush to limit the number of times you can lose in a single level 
-before the run forcibly resets. In other modes, you will lose a chunk of your score, which increases every time you lose a life on the same level.
+* Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. However, they will stilll be used in Time Attack and Boss Rush to limit the number of times you can lose in a single level before the run forcibly resets. In other modes, you will lose a chunk of your score, which increases every time you lose a life on the same level.
 * Added a new red-striped variant of the falling platform, which falls automatically after 2-4 seconds, depending on difficulty. These are more faithful to the falling platforms' inspiration, Sonic Robo Blast 2.
 * Coins stored in Jane's bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
@@ -28,6 +27,7 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * Xane's Drop Dash has been removed as it was pretty pointless.
 * (Most) springs now "freeze" the player to make it harder to accidentally break spring chains. Using your character's mid-air ability or landing on the ground will restore movement. It's intended that all springs behave this way.
 * Mary's ability meter regenerates at a variable rate depending on how fast you're moving. Stand still and it'll fill up very quickly, or run and it'll take forever to refill.
+* Object-group Spawner objects now behave in a more automatic manner! Rather than require keeping track of thing ID ranges, now this is all done behind the scenes with a slot system similar to falling platforms.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**! A shame, Jane will eventually be removed and the hut will somewhat have its purpose changed.
@@ -46,13 +46,12 @@ before the run forcibly resets. In other modes, you will lose a chunk of your sc
 * The "absolute value" (abs) function has been moved out of COMMON1.acs to mma_extra.acs, so it can now be used in any script file.
 * If the moving skybox is disabled in Uroboros (1-4), a fake, slow-moving tunnel is used for the background.
 * Removed USE key jumping on rails. This made no sense, so now only JUMP will make you jump when grinding.
-* The Command Master now has a third "call" to the HCPD officers in HCPD HQ, heard when picking up the second key. Overall, he has improved lines now, though they are still text-to-speech courtesy of Google Cloud.
 * Blue (or green, in the case of the bathroom) ceiling speakers are now in HCPD HQ, which are where the Command Master's voice comes from now. This is done so you can't escape the building then hear his reverb-heavy voice samples anywhere. The subtitles always appear, but at least now the speech doesn't follow you.
 * The Rooftop Battle Arena (now internally **ZBATTLE1** instead of **ARENA1**) now detects cheating using "kill monsters". If you use that cheat, the minigame will forcibly end with a red "you cheated" message when it advances to the next group of enemies to spawn. This is because it checks to see if the next wave is dead, which is normally impossible.
 * Teleporters now can play ambience upon teleporting to the orange end pad. This is also saved to the checkpoint.
 * Both cop colors shoot glowing magic, green bullets to reflect changes to their pistols, as they are now said to be armed with "MAGIC-FIRE-B" pistols, which form magic into high-density "bullets", which is what the player's gun will use as well once it's added, just with pink and blue bullets instead.
 * Cops normally wait a few times before they actually consider shooting at you, to prevent GZDoom from causing endless bullet spam, but now it's been changed so they wait four times in easy difficulty, but that drops to only *two* if in hard difficulty, making it an overall harder game.
-* Added a new debug CVAR to test out planned epilogue for Mary. If ***debug_epilogue*** is set to TRUE, all enemies are removed from levels. Other things are planned too, such as boss battles immediately advancing to the next level (since none of them will be there at that point), but for now the only special thing that's done is that the Command Master doesn't talk over the speakers in HCPD HQ
+* Added a new debug CVAR to test out planned epilogue. If ***debug_epilogue*** is set to TRUE, all enemies are removed from levels. Additionally, boss battles will be non-existent and some level events will no longer occur. 
 * Internally, footsteps (and the new landing sounds) use LANGUAGE (.lst) to look up the list of textures for each programmed "surface" type rather than a messy list in the "PlayFootstepSound" script.
 * New sounds were added for Mary/Xane landing! Now, rather than Mary saying "Ow!", a mini explosion sound plays, varying depending on what surface you land on. If you fall fast enough, a louder sound will play.
 * Springs now use a function, "CheckSpringWhitelist", which returns if the activator is on one of the lists. This simplifies the messy "CheckActorClass" if-checks in the spring scripts and makes it easier to mod, just like footstep sounds.
