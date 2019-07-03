@@ -245,8 +245,9 @@ FString M_GetConfigPath(bool for_reading)
 		return path;
 	}*/
 	
-	path = "";
-	path += "/" GAME_DIR;
+	//path = "";
+	//path += "/" GAME_DIR;
+	path = progdir;	//[XANE]Place your configuration file in your own directory, game.
 	CreatePath(path);
 	path += "/" GAMENAMELOWERCASE ".ini";
 

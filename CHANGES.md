@@ -1,4 +1,4 @@
-# Changes (for v1.75)
+# Changes (for v1.95)
 This is a list of any changes done to Mary's Magical Adventure since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
 * Disabled "HandleHealthEvents" script in the Small Hut, which fixes the player randomly dropping coins upon warping there for a second time after losing health in the level.
@@ -13,21 +13,22 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * You can actually fail in Battle Arenas again! Somehow, I broke the arenas using their own "death behavior", which made them use #0, which is the default, taking a life from the player. This means the only way the player could lose was by running out of time, not dying!
 * Each weapon must have three upgrades due to the new upgrade menu, so Mary's Umbrella now has a new upgrade, Charged Burst! When used, Mary holds her umbrella back. When released, Mary quickly hits the enemy up to five times, depending on how long it was held back.
 * Soap Boxes can be bought from Jane's Shop in packs of four! You can hold up to sixteen of them and place them anywhere to try catching enemies off-guard.
-* Jane now has animated sprites using her "old design". If Jane ever gets a new design like Mary, her sprites will be replaced.
-* You can now listen to the same radio "station" heard in City Street Run in Jane's Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
+* Jane now has animated sprites using her "old design". However, she's to be removed eventually when the first level is complete enough.
+* You can now listen to the same radio "station" heard in City Street Run in the Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
 * The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker.
 * Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles and city roads.
-* It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, run and hide fast, as everyone will start trying to cheaply kill you.
-* Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. However, they will stilll be used in Time Attack and Boss Rush to limit the number of times you can lose in a single level before the run forcibly resets. In other modes, you will lose a chunk of your score, which increases every time you lose a life on the same level.
-* Added a new red-striped variant of the falling platform, which falls automatically after 2-4 seconds, depending on difficulty. These are more faithful to the falling platforms' inspiration, Sonic Robo Blast 2.
-* Coins stored in Jane's bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
+* It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, hide! Watch out, as provoked enemies may remain stronger after they hear Mary cry until they are killed.
+* Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. They will eventually be completely removed once the new system for respawning players after falling into pits and drowning is programmed.
+* Added a new red-striped variant of the falling platform, which falls automatically after 2-4 seconds, depending on difficulty. These are more faithful to the falling platforms' behavior in Sonic Robo Blast 2, the game that inspired their addition here.
+* Coins stored in the bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
 * Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text, just like some games on consoles like the NES.
 * Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". This gives more fine control over Xane's flight, and gives him more of a flying advantage over the mostly-grounded Mary.
 * Xane's Drop Dash has been removed as it was pretty pointless.
 * (Most) springs now "freeze" the player to make it harder to accidentally break spring chains. Using your character's mid-air ability or landing on the ground will restore movement. It's intended that all springs behave this way.
 * Mary's ability meter regenerates at a variable rate depending on how fast you're moving. Stand still and it'll fill up very quickly, or run and it'll take forever to refill.
-* Object-group Spawner objects now behave in a more automatic manner! Rather than require keeping track of thing ID ranges, now this is all done behind the scenes with a slot system similar to falling platforms.
+* Object-group Spawner objects now behave in a more automatic manner! Rather than require keeping track of thing ID ranges, now this is all done behind the scenes with a slot system similar to falling platforms. Of course, don't go using their thing ID ranges or you may start seeing the objects disappearing...
+* Level title cards have been updated! They are now simpler, only shown at the bottom-left corner of the screen, and look less like a Sonic zone title now.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**! A shame, Jane will eventually be removed and the hut will somewhat have its purpose changed.
@@ -41,7 +42,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * After Mary is hurt, a third, purple "pain" meter appears until she has recovered from the pain. If this meter fills up, Mary will forcibly cry to let out her stored pain. If the player forces Mary to cry, the meter will disappear, as if she did it herself.
 * Replaced some openInput variable checks to use verisons that aren't affected by players' frozen statuses. This removes the need for the psuedo-freeze that happens when viewing the minigame menu.
 * Due to changed priorities relating to minigames, the only minigame that is guaranteed to end up in the final game is Battle Arena. Therefore, the platform in the middle of the room in Jane's Hut now serves as the entrance to the minigame, moving down after a destination is chosen.
-* Added ***-1*** as a valid number for the ***xane_lowend*** CVAR. When this is chosen, the roads in City Street Run become reflective, which will not happen on normal (0) and performance (1) settings. This is due to even my gaming laptop lagging when the reflective roads are in sight and I would look to the opposite side of the open city area.
+* Added ***-1*** as a valid number for the ***xane_lowend*** CVAR. When this is chosen, the roads in City Street Run (1-3) become reflective, which doesn't happen otherwise. This is a "high-end" value, which enables more laggy effects.
 * More lights and reflective surfaces have been overall added to City Street Run. Additionally, a new room was added to the building with the walkway.
 * The "absolute value" (abs) function has been moved out of COMMON1.acs to mma_extra.acs, so it can now be used in any script file.
 * If the moving skybox is disabled in Uroboros (1-4), a fake, slow-moving tunnel is used for the background.
