@@ -1,4 +1,4 @@
-# Changes (for v1.95)
+# Changes (for v1.97)
 This is a list of any changes done to Mary's Magical Adventure since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
 * Disabled "HandleHealthEvents" script in the Small Hut, which fixes the player randomly dropping coins upon warping there for a second time after losing health in the level.
@@ -15,20 +15,21 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Soap Boxes can be bought from Jane's Shop in packs of four! You can hold up to sixteen of them and place them anywhere to try catching enemies off-guard.
 * Jane now has animated sprites using her "old design". However, she's to be removed eventually when the first level is complete enough.
 * You can now listen to the same radio "station" heard in City Street Run in the Hut; Just cycle through all of the songs in the game using her radio and it will change to that! Do note that since the script that handles this is only on the level with Jane's Hut, 1-1 will instead play default music if none is chosen.
-* The teleporter's controls are being moved to Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker.
+* The teleporter's controls are now in Xane's laptop; Push USE in front of it to start using it then choose Teleport-Hacker. This is to be reverted **back** into the old system eventually, since the laptop is not that fun to use.
 * Thanks to ***dpJudas***' parallax shader, some textures have "depth" to them, most obvious on checker tiles and city roads.
 * It was removed previously for **good reason**, but Mary now cries if hurt too much during combat, which will anger all enemies around you! If this happens, hide! Watch out, as provoked enemies may remain stronger after they hear Mary cry until they are killed.
 * Lives and game overs have been removed! They are a dated game mechanic so they are no longer in use. They will eventually be completely removed once the new system for respawning players after falling into pits and drowning is programmed.
 * Added a new red-striped variant of the falling platform, which falls automatically after 2-4 seconds, depending on difficulty. These are more faithful to the falling platforms' behavior in Sonic Robo Blast 2, the game that inspired their addition here.
 * Coins stored in the bank are now lost to the void after every level, with the amount increasing the more are in it, up to a maximum of fifty coins.
 * In addition, one coin is lost to the void every fifty seconds when in normal levels.
-* Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text, just like some games on consoles like the NES.
+* Cutscenes are in the game, one seen when entering Uroboros (1-4) and another when you meet the first boss, the Command Master. Obviously, graphics are very incomplete. Dialogue is not, though. These support images and 15 FPS "videos" along with text. Eventually, there will be a cutscene that includes a video by an animator.
 * Xane's multiple jumps are now way less like Kirby, behaving more like "flapping wings". This gives more fine control over Xane's flight, and gives him more of a flying advantage over the mostly-grounded Mary.
 * Xane's Drop Dash has been removed as it was pretty pointless.
 * (Most) springs now "freeze" the player to make it harder to accidentally break spring chains. Using your character's mid-air ability or landing on the ground will restore movement. It's intended that all springs behave this way.
 * Mary's ability meter regenerates at a variable rate depending on how fast you're moving. Stand still and it'll fill up very quickly, or run and it'll take forever to refill.
 * Object-group Spawner objects now behave in a more automatic manner! Rather than require keeping track of thing ID ranges, now this is all done behind the scenes with a slot system similar to falling platforms. Of course, don't go using their thing ID ranges or you may start seeing the objects disappearing...
 * Level title cards have been updated! They are now simpler, only shown at the bottom-left corner of the screen, and look less like a Sonic zone title now.
+* To go with the point above, additionally, loading screens are now better-looking! A picture of the level you're going to fades in while the level loads, so there's something pretty to watch until it's done.
 ## Minor
 * Xane's thrown hammer now is affected by gravity. It has less gravity for a few split-seconds but falls quicker after that.
 * Jane's Shop is now complete; The last two slots were filled by **Soap Box ×4** and **Ability Upgrade**! A shame, Jane will eventually be removed and the hut will somewhat have its purpose changed.
