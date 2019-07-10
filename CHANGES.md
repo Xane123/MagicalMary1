@@ -3,6 +3,7 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 ## Bug-fixes
 * None
 ## Major
-* None
+* City Street Run (1-3) is expanded, now including a beach area and brand new tunnel, which will connect to 1-2.
 ## Minor
-* None
+* Juice Cylinders now give two uses each, representing how Mary only drinks half each drink.
+* Altered Orange Juice voxel model to use the correct straw color and heart shape. Also, added Aplpe Juice recolor, which won't be seen in-game until the girl is added.
