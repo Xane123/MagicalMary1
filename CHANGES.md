@@ -1,9 +1,9 @@
 # Changes (for v2.1)
 This is a list of any changes done to Mary's Magical Adventure since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
-* None
+* It's unknown if this fixed anything, but now springs lock the player twice across two tics. This is in an attempt to fix a bug where the lock would immediately get removed due to the player being on-ground right as it's set. Boost panels are basically broken now, though.
 ## Major
-* City Street Run (1-3) is expanded, now including a beach area and brand new tunnel, which will connect to 1-2.
+* Checkpoints no longer store much information, now just storing the current music and the respawn point thing ID. Additionally, that thing ID is only used if the player can't be warped to their "last safe position", which was previously only used when warping back from the Small Hut or Special Stage.
+* Level start points are no longer scripted warps; Before this version, your character would spawn in a small black room before being warped to where they start the level. This could fail, leading to the infamous "Black Room Glitch". Now, if nothing happens, the player will always appear at the beginning of the level, as intended. This also allows levels to have multiple starting points naturally, like when transitioning to and from the planned hub area, which will connect directly to the first level. Xane's special level starting point (TID 1995) will still use the old method, because it's so rarely used.
 ## Minor
-* Juice Cylinders now give two uses each, representing how Mary only drinks half each drink.
-* Altered Orange Juice voxel model to use the correct straw color and heart shape. Also, added Aplpe Juice recolor, which won't be seen in-game until the girl is added.
+* In 1-3, the beach area was basically removed; It's still there (though most of it is missing now), and the bridge that comes from 1-2 is now visible from the windows of the original intro building.
