@@ -18,3 +18,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Rain ambience no longer uses a separate low frequency and high frequency version of the sounds. Instead, the low frequency plays around the player as before while *normal* frequency sounds play sround the player, as stated abvoe.
 * Ambience script was updated to use the ambient sound object (TID 1080 + player number) that the low-frequency rain and thunder sounds use.
 * The ambiience script uses a much easier to edit system than before, now not a linear list of sounds.
+* Dropped coins play more realistic sounds upon hitting the ground, with longer "ching" sounds if hitting it quickly. Also, dropped coins have height variation now, so coins will look more unique and less like clones now.
