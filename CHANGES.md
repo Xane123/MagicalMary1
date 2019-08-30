@@ -21,3 +21,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Ambience script was updated to use the ambient sound object (TID 1080 + player number) that the low-frequency rain and thunder sounds use.
 * The ambiience script uses a much easier to edit system than before, now not a linear list of sounds.
 * Corrected internal order of coins in the "AddCPowerupTics" ACS script.
+* Dropped coins play more realistic sounds upon hitting the ground, with longer "ching" sounds if hitting it quickly. Also, dropped coins have height variation now, so coins will look more unique and less like clones now.
