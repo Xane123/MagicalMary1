@@ -12,9 +12,12 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Removed "auto wind" since I can't think of any real good use of it. As a result, wind only now moves in directions scripted during levels and is used more for currents more than wind.
 * Also removed arbitrary disabling of movememnt when gliding using Mary's umbrella in higher wind speeds. The wind alone makes it hard to move against while gliding, so this artificial limitation isn't necessary.
 * Xane's multiple flaps now have an "automatic" mode. Hold the jump button anytime in the air and Xane will automatically flap at an optimal rate until it's released. This will save your fingers from possibly hurting if you play this game a lot.
+* A new status bar is (being) added, replacing the old one. The new status bar uses bigger meters that have the game's visual style.
+* Armor was added! The pwoer meter previously used armor internally, but now it uses its own inventory item.
 ## Minor
 * In 1-3, the beach area was basically removed; It's still there (though most of it is missing now), and the bridge that comes from 1-2 is now visible from the windows of the original intro building.
 * Added a "detection" mechanic to PWPD HQ. Upon entering, H-Computer alerts everyone to your presence, then warns about detectors scanning your character. Little black areas with red lasers firing from them are in some hallways, and if you don't jump over the laser, you'll be "scanned". In the future, this may continuously sound alarms, making all enemies alerted non-stop.
 * Rain ambience no longer uses a separate low frequency and high frequency version of the sounds. Instead, the low frequency plays around the player as before while *normal* frequency sounds play sround the player, as stated abvoe.
 * Ambience script was updated to use the ambient sound object (TID 1080 + player number) that the low-frequency rain and thunder sounds use.
 * The ambiience script uses a much easier to edit system than before, now not a linear list of sounds.
+* Corrected internal order of coins in the "AddCPowerupTics" ACS script.
