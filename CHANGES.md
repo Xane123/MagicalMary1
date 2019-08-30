@@ -22,3 +22,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The ambiience script uses a much easier to edit system than before, now not a linear list of sounds.
 * Corrected internal order of coins in the "AddCPowerupTics" ACS script.
 * Dropped coins play more realistic sounds upon hitting the ground, with longer "ching" sounds if hitting it quickly. Also, dropped coins have height variation now, so coins will look more unique and less like clones now.
+* A new song was added (#15), which plays in Special Stages, replacing #14, "The Peaceful Dimension".
