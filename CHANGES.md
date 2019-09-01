@@ -23,3 +23,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Corrected internal order of coins in the "AddCPowerupTics" ACS script.
 * Dropped coins play more realistic sounds upon hitting the ground, with longer "ching" sounds if hitting it quickly. Also, dropped coins have height variation now, so coins will look more unique and less like clones now.
 * A new song was added (#15), which plays in Special Stages, replacing #14, "The Peaceful Dimension".
+* Special Stages now require collecting large magic stars instead of ordinary coins.
+* The "endless Special Stage" event flag (array index [3]) was added, which will be used before the final boss eventually. When finished, this will lock the player into the Special Stage chain until all seven are completed.
