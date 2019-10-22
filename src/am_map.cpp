@@ -41,7 +41,6 @@
 #include "p_setup.h"
 #include "c_bind.h"
 #include "serializer.h"
-#include "r_renderer.h"
 #include "r_sky.h"
 #include "sbar.h"
 #include "d_player.h"
@@ -145,21 +144,21 @@ CUSTOM_CVAR(Int, am_cheat, 0, 0)
 }
 
 
-CVAR (Int,   am_rotate,				1,			CVAR_ARCHIVE);
-CVAR (Int,   am_overlay,			2,			CVAR_ARCHIVE);
-CVAR (Bool,  am_showsecrets,		true,		CVAR_ARCHIVE);
-CVAR (Bool,  am_showmonsters,		true,		CVAR_ARCHIVE);
-CVAR (Bool,  am_showitems,			false,		CVAR_ARCHIVE);
-CVAR (Bool,  am_showtime,			true,		CVAR_ARCHIVE);
-CVAR (Bool,  am_showtotaltime,		false,		CVAR_ARCHIVE);
-CVAR (Int,   am_colorset,			0,			CVAR_ARCHIVE);
-CVAR (Bool,  am_customcolors,		true,		CVAR_ARCHIVE);
-CVAR (Int,   am_map_secrets,		1,			CVAR_ARCHIVE);
-CVAR (Int,	 am_drawmapback,		1,			CVAR_ARCHIVE);
-CVAR (Bool,  am_showkeys,			true,		CVAR_ARCHIVE);
-CVAR (Int,   am_showtriggerlines,	0,			CVAR_ARCHIVE);
-CVAR (Int,   am_showthingsprites,	0,			CVAR_ARCHIVE);
-CVAR (Bool,	 am_showkeys_always,	false,		CVAR_ARCHIVE);
+CVAR(Int,	am_rotate,				1,		CVAR_ARCHIVE);
+CVAR(Int,	am_overlay,				2,		CVAR_ARCHIVE);
+CVAR(Bool,	am_showsecrets,			true,	CVAR_ARCHIVE);
+CVAR(Bool,	am_showmonsters,		true,	CVAR_ARCHIVE);
+CVAR(Bool,	am_showitems,			false,	CVAR_ARCHIVE);
+CVAR(Bool,	am_showtime,			true,	CVAR_ARCHIVE);
+CVAR(Bool,	am_showtotaltime,		false,	CVAR_ARCHIVE);
+CVAR(Int,	am_colorset,			0,		CVAR_ARCHIVE);
+CVAR(Bool,	am_customcolors,		true,	CVAR_ARCHIVE);
+CVAR(Int,	am_map_secrets,			1,		CVAR_ARCHIVE);
+CVAR(Int,	am_drawmapback,			1,		CVAR_ARCHIVE);
+CVAR(Bool,	am_showkeys,			true,	CVAR_ARCHIVE);
+CVAR(Int,	am_showtriggerlines,	0,		CVAR_ARCHIVE);
+CVAR(Int,	am_showthingsprites,	0,		CVAR_ARCHIVE);
+CVAR (Bool,	am_showkeys_always,		false,	CVAR_ARCHIVE);
 
 CUSTOM_CVAR(Int, am_emptyspacemargin, 0, CVAR_ARCHIVE)
 {

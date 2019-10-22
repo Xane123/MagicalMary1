@@ -51,7 +51,6 @@
 #include "cmdlib.h"
 #include "g_level.h"
 #include "v_video.h"
-#include "r_renderer.h"
 #include "r_sky.h"
 #include "vm.h"
 #include "image.h"
@@ -444,7 +443,7 @@ bool FTextureManager::OkForLocalization(FTextureID texnum, const char *substitut
 	
 	// Mode 3 must also reject substitutions for non-IWAD content.
 	int file = Wads.GetLumpFile(Textures[texnum.GetIndex()].Texture->SourceLump);
-	if (file > Wads.GetIwadNum()) return true;
+	if (file > Wads.GetMaxIwadNum()) return true;
 
 	return false;
 }
@@ -928,6 +927,7 @@ void FTextureManager::AddTexturesForWad(int wadnum, FMultipatchTextureBuilder &b
 {
 	int firsttexture = Textures.Size();
 	int lumpcount = Wads.GetNumLumps();
+	bool iwad = wadnum >= Wads.GetIwadNum() && wadnum <= Wads.GetMaxIwadNum();
 
 	FirstTextureForFile.Push(firsttexture);
 
@@ -980,16 +980,33 @@ void FTextureManager::AddTexturesForWad(int wadnum, FMultipatchTextureBuilder &b
 			if (Wads.CheckLumpName(i, "BLOCKMAP")) continue;
 			if (Wads.CheckLumpName(i, "BEHAVIOR")) continue;
 
+			bool force = false;
 			// Don't bother looking at this lump if something later overrides it.
-			if (Wads.CheckNumForName(Name, ns_graphics) != i) continue;
+			if (Wads.CheckNumForName(Name, ns_graphics) != i)
+			{
+				if (iwad)
+				{ 
+					// We need to make an exception for font characters of the SmallFont coming from the IWAD to be able to construct the original font.
+					if (Name.IndexOf("STCFN") != 0 && Name.IndexOf("FONTA") != 0) continue;
+					force = true;
+				}
+				else continue;
+			}
 
 			// skip this if it has already been added as a wall patch.
-			if (CheckForTexture(Name, ETextureType::WallPatch, 0).Exists()) continue;
+			if (!force && CheckForTexture(Name, ETextureType::WallPatch, 0).Exists()) continue;
 		}
 		else if (ns == ns_graphics)
 		{
-			// Don't bother looking this lump if something later overrides it.
-			if (Wads.CheckNumForName(Name, ns_graphics) != i) continue;
+			if (Wads.CheckNumForName(Name, ns_graphics) != i)
+			{
+				if (iwad)
+				{
+					// We need to make an exception for font characters of the SmallFont coming from the IWAD to be able to construct the original font.
+					if (Name.IndexOf("STCFN") != 0 && Name.IndexOf("FONTA") != 0) continue;
+				}
+				else continue;
+			}
 		}
 		else if (ns >= ns_firstskin)
 		{
@@ -1432,14 +1449,14 @@ void FTextureManager::AdjustSpriteOffsets()
 
 	for (int i = 0; i < numtex; i++)
 	{
-		if (Wads.GetLumpFile(i) > Wads.GetIwadNum()) break; // we are past the IWAD
-		if (Wads.GetLumpNamespace(i) == ns_sprites && Wads.GetLumpFile(i) == Wads.GetIwadNum())
+		if (Wads.GetLumpFile(i) > Wads.GetMaxIwadNum()) break; // we are past the IWAD
+		if (Wads.GetLumpNamespace(i) == ns_sprites && Wads.GetLumpFile(i) >= Wads.GetIwadNum() && Wads.GetLumpFile(i) <= Wads.GetMaxIwadNum())
 		{
 			char str[9];
 			Wads.GetLumpName(str, i);
 			str[8] = 0;
 			FTextureID texid = TexMan.CheckForTexture(str, ETextureType::Sprite, 0);
-			if (texid.isValid() && Wads.GetLumpFile(GetTexture(texid)->SourceLump) > Wads.GetIwadNum())
+			if (texid.isValid() && Wads.GetLumpFile(GetTexture(texid)->SourceLump) > Wads.GetMaxIwadNum())
 			{
 				// This texture has been replaced by some PWAD.
 				memcpy(&sprid, str, 4);
@@ -1481,9 +1498,9 @@ void FTextureManager::AdjustSpriteOffsets()
 				if (lumpnum >= 0 && lumpnum < Wads.GetNumLumps())
 				{
 					int wadno = Wads.GetLumpFile(lumpnum);
-					if ((iwadonly && wadno == Wads.GetIwadNum()) || (!iwadonly && wadno == ofslumpno))
+					if ((iwadonly && wadno >= Wads.GetIwadNum() && wadno <= Wads.GetMaxIwadNum()) || (!iwadonly && wadno == ofslumpno))
 					{
-						if (wadno == Wads.GetIwadNum() && !forced && iwadonly)
+						if (wadno >= Wads.GetIwadNum() && wadno <= Wads.GetMaxIwadNum() && !forced && iwadonly)
 						{
 							memcpy(&sprid, &tex->Name[0], 4);
 							if (donotprocess.CheckKey(sprid)) continue;	// do not alter sprites that only get partially replaced.

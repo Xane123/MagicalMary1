@@ -106,7 +106,24 @@ class OptionMenu : Menu
 		mParentMenu = parent;
 		mDesc = desc;
 		DontDim = desc.mDontDim;
-		if (mDesc != NULL && mDesc.mSelectedItem == -1) mDesc.mSelectedItem = FirstSelectable();
+
+		let itemCount = mDesc.mItems.size();
+		if (itemCount > 0)
+		{
+			let last = mDesc.mItems[itemCount - 1];
+			bool lastIsText = (last is "OptionMenuItemStaticText");
+			if (lastIsText)
+			{
+				String text = last.mLabel;
+				bool lastIsSpace = (text == "" || text == " ");
+				if (lastIsSpace)
+				{
+					mDesc.mItems.Pop();
+				}
+			}
+		}
+
+		if (mDesc.mSelectedItem == -1) mDesc.mSelectedItem = FirstSelectable();
 		mDesc.CalcIndent();
 
 		// notify all items that the menu was just created.
@@ -142,18 +159,15 @@ class OptionMenu : Menu
 
 	int FirstSelectable()
 	{
-		if (mDesc != NULL)
+		// Go down to the first selectable item
+		int i = -1;
+		do
 		{
-			// Go down to the first selectable item
-			int i = -1;
-			do
-			{
-				i++;
-			}
-			while (i < mDesc.mItems.Size() && !mDesc.mItems[i].Selectable());
-			if (i>=0 && i < mDesc.mItems.Size()) return i;
+			i++;
 		}
-		return -1;
+		while (i < mDesc.mItems.Size() && !mDesc.mItems[i].Selectable());
+		if (i>=0 && i < mDesc.mItems.Size()) return i;
+		else return -1;
 	}
 
 	//=============================================================================
@@ -225,9 +239,10 @@ class OptionMenu : Menu
 
 					if (y <= 0)
 					{
-						if (mDesc.mFont && mDesc.mTitle.Length() > 0)
+						let font = generic_ui || !mDesc.mFont? NewSmallFont : mDesc.mFont;
+						if (font && mDesc.mTitle.Length() > 0)
 						{
-							y = -y + mDesc.mFont.GetHeight();
+							y = -y + font.GetHeight();
 						}
 						else
 						{
@@ -422,13 +437,14 @@ class OptionMenu : Menu
 
 		if (y <= 0)
 		{
-			if (mDesc.mFont && mDesc.mTitle.Length() > 0)
+			let font = generic_ui || !mDesc.mFont? NewSmallFont : mDesc.mFont;
+			if (font && mDesc.mTitle.Length() > 0)
 			{
 				let tt = Stringtable.Localize(mDesc.mTitle);
-				screen.DrawText (mDesc.mFont, OptionMenuSettings.mTitleColor,
-					(screen.GetWidth() - mDesc.mFont.StringWidth(tt) * CleanXfac_1) / 2, 10*CleanYfac_1,
+				screen.DrawText (font, OptionMenuSettings.mTitleColor,
+					(screen.GetWidth() - font.StringWidth(tt) * CleanXfac_1) / 2, 10*CleanYfac_1,
 					tt, DTA_CleanNoMove_1, true);
-				y = -y + mDesc.mFont.GetHeight();
+				y = -y + font.GetHeight();
 			}
 			else
 			{
@@ -459,7 +475,7 @@ class OptionMenu : Menu
 			{
 				if (((MenuTime() % 8) < 6) || GetCurrentMenu() != self)
 				{
-					DrawOptionText(cur_indent + 3 * CleanXfac_1, y, Font.CR_UNTRANSLATED, "◄");
+					DrawOptionText(cur_indent + 3 * CleanXfac_1, y, OptionMenuSettings.mFontColorSelection, "◄");
 				}
 			}
 			y += fontheight;
@@ -471,11 +487,11 @@ class OptionMenu : Menu
 
 		if (CanScrollUp)
 		{
-			DrawOptionText(screen.GetWidth() - 11 * CleanXfac_1, ytop, Font.CR_UNTRANSLATED, "▲");
+			DrawOptionText(screen.GetWidth() - 11 * CleanXfac_1, ytop, OptionMenuSettings.mFontColorSelection, "▲");
 		}
 		if (CanScrollDown)
 		{
-			DrawOptionText(screen.GetWidth() - 11 * CleanXfac_1 , y - 8*CleanYfac_1, Font.CR_UNTRANSLATED, "▼");
+			DrawOptionText(screen.GetWidth() - 11 * CleanXfac_1 , y - 8*CleanYfac_1, OptionMenuSettings.mFontColorSelection, "▼");
 		}
 		Super.Drawer();
 	}

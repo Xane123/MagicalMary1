@@ -1320,6 +1320,8 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 					}
 				}
 				
+				PField *f = nullptr;
+
 				if (varflags & VARF_Native)
 				{
 					if (varflags & VARF_Meta)
@@ -1344,19 +1346,14 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 						{
 							// for bit fields the type must point to the source variable.
 							if (fd->BitValue != 0) thisfieldtype = fd->FieldSize == 1 ? TypeUInt8 : fd->FieldSize == 2 ? TypeUInt16 : TypeUInt32;
-							auto f = type->AddNativeField(name->Name, thisfieldtype, fd->FieldOffset, varflags, fd->BitValue);
-							if (field->Flags & (ZCC_Version | ZCC_Deprecated)) f->mVersion = field->Version;
+							f = type->AddNativeField(name->Name, thisfieldtype, fd->FieldOffset, varflags, fd->BitValue);
 						}
 						else
 						{
 
 							// This is a global variable.
 							if (fd->BitValue != 0) thisfieldtype = fd->FieldSize == 1 ? TypeUInt8 : fd->FieldSize == 2 ? TypeUInt16 : TypeUInt32;
-							PField *f = Create<PField>(name->Name, thisfieldtype, varflags | VARF_Native | VARF_Static, fd->FieldOffset, fd->BitValue);
-							if (f->Flags & (ZCC_Version | ZCC_Deprecated))
-							{
-								f->mVersion = field->Version;
-							}
+							f = Create<PField>(name->Name, thisfieldtype, varflags | VARF_Native | VARF_Static, fd->FieldOffset, fd->BitValue);
 
 							if (OutNamespace->Symbols.AddSymbol(f) == nullptr)
 							{ // name is already in use
@@ -1372,12 +1369,23 @@ bool ZCCCompiler::CompileFields(PContainerType *type, TArray<ZCC_VarDeclarator *
 				}
 				else if (type != nullptr)
 				{
-					auto f = type->AddField(name->Name, thisfieldtype, varflags);
-					if (field->Flags & (ZCC_Version | ZCC_Deprecated)) f->mVersion = field->Version;
+					f = type->AddField(name->Name, thisfieldtype, varflags);
 				}
 				else
 				{
 					Error(field, "Cannot declare non-native global variables. Tried to declare %s", FName(name->Name).GetChars());
+				}
+
+				assert(f != nullptr);
+
+				if (field->Flags & (ZCC_Version | ZCC_Deprecated))
+				{
+					f->mVersion = field->Version;
+
+					if (field->DeprecationMessage != nullptr)
+					{
+						f->DeprecationMessage = *field->DeprecationMessage;
+					}
 				}
 			}
 			name = static_cast<ZCC_VarName*>(name->SiblingNext);
@@ -2752,6 +2760,11 @@ void ZCCCompiler::CompileFunction(ZCC_StructWork *c, ZCC_FuncDeclarator *f, bool
 		sym->AddVariant(NewPrototype(rets, args), argflags, argnames, afd == nullptr ? nullptr : *(afd->VMPointer), varflags, useflags);
 		c->Type()->Symbols.ReplaceSymbol(sym);
 
+		if (f->DeprecationMessage != nullptr)
+		{
+			sym->Variants[0].DeprecationMessage = *f->DeprecationMessage;
+		}
+
 		auto vcls = PType::toClass(c->Type());
 		auto cls = vcls ? vcls->Descriptor : nullptr;
 		PFunction *virtsym = nullptr;
@@ -2985,6 +2998,11 @@ FxExpression *ZCCCompiler::SetupActionFunction(PClass *cls, ZCC_TreeNode *af, in
 					int comboflags = afd->Variants[0].UseFlags & StateFlags;
 					if (comboflags == StateFlags)	// the function must satisfy all the flags the state requires
 					{
+						if ((afd->Variants[0].Flags & VARF_Private) && afd->OwningClass != cls->VMType)
+						{
+							Error(af, "%s is declared private and not accessible", FName(id->Identifier).GetChars());
+						}
+						
 						return new FxVMFunctionCall(new FxSelf(*af), afd, argumentlist, *af, false);
 					}
 					else

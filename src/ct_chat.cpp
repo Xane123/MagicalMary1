@@ -41,6 +41,7 @@
 #include "v_video.h"
 #include "utf8.h"
 #include "gstrings.h"
+#include "vm.h"
 
 enum
 {
@@ -73,7 +74,6 @@ static void CT_BackSpace ();
 static void ShoveChatStr (const char *str, uint8_t who);
 static bool DoSubstitution (FString &out, const char *in);
 
-static int CharLen;
 static TArray<uint8_t> ChatQueue;
 
 CVAR (String, chatmacro1, "I'm ready to kick butt!", CVAR_ARCHIVE)
@@ -113,7 +113,6 @@ CVAR (Bool, chat_substitution, false, CVAR_ARCHIVE)
 void CT_Init ()
 {
 	ChatQueue.Clear();
-	CharLen = 0;
 	chatmodeon = 0;
 }
 
@@ -235,8 +234,30 @@ void CT_PasteChat(const char *clip)
 void CT_Drawer (void)
 {
 	FFont *displayfont = NewConsoleFont;
+
+	if (players[consoleplayer].camera != NULL &&
+		(Button_ShowScores.bDown ||
+		 players[consoleplayer].camera->health <= 0 ||
+		 SB_ForceActive) &&
+		 // Don't draw during intermission, since it has its own scoreboard in wi_stuff.cpp.
+		 gamestate != GS_INTERMISSION)
+	{
+		HU_DrawScores (&players[consoleplayer]);
+	}
 	if (chatmodeon)
 	{
+		// [MK] allow the status bar to take over chat prompt drawing
+		bool skip = false;
+		IFVIRTUALPTR(StatusBar, DBaseStatusBar, DrawChat)
+		{
+			FString txt = ChatQueue;
+			VMValue params[] = { (DObject*)StatusBar, &txt };
+			int rv;
+			VMReturn ret(&rv);
+			VMCall(func, params, countof(params), &ret, 1);
+			if (!!rv) return;
+		}
+
 		FStringf prompt("%s ", GStrings("TXT_SAY"));
 		int x, scalex, y, promptwidth;
 
@@ -270,16 +291,6 @@ void CT_Drawer (void)
 		screen->DrawText (displayfont, CR_GREY, promptwidth, y, printstr, 
 			DTA_VirtualWidth, screen_width, DTA_VirtualHeight, screen_height, DTA_KeepRatio, true, TAG_DONE);
 	}
-
-	if (players[consoleplayer].camera != NULL &&
-		(Button_ShowScores.bDown ||
-		 players[consoleplayer].camera->health <= 0 ||
-		 SB_ForceActive) &&
-		 // Don't draw during intermission, since it has its own scoreboard in wi_stuff.cpp.
-		 gamestate != GS_INTERMISSION)
-	{
-		HU_DrawScores (&players[consoleplayer]);
-	}
 }
 
 //===========================================================================
@@ -290,7 +301,7 @@ void CT_Drawer (void)
 
 static void CT_AddChar (int c)
 {
-	if (CharLen < QUEUESIZE-2)
+	if (ChatQueue.Size() < QUEUESIZE-2)
 	{
 		int size;
 		auto encode = MakeUTF8(c, &size);
@@ -300,7 +311,6 @@ static void CT_AddChar (int c)
 			{
 				ChatQueue.Push(encode[i]);
 			}
-			CharLen++;
 		}
 	}
 }
@@ -314,12 +324,11 @@ static void CT_AddChar (int c)
 
 static void CT_BackSpace ()
 {
-	if (CharLen)
+	if (ChatQueue.Size())
 	{
 		int endpos = ChatQueue.Size() - 1;
 		while (endpos > 0 && ChatQueue[endpos] >= 0x80 && ChatQueue[endpos] < 0xc0) endpos--;
 		ChatQueue.Clamp(endpos);
-		CharLen--;
 	}
 }
 

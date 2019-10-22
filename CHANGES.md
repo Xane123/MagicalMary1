@@ -35,3 +35,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Support for different foliage colors per level has been implemented. Currently, tree leaf clusters distant "imposter" tree renders change color accordingly, but leaves are still all green.
 * Menu sounds were changed (again). I just can't decide how things should sound in this game!
 * Juice inside of half-drank juice cylinders now can go stale if not drank within 90 (orange) or 120 (apple) seconds. If it goes stale, the remaining juice in he container is forcibly removed from your inventory.
+* Proximity mines now are tinted slightly orange around the mini-thrusters at each corner, a bit of fake lighting.

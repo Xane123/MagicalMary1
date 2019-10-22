@@ -82,6 +82,8 @@ static const FLOP FxFlops[] =
 	{ NAME_CosH,	FLOP_COSH,		[](double v) { return g_cosh(v); } },
 	{ NAME_SinH,	FLOP_SINH,		[](double v) { return g_sinh(v); } },
 	{ NAME_TanH,	FLOP_TANH,		[](double v) { return g_tanh(v); } },
+
+	{ NAME_Round,	FLOP_ROUND,		[](double v) { return round(v);  } },
 };
 
 
@@ -4835,7 +4837,7 @@ ExpEmit FxConditional::Emit(VMFunctionBuilder *build)
 			// If this is a local variable we need another register for the result.
 			if (trueop.Fixed)
 			{
-				out = ExpEmit(build, trueop.RegType);
+				out = ExpEmit(build, trueop.RegType, trueop.RegCount);
 				build->Emit(truex->ValueType->GetMoveOp(), out.RegNum, trueop.RegNum, 0);
 			}
 			else out = trueop;
@@ -6127,18 +6129,17 @@ FxExpression *FxIdentifier::Resolve(FCompileContext& ctx)
 			{
 				if (sym->mVersion <= ctx.Version)
 				{
-					if (!(ctx.Function->Variants[0].Flags & VARF_Deprecated) && Wads.GetLumpFile(ctx.Lump) == 0)
-					{
-						ScriptPosition.Message(MSG_WARNING, "Accessing deprecated global variable %s - deprecated since %d.%d.%d", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision);
-					}
-					else
-					{
-						// Allow use of deprecated symbols in deprecated functions of the internal code. This is meant to allow deprecated code to remain as it was, 
-						// even if it depends on some deprecated symbol. 
-						// The main motivation here is to keep the deprecated static functions accessing the global level variable as they were.
-						// Print these only if debug output is active and at the highest verbosity level.
-						ScriptPosition.Message(MSG_DEBUGMSG, TEXTCOLOR_BLUE "Accessing deprecated global variable %s - deprecated since %d.%d.%d", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision);
-					}
+					// Allow use of deprecated symbols in deprecated functions of the internal code. This is meant to allow deprecated code to remain as it was, 
+					// even if it depends on some deprecated symbol. 
+					// The main motivation here is to keep the deprecated static functions accessing the global level variable as they were.
+					// Print these only if debug output is active and at the highest verbosity level.
+					const bool internal = (ctx.Function->Variants[0].Flags & VARF_Deprecated) && Wads.GetLumpFile(ctx.Lump) == 0;
+					const FString &deprecationMessage = vsym->DeprecationMessage;
+
+					ScriptPosition.Message(internal ? MSG_DEBUGMSG : MSG_WARNING, 
+						"%sAccessing deprecated global variable %s - deprecated since %d.%d.%d%s%s", internal ? TEXTCOLOR_BLUE : "",
+						sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision,
+						deprecationMessage.IsEmpty() ? "" : ", ", deprecationMessage.GetChars());
 				}
 			}
 			
@@ -6234,7 +6235,9 @@ FxExpression *FxIdentifier::ResolveMember(FCompileContext &ctx, PContainerType *
 			{
 				if (sym->mVersion <= ctx.Version)
 				{
-					ScriptPosition.Message(MSG_WARNING, "Accessing deprecated member variable %s - deprecated since %d.%d.%d", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision);
+					const FString &deprecationMessage = vsym->DeprecationMessage;
+					ScriptPosition.Message(MSG_WARNING, "Accessing deprecated member variable %s - deprecated since %d.%d.%d%s%s", sym->SymbolName.GetChars(), vsym->mVersion.major, vsym->mVersion.minor, vsym->mVersion.revision,
+						deprecationMessage.IsEmpty() ? "" : ", ", deprecationMessage.GetChars());
 				}
 			}
 
@@ -7126,7 +7129,15 @@ FxExpression *FxStructMember::Resolve(FCompileContext &ctx)
 		{
 			// since this is a vector, all potential things that may get here are single float or an xy-vector.
 			auto locvar = static_cast<FxLocalVariable *>(classx);
-			locvar->RegOffset = int(membervar->Offset / 8);
+			if (!(locvar->Variable->VarFlags & VARF_Out))
+			{
+				locvar->RegOffset = int(membervar->Offset / 8);
+			}
+			else
+			{
+				locvar->RegOffset = int(membervar->Offset);
+			}
+			
 			locvar->ValueType = membervar->Type;
 			classx = nullptr;
 			delete this;
@@ -7425,7 +7436,6 @@ ExpEmit FxArrayElement::Emit(VMFunctionBuilder *build)
 	{
 		bool ismeta = Array->ExprType == EFX_ClassMember && static_cast<FxClassMember*>(Array)->membervar->Flags & VARF_Meta;
 
-		arrayvar.Free(build);
 		start = ExpEmit(build, REGT_POINTER);
 		build->Emit(OP_LP, start.RegNum, arrayvar.RegNum, build->GetConstantInt(0));
 
@@ -7445,17 +7455,17 @@ ExpEmit FxArrayElement::Emit(VMFunctionBuilder *build)
 		arraymemberbase->membervar = origmembervar;
 		arraymemberbase->AddressRequested = origaddrreq;
 		Array->ValueType = origvaluetype;
+
+		arrayvar.Free(build);
 	}
 	else if (Array->ExprType == EFX_ArrayElement && Array->isStaticArray())
 	{
-		bool ismeta = Array->ExprType == EFX_ClassMember && static_cast<FxClassMember*>(Array)->membervar->Flags & VARF_Meta;
+		bound = ExpEmit(build, REGT_INT);
+		build->Emit(OP_LW, bound.RegNum, arrayvar.RegNum, build->GetConstantInt(myoffsetof(FArray, Count)));
 
 		arrayvar.Free(build);
 		start = ExpEmit(build, REGT_POINTER);
 		build->Emit(OP_LP, start.RegNum, arrayvar.RegNum, build->GetConstantInt(0));
-
-		bound = ExpEmit(build, REGT_INT);
-		build->Emit(OP_LW, bound.RegNum, arrayvar.RegNum, build->GetConstantInt(sizeof(void*)));
 
 		nestedarray = true;
 	}
@@ -7514,7 +7524,7 @@ ExpEmit FxArrayElement::Emit(VMFunctionBuilder *build)
 	else
 	{
 		ExpEmit indexv(index->Emit(build));
-		if (SizeAddr != ~0u)
+		if (SizeAddr != ~0u || nestedarray)
 		{
 			build->Emit(OP_BOUND_R, indexv.RegNum, bound.RegNum);
 			bound.Free(build);
@@ -7719,7 +7729,7 @@ FxExpression *FxFunctionCall::Resolve(FCompileContext& ctx)
 
 	if (ctx.Class != nullptr)
 	{
-		PFunction *afd = FindClassMemberFunction(ctx.Class, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version);
+		PFunction *afd = FindClassMemberFunction(ctx.Class, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version, !ctx.FromDecorate);
 
 		if (afd != nullptr)
 		{
@@ -8121,7 +8131,7 @@ FxExpression *FxMemberFunctionCall::Resolve(FCompileContext& ctx)
 					if (novirtual)
 					{
 						bool error;
-						PFunction *afd = FindClassMemberFunction(ccls, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version);
+						PFunction *afd = FindClassMemberFunction(ccls, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version, !ctx.FromDecorate);
 						if ((nullptr != afd) && (afd->Variants[0].Flags & VARF_Method) && (afd->Variants[0].Flags & VARF_Virtual))
 						{
 							staticonly = false;
@@ -8428,7 +8438,7 @@ FxExpression *FxMemberFunctionCall::Resolve(FCompileContext& ctx)
 
 isresolved:
 	bool error = false;
-	PFunction *afd = FindClassMemberFunction(cls, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version);
+	PFunction *afd = FindClassMemberFunction(cls, ctx.Class, MethodName, ScriptPosition, &error, ctx.Version, !ctx.FromDecorate);
 	if (error)
 	{
 		delete this;
@@ -8775,7 +8785,9 @@ bool FxVMFunctionCall::CheckAccessibility(const VersionInfo &ver)
 	{
 		if (Function->mVersion <= ver)
 		{
-			ScriptPosition.Message(MSG_WARNING, "Accessing deprecated function %s - deprecated since %d.%d.%d", Function->SymbolName.GetChars(), Function->mVersion.major, Function->mVersion.minor, Function->mVersion.revision);
+			const FString &deprecationMessage = Function->Variants[0].DeprecationMessage;
+			ScriptPosition.Message(MSG_WARNING, "Accessing deprecated function %s - deprecated since %d.%d.%d%s%s", Function->SymbolName.GetChars(), Function->mVersion.major, Function->mVersion.minor, Function->mVersion.revision, 
+				deprecationMessage.IsEmpty() ? "" : ", ", deprecationMessage.GetChars());
 		}
 	}
 	return true;
@@ -9035,6 +9047,14 @@ FxExpression *FxVMFunctionCall::Resolve(FCompileContext& ctx)
 					else
 					{
 						ArgList[i]->RequestAddress(ctx, &writable);
+
+						if ((flag & VARF_Out) && !writable)
+						{
+							ScriptPosition.Message(MSG_ERROR, "Argument must be a modifiable value");
+							delete this;
+							return nullptr;
+						}
+
 						if (flag & VARF_Ref)ArgList[i]->ValueType = NewPointer(ArgList[i]->ValueType);
 					}
 
@@ -11268,6 +11288,7 @@ FxLocalVariableDeclaration::FxLocalVariableDeclaration(PType *type, FName name, 
 	Name = name;
 	RegCount = type == TypeVector2 ? 2 : type == TypeVector3 ? 3 : 1;
 	Init = initval;
+	clearExpr = nullptr;
 }
 
 FxLocalVariableDeclaration::~FxLocalVariableDeclaration()
@@ -11278,6 +11299,7 @@ FxLocalVariableDeclaration::~FxLocalVariableDeclaration()
 FxExpression *FxLocalVariableDeclaration::Resolve(FCompileContext &ctx)
 {
 	CHECKRESOLVED();
+
 	if (ctx.Block == nullptr)
 	{
 		ScriptPosition.Message(MSG_ERROR, "Variable declaration outside compound statement");
@@ -11334,6 +11356,15 @@ FxExpression *FxLocalVariableDeclaration::Resolve(FCompileContext &ctx)
 			}
 		}
 	}
+
+	if (IsDynamicArray())
+	{
+		auto stackVar = new FxStackVariable(ValueType, StackOffset, ScriptPosition);
+		FArgumentList argsList;
+		clearExpr = new FxMemberFunctionCall(stackVar, "Clear", argsList, ScriptPosition);
+		SAFE_RESOLVE(clearExpr, ctx);
+	}
+
 	ctx.Block->LocalVars.Push(this);
 	return this;
 }
@@ -11352,8 +11383,59 @@ ExpEmit FxLocalVariableDeclaration::Emit(VMFunctionBuilder *build)
 		{
 			if (RegNum == -1)
 			{
-				if (!(VarFlags & VARF_Out)) RegNum = build->Registers[ValueType->GetRegType()].Get(RegCount);
-				else RegNum = build->Registers[REGT_POINTER].Get(1);
+				if (!(VarFlags & VARF_Out))
+				{
+					const int regType = ValueType->GetRegType();
+					assert(regType <= REGT_TYPE);
+
+					auto& registers = build->Registers[regType];
+					RegNum = registers.Get(RegCount);
+
+					// Check for reused registers and clean them if needed
+					bool useDirtyRegisters = false;
+
+					for (int reg = RegNum, end = RegNum + RegCount; reg < end; ++reg)
+					{
+						if (!registers.IsDirty(reg))
+						{
+							continue;
+						}
+
+						useDirtyRegisters = true;
+
+						switch (regType)
+						{
+						case REGT_INT:
+							build->Emit(OP_LI, reg, 0, 0);
+							break;
+
+						case REGT_FLOAT:
+							build->Emit(OP_LKF, reg, build->GetConstantFloat(0.0));
+							break;
+
+						case REGT_STRING:
+							build->Emit(OP_LKS, reg, build->GetConstantString(nullptr));
+							break;
+
+						case REGT_POINTER:
+							build->Emit(OP_LKP, reg, build->GetConstantAddress(nullptr));
+							break;
+
+						default:
+							assert(false);
+							break;
+						}
+					}
+
+					if (useDirtyRegisters)
+					{
+						ScriptPosition.Message(MSG_DEBUGMSG, "Implicit initialization of variable %s", Name.GetChars());
+					}
+				}
+				else
+				{
+					RegNum = build->Registers[REGT_POINTER].Get(1);
+				}
 			}
 		}
 		else
@@ -11421,6 +11503,10 @@ ExpEmit FxLocalVariableDeclaration::Emit(VMFunctionBuilder *build)
 			}
 			if (pstr->mDestructor != nullptr) build->ConstructedStructs.Push(this);
 		}
+		else if (ValueType->isDynArray())
+		{
+			ClearDynamicArray(build);
+		}
 	}
 	return ExpEmit();
 }
@@ -11452,6 +11538,11 @@ void FxLocalVariableDeclaration::Release(VMFunctionBuilder *build)
 	// For that all local stack variables need to live for the entire execution of a function.
 }
 
+void FxLocalVariableDeclaration::ClearDynamicArray(VMFunctionBuilder *build)
+{
+	assert(clearExpr != nullptr);
+	clearExpr->Emit(build);
+}
 
 FxStaticArray::FxStaticArray(PType *type, FName name, FArgumentList &args, const FScriptPosition &pos)
 	: FxLocalVariableDeclaration(NewArray(type, args.Size()), name, nullptr, VARF_Static|VARF_ReadOnly, pos)
@@ -11536,7 +11627,6 @@ FxLocalArrayDeclaration::FxLocalArrayDeclaration(PType *type, FName name, FArgum
 {
 	ExprType = EFX_LocalArrayDeclaration;
 	values = std::move(args);
-	clearExpr = nullptr;
 }
 
 FxExpression *FxLocalArrayDeclaration::Resolve(FCompileContext &ctx)
@@ -11551,16 +11641,6 @@ FxExpression *FxLocalArrayDeclaration::Resolve(FCompileContext &ctx)
 	auto stackVar = new FxStackVariable(ValueType, StackOffset, ScriptPosition);
 	auto elementType = (static_cast<PArray *> (ValueType))->ElementType;
 	auto elementCount = (static_cast<PArray *> (ValueType))->ElementCount;
-
-	// We HAVE to clear dynamic arrays before initializing them
-	if (IsDynamicArray())
-	{
-		FArgumentList argsList;
-		argsList.Clear();
-
-		clearExpr = new FxMemberFunctionCall(stackVar, "Clear", argsList, (const FScriptPosition) ScriptPosition);
-		SAFE_RESOLVE(clearExpr, ctx);
-	}
 
 	if (values.Size() > elementCount)
 	{
@@ -11618,9 +11698,11 @@ ExpEmit FxLocalArrayDeclaration::Emit(VMFunctionBuilder *build)
 {
 	assert(!(VarFlags & VARF_Out));	// 'out' variables should never be initialized, they can only exist as function parameters.
 
-	if (IsDynamicArray() && clearExpr != nullptr)
+	const bool isDynamicArray = IsDynamicArray();
+
+	if (isDynamicArray)
 	{
-		clearExpr->Emit(build);
+		ClearDynamicArray(build);
 	}
 
 	auto elementSizeConst = build->GetConstantInt(static_cast<PArray *>(ValueType)->ElementSize);
@@ -11631,7 +11713,7 @@ ExpEmit FxLocalArrayDeclaration::Emit(VMFunctionBuilder *build)
 	{
 		ExpEmit emitval = v->Emit(build);
 
-		if (IsDynamicArray())
+		if (isDynamicArray)
 		{
 			continue;
 		}

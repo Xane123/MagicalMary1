@@ -105,7 +105,8 @@ void FStat::PrintStat ()
 					// Count number of linefeeds but ignore terminating ones.
 					if (stattext[i] == '\n') y -= fontheight;
 				}
-				screen->DrawText(NewConsoleFont, CR_GREEN, 5 / textScale, y, stattext,
+				screen->Clear(0, screen->GetHeight() - (screen->GetHeight() / 8), screen->GetWidth(), screen->GetHeight(), 254, 0);	//[XANE]Add a solid background behind the text as it's hard to read.
+				screen->DrawText(NewConsoleFont, CR_PURPLE, 5 / textScale, y, stattext,
 					DTA_VirtualWidth, screen->GetWidth() / textScale,
 					DTA_VirtualHeight, screen->GetHeight() / textScale,
 					DTA_KeepRatio, true, TAG_DONE);

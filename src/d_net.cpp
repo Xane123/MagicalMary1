@@ -67,6 +67,7 @@
 #include "i_system.h"
 #include "vm.h"
 #include "gstrings.h"
+#include "s_music.h"
 
 EXTERN_CVAR (Int, disableautosave)
 EXTERN_CVAR (Int, autosavecount)
@@ -145,18 +146,7 @@ static int	oldentertics;
 
 extern	bool	 advancedemo;
 
-CUSTOM_CVAR (Bool, cl_capfps, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
-{
-	// Do not use the separate FPS limit timer if we are limiting FPS with this.
-	if (self)
-	{
-		I_SetFPSLimit(0);
-	}
-	else
-	{
-		I_SetFPSLimit(-1);
-	}
-}
+CVAR (Bool, cl_capfps, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
 
 CVAR(Bool, net_ticbalance, false, CVAR_SERVERINFO | CVAR_NOSAVE)
 CUSTOM_CVAR(Int, net_extratic, 0, CVAR_SERVERINFO | CVAR_NOSAVE)
@@ -1551,14 +1541,14 @@ bool DoArbitrate (void *userdata)
 	return false;
 }
 
-void D_ArbitrateNetStart (void)
+bool D_ArbitrateNetStart (void)
 {
 	ArbitrateData data;
 	int i;
 
 	// Return right away if we're just playing with ourselves.
 	if (doomcom.numnodes == 1)
-		return;
+		return true;
 
 	autostart = true;
 
@@ -1614,7 +1604,7 @@ void D_ArbitrateNetStart (void)
 	StartScreen->NetInit ("Exchanging game information", 1);
 	if (!StartScreen->NetLoop (DoArbitrate, &data))
 	{
-		exit (0);
+		return false;
 	}
 
 	if (consoleplayer == Net_Arbitrator)
@@ -1631,6 +1621,7 @@ void D_ArbitrateNetStart (void)
 		}
 	}
 	StartScreen->NetDone();
+	return true;
 }
 
 static void SendSetup (uint32_t playersdetected[MAXNETNODES], uint8_t gotsetup[MAXNETNODES], int len)
@@ -1663,7 +1654,7 @@ static void SendSetup (uint32_t playersdetected[MAXNETNODES], uint8_t gotsetup[M
 // Works out player numbers among the net participants
 //
 
-void D_CheckNetGame (void)
+bool D_CheckNetGame (void)
 {
 	const char *v;
 	int i;
@@ -1684,8 +1675,13 @@ void D_CheckNetGame (void)
 			"\nIf the game is running well below expected speeds, use netmode 0 (P2P) instead.\n");
 	}
 
+	int result = I_InitNetwork ();
 	// I_InitNetwork sets doomcom and netgame
-	if (I_InitNetwork ())
+	if (result == -1)
+	{
+		return false;
+	}
+	else if (result > 0)
 	{
 		// For now, stop auto selecting PacketServer, as it's more likely to cause confusion.
 		//NetMode = NET_PacketServer;
@@ -1731,7 +1727,7 @@ void D_CheckNetGame (void)
 	if (netgame)
 	{
 		GameConfig->ReadNetVars ();	// [RH] Read network ServerInfo cvars
-		D_ArbitrateNetStart ();
+		if (!D_ArbitrateNetStart ()) return false;
 	}
 
 	// read values out of doomcom
@@ -1749,6 +1745,8 @@ void D_CheckNetGame (void)
 
 	if (!batchrun) Printf ("player %i of %i (%i nodes)\n",
 			consoleplayer+1, doomcom.numplayers, doomcom.numnodes);
+	
+	return true;
 }
 
 
@@ -1802,7 +1800,46 @@ void D_QuitNetGame (void)
 		fclose (debugfile);
 }
 
+// Forces playsim processing time to be consistent across frames.
+// This improves interpolation for frames in between tics.
+//
+// With this cvar off the mods with a high playsim processing time will appear
+// less smooth as the measured time used for interpolation will vary.
 
+CVAR(Bool, r_ticstability, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+
+static uint64_t stabilityticduration = 0;
+static uint64_t stabilitystarttime = 0;
+
+static void TicStabilityWait()
+{
+	using namespace std::chrono;
+	using namespace std::this_thread;
+
+	if (!r_ticstability)
+		return;
+
+	uint64_t start = duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
+	while (true)
+	{
+		uint64_t cur = duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
+		if (cur - start > stabilityticduration)
+			break;
+	}
+}
+
+static void TicStabilityBegin()
+{
+	using namespace std::chrono;
+	stabilitystarttime = duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
+}
+
+static void TicStabilityEnd()
+{
+	using namespace std::chrono;
+	uint64_t stabilityendtime = duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
+	stabilityticduration = std::min(stabilityendtime - stabilitystarttime, (uint64_t)1'000'000);
+}
 
 //
 // TryRunTics
@@ -1872,6 +1909,8 @@ void TryRunTics (void)
 	// Uncapped framerate needs seprate checks
 	if (counts == 0 && !doWait)
 	{
+		TicStabilityWait();
+
 		// Check possible stall conditions
 		Net_CheckLastReceived(counts);
 		if (realtics >= 1)
@@ -1939,6 +1978,7 @@ void TryRunTics (void)
 		P_UnPredictPlayer();
 		while (counts--)
 		{
+			TicStabilityBegin();
 			if (gametic > lowtic)
 			{
 				I_Error ("gametic>lowtic");
@@ -1954,9 +1994,14 @@ void TryRunTics (void)
 			gametic++;
 
 			NetUpdate ();	// check for new console commands
+			TicStabilityEnd();
 		}
 		P_PredictPlayer(&players[consoleplayer]);
 		S_UpdateSounds (players[consoleplayer].camera);	// move positional sounds
+	}
+	else
+	{
+		TicStabilityWait();
 	}
 }
 
@@ -2364,12 +2409,11 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 							if (type >= DEM_SUMMON2 && type <= DEM_SUMMONFOE2)
 							{
 								spawned->Angles.Yaw = source->Angles.Yaw - angle;
-								spawned->tid = tid;
 								spawned->special = special;
 								for(i = 0; i < 5; i++) {
 									spawned->args[i] = args[i];
 								}
-								if(tid) spawned->AddToHash();
+								if(tid) spawned->SetTID(tid);
 							}
 						}
 					}
@@ -2695,6 +2739,12 @@ void Net_DoCommand (int type, uint8_t **stream, int player)
 // Used by DEM_RUNSCRIPT, DEM_RUNSCRIPT2, and DEM_RUNNAMEDSCRIPT
 static void RunScript(uint8_t **stream, AActor *pawn, int snum, int argn, int always)
 {
+	if (pawn == nullptr)
+	{
+		// Scripts can be invoked without a level loaded, e.g. via puke(name) CCMD in fullscreen console
+		return;
+	}
+
 	int arg[4] = { 0, 0, 0, 0 };
 	int i;
 	

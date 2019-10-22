@@ -45,6 +45,8 @@ class SkyViewpoint : Actor
 	}
 	
 	// arg0 = Visibility*4 for self skybox
+	// arg1 = X offset to proper skybox (mobile compatibility)
+	// arg2 = Y offset to proper skybox (mobile compatibility)
 
 	// If self actor has no TID, make it the default sky box
 	override void BeginPlay ()

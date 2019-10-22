@@ -9,7 +9,6 @@ IWad
 	Mapinfo = "mapinfo/doom2.txt"
 	BannerColors = "c0 40 c0", "40 20 40"
 	Load = "MaryMagicalAdventure2.pk3", "MaryMagicalAdventure3.pk3", "mma_maps.wad", "mod_mobile.pk3", "mod_materials.pk3", "mod_hires.pk3", "mod_vr.pk3"
-	IgnoreTitlePatches = 1
 }
 
 Names

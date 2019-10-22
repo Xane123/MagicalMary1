@@ -84,8 +84,9 @@ EXTERN_CVAR (Bool, am_showtotaltime)
 EXTERN_CVAR (Bool, noisedebug)
 EXTERN_CVAR (Int, con_scaletext)
 EXTERN_CVAR(Bool, vid_fps)
+EXTERN_CVAR(Bool, inter_subtitles)
 CVAR(Int, hud_scale, 0, CVAR_ARCHIVE);
-
+CVAR(Bool, log_vgafont, false, CVAR_ARCHIVE)
 
 DBaseStatusBar *StatusBar;
 
@@ -123,10 +124,11 @@ CUSTOM_CVAR(Bool, hud_aspectscale, false, CVAR_ARCHIVE)
 	}
 }
 
+CVAR (Bool, crosshairon, true, CVAR_ARCHIVE);
 CVAR (Int, crosshair, 0, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
 CVAR (Color, crosshaircolor, 0xff0000, CVAR_ARCHIVE);
-CVAR (Bool, crosshairhealth, true, CVAR_ARCHIVE);
+CVAR (Int, crosshairhealth, 1, CVAR_ARCHIVE);
 CVAR (Float, crosshairscale, 1.0, CVAR_ARCHIVE);
 CVAR (Bool, crosshairgrow, false, CVAR_ARCHIVE);
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
@@ -388,6 +390,47 @@ void DBaseStatusBar::SetSize(int reltop, int hres, int vres, int hhres, int hvre
 	SetDrawSize(reltop, hres, vres);
 }
 
+static void ST_CalcCleanFacs(int designwidth, int designheight, int realwidth, int realheight, int *cleanx, int *cleany)
+{
+	float ratio;
+	int cwidth;
+	int cheight;
+	int cx1, cy1, cx2, cy2;
+
+	ratio = ActiveRatio(realwidth, realheight);
+	if (AspectTallerThanWide(ratio))
+	{
+		cwidth = realwidth;
+		cheight = realheight * AspectMultiplier(ratio) / 48;
+	}
+	else
+	{
+		cwidth = realwidth * AspectMultiplier(ratio) / 48;
+		cheight = realheight;
+	}
+	// Use whichever pair of cwidth/cheight or width/height that produces less difference
+	// between CleanXfac and CleanYfac.
+	cx1 = MAX(cwidth / designwidth, 1);
+	cy1 = MAX(cheight / designheight, 1);
+	cx2 = MAX(realwidth / designwidth, 1);
+	cy2 = MAX(realheight / designheight, 1);
+	if (abs(cx1 - cy1) <= abs(cx2 - cy2) || MAX(cx1, cx2) >= 4)
+	{ // e.g. 640x360 looks better with this.
+		*cleanx = cx1;
+		*cleany = cy1;
+	}
+	else
+	{ // e.g. 720x480 looks better with this.
+		*cleanx = cx2;
+		*cleany = cy2;
+	}
+
+	if (*cleanx < *cleany)
+		*cleany = *cleanx;
+	else
+		*cleanx = *cleany;
+}
+
 void DBaseStatusBar::SetDrawSize(int reltop, int hres, int vres)
 {
 	ValidateResolution(hres, vres);
@@ -396,7 +439,7 @@ void DBaseStatusBar::SetDrawSize(int reltop, int hres, int vres)
 	HorizontalResolution = hres;
 	VerticalResolution = vres;
 	int x, y;
-	V_CalcCleanFacs(hres, vres, SCREENWIDTH, SCREENHEIGHT, &x, &y);
+	ST_CalcCleanFacs(hres, vres, SCREENWIDTH, SCREENHEIGHT, &x, &y);
 	defaultScale = { (double)x, (double)y };
 
 	SetScale();	// recalculate positioning info.
@@ -417,6 +460,7 @@ void DBaseStatusBar::OnDestroy ()
 		while (msg)
 		{
 			DHUDMessageBase *next = msg->Next;
+			msg->Next = nullptr;
 			msg->Destroy();
 			msg = next;
 		}
@@ -556,6 +600,7 @@ void DBaseStatusBar::DoDrawAutomapHUD(int crdefault, int highlight)
 {
 	auto scale = GetUIScale(hud_scale);
 	auto font = generic_ui ? NewSmallFont : SmallFont;
+	auto font2 = font;
 	auto vwidth = screen->GetWidth() / scale;
 	auto vheight = screen->GetHeight() / scale;
 	auto fheight = font->GetHeight();
@@ -565,8 +610,15 @@ void DBaseStatusBar::DoDrawAutomapHUD(int crdefault, int highlight)
 	int textdist = 4;
 	int zerowidth = font->GetCharWidth('0');
 
+	if (!generic_ui)
+	{
+		// If the original font does not have accents this will strip them - but a fallback to the VGA font is not desirable here for such cases.
+		if (!font->CanPrint(GStrings("AM_MONSTERS")) || !font->CanPrint(GStrings("AM_SECRETS")) || !font->CanPrint(GStrings("AM_ITEMS"))) font2 = OriginalSmallFont;
+	}
+
 	if (am_showtime)
 	{
+		if (vid_fps) y += (NewConsoleFont->GetHeight() * active_con_scale() + 5) / scale;
 		sec = Tics2Seconds(primaryLevel->time);
 		textbuffer.Format("%02d:%02d:%02d", sec / 3600, (sec % 3600) / 60, sec % 60);
 		screen->DrawText(font, crdefault, vwidth - zerowidth * 8 - textdist, y, textbuffer, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight,
@@ -588,14 +640,14 @@ void DBaseStatusBar::DoDrawAutomapHUD(int crdefault, int highlight)
 		if (am_showmonsters)
 		{
 			textbuffer.Format("%s\34%c %d/%d", GStrings("AM_MONSTERS"), crdefault + 65, primaryLevel->killed_monsters, primaryLevel->total_monsters);
-			screen->DrawText(font, highlight, textdist, y, textbuffer, DTA_KeepRatio, true, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
+			screen->DrawText(font2, highlight, textdist, y, textbuffer, DTA_KeepRatio, true, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
 			y += fheight;
 		}
 
 		if (am_showsecrets)
 		{
 			textbuffer.Format("%s\34%c %d/%d", GStrings("AM_SECRETS"), crdefault + 65, primaryLevel->found_secrets, primaryLevel->total_secrets);
-			screen->DrawText(font, highlight, textdist, y, textbuffer, DTA_KeepRatio, true, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
+			screen->DrawText(font2, highlight, textdist, y, textbuffer, DTA_KeepRatio, true, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
 			y += fheight;
 		}
 
@@ -603,13 +655,18 @@ void DBaseStatusBar::DoDrawAutomapHUD(int crdefault, int highlight)
 		if (am_showitems)
 		{
 			textbuffer.Format("%s\34%c %d/%d", GStrings("AM_ITEMS"), crdefault + 65, primaryLevel->found_items, primaryLevel->total_items);
-			screen->DrawText(font, highlight, textdist, y, textbuffer, DTA_KeepRatio, true, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
+			screen->DrawText(font2, highlight, textdist, y, textbuffer, DTA_KeepRatio, true, DTA_VirtualWidth, vwidth, DTA_VirtualHeight, vheight, TAG_DONE);
 			y += fheight;
 		}
 
 	}
 
 	FormatMapName(primaryLevel, crdefault, &textbuffer);
+
+	if (!generic_ui)
+	{
+		if (!font->CanPrint(textbuffer)) font = OriginalSmallFont;
+	}
 
 	auto lines = V_BreakLines(font, vwidth - 32, textbuffer, true);
 	auto numlines = lines.Size();
@@ -689,7 +746,6 @@ void DBaseStatusBar::Tick ()
 	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessageBase *msg = Messages[i];
-		TObjPtr<DHUDMessageBase *>*prev = &Messages[i];
 
 		while (msg)
 		{
@@ -697,12 +753,8 @@ void DBaseStatusBar::Tick ()
 
 			if (msg->CallTick ())
 			{
-				*prev = next;
+				DetachMessage(msg);
 				msg->Destroy();
-			}
-			else
-			{
-				prev = &msg->Next;
 			}
 			msg = next;
 		}
@@ -752,7 +804,9 @@ void DBaseStatusBar::CallTick()
 void DBaseStatusBar::AttachMessage (DHUDMessageBase *msg, uint32_t id, int layer)
 {
 	DHUDMessageBase *old = NULL;
-	TObjPtr<DHUDMessageBase *>*prev;
+	DObject* pointing;
+	TObjPtr<DHUDMessageBase *>*prevp;
+	DHUDMessageBase* prev;
 
 	old = (id == 0 || id == 0xFFFFFFFF) ? NULL : DetachMessage (id);
 	if (old != NULL)
@@ -766,20 +820,25 @@ void DBaseStatusBar::AttachMessage (DHUDMessageBase *msg, uint32_t id, int layer
 		layer = HUDMSGLayer_Default;
 	}
 
-	prev = &Messages[layer];
+	pointing = this;
+	prevp = &Messages[layer];
+	prev = *prevp;
 
 	// The ID serves as a priority, where lower numbers appear in front of
 	// higher numbers. (i.e. The list is sorted in descending order, since
 	// it gets drawn back to front.)
-	while (*prev != NULL && (*prev)->SBarID > id)
+	while (prev != NULL && prev->SBarID > id)
 	{
-		prev = &(*prev)->Next;
+		pointing = prev;
+		prevp = &prev->Next;
+		prev = *prevp;
 	}
 
-	msg->Next = *prev;
+	msg->Next = prev;
 	msg->SBarID = id;
-	*prev = msg;
-	GC::WriteBarrier(msg);
+	*prevp = msg;
+	GC::WriteBarrier(msg, prev);
+	GC::WriteBarrier(pointing, msg);
 }
 
 //---------------------------------------------------------------------------
@@ -793,15 +852,18 @@ DHUDMessageBase *DBaseStatusBar::DetachMessage (DHUDMessageBase *msg)
 	for (size_t i = 0; i < countof(Messages); ++i)
 	{
 		DHUDMessageBase *probe = Messages[i];
+		DObject* pointing = this;
 		TObjPtr<DHUDMessageBase *>*prev = &Messages[i];
 
 		while (probe && probe != msg)
 		{
+			pointing = probe;
 			prev = &probe->Next;
 			probe = probe->Next;
 		}
 		if (probe != NULL)
 		{
+			GC::WriteBarrier(pointing, probe->Next);
 			*prev = probe->Next;
 			probe->Next = nullptr;
 			return probe;
@@ -814,16 +876,19 @@ DHUDMessageBase *DBaseStatusBar::DetachMessage (uint32_t id)
 {
 	for (size_t i = 0; i < countof(Messages); ++i)
 	{
+		DObject* pointing = this;
 		DHUDMessageBase *probe = Messages[i];
 		TObjPtr<DHUDMessageBase *>*prev = &Messages[i];
 
 		while (probe && probe->SBarID != id)
 		{
+			pointing = probe;
 			prev = &probe->Next;
 			probe = probe->Next;
 		}
 		if (probe != NULL)
 		{
+			GC::WriteBarrier(pointing, probe->Next);
 			*prev = probe->Next;
 			probe->Next = nullptr;
 			return probe;
@@ -981,9 +1046,16 @@ void DBaseStatusBar::DrawCrosshair ()
 	double size;
 	int w, h;
 
+	if (!crosshairon)
+	{
+		return;
+	}
+
 	// Don't draw the crosshair in chasecam mode
 	if (players[consoleplayer].cheats & CF_CHASECAM)
+	{
 		return;
+	}
 
 	ST_LoadCrosshair();
 
@@ -1009,15 +1081,15 @@ void DBaseStatusBar::DrawCrosshair ()
 	w = int(CrosshairImage->GetDisplayWidth() * size);
 	h = int(CrosshairImage->GetDisplayHeight() * size);
 
-	if (crosshairhealth)
-	{
+	if (crosshairhealth == 1) {
+		// "Standard" crosshair health (green-red)
 		int health = Scale(CPlayer->health, 100, CPlayer->mo->GetDefault()->health);
 
 		if (health >= 85)
 		{
 			color = 0x00ff00;
 		}
-		else 
+		else
 		{
 			int red, green;
 			health -= 25;
@@ -1037,6 +1109,21 @@ void DBaseStatusBar::DrawCrosshair ()
 			}
 			color = (red<<16) | (green<<8);
 		}
+	}
+	else if (crosshairhealth == 2)
+	{
+		// "Enhanced" crosshair health (blue-green-yellow-red)
+		int health = clamp(Scale(CPlayer->health, 100, CPlayer->mo->GetDefault()->health), 0, 200);
+		float rr, gg, bb;
+
+		float saturation = health < 150 ? 1.f : 1.f - (health - 150) / 100.f;
+
+		HSVtoRGB(&rr, &gg, &bb, health * 1.2f, saturation, 1);
+		int red = int(rr * 255);
+		int green = int(gg * 255);
+		int blue = int(bb * 255);
+
+		color = (red<<16) | (green<<8) | blue;
 	}
 	else
 	{
@@ -1150,17 +1237,18 @@ void DBaseStatusBar::CallDraw(EHudState state, double ticFrac)
 void DBaseStatusBar::DrawLog ()
 {
 	int hudwidth, hudheight;
+	const FString & text = (inter_subtitles && CPlayer->SubtitleCounter) ? CPlayer->SubtitleText : CPlayer->LogText;
 
-	if (CPlayer->LogText.IsNotEmpty())
+	if (text.IsNotEmpty())
 	{
 		// This uses the same scaling as regular HUD messages
-		auto scale = active_con_scaletext(generic_ui);
+		auto scale = active_con_scaletext(generic_ui || log_vgafont);
 		hudwidth = SCREENWIDTH / scale;
 		hudheight = SCREENHEIGHT / scale;
-		FFont *font = C_GetDefaultHUDFont();
+		FFont *font = (generic_ui || log_vgafont)? NewSmallFont : SmallFont;
 
 		int linelen = hudwidth<640? Scale(hudwidth,9,10)-40 : 560;
-		auto lines = V_BreakLines (font, linelen,  CPlayer->LogText[0] == '$'? GStrings(CPlayer->LogText.GetChars()+1) : CPlayer->LogText.GetChars());
+		auto lines = V_BreakLines (font, linelen, text[0] == '$'? GStrings(text.GetChars()+1) : text.GetChars());
 		int height = 20;
 
 		for (unsigned i = 0; i < lines.Size(); i++) height += font->GetHeight ();
@@ -1176,7 +1264,7 @@ void DBaseStatusBar::DrawLog ()
 		else
 		{
 			x=(hudwidth>>1)-300;
-			y=hudheight*3/10-(height>>1);
+			y=hudheight/8-(height>>1);
 			if (y<0) y=0;
 			w=600;
 		}
@@ -1186,7 +1274,7 @@ void DBaseStatusBar::DrawLog ()
 		y+=10;
 		for (const FBrokenLines &line : lines)
 		{
-			screen->DrawText (font, CR_UNTRANSLATED, x, y, line.Text,
+			screen->DrawText (font, CPlayer->SubtitleCounter? CR_CYAN : CR_UNTRANSLATED, x, y, line.Text,
 				DTA_KeepRatio, true,
 				DTA_VirtualWidth, hudwidth, DTA_VirtualHeight, hudheight, TAG_DONE);
 			y += font->GetHeight ();
@@ -1225,6 +1313,7 @@ void DBaseStatusBar::SetMugShotState(const char *stateName, bool waitTillDone, b
 
 void DBaseStatusBar::DrawBottomStuff (EHudState state)
 {
+	primaryLevel->localEventManager->RenderUnderlay(state);
 	DrawMessages (HUDMSGLayer_UnderHUD, (state == HUD_StatusBar) ? GetTopOfStatusbar() : SCREENHEIGHT);
 }
 
@@ -1265,7 +1354,7 @@ void DBaseStatusBar::DrawTopStuff (EHudState state)
 
 	DrawConsistancy ();
 	DrawWaiting ();
-	if (ShowLog && MustDrawLog(state)) DrawLog ();
+	if ((ShowLog && MustDrawLog(state)) || (inter_subtitles && CPlayer->SubtitleCounter > 0)) DrawLog ();
 
 	if (noisedebug)
 	{

@@ -492,15 +492,15 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which GZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
-            VALUE "CompanyName", ""
+            VALUE "CompanyName", "Xane Corp."
             VALUE "FileDescription", "Mary's Magical Adventure"
             VALUE "FileVersion", RC_FILEVERSION2
             VALUE "InternalName", "Mary's Magical Adventure"
             VALUE "LegalCopyright", "©1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, 2019 Xane Myers, et al."
             VALUE "LegalTrademarks", "DOOM is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "Mary's Magical Adventure.exe"
+            VALUE "OriginalFilename", "PlayMMA.exe"
             VALUE "ProductName", "Mary's Magical Adventure"
-            VALUE "ProductVersion", GIT_DESCRIPTION
+            VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
     END
     BLOCK "VarFileInfo"
