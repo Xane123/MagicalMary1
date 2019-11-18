@@ -36,3 +36,4 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Menu sounds were changed (again). I just can't decide how things should sound in this game!
 * Juice inside of half-drank juice cylinders now can go stale if not drank within 90 (orange) or 120 (apple) seconds. If it goes stale, the remaining juice in he container is forcibly removed from your inventory.
 * Proximity mines now are tinted slightly orange around the mini-thrusters at each corner, a bit of fake lighting.
+* Added light pink fade in (12) and out (13). Use SetFadeOut script to see them, though they will be used for the World Map.

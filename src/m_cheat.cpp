@@ -466,9 +466,8 @@ void cht_DoCheat (player_t *player, int cheat)
 		}
 		break;
 
-	case CHT_DONNYTRUMP:
-		cht_Give (player, "HealthTraining");
-		msg = GStrings("TXT_MIDASTOUCH");
+	case CHT_CGEMS:
+		msg = GStrings("CHT_CGEMS");
 		break;
 
 	case CHT_LEGO:

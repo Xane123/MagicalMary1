@@ -62,7 +62,8 @@ static bool Cht_ChangeStartSpot (cheatseq_t *);
 static bool Cht_WarpTransLevel (cheatseq_t *);
 static bool Cht_MyPos (cheatseq_t *);
 static bool Cht_Sound (cheatseq_t *);
-static bool Cht_Ticker (cheatseq_t *);
+static bool Cht_Ticker(cheatseq_t *);
+static bool Cht_AllCGems(cheatseq_t *);
 
 uint8_t CheatPowerup[7][12] =
 {
@@ -78,12 +79,13 @@ uint8_t CheatPowerup[7][12] =
 //The list of cheats in Mary's Magical Adventure. These all start with the letter 'X' to allow easy entry.
 static uint8_t CheatNoclip[] =	{ 'x','g','h','o','s','t',255 };							//XGHOST
 static uint8_t CheatGod[] =		{ 'x','h','o','n','o','r',255 };							//X HONOR (Arthas)
-static uint8_t CheatAmmo[] =		{ 'x','a','m','m','o','p','l','e','a','s','e',255 };	//X AMMO PLEASE
-static uint8_t CheatAmmoNoKey[] =	{ 'x','g','i','m','m','e','k','e','y','s',255 };		//X GIMME KEYS
+static uint8_t CheatAmmo[] = { 'x','g','i','m','m','e','k','e','y','s',255 };				//X GIMME KEYS
+static uint8_t CheatAmmoNoKey[] = { 'x','a','m','m','o','p','l','e','a','s','e',255 };		//X AMMO PLEASE
 static uint8_t CheatClev[] =		{ 'x','a','r','e','a',0,0,255 };						//X AREA
 static uint8_t CheatMypos[] =		{ 'x','w','h','e','r','e','a','m','i',255 };			//X WHERE AM I
 static uint8_t CheatAmap[] = { 'x','a','n','e',255 };										//XANE
 static uint8_t CheatKill[] = { 'x','k','i','l','l',255 };									//X KILL
+static uint8_t CheatCGems[] = { 'x','p','o','w','e','r','m','e','u','p',255 };				//X POWER ME UP
 
 
 static cheatseq_t GameCheats[] =
@@ -102,7 +104,8 @@ static cheatseq_t GameCheats[] =
 	{ CheatPowerup[4],		0, 0, 0, {CHT_BEHOLDA,0},	Cht_Generic },
 	{ CheatPowerup[5],		0, 0, 0, {CHT_BEHOLDL,0},	Cht_Generic },
 	{ CheatClev,				0, 1, 0, {0,0},				Cht_ChangeLevel },
-	{ CheatKill,				0, 0, 0, {CHT_MDK,0},		Cht_Generic }
+	{ CheatKill,				0, 0, 0, {CHT_MDK,0},		Cht_Generic },
+	{ CheatCGems,				0, 0, 0, {CHT_CGEMS,0},		Cht_AllCGems }
 };
 
 // Respond to keyboard input events, intercept cheats.
@@ -201,7 +204,7 @@ static bool Cht_Generic (cheatseq_t *cheat)
 	return true;
 }
 
-static bool Cht_Music (cheatseq_t *cheat)
+static bool Cht_Music(cheatseq_t *cheat)
 {
 	char buf[12] = "puke 254 xx";
 
@@ -215,6 +218,14 @@ static bool Cht_Music (cheatseq_t *cheat)
 		buf[9] = cheat->Args[0];
 		buf[10] = cheat->Args[1];
 	}
+
+	C_DoCommand(buf);
+	return true;
+}
+
+static bool Cht_AllCGems(cheatseq_t *cheat)
+{
+	char buf[20] = "pukename AddCGems 6";
 
 	C_DoCommand(buf);
 	return true;
