@@ -18,6 +18,8 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * A new status bar is (being) added, replacing the old one. The new status bar uses bigger meters that have the game's visual style.
 * Armor was added! The power meter previously used armor internally, but now it uses its own inventory item.
 * Trees are now very different than before. Previously, they were single images that didn't blend in, but currently use a combination of 2D images (for leaves) and a voxel model under it all. The leaves are randomly placed within areas, giving each tree its own appearance and also allowing you to damage the tree and its leaves.
+* Though not used in any official levels yet, two new 3D skyboxes were created, one for the "Asian area" level and the other for the Cumulus Peaks sky level. They're a definite upgrade from the rather static "scrolling clouds" backgrounds used in other levels. These won't replace the sky in levels that already use the 3D Skybox trick for other things, though. For example, Soroboru takes place on an airship, so it uses the skybox to make it look like it's flying over a part of the city. In cases like that, the sky will stay as the basic Doom-esque sky image.
+* Added a "gobal shadow" system for compatible objects (currently just the first tree). If enabled thruogh ACS on a level, objects will appear to cast shadows onto the flat surface they're on.This can be seen in the new skybox.
 ## Minor
 * In 1-3, the beach area was removed, and the bridge that comes from 1-2 is now visible from the windows of the original intro building.
 * Added a "detection" mechanic to PWPD HQ. Upon entering, H-Computer alerts everyone to your presence, then warns about detectors scanning your character. Little black areas with red lasers firing from them are in some hallways, and if you don't jump over the laser, you'll be "scanned". This causes the lights to go out, alarms begin sounding, and bars lower to prevent exiting the building (though it's still possible to exit). Enemies will always be aware of your presence once this happens, always being alerted.
@@ -30,10 +32,12 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Special Stages now require collecting large magic stars instead of ordinary coins.
 * The "endless Special Stage" event flag (array index [3]) was added, which will be used before the final boss eventually. When finished, this will lock the player into the Special Stage chain until all seven are completed.
 * Large magic stars collectable in Special Stages can now be picked up and can be used to complete the Special Stage without problems.
-* Lights were added to City Street Run's bowling alley vent to be consistent with Peacewater Prison's vents.
+* Lights were added to City Street Run's bowling alley vent to be consistent with Peacewater Prison (Xane's section)'s vents.
 * Leaves drop from trees when it's raining or wind is blowing.
 * Support for different foliage colors per level has been implemented. Currently, tree leaf clusters distant "imposter" tree renders change color accordingly, but leaves are still all green.
 * Menu sounds were changed (again). I just can't decide how things should sound in this game!
-* Juice inside of half-drank juice cylinders now can go stale if not drank within 90 (orange) or 120 (apple) seconds. If it goes stale, the remaining juice in he container is forcibly removed from your inventory. This may be increased in the future.
+* Juice inside of half-drank juice cylinders now can go stale if not drank again within a short time period. If it goes stale, the remaining juice in he container is forcibly removed from your inventory. This may be increased in the future.
 * Proximity mines now are tinted slightly orange around the mini-thrusters at each corner, a bit of fake lighting.
 * Added light pink fade in (12) and out (13). Use SetFadeOut script to see them, though they will be used for the World Map.
+* Implemented sunset and sunrise appearances for the "Asian area" 3D skybox.
+* Added Z offset for moving skyboxes. Argument #4 (Args[3]) controls that, while #2 and #3 ([1] and [2]) handle X and Y.

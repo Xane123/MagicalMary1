@@ -82,7 +82,7 @@ class SkyViewpoint : Actor
 	{
 		Spawn:
 			TNT1 A 0;
-			TNT1 A -1 ACS_NamedExecuteAlways("MoveSkybox",0,Args[1],Args[2],0);
+			TNT1 A -1 ACS_NamedExecuteAlways("MoveSkybox",0,Args[1],Args[2],Args[3]);
 			Stop;
 	}
 	
