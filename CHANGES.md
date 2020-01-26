@@ -29,13 +29,13 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * The ambience script uses a much easier to edit system than before, now not a linear list of sounds.
 * Corrected internal order of coins in the "AddCPowerupTics" ACS script.
 * Dropped coins play more realistic sounds upon hitting the ground, with longer "ching" sounds if hitting it quickly. Also, dropped coins have height variation now, so coins will look more unique and less like clones now.
-* A new song was added (#15), which plays in Special Stages, replacing #14, "The Peaceful Dimension".
+* A new song was added (#15), which plays in Special Stages, replacing #14, "The Peaceful Dimension", which is probably no longer in the game.(?)
 * Special Stages now require collecting large magic stars instead of ordinary coins.
 * The "endless Special Stage" event flag (array index [3]) was added, which will be used before the final boss eventually. When finished, this will lock the player into the Special Stage chain until all seven are completed.
 * Large magic stars collectable in Special Stages can now be picked up and can be used to complete the Special Stage without problems.
 * Lights were added to City Street Run's bowling alley vent to be consistent with Peacewater Prison (Xane's section)'s vents.
-* Leaves drop from trees when it's raining or wind is blowing.
-* Support for different foliage colors per level has been implemented. Currently, tree leaf clusters distant "imposter" tree renders change color accordingly, but leaves are still all green.
+* Leaves drop from trees when it's raining or an air current is flowing through the current area.
+* Support for different foliage colors per level has been implemented. Currently, tree leaf clusters distant "imposter" tree renders change color accordingly, but leaves that fall off are still all green.
 * Menu sounds were changed (again). I just can't decide how things should sound in this game!
 * Juice inside of half-drank juice cylinders now can go stale if not drank again within a short time period. If it goes stale, the remaining juice in he container is forcibly removed from your inventory. This may be increased in the future.
 * Proximity mines now are tinted slightly orange around the mini-thrusters at each corner, a bit of fake lighting.
@@ -44,4 +44,5 @@ This is a list of any changes done to Mary's Magical Adventure since the last re
 * Added Z offset for moving skyboxes. Argument #4 (Args[3]) controls that, while #2 and #3 ([1] and [2]) handle X and Y.
 * Added draw distance support to "Welcome to Peacewater!". Additionally, the prison area was split into its own level (AREA1_X).
 * Removed the ugly shding on textures in the materials mod, which turned ugly and unfittingly "realistic" in appearance when viewed from certain angles, including being nearly parallel with walls, or on floors when facing south-east.
-* Bloom now better resembles its older look, with exagerated glows on anything vaguely bright. The game looks overall better with this look, though.
+* Bloom now better resembles its older look, with exagerated glows on anything vaguely bright. Don't worry, it isn't as overdone, and this new bloom may strike a nice balance between how it was and what GZDoom's developers turned it into. There are times where it will go overboard briefly, so if colors go overly vibrant, move or look around and that should go away.
+* Hitting the ground affects your speed now! Land from a height that causes a landing sound and you'll become slightly slower for less than a second, but fall from higher heights to become even slower! Remember to carefully land by using Mary's umbrella or Xane's flight as you get near the ground for a smooth landing. Otherwise, you'll hurt Mary's feet and legs! (No falling damage, though.)
