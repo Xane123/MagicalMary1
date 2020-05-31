@@ -2,22 +2,21 @@
 
 IWad
 {
-	Name = "Mary's Magical Adventure"
+	Name = "Magical Mary 1: Redthorn's Family Ransom"
 	Autoname = "mma.base"
 	Game = "Doom"
 	Config = "Doom"
 	Mapinfo = "mapinfo/doom2.txt"
 	BannerColors = "c0 40 c0", "40 20 40"
-	Load = "MaryMagicalAdventure2.pk3", "MaryMagicalAdventure3.pk3", "mma_maps.wad", "mod_mobile.pk3", "mod_materials.pk3", "mod_hires.pk3", "mod_vr.pk3"
+	Load = "MagicalMary2.pk3", "MagicalMary3.pk3", "mm1_maps.wad", "mod_mobile.pk3", "mod_materials.pk3", "mod_hires.pk3", "mod_vr.pk3"
 }
 
 Names
 {
-	"MaryMagicalAdventure.pk3"
-	"MaryMagicalAdventure.ipk3"
+	"MagicalMary.ipk3"
 }
 
 Order	// Order in the IWAD selection box
 {
-	"Mary's Magical Adventure"
+	"Magical Mary 1: Redthorn's Family Ransom"
 }
