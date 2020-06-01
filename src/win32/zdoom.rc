@@ -233,7 +233,7 @@ FONT 8, "MS Shell Dlg"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDI_ICON1,IDC_STATIC,7,7,21,20
-    LTEXT           "Welcome to Mary's Magical Adventure!",IDC_STATIC,42,8,180,8
+    LTEXT           "Welcome to Magical Mary 1: Redthorn's Family Ransom!",IDC_STATIC,42,8,180,8
     LTEXT           "<Version info>",IDC_WELCOME_VERSION,42,18,180,8
     GROUPBOX        "IWAD selection",IDC_STATIC,8,32,208,102
     LTEXT           "Select which game data (IWAD) to run.",IDC_STATIC,12,44,190,8
@@ -244,7 +244,7 @@ BEGIN
     CONTROL         "Lights.pk3",IDC_WELCOME_LIGHTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,46,182,51,10
     CONTROL         "Brightmaps.pk3",IDC_WELCOME_BRIGHTMAPS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,111,182,65,10
     CONTROL         "Don't show this again",IDC_DONTASKIWAD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,73,201,87,10
-    DEFPUSHBUTTON   "Play!",IDOK,8,228,90,14
+    DEFPUSHBUTTON   "Let's go!",IDOK,8,228,90,14
     PUSHBUTTON      "Exit",IDCANCEL,166,228,50,14
 END
 #endif
@@ -396,7 +396,7 @@ END
 IDD_CRASHDIALOG DIALOGEX 0, 0, 415, 308
 STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_APPWINDOW
-CAPTION "GZDoom Very Fatal Error"
+CAPTION "Very Fatal Error encountered!"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     CONTROL         "",IDC_CRASHTAB,"SysTabControl32",WS_TABSTOP,4,4,404,280
@@ -410,7 +410,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     EDITTEXT        IDC_CRASHINFO,7,126,377,90,ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | WS_VSCROLL
     CONTROL         "",IDC_PLEASETELLUS,"RichEdit20A",ES_MULTILINE | ES_READONLY,7,50,377,54,WS_EX_TRANSPARENT
-    LTEXT           "(Optional) To help diagnose the cause of this error, please describe what you were doing when the error occured. If you were playing with custom wads, please also indicate where to obtain them:",IDC_STATIC,7,108,377,16,0,WS_EX_TRANSPARENT
+    LTEXT           "(Optional) To help diagnose the cause of this error, please describe what you were doing when the error occured. If you were playing with mods, please also indicate where to obtain them:",IDC_STATIC,7,108,377,16,0,WS_EX_TRANSPARENT
     CONTROL         131,IDC_DEADGUYVIEWER,"Static",SS_BITMAP,345,7,23,26
     CONTROL         "",IDC_CRASHHEADER,"RichEdit20A",ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY,18,13,306,25,WS_EX_TRANSPARENT
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,0,42,407,1
@@ -492,13 +492,13 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Thanks to id Software for creating DOOM and then releasing the source code. Thanks also to TeamTNT for creating BOOM, which GZDoom is partially based on. Includes code based on the Cajun Bot 0.97 by Martin Collberg."
-            VALUE "CompanyName", "Xane Corp."
-            VALUE "FileDescription", "Mary's Magical Adventure"
+            VALUE "CompanyName", "Xane Myers"
+            VALUE "FileDescription", "Magical Mary 1: Redthorn's Family Ransom"
             VALUE "FileVersion", RC_FILEVERSION2
-            VALUE "InternalName", "Mary's Magical Adventure"
-            VALUE "LegalCopyright", "©1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, 2019 Xane Myers, et al."
+            VALUE "InternalName", "Magical Mary 1: Redthorn's Family Ransom"
+            VALUE "LegalCopyright", "©1993-1996 id Software, 1998-2010 Randy Heit, 2002-2010 Christoph Oelckers, 2019-2020 Xane Myers, et al."
             VALUE "LegalTrademarks", "DOOM is a Registered Trademark of id Software, Inc."
-            VALUE "OriginalFilename", "PlayMMA.exe"
+            VALUE "OriginalFilename", "PlayGame.exe"
             VALUE "ProductName", "Mary's Magical Adventure"
             VALUE "ProductVersion", RC_PRODUCTVERSION2
         END
