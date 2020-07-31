@@ -108,7 +108,7 @@ void HWDrawInfo::SetFog(FRenderState &state, int lightlevel, int rellight, bool 
 	else if (cmap != NULL && !fullbright)
 	{
 		fogcolor = cmap->FadeColor;
-		fogdensity = 800;	//GetFogDensity(lightlevel, fogcolor, cmap->FogDensity, cmap->BlendFactor);
+		fogdensity = GetFogDensity(lightlevel, fogcolor, cmap->FogDensity, cmap->BlendFactor);
 		fogcolor.a = 0;
 	}
 	else
@@ -117,9 +117,8 @@ void HWDrawInfo::SetFog(FRenderState &state, int lightlevel, int rellight, bool 
 		fogdensity = 0;
 	}
 
-	// Make fog a little denser when inside a skybox
-	if (screen->mPortalState->inskybox) fogdensity += fogdensity / 2;
-
+	//[XANE]Make fog half as dense when in skyboxes. Why make it twice as thick? That doesn't help the player enjoy the view!
+	//if (screen->mPortalState->inskybox) fogdensity /= 2;
 
 	// no fog in enhanced vision modes!
 	if (fogdensity == 0 || gl_fogmode == 0)
