@@ -91,13 +91,13 @@ const char *GetVersionString();
 #define SAVEVER 4556
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "Mary's Magical Adventure"
+#define GAMESIG "Magical Mary 1"
 #define BASEWAD "engine.pk3"
 #define OPTIONALWAD "who_cares.pk3"
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "Mary's Magical Adventure"
-#define WGAMENAME L"Mary's Magical Adventure"
+#define GAMENAME "Magical Mary 1: Redthorn's Family Ransom"
+#define WGAMENAME L"Magical Mary 1"
 #define GAMENAMELOWERCASE "Settings"
 #define FORUM_URL "http://forum.zdoom.org/"
 #define BUGS_FORUM_URL	"http://forum.zdoom.org/viewforum.php?f=2"
