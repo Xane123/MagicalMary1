@@ -4,7 +4,8 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * Fixed a glitch where gliding with Mary's parasol when sticking to walls would prevent checking for walls behind her, allowing her to do things like turn around and jump toward the wall she's on, or worse, sliding up to the invisible ceiling of **any** area, then gliding to anywhere she wants!
 * Added extra code to Mary's downward Air Dash to cancel it if she's ever detected gliding (with her Pretty Parasol), sliding on a wall, or bouncing off a spring. (The latter should stop the boost mid-way through, which will lessen how much the player could tweak where springs bounce them to.
 ## Major
-* None
+* If you slide up a wall and reach the top, you'll move back onto the ground, just like you would if you moved upward using a Ninja Coin in previous versions. It's more consistent and logical now; Going up? You will land on the higher ground.
+* Sliding on walls (before wall-jumping) is now automatic, no need to be holding the "forward" key! This weird requirement was added years ago back in the World of Kirbycraft days because Mary would randomly think she hit a wall and would try sliding on thin air, but extra checks added since have rendered this safety feature unnecessary now. This makes doing downward Air Dashes to quickly slide down walls easier.
 ## Minor
 * For you mod programmers, if there's any of you here, GetSpeed has been updated with new parameters to control what axises are factored in. It's not the same as GetActorVel# though, as this returns integers that usually are large at even slower speeds.
 * Addititonally, the ***RoundTo5*** function is no longer in COMMON1.acs, instead in the common script file "mma_extra.acs". It's also more freeform now, taking two arguments, one for the multiple to round to and a second one to pass your variable to.
