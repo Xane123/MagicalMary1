@@ -1716,7 +1716,7 @@ int P_LookForPlayers (AActor *actor, INTBOOL allaround, FLookExParams *params)
 
 		// [RC] Well, let's let special monsters with this flag active be able to see
 		// the player then, eh?
-		// [XANE] For Mary's Magical Adventure, enemies are way more oblvious to "ninjas".
+		// [XANE] For Magical Mary 1, enemies are way more oblivious to "ninjas".
 		if(!(actor->flags6 & MF6_SEEINVISIBLE)) 
 		{
 			if ((player->mo->flags & MF_SHADOW && !(actor->Level->i_compatflags & COMPATF_INVISIBILITY)) ||

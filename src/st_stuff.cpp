@@ -77,7 +77,7 @@ uint8_t CheatPowerup[7][12] =
 };
 
 //The list of cheats in Mary's Magical Adventure. These all start with the letter 'X' to allow easy entry.
-static uint8_t CheatNoclip[] =	{ 'x','g','h','o','s','t',255 };							//XGHOST
+static uint8_t CheatNoclip[] =	{ 'x','g','h','o','s','t',255 };							//X GHOST
 static uint8_t CheatGod[] =		{ 'x','h','o','n','o','r',255 };							//X HONOR (Arthas)
 static uint8_t CheatAmmo[] = { 'x','g','i','m','m','e','k','e','y','s',255 };				//X GIMME KEYS
 static uint8_t CheatAmmoNoKey[] = { 'x','a','m','m','o','p','l','e','a','s','e',255 };		//X AMMO PLEASE
@@ -142,7 +142,7 @@ static bool CheatCheckList (event_t *ev, cheatseq_t *cheats, int numcheats)
 				}
 			}
 			else if (cheats->Pos - cheats->Sequence > 1)
-			{ // If more than two characters into the sequence,
+			{ // If more than one character into the sequence,
 			  // eat the keypress, just so that the Hexen cheats
 			  // with T in them will work without unbinding T.
 				eat = true;

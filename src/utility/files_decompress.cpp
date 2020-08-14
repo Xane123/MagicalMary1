@@ -144,12 +144,12 @@ public:
 
 		if (err != Z_OK && err != Z_STREAM_END)
 		{
-			DecompressionError ("The PK3 file has been modified while Mary's Magical Adventure was open. Sorry for any inconvenience this caused.");
+			DecompressionError ("The PK3 file was modified while Magical Mary 1 was open. Sorry for any inconvenience this caused.");
 		}
 
 		if (Stream.avail_out != 0)
 		{
-			DecompressionError ("Somehow, the compressed stream ran out. Please restart Mary's Magical Adventure.");
+			DecompressionError ("Somehow, the compressed stream ran out. Please restart the game.");
 		}
 
 		return len - Stream.avail_out;
