@@ -107,6 +107,7 @@ void gl_LoadExtensions()
 	const char *glversion = (const char*)glGetString(GL_VERSION);
 
 	const char *version = Args->CheckValue("-glversion");
+	const char *glforce = Args->CheckValue("-glforce");
 	realglversion = strtod(glversion, NULL);
 
 
@@ -129,9 +130,13 @@ void gl_LoadExtensions()
 	float gl_version = (float)strtod(version, NULL) + 0.01f;
 
 	// Don't even start if it's lower than 2.0 or no framebuffers are available (The framebuffer extension is needed for glGenerateMipmapsEXT!)
+	//[XANE]The -glforce argument will try to bypass this, probably causing a crash shortly afterward.
 	if (gl_version < 3.3f)
 	{
-		I_FatalError("Unsupported OpenGL version.\nAt least OpenGL 3.3 is required to run " GAMENAME ".\nFor older versions of OpenGL please download the vintage build of " GAMENAME ".\n");
+		if (glforce == NULL)
+			I_FatalError("Sorry, but your graphics card does not support OpenGL 3.3, which is required to run " GAMENAME ".\nThough it won't come even close to this version in terms of completion and graphics, you can download an old version of the game.\nOtherwise, please try another computer or upgrade your GPU (graphics card).\n\n(Oh, and you can try using the command line argument -glforce, but that will likely fail too.)\n");
+		else
+			Printf("This computer only supports OpenGL %f, but was forced to run the game regardless.", gl_version);
 	}
 
 
