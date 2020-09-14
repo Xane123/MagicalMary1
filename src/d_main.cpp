@@ -2132,7 +2132,8 @@ static void CheckCmdLine()
 	const char *v;
 
 	if (!batchrun) Printf ("Checking cmd-line parameters...\n");
-	if (Args->CheckParm ("-nomonsters"))	flags |= DF_NO_MONSTERS;
+	//if (Args->CheckParm("-nomonsters"))	flags |= DF_NO_MONSTERS;
+	if (Args->CheckParm("-nomonsters"))		Printf("Monsters can't be disabled in this game, as that would cause doors to stop opening.");
 	if (Args->CheckParm ("-respawn"))		flags |= DF_MONSTERS_RESPAWN;
 	if (Args->CheckParm ("-fast"))			flags |= DF_FAST_MONSTERS;
 
@@ -2328,6 +2329,8 @@ static void NewFailure ()
 
 static int D_DoomMain_Internal (void)
 {
+	if (gameinfo.flags & GI_SHAREWARE) I_FatalError("There isn't a demo of Magical Mary 1 yet!");
+
 	int p;
 	const char *v;
 	const char *wad;
@@ -2439,7 +2442,7 @@ static int D_DoomMain_Internal (void)
 
 		if ((gameinfo.flags & GI_SHAREWARE) && pwads.Size() > 0)
 		{
-			I_FatalError ("You cannot -file with the shareware version. Register!");
+			I_FatalError ("Please don't load mods with the demo release...I think.");
 		}
 
 		FBaseCVar::DisableCallbacks();
