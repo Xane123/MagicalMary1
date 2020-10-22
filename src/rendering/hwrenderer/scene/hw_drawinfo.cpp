@@ -46,7 +46,7 @@
 
 EXTERN_CVAR(Float, r_visibility)
 CVAR(Bool, gl_bandedswlight, false, CVAR_ARCHIVE)
-CVAR(Bool, gl_spritedepth, false, CVAR_ARCHIVE)	//[XANE]Include sprites in depth map in exchange for glitchy rendering?
+CVAR(Bool, gl_spritedepth, false, CVAR_ARCHIVE)	//[XANE]Include sprites in depth map in exchange for glitchy translucent pixel rendering in the depth map?
 CVAR(Bool, gl_sort_textures, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 
 sector_t * hw_FakeFlat(sector_t * sec, sector_t * dest, area_t in_area, bool back);

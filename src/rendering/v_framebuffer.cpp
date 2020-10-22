@@ -375,7 +375,7 @@ void DFrameBuffer::SetViewportRects(IntRect *bounds)
 
 	// Viewport for the 3D scene
 	mSceneViewport.left = viewwindowx;
-	mSceneViewport.top = screenHeight - (height + viewwindowy - (height - viewheight));	//[XANE]Removed divide to fix sbar depth map height inconsistency.
+	mSceneViewport.top = screenHeight - (height + viewwindowy - ((height - viewheight) / 2));	//[XANE] This causes the status bar to have an incorrect, halved height in the depth buffer...
 	mSceneViewport.width = viewwidth;
 	mSceneViewport.height = height;
 
