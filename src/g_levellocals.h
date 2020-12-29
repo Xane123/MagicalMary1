@@ -504,6 +504,7 @@ public:
 	int			cluster;
 	int			clusterflags;
 	int			levelnum;
+	int			partnum;			// [XANE]Level part number, for levels that come in multple parts.
 	int			lumpnum;
 	FString		LevelName;
 	FString		MapName;			// the lump name (E1M1, MAP01, etc)

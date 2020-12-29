@@ -1637,6 +1637,7 @@ void FLevelLocals::Init()
 	flags2 |= info->flags2;
 	flags3 |= info->flags3;
 	levelnum = info->levelnum;
+	partnum = info->partnum;	//[XANE]Level part number, for levels that come in multiple parts.
 	Music = info->Music;
 	musicorder = info->musicorder;
 	MusicVolume = 1.f;

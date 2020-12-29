@@ -390,6 +390,7 @@ struct level_info_t
 	FString		acsName;
 	bool		fs_nocheckposition;
 
+	int			partnum;	//[XANE]Level part number, for levels that come in multple parts.
 
 	level_info_t() 
 	{ 
