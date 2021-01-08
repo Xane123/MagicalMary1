@@ -23,4 +23,4 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * Night ambience has been added in place of the unused "HCPD police station" ambience. It sounds creepy, with strange sounds and "owls", all over near-constant crickets. The main looping sound is actually entirely generated using AI. I hope OpenAI's artificial intelligence never becomes sentient and starts demanding I pay it royalties or something with how much I keep using its generated audio now...
 * Fight Trap has finally been pre-rendered, so it's as loud as some of the other music in the game now. (Also, new AI-generated drum beats were added during the intro and siren "solo", as this is no longer meant for fighting the police (and hasn't been for a few versions now).
 * New song added for the radio: "Arm Cannon Man"! (Is she referring to a certain blue fighting robot?)
-* There's three new functions in mm1_extra.acs", the common "min", "max", and "clamp". They don't appear to function as intended, though.
+* There's three new functions in mm1_extra.acs, the common "min", "max", and "clamp". They don't appear to function as intended, though.

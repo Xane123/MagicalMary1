@@ -520,7 +520,8 @@
 		LEVELINFO_TOTAL_MONSTERS,
 		LEVELINFO_KILLED_MONSTERS,
 		LEVELINFO_SUCK_TIME,
-		LEVELINFO_PARTNUM
+		LEVELINFO_PARTNUM,
+		LEVELINFO_MUSIC_ID
 	};
 	enum {
 		PLAYERINFO_TEAM,
@@ -9772,6 +9773,7 @@ scriptwait:
 			case LEVELINFO_TOTAL_MONSTERS:	STACK(1) = Level->total_monsters;	break;
 			case LEVELINFO_KILLED_MONSTERS:	STACK(1) = Level->killed_monsters;	break;
 			case LEVELINFO_PARTNUM:			STACK(1) = Level->partnum;			break;	//[XANE]Level part number, for levels that come in multple parts.
+			case LEVELINFO_MUSIC_ID:		STACK(1) = Level->songid;			break;	//[XANE]Music ID that will play at the beginning of this level.
 			default:						STACK(1) = 0;						break;
 			}
 			break;
