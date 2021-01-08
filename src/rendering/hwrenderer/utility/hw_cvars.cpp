@@ -86,6 +86,7 @@ CUSTOM_CVAR(Bool, gl_texture_usehires, true, CVAR_ARCHIVE|CVAR_NOINITCALL)
 }
 
 CVAR(Bool, gl_precache, false, CVAR_ARCHIVE)
+CVAR(Bool, gl_texture_shaders, true, CVAR_ARCHIVE)	//[XANE]Use shaders like PBR on textures?
 
 //==========================================================================
 //

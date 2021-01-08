@@ -30,6 +30,7 @@
 #include "hw_material.h"
 
 EXTERN_CVAR(Bool, gl_texture_usehires)
+EXTERN_CVAR(Bool, gl_texture_shaders)
 
 //===========================================================================
 // 
@@ -157,33 +158,41 @@ FMaterial::FMaterial(FTexture * tx, bool expanded)
 	}
 	else
 	{
-		if (tx->Normal && tx->Specular)
+		if (gl_texture_shaders)	//[XANE]Only allow PBR and specular textures if the user wants them.
 		{
-			for (auto &texture : { tx->Normal, tx->Specular })
+			if (tx->Normal && tx->Specular)
 			{
-				mTextureLayers.Push(texture);
+				for (auto &texture : { tx->Normal, tx->Specular })
+				{
+					mTextureLayers.Push(texture);
+				}
+				mShaderIndex = SHADER_Specular;
 			}
-			mShaderIndex = SHADER_Specular;
-		}
-		else if (tx->Normal && tx->Metallic && tx->Roughness && tx->AmbientOcclusion)
-		{
-			for (auto &texture : { tx->Normal, tx->Metallic, tx->Roughness, tx->AmbientOcclusion })
+			else if (tx->Normal && tx->Metallic && tx->Roughness && tx->AmbientOcclusion)
 			{
-				mTextureLayers.Push(texture);
+				for (auto &texture : { tx->Normal, tx->Metallic, tx->Roughness, tx->AmbientOcclusion })
+				{
+					mTextureLayers.Push(texture);
+				}
+				mShaderIndex = SHADER_PBR;
 			}
-			mShaderIndex = SHADER_PBR;
-		}
 
-		tx->CreateDefaultBrightmap();
-		if (tx->Brightmap)
-		{
-			mTextureLayers.Push(tx->Brightmap);
-			if (mShaderIndex == SHADER_Specular)
-				mShaderIndex = SHADER_SpecularBrightmap;
-			else if (mShaderIndex == SHADER_PBR)
-				mShaderIndex = SHADER_PBRBrightmap;
-			else
-				mShaderIndex = SHADER_Brightmap;
+			tx->CreateDefaultBrightmap();
+			if (tx->Brightmap)
+			{
+				mTextureLayers.Push(tx->Brightmap);
+				if (mShaderIndex == SHADER_Specular)
+					mShaderIndex = SHADER_SpecularBrightmap;
+				else if (mShaderIndex == SHADER_PBR)
+					mShaderIndex = SHADER_PBRBrightmap;
+				else
+					mShaderIndex = SHADER_Brightmap;
+			}
+		}
+		else
+		{	//[XANE] If PBR is disabled, always act like a texture has a brightmap.
+			tx->CreateDefaultBrightmap();
+			mShaderIndex = SHADER_Brightmap;
 		}
 
 		if (tx->shaderindex >= FIRST_USER_SHADER)
