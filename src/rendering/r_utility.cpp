@@ -88,7 +88,7 @@ struct InterpolationViewer
 // PRIVATE DATA DECLARATIONS -----------------------------------------------
 static TArray<InterpolationViewer> PastViewers;
 static FRandom pr_torchflicker ("TorchFlicker");
-static FRandom pr_hom;
+//static FRandom pr_hom; (how to make a new random variable)
 bool NoInterpolateView;	// GL needs access to this.
 static TArray<DVector3a> InterpolationPath;
 
@@ -978,23 +978,23 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 
 		if (hom == 3)
 		{
-			hom = ((screen->FrameTime / 128) & 1) + 1;
+			hom = ((screen->FrameTime / 256) & 1) + 1;
 		}
 		if (hom == 1)
 		{
-			color = GPalette.BlackIndex;
+			color = GPalette.BlackIndex;			//All black (default)
 		}
 		else if (hom == 2)
 		{
-			color = GPalette.WhiteIndex;
+			color = GPalette.WhiteIndex;			//All white
 		}
 		else if (hom == 4)
 		{
-			color = (screen->FrameTime / 32) & 255;
+			color = (screen->FrameTime / 64) & 255;	//Palette cycle
 		}
 		else
 		{
-			color = pr_hom();
+			color = (hom - 5) % 256;	//[XANE]Instead of giving seizures, treat the number as the palette index minus 5. (5 = 0, 260 = 255, etc.)
 		}
 		screen->SetClearColor(color);
 		SWRenderer->SetClearColor(color);

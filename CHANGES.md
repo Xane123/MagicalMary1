@@ -1,4 +1,4 @@
-# Changes (for v2.2?)
+f1# Changes (for v2.2?)
 This is a list of any changes done to Magical Mary 1 since the last release. They will be included in the list of changes for the release when it happens.
 ## Bug-fixes
 * Fixed a glitch where gliding with Mary's parasol when sticking to walls would prevent checking for walls behind her, allowing her to do things like turn around and jump toward the wall she's on, or worse, sliding up to the invisible ceiling of **any** area, then gliding to anywhere she wants!
@@ -10,6 +10,7 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * Xane's flight now takes variable power away, factoring in his height off the ground, speed, and number of flaps. Basically, it's easier to fly straight up than trying to fly quickly across a wide-open area. (Doing that will cause you to make an emergency landing, so don't try it!) In addition, Xane's flight was nerfed; He doesn't get much height from flaps anymore, but instead now builds up speed quicker when flying in a straight line.
 * The radio heard in City Street Run (1-3) has been revamped! Before, it only played music and randomly slapped togther a "talk show". After listening to real radio, I've improved the in-game radio, which now comes up with routines involving music playback, ad breaks, and the talk shows between them! (Talk shows in general are more detailed now, with a specific host and two guests, who can swap positions at random.)
 * It might not be that major, but the radio (currently only in a test level) now is more detailed, with cover art for each song that hides during ads and animate upon switching songs. It's more modern and advanced than the old physical "blocks".
+* The r_clearbuffer CVar shouldn't give any seizures anymore; Before, like GZDoom, setting it to 5 would cause rapid flashing colors. Now, it will show the cooresponding palette index, minus 5. This lets you set any color in Magical Mary 1's palette as your "out of bounds void" color.
 ## Minor
 * For you mod programmers, if there's any of you here, GetSpeed has been updated with new parameters to control what axises are factored in. It's not the same as GetActorVel# though, as this returns integers that usually are large at even slower speeds.
 * Addititonally, the ***RoundTo5*** function is no longer in COMMON1.acs, instead in the common script file "mm1_extra.acs". It's also more freeform now, taking two arguments, one for the multiple to round to and a second one to pass your variable to.
