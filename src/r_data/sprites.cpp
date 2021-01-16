@@ -972,8 +972,16 @@ void R_InitSprites ()
 	int lump, lastlump;
 	unsigned int i, j;
 	unsigned numskins;
-	
-	//[XANE]No need for stupid SPALDOOM and SPALHTIC. Who uses those with MMA?
+
+	// [RH] Create a standard translation to map skins between Heretic and Doom
+	if (gameinfo.gametype == GAME_DoomChex)
+	{
+		R_CreateSkinTranslation ("SPALHTIC");
+	}
+	else
+	{
+		R_CreateSkinTranslation ("SPALDOOM");
+	}
 
 	// [RH] Count the number of skins.
 	numskins = PlayerClasses.Size ();

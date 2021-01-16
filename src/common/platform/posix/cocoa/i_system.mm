@@ -139,7 +139,6 @@ int I_PickIWad(WadStuff* const wads, const int numwads, const bool showwin, cons
 }
 
 
-
 void I_PutInClipboard(const char* const string)
 {
 	NSPasteboard* const pasteBoard = [NSPasteboard generalPasteboard];

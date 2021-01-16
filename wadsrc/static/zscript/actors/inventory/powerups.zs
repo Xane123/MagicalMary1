@@ -317,7 +317,7 @@ class PowerInvulnerable : Powerup
 {
 	Default
 	{
-		Powerup.Duration -32767;
+		Powerup.Duration -30;
 		inventory.icon "SPSHLD0";
 	}
 
@@ -1165,8 +1165,8 @@ class PowerSpeed : Powerup
 	
 	Default
 	{
-		Powerup.Duration -600;
-		Speed 1.0;
+		Powerup.Duration -45;
+		Speed 1.5;
 		Inventory.Icon "SPBOOT0";
 		+INVENTORY.NOTELEPORTFREEZE
 	}

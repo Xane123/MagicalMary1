@@ -127,7 +127,6 @@ extern bool ConWindowHidden;
 
 CVAR (String, queryiwad_key, "shift", CVAR_GLOBALCONFIG|CVAR_ARCHIVE);
 CVAR (Bool, con_debugoutput, false, 0);
-CVAR (Bool, saveconfig, true, CVAR_ARCHIVE)	//[XANE]Allow/deny saving to configuration file. This is used for if MMA is distributed on a disc where writing is not possible.
 
 double PerfToSec, PerfToMillisec;
 
@@ -888,26 +887,22 @@ void DestroyCustomCursor()
 
 bool I_WriteIniFailed()
 {
-	if(saveconfig)
-	{
-		char *lpMsgBuf;
-		FString errortext;
-	
-		FormatMessageA (FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-						FORMAT_MESSAGE_FROM_SYSTEM | 
-						FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL,
-			GetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-			(LPSTR)&lpMsgBuf,
-			0,
-			NULL 
-		);
-		errortext.Format ("The config file %s could not be written:\n%s", GameConfig->GetPathName(), lpMsgBuf);
-		LocalFree (lpMsgBuf);
-		return MessageBoxA(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
-	}
-	else return false;
+	char *lpMsgBuf;
+	FString errortext;
+
+	FormatMessageA (FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+					FORMAT_MESSAGE_FROM_SYSTEM | 
+					FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		GetLastError(),
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		(LPSTR)&lpMsgBuf,
+		0,
+		NULL 
+	);
+	errortext.Format ("The config file %s could not be written:\n%s", GameConfig->GetPathName(), lpMsgBuf);
+	LocalFree (lpMsgBuf);
+	return MessageBoxA(Window, errortext.GetChars(), GAMENAME " configuration not saved", MB_ICONEXCLAMATION | MB_RETRYCANCEL) == IDRETRY;
 }
 
 

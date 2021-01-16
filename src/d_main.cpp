@@ -3049,8 +3049,6 @@ bool  CheckSkipGameOptionBlock(const char* str);
 
 static int D_DoomMain_Internal (void)
 {
-	if (gameinfo.flags & GI_SHAREWARE) I_FatalError("There isn't a demo of Magical Mary 1 yet!");
-
 	int p;
 	const char *v;
 	const char *wad;
@@ -3198,7 +3196,7 @@ static int D_DoomMain_Internal (void)
 
 		if ((gameinfo.flags & GI_SHAREWARE) && pwads.Size() > 0)
 		{
-			I_FatalError ("Please don't load mods with the demo release...I think.");
+			I_FatalError ("You cannot -file with the shareware version. Register!");
 		}
 
 		FBaseCVar::DisableCallbacks();

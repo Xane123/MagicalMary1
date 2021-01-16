@@ -486,12 +486,12 @@ void FConsoleCommand::Run(FCommandLine &argv, int key)
 }
 
 void FUnsafeConsoleCommand::Run(FCommandLine &args, int key)
-{	//[XANE] Who cares if it's "unsafe"? It's my game!
-	/*if (UnsafeExecutionContext)
+{
+	if (UnsafeExecutionContext)
 	{
 		Printf(TEXTCOLOR_RED "Cannot execute unsafe command " TEXTCOLOR_GOLD "%s\n", m_Name.GetChars());
 		return;
-	}*/
+	}
 
 	FConsoleCommand::Run (args, key);
 }

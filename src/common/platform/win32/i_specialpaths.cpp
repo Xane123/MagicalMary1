@@ -81,11 +81,11 @@ bool UseKnownFolders()
 	if (file != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(file);
-		//if (!batchrun) Printf("Using program directory for storage\n");
+		if (!batchrun) Printf("Using program directory for storage\n");
 		iswritable = true;
 		return false;
 	}
-	//if (!batchrun) Printf("Using known folders for storage\n");
+	if (!batchrun) Printf("Using known folders for storage\n");
 	iswritable = false;
 	return true;
 }
@@ -189,7 +189,7 @@ FString M_GetAutoexecPath()
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	/*HRESULT hr;
+	HRESULT hr;
 
 	path.Format("%s" GAMENAMELOWERCASE "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
@@ -207,13 +207,29 @@ FString M_GetConfigPath(bool for_reading)
 	}
 	else
 	{ // construct "$PROGDIR/-$USER.ini"
-		//WCHAR uname[UNLEN+1];
-		//DWORD unamelen = UNLEN;
+		WCHAR uname[UNLEN+1];
+		DWORD unamelen = UNLEN;
 
-		*/path = progdir;
-		//hr = GetUserNameW(uname, &unamelen);
-		path += GAMENAMELOWERCASE ".ini";
-	//}
+		path = progdir;
+		hr = GetUserNameW(uname, &unamelen);
+		if (SUCCEEDED(hr) && uname[0] != 0)
+		{
+			// Is it valid for a user name to have slashes?
+			// Check for them and substitute just in case.
+			auto probe = uname;
+			while (*probe != 0)
+			{
+				if (*probe == '\\' || *probe == '/')
+					*probe = '_';
+				++probe;
+			}
+			path << GAMENAMELOWERCASE "-" << FString(uname) << ".ini";
+		}
+		else
+		{ // Couldn't get user name, so just use base version.
+			path += GAMENAMELOWERCASE ".ini";
+		}
+	}
 
 	// If we are reading the config file, check if it exists. If not, fallback
 	// to base version.

@@ -47,7 +47,6 @@
 
 EXTERN_CVAR(Float, r_visibility)
 CVAR(Bool, gl_bandedswlight, false, CVAR_ARCHIVE)
-CVAR(Bool, gl_spritedepth, false, CVAR_ARCHIVE)	//[XANE]Include sprites in depth map in exchange for glitchy translucent pixel rendering in the depth map?
 CVAR(Bool, gl_sort_textures, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 CVAR(Bool, gl_no_skyclear, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 CVAR(Int, gl_enhanced_nv_stealth, 3, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
@@ -536,10 +535,11 @@ void HWDrawInfo::RenderTranslucent(FRenderState &state)
 
 	state.EnableBrightmap(true);
 	drawlists[GLDL_TRANSLUCENTBORDER].Draw(this, state, true);
-	
-	state.SetDepthMask(gl_spritedepth);	//[XANE]Set this to TRUE and sprites will display in the depth map, though trees don't display correctly (and still no HUD).
+	state.SetDepthMask(false);
+
 	drawlists[GLDL_TRANSLUCENT].DrawSorted(this, state);
 	state.EnableBrightmap(false);
+
 
 	state.AlphaFunc(Alpha_GEqual, 0.5f);
 	state.SetDepthMask(true);

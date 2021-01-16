@@ -116,9 +116,7 @@ void FStat::PrintStat (F2DDrawer *drawer)
 					// Count number of linefeeds but ignore terminating ones.
 					if (stattext[i] == '\n') y -= fontheight;
 				}
-
-				screen->Clear(0, screen->GetHeight() - (screen->GetHeight() / 8), screen->GetWidth(), screen->GetHeight(), 254, 0);	//[XANE]Add a solid background behind the text as it's hard to read.
-				DrawText(drawer, NewConsoleFont, CR_PURPLE, 5 / textScale, y, stattext,
+				DrawText(drawer, NewConsoleFont, CR_GREEN, 5 / textScale, y, stattext,
 					DTA_VirtualWidth, twod->GetWidth() / textScale,
 					DTA_VirtualHeight, twod->GetHeight() / textScale,
 					DTA_KeepRatio, true, TAG_DONE);

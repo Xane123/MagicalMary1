@@ -153,12 +153,12 @@ public:
 
 		if (err != Z_OK && err != Z_STREAM_END)
 		{
-			DecompressionError ("The PK3 file was modified while Magical Mary 1 was open. Sorry for any inconvenience this caused.");
+			DecompressionError ("Corrupt zlib stream");
 		}
 
 		if (Stream.avail_out != 0)
 		{
-			DecompressionError ("Somehow, the compressed stream ran out. Please restart the game.");
+			DecompressionError ("Ran out of data in zlib stream");
 		}
 
 		return len - Stream.avail_out;

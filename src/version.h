@@ -91,23 +91,23 @@ const char *GetVersionString();
 #define SAVEVER 4558
 
 // This is so that derivates can use the same savegame versions without worrying about engine compatibility
-#define GAMESIG "Magical Mary 1"
-#define BASEWAD "engine.pk3"
-#define OPTIONALWAD "who_cares.pk3"
+#define GAMESIG "GZDOOM"
+#define BASEWAD "gzdoom.pk3"
+#define OPTIONALWAD "game_support.pk3"
 #define GZDOOM 1
 #define VR3D_ENABLED
 
 // More stuff that needs to be different for derivatives.
-#define GAMENAME "Magical Mary 1: Redthorn's Family Ransom"
-#define WGAMENAME L"Magical Mary 1"
-#define GAMENAMELOWERCASE "Settings"
-#define FORUM_URL "http://forum.zdoom.org/ (ZDoom Forums)"
-#define BUGS_FORUM_URL	"xane@thex.site"
+#define GAMENAME "GZDoom"
+#define WGAMENAME L"GZDoom"
+#define GAMENAMELOWERCASE "gzdoom"
+#define FORUM_URL "http://forum.zdoom.org/"
+#define BUGS_FORUM_URL	"http://forum.zdoom.org/viewforum.php?f=2"
 
 #if defined(__APPLE__) || defined(_WIN32)
 #define GAME_DIR GAMENAME
 #else
-#define GAME_DIR ".config/" GAMENAME
+#define GAME_DIR ".config/" GAMENAMELOWERCASE
 #endif
 
 const int SAVEPICWIDTH = 216;
