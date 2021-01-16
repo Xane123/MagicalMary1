@@ -54,6 +54,7 @@
 #include "r_data/r_sections.h"
 #include "r_data/r_canvastexture.h"
 #include "r_data/r_interpolate.h"
+#include "doom_aabbtree.h"
 
 //============================================================================
 //
@@ -149,6 +150,7 @@ struct FLevelLocals
 	void Init();
 
 private:
+	bool ShouldDoIntermission(cluster_info_t* nextcluster, cluster_info_t* thiscluster);
 	line_t *FindPortalDestination(line_t *src, int tag);
 	void BuildPortalBlockmap();
 	void UpdatePortal(FLinePortal *port);
@@ -164,6 +166,7 @@ private:
 	void ReadOnePlayer(FSerializer &arc, bool skipload);
 	void ReadMultiplePlayers(FSerializer &arc, int numPlayers, int numPlayersNow, bool skipload);
 	void SerializeSounds(FSerializer &arc);
+	void PlayerSpawnPickClass (int playernum);
 
 public:
 	void SnapshotLevel();
@@ -429,6 +432,7 @@ public:
 
 	TArray<vertex_t> vertexes;
 	TArray<sector_t> sectors;
+	TArray<extsector_t> extsectors; // container for non-trivial sector information. sector_t must be trivially copyable for *_fakeflat to work as intended.
 	TArray<line_t*> linebuffer;	// contains the line lists for the sectors.
 	TArray<subsector_t*> subsectorbuffer;	// contains the subsector lists for the sectors.
 	TArray<line_t> lines;
@@ -456,6 +460,7 @@ public:
 	FSectionContainer sections;
 	FCanvasTextureInfo canvasTextureInfo;
 	EventManager *localEventManager = nullptr;
+	DoomLevelAABBTree* aabbTree = nullptr;
 
 	// [ZZ] Destructible geometry information
 	TMap<int, FHealthGroup> healthGroups;

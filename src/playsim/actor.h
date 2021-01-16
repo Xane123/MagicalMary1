@@ -40,8 +40,8 @@
 #include "info.h"
 
 #include "doomdef.h"
-#include "textures/textures.h"
-#include "r_data/renderstyle.h"
+#include "textures.h"
+#include "renderstyle.h"
 #include "s_sound.h"
 #include "memarena.h"
 #include "g_level.h"
@@ -411,6 +411,10 @@ enum ActorFlag8
 	MF8_NOFRICTIONBOUNCE	= 0x00000040,	// don't bounce off walls when on icy floors
 	MF8_RETARGETAFTERSLAM	= 0x00000080,	// Forces jumping to the idle state after slamming into something
 	MF8_RECREATELIGHTS	= 0x00000100,	// Internal flag that signifies that the light attachments need to be recreated at the
+	MF8_STOPRAILS		= 0x00000200,	// [MC] Prevent rails from going further if an actor has this flag.
+	MF8_ABSVIEWANGLES	= 0x00000400,	// [MC] By default view angle/pitch/roll is an offset. This will make it absolute instead.
+	MF8_FALLDAMAGE		= 0x00000800,	// Monster will take fall damage regardless of map settings.
+	MF8_ALLOWTHRUBITS		= 0x00008000,	// [MC] Enable ThruBits property
 };
 
 // --- mobj.renderflags ---
@@ -604,6 +608,11 @@ inline AActor *GetDefaultByName (const char *name)
 	return (AActor *)(PClass::FindClass(name)->Defaults);
 }
 
+inline AActor* GetDefaultByName(FName name)
+{
+	return (AActor*)(PClass::FindClass(name)->Defaults);
+}
+
 inline AActor *GetDefaultByType (const PClass *type)
 {
 	return (AActor *)(type->Defaults);
@@ -674,7 +683,7 @@ public:
 	// Adjusts the angle for deflection/reflection of incoming missiles
 	// Returns true if the missile should be allowed to explode anyway
 	bool AdjustReflectionAngle (AActor *thing, DAngle &angle);
-	int AbsorbDamage(int damage, FName dmgtype);
+	int AbsorbDamage(int damage, FName dmgtype, AActor *inflictor, AActor *source, int flags);
 	void AlterWeaponSprite(visstyle_t *vis);
 
 	// Returns true if this actor is within melee range of its target
@@ -839,9 +848,13 @@ public:
 	}
 
 	// These also set CF_INTERPVIEW for players.
-	void SetPitch(DAngle p, bool interpolate, bool forceclamp = false);
-	void SetAngle(DAngle ang, bool interpolate);
-	void SetRoll(DAngle roll, bool interpolate);
+	DAngle ClampPitch(DAngle p);
+	void SetPitch(DAngle p, int fflags);
+	void SetAngle(DAngle ang, int fflags);
+	void SetRoll(DAngle roll, int fflags);
+	void SetViewPitch(DAngle p, int fflags);
+	void SetViewAngle(DAngle ang, int fflags);
+	void SetViewRoll(DAngle roll, int fflags);
 
 	PClassActor *GetBloodType(int type = 0) const;
 
@@ -851,7 +864,7 @@ public:
 		return (Pos().XY() - otherpos).LengthSquared();
 	}
 
-	double Distance2D(AActor *other, bool absolute = false)
+	double Distance2D(AActor *other, bool absolute = false) const
 	{
 		DVector2 otherpos = absolute ? other->Pos() : other->PosRelative(this);
 		return (Pos().XY() - otherpos).Length();
@@ -862,7 +875,7 @@ public:
 		return DVector2(X() - x, Y() - y).Length();
 	}
 
-	double Distance2D(AActor *other, double xadd, double yadd, bool absolute = false)
+	double Distance2D(AActor *other, double xadd, double yadd, bool absolute = false) const
 	{
 		DVector3 otherpos = absolute ? other->Pos() : other->PosRelative(this);
 		return DVector2(X() - otherpos.X + xadd, Y() - otherpos.Y + yadd).Length();
@@ -955,6 +968,7 @@ public:
 	DAngle			SpriteAngle;
 	DAngle			SpriteRotation;
 	DRotator		Angles;
+	DRotator		ViewAngles;			// Offsets for cameras
 	DVector2		Scale;				// Scaling values; 1 is normal size
 	double			Alpha;				// Since P_CheckSight makes an alpha check this can't be a float. It has to be a double.
 
@@ -982,13 +996,14 @@ public:
 	double			Floorclip;		// value to use for floor clipping
 	double			radius, Height;		// for movement checking
 
-	DAngle			VisibleStartAngle;
-	DAngle			VisibleStartPitch;
-	DAngle			VisibleEndAngle;
-	DAngle			VisibleEndPitch;
+	FAngle			VisibleStartAngle;
+	FAngle			VisibleStartPitch;
+	FAngle			VisibleEndAngle;
+	FAngle			VisibleEndPitch;
 
 	DVector3		OldRenderPos;
 	DVector3		Vel;
+	DVector2		SpriteOffset;
 	double			Speed;
 	double			FloatSpeed;
 
@@ -1000,11 +1015,13 @@ public:
 	double			floorz, ceilingz;	// closest together of contacted secs
 	double			dropoffz;		// killough 11/98: the lowest floor over all contacted Sectors.
 
-	struct sector_t	*floorsector;
+	uint32_t		ThruBits;
 	FTextureID		floorpic;			// contacted sec floorpic
 	int				floorterrain;
-	struct sector_t	*ceilingsector;
 	FTextureID		ceilingpic;			// contacted sec ceilingpic
+
+	struct sector_t	*floorsector;
+	struct sector_t	*ceilingsector;
 	double			renderradius;
 
 	double			projectilepassheight;	// height for clipping projectile movement against this actor
@@ -1037,6 +1054,7 @@ public:
 	int8_t			visdir;
 	int16_t			movecount;		// when 0, select a new dir
 	int16_t			strafecount;	// for MF3_AVOIDMELEE
+	uint16_t			SpawnAngle;
 	TObjPtr<AActor*> target;			// thing being chased/attacked (or NULL)
 									// also the originator for missiles
 	TObjPtr<AActor*>	lastenemy;		// Last known enemy -- killough 2/15/98
@@ -1049,11 +1067,10 @@ public:
 	player_t		*player;		// only valid if type of PlayerPawn
 	TObjPtr<AActor*>	LastLookActor;	// Actor last looked for (if TIDtoHate != 0)
 	DVector3		SpawnPoint; 	// For nightmare respawn
-	uint16_t			SpawnAngle;
 	int				StartHealth;
 	uint8_t			WeaveIndexXY;	// Separated from special2 because it's used by globally accessible functions.
 	uint8_t			WeaveIndexZ;
-	int				skillrespawncount;
+	uint16_t		skillrespawncount;
 	int				TIDtoHate;			// TID of things to hate (0 if none)
 	FName		Species;		// For monster families
 	TObjPtr<AActor*>	alternative;	// (Un)Morphed actors stored here. Those with the MF_UNMORPHED flag are the originals.
@@ -1081,11 +1098,11 @@ public:
 	double			maxtargetrange;	// any target farther away cannot be attacked
 	double			bouncefactor;	// Strife's grenades use 50%, Hexen's Flechettes 70.
 	double			wallbouncefactor;	// The bounce factor for walls can be different.
-	int				bouncecount;	// Strife's grenades only bounce twice before exploding
 	double			Gravity;		// [GRB] Gravity factor
 	double			Friction;
-	int 			FastChaseStrafeCount;
 	double			pushfactor;
+	int				bouncecount;	// Strife's grenades only bounce twice before exploding
+	int 			FastChaseStrafeCount;
 	int				lastpush;
 	int				activationtype;	// How the thing behaves when activated with USESPECIAL or BUMPSPECIAL
 	int				lastbump;		// Last time the actor was bumped, used to control BUMPSPECIAL
@@ -1124,8 +1141,8 @@ public:
 
 	uint8_t smokecounter;
 	uint8_t FloatBobPhase;
-	double FloatBobStrength;
 	uint8_t FriendPlayer;				// [RH] Player # + 1 this friendly monster works for (so 0 is no player, 1 is player 0, etc)
+	double FloatBobStrength;
 	PalEntry BloodColor;
 	uint32_t BloodTranslation;
 
@@ -1142,6 +1159,7 @@ public:
 
 	double MaxDropOffHeight;
 	double MaxStepHeight;
+	double MaxSlopeSteepness;
 
 	int32_t Mass;
 	int16_t PainChance;
@@ -1159,14 +1177,14 @@ public:
 	int RipLevelMin;
 	int RipLevelMax;
 
+	int ConversationRoot;				// THe root of the current dialogue
+	FStrifeDialogueNode* Conversation;	// [RH] The dialogue to show when this actor is "used."
+
 	FState *SpawnState;
 	FState *SeeState;
 	FState *MeleeState;
 	FState *MissileState;
 
-	
-	int ConversationRoot;				// THe root of the current dialogue
-	FStrifeDialogueNode *Conversation;	// [RH] The dialogue to show when this actor is "used."
 
 	// [RH] Decal(s) this weapon/projectile generates on impact.
 	FDecalBase *DecalGenerator;
@@ -1427,7 +1445,7 @@ public:
 
 	// This is used by many vertical velocity calculations.
 	// Better have it in one place, if something needs to be changed about the formula.
-	double DistanceBySpeed(AActor *dest, double speed)
+	double DistanceBySpeed(AActor *dest, double speed) const
 	{
 		return MAX(1., Distance2D(dest) / speed);
 	}
@@ -1435,7 +1453,7 @@ public:
 	int ApplyDamageFactor(FName damagetype, int damage) const;
 	int GetModifiedDamage(FName damagetype, int damage, bool passive, AActor *inflictor, AActor *source, int flags = 0);
 	void DeleteAttachedLights();
-	bool isFrozen();
+	bool isFrozen() const;
 
 	bool				hasmodel;
 };
@@ -1551,6 +1569,8 @@ struct FTranslatedLineTarget
 	bool unlinked;	// found by a trace that went through an unlinked portal.
 };
 
+
+void StaticPointerSubstitution(AActor* old, AActor* notOld);
 
 #define S_FREETARGMOBJ	1
 

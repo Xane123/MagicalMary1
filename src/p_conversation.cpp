@@ -36,7 +36,7 @@
 
 #include "actor.h"
 #include "p_conversation.h"
-#include "w_wad.h"
+#include "filesystem.h"
 #include "cmdlib.h"
 #include "v_text.h"
 #include "gi.h"
@@ -52,11 +52,13 @@
 #include "sbar.h"
 #include "p_lnspec.h"
 #include "p_local.h"
-#include "menu/menu.h"
+#include "menu.h"
 #include "g_levellocals.h"
 #include "vm.h"
 #include "v_video.h"
 #include "actorinlines.h"
+#include "v_draw.h"
+#include "doommenu.h"
 
 static FRandom pr_randomspeech("RandomSpeech");
 
@@ -329,7 +331,7 @@ void P_StartConversation (AActor *npc, AActor *pc, bool facetalker, bool saveang
 
 	if (pc->player == Level->GetConsolePlayer())
 	{
-		S_Sound (CHAN_VOICE | CHAN_UI, gameinfo.chatSound, 1, ATTN_NONE);
+		S_Sound (CHAN_VOICE, CHANF_UI, gameinfo.chatSound, 1, ATTN_NONE);
 	}
 
 	npc->reactiontime = 2;
@@ -380,7 +382,7 @@ void P_StartConversation (AActor *npc, AActor *pc, bool facetalker, bool saveang
 		if (CurNode->SpeakerVoice != 0)
 		{
 			I_SetMusicVolume (dlg_musicvolume);
-			S_Sound (npc, CHAN_VOICE|CHAN_NOPAUSE, CurNode->SpeakerVoice, 1, ATTN_NORM);
+			S_Sound (npc, CHAN_VOICE, CHANF_NOPAUSE, CurNode->SpeakerVoice, 1, ATTN_NORM);
 		}
 		M_StartControlPanel(false, true);
 

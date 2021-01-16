@@ -64,6 +64,7 @@
 #include "actorinlines.h"
 #include "g_game.h"
 #include "i_system.h"
+#include "v_draw.h"
 
 // EXTERNAL DATA DECLARATIONS ----------------------------------------------
 
@@ -140,7 +141,6 @@ int				LocalViewPitch;
 bool			LocalKeyboardTurner;
 
 int				setblocks;
-bool			setsizeneeded;
 
 unsigned int	R_OldBlend = ~0;
 int 			validcount = 1; 	// increment every time a check is made
@@ -368,7 +368,7 @@ CUSTOM_CVAR (Int, screenblocks, 10, CVAR_ARCHIVE)
 //==========================================================================
 
 FRenderer *CreateSWRenderer();
-
+FRenderer* SWRenderer;
 
 //==========================================================================
 //
@@ -804,7 +804,17 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 		viewpoint.sector = viewpoint.camera->Sector;
 		viewpoint.showviewer = false;
 	}
-	iview->New.Angles = viewpoint.camera->Angles;
+
+	// [MC] Apply the view angles first, which is the offsets. If the absolute isn't desired,
+	// add the standard angles on top of it.
+	viewpoint.Angles = viewpoint.camera->ViewAngles;
+
+	if (!(viewpoint.camera->flags8 & MF8_ABSVIEWANGLES))
+	{
+		viewpoint.Angles += viewpoint.camera->Angles;
+	}
+
+	iview->New.Angles = viewpoint.Angles;
 	if (viewpoint.camera->player != 0)
 	{
 		player = viewpoint.camera->player;
@@ -1030,30 +1040,6 @@ void R_SetupFrame (FRenderViewpoint &viewpoint, FViewWindow &viewwindow, AActor 
 	
 }
 
-
-//==========================================================================
-//
-// CVAR transsouls
-//
-// How translucent things drawn with STYLE_SoulTrans are. Normally, only
-// Lost Souls have this render style.
-// Values less than 0.25 will automatically be set to
-// 0.25 to ensure some degree of visibility. Likewise, values above 1.0 will
-// be set to 1.0, because anything higher doesn't make sense.
-//
-//==========================================================================
-
-CUSTOM_CVAR(Float, transsouls, 0.75f, CVAR_ARCHIVE)
-{
-	if (self < 0.25f)
-	{
-		self = 0.25f;
-	}
-	else if (self > 1.f)
-	{
-		self = 1.f;
-	}
-}
 
 CUSTOM_CVAR(Float, maxviewpitch, 75.f, CVAR_ARCHIVE | CVAR_SERVERINFO)
 {

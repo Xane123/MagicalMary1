@@ -249,7 +249,7 @@ bool P_TestActivateLine (line_t *line, AActor *mo, int side, int activationType,
 	auto Level = line->GetLevel();
  	int lineActivation = line->activation;
 
-	if (line->flags & ML_FIRSTSIDEONLY && side == 1)
+	if ((line->flags & ML_FIRSTSIDEONLY && side == 1) || line->special == 0)
 	{
 		return false;
 	}
@@ -345,6 +345,7 @@ bool P_TestActivateLine (line_t *line, AActor *mo, int side, int activationType,
 					{
 						break;
 					}
+					[[fallthrough]];
 				case Teleport:
 				case Teleport_NoFog:
 				case Teleport_Line:
@@ -432,6 +433,10 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 	auto Level = sector->Level;
 
 	// [RH] Apply any customizable damage
+
+	if (sector->damageinterval <= 0)
+		sector->damageinterval = 32; // repair invalid damageinterval values
+
 	if (sector->damageamount > 0)
 	{
 		// Allow subclasses. Better would be to implement it as armor and let that reduce
@@ -454,7 +459,10 @@ void P_PlayerInSpecialSector (player_t *player, sector_t * sector)
 			}
 			else if (Level->time % sector->damageinterval == 0)
 			{
-				if (!(player->cheats & (CF_GODMODE|CF_GODMODE2))) P_DamageMobj(player->mo, NULL, NULL, sector->damageamount, sector->damagetype);
+				if (!(player->cheats & (CF_GODMODE | CF_GODMODE2)))
+				{
+					P_DamageMobj(player->mo, NULL, NULL, sector->damageamount, sector->damagetype);
+				}
 				if ((sector->Flags & SECF_ENDLEVEL) && player->health <= 10 && (!deathmatch || !(dmflags & DF_NO_EXIT)))
 				{
 					Level->ExitLevel(0, false);
@@ -592,15 +600,13 @@ void P_GiveSecret(FLevelLocals *Level, AActor *actor, bool printmessage, bool pl
 		{
 			if (printmessage)
 			{
-				if (!showsecretsector || sectornum < 0) C_MidPrint(nullptr, GStrings["SECRETMESSAGE"]);
-				else
+				C_MidPrint(nullptr, GStrings["SECRETMESSAGE"]);
+				if (showsecretsector && sectornum >= 0) 
 				{
-					FString s = GStrings["SECRETMESSAGE"];
-					s.AppendFormat(" (Sector %d)", sectornum);
-					C_MidPrint(nullptr, s);
+					Printf(PRINT_NONOTIFY, "Secret found in sector %d\n", sectornum);
 				}
 			}
-			if (playsound) S_Sound (CHAN_AUTO | CHAN_UI, "misc/secret", 1, ATTN_NORM);
+			if (playsound) S_Sound (CHAN_AUTO, CHANF_UI, "misc/secret", 1, ATTN_NORM);
 		}
 	}
 	Level->found_secrets++;
@@ -627,7 +633,7 @@ void P_PlayerOnSpecialFlat (player_t *player, int floorType)
 	auto Level = player->mo->Level;
 
 	if (Terrains[floorType].DamageAmount &&
-		!(Level->time & Terrains[floorType].DamageTimeMask))
+		!(Level->time % (Terrains[floorType].DamageTimeMask+1)))
 	{
 		AActor *ironfeet = NULL;
 
@@ -649,7 +655,7 @@ void P_PlayerOnSpecialFlat (player_t *player, int floorType)
 		}
 		if (damage > 0 && Terrains[floorType].Splash != -1)
 		{
-			S_Sound (player->mo, CHAN_AUTO,
+			S_Sound (player->mo, CHAN_AUTO, 0,
 				Splashes[Terrains[floorType].Splash].NormalSplashSound, 1,
 				ATTN_IDLE);
 		}

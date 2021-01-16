@@ -39,6 +39,7 @@
 EXTERN_CVAR (Bool, ticker);
 EXTERN_CVAR (Bool, noisedebug);
 EXTERN_CVAR (Int, am_cheat);
+EXTERN_CVAR (Int, cl_blockcheats);
 
 struct cheatseq_t
 {
@@ -114,13 +115,18 @@ bool ST_Responder (event_t *ev)
 {
 	bool eat = false;
 
-		static cheatseq_t *cheatlists[] = { GameCheats };
-		static int counts[] = { countof(GameCheats) };
+	if (!!cl_blockcheats || gameinfo.nokeyboardcheats)
+	{
+		return false;
+	}
 
-		for (size_t i=0; i<countof(cheatlists); i++)
-		{
-			if (CheatCheckList(ev, cheatlists[i], counts[i])) return true;
-		}
+	static cheatseq_t *cheatlists[] = { GameCheats };	//[XANE] Only one list, but I don't feel safe altering this in fear of breaking cheats.
+	static int counts[] = { countof(GameCheats) };
+
+	for (size_t i = 0; i < countof(cheatlists); i++)
+	{
+		if (CheatCheckList(ev, cheatlists[i], counts[i])) return true;
+	}
 	return false;
 }
 
