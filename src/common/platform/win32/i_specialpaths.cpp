@@ -189,7 +189,7 @@ FString M_GetAutoexecPath()
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	HRESULT hr;
+	//HRESULT hr;
 
 	/*path.Format("%s" GAMENAMELOWERCASE "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
