@@ -189,14 +189,14 @@ FString M_GetAutoexecPath()
 FString M_GetConfigPath(bool for_reading)
 {
 	FString path;
-	//HRESULT hr;
+	HRESULT hr;
 
-	/*path.Format("%s" GAMENAMELOWERCASE "_portable.ini", progdir.GetChars());
+	path.Format("%s" GAMENAMELOWERCASE "_portable.ini", progdir.GetChars());
 	if (FileExists(path))
 	{
 		return path;
 	}
-	path = "";*/
+	path = "";
 
 	// Construct a user-specific config name
 	if (UseKnownFolders() && GetKnownFolder(CSIDL_APPDATA, FOLDERID_RoamingAppData, true, path))
@@ -205,14 +205,14 @@ FString M_GetConfigPath(bool for_reading)
 		CreatePath(path);
 		path += "/" GAMENAMELOWERCASE ".ini";
 	}
-	/*else
+	else
 	{ // construct "$PROGDIR/-$USER.ini"
-		WCHAR uname[UNLEN+1];
-		DWORD unamelen = UNLEN;
+		//WCHAR uname[UNLEN+1];
+		//DWORD unamelen = UNLEN;
 
 		path = progdir;
-		hr = GetUserNameW(uname, &unamelen);
-		if (SUCCEEDED(hr) && uname[0] != 0)
+		//hr = GetUserNameW(uname, &unamelen);
+		/*if (SUCCEEDED(hr) && uname[0] != 0)
 		{
 			// Is it valid for a user name to have slashes?
 			// Check for them and substitute just in case.
@@ -225,11 +225,11 @@ FString M_GetConfigPath(bool for_reading)
 			}
 			path << GAMENAMELOWERCASE "-" << FString(uname) << ".ini";
 		}
-		else
+		else*/
 		{ // Couldn't get user name, so just use base version.
 			path += GAMENAMELOWERCASE ".ini";
 		}
-	}*/
+	}
 
 	// If we are reading the config file, check if it exists. If not, fallback
 	// to base version.
