@@ -207,12 +207,12 @@ FString M_GetConfigPath(bool for_reading)
 	}
 	else
 	{ // construct "$PROGDIR/-$USER.ini"
-		//WCHAR uname[UNLEN+1];
-		//DWORD unamelen = UNLEN;
+		WCHAR uname[UNLEN+1];
+		DWORD unamelen = UNLEN;
 
 		path = progdir;
-		//hr = GetUserNameW(uname, &unamelen);
-		/*if (SUCCEEDED(hr) && uname[0] != 0)
+		hr = GetUserNameW(uname, &unamelen);
+		if (SUCCEEDED(hr) && uname[0] != 0)
 		{
 			// Is it valid for a user name to have slashes?
 			// Check for them and substitute just in case.
@@ -223,9 +223,9 @@ FString M_GetConfigPath(bool for_reading)
 					*probe = '_';
 				++probe;
 			}
-			path << GAMENAMELOWERCASE "-" << FString(uname) << ".ini";
+			path << GAMENAMELOWERCASE ".ini";	//path << GAMENAMELOWERCASE "-" << FString(uname) << ".ini";
 		}
-		else*/
+		else
 		{ // Couldn't get user name, so just use base version.
 			path += GAMENAMELOWERCASE ".ini";
 		}
