@@ -1556,6 +1556,13 @@ DEFINE_MAP_OPTION(songid, true)
 	info->partnum = parse.sc.Number;
 }
 
+DEFINE_MAP_OPTION(foliagecolor, true)
+{	//[XANE]Color used by tree leaf clusters and grass.
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->partnum = parse.sc.Number;
+}
+
 //==========================================================================
 //
 // All flag based map options 
