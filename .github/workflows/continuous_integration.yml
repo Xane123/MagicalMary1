@@ -14,13 +14,7 @@ jobs:
             name: "Visual Studio 64-bit",
             os: windows-latest,
             extra_options: "-A x64",
-            build_type: "Release"
-          }
-        - {
-            name: "Visual Studio 64-bit",
-            os: windows-latest,
-            extra_options: "-A x64",
-            build_type: "Debug"
+            build_type: "MinSizeRel"
           }
         - {
             name: "macOS",
@@ -30,29 +24,10 @@ jobs:
             build_type: "Release"
           }
         - {
-            name: "macOS",
-            os: macos-latest,
-            build_type: "Debug"
-          }
-        - {
-            name: "Linux GCC 7",
-            os: ubuntu-latest,
-            extra_options: "-DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_CXX_COMPILER=/usr/bin/g++-7",
-            deps_cmdline: "sudo apt update && sudo apt install libsdl2-dev libgtk2.0-dev",
-            build_type: "RelWithDebInfo"
-          }
-        - {
             name: "Linux GCC 9",
             os: ubuntu-latest,
             extra_options: "-DCMAKE_C_COMPILER=/usr/bin/gcc-9 -DCMAKE_CXX_COMPILER=/usr/bin/g++-9",
             deps_cmdline: "sudo apt update && sudo apt install libsdl2-dev libgtk-3-dev",
-            build_type: "Debug"
-          }
-        - {
-            name: "Linux Clang 6",
-            os: ubuntu-latest,
-            extra_options: "-DCMAKE_C_COMPILER=/usr/bin/clang-6.0 -DCMAKE_CXX_COMPILER=/usr/bin/clang++-6.0",
-            deps_cmdline: "sudo apt update && sudo apt install libsdl2-dev",
             build_type: "Debug"
           }
         - {
@@ -109,7 +84,7 @@ jobs:
         fi
 
     - name: Upload Package
-      if: runner.os == 'Windows'  # Remove to store packages of all targets
+      #if: runner.os == 'Windows'  # Remove to store packages of all targets
       uses: actions/upload-artifact@v1
       with:
         path: build/package
