@@ -100,7 +100,7 @@ const char *GetVersionString();
 // More stuff that needs to be different for derivatives.
 #define GAMENAME "Magical May 1: Redthorn's Family Ransom"
 #define WGAMENAME L"Magical Mary 1"
-#define GAMENAMELOWERCASE "Settings"
+#define GAMENAMELOWERCASE "magicalmary1"
 #define FORUM_URL "http://forum.zdoom.org/"
 #define BUGS_FORUM_URL	"http://forum.zdoom.org/viewforum.php?f=2"
 
