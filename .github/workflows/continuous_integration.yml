@@ -75,12 +75,26 @@ jobs:
       run: |
         cd build
         mkdir package
+        cd package
+        mkdir windows
+        mkdir macos
+        mkdir linux
+        cd ../
+        
+        if [[ "${{ runner.os }}" == 'Windows' ]]; then
+          cp ${{ matrix.config.build_type }}/PlayGame.exe ${{ matrix.config.build_type }}/*.pk3 package/windows
+        elif [[ "${{ runner.os }}" == 'macOS' ]]; then
+          cp -r PlayGame.app ZMusic package/macos
+        elif [[ "${{ runner.os }}" == 'Linux' ]]; then
+          cp -r PlayGame ZMusic *.pk3 package/linux
+        fi
+        
         if [[ "${{ runner.os }}" == 'Windows' ]]; then
           cp ${{ matrix.config.build_type }}/PlayGame.exe ${{ matrix.config.build_type }}/*.pk3 package
         elif [[ "${{ runner.os }}" == 'macOS' ]]; then
           cp -r PlayGame.app ZMusic package
         elif [[ "${{ runner.os }}" == 'Linux' ]]; then
-          cp PlayGame ZMusic *.pk3 package
+          cp -r PlayGame ZMusic *.pk3 package
         fi
 
     - name: Upload Package
