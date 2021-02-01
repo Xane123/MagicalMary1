@@ -289,7 +289,7 @@ void level_info_t::Reset()
 	fogdensity = 0;
 	outsidefogdensity = 0;
 	skyfog = 0;
-	pixelstretch = 1.2f;
+	pixelstretch = 1.0f;
 
 	specialactions.Clear();
 	DefaultEnvironment = 0;
@@ -304,6 +304,7 @@ void level_info_t::Reset()
 
 	partnum = 0;
 	songid = 0;
+	foliagecolor = 0;	//[XANE] Default to green grass parts/trees.
 }
 
 
@@ -1553,14 +1554,14 @@ DEFINE_MAP_OPTION(songid, true)
 {	//[XANE]Which song ID to play at the beginning of this level. (not to be confused with "Music" and "musicorder", ZDoom's built-in MAPINFO properties.
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
-	info->partnum = parse.sc.Number;
+	info->songid = parse.sc.Number;
 }
 
 DEFINE_MAP_OPTION(foliagecolor, true)
 {	//[XANE]Color used by tree leaf clusters and grass.
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
-	info->partnum = parse.sc.Number;
+	info->foliagecolor = parse.sc.Number;
 }
 
 //==========================================================================
