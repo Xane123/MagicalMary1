@@ -172,12 +172,12 @@ float HWDrawInfo::GetFogDensity(int lightlevel, PalEntry fogcolor, int sectorfog
 	auto oldlightmode = lightmode;
 	if (isSoftwareLighting() && blendfactor > 0) lightmode = ELightMode::Doom;	// The blendfactor feature does not work with software-style lighting.
 
-	if (lightmode == ELightMode::DoomLegacy)
+	/*if (lightmode == ELightMode::DoomLegacy)
 	{
 		// uses approximations of Legacy's default settings.
 		density = Level->fogdensity ? (float)Level->fogdensity : 18;
 	}
-	else if (sectorfogdensity != 0)
+	else */if (sectorfogdensity != 0)
 	{
 		// case 1: Sector has an explicit fog density set.
 		density = (float)sectorfogdensity;
@@ -252,7 +252,7 @@ bool HWDrawInfo::CheckFog(sector_t *frontsector, sector_t *backsector)
 	else 
 	{
 		// case 4: use light level
-		if (frontsector->lightlevel >= 248) return false;
+		if (frontsector->lightlevel >= 256) return false;
 	}
 
 	fogcolor = backsector->Colormap.FadeColor;
@@ -272,7 +272,7 @@ bool HWDrawInfo::CheckFog(sector_t *frontsector, sector_t *backsector)
 	else 
 	{
 		// case 4: use light level
-		if (backsector->lightlevel < 248) return false;
+		if (backsector->lightlevel < 256) return false;
 	}
 
 	// in all other cases this might create more problems than it solves.

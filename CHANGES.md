@@ -15,6 +15,7 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * Double and triple jumps are back, missing since the World of Kirbycraft days! Like before if you are moving fast enough and are holding the "forward" movement key, you can push "jump" as you land and you'll jump higher! Like before, Mary makes different sounds, so you'll know when it happens. Release that key right before you jump, and it will become the expected normal jump.
 * The way Mary's claw and crying are activated has been altered. Double-tap USE to fire the claw like before, but now there's way less button-mashing needed to make Mary cry; Tap it five times then she'll cry after the delay.
 * Trees are now "built" when approached, using "parts" to form it. This means trees can be different sizes now and don't always have two branches; In fact, sometimes they don't even have one! The trees are kept **mostly** consistent in structure, too; If you move away from a tree, it'll become an image to improve performance (which reflects the tree's size)	, but returning to that same tree will make it rebuild itself almost exactly like it was last time you saw it...minus slight randomness for the leaf cluster positions.
+* Mary's downward Air Dash doesn't boost her on landing anymore, preventing easy cheesing of every ramp with her.
 ## Minor
 * For you mod programmers, if there's any of you here, GetSpeed has been updated with new parameters to control what axises are factored in. It's not the same as GetActorVel# though, as this returns integers that usually are large at even slower speeds.
 * Addititonally, the ***RoundTo5*** function is no longer in COMMON1.acs, instead in the common script file "mm1_extra.acs". It's also more freeform now, taking two arguments, one for the multiple to round to and a second one to pass your variable to.
@@ -39,3 +40,6 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * OBJGroupSpawner objects become visible at a longer distance than before, 1.5x the spawning radius of a given marker.
 * Water splashes have been improved visually! Before this update, they used copyrighted Sonic 1 sprites, but now they are particle-based and look detailed. Look behind Mary when running on water and you'll see the white-colored trails boats tend to leave behind.
 * Hopping into water now briefly creates bubbles, which try to dip into the player's view briefly.
+* Bubbles! Go beneath the surface of the water and a bunch of bubbles will float away from you.
+* New texture versions for grass!
+* Completely new textures: Leaf piles (slow down player) and 
