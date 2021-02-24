@@ -42,4 +42,4 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * Hopping into water now briefly creates bubbles, which try to dip into the player's view briefly.
 * Bubbles! Go beneath the surface of the water and a bunch of bubbles will float away from you.
 * New texture versions for grass!
-* Completely new textures: Leaf piles (slow down player) and 
+* Completely new textures: Leaf piles (slow down player), Cumulus Peaks textures, and new grass textures, including replacements of the standard two! 
