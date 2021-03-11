@@ -140,6 +140,8 @@ CUSTOM_CVAR(Bool, gl_notexturefill, false, CVAR_NOINITCALL)
 	}
 }
 
+EXTERN_CVAR(Int, gl_tonemap)	//Referenced to toggle software appearance if "World of Kirbycraft" is selected as the "light mode" below.
+
 CUSTOM_CVAR(Int, gl_lightmode, 4, CVAR_ARCHIVE | CVAR_NOINITCALL)	// [XANE]Doom Legacy's appearance looks the best, minus forced fog.
 {
 	int newself = self;
@@ -151,6 +153,10 @@ CUSTOM_CVAR(Int, gl_lightmode, 4, CVAR_ARCHIVE | CVAR_NOINITCALL)	// [XANE]Doom 
 	{
 		if ((Level->info == nullptr || Level->info->lightmode == ELightMode::NotSet)) Level->lightMode = (ELightMode)*self;
 	}
+
+	// [XANE]If World of Kirbycraft (software) lighting mode is selected, the palette tonemap is silently turned on.
+	if (self == 8) gl_tonemap = 5;
+	else gl_tonemap = 0;
 }
 
 CVAR(Int, sv_alwaystally, 0, CVAR_SERVERINFO)

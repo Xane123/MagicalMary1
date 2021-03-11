@@ -351,7 +351,7 @@ static bool Cht_AutoMap (cheatseq_t *cheat)
 {
 	if (automapactive)
 	{
-		am_cheat = (am_cheat + 1) % 3;
+		am_cheat = (am_cheat + 1) % 4;
 		return true;
 	}
 	else
