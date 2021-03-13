@@ -1,0 +1,20 @@
+New variables being added to the source code/MAPINFO/GetLevelInfo:
+Variable		LEVELINFO constant		Description
+leveltype		LEVELINFO_TYPE			Level type - 0: Normal, 1: Special Stage, 2: Battle Arena, 3: Twisted Metal-like combat?
+timeofday		LEVELINFO_TIMEOFDAY_ON	If non-zero, enables the time of day system. Number determines color/sky property set, like 1 = Peacewater.
+override_time	LEVELINFO_NEXTMAP_TIME	Forces the time of day to this ID, given it's > -1. On levels where time of day's disabled, this sets the time of day that the next visited level will use.
+
+TIME OF DAY REVIVAL?
+The quickly-scrapped time-of-day system could be revived for new levels, minus those that use 3D skyboxes designed only for specific times of day (like the 3D river/Cumulus Peaks skies).
+To make things more interesting, there should be more times implemented than just day, sunset, night, and sunrise...
+
+0	Day
+1	Early Sunset
+2	Sunset
+3	Late Sunset
+4	Night
+5	Early Sunrise
+6	Sunrise
+7	Late Sunrise
+
+Just like when the time of day system was used, the cloudy sky and fog are special, and should probably be connected to the rain ambience's lightning flashes.

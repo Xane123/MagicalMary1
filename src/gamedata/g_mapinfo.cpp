@@ -305,6 +305,9 @@ void level_info_t::Reset()
 	partnum = 0;
 	songid = 0;
 	foliagecolor = 0;	//[XANE] Default to green grass parts/trees.
+	leveltype = 0;		//[XANE] Standard level type is the default.
+	timeofday = 0;		//[XANE] Disable the time-of-day system by default.
+	override_time = -1;	//[XANE] Don't force a speciic time of day by deault.
 }
 
 
@@ -1562,6 +1565,27 @@ DEFINE_MAP_OPTION(foliagecolor, true)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 	info->foliagecolor = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(leveltype, true)
+{	//[XANE]Replacing the "CheckSpecialStage" script, this indicates if a stage is normal (0), a Special Stage (1), and more.
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->leveltype = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(timeofday, true)
+{	//[XANE]If non-zero, enables the time of day system. Number determines color/sky property set.
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->timeofday = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(override_time, true)
+{	//[XANE]Forces the time of day to this ID, given it's > -1. On levels where time of day's disabled, this sets the time of day that the next visited level will use.
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->override_time = parse.sc.Number;
 }
 
 //==========================================================================
