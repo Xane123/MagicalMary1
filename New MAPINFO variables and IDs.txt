@@ -1,8 +1,8 @@
 New variables being added to the source code/MAPINFO/GetLevelInfo:
 Variable		LEVELINFO constant		Description
 PartNum			LEVELINFO_PARTNUM		Level part number for multi-part levels, like levelnum, but for parts.
-SongID			LEVELINFO_SONG_ID?		Which song to play from Magical Mary 1's list.
-FoliageColor	LEVELINFO_FOLIAGECOLOR?	Color used for leaf clusters and grass. 0: Normal, 1: Autumn, 2: Snowy, 3: Cherry Blossoms, 4: Cumulus Peaks?
+SongID			LEVELINFO_MUSIC_ID		Which song to play from Magical Mary 1's list.
+FoliageColor	LEVELINFO_FOLIAGE_COLOR	Color used for leaf clusters and grass. 0: Normal, 1: Autumn, 2: Snowy, 3: Cherry Blossoms, 4: Cumulus Peaks?
 LevelType		LEVELINFO_TYPE			Level type - 0: Normal, 1: Special Stage, 2: Battle Arena, 3: Twisted Metal-like combat?
 TimeOfDay		LEVELINFO_TIMEOFDAY_ON	If non-zero, enables the time of day system. Number determines color/sky property set, like 1 = Peacewater.
 OverrideTime	LEVELINFO_NEXTMAP_TIME	Forces the time of day to this ID, given it's > -1. On levels where time of day's disabled, this sets the time of day that the next visited level will use.
