@@ -1,8 +1,13 @@
 New variables being added to the source code/MAPINFO/GetLevelInfo:
 Variable		LEVELINFO constant		Description
-leveltype		LEVELINFO_TYPE			Level type - 0: Normal, 1: Special Stage, 2: Battle Arena, 3: Twisted Metal-like combat?
-timeofday		LEVELINFO_TIMEOFDAY_ON	If non-zero, enables the time of day system. Number determines color/sky property set, like 1 = Peacewater.
-override_time	LEVELINFO_NEXTMAP_TIME	Forces the time of day to this ID, given it's > -1. On levels where time of day's disabled, this sets the time of day that the next visited level will use.
+PartNum			LEVELINFO_PARTNUM		Level part number for multi-part levels, like levelnum, but for parts.
+SongID			LEVELINFO_SONG_ID?		Which song to play from Magical Mary 1's list.
+FoliageColor	LEVELINFO_FOLIAGECOLOR?	Color used for leaf clusters and grass. 0: Normal, 1: Autumn, 2: Snowy, 3: Cherry Blossoms, 4: Cumulus Peaks?
+LevelType		LEVELINFO_TYPE			Level type - 0: Normal, 1: Special Stage, 2: Battle Arena, 3: Twisted Metal-like combat?
+TimeOfDay		LEVELINFO_TIMEOFDAY_ON	If non-zero, enables the time of day system. Number determines color/sky property set, like 1 = Peacewater.
+OverrideTime	LEVELINFO_NEXTMAP_TIME	Forces the time of day to this ID, given it's > -1. On levels where time of day's disabled, this sets the time of day that the next visited level will use.
+RadioScreenLine	LEVELINFO_RADIO_LINE	First linedef ID used for the animated radio screen. On-screen cover art objects start with this same number as their thing ID.
+RadioSpeakerTID	LEVELINFO_SPEAKER_TID	Thing ID used by radio speakers in this level. If 0, the radio will use TID 99999, or the player's personal radio, if that's enabled.
 
 TIME OF DAY REVIVAL?
 The quickly-scrapped time-of-day system could be revived for new levels, minus those that use 3D skyboxes designed only for specific times of day (like the 3D river/Cumulus Peaks skies).
