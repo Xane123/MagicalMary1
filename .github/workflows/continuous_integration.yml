@@ -28,7 +28,7 @@ jobs:
             os: ubuntu-latest,
             extra_options: "-DCMAKE_C_COMPILER=/usr/bin/gcc-9 -DCMAKE_CXX_COMPILER=/usr/bin/g++-9",
             deps_cmdline: "sudo apt update && sudo apt install libsdl2-dev libgtk-3-dev",
-            build_type: "Debug"
+            build_type: "Release"
           }
 
     steps:
