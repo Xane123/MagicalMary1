@@ -10,6 +10,7 @@ Variable			LEVELINFO constant			Description
 |SkySet				|LEVELINFO_TOD_SKYSET		|Pairs of sky images used for different times of day if the time-of-day system is enabled. Default is 0, which are Peacewater's skies.
 |RadioScreenLine	|LEVELINFO_RADIO_LINE		|First linedef ID used for the animated radio screen. On-screen cover art objects start with this same number as their thing ID.
 |RadioSpeakerTID	|LEVELINFO_SPEAKER_TID		|Thing ID used by radio speakers in this level. If 0, the radio will use TID 99999, or the player's personal radio, if that's enabled.
+|SpecialStageNumber	|LEVELINFO_SPECSTG_NUMBER	|Indicates that a level is a Special Stage by being non-zero, and also which Special Stage it is (used for star/time requirements).
 
 TIME OF DAY REVIVAL?
 The quickly-scrapped time-of-day system could be revived for new levels, minus those that use 3D skyboxes designed only for specific times of day (like the 3D river/Cumulus Peaks skies).
