@@ -402,6 +402,7 @@ struct level_info_t
 	int			skyset;				//[XANE]Pairs of sky images used for different times of day. (0 = Peacewater)
 	int			radioscreenline;	//[XANE]First linedef ID used for the animated radio screen. On-screen cover art objects start with this same number as their thing ID.
 	int			radiospeakertid;	//[XANE]Thing ID used by radio speakers in this level. If 0, the radio will use TID 99999, or the player's personal radio, if that's enabled.
+	int			specialstageno;		//[XANE]Special Stage number.
 
 
 	level_info_t() 

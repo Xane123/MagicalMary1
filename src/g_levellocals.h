@@ -518,6 +518,7 @@ public:
 	int			skyset;
 	int			radioscreenline;
 	int			radiospeakertid;
+	int			specialstageno;
 	
 	int			lumpnum;
 	FString		LevelName;

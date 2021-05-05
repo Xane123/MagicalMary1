@@ -307,10 +307,11 @@ void level_info_t::Reset()
 	foliagecolor = 0;		//[XANE] Default to green grass parts/trees.
 	leveltype = 0;			//[XANE] Standard level type is the default.
 	timeofday = -1;			//[XANE] Disable the time-of-day system by default.
-	colorset = 0;			//[XANE]Default color set is chosen.
-	skyset = 0;				//[XANE]Peacewater sky set is used by default.
+	colorset = 0;			//[XANE] Default color set is chosen.
+	skyset = 0;				//[XANE] Peacewater sky set is used by default.
 	radioscreenline = 0;	//[XANE] There's no radio screen by default.
 	radiospeakertid = 0;	//[XANE] Neither is there a speaker by default.
+	specialstageno = 0;		//[XANE] Levels aren't Special Stages by default.
 }
 
 
@@ -950,12 +951,6 @@ DEFINE_MAP_OPTION(author, true)
 }
 
 DEFINE_MAP_OPTION(secretnext, true)
-{
-	parse.ParseAssign();
-	parse.ParseNextMap(info->NextSecretMap);
-}
-
-DEFINE_MAP_OPTION(secret, true) // Just an alias for secretnext, for Vavoom compatibility
 {
 	parse.ParseAssign();
 	parse.ParseNextMap(info->NextSecretMap);
@@ -1610,6 +1605,13 @@ DEFINE_MAP_OPTION(radiospeakertid, true)
 	parse.ParseAssign();
 	parse.sc.MustGetNumber();
 	info->radiospeakertid = parse.sc.Number;
+}
+
+DEFINE_MAP_OPTION(specialStageNumber, true)
+{	//[XANE]Indicates this level is a Special Stage, and which number it is (1-7).
+	parse.ParseAssign();
+	parse.sc.MustGetNumber();
+	info->specialstageno = parse.sc.Number;
 }
 
 

@@ -532,7 +532,8 @@
 		LEVELINFO_TOD_SKYSET,
 		LEVELINFO_NEXTMAP_TIME,
 		LEVELINFO_RADIO_LINE,
-		LEVELINFO_SPEAKER_TID
+		LEVELINFO_SPEAKER_TID,
+		LEVELINFO_SPECSTG_NUMBER
 	};
 	enum {
 		PLAYERINFO_TEAM,
@@ -9791,6 +9792,7 @@ scriptwait:
 			case LEVELINFO_TOD_SKYSET:			STACK(1) = Level->skyset;			break;
 			case LEVELINFO_RADIO_LINE:			STACK(1) = Level->radioscreenline;	break;
 			case LEVELINFO_SPEAKER_TID:			STACK(1) = Level->radiospeakertid;	break;
+			case LEVELINFO_SPECSTG_NUMBER:		STACK(1) = Level->specialstageno;	break;
 			default:							STACK(1) = 0;						break;
 			}
 			break;

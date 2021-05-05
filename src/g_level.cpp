@@ -1703,6 +1703,7 @@ void FLevelLocals::Init()
 	skyset  = info->skyset;
 	radioscreenline = info->radioscreenline;
 	radiospeakertid = info->radiospeakertid;
+	specialstageno = info->specialstageno;
 	
 	Music = info->Music;
 	musicorder = info->musicorder;
