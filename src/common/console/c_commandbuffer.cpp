@@ -57,20 +57,20 @@ void FCommandBuffer::Draw(int x, int y, int scale, bool cursor)
 {
 	if (scale == 1)
 	{
-		DrawChar(twod, ConsoleEntryFont, CR_WHITE, x, y, ')', TAG_DONE);	//Line-start character
+		DrawChar(twod, ConsoleEntryFont, CR_GREY, x, y, 'c>', TAG_DONE);	//Line-start character
 		DrawText(twod, ConsoleEntryFont, CR_CREAM, x + ConsoleEntryFont->GetCharWidth(0x1c), y,
 			&Text[StartPos], TAG_DONE);	//Command
 
 		if (cursor)
 		{
-			DrawChar(twod, ConsoleEntryFont, CR_WHITE,
+			DrawChar(twod, ConsoleEntryFont, CR_GREY,
 				x + ConsoleEntryFont->GetCharWidth(0x1c) + (CursorPosCells - StartPosCells) * ConsoleEntryFont->GetCharWidth(0xb),
-				y, '/', TAG_DONE);	//Cursor character
+				y, '|', TAG_DONE);	//Cursor character
 		}
 	}
 	else
 	{
-		DrawChar(twod, ConsoleEntryFont, CR_WHITE, x, y, ')',	//Line-start character
+		DrawChar(twod, ConsoleEntryFont, CR_GREY, x, y, 'c>',	//Line-start character
 			DTA_VirtualWidth, twod->GetWidth() / scale,
 			DTA_VirtualHeight, twod->GetHeight() / scale,
 			DTA_KeepRatio, true, TAG_DONE);
@@ -83,9 +83,9 @@ void FCommandBuffer::Draw(int x, int y, int scale, bool cursor)
 
 		if (cursor)
 		{
-			DrawChar(twod, ConsoleEntryFont, CR_WHITE,
+			DrawChar(twod, ConsoleEntryFont, CR_GREY,
 				x + ConsoleEntryFont->GetCharWidth(0x1c) + (CursorPosCells - StartPosCells) * ConsoleEntryFont->GetCharWidth(0xb),
-				y, '/',
+				y, '|',
 				DTA_VirtualWidth, twod->GetWidth() / scale,
 				DTA_VirtualHeight, twod->GetHeight() / scale,
 				DTA_KeepRatio, true, TAG_DONE);	//Cursor character
