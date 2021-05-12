@@ -86,7 +86,8 @@ extern int PrintColors[];
 
 // PUBLIC DATA DEFINITIONS -------------------------------------------------
 FFont* SmallFont, * SmallFont2, * BigFont, * BigUpper, * ConFont, * IntermissionFont, * NewConsoleFont, * NewSmallFont, 
-	* CurrentConsoleFont, * OriginalSmallFont, * AlternativeSmallFont, * OriginalBigFont, *AlternativeBigFont;
+	* CurrentConsoleFont, * OriginalSmallFont, * AlternativeSmallFont, * OriginalBigFont, * AlternativeBigFont,
+	* ConsoleEntryFont, * ConsoleLogFont;
 
 FFont *FFont::FirstFont = nullptr;
 int NumTextColors;
@@ -678,11 +679,14 @@ void V_InitFonts()
 {
 	V_InitCustomFonts();
 
+	if(!(ConsoleEntryFont = V_GetFont("ConsoleEntry", "CONENTRY"))) I_FatalError("The console text-entry font (ConsoleEntry) doesn't exist in engine.pk3.");
+	if(!(ConsoleLogFont = V_GetFont("ConsoleLog", "CONSOLOG"))) I_FatalError("The console logging font (ConsoleLog) doesn't exist in engine.pk3.");
+	
 	FFont *CreateHexLumpFont(const char *fontname, int lump);
 	FFont *CreateHexLumpFont2(const char *fontname, int lump);
 
-	auto lump = fileSystem.CheckNumForFullName("newconsolefont.hex", 0);	// This is always loaded from gzdoom.pk3 to prevent overriding it with incomplete replacements.
-	if (lump == -1) I_FatalError("newconsolefont.hex not found");	// This font is needed - do not start up without it.
+	auto lump = fileSystem.CheckNumForFullName("newconsolefont.hex", 0);						// This is always loaded from gzdoom.pk3 to prevent overriding it with incomplete replacements.
+	if (lump == -1) I_FatalError("For some stupid reason, newconsolefont.hex is required.");	// This font is needed - do not start up without it.
 	NewConsoleFont = CreateHexLumpFont("NewConsoleFont", lump);
 	NewSmallFont = CreateHexLumpFont2("NewSmallFont", lump);
 	CurrentConsoleFont = NewConsoleFont;

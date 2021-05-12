@@ -57,25 +57,25 @@ void FCommandBuffer::Draw(int x, int y, int scale, bool cursor)
 {
 	if (scale == 1)
 	{
-		DrawChar(twod, SmallFont, CR_WHITE, x, y, ')', TAG_DONE);	//Line-start character
-		DrawText(twod, SmallFont, CR_CREAM, x + SmallFont->GetCharWidth(0x1c), y,
+		DrawChar(twod, ConsoleEntryFont, CR_WHITE, x, y, ')', TAG_DONE);	//Line-start character
+		DrawText(twod, ConsoleEntryFont, CR_CREAM, x + ConsoleEntryFont->GetCharWidth(0x1c), y,
 			&Text[StartPos], TAG_DONE);	//Command
 
 		if (cursor)
 		{
-			DrawChar(twod, SmallFont, CR_WHITE,
-				x + SmallFont->GetCharWidth(0x1c) + (CursorPosCells - StartPosCells) * SmallFont->GetCharWidth(0xb),
-				y, '.', TAG_DONE);	//Cursor character
+			DrawChar(twod, ConsoleEntryFont, CR_WHITE,
+				x + ConsoleEntryFont->GetCharWidth(0x1c) + (CursorPosCells - StartPosCells) * ConsoleEntryFont->GetCharWidth(0xb),
+				y, '/', TAG_DONE);	//Cursor character
 		}
 	}
 	else
 	{
-		DrawChar(twod, SmallFont, CR_WHITE, x, y, ')',	//Line-start character
+		DrawChar(twod, ConsoleEntryFont, CR_WHITE, x, y, ')',	//Line-start character
 			DTA_VirtualWidth, twod->GetWidth() / scale,
 			DTA_VirtualHeight, twod->GetHeight() / scale,
 			DTA_KeepRatio, true, TAG_DONE);
 
-		DrawText(twod, SmallFont, CR_CREAM, x + SmallFont->GetCharWidth(0x1c), y,
+		DrawText(twod, ConsoleEntryFont, CR_CREAM, x + ConsoleEntryFont->GetCharWidth(0x1c), y,
 			&Text[StartPos],
 			DTA_VirtualWidth, twod->GetWidth() / scale,
 			DTA_VirtualHeight, twod->GetHeight() / scale,
@@ -83,9 +83,9 @@ void FCommandBuffer::Draw(int x, int y, int scale, bool cursor)
 
 		if (cursor)
 		{
-			DrawChar(twod, SmallFont, CR_WHITE,
-				x + SmallFont->GetCharWidth(0x1c) + (CursorPosCells - StartPosCells) * SmallFont->GetCharWidth(0xb),
-				y, '.',
+			DrawChar(twod, ConsoleEntryFont, CR_WHITE,
+				x + ConsoleEntryFont->GetCharWidth(0x1c) + (CursorPosCells - StartPosCells) * ConsoleEntryFont->GetCharWidth(0xb),
+				y, '/',
 				DTA_VirtualWidth, twod->GetWidth() / scale,
 				DTA_VirtualHeight, twod->GetHeight() / scale,
 				DTA_KeepRatio, true, TAG_DONE);	//Cursor character

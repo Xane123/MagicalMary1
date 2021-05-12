@@ -41,7 +41,7 @@ const char *GetVersionString();
 
 /** Lots of different version numbers **/
 
-#define VERSIONSTR "4.6pre"
+#define VERSIONSTR "refactoring (GZDoom 4.6pre)"
 
 // The version as seen in the Windows resource
 #define RC_FILEVERSION 4,5,9999,0
