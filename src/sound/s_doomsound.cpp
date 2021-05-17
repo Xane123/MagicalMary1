@@ -1339,7 +1339,7 @@ void DoomSoundEngine::NoiseDebug()
 		DrawText(twod, SmallFont, color, 340, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		// Flags
-		mysnprintf(temp, countof(temp), "%sNP" TEXTCOLOR_UNTRANSLATED "|%sJS" TEXTCOLOR_UNTRANSLATED "|%sAR" TEXTCOLOR_UNTRANSLATED "|%sAB",
+		mysnprintf(temp, countof(temp), "%sNP" TEXTCOLOR_UNTRANSLATED "/%sJS" TEXTCOLOR_UNTRANSLATED "/%sAR" TEXTCOLOR_UNTRANSLATED "/%sAB",
 			(chan->ChanFlags & CHANF_NOPAUSE) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
 			(chan->ChanFlags & CHANF_JUSTSTARTED) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
 			(chan->ChanFlags & CHANF_AREA) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
