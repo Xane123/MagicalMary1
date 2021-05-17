@@ -859,7 +859,7 @@ static void DrawRateStuff()
 			for (int i = 2; i < 16; i += 2)
 				Dim(twod, 50, 0.15, 0, -4 * textScale, twod->GetWidth(), (ConsoleEntryFont->GetHeight() + i) * textScale);	// [XANE] Draw the background color.
 
-			DrawText(twod, ConsoleEntryFont, (unsigned long long)LastCount > 30 ? CR_YELLOW : CR_GREEN, 2 * textScale, 2 * textScale, (char*)&fpsbuff[0],
+			DrawText(twod, ConsoleEntryFont, (unsigned long long)LastCount > 30 ? CR_GREEN : CR_YELLOW, 2 * textScale, 2 * textScale, (char*)&fpsbuff[0],
 				DTA_VirtualWidth, screen->GetWidth() / textScale,
 				DTA_VirtualHeight, screen->GetHeight() / textScale,
 				DTA_KeepRatio, true, TAG_DONE);

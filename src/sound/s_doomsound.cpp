@@ -1248,23 +1248,24 @@ void DoomSoundEngine::NoiseDebug()
 	FVector3 listener;
 	FVector3 origin;
 	int y, color;
+	int textScale = active_con_scale(twod);
 
-	y = 32 * CleanYfac;
-	DrawText(twod, NewConsoleFont, CR_UNTRANSLATED, 0, y, "- CURRENTLY PLAYING SOUNDS -", TAG_DONE);
-	y += NewConsoleFont->GetHeight();
+	y = 16 * textScale;
+	DrawText(twod, BigFont, CR_BRICK, 0, y, "Sound Info:", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	y += BigFont->GetHeight();
 
-	DrawText(twod, NewConsoleFont, CR_GOLD, 0, y, "filename", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 70, y, "x", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 120, y, "y", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 170, y, "z", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 220, y, "vol", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 260, y, "dist", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 300, y, "chan", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 340, y, "pri", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 380, y, "flags", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 460, y, "aud", TAG_DONE);
-	DrawText(twod, NewConsoleFont, CR_GOLD, 520, y, "pos", TAG_DONE);
-	y += NewConsoleFont->GetHeight();
+	DrawText(twod, SmallFont, CR_GOLD, 0, y, "Filename", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 70, y, "X", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 120, y, "Y", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 170, y, "Z", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 220, y, "Vol.", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 260, y, "Dist.", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 300, y, "Chan.", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 340, y, "Pri.", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 380, y, "Flags", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 460, y, "Audible", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	DrawText(twod, SmallFont, CR_GOLD, 520, y, "Samples", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+	y += SmallFont->GetHeight() + (SmallFont->GetHeight() / 2);
 
 	if (Channels == nullptr)
 	{
@@ -1283,81 +1284,78 @@ void DoomSoundEngine::NoiseDebug()
 		char temp[32];
 
 		SoundEngine::CalcPosVel(chan, &origin, nullptr);
-		color = (chan->ChanFlags & CHANF_LOOP) ? CR_BROWN : CR_GREY;
+		color = (chan->ChanFlags & CHANF_LOOP) ? CR_GREEN : CR_UNTRANSLATED;
+		if (!(chan->ChanFlags & CHANF_IS3D)) color = CR_LIGHTBLUE;	// [XANE] If a sound isn't 3D, it's colored light blue.
+
 
 		// Name
 		fileSystem.GetFileShortName(temp, S_sfx[chan->SoundID].lumpnum);
 		temp[8] = 0;
-		DrawText(twod, NewConsoleFont, color, 0, y, temp, TAG_DONE);
+		DrawText(twod, SmallFont, color, 0, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		if (!(chan->ChanFlags & CHANF_IS3D))
-		{
-			DrawText(twod, NewConsoleFont, color, 70, y, "---", TAG_DONE);		// X
-			DrawText(twod, NewConsoleFont, color, 120, y, "---", TAG_DONE);	// Y
-			DrawText(twod, NewConsoleFont, color, 170, y, "---", TAG_DONE);	// Z
-			DrawText(twod, NewConsoleFont, color, 260, y, "---", TAG_DONE);	// Distance
+		{	//X, Y, Z, distance
+			DrawText(twod, SmallFont, color, 70, y, "no", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+			DrawText(twod, SmallFont, color, 120, y, "no", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+			DrawText(twod, SmallFont, color, 170, y, "no", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
+			DrawText(twod, SmallFont, color, 260, y, "no", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 		}
 		else
 		{
 			// X coordinate
 			mysnprintf(temp, countof(temp), "%.0f", origin.X);
-			DrawText(twod, NewConsoleFont, color, 70, y, temp, TAG_DONE);
+			DrawText(twod, SmallFont, color, 70, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 			// Y coordinate
 			mysnprintf(temp, countof(temp), "%.0f", origin.Z);
-			DrawText(twod, NewConsoleFont, color, 120, y, temp, TAG_DONE);
+			DrawText(twod, SmallFont, color, 120, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 			// Z coordinate
 			mysnprintf(temp, countof(temp), "%.0f", origin.Y);
-			DrawText(twod, NewConsoleFont, color, 170, y, temp, TAG_DONE);
+			DrawText(twod, SmallFont, color, 170, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 			// Distance
 			if (chan->DistanceScale > 0)
 			{
 				mysnprintf(temp, countof(temp), "%.0f", (origin - listener).Length());
-				DrawText(twod, NewConsoleFont, color, 260, y, temp, TAG_DONE);
+				DrawText(twod, SmallFont, color, 260, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 			}
 			else
 			{
-				DrawText(twod, NewConsoleFont, color, 260, y, "---", TAG_DONE);
+				DrawText(twod, SmallFont, color, 260, y, "no", DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 			}
 		}
 
 		// Volume
 		mysnprintf(temp, countof(temp), "%.2g", chan->Volume);
-		DrawText(twod, NewConsoleFont, color, 220, y, temp, TAG_DONE);
+		DrawText(twod, SmallFont, color, 220, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		// Channel
 		mysnprintf(temp, countof(temp), "%d", chan->EntChannel);
-		DrawText(twod, NewConsoleFont, color, 300, y, temp, TAG_DONE);
+		DrawText(twod, SmallFont, color, 300, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		// Priority
 		mysnprintf(temp, countof(temp), "%d", chan->Priority);
-		DrawText(twod, NewConsoleFont, color, 340, y, temp, TAG_DONE);
+		DrawText(twod, SmallFont, color, 340, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		// Flags
-		mysnprintf(temp, countof(temp), "%s3%sZ%sU%sM%sN%sA%sL%sE%sV",
-			(chan->ChanFlags & CHANF_IS3D) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
-			(chan->ChanFlags & CHANF_LISTENERZ) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
-			(chan->ChanFlags & CHANF_UI) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
-			(chan->ChanFlags & CHANF_MAYBE_LOCAL) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+		mysnprintf(temp, countof(temp), "%sNP" TEXTCOLOR_UNTRANSLATED "|%sJS" TEXTCOLOR_UNTRANSLATED "|%sAR" TEXTCOLOR_UNTRANSLATED "|%sAB",
 			(chan->ChanFlags & CHANF_NOPAUSE) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
+			(chan->ChanFlags & CHANF_JUSTSTARTED) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
 			(chan->ChanFlags & CHANF_AREA) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
-			(chan->ChanFlags & CHANF_LOOP) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
-			(chan->ChanFlags & CHANF_EVICTED) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK,
-			(chan->ChanFlags & CHANF_VIRTUAL) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK);
-		DrawText(twod, NewConsoleFont, color, 380, y, temp, TAG_DONE);
+			(chan->ChanFlags & CHANF_ABSTIME) ? TEXTCOLOR_GREEN : TEXTCOLOR_BLACK);
+		DrawText(twod, SmallFont, color, 380, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		// Audibility
 		mysnprintf(temp, countof(temp), "%.4f", GSnd->GetAudibility(chan));
-		DrawText(twod, NewConsoleFont, color, 460, y, temp, TAG_DONE);
+		DrawText(twod, SmallFont, color, 460, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 		// Position
 		mysnprintf(temp, countof(temp), "%u", GSnd->GetPosition(chan));
-		DrawText(twod, NewConsoleFont, color, 520, y, temp, TAG_DONE);
+		DrawText(twod, SmallFont, color, 520, y, temp, DTA_VirtualWidth, screen->GetWidth() / textScale, DTA_VirtualHeight, screen->GetHeight() / textScale, DTA_KeepRatio, true, TAG_DONE);
 
 
-		y += NewConsoleFont->GetHeight();
+		y += SmallFont->GetHeight();
 		if (chan->PrevChan == &Channels)
 		{
 			break;
