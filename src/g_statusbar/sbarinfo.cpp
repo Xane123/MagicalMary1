@@ -65,7 +65,7 @@ enum
 
 EXTERN_CVAR(Int, fraglimit)
 EXTERN_CVAR(Int, screenblocks)
-EXTERN_CVAR(Bool, vid_fps)
+EXTERN_CVAR(Int, vid_fps)
 
 class DSBarInfo;
 static double nulclip[] = { 0,0,0,0 };

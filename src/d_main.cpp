@@ -289,7 +289,7 @@ CVAR (Bool, autoloadbrightmaps, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLO
 CVAR (Bool, autoloadlights, false, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)
 CVAR (Bool, autoloadwidescreen, true, CVAR_ARCHIVE | CVAR_NOINITCALL | CVAR_GLOBALCONFIG)
 CVAR (Bool, r_debug_disable_vis_filter, false, 0)
-CVAR(Bool, vid_fps, false, 0)
+CVAR(Int, vid_fps, 0, CVAR_ARCHIVE)
 CVAR(Int, vid_showpalette, 0, 0)
 
 bool hud_toggled = false;
@@ -852,10 +852,14 @@ static void DrawRateStuff()
 
 			int textScale = active_con_scale(twod);
 
-			chars = mysnprintf(fpsbuff, countof(fpsbuff), "%2llu ms (%3llu fps)", (unsigned long long)howlong, (unsigned long long)LastCount);
-			rate_x = screen->GetWidth() / textScale - NewConsoleFont->StringWidth(&fpsbuff[0]);
-			ClearRect(twod, rate_x * textScale, 0, screen->GetWidth(), NewConsoleFont->GetHeight() * textScale, GPalette.BlackIndex, 0);
-			DrawText(twod, NewConsoleFont, CR_WHITE, rate_x, 0, (char*)&fpsbuff[0],
+			if (vid_fps == 1) chars = mysnprintf(fpsbuff, countof(fpsbuff), "%3lluFPS", (unsigned long long)LastCount);
+			else chars = mysnprintf(fpsbuff, countof(fpsbuff), "%3lluFPS (%2llums)", (unsigned long long)LastCount, (unsigned long long)howlong);
+			rate_x = screen->GetWidth() / textScale - ConsoleEntryFont->StringWidth(&fpsbuff[0]);
+			
+			for (int i = 2; i < 16; i += 2)
+				Dim(twod, 50, 0.15, 0, -4 * textScale, twod->GetWidth(), (ConsoleEntryFont->GetHeight() + i) * textScale);	// [XANE] Draw the background color.
+
+			DrawText(twod, ConsoleEntryFont, (unsigned long long)LastCount > 30 ? CR_YELLOW : CR_GREEN, 2 * textScale, 2 * textScale, (char*)&fpsbuff[0],
 				DTA_VirtualWidth, screen->GetWidth() / textScale,
 				DTA_VirtualHeight, screen->GetHeight() / textScale,
 				DTA_KeepRatio, true, TAG_DONE);

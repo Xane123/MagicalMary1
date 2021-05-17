@@ -55,3 +55,4 @@ This is a list of any changes done to Magical Mary 1 since the last release. The
 * Speaking of skies, new times of day are possible, and with them come new sky variants. Yeah, it's the same sloppy World of Kirbycraft art, but now with new colors, a brand new night sky, and...altered sunset colors.
 * Player characters slow down if they walk up standard (not small) stairs. To avoid this, just jump, fly, or air dash over them. You can still run down them dangerously fast, however.
 * When running on water, you will slow down over time. If you don't Air Dash in time, you will plunge into the water beneath you! If you see a Boost Panel near the water, use it instead, as its higher speed will ensure you will make it farther across the water.
+* GZDoom's "stat" display has been improved, with a faded background behind text, and different text colors for each selected stat.

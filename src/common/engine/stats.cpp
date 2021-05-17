@@ -98,10 +98,36 @@ void FStat::PrintStat (F2DDrawer *drawer)
 {
 	int textScale = active_con_scale(drawer);
 
-	int fontheight = NewConsoleFont->GetHeight() + 1;
-	int y = drawer->GetHeight() / textScale;
+	int fontheight = ConsoleLogFont->GetHeight() + 1;
+	int y = 0;
 	int count = 0;
+	int statColors[4] = { CR_PURPLE, CR_YELLOW, CR_SAPPHIRE, CR_BRICK };
 
+	y = drawer->GetHeight() / textScale;	// [XANE] Stats are drawn at least two lines from the bottom of the screen.
+	for (FStat *stat = FirstStat; stat != NULL; stat = stat->m_Next)
+	{	// [XANE] It may be redundant, but iterate through all active stats twice, once to draw the background and another time for the stat-printing.
+		if (stat->m_Active)
+		{
+			FString stattext(stat->GetStats());
+			if (stattext.Len() > 0)
+			{
+				y -= fontheight;	// there's at least one line of text
+				for (unsigned i = 0; i < stattext.Len() - 1; i++)
+				{
+					// Count number of linefeeds but ignore terminating ones.
+					if (stattext[i] == '\n') y -= fontheight;
+				}
+				count++;
+			}
+		}
+	}
+
+	if(count>0)
+		for(int i = -32; i < 0; i += 4)
+			Dim(drawer, 50, 0.1, 0, (y * textScale)+i, twod->GetWidth(), 4096);	// [XANE] Draw the background color.
+
+	y = drawer->GetHeight() / textScale;	// [XANE] Reset the variables for the second loop below.
+	count = 0;
 	for (FStat *stat = FirstStat; stat != NULL; stat = stat->m_Next)
 	{
 		if (stat->m_Active)
@@ -110,13 +136,15 @@ void FStat::PrintStat (F2DDrawer *drawer)
 
 			if (stattext.Len() > 0)
 			{
+				if(count>0) Dim(drawer, 192, 0.5, 8 * textScale, y * textScale, twod->GetWidth() - (8 * textScale), 1 * textScale);	// [XANE] Draw a separator above this line.
 				y -= fontheight;	// there's at least one line of text
 				for (unsigned i = 0; i < stattext.Len()-1; i++)
 				{
 					// Count number of linefeeds but ignore terminating ones.
 					if (stattext[i] == '\n') y -= fontheight;
 				}
-				DrawText(drawer, NewConsoleFont, CR_PURPLE, 5 / textScale, y, stattext,
+
+				DrawText(drawer, ConsoleLogFont, statColors[count%4], 5 / textScale, y, stattext,
 					DTA_VirtualWidth, twod->GetWidth() / textScale,
 					DTA_VirtualHeight, twod->GetHeight() / textScale,
 					DTA_KeepRatio, true, TAG_DONE);

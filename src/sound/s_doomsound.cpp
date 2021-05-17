@@ -1250,10 +1250,10 @@ void DoomSoundEngine::NoiseDebug()
 	int y, color;
 
 	y = 32 * CleanYfac;
-	DrawText(twod, NewConsoleFont, CR_YELLOW, 0, y, "*** SOUND DEBUG INFO ***", TAG_DONE);
+	DrawText(twod, NewConsoleFont, CR_UNTRANSLATED, 0, y, "- CURRENTLY PLAYING SOUNDS -", TAG_DONE);
 	y += NewConsoleFont->GetHeight();
 
-	DrawText(twod, NewConsoleFont, CR_GOLD, 0, y, "name", TAG_DONE);
+	DrawText(twod, NewConsoleFont, CR_GOLD, 0, y, "filename", TAG_DONE);
 	DrawText(twod, NewConsoleFont, CR_GOLD, 70, y, "x", TAG_DONE);
 	DrawText(twod, NewConsoleFont, CR_GOLD, 120, y, "y", TAG_DONE);
 	DrawText(twod, NewConsoleFont, CR_GOLD, 170, y, "z", TAG_DONE);

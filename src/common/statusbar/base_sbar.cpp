@@ -59,7 +59,7 @@ CVAR(Color, crosshaircolor, 0xff0000, CVAR_ARCHIVE);
 CVAR(Int, crosshairhealth, 2, CVAR_ARCHIVE);
 CVARD(Float, crosshairscale, 0.5, CVAR_ARCHIVE, "changes the size of the crosshair");
 CVAR(Bool, crosshairgrow, false, CVAR_ARCHIVE);
-EXTERN_CVAR(Bool, vid_fps)
+EXTERN_CVAR(Int, vid_fps)
 
 EXTERN_CVAR(Float, hud_scalefactor)
 
