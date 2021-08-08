@@ -94,7 +94,7 @@ const char *KeyNames[NUM_KEYS] =
 	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	//F8
 
 	// non-keyboard buttons that can be bound
-	"LeftClick","MiddleClick","RightClick",	"MouseExtra1",		// 8 mouse buttons
+	"LeftClick","RightClick","MiddleClick",	"MouseExtra1",		// 8 mouse buttons
 	"MouseExtra2",	"MouseExtra3",	"MouseExtra4",	"MouseExtra5",
 
 	"(1)",	"(2)",	"(3)",	"(4)",			// 128 joystick buttons!
