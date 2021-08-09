@@ -52,42 +52,42 @@ mwheelleft weapprev
 mwheelright weapnext
 
 //Mouse
-LeftClick +attack
-RightClick +jump
-MiddleClick +altattack
-mouse4 +user2
+MouseLeft +attack
+MouseRight +jump
+MouseMiddle +altattack
+MouseExtra1 +user2
 
 // Gamepad (meant for Logitech Dual Action)
-joy2 +jump
-joy3 invuse
-joy1 +use
-joy4 weapnext
-joy8 +attack
-joy7 +altattack
-joy5 +user2
-joy6 +user3
-pov1left invprev
-pov1right invnext
-pov1down weapnext
-pov1up weapprev
-joy10 menu_main
-joy9 togglemap
+[2] +jump
+[3] invuse
+[1] +use
+[4] weapnext
+[8] +attack
+[7] +altattack
+[5] +user2
+[6] +user3
+POV1left invprev
+POV1right invnext
+POV1down weapnext
+POV1up weapprev
+[10] menu_main
+[9] togglemap
 
 // Xbox (XInput) controllers
-(A) +jump
-(B) invuse
-(X) +use
-(Y) weapnext
-(RT) +attack
-(LT) +altattack
-(LB) +user2
-(RB) +user3
-dpadleft invprev
-dpadright invnext
-dpaddown weapnext
-dpadup weapprev
-(START) menu_main
-(BACK/SELECT) togglemap
+[A] +jump
+[B] invuse
+[X] +use
+[Y] weapnext
+[RT] +attack
+[LT] +altattack
+[LB] +user2
+[RB] +user3
+[DPadleft] invprev
+[DPadright] invnext
+[DPaddown] weapnext
+[DPadup] weapprev
+[START] menu_main
+[BACK] togglemap
 
 /* Default automap bindings */
 mapbind m am_setmark

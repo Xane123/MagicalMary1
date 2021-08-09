@@ -1,5 +1,17 @@
 // Must be sorted in identification order (easiest to recognize first!)
 
+IWad	//Development version, using multiple PK3 files, a WAD, and mods.
+{
+	Name = "Magical Mary (development)"
+	Autoname = "mm1.dev"
+	Game = "Doom"
+	Config = "Doom"
+	Mapinfo = "mapinfo/doom2.txt"
+	MustContain = "InDevMM1.txt"
+	BannerColors = "ff a0 d0", "8d 6c ae"
+	Load = "BaseGamePack2.pk3", "BaseGamePack3.pk3", "BaseGameMaps.wad", "mod_hires.pk3", "mod_improvedSound.pk3"
+}
+
 IWad	//Single-file packaged game data (all in one IPK3/IPK7, only loads mods)
 {
 	Name = "Magical Mary: Redthorn's Family Ransom"
@@ -12,27 +24,15 @@ IWad	//Single-file packaged game data (all in one IPK3/IPK7, only loads mods)
 	Load = "mod_hires.pk3", "mod_improvedSound.pk3"
 }
 
-IWad	//Development version, using multiple PK3 files, a WAD, and mods.
-{
-	Name = "Magical Mary (development)"
-	Autoname = "mm1.dev"
-	Game = "Doom"
-	Config = "Doom"
-	Mapinfo = "mapinfo/doom2.txt"
-	MustContain = "InDevMM1.txt"
-	BannerColors = "a0 d0 ff", "ae 8d 6c"
-	Load = "BaseGameData2.pk3", "BaseGameData3.pk3", "BaseGameMaps.wad", "mod_hires.pk3", "mod_improvedSound.pk3"
-}
-
 Names
 {
-	"BaseGameData.ipk3"
-	"BaseGameData.ipk7"
 	"BaseGamePack1.ipk3"
+	"BaseGameData.ipk7"
+	"BaseGameData.ipk3"
 }
 
 Order	// Order in the IWAD selection box
 {
-	"Magical Mary: Redthorn's Family Ransom"
 	"Magical Mary (development)"
+	"Magical Mary: Redthorn's Family Ransom"
 }
