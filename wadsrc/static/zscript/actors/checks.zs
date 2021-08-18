@@ -275,18 +275,27 @@ extend class Actor
 	
 	//Xane's simple "special"-setting actions.
 	
-	action void A_SetSpecialValue(int value)
+	//Sets the actor pointer's special/special2 value to the given number.
+	action void A_SetSpecialValue(bool useSpecial2 = false, int value = 0, int ptr = AAPTR_DEFAULT)
 	{	//Sets this object's special value to "value".
-		self.special = value;
+		Actor mobj = GetPointer(ptr);
+		
+		if(mobj!=null && mobj!=self)
+		{
+			if(!useSpecial2) self.special = value;	//Special1
+			else self.special2 = value;				//Special2
+		}
 	}
 	
-	action void A_CopySpecialValue(int ptr = AAPTR_MASTER)
+	//Copies the given actor pointer's special/special2 variable to this actor.
+	action void A_CopySpecialValue(bool useSpecial2 = false, int ptr = AAPTR_MASTER)
 	{
 		Actor mobj = GetPointer(ptr);
 		
 		if(mobj!=null && mobj!=self)
 		{
-			self.special = mobj.special;
+			if(!useSpecial2) self.special = mobj.special;	//Special1
+			else self.special2 = mobj.special2;				//Special2
 		}
 	}
 	
