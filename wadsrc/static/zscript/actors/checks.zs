@@ -273,29 +273,38 @@ extend class Actor
 		return null;
 	}
 	
-	//Xane's simple "special"-setting actions.
+	//Xane's simple "ZScript-variable"-setting actions. (previously known as "special" setting before Xane learned
+	//"special2" is not the same type of variable as "Special".
 	
-	//Sets the actor pointer's special/special2 value to the given number.
-	action void A_SetSpecialValue(bool useSpecial2 = false, int value = 0, int ptr = AAPTR_DEFAULT)
-	{	//Sets this object's special value to "value".
+	//Sets the actor pointer's special/stamina/accuracy value to the given number.
+	action void A_SetActorVariable(int variable, int value, int ptr = AAPTR_DEFAULT)
+	{	//Sets this object's value to "value". If variable is 0, sets "special". Otherwise sets "ZScriptVar#".
 		Actor mobj = GetPointer(ptr);
 		
-		if(mobj!=null && mobj!=self)
+		if(mobj!=null)// && mobj!=self)
 		{
-			if(!useSpecial2) self.special = value;	//Special1
-			else self.special2 = value;				//Special2
+			switch(variable)
+			{
+				case 0:	mobj.Special = value;	Break;		//Special
+				case 1:	mobj.Stamina = value;	Break;		//Stamina
+				case 2:	mobj.Accuracy = value;	Break;		//Accuracy
+			}
 		}
 	}
 	
-	//Copies the given actor pointer's special/special2 variable to this actor.
-	action void A_CopySpecialValue(bool useSpecial2 = false, int ptr = AAPTR_MASTER)
+	//Copies the given actor pointer's special/stamina/accuracy variable to this actor.
+	action void A_CopyActorVariable(int variable, int ptr = AAPTR_MASTER)
 	{
 		Actor mobj = GetPointer(ptr);
 		
-		if(mobj!=null && mobj!=self)
+		if(mobj!=null)// && mobj!=self)
 		{
-			if(!useSpecial2) self.special = mobj.special;	//Special1
-			else self.special2 = mobj.special2;				//Special2
+			switch(variable)
+			{
+				case 0:	self.Special = mobj.Special;	Break;	//Special
+				case 1:	self.Stamina = mobj.Stamina;	Break;	//Stamina
+				case 2:	self.Accuracy = mobj.Accuracy;	Break;	//Accuracy
+			}
 		}
 	}
 	
