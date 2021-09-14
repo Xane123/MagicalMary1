@@ -1487,6 +1487,7 @@ AActor *LookForEnemiesInBlock (AActor *lookee, int index, void *extparam)
 			if (targ && targ->target == other && pr_skiptarget() > 100 && lookee->IsFriend (targ) &&
 				targ->health*2 >= targ->SpawnHealth())
 			{
+				Printf("OOH\nOOH\nOOH\nOOH\nLookie here!\n");
 				continue;
 			}
 		}
@@ -2282,7 +2283,7 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 
 	// [RH] Friendly monsters will consider chasing whoever hurts a player if they
 	// don't already have a target.
-	if (actor->flags & MF_FRIENDLY && actor->target == NULL)
+	if (actor->flags & MF_FRIENDLY)// && actor->target == NULL)
 	{
 		player_t *player;
 
@@ -2302,9 +2303,9 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 			}
 			player = actor->Level->Players[i];
 		}
-		if (player->attacker && player->attacker->health > 0 && player->attacker->flags & MF_SHOOTABLE && pr_newchasedir() < 80)
+		if (player->attacker && player->attacker->health > 0 && player->attacker->flags & MF_SHOOTABLE)// && pr_newchasedir() < 80)
 		{
-			if (!(player->attacker->flags & MF_FRIENDLY) ||
+			if (!(player->attacker->flags & MF_FRIENDLY) ||	//[XANE] Friends will always change targets if an enemy attacks the player.
 				(deathmatch && actor->FriendPlayer != 0 && player->attacker->FriendPlayer != 0 &&
 				actor->FriendPlayer != player->attacker->FriendPlayer))
 			{
@@ -2549,7 +2550,7 @@ void A_DoChase (AActor *actor, bool fastchase, FState *meleestate, FState *missi
 	else if (dontmove && actor->movecount > 0) actor->movecount--;
 	
 	// make active sound
-	if (playactive && pr_chase() < 3)
+	if (playactive && pr_chase() < 2)
 	{
 		actor->PlayActiveSound ();
 	}
