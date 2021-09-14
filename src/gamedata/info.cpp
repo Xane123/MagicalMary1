@@ -777,12 +777,13 @@ static void SummonActor (int command, int command2, FCommandLine argv)
 			Printf ("Unknown actor '%s'\n", argv[1]);
 			return;
 		}
-		Net_WriteByte (argv.argc() > 2 ? command2 : command);
+		Net_WriteByte (argv.argc() > 2 ? command2 : command);	//[XANE] This literally doesn't matter anymore.
 		Net_WriteString (type->TypeName.GetChars());
 
-		if (argv.argc () > 2)
+		//[XANE] Due to always sending the "2" variant of a net-cmd, the parameters below must ALWAYS be sent with this packet.
+		if (1)	//argv.argc () > 2)
 		{
-			Net_WriteWord (atoi (argv[2])); // angle
+			Net_WriteWord ((argv.argc() > 2) ? atoi(argv[2]) : 180); // angle (defaults to towards player)
 			Net_WriteWord ((argv.argc() > 3) ? atoi(argv[3]) : 0); // TID
 			Net_WriteByte ((argv.argc() > 4) ? atoi(argv[4]) : 0); // special
 			for (int i = 5; i < 10; i++)
@@ -795,22 +796,17 @@ static void SummonActor (int command, int command2, FCommandLine argv)
 
 CCMD (summon)
 {
-	SummonActor (DEM_SUMMON, DEM_SUMMON2, argv);
+	SummonActor (DEM_SUMMON2, DEM_SUMMON2, argv);
 }
 
 CCMD (summonfriend)
 {
-	SummonActor (DEM_SUMMONFRIEND, DEM_SUMMONFRIEND2, argv);
-}
-
-CCMD (summonmbf)
-{
-	SummonActor (DEM_SUMMONMBF, DEM_SUMMONFRIEND2, argv);
+	SummonActor (DEM_SUMMONFRIEND2, DEM_SUMMONFRIEND2, argv);
 }
 
 CCMD (summonfoe)
 {
-	SummonActor (DEM_SUMMONFOE, DEM_SUMMONFOE2, argv);
+	SummonActor (DEM_SUMMONFOE2, DEM_SUMMONFOE2, argv);
 }
 
 
