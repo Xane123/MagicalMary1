@@ -82,7 +82,7 @@ class MessageBoxMenu : Menu
 			arrowFont = ConFont;
 			destWidth = CleanWidth;
 			destHeight = CleanHeight;
-			selector = "\xb";
+			selector = "\xd";
 		}
 
 		int mr1 = destWidth/2 + 10 + textFont.StringWidth(Stringtable.Localize("$TXT_YES"));
@@ -131,9 +131,9 @@ class MessageBoxMenu : Menu
 
 			if (messageSelection >= 0)
 			{
-				if ((MenuTime() % 35) < 30)
+				if ((MenuTime() % 8) < 6)
 				{
-					screen.DrawText(arrowFont, 19,
+					screen.DrawText(arrowFont, OptionMenuSettings.mFontColorSelection,
 						destWidth/2 - 11, y + fontheight * messageSelection, selector, DTA_VirtualWidth, destWidth, DTA_VirtualHeight, destHeight, DTA_KeepRatio, true);
 				}
 			}

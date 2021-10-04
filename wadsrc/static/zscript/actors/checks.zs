@@ -273,6 +273,8 @@ extend class Actor
 		return null;
 	}
 	
+}
+
 	//Xane's simple "ZScript-variable"-setting actions. (previously known as "special" setting before Xane learned
 	//"special2" is not the same type of variable as "Special".
 	

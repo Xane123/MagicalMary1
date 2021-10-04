@@ -329,7 +329,7 @@ bool EV_RotatePoly (FLevelLocals *Level, line_t *line, int polyNum, int speed, i
 
 	if ((poly = Level->GetPolyobj(polyNum)) == nullptr)
 	{
-		if (polyNum > 0) Printf("EV_RotatePoly: Invalid polyobj num: %d\n", polyNum);
+		Printf("EV_RotatePoly: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
@@ -413,7 +413,7 @@ bool EV_MovePoly (FLevelLocals *Level, line_t *line, int polyNum, double speed, 
 
 	if ((poly = Level->GetPolyobj(polyNum)) == nullptr)
 	{
-		if (polyNum > 0) Printf("EV_MovePoly: Invalid polyobj num: %d\n", polyNum);
+		Printf("EV_MovePoly: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
@@ -491,7 +491,7 @@ bool EV_MovePolyTo(FLevelLocals *Level, line_t *line, int polyNum, double speed,
 
 	if ((poly = Level->GetPolyobj(polyNum)) == nullptr)
 	{
-		if (polyNum > 0) Printf("EV_MovePolyTo: Invalid polyobj num: %d\n", polyNum);
+		Printf("EV_MovePolyTo: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
@@ -641,7 +641,7 @@ bool EV_OpenPolyDoor(FLevelLocals *Level, line_t *line, int polyNum, double spee
 
 	if ((poly = Level->GetPolyobj(polyNum)) == nullptr)
 	{
-		if (polyNum > 0) Printf("EV_OpenPolyDoor: Invalid polyobj num: %d\n", polyNum);
+		Printf("EV_OpenPolyDoor: Invalid polyobj num: %d\n", polyNum);
 		return false;
 	}
 	FPolyMirrorIterator it(poly);
@@ -1027,15 +1027,15 @@ void FPolyObj::UnLinkPolyobj ()
 
 bool FPolyObj::CheckMobjBlocking (side_t *sd)
 {
-	if (bHurtOnTouch) return false;	//[XANE]This is so draw distance polyobjects are non-solid.
+	if (bHurtOnTouch) return false;
 	else
 	{
-		static TArray<AActor *> checker;
-		FBlockNode *block;
-		AActor *mobj;
+		static TArray<AActor*> checker;
+		FBlockNode* block;
+		AActor* mobj;
 		int i, j, k;
 		int left, right, top, bottom;
-		line_t *ld;
+		line_t* ld;
 		bool blocked;
 		bool performBlockingThrust;
 		int bmapwidth = Level->blockmap.bmapwidth;
@@ -1076,15 +1076,18 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 					}
 					if (k < 0)
 					{
-						FLineOpening open;
-						open.top = LINEOPEN_MAX;
-						open.bottom = LINEOPEN_MIN;
-						// [TN] Check wether this actor gets blocked by the line.
-						if (ld->backsector != nullptr && !P_IsBlockedByLine(mobj, ld) 
-							&& (!(ld->flags & ML_3DMIDTEX) ||
-								(!P_LineOpening_3dMidtex(mobj, ld, open) &&
-									(mobj->Top() < open.top)
-									) || (open.abovemidtex && mobj->Z() > mobj->floorz))
+						checker.Push(mobj);
+						if ((mobj->flags & MF_SOLID) && !(mobj->flags & MF_NOCLIP))
+						{
+							FLineOpening open;
+							open.top = LINEOPEN_MAX;
+							open.bottom = LINEOPEN_MIN;
+							// [TN] Check wether this actor gets blocked by the line.
+							if (ld->backsector != nullptr && !P_IsBlockedByLine(mobj, ld)
+								&& (!(ld->flags & ML_3DMIDTEX) ||
+									(!P_LineOpening_3dMidtex(mobj, ld, open) &&
+										(mobj->Top() < open.top)
+										) || (open.abovemidtex && mobj->Z() > mobj->floorz))
 								)
 							{
 								// [BL] We can't just continue here since we must
