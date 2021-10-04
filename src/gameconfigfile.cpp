@@ -72,6 +72,7 @@ EXTERN_CVAR(Float, m_sensitivity_x)
 EXTERN_CVAR(Float, m_sensitivity_y)
 EXTERN_CVAR(Int, adl_volume_model)
 EXTERN_CVAR (Int, gl_texture_hqresize_targets)
+EXTERN_CVAR(Int, wipetype)
 
 #ifdef _WIN32
 EXTERN_CVAR(Int, in_mouse)
@@ -116,6 +117,7 @@ FGameConfigFile::FGameConfigFile ()
 		SetValueForKey ("Path", "$HOME", true);
 #else
 		SetValueForKey ("Path", "$HOME/" GAME_DIR, true);
+		SetValueForKey ("Path", "$HOME/.local/share/games/doom", true);
 		// Arch Linux likes them in /usr/share/doom
 		// Debian likes them in /usr/share/games/doom
 		// I assume other distributions don't do anything radically different
@@ -142,6 +144,7 @@ FGameConfigFile::FGameConfigFile ()
 		SetValueForKey ("Path", "$PROGDIR", true);
 #else
 		SetValueForKey ("Path", "$HOME/" GAME_DIR, true);
+		SetValueForKey ("Path", "$HOME/.local/share/games/doom", true);
 		SetValueForKey ("Path", SHARE_DIR, true);
 		SetValueForKey ("Path", "/usr/local/share/doom", true);
 		SetValueForKey ("Path", "/usr/local/share/games/doom", true);
@@ -170,6 +173,8 @@ FGameConfigFile::FGameConfigFile ()
 #else
 		SetValueForKey("Path", "$HOME/" GAME_DIR "/soundfonts", true);
 		SetValueForKey("Path", "$HOME/" GAME_DIR "/fm_banks", true);
+		SetValueForKey("Path", "$HOME/.local/share/games/doom/soundfonts", true);
+		SetValueForKey("Path", "$HOME/.local/share/games/doom/fm_banks", true);
 		SetValueForKey("Path", "/usr/local/share/doom/soundfonts", true);
 		SetValueForKey("Path", "/usr/local/share/doom/fm_banks", true);
 		SetValueForKey("Path", "/usr/local/share/games/doom/soundfonts", true);
@@ -228,7 +233,7 @@ void FGameConfigFile::DoAutoloadSetup (FIWadManager *iwad_man)
 			{
 				FString section = workname + ".Autoload";
 				CreateSectionAtStart(section.GetChars());
-				long dotpos = workname.LastIndexOf('.');
+				auto dotpos = workname.LastIndexOf('.');
 				if (dotpos < 0) break;
 				workname.Truncate(dotpos);
 			}
@@ -281,30 +286,6 @@ void FGameConfigFile::DoGlobalSetup ()
 		if (lastver != NULL)
 		{
 			double last = atof (lastver);
-			if (last < 202)
-			{
-				// Make sure the Hexen hotkeys are accessible by default.
-				if (SetSection ("Hexen.Bindings"))
-				{
-					SetValueForKey ("\\", "use ArtiHealth");
-					SetValueForKey ("scroll", "+showscores");
-					SetValueForKey ("0", "useflechette");
-					SetValueForKey ("9", "use ArtiBlastRadius");
-					SetValueForKey ("8", "use ArtiTeleport");
-					SetValueForKey ("7", "use ArtiTeleportOther");
-					SetValueForKey ("6", "use ArtiPork");
-					SetValueForKey ("5", "use ArtiInvulnerability2");
-				}
-			}
-			if (last < 204)
-			{ // The old default for vsync was true, but with an unlimited framerate
-			  // now, false is a better default.
-				FBaseCVar *vsync = FindCVar ("vid_vsync", NULL);
-				if (vsync != NULL)
-				{
-					vsync->ResetToDefault ();
-				}
-			}
 			if (last < 207)
 			{ // Now that snd_midiprecache works again, you probably don't want it on.
 				FBaseCVar *precache = FindCVar ("snd_midiprecache", NULL);
@@ -578,6 +559,16 @@ void FGameConfigFile::DoGlobalSetup ()
 				old_targets |= (old_targets & 1) ? 8 : 0;
 				gl_texture_hqresize_targets = old_targets;
 			}
+			if (last < 222)
+			{
+				auto var = FindCVar("mod_dumb_mastervolume", NULL);
+				if (var != NULL)
+				{
+					UCVarValue v = var->GetGenericRep(CVAR_Float);
+					v.Float /= 4.f;
+					if (v.Float < 1.f) v.Float = 1.f;
+				}
+			}
 		}
 	}
 }
@@ -612,6 +603,11 @@ void FGameConfigFile::DoGameSetup (const char *gamename)
 	if (gameinfo.gametype & GAME_Raven)
 	{
 		SetRavenDefaults (gameinfo.gametype == GAME_Hexen);
+	}
+
+	if (gameinfo.gametype & GAME_Strife)
+	{
+		SetStrifeDefaults ();
 	}
 
 	// The NetServerInfo section will be read and override anything loaded
@@ -915,6 +911,9 @@ void FGameConfigFile::SetRavenDefaults (bool isHexen)
 	val.Int = 0x734323;
 	am_cdwallcolor.SetGenericRepDefault (val, CVAR_Int);
 
+	val.Int = 0;
+	wipetype.SetGenericRepDefault(val, CVAR_Int);
+
 	// Fix the Heretic/Hexen automap colors so they are correct.
 	// (They were wrong on older versions.)
 	if (*am_wallcolor == 0x2c1808 && *am_fdwallcolor == 0x887058 && *am_cdwallcolor == 0x4c3820)
@@ -929,6 +928,13 @@ void FGameConfigFile::SetRavenDefaults (bool isHexen)
 		val.Int = 0x3f6040;
 		color.SetGenericRepDefault (val, CVAR_Int);
 	}
+}
+
+void FGameConfigFile::SetStrifeDefaults ()
+{
+	UCVarValue val;
+	val.Int = 3;
+	wipetype.SetGenericRepDefault(val, CVAR_Int);
 }
 
 CCMD (whereisini)

@@ -50,7 +50,10 @@
 
 #include "gl_renderer.h"
 #include "gl_framebuffer.h"
-
+#ifdef HAVE_GLES2
+#include "gles_framebuffer.h"
+#endif
+ 
 #ifdef HAVE_VULKAN
 #include "vulkan/system/vk_framebuffer.h"
 #endif
@@ -61,12 +64,9 @@
 
 // MACROS ------------------------------------------------------------------
 
-// Requires SDL 2.0.6 or newer
-//#define SDL2_STATIC_LIBRARY
-
-#if defined SDL2_STATIC_LIBRARY && defined HAVE_VULKAN
+#if defined HAVE_VULKAN
 #include <SDL_vulkan.h>
-#endif // SDL2_STATIC_LIBRARY && HAVE_VULKAN
+#endif // HAVE_VULKAN
 
 // TYPES -------------------------------------------------------------------
 
@@ -118,31 +118,6 @@ CCMD(vid_list_sdl_render_drivers)
 
 namespace Priv
 {
-#ifdef SDL2_STATIC_LIBRARY
-
-#define SDL2_OPTIONAL_FUNCTION(RESULT, NAME, ...) \
-	RESULT(*NAME)(__VA_ARGS__) = SDL_ ## NAME
-
-#else // !SDL2_STATIC_LIBRARY
-
-	FModule library("SDL2");
-
-#define SDL2_OPTIONAL_FUNCTION(RESULT, NAME, ...) \
-	static TOptProc<library, RESULT(*)(__VA_ARGS__)> NAME("SDL_" #NAME)
-
-#endif // SDL2_STATIC_LIBRARY
-
-	SDL2_OPTIONAL_FUNCTION(int,      GetWindowBordersSize,         SDL_Window *window, int *top, int *left, int *bottom, int *right);
-#ifdef HAVE_VULKAN
-	SDL2_OPTIONAL_FUNCTION(void,     Vulkan_GetDrawableSize,       SDL_Window *window, int *width, int *height);
-	SDL2_OPTIONAL_FUNCTION(SDL_bool, Vulkan_GetInstanceExtensions, SDL_Window *window, unsigned int *count, const char **names);
-	SDL2_OPTIONAL_FUNCTION(SDL_bool, Vulkan_CreateSurface,         SDL_Window *window, VkInstance instance, VkSurfaceKHR *surface);
-#endif
-
-#undef SDL2_OPTIONAL_FUNCTION
-
-	static const uint32_t VulkanWindowFlag = 0x1000'0000;
-
 	SDL_Window *window;
 	bool vulkanEnabled;
 	bool softpolyEnabled;
@@ -175,6 +150,8 @@ namespace Priv
 		{
 			// Enforce minimum size limit
 			SDL_SetWindowMinimumSize(Priv::window, VID_MIN_WIDTH, VID_MIN_HEIGHT);
+			// Tell SDL to start sending text input on Wayland.
+			if (strncasecmp(SDL_GetCurrentVideoDriver(), "wayland", 7) == 0) SDL_StartTextInput();
 		}
 	}
 
@@ -240,22 +217,21 @@ void I_GetVulkanDrawableSize(int *width, int *height)
 {
 	assert(Priv::vulkanEnabled);
 	assert(Priv::window != nullptr);
-	assert(Priv::Vulkan_GetDrawableSize);
-	Priv::Vulkan_GetDrawableSize(Priv::window, width, height);
+	SDL_Vulkan_GetDrawableSize(Priv::window, width, height);
 }
 
 bool I_GetVulkanPlatformExtensions(unsigned int *count, const char **names)
 {
 	assert(Priv::vulkanEnabled);
 	assert(Priv::window != nullptr);
-	return Priv::Vulkan_GetInstanceExtensions(Priv::window, count, names) == SDL_TRUE;
+	return SDL_Vulkan_GetInstanceExtensions(Priv::window, count, names) == SDL_TRUE;
 }
 
 bool I_CreateVulkanSurface(VkInstance instance, VkSurfaceKHR *surface)
 {
 	assert(Priv::vulkanEnabled);
 	assert(Priv::window != nullptr);
-	return Priv::Vulkan_CreateSurface(Priv::window, instance, surface) == SDL_TRUE;
+	return SDL_Vulkan_CreateSurface(Priv::window, instance, surface) == SDL_TRUE;
 }
 #endif
 
@@ -419,24 +395,23 @@ SDLVideo::SDLVideo ()
 		return;
 	}
 
-#ifndef SDL2_STATIC_LIBRARY
-	// Load optional SDL functions
-	if (!Priv::library.IsLoaded())
+	// Fail gracefully if we somehow reach here after linking against a SDL2 library older than 2.0.6.
+	SDL_version sdlver;
+	SDL_GetVersion(&sdlver);
+	if (!(sdlver.patch >= 6))
 	{
-		Priv::library.Load({ "libSDL2-2.0.so.0", "libSDL2-2.0.so", "libSDL2.so" });
+		I_FatalError("Only SDL 2.0.6 or later is supported.");
 	}
-#endif // !SDL2_STATIC_LIBRARY
 
 #ifdef HAVE_SOFTPOLY
 	Priv::softpolyEnabled = vid_preferbackend == 2;
 #endif
 #ifdef HAVE_VULKAN
-	Priv::vulkanEnabled = vid_preferbackend == 1
-		&& Priv::Vulkan_GetDrawableSize && Priv::Vulkan_GetInstanceExtensions && Priv::Vulkan_CreateSurface;
+	Priv::vulkanEnabled = vid_preferbackend == 1;
 
 	if (Priv::vulkanEnabled)
 	{
-		Priv::CreateWindow(Priv::VulkanWindowFlag | SDL_WINDOW_HIDDEN);
+		Priv::CreateWindow(SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN | (vid_fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
 
 		if (Priv::window == nullptr)
 		{
@@ -448,6 +423,10 @@ SDLVideo::SDLVideo ()
 	if (Priv::softpolyEnabled)
 	{
 		Priv::CreateWindow(SDL_WINDOW_HIDDEN);
+		if (Priv::window == nullptr)
+		{
+			I_FatalError("Could not create SoftPoly window:\n%s\n",SDL_GetError());
+		}
 	}
 #endif
 }
@@ -473,13 +452,14 @@ DFrameBuffer *SDLVideo::CreateFrameBuffer ()
 			device = new VulkanDevice();
 			fb = new VulkanFrameBuffer(nullptr, vid_fullscreen, device);
 		}
-		catch (CVulkanError const&)
+		catch (CVulkanError const &error)
 		{
 			if (Priv::window != nullptr)
 			{
 				Priv::DestroyWindow();
 			}
 
+			Printf(TEXTCOLOR_RED "Initialization of Vulkan failed: %s\n", error.what());
 			Priv::vulkanEnabled = false;
 		}
 	}
@@ -493,7 +473,12 @@ DFrameBuffer *SDLVideo::CreateFrameBuffer ()
 #endif
 	if (fb == nullptr)
 	{
-		fb = new OpenGLRenderer::OpenGLFrameBuffer(0, vid_fullscreen);
+#ifdef HAVE_GLES2
+		if( (Args->CheckParm ("-gles2_renderer")) || (vid_preferbackend == 3) )
+			fb = new OpenGLESRenderer::OpenGLFrameBuffer(0, vid_fullscreen);
+		else
+#endif
+			fb = new OpenGLRenderer::OpenGLFrameBuffer(0, vid_fullscreen);
 	}
 
 	return fb;
@@ -535,7 +520,7 @@ int SystemBaseFrameBuffer::GetClientWidth()
 	
 #ifdef HAVE_VULKAN
 	assert(Priv::vulkanEnabled);
-	Priv::Vulkan_GetDrawableSize(Priv::window, &width, nullptr);
+	SDL_Vulkan_GetDrawableSize(Priv::window, &width, nullptr);
 #endif
 
 	return width;
@@ -558,7 +543,7 @@ int SystemBaseFrameBuffer::GetClientHeight()
 
 #ifdef HAVE_VULKAN
 	assert(Priv::vulkanEnabled);
-	Priv::Vulkan_GetDrawableSize(Priv::window, nullptr, &height);
+	SDL_Vulkan_GetDrawableSize(Priv::window, nullptr, &height);
 #endif
 
 	return height;
@@ -667,6 +652,10 @@ SystemGLFrameBuffer::SystemGLFrameBuffer(void *hMonitor, bool fullscreen)
 			break;
 		}
 	}
+	if (Priv::window == nullptr)
+	{
+		I_FatalError("Could not create OpenGL window:\n%s\n",SDL_GetError());
+	}
 }
 
 SystemGLFrameBuffer::~SystemGLFrameBuffer ()
@@ -737,10 +726,10 @@ void ProcessSDLWindowEvent(const SDL_WindowEvent &event)
 		break;
 
 	case SDL_WINDOWEVENT_MOVED:
-		if (!vid_fullscreen && Priv::GetWindowBordersSize)
+		if (!vid_fullscreen)
 		{
 			int top = 0, left = 0;
-			Priv::GetWindowBordersSize(Priv::window, &top, &left, nullptr, nullptr);
+			SDL_GetWindowBordersSize(Priv::window, &top, &left, nullptr, nullptr);
 			win_x = event.data1-left;
 			win_y = event.data2-top;
 		}

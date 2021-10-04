@@ -4,7 +4,7 @@
 **
 **---------------------------------------------------------------------------
 ** Copyright 1998-2009 Randy Heit
-** Copyright 2009 CHristoph Oelckers
+** Copyright 2009 Christoph Oelckers
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without
@@ -172,10 +172,10 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 				{
 					sc.MustGetStringName("=");
 					sc.MustGetString();
-					iwad->FgColor = V_GetColor(NULL, sc);
+					iwad->FgColor = V_GetColor(sc);
 					sc.MustGetStringName(",");
 					sc.MustGetString();
-					iwad->BkColor = V_GetColor(NULL, sc);
+					iwad->BkColor = V_GetColor(sc);
 				}
 				else if (sc.Compare("IgnoreTitlePatches"))
 				{
@@ -264,7 +264,7 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 // Look for IWAD definition lump
 //
 //==========================================================================
-extern const char* iwad_folders[13];
+extern const char* iwad_folders[14];
 extern const char* iwad_reserved[12];
 
 FIWadManager::FIWadManager(const char *firstfn, const char *optfn)
@@ -420,6 +420,7 @@ void FIWadManager::CollectSearchPaths()
 	}
 	mSearchPaths.Append(I_GetGogPaths());
 	mSearchPaths.Append(I_GetSteamPath());
+	mSearchPaths.Append(I_GetBethesdaPath());
 
 	// Unify and remove trailing slashes
 	for (auto &str : mSearchPaths)
@@ -576,6 +577,12 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 	}
 	// -iwad not found or not specified. Revert back to standard behavior.
 	if (mFoundWads.Size() == numFoundWads) iwadparm = nullptr;
+
+	// Check for symbolic links leading to non-existent files and for files that are unreadable.
+	for (unsigned int i = 0; i < mFoundWads.Size(); i++)
+	{
+		if (!FileExists(mFoundWads[i].mFullPath) || !FileReadable(mFoundWads[i].mFullPath)) mFoundWads.Delete(i);
+	}
 
 	// Now check if what got collected actually is an IWAD.
 	ValidateIWADs();
@@ -765,7 +772,7 @@ int FIWadManager::IdentifyVersion (TArray<FString> &wadfiles, const char *iwad, 
 		FString path;
 		if (info.Load[i][0] != ':')
 		{
-			long lastslash = picks[pick].mFullPath.LastIndexOf('/');
+			auto lastslash = picks[pick].mFullPath.LastIndexOf('/');
 
 			if (lastslash == -1)
 			{

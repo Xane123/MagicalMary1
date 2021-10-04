@@ -1076,19 +1076,12 @@ bool FPolyObj::CheckMobjBlocking (side_t *sd)
 					}
 					if (k < 0)
 					{
-						checker.Push(mobj);
-						if ((mobj->flags&MF_SOLID) && !(mobj->flags&MF_NOCLIP))
-						{
-							FLineOpening open;
-							open.top = LINEOPEN_MAX;
-							open.bottom = LINEOPEN_MIN;
-							// [TN] Check wether this actor gets blocked by the line.
-							if (ld->backsector != nullptr &&
-								!(ld->flags & (ML_BLOCKING | ML_BLOCKEVERYTHING))
-								&& !(ld->flags & ML_BLOCK_PLAYERS && (mobj->player || (mobj->flags8 & MF8_BLOCKASPLAYER)))
-								&& !(ld->flags & ML_BLOCKMONSTERS && mobj->flags3 & MF3_ISMONSTER)
-								&& !((mobj->flags & MF_FLOAT) && (ld->flags & ML_BLOCK_FLOATERS))
-								&& (!(ld->flags & ML_3DMIDTEX) ||
+						FLineOpening open;
+						open.top = LINEOPEN_MAX;
+						open.bottom = LINEOPEN_MIN;
+						// [TN] Check wether this actor gets blocked by the line.
+						if (ld->backsector != nullptr && !P_IsBlockedByLine(mobj, ld) 
+							&& (!(ld->flags & ML_3DMIDTEX) ||
 								(!P_LineOpening_3dMidtex(mobj, ld, open) &&
 									(mobj->Top() < open.top)
 									) || (open.abovemidtex && mobj->Z() > mobj->floorz))

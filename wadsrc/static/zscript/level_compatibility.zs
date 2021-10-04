@@ -1365,7 +1365,6 @@ class LevelCompatibility : LevelPostProcessor
 			case '11EA5B8357DEB70A8F00900117831191': // kdizd_12.pk3 z1m3
 			{
 				// Fix incorrectly tagged underwater sector which causes render glitches.
-				ClearSectorTags(7857);
 				AddSectorTag(7857, 82);
 				break;
 			}
@@ -2112,6 +2111,21 @@ class LevelCompatibility : LevelPostProcessor
 			{
 				SetLineFlags(1461, Line.ML_REPEAT_SPECIAL);
 				SetLineFlags(1468, Line.ML_REPEAT_SPECIAL);
+				break;
+			}
+			
+			case 'E0D747B9EE58A0CB74B9AD54423AC15C': // return01.wad e1m2
+			{
+				// fix broken switch to raise the exit bridge
+				SetLineSpecial(1248, Floor_RaiseByValue, 39, 8, 512);
+				break;
+			}
+
+			case '1C35384B22BD805F51B3B2C9D17D62E4': // 007ltsd.wad E4M7
+			{
+				// Fix impassable exit line
+				SetLineFlags(6842, 0, Line.ML_BLOCKING); 
+				break;
 			}
 		}
 	}

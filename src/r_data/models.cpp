@@ -183,7 +183,7 @@ void RenderModel(FModelRenderer *renderer, float x, float y, float z, FSpriteMod
 void RenderHUDModel(FModelRenderer *renderer, DPSprite *psp, float ofsX, float ofsY)
 {
 	AActor * playermo = players[consoleplayer].camera;
-	FSpriteModelFrame *smf = FindModelFrame(playermo->player->ReadyWeapon->GetClass(), psp->GetSprite(), psp->GetFrame(), false);
+	FSpriteModelFrame *smf = psp->Caller != nullptr ? FindModelFrame(psp->Caller->GetClass(), psp->GetSprite(), psp->GetFrame(), false) : nullptr;
 
 	// [BB] No model found for this sprite, so we can't render anything.
 	if (smf == nullptr)
@@ -216,7 +216,7 @@ void RenderHUDModel(FModelRenderer *renderer, DPSprite *psp, float ofsX, float o
 	renderer->BeginDrawHUDModel(playermo->RenderStyle, objectToWorldMatrix, orientation < 0);
 	uint32_t trans = psp->GetTranslation() != 0 ? psp->GetTranslation() : 0;
 	if ((psp->Flags & PSPF_PLAYERTRANSLATED)) trans = psp->Owner->mo->Translation;
-	RenderFrameModels(renderer, playermo->Level, smf, psp->GetState(), psp->GetTics(), playermo->player->ReadyWeapon->GetClass(), trans);
+	RenderFrameModels(renderer, playermo->Level, smf, psp->GetState(), psp->GetTics(), psp->Caller->GetClass(), trans);
 	renderer->EndDrawHUDModel(playermo->RenderStyle);
 }
 
@@ -268,7 +268,7 @@ void RenderFrameModels(FModelRenderer *renderer, FLevelLocals *Level, const FSpr
 		}
 	}
 
-	for (int i = 0; i<MAX_MODELS_PER_FRAME; i++)
+	for (int i = 0; i < smf->modelsAmount; i++)
 	{
 		if (smf->modelIDs[i] != -1)
 		{
@@ -317,9 +317,14 @@ void InitModels()
 		FSpriteModelFrame smf;
 		memset(&smf, 0, sizeof(smf));
 		smf.isVoxel = true;
+		smf.modelsAmount = 1;
+		smf.modelframes.Alloc(1);
+		smf.modelframes[0] = -1;
+		smf.modelIDs.Alloc(1);
 		smf.flags |= MDL_USEACTORPITCH | MDL_USEACTORROLL;	//[XANE]Brute-force these flags on for voxel models. (SOMEHOW THIS WORKS!)
-		smf.modelIDs[1] = smf.modelIDs[2] = smf.modelIDs[3] = -1;
+		//smf.modelIDs[1] = smf.modelIDs[2] = smf.modelIDs[3] = -1;
 		smf.modelIDs[0] = VoxelDefs[i]->Voxel->VoxelIndex;
+		smf.skinIDs.Alloc(1);
 		smf.skinIDs[0] = md->GetPaletteTexture();
 		smf.xscale = smf.yscale = smf.zscale = VoxelDefs[i]->Scale;
 		smf.angleoffset = VoxelDefs[i]->AngleOffset.Degrees;
@@ -381,7 +386,6 @@ static void ParseModelDefLump(int Lump)
 
 			FSpriteModelFrame smf;
 			memset(&smf, 0, sizeof(smf));
-			smf.modelIDs[0] = smf.modelIDs[1] = smf.modelIDs[2] = smf.modelIDs[3] = -1;
 			smf.xscale=smf.yscale=smf.zscale=1.f;
 
 			auto type = PClass::FindClass(sc.String);
@@ -390,6 +394,40 @@ static void ParseModelDefLump(int Lump)
 				sc.ScriptError("MODELDEF: Unknown actor type '%s'\n", sc.String);
 			}
 			smf.type = type;
+			FScanner::SavedPos scPos = sc.SavePos();
+			sc.MustGetStringName("{");
+			while (!sc.CheckString("}"))
+			{
+				sc.MustGetString();
+				if (sc.Compare("model"))
+				{
+					sc.MustGetNumber();
+					index = sc.Number;
+					if (index < 0)
+					{
+						sc.ScriptError("Model index must be 0 or greater in %s", type->TypeName.GetChars());
+					}
+					smf.modelsAmount = index + 1;
+				}
+			}
+			//Make sure modelsAmount is at least equal to MIN_MODELS(4) to ensure compatibility with old mods
+			if (smf.modelsAmount < MIN_MODELS)
+			{
+				smf.modelsAmount = MIN_MODELS;
+			}
+
+			const auto initArray = [](auto& array, const unsigned count, const auto value)
+			{
+				array.Alloc(count);
+				std::fill(array.begin(), array.end(), value);
+			};
+
+			initArray(smf.modelIDs, smf.modelsAmount, -1);
+			initArray(smf.skinIDs, smf.modelsAmount, FNullTextureID());
+			initArray(smf.surfaceskinIDs, smf.modelsAmount * MD3_MAX_SURFACES, FNullTextureID());
+			initArray(smf.modelframes, smf.modelsAmount, 0);
+
+			sc.RestorePos(scPos);
 			sc.MustGetStringName("{");
 			while (!sc.CheckString("}"))
 			{
@@ -405,7 +443,11 @@ static void ParseModelDefLump(int Lump)
 				{
 					sc.MustGetNumber();
 					index = sc.Number;
-					if (index < 0 || index >= MAX_MODELS_PER_FRAME)
+					if (index < 0)
+					{
+						sc.ScriptError("Model index must be 0 or greater in %s", type->TypeName.GetChars());
+					}
+					else if (index >= smf.modelsAmount)
 					{
 						sc.ScriptError("Too many models in %s", type->TypeName.GetChars());
 					}
@@ -530,7 +572,7 @@ static void ParseModelDefLump(int Lump)
 				{
 					sc.MustGetNumber();
 					index=sc.Number;
-					if (index<0 || index>=MAX_MODELS_PER_FRAME)
+					if (index<0 || index>= smf.modelsAmount)
 					{
 						sc.ScriptError("Too many models in %s", type->TypeName.GetChars());
 					}
@@ -557,7 +599,7 @@ static void ParseModelDefLump(int Lump)
 					sc.MustGetNumber();
 					surface = sc.Number;
 
-					if (index<0 || index >= MAX_MODELS_PER_FRAME)
+					if (index<0 || index >= smf.modelsAmount)
 					{
 						sc.ScriptError("Too many models in %s", type->TypeName.GetChars());
 					}
@@ -569,14 +611,15 @@ static void ParseModelDefLump(int Lump)
 
 					sc.MustGetString();
 					FixPathSeperator(sc.String);
+					int ssIndex = surface + index * MD3_MAX_SURFACES;
 					if (sc.Compare(""))
 					{
-						smf.surfaceskinIDs[index][surface] = FNullTextureID();
+						smf.surfaceskinIDs[ssIndex] = FNullTextureID();
 					}
 					else
 					{
-						smf.surfaceskinIDs[index][surface] = LoadSkin(path.GetChars(), sc.String);
-						if (!smf.surfaceskinIDs[index][surface].isValid())
+						smf.surfaceskinIDs[ssIndex] = LoadSkin(path.GetChars(), sc.String);
+						if (!smf.surfaceskinIDs[ssIndex].isValid())
 						{
 							Printf("Surface Skin '%s' not found in '%s'\n",
 								sc.String, type->TypeName.GetChars());
@@ -611,7 +654,7 @@ static void ParseModelDefLump(int Lump)
 
 					sc.MustGetNumber();
 					index=sc.Number;
-					if (index<0 || index>=MAX_MODELS_PER_FRAME)
+					if (index<0 || index>= smf.modelsAmount)
 					{
 						sc.ScriptError("Too many models in %s", type->TypeName.GetChars());
 					}
@@ -736,15 +779,14 @@ FSpriteModelFrame * FindModelFrame(const PClass * ti, int sprite, int frame, boo
 
 bool IsHUDModelForPlayerAvailable (player_t * player)
 {
-	if (player == nullptr || player->ReadyWeapon == nullptr)
+	if (player == nullptr || player->psprites == nullptr)
 		return false;
 
-	DPSprite *psp = player->FindPSprite(PSP_WEAPON);
-
-	if (psp == nullptr)
-		return false;
-
-	FSpriteModelFrame *smf = FindModelFrame(player->ReadyWeapon->GetClass(), psp->GetSprite(), psp->GetFrame(), false);
-	return ( smf != nullptr );
+	// [MK] check that at least one psprite uses models
+	for (DPSprite *psp = player->psprites; psp != nullptr && psp->GetID() < PSP_TARGETCENTER; psp = psp->GetNext())
+	{
+		FSpriteModelFrame *smf = psp->Caller != nullptr ? FindModelFrame(psp->Caller->GetClass(), psp->GetSprite(), psp->GetFrame(), false) : nullptr;
+		if ( smf != nullptr ) return true;
+	}
+	return false;
 }
-

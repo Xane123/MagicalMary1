@@ -37,7 +37,6 @@
 #include "cmdlib.h"
 #include "i_system.h"
 #include "gameconfigfile.h"
-#include "x86.h"
 
 
 bool I_WriteIniFailed()
@@ -49,5 +48,11 @@ bool I_WriteIniFailed()
 TArray<FString> I_GetGogPaths()
 {
 	// GOG's Doom games are Windows only at the moment
+	return TArray<FString>();
+}
+
+TArray<FString> I_GetBethesdaPath()
+{
+	// Bethesda.net Launcher is Windows only at the moment
 	return TArray<FString>();
 }

@@ -45,9 +45,9 @@
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include <SDL.h>
-#include "x86.h"
 
 #include "version.h"
 #include "cmdlib.h"
@@ -57,6 +57,7 @@
 #include "v_font.h"
 #include "c_cvars.h"
 #include "palutil.h"
+#include "st_start.h"
 
 
 #ifndef NO_GTK
@@ -70,6 +71,8 @@ int I_PickIWad_Cocoa (WadStuff *wads, int numwads, bool showwin, int defaultiwad
 double PerfToSec, PerfToMillisec;
 CVAR(Bool, con_printansi, true, CVAR_GLOBALCONFIG|CVAR_ARCHIVE);
 CVAR(Bool, con_4bitansi, false, CVAR_GLOBALCONFIG|CVAR_ARCHIVE);
+
+extern FStartupScreen *StartScreen;
 
 void I_SetIWADInfo()
 {
@@ -87,7 +90,7 @@ void Mac_I_FatalError(const char* errortext);
 void Unix_I_FatalError(const char* errortext)
 {
 	// Close window or exit fullscreen and release mouse capture
-	SDL_Quit();
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
 	const char *str;
 	if((str=getenv("KDE_FULL_SESSION")) && strcmp(str, "true") == 0)
@@ -132,14 +135,51 @@ void CalculateCPUSpeed()
 {
 }
 
+void CleanProgressBar()
+{
+	if (!isatty(STDOUT_FILENO)) return;
+	struct winsize sizeOfWindow;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &sizeOfWindow);
+	fprintf(stdout,"\0337\033[%d;%dH\033[0J\0338",sizeOfWindow.ws_row, 0);
+	fflush(stdout);
+}
+
+static int ProgressBarCurPos, ProgressBarMaxPos;
+
+void RedrawProgressBar(int CurPos, int MaxPos)
+{
+	if (!isatty(STDOUT_FILENO)) return;
+	CleanProgressBar();
+	struct winsize sizeOfWindow;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &sizeOfWindow);
+	double progVal = std::clamp((double)CurPos / (double)MaxPos,0.0,1.0);
+	int curProgVal = std::clamp(int(sizeOfWindow.ws_col * progVal),0,(int)sizeOfWindow.ws_col);
+
+	char progressBuffer[512];
+	memset(progressBuffer,'.',512);
+	progressBuffer[sizeOfWindow.ws_col - 1] = 0;
+	int lengthOfStr = 0;
+	
+	while (curProgVal-- > 0)
+	{
+		progressBuffer[lengthOfStr++] = '=';
+		if (lengthOfStr >= sizeOfWindow.ws_col - 1) break;
+	}
+	fprintf(stdout, "\0337\033[%d;%dH\033[2K[%s\033[%d;%dH]\0338", sizeOfWindow.ws_row, 0, progressBuffer, sizeOfWindow.ws_row, sizeOfWindow.ws_col);
+	fflush(stdout);
+	ProgressBarCurPos = CurPos;
+	ProgressBarMaxPos = MaxPos;
+}
+
 void I_PrintStr(const char *cp)
 {
 	const char * srcp = cp;
 	FString printData = "";
+	bool terminal = isatty(STDOUT_FILENO);
 
 	while (*srcp != 0)
 	{
-		if (*srcp == 0x1c && con_printansi)
+		if (*srcp == 0x1c && con_printansi && terminal)
 		{
 			srcp += 1;
 			EColorRange range = V_ParseFontColor((const uint8_t*&)srcp, CR_UNTRANSLATED, CR_YELLOW);
@@ -164,7 +204,7 @@ void I_PrintStr(const char *cp)
 					{ // gray
 						     if (v < 0.33) attrib = 0x8;
 						else if (v < 0.90) attrib = 0x7;
-						else			   attrib = 0x15;
+						else			   attrib = 0xF;
 					}
 					
 					printData.AppendFormat("\033[%um",((attrib & 0x8) ? 90 : 30) + (attrib & 0x7));
@@ -183,8 +223,10 @@ void I_PrintStr(const char *cp)
 		}
 	}
 	
+	if (StartScreen) CleanProgressBar();
 	fputs(printData.GetChars(),stdout);
-	fputs("\033[0m",stdout);
+	if (terminal) fputs("\033[0m",stdout);
+	if (StartScreen) RedrawProgressBar(ProgressBarCurPos,ProgressBarMaxPos);
 }
 
 int I_PickIWad (WadStuff *wads, int numwads, bool showwin, int defaultiwad)

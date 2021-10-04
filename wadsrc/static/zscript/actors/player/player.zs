@@ -80,6 +80,7 @@ class PlayerPawn : Actor
 	flagdef NoThrustWhenInvul: PlayerFlags, 0;
 	flagdef CanSuperMorph: PlayerFlags, 1;
 	flagdef CrouchableMorph: PlayerFlags, 2;
+	flagdef WeaponLevel2Ended: PlayerFlags, 3;
 	
 	Default
 	{
@@ -137,6 +138,21 @@ class PlayerPawn : Actor
 		else
 		{
 			if (health > 0) Height = FullHeight;
+		}
+
+		if (player && bWeaponLevel2Ended)
+		{
+			bWeaponLevel2Ended = false;
+			if (player.ReadyWeapon != NULL && player.ReadyWeapon.bPowered_Up)
+			{
+				player.ReadyWeapon.EndPowerup ();
+			}
+			if (player.PendingWeapon != NULL && player.PendingWeapon != WP_NOCHANGE &&
+				player.PendingWeapon.bPowered_Up &&
+				player.PendingWeapon.SisterWeapon != NULL)
+			{
+				player.PendingWeapon = player.PendingWeapon.SisterWeapon;
+			}
 		}
 		Super.Tick();
 	}
@@ -317,8 +333,8 @@ class PlayerPawn : Actor
 			(player.ReadyWeapon == NULL || player.ReadyWeapon.bWimpy_Weapon))
 		{
 			let best = BestWeapon (ammotype);
-			if (best != NULL && (player.ReadyWeapon == NULL ||
-				best.SelectionOrder < player.ReadyWeapon.SelectionOrder))
+			if (best != NULL && !best.bNoAutoSwitchTo && 
+				(player.ReadyWeapon == NULL || best.SelectionOrder < player.ReadyWeapon.SelectionOrder))
 			{
 				player.PendingWeapon = best;
 			}
@@ -440,6 +456,7 @@ class PlayerPawn : Actor
 	virtual void CheckWeaponChange ()
 	{
 		let player = self.player;
+		if (!player) return;	
 		if ((player.WeaponState & WF_DISABLESWITCH) || // Weapon changing has been disabled.
 			player.morphTics != 0)					// Morphed classes cannot change weapons.
 		{ // ...so throw away any pending weapon requests.
@@ -927,6 +944,8 @@ class PlayerPawn : Actor
 	virtual void CheckFOV()
 	{
 		let player = self.player;
+
+		if (!player) return;
 
 		// [RH] Zoom the player's FOV
 		float desired = player.DesiredFOV;
@@ -2021,7 +2040,7 @@ class PlayerPawn : Actor
 				next = item.Inv;
 				if (item.InterHubAmount < 1)
 				{
-					item.Destroy ();
+					item.DepleteOrDestroy ();
 				}
 				item = next;
 			}
@@ -2065,7 +2084,7 @@ class PlayerPawn : Actor
 			me.GiveDefaultInventory();
 		}
 	}
-	
+	 
 	//===========================================================================
 	//
 	// FWeaponSlot :: PickWeapon

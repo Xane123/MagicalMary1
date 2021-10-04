@@ -584,7 +584,11 @@ bool AActor::SetState (FState *newstate, bool nofunction)
 		newstate = newstate->GetNextState();
 	} while (tics == 0);
 
-	flags8 |= MF8_RECREATELIGHTS;
+	if (GetInfo()->LightAssociations.Size() || (state && state->Light > 0))
+	{
+		flags8 |= MF8_RECREATELIGHTS;
+		Level->flags3 |= LEVEL3_LIGHTCREATED;
+	}
 	return true;
 }
 
@@ -1608,7 +1612,7 @@ bool AActor::FloorBounceMissile (secplane_t &plane)
 			flags &= ~MF_INBOUNCE;
 			return false;
 		}
-		else Vel.Z *= bouncefactor;
+		else Vel.Z *= GetMBFBounceFactor(this);
 	}
 	else // Don't run through this for MBF-style bounces
 	{
@@ -2551,7 +2555,7 @@ void P_ZMovement (AActor *mo, double oldfloorz)
 				if (mo->BounceFlags & BOUNCE_Floors)
 				{
 					mo->FloorBounceMissile (mo->floorsector->floorplane);
-					/* if (!(mo->flags6 & MF6_CANJUMP)) */ return;
+					/* if (!CanJump(mo)) */ return;
 				}
 				else if (mo->flags3 & MF3_NOEXPLODEFLOOR)
 				{
@@ -2660,7 +2664,7 @@ void P_ZMovement (AActor *mo, double oldfloorz)
 			if (mo->BounceFlags & BOUNCE_Ceilings)
 			{	// ceiling bounce
 				mo->FloorBounceMissile (mo->ceilingsector->ceilingplane);
-				/*if (!(mo->flags6 & MF6_CANJUMP))*/ return;
+				/* if (!CanJump(mo)) */ return;
 			}
 			if (mo->flags & MF_SKULLFLY)
 			{	// the skull slammed into something
@@ -3306,7 +3310,7 @@ bool AActor::IsOkayToAttack (AActor *link)
 	// its target; and for a summoned minion, its tracer.
 	AActor * Friend;
 	if (flags5 & MF5_SUMMONEDMONSTER)					Friend = tracer;
-	else if (flags2 & MF2_SEEKERMISSILE)				Friend = target;
+	else if (flags & MF_MISSILE)						Friend = target;
 	else if ((flags & MF_FRIENDLY) && FriendPlayer)		Friend = Level->Players[FriendPlayer-1]->mo;
 	else												Friend = this;
 
@@ -4097,12 +4101,20 @@ void AActor::Tick ()
 	}
 	if (!CheckNoDelay())
 		return; // freed itself
-	// cycle through states, calling action functions at transitions
 
 	UpdateRenderSectorList();
 
+	if (Sector->Flags & SECF_KILLMONSTERS && Z() == floorz &&
+		player == nullptr && (flags & MF_SHOOTABLE) && !(flags & MF_FLOAT))
+	{
+		P_DamageMobj(this, nullptr, nullptr, TELEFRAG_DAMAGE, NAME_InstantDeath);
+		// must have been removed
+		if (ObjectFlags & OF_EuthanizeMe) return;
+	}
+
 	if (tics != -1)
 	{
+		// cycle through states, calling action functions at transitions
 		// [RH] Use tics <= 0 instead of == 0 so that spawnstates
 		// of 0 tics work as expected.
 		if (--tics <= 0)
@@ -4791,7 +4803,11 @@ void AActor::PostBeginPlay ()
 {
 	PrevAngles = Angles;
 	flags7 |= MF7_HANDLENODELAY;
-	flags8 |= MF8_RECREATELIGHTS;
+	if (GetInfo()->LightAssociations.Size() || (state && state->Light > 0))
+	{
+		flags8 |= MF8_RECREATELIGHTS;
+		Level->flags3 |= LEVEL3_LIGHTCREATED;
+	}
 }
 
 void AActor::CallPostBeginPlay()
@@ -5720,7 +5736,7 @@ AActor *FLevelLocals::SpawnMapThing (FMapThing *mthing, int position)
 	{
 		if (mthing->arg0str != NAME_None)
 		{
-			PalEntry color = V_GetColor(nullptr, mthing->arg0str.GetChars());
+			PalEntry color = V_GetColor(mthing->arg0str.GetChars());
 			mobj->args[0] = color.r;
 			mobj->args[1] = color.g;
 			mobj->args[2] = color.b;
@@ -7399,6 +7415,19 @@ void AActor::SetTag(const char *def)
 	else Tag = mStringPropertyData.Alloc(def);
 }
 
+const char *AActor::GetCharacterName() const
+{
+	if (Conversation && Conversation->SpeakerName.Len() != 0)
+	{
+		const char *cname = Conversation->SpeakerName.GetChars();
+		if (cname[0] == '$')
+		{
+			return GStrings(cname + 1);
+		}
+		else return cname;
+	}
+	return GetTag();
+}
 
 void AActor::ClearCounters()
 {

@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 2.8.7 )
+cmake_minimum_required( VERSION 3.1.0 )
 
 include(precompiled_headers)
 
@@ -318,16 +318,6 @@ if( ZD_CMAKE_COMPILER_IS_GNUCXX_COMPATIBLE )
 	set( CMAKE_C_FLAGS "-Wall -Wextra -Wno-unused -Wno-unused-parameter -Wno-missing-field-initializers -ffp-contract=off ${CMAKE_C_FLAGS}" )
 	set( CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused -Wno-unused-parameter -Wno-missing-field-initializers -ffp-contract=off ${CMAKE_CXX_FLAGS}" )
 
-	# ARM processors (Raspberry Pi, et al) - enable ARM NEON support.
-	if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-		set (USE_ARMV8 0 CACHE BOOL "Use ARMv8 instructions - Raspberry Pi 3")
-		if (USE_ARMV8)
-			set( CMAKE_CXX_FLAGS "-mcpu=cortex-a53 -mfpu=neon-fp-armv8 -mtune=cortex-a53 -mhard-float -DNO_SSE ${CMAKE_CXX_FLAGS}" )
-		else ()
-			set( CMAKE_CXX_FLAGS "-mcpu=cortex-a7 -mfpu=neon-vfpv4 -mtune=cortex-a7 -mhard-float -DNO_SSE ${CMAKE_CXX_FLAGS}" )
-		endif ()
-	endif ()
-
 	if( NOT X64 AND NOT CAN_DO_MFPMATH )
 		set( CMAKE_C_FLAGS "-DNO_SSE ${CMAKE_C_FLAGS}" )
 		set( CMAKE_CXX_FLAGS "-DNO_SSE ${CMAKE_CXX_FLAGS}" )
@@ -617,6 +607,7 @@ file( GLOB HEADER_FILES
 	common/thirdparty/math/*h
 	common/rendering/*.h
 	common/rendering/gl_load/*.h
+	common/rendering/gles/*.h
 	common/rendering/hwrenderer/data/*.h
 	common/rendering/polyrenderer/*.h
 	common/rendering/polyrenderer/math/*.h
@@ -794,6 +785,26 @@ set (VULKAN_SOURCES
 	common/rendering/vulkan/thirdparty/vk_mem_alloc/vk_mem_alloc.cpp
 )
 
+if (HAVE_GLES2)
+	set (GLES_SOURCES
+		common/rendering/gles/gles_system.cpp
+		common/rendering/gles/gles_renderer.cpp
+		common/rendering/gles/gles_framebuffer.cpp
+		common/rendering/gles/gles_renderstate.cpp
+		common/rendering/gles/gles_renderbuffers.cpp
+		common/rendering/gles/gles_postprocess.cpp
+		common/rendering/gles/gles_postprocessstate.cpp
+		common/rendering/gles/gles_buffers.cpp
+		common/rendering/gles/gles_hwtexture.cpp
+		common/rendering/gles/gles_shader.cpp
+		common/rendering/gles/gles_shaderprogram.cpp
+		common/rendering/gles/gles_samplers.cpp
+		common/rendering/gles/glad/src/glad.c
+	)
+
+	set (FASTMATH_SOURCES ${FASTMATH_SOURCES} ${GLES_SOURCES})
+endif()
+
 if (HAVE_VULKAN)
 	set (FASTMATH_SOURCES ${FASTMATH_SOURCES} ${VULKAN_SOURCES})
 endif()
@@ -820,6 +831,7 @@ set (PCH_SOURCES
 	ct_chat.cpp
 	d_iwad.cpp
 	d_main.cpp
+	d_defcvars.cpp
 	d_anonstats.cpp
 	d_net.cpp
 	d_netinfo.cpp
@@ -1002,6 +1014,7 @@ set (PCH_SOURCES
 	common/2d/v_2ddrawer.cpp
 	common/2d/v_drawtext.cpp
 	common/2d/v_draw.cpp
+	common/thirdparty/gain_analysis.cpp
 	common/thirdparty/sfmt/SFMT.cpp
 	common/fonts/singlelumpfont.cpp
 	common/fonts/singlepicfont.cpp
@@ -1264,6 +1277,9 @@ include_directories( .
 	common/rendering/hwrenderer/data
 	common/rendering/gl_load
 	common/rendering/gl
+	common/rendering/gles
+	common/rendering/gles/glad/include
+	common/rendering/gles/Mali_OpenGL_ES_Emulator/include
 	common/rendering/vulkan/thirdparty
 	common/rendering/polyrenderer/backend
 	common/rendering/polyrenderer/drawers
@@ -1467,6 +1483,7 @@ source_group("Common\\Rendering\\Hardware Renderer\\Data" REGULAR_EXPRESSION "^$
 source_group("Common\\Rendering\\Hardware Renderer\\Postprocessing" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/hwrenderer/postprocessing/.+")
 source_group("Common\\Rendering\\OpenGL Loader" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/gl_load/.+")
 source_group("Common\\Rendering\\OpenGL Backend" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/gl/.+")
+source_group("Common\\Rendering\\GLES Backend" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/gles/.+")
 source_group("Common\\Rendering\\Vulkan Renderer\\System" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/vulkan/system/.+")
 source_group("Common\\Rendering\\Vulkan Renderer\\Renderer" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/vulkan/renderer/.+")
 source_group("Common\\Rendering\\Vulkan Renderer\\Shaders" REGULAR_EXPRESSION "^${CMAKE_CURRENT_SOURCE_DIR}/common/rendering/vulkan/shaders/.+")

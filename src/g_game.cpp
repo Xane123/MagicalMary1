@@ -138,6 +138,7 @@ CUSTOM_CVAR (Int, displaynametags, 3, CVAR_ARCHIVE)
 
 CVAR(Int, nametagcolor, CR_GOLD, CVAR_ARCHIVE)
 
+extern bool playedtitlemusic;
 
 gameaction_t	gameaction;
 gamestate_t 	gamestate = GS_STARTUP;
@@ -319,7 +320,7 @@ CCMD (slot)
 		}
 
 		// [Nash] Option to display the name of the weapon being switched to.
-		if (players[consoleplayer].playerstate != PST_LIVE) return;
+		if ((paused || pauseext) || players[consoleplayer].playerstate != PST_LIVE) return;
 		if (SendItemUse != players[consoleplayer].ReadyWeapon && (displaynametags & 2) && StatusBar && SmallFont && SendItemUse)
 		{
 			StatusBar->AttachMessage(Create<DHUDMessageFadeOut>(nullptr, SendItemUse->GetTag(),
@@ -368,7 +369,7 @@ CCMD (weapnext)
 	}
 
 	// [BC] Option to display the name of the weapon being cycled to.
-	if (players[consoleplayer].playerstate != PST_LIVE) return;
+	if ((paused || pauseext) || players[consoleplayer].playerstate != PST_LIVE) return;
 	if ((displaynametags & 2) && StatusBar && SmallFont && SendItemUse)
 	{
 		StatusBar->AttachMessage(Create<DHUDMessageFadeOut>(nullptr, SendItemUse->GetTag(),
@@ -395,7 +396,7 @@ CCMD (weapprev)
 	}
 
 	// [BC] Option to display the name of the weapon being cycled to.
-	if (players[consoleplayer].playerstate != PST_LIVE) return;
+	if ((paused || pauseext) || players[consoleplayer].playerstate != PST_LIVE) return;
 	if ((displaynametags & 2) && StatusBar && SmallFont && SendItemUse)
 	{
 		StatusBar->AttachMessage(Create<DHUDMessageFadeOut>(nullptr, SendItemUse->GetTag(),
@@ -1013,7 +1014,7 @@ bool G_Responder (event_t *ev)
 	{
 		if (ST_Responder (ev))
 			return true;		// status window ate it
-		if (!viewactive && primaryLevel->automap->Responder (ev, false))
+		if (!viewactive && primaryLevel->automap && primaryLevel->automap->Responder (ev, false))
 			return true;		// automap ate it
 	}
 	else if (gamestate == GS_FINALE)
@@ -1166,7 +1167,7 @@ void G_Ticker ()
 		case ga_loadgameplaydemo:
 			G_DoLoadGame ();
 			// fallthrough
-		case ga_playdemo:
+		case  ga_playdemo:
 			G_DoPlayDemo ();
 			break;
 		case ga_completed:
@@ -1314,6 +1315,15 @@ void G_Ticker ()
 
 	default:
 		break;
+	}
+	// Do some more aggressive GC maintenance when the game ticker is inactive. 
+	if ((gamestate != GS_LEVEL && gamestate != GS_TITLELEVEL) || paused || P_CheckTickerPaused())
+	{
+		size_t ac = std::max<size_t>(10, GC::AllocCount);
+		for (size_t i = 0; i < ac; i++)
+		{
+			if (!GC::CheckGC()) break;
+		}
 	}
 
 	// [MK] Additional ticker for UI events right after all others
@@ -1793,6 +1803,7 @@ void G_DoPlayerPop(int playernum)
 	FString message = GStrings(deathmatch? "TXT_LEFTWITHFRAGS" : "TXT_LEFTTHEGAME");
 	message.Substitute("%s", players[playernum].userinfo.GetName());
 	message.Substitute("%d", FStringf("%d", players[playernum].fragcount));
+	Printf("%s\n", message.GetChars());
 
 	// [RH] Revert each player to their own view if spying through the player who left
 	for (int ii = 0; ii < MAXPLAYERS; ++ii)
@@ -2933,6 +2944,7 @@ void G_DoPlayDemo (void)
 
 		usergame = false;
 		demoplayback = true;
+		playedtitlemusic = false;
 	}
 }
 

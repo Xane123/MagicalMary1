@@ -748,6 +748,7 @@ void AActor::AttachLight(unsigned int count, const FLightDefaults *lightdef)
 		AttachedLights.Push(light);
 	}
 	lightdef->ApplyProperties(light);
+	light->UpdateLocation();
 }
 
 //==========================================================================
@@ -849,6 +850,7 @@ int AttachLightDef(AActor *self, int _lightid, int _lightname)
 		auto userlight = self->UserLights[FindUserLight(self, lightid, true)];
 		userlight->CopyFrom(*LightDefaults[lightdef]);
 		self->flags8 |= MF8_RECREATELIGHTS;
+		self->Level->flags3 |= LEVEL3_LIGHTCREATED;
 		return 1;
 	}
 	return 0;
@@ -893,6 +895,7 @@ int AttachLightDirect(AActor *self, int _lightid, int type, int color, int radiu
 		userlight->UnsetSpotPitch();
 	}
 	self->flags8 |= MF8_RECREATELIGHTS;
+	self->Level->flags3 |= LEVEL3_LIGHTCREATED;
 	return 1;
 }
 
@@ -930,6 +933,7 @@ int RemoveLight(AActor *self, int _lightid)
 		delete self->UserLights[userlight];
 		self->UserLights.Delete(userlight);
 		self->flags8 |= MF8_RECREATELIGHTS;
+		self->Level->flags3 |= LEVEL3_LIGHTCREATED;
 		return 1;
 	}
 	return 0;

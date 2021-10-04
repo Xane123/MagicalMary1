@@ -832,7 +832,7 @@ static void ReactToDamage(AActor *target, AActor *inflictor, AActor *source, int
 		return;
 
 	player_t *player = target->player;
-	if (player)
+	if (player && player->mo)
 	{
 		if ((player->cheats & CF_GODMODE2) || (player->mo->flags5 & MF5_NOPAIN) ||
 			((player->cheats & CF_GODMODE) && damage < TELEFRAG_DAMAGE))
@@ -1195,7 +1195,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 
 
 	//[RC] Backported from the Zandronum source.. Mostly.
-	if( target->player  &&
+	if( target->player && target->player->mo &&
 		damage > 0 &&
 		source &&
 		mod != NAME_Reflection &&
@@ -1266,7 +1266,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 	//
 	// player specific
 	//
-	if (player)
+	if (player && player->mo)
 	{
 		// Don't allow DMG_FORCED to work on ultimate degreeslessness/buddha and nodamage.
 		if ((player->cheats & (CF_GODMODE2 | CF_BUDDHA2)) || (player->mo->flags5 & MF5_NODAMAGE))
@@ -1365,7 +1365,7 @@ static int DamageMobj (AActor *target, AActor *inflictor, AActor *source, int da
 			//I_Tactile (40,10,40+temp*2);
 		}
 	}
-	else
+	else if (!player)
 	{
 		// Armor for monsters.
 		if (!(flags & (DMG_NO_ARMOR|DMG_FORCED)) && target->Inventory != NULL && damage > 0)
@@ -1600,19 +1600,25 @@ bool AActor::OkayToSwitchTarget(AActor *other)
 	if (!(other->flags & MF_SHOOTABLE))
 		return false;		// Don't attack things that can't be hurt
 
-	if ((flags4 & MF4_NOTARGETSWITCH) && target != NULL)
+	if ((flags4 & MF4_NOTARGETSWITCH) && target != nullptr)
 		return false;		// Don't switch target if not allowed
 
-	if ((master != NULL && other->IsA(master->GetClass())) ||		// don't attack your master (or others of its type)
-		(other->master != NULL && IsA(other->master->GetClass())))	// don't attack your minion (or those of others of your type)
+	if ((master != nullptr && other->IsA(master->GetClass())) ||		// don't attack your master (or others of its type)
+		(other->master != nullptr && IsA(other->master->GetClass())))	// don't attack your minion (or those of others of your type)
 	{
-		if (!IsHostile (other) &&								// allow target switch if other is considered hostile
+		if (!IsHostile(other) &&								// allow target switch if other is considered hostile
 			(other->tid != TIDtoHate || TIDtoHate == 0) &&		// or has the tid we hate
 			other->TIDtoHate == TIDtoHate)						// or has different hate information
 		{
 			return false;
 		}
 	}
+
+	// MBF21 support.
+	auto mygroup = GetClass()->ActorInfo()->infighting_group;
+	auto othergroup = other->GetClass()->ActorInfo()->infighting_group;
+	if (mygroup != 0 && mygroup == othergroup)
+		return false;
 
 	if ((flags7 & MF7_NOINFIGHTSPECIES) && GetSpecies() == other->GetSpecies())
 		return false;		// Don't fight own species.

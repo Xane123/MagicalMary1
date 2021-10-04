@@ -200,9 +200,8 @@ struct StreamData
 	FVector4 uSplitBottomPlane;
 
 	FVector4 uDetailParms;
-#ifdef NPOT_EMULATION
-	FVector2 uNpotEmulation;
-#endif
+	FVector4 uNpotEmulation;
+	FVector4 padding1, padding2, padding3;
 };
 
 class FRenderState
@@ -220,12 +219,17 @@ protected:
 	int mLightIndex;
 	int mSpecialEffect;
 	int mTextureMode;
+	int mTextureClamp;
 	int mTextureModeFlags;
 	int mSoftLight;
 	float mLightParms[4];
 
 	float mAlphaThreshold;
 	float mClipSplit[2];
+
+
+	int mColorMapSpecial;
+	float mColorMapFlash;
 
 	StreamData mStreamData = {};
 	PalEntry mFogColor;
@@ -256,6 +260,7 @@ public:
 		mFogColor = 0xffffffff;
 		mStreamData.uFogColor = mFogColor;
 		mTextureMode = -1;
+		mTextureClamp = 0;
 		mTextureModeFlags = 0;
 		mStreamData.uDesaturationFactor = 0.0f;
 		mAlphaThreshold = 0.5f;
@@ -279,6 +284,9 @@ public:
 		mBias.Reset();
 		mPassType = NORMAL_PASS;
 
+		mColorMapSpecial = 0;
+		mColorMapFlash = 1;
+
 		mVertexBuffer = nullptr;
 		mVertexOffsets[0] = mVertexOffsets[1] = 0;
 		mIndexBuffer = nullptr;
@@ -295,7 +303,7 @@ public:
 		mStreamData.uDynLightColor = { 0.0f, 0.0f, 0.0f, 1.0f };
 		mStreamData.uDetailParms = { 0.0f, 0.0f, 0.0f, 0.0f };
 #ifdef NPOT_EMULATION
-		mStreamData.uNpotEmulation = { 0,0 };
+		mStreamData.uNpotEmulation = { 0,0,0,0 };
 #endif
 		mModelMatrix.loadIdentity();
 		mTextureMatrix.loadIdentity();
@@ -338,6 +346,12 @@ public:
 		mStreamData.uDesaturationFactor = 0.0f;
 	}
 
+	void SetTextureClamp(bool on)
+	{
+		if (on) mTextureClamp = TM_CLAMPY;
+		else mTextureClamp = 0;
+	}
+
 	void SetTextureMode(int mode)
 	{
 		mTextureMode = mode;
@@ -362,6 +376,14 @@ public:
 	int GetTextureMode()
 	{
 		return mTextureMode;
+	}
+
+	int GetTextureModeAndFlags(int tempTM)
+	{
+		int f = mTextureModeFlags;
+		if (!mBrightmapEnabled) f &= ~(TEXF_Brightmap | TEXF_Glowmap);
+		if (mTextureClamp) f |= TEXF_ClampY;
+		return (mTextureMode == TM_NORMAL && tempTM == TM_OPAQUE ? TM_OPAQUE : mTextureMode) | f;
 	}
 
 	void EnableTexture(bool on)
@@ -490,7 +512,7 @@ public:
 	void SetNpotEmulation(float factor, float offset)
 	{
 #ifdef NPOT_EMULATION
-		mStreamData.uNpotEmulation = { offset, factor };
+		mStreamData.uNpotEmulation = { offset, factor, 0, 0 };
 #endif
 	}
 
@@ -556,18 +578,28 @@ public:
 		mRenderStyle = rs;
 	}
 
+	auto GetDepthBias()
+	{
+		return mBias;
+	}
+
 	void SetDepthBias(float a, float b)
 	{
+		mBias.mChanged = mBias.mFactor != a || mBias.mUnits != b;
 		mBias.mFactor = a;
 		mBias.mUnits = b;
-		mBias.mChanged = true;
+	}
+
+	void SetDepthBias(FDepthBiasState& bias)
+	{
+		SetDepthBias(bias.mFactor, bias.mUnits);
 	}
 
 	void ClearDepthBias()
 	{
+		mBias.mChanged = mBias.mFactor != 0 || mBias.mUnits != 0;
 		mBias.mFactor = 0;
 		mBias.mUnits = 0;
-		mBias.mChanged = true;
 	}
 
 private:
@@ -665,6 +697,12 @@ public:
 	EPassType GetPassType()
 	{
 		return mPassType;
+	}
+
+	void SetSpecialColormap(int cm, float flash)
+	{
+		mColorMapSpecial = cm;
+		mColorMapFlash = flash;
 	}
 
 	// API-dependent render interface

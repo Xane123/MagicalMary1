@@ -40,7 +40,6 @@
 
 #include "gl_sysfb.h"
 #include "hardware.h"
-#include "x86.h"
 #include "templates.h"
 #include "version.h"
 #include "c_console.h"
@@ -54,6 +53,9 @@
 #include "win32glvideo.h"
 
 #include "gl_framebuffer.h"
+#ifdef HAVE_GLES2
+#include "gles_framebuffer.h"
+#endif
 
 extern "C" {
 HGLRC zd_wglCreateContext(HDC Arg1);
@@ -63,6 +65,7 @@ PROC zd_wglGetProcAddress(LPCSTR name);
 }
 
 EXTERN_CVAR(Int, vid_adapter)
+EXTERN_CVAR(Int, vid_preferbackend)
 EXTERN_CVAR(Bool, vid_hdr)
 
 CUSTOM_CVAR(Bool, gl_debug, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOINITCALL)
@@ -106,7 +109,13 @@ DFrameBuffer *Win32GLVideo::CreateFrameBuffer()
 {
 	SystemGLFrameBuffer *fb;
 
-	fb = new OpenGLRenderer::OpenGLFrameBuffer(m_hMonitor, vid_fullscreen);
+#ifdef HAVE_GLES2
+	if ((Args->CheckParm("-gles2_renderer")) || (vid_preferbackend == 3) )
+		fb = new OpenGLESRenderer::OpenGLFrameBuffer(m_hMonitor, vid_fullscreen);
+	else
+#endif
+		fb = new OpenGLRenderer::OpenGLFrameBuffer(m_hMonitor, vid_fullscreen);
+
 	return fb;
 }
 

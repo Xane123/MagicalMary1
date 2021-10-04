@@ -70,6 +70,8 @@
 #define RIGHTMARGIN 8
 #define BOTTOMARGIN 12
 
+extern bool AppActive;
+
 CUSTOM_CVAR(Int, con_buffersize, -1, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	// ensure a minimum size
@@ -590,8 +592,7 @@ void C_DrawConsole ()
 
 	oldbottom = ConBottom;
 
-	if (ConsoleState == c_up && gamestate != GS_INTRO && gamestate != GS_INTERMISSION && 
-		gamestate != GS_FULLCONSOLE && gamestate != GS_MENUSCREEN)
+	if (ConsoleState == c_up && gamestate == GS_LEVEL)
 	{
 		if (NotifyStrings) NotifyStrings->Draw();
 		return;
@@ -729,7 +730,7 @@ void C_ToggleConsole ()
 	}
 	if (gamestate == GS_MENUSCREEN)
 	{
-		gameaction = ga_fullconsole;
+		if (sysCallbacks.ToggleFullConsole) sysCallbacks.ToggleFullConsole();
 		togglestate = c_down;
 	}
 	else if (!chatmodeon && (ConsoleState == c_up || ConsoleState == c_rising) && menuactive == MENU_Off)
@@ -1039,7 +1040,7 @@ static bool C_HandleKey (event_t *ev, FCommandBuffer &buffer)
 			// Close console and clear command line. But if we're in the
 			// fullscreen console mode, there's nothing to fall back on
 			// if it's closed, so open the main menu instead.
-			if (gamestate == GS_STARTUP)
+			if (gamestate == GS_STARTUP || !AppActive)
 			{
 				return false;
 			}

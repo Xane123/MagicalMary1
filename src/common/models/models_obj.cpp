@@ -44,8 +44,8 @@ bool FOBJModel::Load(const char* fn, int lumpnum, const char* buffer, int length
 	{
 		// Ensure usemtl statements remain intact
 		TArray<FString> mtlUsages;
-		TArray<long> mtlUsageIdxs;
-		long bpos = 0, nlpos = 0, slashpos = 0;
+		TArray<ptrdiff_t> mtlUsageIdxs;
+		ptrdiff_t bpos = 0, nlpos = 0, slashpos = 0;
 		while (1)
 		{
 			bpos = objBuf.IndexOf("\nusemtl", bpos);
@@ -58,7 +58,7 @@ bool FOBJModel::Load(const char* fn, int lumpnum, const char* buffer, int length
 			}
 			if (nlpos == -1)
 			{
-				nlpos = (long)objBuf.Len();
+				nlpos = objBuf.Len();
 			}
 			FString lineStr(objBuf.GetChars() + bpos, nlpos - bpos);
 			mtlUsages.Push(lineStr);
@@ -76,7 +76,7 @@ bool FOBJModel::Load(const char* fn, int lumpnum, const char* buffer, int length
 			nlpos = objBuf.IndexOf('\n', bpos);
 			if (nlpos == -1)
 			{
-				nlpos = (long)objBuf.Len();
+				nlpos = objBuf.Len();
 			}
 			memcpy(wObjBuf + bpos, mtlUsages[i].GetChars(), nlpos - bpos);
 		}
@@ -240,13 +240,12 @@ bool FOBJModel::Load(const char* fn, int lumpnum, const char* buffer, int length
  */
 template<typename T, size_t L> void FOBJModel::ParseVector(TArray<T> &array)
 {
-	float coord[L];
-	for (size_t axis = 0; axis < L; axis++)
+	T vec;
+	for (unsigned axis = 0; axis < L; axis++)
 	{
 		sc.MustGetFloat();
-		coord[axis] = (float)sc.Float;
+		vec[axis] = (float)sc.Float;
 	}
-	T vec(coord);
 	array.Push(vec);
 }
 
@@ -636,11 +635,12 @@ void FOBJModel::RenderFrame(FModelRenderer *renderer, FGameTexture * skin, int f
 		OBJSurface *surf = &surfaces[i];
 
 		FGameTexture *userSkin = skin;
-		if (!userSkin)
+		if (!userSkin && curSpriteMDLFrame)
 		{
-			if (i < MD3_MAX_SURFACES && curSpriteMDLFrame->surfaceskinIDs[curMDLIndex][i].isValid())
+			int ssIndex = i + curMDLIndex * MD3_MAX_SURFACES;
+			if (i < MD3_MAX_SURFACES && curSpriteMDLFrame->surfaceskinIDs[ssIndex].isValid())
 			{
-				userSkin = TexMan.GetGameTexture(curSpriteMDLFrame->surfaceskinIDs[curMDLIndex][i], true);
+				userSkin = TexMan.GetGameTexture(curSpriteMDLFrame->surfaceskinIDs[ssIndex], true);
 			}
 			else if (surf->skin.isValid())
 			{
@@ -669,13 +669,14 @@ void FOBJModel::AddSkins(uint8_t* hitlist)
 {
 	for (size_t i = 0; i < surfaces.Size(); i++)
 	{
-		if (i < MD3_MAX_SURFACES && curSpriteMDLFrame->surfaceskinIDs[curMDLIndex][i].isValid())
+		size_t ssIndex = i + curMDLIndex * MD3_MAX_SURFACES;
+		if (curSpriteMDLFrame && i < MD3_MAX_SURFACES && curSpriteMDLFrame->surfaceskinIDs[ssIndex].isValid())
 		{
 			// Precache skins manually reassigned by the user.
 			// On OBJs with lots of skins, such as Doom map OBJs exported from GZDB,
 			// there may be too many skins for the user to manually change, unless
 			// the limit is bumped or surfaceskinIDs is changed to a TArray<FTextureID>.
-			hitlist[curSpriteMDLFrame->surfaceskinIDs[curMDLIndex][i].GetIndex()] |= FTextureManager::HIT_Flat;
+			hitlist[curSpriteMDLFrame->surfaceskinIDs[ssIndex].GetIndex()] |= FTextureManager::HIT_Flat;
 			return; // No need to precache skin that was replaced
 		}
 

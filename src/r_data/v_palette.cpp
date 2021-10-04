@@ -40,7 +40,6 @@
 #include "i_video.h"
 #include "c_dispatch.h"
 #include "st_stuff.h"
-#include "x86.h"
 #include "g_levellocals.h"
 #include "m_png.h"
 #include "v_colortables.h"
@@ -56,7 +55,7 @@ void InitPalette ()
 	
 	ReadPalette(fileSystem.GetNumForName("PLAYPAL"), pal);
 
-	GPalette.Init(NUM_TRANSLATION_TABLES);
+	GPalette.Init(NUM_TRANSLATION_TABLES, nullptr);
 	GPalette.SetPalette (pal, -1);
 
 	int lump = fileSystem.CheckNumForName("COLORMAP");
@@ -99,11 +98,11 @@ CCMD (testblend)
 	{
 		if ( !(colorstring = V_GetColorStringByName (argv[1])).IsEmpty() )
 		{
-			color = V_GetColorFromString (NULL, colorstring);
+			color = V_GetColorFromString (colorstring);
 		}
 		else
 		{
-			color = V_GetColorFromString (NULL, argv[1]);
+			color = V_GetColorFromString (argv[1]);
 		}
 		amt = (float)atof (argv[2]);
 		if (amt > 1.0f)

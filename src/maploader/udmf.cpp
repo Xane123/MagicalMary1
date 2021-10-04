@@ -109,21 +109,22 @@ static inline bool P_IsThingSpecial(int specnum)
 	return (specnum >= Thing_Projectile && specnum <= Thing_SpawnNoFog) ||
 			specnum == Thing_SpawnFacing || specnum == Thing_ProjectileIntercept || specnum == Thing_ProjectileAimed;
 }
-
-enum
+namespace
 {
-	Dm=1,
-	Ht=2,
-	Hx=4,
-	St=8,
-	Zd=16,
-	Zdt=32,
-	Va=64,
+	enum
+	{
+		Dm=1,		// Doom
+		Ht=2,		// Heretic
+		Hx=4,		// Hexen
+		St=8,		// Strife
+		Zd=16,		// ZDoom
+		Zdt=32,		// ZDoom Translated
+		Va=64,		// Vavoom
 
-	// will be extended later. Unknown namespaces will always be treated like the base
-	// namespace for each game
-};
-
+		// will be extended later. Unknown namespaces will always be treated like the base
+		// namespace for each game
+	};
+}
 #define CHECK_N(f) if (!(namespace_bits&(f))) break;
 
 //===========================================================================
@@ -761,6 +762,10 @@ public:
 					ReadUserKey(ukey);
 					loader->MapThingsUserData.Push(ukey);
 				}
+				else if (stricmp("comment", key.GetChars()))
+				{
+					DPrintf(DMSG_WARNING, "Unknown UDMF thing key %s\n", key.GetChars());
+				}
 				break;
 			}
 		}
@@ -924,6 +929,12 @@ public:
 				Flag(ld->flags, ML_BLOCK_FLOATERS, key); 
 				continue;
 
+			case NAME_Blocklandmonsters:
+				// This is from MBF21 so it may later be needed for a lower level namespace.
+				CHECK_N(St | Zd | Zdt | Va)
+				Flag(ld->flags2, ML2_BLOCKLANDMONSTERS, key);
+				continue;
+
 			case NAME_Translucent:
 				CHECK_N(St | Zd | Zdt | Va)
 				strifetrans = CheckBool(key); 
@@ -940,6 +951,8 @@ public:
 				continue;
 
 			default:
+				if (!stricmp("comment", key.GetChars()))
+					continue;
 				break;
 			}
 
@@ -1111,6 +1124,8 @@ public:
 				break;
 
 			default:
+				if (strnicmp("user_", key.GetChars(), 5))
+					DPrintf(DMSG_WARNING, "Unknown UDMF linedef key %s\n", key.GetChars());
 				break;
 			}
 
@@ -1224,6 +1239,8 @@ public:
 				continue;
 
 			default:
+				if (!stricmp("comment", key.GetChars()))
+					continue;
 				break;
 			}
 
@@ -1425,6 +1442,8 @@ public:
 				break;
 
 			default:
+				if (strnicmp("user_", key.GetChars(), 5))
+					DPrintf(DMSG_WARNING, "Unknown UDMF sidedef key %s\n", key.GetChars());
 				break;
 
 			}
@@ -1541,6 +1560,8 @@ public:
 				continue;
 
 			default:
+				if (!stricmp("comment", key.GetChars()))
+					continue;
 				break;
 			}
 
@@ -1929,6 +1950,8 @@ public:
 					break;
 					
 				default:
+					if (strnicmp("user_", key.GetChars(), 5))
+						DPrintf(DMSG_WARNING, "Unknown UDMF sector key %s\n", key.GetChars());
 					break;
 			}
 			if ((namespace_bits & (Zd | Zdt)) && !strnicmp("user_", key.GetChars(), 5))
@@ -2179,6 +2202,7 @@ public:
 			switch(namespc.GetIndex())
 			{
 			case NAME_ZDoom:
+			case NAME_Eternity:
 				namespace_bits = Zd;
 				isTranslated = false;
 				break;
@@ -2310,10 +2334,10 @@ public:
 		// Create the real sectors
 		Level->sectors.Alloc(ParsedSectors.Size());
 		memcpy(&Level->sectors[0], &ParsedSectors[0], Level->sectors.Size() * sizeof(sector_t));
-		Level->sectors[0].e = new extsector_t[Level->sectors.Size()];
+		Level->extsectors.Alloc(Level->sectors.Size());
 		for(unsigned i = 0; i < Level->sectors.Size(); i++)
 		{
-			Level->sectors[i].e = &Level->sectors[0].e[i];
+			Level->sectors[i].e = &Level->extsectors[i];
 		}
 		// Now create the scrollers.
 		for (auto &scroll : UDMFScrollers)

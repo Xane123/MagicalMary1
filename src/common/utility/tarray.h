@@ -292,6 +292,17 @@ public:
         return i;
     }
 
+   bool Contains(const T& item) const
+    {
+        unsigned int i;
+        for(i = 0;i < Count;++i)
+        {
+            if(Array[i] == item)
+                return true;
+        }
+        return false;
+    }
+
 	template<class Func> 
 	unsigned int FindEx(Func compare) const
 	{
@@ -826,12 +837,30 @@ public:
 		CopyNodes(o.Nodes, o.Size);
 	}
 
+	TMap(TMap &&o)
+	{
+		Nodes = o.Nodes;
+		LastFree = o.LastFree;		/* any free position is before this position */
+		Size = o.Size;		/* must be a power of 2 */
+		NumUsed = o.NumUsed;
+		
+		o.Size = 0;
+		o.NumUsed = 0;
+		o.SetNodeVector(1);
+	}
+
 	TMap &operator= (const TMap &o)
 	{
 		NumUsed = 0;
 		ClearNodeVector();
 		SetNodeVector(o.CountUsed());
 		CopyNodes(o.Nodes, o.Size);
+		return *this;
+	}
+
+	TMap &operator= (TMap &&o)
+	{
+		TransferFrom(o);
 		return *this;
 	}
 
@@ -1365,6 +1394,134 @@ public:
 protected:
 	const MapType &Map;
 	hash_t Position;
+};
+
+
+// Pointer wrapper without the unpleasant side effects of std::unique_ptr, mainly the inability to copy it.
+// This class owns the object with no means to release it, and copying the pointer copies the object.
+template <class T>
+class TPointer
+{
+public:
+
+	////////
+	TPointer()
+	{
+		Ptr = nullptr;
+	}
+	TPointer(const T& other) = delete;
+	/*
+	{
+		Alloc();
+		*Ptr = other;
+	}
+	*/
+	TPointer(T&& other)
+	{
+		Alloc();
+		*Ptr = other;
+	}
+	TPointer(const TPointer<T>& other) = delete;
+	/*
+	{
+		DoCopy(other);
+	}
+	*/
+	TPointer(TPointer<T>&& other)
+	{
+		Ptr = other.Ptr;
+		other.Ptr = nullptr;
+	}
+	TPointer<T>& operator= (const T& other)
+	{
+		if (&other != this)
+		{
+			Alloc();
+			*Ptr = other;
+		}
+		return *this;
+	}
+	TPointer<T>& operator= (const TPointer<T>& other)
+	{
+		if (&other != this)
+		{
+			DoCopy(other);
+		}
+		return *this;
+	}
+	TPointer<T>& operator= (TPointer<T>&& other)
+	{
+		if (&other != this)
+		{
+			if (Ptr) delete Ptr;
+			Ptr = other.Ptr;
+			other.Ptr = nullptr;
+		}
+		return *this;
+	}
+	~TPointer()
+	{
+		if (Ptr) delete Ptr;
+		Ptr = nullptr;
+	}
+	// Check equality of two pointers
+	bool operator==(const TPointer<T>& other) const
+	{
+		return *Ptr == *other.Ptr;
+	}
+
+	T& operator* () const
+	{
+		assert(Ptr);
+		return *Ptr;
+	}
+
+	T* operator->() { return Ptr; }
+
+	// returns raw pointer
+	T* Data() const
+	{
+		return Ptr;
+	}
+
+#if 0 // this is too dangerous.
+	operator T* () const
+	{
+		return Ptr;
+	}
+#endif
+
+	void Alloc()
+	{
+		if (!Ptr) Ptr = new T;
+	}
+
+	void Clear()
+	{
+		if (Ptr) delete Ptr;
+		Ptr = nullptr;
+	}
+
+	void Swap(TPointer<T>& other)
+	{
+		std::swap(Ptr, other.Ptr);
+	}
+
+private:
+	T* Ptr;
+
+	void DoCopy(const TPointer<T>& other)
+	{
+		if (other.Ptr == nullptr)
+		{
+			Clear();
+		}
+		else
+		{
+			Alloc();
+			*Ptr = *other.Ptr;
+		}
+	}
 };
 
 
