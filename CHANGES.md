@@ -29,6 +29,7 @@ This is a list of any changes done to Magical Mary since the last release. They 
 * Mary's Air Dash is slightly influenced by her momentum! If performing an Air Dash from standstill, Mary will only reach full running speed, but even walking will boost her to higher speeds. This makes the Air Dash less of a "boost" button and more of a strategic way to double-jump and instantly change directions while moving.
 * The time of day system (TOD) is back! Only seen in one video, it's improved with real-time fading between lighting and fog colors as the times of the day go by. Unlike the old system, there's separate sets of colors for outdoor, indoor, and even water sectors (and "shaded" variants), which makes it more likely that every level will work with every time of the day!
 * The GZDoom engine version was updated to 4.8-pre (12 days after GZDoom v4.7 was released)! This adds OpenGL ES2 from Delta Touch.
+* Though it isn't in the game, Mary's broom can be ridden! Push MODE (probably T) when holding the MAGIC-FIRE-G and you will start automatically moving. Move off an edge and you can use forward/backward to control your height. Press MODE again to hop off. Switch to third-person (chase) to see her unique broom-riding sprites!
 ## Minor
 * For you mod programmers, if there's any of you here, GetSpeed has been updated with new parameters to control what axises are factored in. It's not the same as GetActorVel# though, as this returns integers that usually are large at even slower speeds.
 * Addititonally, the ***RoundTo5*** function is no longer in the "common" ACS file in MagicalMary1.ipk3, instead in the common script file "mm1_extra.acs". It's also more freeform now, taking two arguments, one for the multiple to round to and a second one to pass your variable to.
@@ -69,3 +70,4 @@ This is a list of any changes done to Magical Mary since the last release. They 
 * Burning leaf clusters falling off of trees that are on fire constantly damage anything around them as they fall, with a final larger damage upon touching the ground.
 * Leaf clusters now drop leaves automatically using ZScript. They also drop correctly-colored leaves in the standard and autumn foliage color schemes, consistent whether they fall automatically or by being destroyed by attacks.
 * Slightly increased Mary's max speed, but slowed down her acceleration to counter it. Air Dashes, as usual, bring her up to almost maximum speed, however.
+* Mary loses power slightly when running at high speeds (~275 speed). If she runs out of power, her running speed is limited.

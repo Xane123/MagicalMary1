@@ -692,30 +692,31 @@ bool M_Responder (event_t *ev)
 			ch = ev->data1;
 			switch (ch)
 			{
-			case KEY_JOY1:
-			case KEY_JOY3:
+			case KEY_JOY1:	//Accept
+			case KEY_JOY2:
 			case KEY_JOY15:
 			case KEY_PAD_A:
 				mkey = MKEY_Enter;
 				break;
 
-			case KEY_JOY2:
+			case KEY_JOY3:	//Back
+			case KEY_JOY4:
 			case KEY_JOY14:
 			case KEY_PAD_B:
 				mkey = MKEY_Back;
 				break;
 
-			case KEY_JOY4:
+			case KEY_JOY7:	//Clear...? (What does this do? Text clearing?)
 			case KEY_PAD_X:
 				mkey = MKEY_Clear;
 				break;
 
-			case KEY_JOY5:
+			case KEY_JOY5:	//Move up page
 			case KEY_PAD_LSHOULDER:
 				mkey = MKEY_PageUp;
 				break;
 
-			case KEY_JOY6:
+			case KEY_JOY6:	//Move down page
 			case KEY_PAD_RSHOULDER:
 				mkey = MKEY_PageDown;
 				break;

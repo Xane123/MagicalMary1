@@ -57,8 +57,8 @@ bool P_CheckTickerPaused ()
 	// pause if in menu or console and at least one tic has been run
 	if ( !netgame
 		 && gamestate != GS_TITLELEVEL
-		 && ((menuactive != MENU_Off && menuactive != MENU_OnNoPause) ||
-			 ConsoleState == c_down || ConsoleState == c_falling)
+		 && /*(*/(menuactive != MENU_Off && menuactive != MENU_OnNoPause)/* ||
+			 ConsoleState == c_down || ConsoleState == c_falling)*/	//[XANE]The console doesn't pause gameplay. The menu still does, though. Use the "freeze" CCMD (using a bind)
 		 && !demoplayback
 		 && !demorecording
 		 && players[consoleplayer].viewz != NO_VALUE
