@@ -51,7 +51,7 @@
 
 extern int chatmodeon;
 
-const char *KeyNames[NUM_KEYS] =
+const char* KeyNames[NUM_KEYS] =
 {
 	// We use the DirectInput codes and assume a qwerty keyboard layout.
 	// See <dinput.h> for the DIK_* codes
@@ -78,7 +78,7 @@ const char *KeyNames[NUM_KEYS] =
 	nullptr,	"PrevTrack",nullptr,	nullptr,	"KP-Enter",	"RCtrl",	nullptr,	nullptr,	//98
 	"Mute",		"Calculator","Play",	nullptr,	"Stop",		nullptr,	nullptr,	nullptr,	//A0
 	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	"VolDown",	nullptr,	//A8
-	"VolUp",	nullptr,	"WebHome",	"KP,",		nullptr,	"KP/",		nullptr,	"PrtSc",	//B0
+	"VolUp",	nullptr,	"WebHome",	"KP,",		nullptr,	"KP/",		nullptr,	"SysRq",	//B0
 	"RAlt",		nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	//B8
 	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	"Pause",	nullptr,	"Home",		//C0
 	"UpArrow",	"PgUp",		nullptr,	"LeftArrow",nullptr,	"RightArrow",nullptr,	"End",		//C8
@@ -86,16 +86,16 @@ const char *KeyNames[NUM_KEYS] =
 #ifdef __APPLE__
 	nullptr,	nullptr,	nullptr,	"Command",	nullptr,	"Apps",		"Power",	"Sleep",	//D8
 #else // !__APPLE__
-	nullptr,	nullptr,	nullptr,	"Windows",	"RWindows",	"Apps",		"Power",	"Sleep",	//D8
+	nullptr,	nullptr,	nullptr,	"LWin",		"RWin",		"Apps",		"Power",	"Sleep",	//D8
 #endif // __APPLE__
 	nullptr,	nullptr,	nullptr,	"Wake",		nullptr,	"Search",	"Favorites","Refresh",	//E0
-	"Stop",		"Forward",	"Back",	"Computer",		"Mail",		"MediaSelect",nullptr,	nullptr,	//E8
+	"WebStop",	"WebForward","WebBack",	"MyComputer","Mail",	"MediaSelect",nullptr,	nullptr,	//E8
 	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	//F0
 	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	nullptr,	//F8
 
 	// non-keyboard buttons that can be bound
-	"MouseLeft",	"MouseRight",	"MouseMiddle",	"MouseExtra1",		// 8 mouse buttons
-	"MouseExtra2",	"MouseExtra3",	"MouseExtra4",	"MouseExtra5",
+	"Mouse1",	"Mouse2",	"Mouse3",	"Mouse4",		// 8 mouse buttons
+	"Mouse5",	"Mouse6",	"Mouse7",	"Mouse8",
 
 	"Joy1",		"Joy2",		"Joy3",		"Joy4",			// 128 joystick buttons!
 	"Joy5",		"Joy6",		"Joy7",		"Joy8",
@@ -130,7 +130,7 @@ const char *KeyNames[NUM_KEYS] =
 	"Joy121",	"Joy122",	"Joy123",	"Joy124",
 	"Joy125",	"Joy126",	"Joy127",	"Joy128",
 
-	"POV1Up",	"POV1Right","POV1Down",	"POV1Left",		// First POV hat, usually a dpad.
+	"POV1Up",	"POV1Right","POV1Down",	"POV1Left",		// First POV hat
 	"POV2Up",	"POV2Right","POV2Down",	"POV2Left",		// Second POV hat
 	"POV3Up",	"POV3Right","POV3Down",	"POV3Left",		// Third POV hat
 	"POV4Up",	"POV4Right","POV4Down",	"POV4Left",		// Fourth POV hat

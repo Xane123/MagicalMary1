@@ -51,13 +51,13 @@ f12 spynext
 mwheelleft weapprev
 mwheelright weapnext
 
-//Mouse
+/* Mouse */
 Mouse1 +attack
 Mouse2 +jump
 Mouse3 +altattack
 Mouse4 +user2
 
-// Gamepad (meant for Logitech Dual Action)
+/* Gamepad Logitech Dual Action */
 Joy2 +jump
 Joy3 +reload
 Joy1 +use
@@ -73,7 +73,7 @@ POV1Up weapprev
 Joy10 menu_main
 Joy9 togglemap
 
-// Xbox (XInput) controllers
+/* XInput */
 Pad_A +jump
 Pad_B invuse
 Pad_X +use
