@@ -52,42 +52,42 @@ mwheelleft weapprev
 mwheelright weapnext
 
 //Mouse
-MouseLeft +attack
-MouseRight +jump
-MouseMiddle +altattack
-MouseExtra1 +user2
+Mouse1 +attack
+Mouse2 +jump
+Mouse3 +altattack
+Mouse4 +user2
 
 // Gamepad (meant for Logitech Dual Action)
-[2] +jump
-[3] invuse
-[1] +use
-[4] weapnext
-[8] +attack
-[7] +altattack
-[5] +user2
-[6] +user3
-POV1left invprev
-POV1right invnext
-POV1down weapnext
-POV1up weapprev
-[10] menu_main
-[9] togglemap
+Joy2 +jump
+Joy3 +reload
+Joy1 +use
+Joy4 invuse
+Joy8 +attack
+Joy7 +altattack
+Joy5 +user2
+Joy6 +user3
+POV1Left invprev
+POV1Right invnext
+POV1Down weapnext
+POV1Up weapprev
+Joy10 menu_main
+Joy9 togglemap
 
 // Xbox (XInput) controllers
-[A] +jump
-[B] invuse
-[X] +use
-[Y] weapnext
-[RT] +attack
-[LT] +altattack
-[LB] +user2
-[RB] +user3
-[DPadleft] invprev
-[DPadright] invnext
-[DPaddown] weapnext
-[DPadup] weapprev
-[START] menu_main
-[BACK] togglemap
+Pad_A +jump
+Pad_B invuse
+Pad_X +use
+Pad_Y weapnext
+RTrigger +attack
+LTrigger +altattack
+LShoulder +user2
+RShoulder +user3
+DPadLeft invprev
+DPadRight invnext
+DPadDown weapnext
+DPadUp weapprev
+Pad_Start menu_main
+Pad_Back togglemap
 
 /* Default automap bindings */
 mapbind m am_setmark
