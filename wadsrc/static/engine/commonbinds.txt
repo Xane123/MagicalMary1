@@ -1,103 +1,17 @@
-/* Default keybindings for all games */
+/*	Common keybindings, always set regardless of which default config is selected.
+	This ensures the console and F-keys are always assigned.
+*/
 
 ` toggleconsole
-1 "slot 1"
-2 "slot 2"
-3 "slot 3"
-4 "slot 4"
-5 "slot 5"
-6 "slot 6"
-7 "slot 7"
-8 "slot 8"
-9 "slot 9"
-0 "slot 0"
-[ "screenblocks 10"
-] "screenblocks 11"
-mwheelup invnext
-mwheeldown invprev
-q +attack
-e +altattack
-shift +speed
-r +use
-w +forward
-s +back
-d +moveright
-a +moveleft
-space +jump
-m +user4
-. +user2
-/ +user3
-uparrow invuse
-downarrow invuse
-leftarrow invprev
-rightarrow invnext
-capslock chase
-f1 menu_help
+/* f1 menu_help */
 f2 menu_save
 f3 menu_load
-f4 openmenu ZDoom_OptionsMenu
+f4 menu_main
 f5 menu_display
 f6 quicksave
 f7 menu_endgame
 f8 togglemessages
 f9 quickload
-f11 bumpgamma
 f10 menu_quit
-tab togglemap
-pause pause
-sysrq screenshot
-enter messagemode
+f11 bumpgamma
 f12 spynext
-mwheelleft weapprev
-mwheelright weapnext
-
-/* Mouse */
-Mouse1 +attack
-Mouse2 +jump
-Mouse3 +altattack
-Mouse4 +user2
-
-/* Gamepad Logitech Dual Action */
-Joy2 +jump
-Joy3 +reload
-Joy1 +use
-Joy4 invuse
-Joy8 +attack
-Joy7 +altattack
-Joy5 +user2
-Joy6 +user3
-POV1Left invprev
-POV1Right invnext
-POV1Down weapnext
-POV1Up weapprev
-Joy10 menu_main
-Joy9 togglemap
-
-/* XInput */
-Pad_A +jump
-Pad_B invuse
-Pad_X +use
-Pad_Y weapnext
-RTrigger +attack
-LTrigger +altattack
-LShoulder +user2
-RShoulder +user3
-DPadLeft invprev
-DPadRight invnext
-DPadDown weapnext
-DPadUp weapprev
-Pad_Start menu_main
-Pad_Back togglemap
-
-/* Default automap bindings */
-mapbind m am_setmark
-mapbind c am_clearmarks
-mapbind kp0 am_gobig
-mapbind rightarrow +am_panright
-mapbind leftarrow +am_panleft
-mapbind uparrow +am_panup
-mapbind downarrow +am_pandown
-mapbind - +am_zoomout
-mapbind = +am_zoomin
-mapbind kp- +am_zoomout
-mapbind kp+ +am_zoomin

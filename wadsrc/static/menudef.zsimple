@@ -7,7 +7,7 @@ OptionMenu "OptionsMenuSimple" protected
 	Title "$OPTMNU_TITLE"
 	Submenu "$OS_TITLE", "os_Menu"	//Searching is pretty important and useful.
 	StaticText " "
-	Submenu "$OPTMNU_CONTROLS",			"CustomizeControls"
+	Submenu "$OPTMNU_CONTROLS",			"ControlPresets"
 	Submenu "$OPTMNU_MOUSE",			"MouseOptions"
 	Submenu "$OPTMNU_JOYSTICK",			"JoystickOptions"
 	StaticText " "

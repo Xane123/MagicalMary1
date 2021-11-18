@@ -325,3 +325,10 @@ HE2TEXT = "";
 HE3TEXT = "";
 HE4TEXT = "";
 HE5TEXT = "";
+
+//Default control configurations
+OPTVAL_MM1CON_KBDM = "Keyboard & Mouse";
+OPTVAL_MM1CON_DACTION = "Logitech Dual Action(TM)";
+OPTVAL_MM1CON_XINPUT = "XInput (Xbox controllers)";
+
+OPTMNU_CHANGETOCL = "Apply selected configuration above";

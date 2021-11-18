@@ -1,0 +1,15 @@
+/* Logitech Dual Action bindings */
+Joy2 +jump
+Joy3 +reload
+Joy1 +use
+Joy4 invuse
+Joy8 +attack
+Joy7 +altattack
+Joy5 +user2
+Joy6 +user3
+POV1Left invprev
+POV1Right invnext
+POV1Down weapnext
+POV1Up weapprev
+Joy10 menu_main
+Joy9 togglemap

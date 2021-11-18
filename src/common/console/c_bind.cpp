@@ -750,12 +750,17 @@ void C_SetDefaultKeys(const char* baseconfig)
 //
 //
 //=============================================================================
-CVAR(Int, cl_defaultconfiguration, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CVAR(Bool, z_starting, true, 0)	//[XANE]Hackish but prevents resetting bindings on game start. The code below only runs if the menu option is changed (or rather, it should).
+CUSTOM_CVAR(Int, cl_defaultconfiguration, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (!z_starting) C_SetDefaultBindings();	//[XANE] Changing controller configurations should automatically reset the bindings.
+	else z_starting = false;
+}
 
 
 void C_BindDefaults()
 {
-	C_SetDefaultKeys(cl_defaultconfiguration == 1 ? "engine/origbinds.txt" : cl_defaultconfiguration == 2 ? "engine/leftbinds.txt" : "engine/defbinds.txt");
+	C_SetDefaultKeys(cl_defaultconfiguration == 1 ? "engine/dualaction.txt" : cl_defaultconfiguration == 2 ? "engine/xinput.txt" : "engine/keyboardmouse.txt");
 }
 
 void C_SetDefaultBindings()
@@ -769,7 +774,7 @@ CCMD(controlpreset)
 {
 	if (argv.argc() < 2)
 	{
-		Printf("Usage: Controlpreset {0,1,2}\n");
+		Printf("Usage: controlpreset (0-2)\n0: Keyboard & Mouse\n1: Logitech Dual Action (gamepad)\n2: Xbox-XInput (also Playstation controllers if DS4Windows is installed and set up)");
 		return;
 	}
 	int v = atoi(argv[1]);

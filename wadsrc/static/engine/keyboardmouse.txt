@@ -1,0 +1,58 @@
+/* Keyboard and mouse */
+
+1 "slot 1"
+2 "slot 2"
+3 "slot 3"
+4 "slot 4"
+5 "slot 5"
+6 "slot 6"
+7 "slot 7"
+8 "slot 8"
+9 "slot 9"
+0 "slot 0"
+[ "screenblocks 10"
+] "screenblocks 11"
+mwheelup invnext
+mwheeldown invprev
+q +attack
+e +altattack
+shift +speed
+r +use
+w +forward
+s +back
+d +moveright
+a +moveleft
+space +jump
+m +user4
+. +user2
+/ +user3
+uparrow invuse
+downarrow invuse
+leftarrow invprev
+rightarrow invnext
+capslock chase
+tab togglemap
+pause pause
+sysrq screenshot
+enter messagemode
+mwheelleft weapprev
+mwheelright weapnext
+
+/* Mouse */
+Mouse1 +attack
+Mouse2 +jump
+Mouse3 +altattack
+Mouse4 +user2
+
+/* Default automap bindings */
+mapbind m am_setmark
+mapbind c am_clearmarks
+mapbind kp0 am_gobig
+mapbind rightarrow +am_panright
+mapbind leftarrow +am_panleft
+mapbind uparrow +am_panup
+mapbind downarrow +am_pandown
+mapbind - +am_zoomout
+mapbind = +am_zoomin
+mapbind kp- +am_zoomout
+mapbind kp+ +am_zoomin

@@ -309,7 +309,7 @@ OptionMenu "OptionsMenu" protected
 	Title "$OPTMNU_TITLE"
 	Submenu "$OS_TITLE", "os_Menu"	//Search is so useful, it deserves to come first.
 	StaticText " "
-	Submenu "$OPTMNU_CONTROLS",			"CustomizeControls"
+	Submenu "$OPTMNU_CONTROLS",			"ControlPresets"
 	Submenu "$OPTMNU_MOUSE",			"MouseOptions"
 	Submenu "$OPTMNU_JOYSTICK",			"JoystickOptions"
 	StaticText " "
@@ -451,15 +451,30 @@ ListMenu "PlayerMenu"
 
 OptionValue "Layouts"
 {
-	0, "$OPTVAL_MODERN"
-	1, "$OPTVAL_CLASSICZ"
-	2, "$OPTVAL_MODERNLEFT"
+	0, "$OPTVAL_MM1CON_KBDM"
+	1, "$OPTVAL_MM1CON_DACTION"
+	2, "$OPTVAL_MM1CON_XINPUT"
 }
 
+OptionMenu "ControlPresets" protected
+{
+	Title "$CNTRLMNU_TITLE"
+	StaticText "Press left or right to choose a control preset (such as a"
+	StaticText "controller's layout, the default keyboard and mouse, and"
+	StaticText "more). You can customize the selected preset using the menu"
+	StaticText "link below that."
+	StaticText " "
+	StaticText "(Do be warned that changing this will reset your current"
+	StaticText "controls layout to defaults.)"
+	Option "$CNTRLMNU_LAYOUT",			"cl_defaultconfiguration", "Layouts"
+	SafeCommand "$OPTMNU_CHANGETOCL",		"resetb2defaults",	"Change to this controller's default layout? It will replace any custom controller binds. (This is usually okay.)"
+	StaticText ""
+	
+	Submenu    "Customize preset...",    "CustomizeControls"
+}
 OptionMenu "CustomizeControls" protected
 {
 	Title "$CNTRLMNU_TITLE"
-
 	Submenu    "$CNTRLMNU_ACTION"      , "ActionControlsMenu"
 	Submenu    "$CNTRLMNU_WEAPONS"     , "WeaponsControlMenu"
 	Submenu    "$CNTRLMNU_INVENTORY"   , "InventoryControlsMenu"
@@ -467,9 +482,6 @@ OptionMenu "CustomizeControls" protected
 	Submenu    "$CNTRLMNU_OTHER"       , "OtherControlsMenu"
 	Submenu    "$CNTRLMNU_POPUPS"      , "StrifeControlsMenu"
 	Submenu    "$MNU_MULTIPLAYER"        , "ChatControlsMenu"
-	StaticText ""
-	Option "$CNTRLMNU_LAYOUT",			"cl_defaultconfiguration", "Layouts"
-	SafeCommand "$OPTMNU_DEFAULTS",		"resetb2defaults"
 }
 
 OptionMenu "ActionControlsMenu" protected
@@ -1177,12 +1189,6 @@ OptionMenu "AltHUDOptions" protected
 //-------------------------------------------------------------------------------------------
 //As it's the typical thing to do in a modern game, here's that usual "accessibility menu".
 
-OptionValue usemodes
-{
-	0,	"Tap (default)"
-	1,	"Hold (1 sec. to cry)"
-}
-
 OptionMenu "AccessibilityOptions" protected
 {
 	Title "Accessibility Options"
@@ -1225,10 +1231,14 @@ OptionMenu "AccessibilityHearing" protected
 OptionMenu "AccessibilityDexterity" protected
 {
 	Title "Dexterity Options"
-	StaticText "When the setting below is HOLD, you only need to hold USE for"
-	StaticText "half a second to fire your claw and a whole second to cry."
+	StaticText "There are no accessibility options for dexterity. If you have an"
+	StaticText "idea for one, suggest it and it'll be added, but ONLY if I can"
+	StaticText "program it using ACS or DECORATE."
 	StaticText " "
-	Option "Reduce button mashing",				"ac_reducemashing",	"usemodes"
+	StaticText "(I really would love a GZDoom programmer to help implement"
+	StaticText "features natively into its confusing source code, like RUMBLE"
+	StaticText "SUPPORT FOR CONTROLLERS, PLEASE."
+	StaticText " "
 }
 
 //-------------------------------------------------------------------------------------------

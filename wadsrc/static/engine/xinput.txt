@@ -1,0 +1,15 @@
+/* Xbox and Playstation (DS4Windows) bindings */
+Pad_A +jump
+Pad_B invuse
+Pad_X +use
+Pad_Y weapnext
+RTrigger +attack
+LTrigger +altattack
+LShoulder +user2
+RShoulder +user3
+DPadLeft invprev
+DPadRight invnext
+DPadDown weapnext
+DPadUp weapprev
+Pad_Start menu_main
+Pad_Back togglemap
