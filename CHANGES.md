@@ -71,3 +71,5 @@ This is a list of any changes done to Magical Mary since the last release. They 
 * Leaf clusters now drop leaves automatically using ZScript. They also drop correctly-colored leaves in the standard and autumn foliage color schemes, consistent whether they fall automatically or by being destroyed by attacks.
 * Slightly increased Mary's max speed, but slowed down her acceleration to counter it. Air Dashes, as usual, bring her up to almost maximum speed, however.
 * Mary loses power slightly when running at high speeds (~275 speed). If she runs out of power, her running speed is limited.
+* Flowers use 3D models now, instead of 2D images. They have more variety with poses, and their limited color sets make different flower types feel distinct. (Currently, there are only six-petal and bulb flowers, which both use the same four colors.)
+* Mary's hammer plays its "hit" and "swing" sounds using new invisible objects; This isn't done the way the old sword handled it, where A_Saw(2) was used instead. This may become the standard for weapon sounds.

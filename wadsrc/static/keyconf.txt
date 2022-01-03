@@ -1,3 +1,4 @@
+//Aliases used for capturing a 360 Photo, photo sphere, or whatever they're called.
 alias screenshot_clean "r_drawplayersprites 0; show_messages 0; crosshair 0; screenblocks 12; wait 2; screenshot; wait 2; r_drawplayersprites 1; show_messages 1; crosshair -2; screenblocks 10;"
 alias panorama "playsound misc/ps_warning; wait 70; r_drawplayersprites 0; crosshair 0; screenblocks 12; freeze; pukename panocapture_assist 0; wait 70; show_messages 0; row; wait 413; row; wait 413; row; wait 413; row; wait 413; row; wait 413; row; wait 413; centerview; pukename panocapture_assist 3; r_drawplayersprites 1; show_messages 1; crosshair -2; screenblocks 10; freeze; wait 35; echo Use those 96 screenshots for a panorama.;"
 alias snap "screenshot; wait 5; pukename panocapture_assist 1;"

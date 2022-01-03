@@ -299,9 +299,9 @@ extend class Actor
 		{
 			mo.bAmbush = bAmbush;
 		}
-		if (flags & SXF_CLEARCALLERTID)
+		if (flags & SXF_TRANSFERTID)
 		{
-			self.ChangeTid(0);
+			mo.ChangeTid(tid);
 		}
 		if (flags & SXF_TRANSFERSPECIAL)
 		{
