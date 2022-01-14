@@ -73,3 +73,4 @@ This is a list of any changes done to Magical Mary since the last release. They 
 * Mary loses power slightly when running at high speeds (~275 speed). If she runs out of power, her running speed is limited.
 * Flowers use 3D models now, instead of 2D images. They have more variety with poses, and their limited color sets make different flower types feel distinct. (Currently, there are only six-petal and bulb flowers, which both use the same four colors.)
 * Mary's hammer plays its "hit" and "swing" sounds using new invisible objects; This isn't done the way the old sword handled it, where A_Saw(2) was used instead. This may become the standard for weapon sounds.
+* Forest trees use MD3 models now, increasing how detyailed they look, especially their branches! Trimmed trees still use voxel models.
