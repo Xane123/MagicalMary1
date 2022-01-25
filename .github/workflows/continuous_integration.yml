@@ -60,40 +60,51 @@ jobs:
       run: |
         export MAKEFLAGS=--keep-going
         cmake --build build --config ${{ matrix.config.build_type }} --parallel 3
-
-    - name: Create Package
-      #if: runner.os == 'Windows'  # Remove to make packages of all targets
+    
+    - name: Create Folder for Downloaded Files
+      if: runner.os == 'Windows'
       shell: bash
       run: |
         cd build
         mkdir package
-        cd package
-        mkdir windows
-        mkdir macos
-        mkdir linux
+        cd ../
+    
+    - uses: suisei-cn/actions-download-file@v1
+      if: runner.os == 'Windows'
+      #id: downloadfile  # Remember to give an ID if you need the output filename
+      name: Download Additional Files (Windows)
+      with:
+        url: "https://storage.googleapis.com/mary-game-1/downloads/public/additional-files.zip"
+        target: ./build/package/
+    
+    - name: Extract Extra Files (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd build\package
+        7z x additional-files.zip
+        cd ../../
+    
+    - name: Create Package
+      #if: runner.os == 'Windows'  # Remove to make packages of all targets
+      shell: bash
+      run: |
+        cd build/package
+        mkdir macOS
         cd ../
         
         if [[ "${{ runner.os }}" == 'Windows' ]]; then
-          cp ${{ matrix.config.build_type }}/PlayGame.exe ${{ matrix.config.build_type }}/*.pk3 package/windows
+          cp ${{ matrix.config.build_type }}/PlayGame.exe ${{ matrix.config.build_type }}/*.pk3 package/Windows
         elif [[ "${{ runner.os }}" == 'macOS' ]]; then
-          cp -r PlayGame.app ZMusic package/macos
+          cp -r PlayGame.app ZMusic package/macOS
         elif [[ "${{ runner.os }}" == 'Linux' ]]; then
-          cp -r PlayGame ZMusic *.pk3 package/linux
-        fi
-        
-        if [[ "${{ runner.os }}" == 'Windows' ]]; then
-          cp ${{ matrix.config.build_type }}/PlayGame.exe ${{ matrix.config.build_type }}/*.pk3 package
-        elif [[ "${{ runner.os }}" == 'macOS' ]]; then
-          cp -r PlayGame.app ZMusic package
-        elif [[ "${{ runner.os }}" == 'Linux' ]]; then
-          cp -r PlayGame ZMusic *.pk3 package
+          cp -r PlayGame ZMusic *.pk3 package/Linux
         fi
 
     - name: Upload Package
       #if: runner.os == 'Windows'  # Remove to store packages of all targets
       uses: actions/upload-artifact@v1
       with:
-        path: build/package
+        path: build/package/${{ runner.os }}
         name: ${{ matrix.config.name }} ${{ matrix.config.build_type }}
 
     - name: List Build Directory
