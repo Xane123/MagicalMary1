@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>zdoom.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.drdteam.gzdoom</string>
+	<string>org.xanemyers.magicalmary</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -24,26 +24,6 @@
 	<string>public.app-category.action-games</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.9</string>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>Doom Resource File</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>wad</string>
-				<string>pk3</string>
-				<string>zip</string>
-				<string>pk7</string>
-				<string>7z</string>
-				<string>iwad</string>
-				<string>ipk3</string>
-				<string>ipk7</string>
-			</array>
-		</dict>
-	</array>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
