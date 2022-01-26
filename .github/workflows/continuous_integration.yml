@@ -11,8 +11,8 @@ jobs:
       matrix:
         config:
         - {
-            name: "Visual Studio 64-bit",
-            os: windows-latest,
+            name: "Windows x64",
+            os: windows-2022,
             extra_options: "-A x64",
             build_type: "MinSizeRel"
           }
